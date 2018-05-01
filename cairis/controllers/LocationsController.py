@@ -23,7 +23,6 @@ else:
   import httplib
   from httplib import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
 from flask import session, request, make_response
-from flask_restful_swagger import swagger
 from flask_restful import Resource
 from cairis.daemon.CairisHTTPError import ObjectNotFoundHTTPError
 from cairis.data.LocationsDAO import LocationsDAO
@@ -36,29 +35,7 @@ __author__ = 'Shamal Faily'
 
 
 class LocationsAPI(Resource):
-  #region Swagger Doc
-  @swagger.operation(
-    notes='Get all locations',
-    responseClass=LocationsModel.__name__,
-    nickname='locations-get',
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-  )
-  #endregion
+
   def get(self):
     session_id = get_session_id(session, request)
     constraint_id = request.args.get('constraint_id', -1)
@@ -71,44 +48,6 @@ class LocationsAPI(Resource):
     resp.headers['Content-Type'] = "application/json"
     return resp
 
-  #region Swagger Doc
-  @swagger.operation(
-    notes='Creates new locations',
-    nickname='locations-post',
-    parameters=[
-      {
-        "name": "body",
-        "description": "The serialized version of new locations to be added",
-        "required": True,
-        "allowMultiple": False,
-        "type": LocationsMessage.__name__,
-        "paramType": "body"
-      },
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'One or more attributes are missing'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'Some problems were found during the name check'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'A database error has occurred'
-      }
-    ]
-  )
-  #endregion
   def post(self):
     session_id = get_session_id(session, request)
 
@@ -124,29 +63,7 @@ class LocationsAPI(Resource):
 
 
 class LocationsByNameAPI(Resource):
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Get locations by name',
-    responseClass=LocationsModel.__name__,
-    nickname='locations-by-name-get',
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-  )
-  # endregion
+
   def get(self, name):
     session_id = get_session_id(session, request)
 
@@ -158,44 +75,6 @@ class LocationsByNameAPI(Resource):
     resp.headers['Content-Type'] = "application/json"
     return resp
 
-  #region Swagger Doc
-  @swagger.operation(
-    notes='Updates existing locations',
-    nickname='locations-put',
-    parameters=[
-      {
-        "name": "body",
-        "description": "The serialized version of locations to be updated",
-        "required": True,
-        "allowMultiple": False,
-        "type": LocationsMessage.__name__,
-        "paramType": "body"
-      },
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'One or more attributes are missing'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'Some problems were found during the name check'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'A database error has occurred'
-      }
-    ]
-  )
-  #endregion
   def put(self, name):
     session_id = get_session_id(session, request)
 
@@ -209,36 +88,6 @@ class LocationsByNameAPI(Resource):
     resp.contenttype = 'application/json'
     return resp
 
-  #region Swagger Doc
-  @swagger.operation(
-    notes='Deletes existing locations',
-    nickname='locations-by-id-delete',
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'One or more attributes are missing'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'Some problems were found during the name check'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'A database error has occurred'
-      }
-    ]
-  )
-  #endregion
   def delete(self, name):
     session_id = get_session_id(session, request)
 
@@ -252,44 +101,7 @@ class LocationsByNameAPI(Resource):
     return resp
 
 class LocationsModelAPI(Resource):
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Get the asset model for a specific environment',
-    nickname='asset-model-get',
-    parameters=[
-      {
-        "name": "locations",
-        "description": "The locations for the locations model",
-        "required": True,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      },
-      {
-        "name": "environment",
-        "description": "The environment for the locations model",
-        "required": True,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      },
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-  )
-  # endregion
+
   def get(self, locations, environment):
     session_id = get_session_id(session, request)
     hide_concerns = request.args.get('hide_concerns', '1')

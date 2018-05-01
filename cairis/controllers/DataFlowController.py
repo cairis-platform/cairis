@@ -24,7 +24,6 @@ else:
   from httplib import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
 from flask import request, session, make_response
 from flask_restful import Resource
-from flask_restful_swagger import swagger
 from cairis.daemon.CairisHTTPError import ARMHTTPError
 from cairis.data.DataFlowDAO import DataFlowDAO
 from cairis.tools.JsonConverter import json_serialize
@@ -36,30 +35,7 @@ __author__ = 'Shamal Faily'
 
 
 class DataFlowsAPI(Resource):
-  #region Swagger Doc
-  @swagger.operation(
-    notes='Get all dataflows',
-    nickname='dataflows-get',
-    responseClass=DataFlowModel.__name__,
-    responseContainer='List',
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-  )
-  #endregion
+
   def get(self):
     session_id = get_session_id(session, request)
     dao = DataFlowDAO(session_id)
@@ -69,48 +45,6 @@ class DataFlowsAPI(Resource):
     resp.contenttype = 'application/json'
     return resp
 
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Creates a new dataflow',
-    nickname='dataflows-post',
-    parameters=[
-      {
-        "name": "body",
-        "description": "The serialized version of the new dataflow to be added",
-        "required": True,
-        "allowMultiple": False,
-        "type": DataFlowMessage.__name__,
-        "paramType": "body"
-      },
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'One or more attributes are missing'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'Some problems were found during the name check'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'A database error has occurred'
-      },
-      {
-        'code': ARMHTTPError.status_code,
-        'message': ARMHTTPError.status
-      }
-    ]
-  )
-  # endregion
   def post(self):
     session_id = get_session_id(session, request)
 
@@ -125,45 +59,7 @@ class DataFlowsAPI(Resource):
     return resp
 
 class DataFlowByNameAPI(Resource):
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Get a dataflow by name',
-    nickname='dataflow-by-name-get',
-    responseClass=DataFlowModel.__name__,
-    parameters=[
-      {
-        'name': 'dataflow_name',
-        'description': 'Dataflow name',
-        'required': True,
-        'allowMultiple': False,
-        'type': 'string',
-        'paramType': 'query'
-      },
-      {
-        'name': 'environment_name',
-        'description': 'Environment name',
-        'required': True,
-        'allowMultiple': False,
-        'type': 'string',
-        'paramType': 'query'
-      },
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      },
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-  )
-  # endregion
+
   def get(self, dataflow_name,environment_name):
     session_id = get_session_id(session, request)
 
@@ -174,56 +70,6 @@ class DataFlowByNameAPI(Resource):
     resp.headers['Content-type'] = 'application/json'
     return resp
 
-  # region Swagger Docs
-  @swagger.operation(
-    notes='Updates a dataflow',
-    nickname='dataflow-by-name-put',
-    parameters=[
-      {
-        'name': 'dataflow_name',
-        'description': 'Old dataflow name',
-        'required': True,
-        'allowMultiple': False,
-        'type': 'string',
-        'paramType': 'query'
-      },
-      {
-        'name': 'environment_name',
-        'description': 'Old environment name',
-        'required': True,
-        'allowMultiple': False,
-        'type': 'string',
-        'paramType': 'query'
-      },
-      {
-        'name': 'body',
-        "description": "JSON serialized version of the dataflow to be updated",
-        "required": True,
-        "allowMultiple": False,
-        'type': DataFlowMessage.__name__,
-        'paramType': 'body'
-      },
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'The provided file is not a valid XML file'
-      },
-      {
-        'code': BAD_REQUEST,
-        'message': '''Some parameters are missing. Be sure 'DataFlow' is defined.'''
-      }
-    ]
-  )
-  # endregion
   def put(self, dataflow_name,environment_name):
     session_id = get_session_id(session, request)
     dao = DataFlowDAO(session_id)
@@ -236,56 +82,6 @@ class DataFlowByNameAPI(Resource):
     resp.headers['Content-type'] = 'application/json'
     return resp
 
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Deletes an existing dataflow',
-    nickname='dataflow-by-name-delete',
-    parameters=[
-      {
-        'name': 'dataflow_name',
-        'description': 'Dataflow name',
-        'required': True,
-        'allowMultiple': False,
-        'type': 'string',
-        'paramType': 'query'
-      },
-      {
-        'name': 'environment_name',
-        'description': 'Environment name',
-        'required': True,
-        'allowMultiple': False,
-        'type': 'string',
-        'paramType': 'query'
-      },
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'One or more attributes are missing'
-      },
-      {
-        'code': NOT_FOUND,
-        'message': 'The provided dataflow name could not be found in the database'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'Some problems were found during the name check'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'A database error has occurred'
-      }
-    ]
-  )
-  # endregion
   def delete(self, dataflow_name,environment_name):
     session_id = get_session_id(session, request)
 
@@ -299,45 +95,7 @@ class DataFlowByNameAPI(Resource):
     return resp
 
 class DataFlowDiagramAPI(Resource):
-  #region Swagger Doc
-  @swagger.operation(
-    notes='Get dataflow diagram for a specific environment',
-    responseClass=str.__name__,
-    nickname='dataflow-diagram-get',
-    parameters=[
-      {
-        "name": "environment_name",
-        "description": "The dataflow diagram environment",
-        "required": True,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      },
-      {
-        "name": "filter_element",
-        "description": "The filter element",
-        "required": True,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      },
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-  )
-  #endregion
+
   def get(self, environment_name,filter_element):
     session_id = get_session_id(session, request)
     model_generator = get_model_generator()

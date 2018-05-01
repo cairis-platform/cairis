@@ -25,54 +25,16 @@ else:
 from flask import session, make_response
 from flask import request
 from flask_restful import Resource
-from flask_restful_swagger import swagger
 from cairis.daemon.CairisHTTPError import MissingParameterHTTPError, CairisHTTPError
 from cairis.data.UploadDAO import UploadDAO
 from cairis.tools.JsonConverter import json_serialize
 from cairis.tools.SessionValidator import get_session_id
 
-__author__ = 'Robin Quetin'
+__author__ = 'Robin Quetin, Shamal Faily'
 
 
 class UploadImageAPI(Resource):
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Sets up the user session',
-    nickname='user-config-post',
-    parameters=[
-      {
-        'name': 'file',
-        "description": "The image file to upload (formats: "+str(UploadDAO.accepted_image_types)+")",
-        "required": True,
-        "allowMultiple": False,
-        'type': 'file',
-        'paramType': 'form'
-      },
-      {
-        'name': 'session_id',
-        'description': 'The ID of the session to use',
-        'required': False,
-        'allowMultiple': False,
-        'type': 'string',
-        'paramType': 'query'
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'The provided parameters are invalid'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'Unsupported file type'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'Image not found'
-      }
-    ]
-  )
-  # endregion
+
   def post(self):
     session_id = get_session_id(session, request)
 

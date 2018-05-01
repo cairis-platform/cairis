@@ -24,7 +24,6 @@ else:
   from httplib import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
 from flask import session, request, make_response
 from flask_restful import Resource
-from flask_restful_swagger import swagger
 from cairis.data.ObjectDependencyDAO import ObjectDependencyDAO
 from cairis.tools.JsonConverter import json_serialize
 from cairis.tools.MessageDefinitions import ProjectMessage
@@ -35,53 +34,7 @@ __author__ = 'Shamal Faily'
 
 
 class ObjectDependencyAPI(Resource):
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Get object dependencies',
-    nickname='object-dependency-get',
-    responseClass=str.__name__,
-    parameters=[
-      {
-        'name': 'dimension_name',
-        'description': 'The dimension name, e.g. asset',
-        'required': True,
-        'allowMultiple': False,
-        'type': 'string',
-        'paramType': 'query'
-      },
-      {
-        'name': 'object_name',
-        'description': 'The object name, e.g. Clinical data',
-        'required': True,
-        'allowMultiple': False,
-        'type': 'string',
-        'paramType': 'query'
-      },
-      {
-        'name': 'session_id',
-        'description': 'The ID of the session to use',
-        'required': True,
-        'allowMultiple': False,
-        'type': 'string',
-        'paramType': 'query'
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'One or more attributes are missing'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'Some problems were found during the name check'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'A database error has occurred'
-      }
-    ]
-  )
-  # endregion
+
   def get(self,dimension_name,object_name):
     session_id = get_session_id(session, request)
 
@@ -93,53 +46,6 @@ class ObjectDependencyAPI(Resource):
     resp.contenttype = 'application/json'
     return resp
 
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Delete object dependencies',
-    nickname='object-dependency-delete',
-    responseClass=str.__name__,
-    parameters=[
-      {
-        'name': 'dimension_name',
-        'description': 'The dimension name, e.g. asset',
-        'required': True,
-        'allowMultiple': False,
-        'type': 'string',
-        'paramType': 'query'
-      },
-      {
-        'name': 'object_name',
-        'description': 'The object name, e.g. Clinical data',
-        'required': True,
-        'allowMultiple': False,
-        'type': 'string',
-        'paramType': 'query'
-      },
-      {
-        'name': 'session_id',
-        'description': 'The ID of the session to use',
-        'required': True,
-        'allowMultiple': False,
-        'type': 'string',
-        'paramType': 'query'
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'One or more attributes are missing'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'Some problems were found during the name check'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'A database error has occurred'
-      }
-    ]
-  )
-  # endregion
   def delete(self,dimension_name,object_name):
     session_id = get_session_id(session, request)
 

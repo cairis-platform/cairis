@@ -23,7 +23,6 @@ else:
   import httplib
   from httplib import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
 from flask import session, request, make_response
-from flask_restful_swagger import swagger
 from flask_restful import Resource
 from cairis.data.DocumentReferenceDAO import DocumentReferenceDAO
 from cairis.tools.JsonConverter import json_serialize
@@ -35,29 +34,7 @@ __author__ = 'Shamal Faily'
 
 
 class DocumentReferencesAPI(Resource):
-  #region Swagger Doc
-  @swagger.operation(
-    notes='Get all document references',
-    responseClass=DocumentReferenceModel.__name__,
-    nickname='document_references-get',
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-  )
-  #endregion
+
   def get(self):
     session_id = get_session_id(session, request)
     constraint_id = request.args.get('constraint_id', -1)
@@ -70,44 +47,6 @@ class DocumentReferencesAPI(Resource):
     resp.headers['Content-Type'] = "application/json"
     return resp
 
-  #region Swagger Doc
-  @swagger.operation(
-    notes='Creates a new document reference',
-    nickname='document_reference-post',
-    parameters=[
-      {
-        "name": "body",
-        "description": "The serialized version of the new document reference to be added",
-        "required": True,
-        "allowMultiple": False,
-        "type": DocumentReferenceMessage.__name__,
-        "paramType": "body"
-      },
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'One or more attributes are missing'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'Some problems were found during the name check'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'A database error has occurred'
-      }
-    ]
-  )
-  #endregion
   def post(self):
     session_id = get_session_id(session, request)
 
@@ -123,29 +62,7 @@ class DocumentReferencesAPI(Resource):
 
 
 class DocumentReferenceByNameAPI(Resource):
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Get a document reference by name',
-    responseClass=DocumentReferenceModel.__name__,
-    nickname='document_reference-by-name-get',
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-  )
-  # endregion
+
   def get(self, name):
     session_id = get_session_id(session, request)
 
@@ -157,44 +74,6 @@ class DocumentReferenceByNameAPI(Resource):
     resp.headers['Content-Type'] = "application/json"
     return resp
 
-  #region Swagger Doc
-  @swagger.operation(
-    notes='Updates an existing document reference',
-    nickname='document_reference-put',
-    parameters=[
-      {
-        "name": "body",
-        "description": "The serialized version of the document reference to be updated",
-        "required": True,
-        "allowMultiple": False,
-        "type": DocumentReferenceMessage.__name__,
-        "paramType": "body"
-      },
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'One or more attributes are missing'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'Some problems were found during the name check'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'A database error has occurred'
-      }
-    ]
-  )
-  #endregion
   def put(self, name):
     session_id = get_session_id(session, request)
 
@@ -208,36 +87,6 @@ class DocumentReferenceByNameAPI(Resource):
     resp.contenttype = 'application/json'
     return resp
 
-  #region Swagger Doc
-  @swagger.operation(
-    notes='Deletes an existing document reference',
-    nickname='document_reference-by-id-delete',
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'One or more attributes are missing'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'Some problems were found during the name check'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'A database error has occurred'
-      }
-    ]
-  )
-  #endregion
   def delete(self, name):
     session_id = get_session_id(session, request)
 

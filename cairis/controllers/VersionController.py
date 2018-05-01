@@ -24,7 +24,6 @@ else:
   from httplib import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
 from flask import make_response, request, session, send_file
 from flask_restful import Resource
-from flask_restful_swagger import swagger
 from cairis.core.ARM import DatabaseProxyException, ARMException
 from cairis.core.Borg import Borg
 from cairis.daemon.CairisHTTPError import MalformedJSONHTTPError, CairisHTTPError, ARMHTTPError, MissingParameterHTTPError
@@ -39,32 +38,7 @@ __author__ = 'Shamal Faily'
 
 
 class VersionAPI(Resource):
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Get CAIRIS version',
-    nickname='cairis-version',
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'The provided file is not a valid XML file'
-      },
-      {
-        'code': BAD_REQUEST,
-        'message': '''Some parameters are missing. Be sure 'file_contents' and 'type' are defined.'''
-      }
-    ]
-  )
-  # endregion
+
   def get(self):
     session_id = get_session_id(session, request)
     dao = VersionDAO(session_id)

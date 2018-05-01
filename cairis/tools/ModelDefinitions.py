@@ -16,7 +16,6 @@
 #  under the License.
 
 from flask_restful import fields
-from flask_restful_swagger import swagger
 from cairis.core.AcceptEnvironmentProperties import AcceptEnvironmentProperties
 
 from cairis.core.ObjectSummary import ObjectSummary
@@ -88,7 +87,6 @@ def gen_class_metadata(class_ref):
     "enum": [class_ref.__module__+'.'+class_ref.__name__]
   }
 
-@swagger.model
 class InterfaceModel(object):
   resource_fields = {
     obj_id_field: fields.String,
@@ -100,8 +98,6 @@ class InterfaceModel(object):
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
 
-@swagger.model
-@swagger.nested(attributes=SecurityAttribute.__name__)
 class AssetEnvironmentPropertiesModel(object):
   def __init__(self, env_name='', associations=[], attributes=[]):
     self.environment = env_name
@@ -125,14 +121,7 @@ class AssetEnvironmentPropertiesModel(object):
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
   required.remove("theRationale")
-  swagger_metadata = {
-    obj_id_field: gen_class_metadata(AssetEnvironmentProperties)
-  }
 
-@swagger.model
-@swagger.nested(
-  theEnvironmentProperties=AssetEnvironmentPropertiesModel.__name__
-)
 class AssetModel(object):
   resource_fields = {
     obj_id_field: fields.String,
@@ -149,9 +138,6 @@ class AssetModel(object):
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
-  swagger_metadata = {
-    obj_id_field : gen_class_metadata(Asset)
-  }
 
 class ObjectSummaryModel(object):
   resource_fields = {
@@ -166,12 +152,8 @@ class ObjectSummaryModel(object):
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
-  swagger_metadata = {
-    obj_id_field : gen_class_metadata(ObjectSummary)
-  }
 
 
-@swagger.model
 class CapabilityModel(object):
   resource_fields = {
     "name": fields.String,
@@ -179,10 +161,6 @@ class CapabilityModel(object):
   }
   required = list(resource_fields.keys())
 
-@swagger.model
-@swagger.nested(
-  theCapabilities=CapabilityModel.__name__
-)
 class AttackerEnvironmentPropertiesModel(object):
   resource_fields = {
     obj_id_field: fields.String,
@@ -193,14 +171,7 @@ class AttackerEnvironmentPropertiesModel(object):
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
-  swagger_metadata = {
-    obj_id_field: gen_class_metadata(AttackerEnvironmentProperties)
-  }
 
-@swagger.model
-@swagger.nested(
-  theEnvironmentProperties=AttackerEnvironmentPropertiesModel.__name__
-)
 class AttackerModel(object):
   resource_fields = {
     obj_id_field: fields.String,
@@ -216,11 +187,7 @@ class AttackerModel(object):
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
   required.remove('theEnvironmentDictionary')
-  swagger_metadata = {
-    obj_id_field: gen_class_metadata(Attacker)
-  }
 
-@swagger.model
 class CImportParams(object):
   resource_fields = {
     'urlenc_file_contents': fields.String,
@@ -228,36 +195,13 @@ class CImportParams(object):
     'overwrite': fields.Integer
   }
   required = list(resource_fields.keys())
-  swagger_metadata = {
-    'type': {
-      'enum': [
-        'securitypattern',
-        'attackpattern',
-        'tvtypes',
-        'directory',
-        'requirements',
-        'riskanalysis',
-        'usability',
-        'project',
-        'domainvalues',
-        'architecturalpattern',
-        'associations',
-        'synopses',
-        'processes',
-        'assets',
-        'all'
-      ]
-    }
-  }
 
-@swagger.model
 class CExportParams(object):
   resource_fields = {
     'theModel': fields.String
   }
   required = list(resource_fields.keys())
 
-@swagger.model
 class DocumentationParams(object):
   resource_fields = {
     'theDocumentType': fields.String,
@@ -266,7 +210,6 @@ class DocumentationParams(object):
   }
   required = list(resource_fields.keys())
 
-@swagger.model
 class DependencyModel(object):
   resource_fields = {
     obj_id_field: fields.String,
@@ -280,11 +223,7 @@ class DependencyModel(object):
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
-  swagger_metamodel = {
-    obj_id_field : gen_class_metadata(Dependency)
-  }
 
-@swagger.model
 class ClassAssociationModel(object):
   resource_fields = {
     obj_id_field: fields.String,
@@ -306,11 +245,7 @@ class ClassAssociationModel(object):
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
-  swagger_metamodel = {
-    obj_id_field : gen_class_metadata(ClassAssociation)
-  }
 
-@swagger.model
 class GoalAssociationModel(object):
   resource_fields = {
     obj_id_field: fields.String,
@@ -326,14 +261,7 @@ class GoalAssociationModel(object):
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
-  swagger_metamodel = {
-    obj_id_field : gen_class_metadata(GoalAssociation)
-  }
 
-@swagger.model
-@swagger.nested(
-  theTensions=EnvironmentTensionModel.__name__,
-)
 class EnvironmentModel(object):
   resource_fields = {
     obj_id_field: fields.String,
@@ -349,7 +277,6 @@ class EnvironmentModel(object):
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
 
-@swagger.model
 class GoalEnvironmentPropertiesModel(object):
   resource_fields = {
     obj_id_field: fields.String,
@@ -367,14 +294,7 @@ class GoalEnvironmentPropertiesModel(object):
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
-  swagger_metadata = {
-    obj_id_field : gen_class_metadata(GoalEnvironmentProperties)
-  }
 
-@swagger.model
-@swagger.nested(
-  theEnvironmentProperties=GoalEnvironmentPropertiesModel.__name__
-)
 class GoalModel(object):
   resource_fields = {
     obj_id_field: fields.String,
@@ -389,11 +309,7 @@ class GoalModel(object):
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
   required.remove("theEnvironmentDictionary")
-  swagger_metadata = {
-    obj_id_field : gen_class_metadata(Goal)
-  }
 
-@swagger.model
 class ObstacleEnvironmentPropertiesModel(object):
   resource_fields = {
     obj_id_field: fields.String,
@@ -408,14 +324,7 @@ class ObstacleEnvironmentPropertiesModel(object):
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
-  swagger_metadata = {
-    obj_id_field : gen_class_metadata(ObstacleEnvironmentProperties)
-  }
 
-@swagger.model
-@swagger.nested(
-  theEnvironmentProperties=ObstacleEnvironmentPropertiesModel.__name__
-)
 class ObstacleModel(object):
   resource_fields = {
     obj_id_field: fields.String,
@@ -429,11 +338,7 @@ class ObstacleModel(object):
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
   required.remove("theEnvironmentDictionary")
-  swagger_metadata = {
-    obj_id_field : gen_class_metadata(Obstacle)
-  }
 
-@swagger.model
 class DomainPropertyModel(object):
   resource_fields = {
     obj_id_field: fields.String,
@@ -446,16 +351,9 @@ class DomainPropertyModel(object):
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
-  swagger_metadata = {
-    obj_id_field : gen_class_metadata(DomainProperty)
-  }
 
 
 
-@swagger.model
-@swagger.nested(
-  theRiskRating=RiskRating.__name__
-)
 class MisuseCaseEnvironmentPropertiesModel(object):
   resource_fields = {
     obj_id_field: fields.String,
@@ -469,16 +367,7 @@ class MisuseCaseEnvironmentPropertiesModel(object):
     "theSeverity": fields.String,
   }
   required = ["theDescription", "theEnvironmentName"]
-  swagger_metadata = {
-    obj_id_field : gen_class_metadata(MisuseCaseEnvironmentProperties),
-    "theLikelihood": likelihood_metadata,
-    "theSeverity": severity_metadata
-  }
 
-@swagger.model
-@swagger.nested(
-  theEnvironmentProperties=MisuseCaseEnvironmentPropertiesModel.__name__
-)
 class MisuseCaseModel(object):
   resource_fields = {
     obj_id_field: fields.String,
@@ -490,11 +379,7 @@ class MisuseCaseModel(object):
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
   required.remove("theEnvironmentDictionary")
-  swagger_metadata = {
-    obj_id_field : gen_class_metadata(MisuseCase)
-  }
 
-@swagger.model
 class RequirementAttributesModel(object):
   resource_fields = {
     "originator": fields.String,
@@ -505,10 +390,6 @@ class RequirementAttributesModel(object):
     "type": fields.String
   }
 
-@swagger.model
-@swagger.nested(
-  attrs=RequirementAttributesModel.__name__
-)
 class RequirementModel(object):
   resource_fields = {
     obj_id_field: fields.String,
@@ -520,12 +401,8 @@ class RequirementModel(object):
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
-  swagger_metadata = {
-    obj_id_field : gen_class_metadata(Requirement)
-  }
 
 
-@swagger.model
 class AcceptEnvironmentPropertiesModel(object):
   resource_fields = {
     obj_id_field: fields.String,
@@ -535,10 +412,7 @@ class AcceptEnvironmentPropertiesModel(object):
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
-  swagger_metadata = { obj_id_field: gen_class_metadata(AcceptEnvironmentProperties) }
 
-
-@swagger.model
 class MitigateEnvironmentPropertiesModel(object):
   resource_fields = {
     obj_id_field: fields.String,
@@ -549,13 +423,8 @@ class MitigateEnvironmentPropertiesModel(object):
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
-  swagger_metadata = { obj_id_field: gen_class_metadata(MitigateEnvironmentProperties) }
 
 
-@swagger.model
-@swagger.nested(
-  theRoles=ValuedRole.__name__
-)
 class TransferEnvironmentPropertiesModel(object):
   resource_fields = {
     obj_id_field: fields.String,
@@ -565,14 +434,7 @@ class TransferEnvironmentPropertiesModel(object):
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
-  swagger_metadata = { obj_id_field: gen_class_metadata(TransferEnvironmentProperties) }
 
-@swagger.model
-@swagger.nested(
-  accept=AcceptEnvironmentPropertiesModel.__name__,
-  mitigate=MitigateEnvironmentPropertiesModel.__name__,
-  transfer=TransferEnvironmentPropertiesModel.__name__,
-)
 class ResponseEnvironmentPropertiesModel(object):
   resource_fields = {
     'accept': fields.List(fields.Nested(AcceptEnvironmentPropertiesModel.resource_fields)),
@@ -581,10 +443,6 @@ class ResponseEnvironmentPropertiesModel(object):
   }
   field_names = list(resource_fields.keys())
 
-@swagger.model
-@swagger.nested(
-  theEnvironmentProperties=ResponseEnvironmentPropertiesModel.__name__
-)
 class ResponseModel(object):
   resource_fields = {
     obj_id_field: fields.String,
@@ -599,10 +457,6 @@ class ResponseModel(object):
   required.remove(obj_id_field)
   required.remove('theTags')
 
-@swagger.model
-@swagger.nested(
-  theMisuseCase=MisuseCaseModel.__name__
-)
 class RiskModel(object):
   resource_fields = {
     obj_id_field: fields.String,
@@ -615,12 +469,7 @@ class RiskModel(object):
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
   required.remove("theTags")
-  swagger_metadata = {
-    obj_id_field : gen_class_metadata(Risk)
-  }
 
-
-@swagger.model
 class RoleModel(object):
   resource_fields = {
     obj_id_field: fields.String,
@@ -636,11 +485,6 @@ class RoleModel(object):
   required.remove(obj_id_field)
   required.remove("theEnvironmentProperties")
 
-  swagger_metadata = {
-    obj_id_field : gen_class_metadata(Role)
-  }
-
-@swagger.model
 class RoleEnvironmentPropertiesModel(object):
   resource_fields = {
     "theEnvironmentName": fields.String,
@@ -651,10 +495,6 @@ class RoleEnvironmentPropertiesModel(object):
   }
   required = list(resource_fields.keys())
 
-@swagger.model
-@swagger.nested(
-  theProperties=SecurityAttribute.__name__
-)
 class ThreatEnvironmentPropertiesModel(object):
   resource_fields = {
     obj_id_field: fields.String,
@@ -668,15 +508,7 @@ class ThreatEnvironmentPropertiesModel(object):
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
   required.remove('theRationale')
-  swagger_metadata = {
-    obj_id_field : gen_class_metadata(ThreatEnvironmentProperties),
-    'theLikelihood' : likelihood_metadata
-  }
 
-@swagger.model
-@swagger.nested(
-  theEnvironmentProperties=ThreatEnvironmentPropertiesModel.__name__
-)
 class ThreatModel(object):
   resource_fields = {
     obj_id_field: fields.String,
@@ -696,7 +528,6 @@ class ThreatModel(object):
   required.remove('theEnvironmentDictionary')
   required.remove('likelihoodLookup')
 
-@swagger.model
 class UserConfigModel(object):
   resource_fields = {
     "user": fields.String,
@@ -708,14 +539,7 @@ class UserConfigModel(object):
   }
   required = list(resource_fields.keys())
   required.remove("jsonPrettyPrint")
-  swagger_metadata = {
-    'jsonPrettyPrint':
-      {
-        'enum': ['on', 'off']
-      }
-  }
 
-@swagger.model
 class VulnerabilityEnvironmentPropertiesModel(object):
   resource_fields = {
     obj_id_field: fields.String,
@@ -725,16 +549,7 @@ class VulnerabilityEnvironmentPropertiesModel(object):
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
-  swagger_metadata = {
-    obj_id_field : gen_class_metadata(VulnerabilityEnvironmentProperties),
-    "theSeverity": severity_metadata
-  }
 
-@swagger.model
-@swagger.nested(
-  theEnvironmentProperties=VulnerabilityEnvironmentPropertiesModel.__name__,
-  theEnvironmentDictionary=VulnerabilityEnvironmentPropertiesModel.__name__
-)
 class VulnerabilityModel(object):
   resource_fields = {
     obj_id_field: fields.String,
@@ -751,14 +566,7 @@ class VulnerabilityModel(object):
   required.remove(obj_id_field)
   required.remove('theEnvironmentDictionary')
   required.remove('severityLookup')
-  swagger_metadata = {
-    obj_id_field: gen_class_metadata(Vulnerability),
-    'theVulnerabilityType' : {
-      "enum": ['Configuration', 'Design', 'Implementation']
-    }
-  }
 
-@swagger.model
 class CountermeasureTask(object):
   resource_fields = {
     "thePersona": fields.String,
@@ -769,20 +577,6 @@ class CountermeasureTask(object):
     "theGoalConflict": fields.String
   }
   required = list(resource_fields.keys())
-  swagger_metadata = {
-    'theDuration' : {
-      "enum": ['High Help','Medium Help','Low Help','None','Low Hindrance','Medium Hindrance','High Hindrance']
-    },
-    'theFrequency' : {
-      "enum": ['High Help','Medium Help','Low Help','None','Low Hindrance','Medium Hindrance','High Hindrance']
-    },
-    'theDemands' : {
-      "enum": ['High Help','Medium Help','Low Help','None','Low Hindrance','Medium Hindrance','High Hindrance']
-    },
-    'theGoalConflict' : {
-      "enum": ['High Help','Medium Help','Low Help','None','Low Hindrance','Medium Hindrance','High Hindrance']
-    }
-  }
 
   def __init__(self,pName,tName,tDur,tFreq,tDemands,tGoalConflict):
     self.thePersona = pName
@@ -792,7 +586,6 @@ class CountermeasureTask(object):
     self.theDemands = tDemands
     self.theGoalConflict = tGoalConflict
 
-@swagger.model
 class CountermeasureEnvironmentPropertiesModel(object):
   resource_fields = {
     obj_id_field: fields.String,
@@ -807,15 +600,7 @@ class CountermeasureEnvironmentPropertiesModel(object):
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
-  swagger_metadata = {
-    obj_id_field : gen_class_metadata(CountermeasureEnvironmentProperties),
-    "theCost": value_metadata
-  }
 
-@swagger.model
-@swagger.nested(
-  theEnvironmentProperties=CountermeasureEnvironmentPropertiesModel.__name__,
-)
 class CountermeasureModel(object):
   resource_fields = {
     obj_id_field: fields.String,
@@ -829,10 +614,6 @@ class CountermeasureModel(object):
   required.remove(obj_id_field)
   required.remove('theTags')
   required.remove('theEnvironmentDictionary')
-  swagger_metadata = {
-    obj_id_field: gen_class_metadata(Countermeasure),
-    'theType' : assettype_metadata
-  }
 
 class PersonaEnvironmentPropertiesModel(object):
   resource_fields = {
@@ -844,14 +625,7 @@ class PersonaEnvironmentPropertiesModel(object):
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
-  swagger_metadata = {
-    obj_id_field: gen_class_metadata(PersonaEnvironmentProperties)
-  }
 
-@swagger.model
-@swagger.nested(
-  theEnvironmentProperties=PersonaEnvironmentPropertiesModel.__name__
-)
 class PersonaModel(object):
   resource_fields = {
     obj_id_field: fields.String,
@@ -875,9 +649,6 @@ class PersonaModel(object):
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
   required.remove('theEnvironmentDictionary')
-  swagger_metadata = {
-    obj_id_field: gen_class_metadata(Persona)
-  }
 
 class TaskConcernAssociationModel(object):
   resource_fields = {
@@ -913,13 +684,7 @@ class TaskEnvironmentPropertiesModel(object):
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
-  swagger_metadata = {
-    obj_id_field: gen_class_metadata(TaskEnvironmentProperties)
-  }
 
-@swagger.nested(
-  theEnvironmentProperties=TaskEnvironmentPropertiesModel.__name__
-)
 class TaskModel(object):
   resource_fields = {
     obj_id_field: fields.String,
@@ -936,9 +701,6 @@ class TaskModel(object):
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
   required.remove('theEnvironmentDictionary')
-  swagger_metadata = {
-    obj_id_field: gen_class_metadata(Task)
-  }
 
 class UseCaseEnvironmentPropertiesModel(object):
   resource_fields = {
@@ -949,13 +711,6 @@ class UseCaseEnvironmentPropertiesModel(object):
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
-  swagger_metadata = {
-    obj_id_field: gen_class_metadata(UseCaseEnvironmentProperties)
-  }
-
-@swagger.nested(
-  theEnvironmentProperties=UseCaseEnvironmentPropertiesModel.__name__
-)
 
 class UseCaseContributionModel(object):
   resource_fields = {
@@ -994,9 +749,6 @@ class UseCaseModel(object):
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
   required.remove('theEnvironmentDictionary')
-  swagger_metadata = {
-    obj_id_field: gen_class_metadata(UseCase)
-  }
 
 class SearchValuesModel(object):
   resource_fields = {
@@ -1032,11 +784,7 @@ class ValidationModel(object):
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
-  swagger_metadata = {
-    obj_id_field : gen_class_metadata(ValidationResult)
-  }
 
-@swagger.model
 class AssetAssociationModel(object):
   resource_fields = {
     obj_id_field: fields.String,
@@ -1057,11 +805,7 @@ class AssetAssociationModel(object):
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
-  swagger_metadata = {
-    obj_id_field : gen_class_metadata(ClassAssociation)
-  }
 
-@swagger.model
 class GoalAssociationModel(object):
   resource_fields = {
     obj_id_field: fields.String,
@@ -1076,11 +820,7 @@ class GoalAssociationModel(object):
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
-  swagger_metadata = {
-    obj_id_field : gen_class_metadata(GoalAssociation)
-  }
 
-@swagger.model
 class ExternalDocumentModel(object):
   resource_fields = {
     obj_id_field: fields.String,
@@ -1092,11 +832,7 @@ class ExternalDocumentModel(object):
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
-  swagger_metadata = {
-    obj_id_field : gen_class_metadata(ExternalDocument)
-  }
 
-@swagger.model
 class DocumentReferenceModel(object):
   resource_fields = {
     obj_id_field: fields.String,
@@ -1107,11 +843,7 @@ class DocumentReferenceModel(object):
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
-  swagger_metadata = {
-    obj_id_field : gen_class_metadata(DocumentReference)
-  }
 
-@swagger.model
 class ConceptReferenceModel(object):
   resource_fields = {
     obj_id_field: fields.String,
@@ -1122,11 +854,7 @@ class ConceptReferenceModel(object):
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
-  swagger_metadata = {
-    obj_id_field : gen_class_metadata(ConceptReference)
-  }
 
-@swagger.model
 class PersonaCharacteristicModel(object):
   resource_fields = {
     obj_id_field: fields.String,
@@ -1141,11 +869,7 @@ class PersonaCharacteristicModel(object):
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
-  swagger_metadata = {
-    obj_id_field : gen_class_metadata(PersonaCharacteristic)
-  }
 
-@swagger.model
 class TaskCharacteristicModel(object):
   resource_fields = {
     obj_id_field: fields.String,
@@ -1158,12 +882,8 @@ class TaskCharacteristicModel(object):
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
-  swagger_metadata = {
-    obj_id_field : gen_class_metadata(TaskCharacteristic)
-  }
 
 
-@swagger.model
 class ObjectDependencyModel(object):
   resource_fields = {
     obj_id_field: fields.String,
@@ -1175,7 +895,6 @@ class ObjectDependencyModel(object):
   def __init__(self):
     self.theDependencies = []
 
-@swagger.model
 class ComponentStructureModel(object):
   resource_fields = {
     obj_id_field: fields.String,
@@ -1193,7 +912,6 @@ class ComponentStructureModel(object):
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
 
-@swagger.model
 class ComponentGoalAssociationModel(object):
   resource_fields = {
     obj_id_field: fields.String,
@@ -1205,9 +923,6 @@ class ComponentGoalAssociationModel(object):
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
 
-
-
-@swagger.model
 class ComponentModel(object):
   resource_fields = {
     obj_id_field: fields.String,
@@ -1221,11 +936,7 @@ class ComponentModel(object):
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
-  swagger_metadata = {
-    obj_id_field : gen_class_metadata(Component)
-  }
 
-@swagger.model
 class ConnectorModel(object):
   resource_fields = {
     obj_id_field: fields.String,
@@ -1243,7 +954,6 @@ class ConnectorModel(object):
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
 
-@swagger.model
 class ArchitecturalPatternModel(object):
   resource_fields = {
     obj_id_field: fields.String,
@@ -1255,11 +965,7 @@ class ArchitecturalPatternModel(object):
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
-  swagger_metadata = {
-    obj_id_field : gen_class_metadata(ComponentView)
-  }
 
-@swagger.model
 class ValueTypeModel(object):
   resource_fields = {
     obj_id_field: fields.String,
@@ -1272,14 +978,7 @@ class ValueTypeModel(object):
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
-  swagger_metadata = {
-    obj_id_field : gen_class_metadata(ValueType),
-    "theType": {
-      "enum": ['asset_value','threat_value','risk_class','countermeasure_value','capability','motivation','asset_type','threat_type','vulnerability_type','severity','likelihood','access_right','protocol','privilege','surface_type']
-    }
-  }
 
-@swagger.model
 class TemplateGoalModel(object):
   resource_fields = {
     obj_id_field: fields.String,
@@ -1291,11 +990,7 @@ class TemplateGoalModel(object):
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
-  swagger_metadata = {
-    obj_id_field : gen_class_metadata(TemplateGoal)
-  }
 
-@swagger.model
 class TemplateAssetModel(object):
   resource_fields = {
     obj_id_field: fields.String,
@@ -1313,12 +1008,7 @@ class TemplateAssetModel(object):
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
   required.remove('theTags')
-  swagger_metadata = {
-    obj_id_field : gen_class_metadata(TemplateAsset)
-  }
 
-
-@swagger.model
 class TemplateRequirementModel(object):
   resource_fields = {
     obj_id_field: fields.String,
@@ -1331,11 +1021,7 @@ class TemplateRequirementModel(object):
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
-  swagger_metadata = {
-    obj_id_field : gen_class_metadata(TemplateRequirement)
-  }
 
-@swagger.model
 class LocationModel(object):
   resource_fields = {
     obj_id_field: fields.String,
@@ -1346,11 +1032,7 @@ class LocationModel(object):
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
-  swagger_metadata = {
-    obj_id_field : gen_class_metadata(Location)
-  }
 
-@swagger.model
 class LocationsModel(object):
   resource_fields = {
     obj_id_field: fields.String,
@@ -1360,11 +1042,7 @@ class LocationsModel(object):
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
-  swagger_metadata = {
-    obj_id_field : gen_class_metadata(Locations)
-  }
 
-@swagger.model
 class SummaryModel(object):
   resource_fields = {
     "theLabel": fields.String,
@@ -1376,7 +1054,6 @@ class SummaryModel(object):
     self.theLabel = lbl 
     self.theValue = val
 
-@swagger.model
 class TraceModel(object):
   resource_fields = {
     obj_id_field: fields.String,
@@ -1387,16 +1064,13 @@ class TraceModel(object):
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
-  swagger_metadata = {
-    obj_id_field : gen_class_metadata(Trace)
-  }
+
   def __init__(self,fromObjt,fromName,toObjt,toName):
     self.theFromObject = fromObjt
     self.theFromName = fromName
     self.theToObject = toObjt
     self.theToName = toName
 
-@swagger.model
 class WeaknessTargetModel(object):
   resource_fields = {
     obj_id_field: fields.String,
@@ -1411,9 +1085,7 @@ class WeaknessTargetModel(object):
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
-  swagger_metadata = {
-    obj_id_field : gen_class_metadata(WeaknessTarget)
-  }
+
   def __init__(self):
     self.theTargetName = ''
     self.theComponents = []
@@ -1424,7 +1096,6 @@ class WeaknessTargetModel(object):
     self.theTreatmentEffectiveness = ''
     self.theTreatmentRationale = ''
 
-@swagger.model
 class PersonaImpactModel(object):
   resource_fields = {
     obj_id_field: fields.String,
@@ -1439,7 +1110,6 @@ class PersonaImpactModel(object):
     self.theImpactScore = iScore
 
 
-@swagger.model
 class CandidateGoalObstacleModel(object):
   resource_fields = {
     obj_id_field: fields.String,
@@ -1453,7 +1123,6 @@ class CandidateGoalObstacleModel(object):
     self.theGoalName = gName
     self.theObstacleName = oName
 
-@swagger.model
 class WeaknessAnalysisModel(object):
   resource_fields = {
     obj_id_field: fields.String,
@@ -1471,7 +1140,6 @@ class WeaknessAnalysisModel(object):
     self.thePersonaImpact = []
     self.theCandidateGoals = []
 
-@swagger.model
 class SecurityPatternStructureModel(object):
   resource_fields = {
     obj_id_field: fields.String,
@@ -1488,7 +1156,6 @@ class SecurityPatternStructureModel(object):
   required.remove(obj_id_field)
 
 
-@swagger.model
 class PatternRequirementModel(object):
   resource_fields = {
     obj_id_field: fields.String,
@@ -1502,7 +1169,6 @@ class PatternRequirementModel(object):
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
 
-@swagger.model
 class SecurityPatternModel(object):
   resource_fields = {
     obj_id_field: fields.String,
@@ -1515,11 +1181,7 @@ class SecurityPatternModel(object):
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
-  swagger_metadata = {
-    obj_id_field : gen_class_metadata(SecurityPattern)
-  }
 
-@swagger.model
 class DataFlowModel(object):
   resource_fields = {
     obj_id_field: fields.String,
@@ -1533,11 +1195,7 @@ class DataFlowModel(object):
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
-  swagger_metadata = {
-    obj_id_field : gen_class_metadata(DataFlow)
-  }
 
-@swagger.model
 class DirectoryModel(object):
   resource_fields = {
     obj_id_field: fields.String,
@@ -1549,13 +1207,8 @@ class DirectoryModel(object):
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
-  swagger_metadata = {
-    obj_id_field : gen_class_metadata(Directory)
-  }
 
-@swagger.model
 class TrustBoundaryComponent(object):
-  # region Swagger Doc
   resource_fields = {
     obj_id_field: fields.String,
     'theName': fields.String,
@@ -1563,7 +1216,6 @@ class TrustBoundaryComponent(object):
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
-  # endregion
 
   def __init__(self,n,t):
     self.theName = n 
@@ -1585,7 +1237,6 @@ class TrustBoundaryEnvironmentModel(object):
     self.theName = n
     self.theComponents = c
 
-@swagger.model
 class TrustBoundaryModel(object):
   resource_fields = {
     obj_id_field: fields.String,
@@ -1595,11 +1246,7 @@ class TrustBoundaryModel(object):
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
-  swagger_metadata = {
-    obj_id_field: gen_class_metadata(TrustBoundary)
-  }
 
-@swagger.model
 class ThreatModelPropertyModel(object):
   resource_fields = {
     obj_id_field: fields.String,
@@ -1609,7 +1256,6 @@ class ThreatModelPropertyModel(object):
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
 
-@swagger.model
 class ThreatModelElementModel(object):
   resource_fields = {
     obj_id_field: fields.String,
@@ -1619,7 +1265,6 @@ class ThreatModelElementModel(object):
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
 
-@swagger.model
 class ThreatModelModel(object):
   resource_fields = {
     obj_id_field: fields.String,

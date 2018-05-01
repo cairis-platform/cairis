@@ -23,54 +23,20 @@ else:
   import httplib
   from httplib import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
 from flask import request, session, make_response
-from flask_restful_swagger import swagger
 from flask_restful import Resource
 from cairis.daemon.CairisHTTPError import ObjectNotFoundHTTPError
 from cairis.data.AssetDAO import AssetDAO
 from cairis.data.AssetAssociationDAO import AssetAssociationDAO
 from cairis.tools.JsonConverter import json_serialize
 from cairis.tools.MessageDefinitions import AssetMessage, AssetEnvironmentPropertiesMessage, ValueTypeMessage, AssetAssociationMessage
-from cairis.tools.ModelDefinitions import AssetModel as SwaggerAssetModel, AssetAssociationModel, AssetEnvironmentPropertiesModel, ValueTypeModel
-from cairis.tools.ModelDefinitions import ObjectSummaryModel as SwaggerObjectSummaryModel
+from cairis.tools.ModelDefinitions import AssetModel as AssetAssociationModel, AssetEnvironmentPropertiesModel, ValueTypeModel
 from cairis.tools.SessionValidator import get_session_id, get_model_generator
 
 __author__ = 'Robin Quetin, Shamal Faily'
 
 
 class AssetsAPI(Resource):
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Get all assets without the asset environment properties.' +
-          'To get the asset environment properties of an asset, please use /api/assets/{name}/properties',
-    responseClass=SwaggerAssetModel.__name__,
-    nickname='assets-get',
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      },
-      {
-        "name": "constraint_id",
-        "description": "An ID used to filter the assets",
-        "required": False,
-        "default": -1,
-        "allowMultiple": False,
-        "dataType": int.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-  )
-  # endregion
+
   def get(self):
     constraint_id = request.args.get('constraint_id', -1)
     session_id = get_session_id(session, request)
@@ -81,40 +47,6 @@ class AssetsAPI(Resource):
     resp.headers['Content-Type'] = "application/json"
     return resp
 
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Creates a new asset',
-    nickname='asset-post',
-    parameters=[
-      {
-        "name": "body",
-        "description": "The serialized version of the new asset to be added",
-        "required": True,
-        "allowMultiple": False,
-        "type": AssetMessage.__name__,
-        "paramType": "body"
-      },
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'One or more attributes are missing'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'A database error has occurred'
-      }
-    ]
-  )
-  # endregion
   def post(self):
     session_id = get_session_id(session, request)
 
@@ -130,29 +62,7 @@ class AssetsAPI(Resource):
 
 
 class AssetByEnvironmentNamesAPI(Resource):
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Get all the asset names associated with a specific environment',
-    responseClass=SwaggerAssetModel.__name__,
-    nickname='assets-by-environment-names-get',
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-  )
-  # endregion
+
   def get(self, environment):
     session_id = get_session_id(session, request)
 
@@ -166,29 +76,7 @@ class AssetByEnvironmentNamesAPI(Resource):
 
 
 class AssetByNameAPI(Resource):
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Get an asset by name',
-    responseClass=SwaggerAssetModel.__name__,
-    nickname='asset-by-name-get',
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-  )
-  # endregion
+
   def get(self, name):
     session_id = get_session_id(session, request)
 
@@ -200,44 +88,6 @@ class AssetByNameAPI(Resource):
     resp.headers['Content-Type'] = "application/json"
     return resp
 
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Updates an existing asset',
-    nickname='asset-put',
-    parameters=[
-      {
-        "name": "body",
-        "description": "The session ID and the serialized version of the asset to be updated",
-        "required": True,
-        "allowMultiple": False,
-        "type": AssetMessage.__name__,
-        "paramType": "body"
-      },
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'One or more attributes are missing'
-      },
-      {
-        'code': NOT_FOUND,
-        'message': 'The provided asset name could not be found in the database'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'A database error has occurred'
-      }
-    ]
-  )
-  # endregion
   def put(self, name):
     session_id = get_session_id(session, request)
 
@@ -251,36 +101,6 @@ class AssetByNameAPI(Resource):
     resp.contenttype = 'application/json'
     return resp
 
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Deletes an existing asset',
-    nickname='asset-delete',
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'One or more attributes are missing'
-      },
-      {
-        'code': NOT_FOUND,
-        'message': 'The provided asset name could not be found in the database'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'A database error has occurred'
-      }
-    ]
-  )
-  # endregion
   def delete(self, name):
     session_id = request.args.get('session_id', None)
     dao = AssetDAO(session_id)
@@ -294,30 +114,7 @@ class AssetByNameAPI(Resource):
     return resp
 
 class AssetNamesAPI(Resource):
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Get a list of assets',
-    responseClass=str.__name__,
-    responseContainer="List",
-    nickname='asset-names-get',
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-  )
-  # endregion
+
   def get(self):
     session_id = request.args.get('session_id', None)
 
@@ -331,53 +128,7 @@ class AssetNamesAPI(Resource):
 
 
 class AssetModelAPI(Resource):
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Get the asset model for a specific environment',
-    nickname='asset-model-get',
-    parameters=[
-      {
-        "name": "environment",
-        "description": "The environment to be used for the asset model",
-        "required": True,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      },
-      {
-        "name": "asset",
-        "description": "The asset filter",
-        "required": True,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      },
-      {
-        "name": "hide_concerns",
-        "description": "Defines if concerns should be hidden in the model",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "enum": ['0','1'],
-        "paramType": "query"
-      },
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-  )
-  # endregion
+
   def get(self, environment,asset):
     session_id = get_session_id(session, request)
     hide_concerns = request.args.get('hide_concerns', '1')
@@ -407,29 +158,7 @@ class AssetModelAPI(Resource):
 
 
 class AssetEnvironmentPropertiesAPI(Resource):
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Get the environment properties for a specific asset',
-    nickname='asset-envprops-by-name-get',
-    responseClass=AssetEnvironmentPropertiesModel.__name__,
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-  )
-  # endregion
+
   def get(self, asset_name):
     session_id = get_session_id(session, request)
 
@@ -441,35 +170,6 @@ class AssetEnvironmentPropertiesAPI(Resource):
     resp.contenttype = 'application/json'
     return resp
 
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Updates the environment properties for a specific asset',
-    nickname='asset-envprops-by-name-put',
-    parameters=[
-      {
-        "name": "body",
-        "required": True,
-        "allowMultiple": False,
-        "dataType": AssetEnvironmentPropertiesMessage.__name__,
-        "paramType": "body"
-      },
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-         "message": "The database connection was not properly set up"
-      }
-    ]
-  )
-  # endregion
   def put(self, asset_name):
     session_id = get_session_id(session, request)
 
@@ -485,30 +185,7 @@ class AssetEnvironmentPropertiesAPI(Resource):
 
 
 class AssetTypesAPI(Resource):
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Get all asset types',
-    nickname='assets-types-get',
-    responseClass=ValueTypeModel.__name__,
-    responseContainer='List',
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-  )
-  # endregion
+
   def get(self):
     session_id = get_session_id(session, request)
     environment_name = request.args.get('environment', '')
@@ -521,40 +198,6 @@ class AssetTypesAPI(Resource):
     resp.contenttype = 'application/json'
     return resp
 
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Creates a new asset type',
-    nickname='asset-type-by-name-post',
-    parameters=[
-      {
-        "name": "body",
-        "description": "The serialized version of the new asset type to be added",
-        "required": True,
-        "allowMultiple": False,
-        "type": ValueTypeMessage.__name__,
-        "paramType": "body"
-      },
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'One or more attributes are missing'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'A database error has occurred'
-      }
-    ]
-  )
-  # endregion
   def post(self):
     session_id = get_session_id(session, request)
     environment_name = request.args.get('environment', '')
@@ -571,29 +214,7 @@ class AssetTypesAPI(Resource):
 
 
 class AssetTypeByNameAPI(Resource):
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Get a asset type by name',
-    nickname='asset-type-by-name-get',
-    responseClass=ValueTypeModel.__name__,
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-  )
-  # endregion
+
   def get(self, name):
     session_id = get_session_id(session, request)
     environment_name = request.args.get('environment', '')
@@ -606,40 +227,6 @@ class AssetTypeByNameAPI(Resource):
     resp.headers['Content-type'] = 'application/json'
     return resp
 
-  # region Swagger Docs
-  @swagger.operation(
-    notes='Updates an asset type',
-    nickname='asset-type-by-name-put',
-    parameters=[
-      {
-        'name': 'body',
-        "description": "",
-        "required": True,
-        "allowMultiple": False,
-        'type': ValueTypeMessage.__name__,
-        'paramType': 'body'
-      },
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'The provided file is not a valid XML file'
-      },
-      {
-        'code': BAD_REQUEST,
-        'message': '''Some parameters are missing. Be sure 'asset' is defined.'''
-      }
-    ]
-  )
-  # endregion
   def put(self, name):
     session_id = get_session_id(session, request)
     environment_name = request.args.get('environment', '')
@@ -654,36 +241,6 @@ class AssetTypeByNameAPI(Resource):
     resp.headers['Content-type'] = 'application/json'
     return resp
 
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Deletes an existing asset type',
-    nickname='asset-type-by-name-delete',
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'One or more attributes are missing'
-      },
-      {
-        'code': NOT_FOUND,
-        'message': 'The provided asset name could not be found in the database'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'A database error has occurred'
-      }
-    ]
-  )
-  # endregion
   def delete(self, name):
     session_id = get_session_id(session, request)
     environment_name = request.args.get('environment', '')
@@ -699,30 +256,7 @@ class AssetTypeByNameAPI(Resource):
 
 
 class AssetValuesAPI(Resource):
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Get all asset values',
-    nickname='assets-values-get',
-    responseClass=ValueTypeModel.__name__,
-    responseContainer='List',
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-  )
-  # endregion
+
   def get(self, environment_name):
     session_id = get_session_id(session, request)
 
@@ -736,29 +270,7 @@ class AssetValuesAPI(Resource):
 
 
 class AssetValueByNameAPI(Resource):
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Get a asset value by name',
-    nickname='asset-value-by-name-get',
-    responseClass=ValueTypeModel.__name__,
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-  )
-  # endregion
+
   def get(self, name, environment_name):
     session_id = get_session_id(session, request)
 
@@ -770,36 +282,6 @@ class AssetValueByNameAPI(Resource):
     resp.headers['Content-type'] = 'application/json'
     return resp
 
-  # region Swagger Docs
-  @swagger.operation(
-    notes='Updates a asset value',
-    nickname='asset-value-by-name-put',
-    parameters=[
-      {
-        'name': 'body',
-        "description": "",
-        "required": True,
-        "allowMultiple": False,
-        'type': ValueTypeMessage.__name__,
-        'paramType': 'body'
-      },
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'The provided file is not a valid XML file'
-      }
-    ]
-  )
-  # endregion
   def put(self, name, environment_name):
     session_id = get_session_id(session, request)
 
@@ -815,53 +297,7 @@ class AssetValueByNameAPI(Resource):
 
 
 class AssetAssociationByNameAPI(Resource):
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Get an asset association',
-    responseClass=AssetAssociationModel.__name__,
-    nickname='asset-association-get',
-    parameters=[
-      {
-        "name": "environment_name",
-        "description": "The environment name",
-        "required": True,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      },
-      {
-        "name": "head_name",
-        "description": "The head asset name",
-        "required": True,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      },
-      {
-        "name": "tail_name",
-        "description": "The tail asset name",
-        "required": True,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      },
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-  )
-  # endregion
+
   def get(self,environment_name,head_name,tail_name):
     session_id = get_session_id(session, request)
     dao = AssetAssociationDAO(session_id)
@@ -870,57 +306,6 @@ class AssetAssociationByNameAPI(Resource):
     resp = make_response(json_serialize(assoc, session_id=session_id))
     resp.headers['Content-Type'] = "application/json"
     return resp
-
-  # region Swagger Docs
-  @swagger.operation(
-    notes='Delete an asset-association',
-    nickname='asset-association-delete',
-    parameters=[
-      {
-        "name": "environment_name",
-        "description": "The environment name",
-        "required": True,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      },
-      {
-        "name": "head_name",
-        "description": "The head asset name",
-        "required": True,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      },
-      {
-        "name": "tail_name",
-        "description": "The tail asset name",
-        "required": True,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      },
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'One or more attributes are missing'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'A database error has occurred'
-      }
-    ]
-  )
-  # endregion
 
   def delete(self,environment_name,head_name,tail_name):
     session_id = get_session_id(session, request)
@@ -933,56 +318,6 @@ class AssetAssociationByNameAPI(Resource):
     resp.contenttype = 'application/json'
     return resp
 
-  # region Swagger Docs
-  @swagger.operation(
-    notes='Update an asset-association',
-    nickname='asset-association-update',
-    parameters=[
-      {
-        "name": "environment_name",
-        "description": "The environment name",
-        "required": True,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      },
-      {
-        "name": "head_name",
-        "description": "The head asset name",
-        "required": True,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      },
-      {
-        "name": "tail_name",
-        "description": "The tail asset name",
-        "required": True,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      },
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'One or more attributes are missing'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'A database error has occurred'
-      }
-    ]
-  )
-  # endregion
   def put(self,environment_name,head_name,tail_name):
     session_id = get_session_id(session, request)
     dao = AssetAssociationDAO(session_id)
@@ -997,29 +332,7 @@ class AssetAssociationByNameAPI(Resource):
 
 
 class AssetAssociationAPI(Resource):
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Get asset associations',
-    responseClass=AssetAssociationModel.__name__,
-    nickname='assets-get',
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-  )
-  # endregion
+
   def get(self):
     session_id = get_session_id(session, request)
 
@@ -1031,40 +344,6 @@ class AssetAssociationAPI(Resource):
     return resp
 
 
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Creates a new asset association',
-    nickname='asset-association-post',
-    parameters=[
-      {
-        "name": "body",
-        "description": "The serialized version of the new asset association to be added",
-        "required": True,
-        "allowMultiple": False,
-        "type": AssetAssociationMessage.__name__,
-        "paramType": "body"
-      },
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'One or more attributes are missing'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'A database error has occurred'
-      }
-    ]
-  )
-  # endregion
   def post(self):
     session_id = get_session_id(session, request)
 
@@ -1079,30 +358,7 @@ class AssetAssociationAPI(Resource):
     return resp
 
 class AssetsSummaryAPI(Resource):
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Get summary of assets',
-    responseClass=SwaggerObjectSummaryModel.__name__,
-    nickname='assets-summary-get',
-    responseContainer='List',
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-  )
-  # endregion
+
   def get(self):
     session_id = get_session_id(session, request)
     dao = AssetDAO(session_id)

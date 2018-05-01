@@ -25,7 +25,6 @@ else:
 
 from flask import session, request, make_response
 from flask_restful import Resource
-from flask_restful_swagger import swagger
 from cairis.daemon.CairisHTTPError import ARMHTTPError, ObjectNotFoundHTTPError
 from cairis.data.SecurityPatternDAO import SecurityPatternDAO
 from cairis.tools.JsonConverter import json_serialize
@@ -36,29 +35,7 @@ __author__ = 'Shamal Faily'
 
 
 class SecurityPatternsAPI(Resource):
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Get security patterns',
-    nickname='security-patterns-get',
-    responseClass=str.__name__,
-    parameters=[
-      {
-        'name': 'session_id',
-        'description': 'The ID of the session to use',
-        'required': True,
-        'allowMultiple': False,
-        'type': 'string',
-        'paramType': 'query'
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'The database connection was not properly setup'
-      },
-    ]
-  )
-  # endregion
+
   def get(self):
     session_id = get_session_id(session, request)
     dao = SecurityPatternDAO(session_id)
@@ -68,49 +45,6 @@ class SecurityPatternsAPI(Resource):
     resp.contenttype = 'application/json'
     return resp
 
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Add security pattern',
-    nickname='security-pattern-add',
-    responseClass=str.__name__,
-    parameters=[
-      {
-        "name": "body",
-        "description": "The serialized version of the new security pattern to be added",
-        "required": True,
-        "allowMultiple": False,
-        "type": SecurityPatternMessage.__name__,
-        "paramType": "body"
-      },
-      {
-        'name': 'session_id',
-        'description': 'The ID of the session to use',
-        'required': True,
-        'allowMultiple': False,
-        'type': 'string',
-        'paramType': 'query'
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'The database connection was not properly setup'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'Some problems were found during the name check'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'A database error has occurred'
-      },
-      {
-        'code': ARMHTTPError.status_code,
-        'message': ARMHTTPError.status
-      }
-    ]
-  )
-  # endregion
   def post(self):
     session_id = get_session_id(session, request)
     dao = SecurityPatternDAO(session_id)
@@ -124,37 +58,7 @@ class SecurityPatternsAPI(Resource):
 
 
 class SecurityPatternByNameAPI(Resource):
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Get security patterns by name',
-    nickname='security-patterns-get-by-name',
-    responseClass=str.__name__,
-    parameters=[
-      {
-        'name': 'name',
-        'description': 'Security pattern name',
-        'required': True,
-        'allowMultiple': False,
-        'type': 'string',
-        'paramType': 'query'
-      },
-      {
-        'name': 'session_id',
-        'description': 'The ID of the session to use',
-        'required': True,
-        'allowMultiple': False,
-        'type': 'string',
-        'paramType': 'query'
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'The database connection was not properly setup'
-      },
-    ]
-  )
-  # endregion
+
   def get(self,name):
     session_id = get_session_id(session, request)
     dao = SecurityPatternDAO(session_id)
@@ -165,57 +69,6 @@ class SecurityPatternByNameAPI(Resource):
     return resp
 
 
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Update security pattern',
-    nickname='security-pattern-update',
-    responseClass=str.__name__,
-    parameters=[
-      {
-        'name': 'name',
-        'description': 'Security pattern name',
-        'required': True,
-        'allowMultiple': False,
-        'type': 'string',
-        'paramType': 'query'
-      },
-      {
-        "name": "body",
-        "description": "The serialized version of the security pattern to be updated",
-        "required": True,
-        "allowMultiple": False,
-        "type": SecurityPatternMessage.__name__,
-        "paramType": "body"
-      },
-      {
-        'name': 'session_id',
-        'description': 'The ID of the session to use',
-        'required': True,
-        'allowMultiple': False,
-        'type': 'string',
-        'paramType': 'query'
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'The database connection was not properly setup'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'Some problems were found during the name check'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'A database error has occurred'
-      },
-      {
-        'code': ARMHTTPError.status_code,
-        'message': ARMHTTPError.status
-      }
-    ]
-  )
-  # endregion
   def put(self,name):
     session_id = get_session_id(session, request)
     dao = SecurityPatternDAO(session_id)
@@ -228,49 +81,6 @@ class SecurityPatternByNameAPI(Resource):
     return resp
 
 
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Delete an existing security patterns',
-    nickname='security-pattern-by-name-delete',
-    responseClass=str.__name__,
-    parameters=[
-      {
-        'name': 'name',
-        'description': 'Security pattern name',
-        'required': True,
-        'allowMultiple': False,
-        'type': 'string',
-        'paramType': 'query'
-      },
-      {
-        'name': 'session_id',
-        'description': 'The ID of the session to use',
-        'required': True,
-        'allowMultiple': False,
-        'type': 'string',
-        'paramType': 'query'
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'The database connection was not properly setup'
-      },
-      {
-        'code': NOT_FOUND,
-        'message': 'The provided threat name could not be found in the database'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'Some problems were found during the name check'
-      },
-      { 
-        'code': CONFLICT,
-        'message': 'A database error has occurred'
-      }
-    ]
-  )
-  # endregion
   def delete(self,name):
     session_id = get_session_id(session, request)
     dao = SecurityPatternDAO(session_id)
@@ -283,45 +93,7 @@ class SecurityPatternByNameAPI(Resource):
     return resp
 
 class SituateSecurityPatternAPI(Resource):
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Situate security pattern',
-    nickname='security-patterns-situate-post',
-    responseClass=str.__name__,
-    parameters=[
-      {
-        'name': 'session_id',
-        'description': 'The ID of the session to use',
-        'required': True,
-        'allowMultiple': False,
-        'type': 'string',
-        'paramType': 'query'
-      },
-      {
-        'name': 'security_pattern_name',
-        'description': 'The security pattern name',
-        'required': True,
-        'allowMultiple': False,
-        'type': 'string',
-        'paramType': 'query'
-      },
-      {
-        'name': 'environment_name',
-        'description': 'The environment name',
-        'required': True,
-        'allowMultiple': False,
-        'type': 'string',
-        'paramType': 'query'
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'The database connection was not properly setup'
-      },
-    ]
-  )
-  # endregion
+
   def post(self,security_pattern_name,environment_name):
     session_id = get_session_id(session, request)
     dao = SecurityPatternDAO(session_id)

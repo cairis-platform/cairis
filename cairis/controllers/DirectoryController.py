@@ -24,7 +24,6 @@ else:
   from httplib import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
 from flask import request, session, make_response
 from flask_restful import Resource
-from flask_restful_swagger import swagger
 from cairis.daemon.CairisHTTPError import ARMHTTPError
 from cairis.data.DirectoryDAO import DirectoryDAO
 from cairis.tools.JsonConverter import json_serialize
@@ -36,38 +35,7 @@ __author__ = 'Shamal Faily'
 
 
 class ThreatDirectoryAPI(Resource):
-  #region Swagger Doc
-  @swagger.operation(
-    notes='Get threat directory',
-    nickname='directory-threat-get',
-    responseClass=DirectoryModel.__name__,
-    responseContainer='List',
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      },
-      {
-        "name": "entry_name",
-        "description": "Directory filter",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-  )
-  #endregion
+
   def get(self,entry_name):
     session_id = get_session_id(session, request)
     dao = DirectoryDAO(session_id)
@@ -80,38 +48,7 @@ class ThreatDirectoryAPI(Resource):
     return resp
 
 class VulnerabilityDirectoryAPI(Resource):
-  #region Swagger Doc
-  @swagger.operation(
-    notes='Get vulnerability directory',
-    nickname='directory-vulnerability-get',
-    responseClass=DirectoryModel.__name__,
-    responseContainer='List',
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      },
-      {
-        "name": "entry_name",
-        "description": "Directory filter",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-  )
-  #endregion
+
   def get(self,entry_name):
     session_id = get_session_id(session, request)
     dao = DirectoryDAO(session_id)

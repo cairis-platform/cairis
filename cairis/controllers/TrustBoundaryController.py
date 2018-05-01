@@ -24,7 +24,6 @@ else:
   from httplib import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
 from flask import request, session, make_response
 from flask_restful import Resource
-from flask_restful_swagger import swagger
 from cairis.daemon.CairisHTTPError import ARMHTTPError
 from cairis.data.TrustBoundaryDAO import TrustBoundaryDAO
 from cairis.tools.JsonConverter import json_serialize
@@ -36,30 +35,7 @@ __author__ = 'Shamal Faily'
 
 
 class TrustBoundariesAPI(Resource):
-  #region Swagger Doc
-  @swagger.operation(
-    notes='Get all trust boundaries',
-    nickname='trustboundaries-get',
-    responseClass=TrustBoundaryModel.__name__,
-    responseContainer='List',
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-  )
-  #endregion
+
   def get(self):
     session_id = get_session_id(session, request)
     dao = TrustBoundaryDAO(session_id)
@@ -69,48 +45,6 @@ class TrustBoundariesAPI(Resource):
     resp.contenttype = 'application/json'
     return resp
 
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Creates a new trust boundary',
-    nickname='trustboundary-post',
-    parameters=[
-      {
-        "name": "body",
-        "description": "The serialized version of the new trustboundary to be added",
-        "required": True,
-        "allowMultiple": False,
-        "type": TrustBoundaryMessage.__name__,
-        "paramType": "body"
-      },
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'One or more attributes are missing'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'Some problems were found during the name check'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'A database error has occurred'
-      },
-      {
-        'code': ARMHTTPError.status_code,
-        'message': ARMHTTPError.status
-      }
-    ]
-  )
-  # endregion
   def post(self):
     session_id = get_session_id(session, request)
 
@@ -125,37 +59,7 @@ class TrustBoundariesAPI(Resource):
     return resp
 
 class TrustBoundaryByNameAPI(Resource):
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Get a trust boundary by name',
-    nickname='trustboundary-by-name-get',
-    responseClass=TrustBoundaryModel.__name__,
-    parameters=[
-      {
-        'name': 'trust_boundary_name',
-        'description': 'Trust Boundary name',
-        'required': True,
-        'allowMultiple': False,
-        'type': 'string',
-        'paramType': 'query'
-      },
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      },
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-  )
-  # endregion
+
   def get(self, trust_boundary_name):
     session_id = get_session_id(session, request)
 
@@ -166,48 +70,6 @@ class TrustBoundaryByNameAPI(Resource):
     resp.headers['Content-type'] = 'application/json'
     return resp
 
-  # region Swagger Docs
-  @swagger.operation(
-    notes='Updates a trust boundary',
-    nickname='trust_boundary-by-name-put',
-    parameters=[
-      {
-        'name': 'trust_boundary_name',
-        'description': 'Old trust boundary name',
-        'required': True,
-        'allowMultiple': False,
-        'type': 'string',
-        'paramType': 'query'
-      },
-      {
-        'name': 'body',
-        "description": "JSON serialized version of the trust boundary to be updated",
-        "required": True,
-        "allowMultiple": False,
-        'type': TrustBoundaryMessage.__name__,
-        'paramType': 'body'
-      },
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'The provided file is not a valid XML file'
-      },
-      {
-        'code': BAD_REQUEST,
-        'message': '''Some parameters are missing. Be sure 'TrustBoundary' is defined.'''
-      }
-    ]
-  )
-  # endregion
   def put(self, trust_boundary_name):
     session_id = get_session_id(session, request)
 
@@ -221,48 +83,6 @@ class TrustBoundaryByNameAPI(Resource):
     resp.headers['Content-type'] = 'application/json'
     return resp
 
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Deletes an existing trust boundary',
-    nickname='trust_boundary-by-name-delete',
-    parameters=[
-      {
-        'name': 'trust_boundary_name',
-        'description': 'Dataflow name',
-        'required': True,
-        'allowMultiple': False,
-        'type': 'string',
-        'paramType': 'query'
-      },
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'One or more attributes are missing'
-      },
-      {
-        'code': NOT_FOUND,
-        'message': 'The provided trustboundary name could not be found in the database'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'Some problems were found during the name check'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'A database error has occurred'
-      }
-    ]
-  )
-  # endregion
   def delete(self, trust_boundary_name):
     session_id = get_session_id(session, request)
 

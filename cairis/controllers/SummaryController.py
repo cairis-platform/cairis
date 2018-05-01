@@ -23,7 +23,6 @@ else:
   import httplib
   from httplib import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
 from flask import session, request, make_response
-from flask_restful_swagger import swagger
 from flask_restful import Resource
 from cairis.data.SummaryDAO import SummaryDAO
 from cairis.tools.JsonConverter import json_serialize
@@ -35,45 +34,7 @@ __author__ = 'Shamal Faily'
 
 
 class SummaryAPI(Resource):
-  #region Swagger Doc
-  @swagger.operation(
-    notes='Get summary table',
-    responseClass=SummaryModel.__name__,
-    nickname='summary-get',
-    parameters=[
-      {
-        "name": "dimension_name",
-        "description": "The relevant dimension name",
-        "required": True,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      },
-      {
-        "name": "environment_name",
-        "description": "The relevant environment name",
-        "required": True,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      },
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-  )
-  #endregion
+
   def get(self,dimension_name,environment_name):
     session_id = get_session_id(session, request)
 

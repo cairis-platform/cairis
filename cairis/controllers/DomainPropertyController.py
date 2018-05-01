@@ -24,7 +24,6 @@ else:
   from httplib import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
 from flask import request, session, make_response
 from flask_restful import Resource
-from flask_restful_swagger import swagger
 from cairis.daemon.CairisHTTPError import ARMHTTPError
 from cairis.data.DomainPropertyDAO import DomainPropertyDAO
 from cairis.tools.JsonConverter import json_serialize
@@ -36,39 +35,7 @@ __author__ = 'Shamal Faily'
 
 
 class DomainPropertiesAPI(Resource):
-  #region Swagger Doc
-  @swagger.operation(
-    notes='Get all domainproperties',
-    nickname='domainproperties-get',
-    responseClass=DomainPropertyModel.__name__,
-    responseContainer='List',
-    parameters=[
-      {
-        "name": "constraint_id",
-        "description": "The constraint to use when querying the database",
-        "default": -1,
-        "required": False,
-        "allowMultiple": False,
-        "dataType": int.__name__,
-        "paramType": "query"
-      },
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-  )
-  #endregion
+
   def get(self):
     session_id = get_session_id(session, request)
     constraint_id = request.args.get('constraint_id', -1)
@@ -81,48 +48,6 @@ class DomainPropertiesAPI(Resource):
     resp.contenttype = 'application/json'
     return resp
 
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Creates a new domainproperty',
-    nickname='domainproperties-post',
-    parameters=[
-      {
-        "name": "body",
-        "description": "The serialized version of the new domainproperty to be added",
-        "required": True,
-        "allowMultiple": False,
-        "type": DomainPropertyMessage.__name__,
-        "paramType": "body"
-      },
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'One or more attributes are missing'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'Some problems were found during the name check'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'A database error has occurred'
-      },
-      {
-        'code': ARMHTTPError.status_code,
-        'message': ARMHTTPError.status
-      }
-    ]
-  )
-  # endregion
   def post(self):
     session_id = get_session_id(session, request)
 
@@ -137,29 +62,7 @@ class DomainPropertiesAPI(Resource):
     return resp
 
 class DomainPropertiesByNameAPI(Resource):
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Get a domainproperty by name',
-    nickname='domainproperty-by-name-get',
-    responseClass=DomainPropertyModel.__name__,
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-  )
-  # endregion
+
   def get(self, name):
     session_id = get_session_id(session, request)
 
@@ -171,40 +74,6 @@ class DomainPropertiesByNameAPI(Resource):
     resp.headers['Content-type'] = 'application/json'
     return resp
 
-  # region Swagger Docs
-  @swagger.operation(
-    notes='Updates a domain_property',
-    nickname='domain_property-by-name-put',
-    parameters=[
-      {
-        'name': 'body',
-        "description": "JSON serialized version of the domain_property to be updated",
-        "required": True,
-        "allowMultiple": False,
-        'type': DomainPropertyMessage.__name__,
-        'paramType': 'body'
-      },
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'The provided file is not a valid XML file'
-      },
-      {
-        'code': BAD_REQUEST,
-        'message': '''Some parameters are missing. Be sure 'DomainProperty' is defined.'''
-      }
-    ]
-  )
-  # endregion
   def put(self, name):
     session_id = get_session_id(session, request)
 
@@ -218,40 +87,6 @@ class DomainPropertiesByNameAPI(Resource):
     resp.headers['Content-type'] = 'application/json'
     return resp
 
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Deletes an existing domain_property',
-    nickname='domain_property-by-name-delete',
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'One or more attributes are missing'
-      },
-      {
-        'code': NOT_FOUND,
-        'message': 'The provided domainProperty name could not be found in the database'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'Some problems were found during the name check'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'A database error has occurred'
-      }
-    ]
-  )
-  # endregion
   def delete(self, name):
     session_id = get_session_id(session, request)
 

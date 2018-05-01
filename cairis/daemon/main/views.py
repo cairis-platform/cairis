@@ -25,7 +25,6 @@ else:
   from httplib import OK
 import MySQLdb
 from flask import send_from_directory, make_response, session, request
-from flask_restful_swagger import swagger
 from flask_restful import Api
 from flask_security import login_required, http_auth_required
 from flask_security.utils import logout_user

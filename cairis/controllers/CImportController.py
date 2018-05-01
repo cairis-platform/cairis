@@ -29,7 +29,6 @@ from os import remove as remove_file
 from tempfile import mkstemp
 from flask import make_response, request, session
 from flask_restful import Resource
-from flask_restful_swagger import swagger
 from werkzeug.datastructures import FileStorage
 from cairis.core.ARM import DatabaseProxyException, ARMException
 from cairis.core.Borg import Borg
@@ -45,40 +44,7 @@ __author__ = 'Robin Quetin, Shamal Faily'
 
 
 class CImportTextAPI(Resource):
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Imports data from XML text',
-    nickname='cimport-text-post',
-    parameters=[
-      {
-        'name':'body',
-        "description": "Options to be passed to the import tool",
-        "required": True,
-        "allowMultiple": False,
-        'type': CImportMessage.__name__,
-        'paramType': 'body'
-      },
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'The provided file is not a valid XML file'
-      },
-      {
-        'code': BAD_REQUEST,
-        'message': '''Some parameters are missing. Be sure 'file_contents' and 'type' are defined.'''
-      }
-    ]
-  )
-  # endregion
+
   def post(self):
     session_id = get_session_id(session, request)
     json_dict = request.get_json(silent=True)
@@ -135,40 +101,7 @@ class CImportTextAPI(Resource):
 
 
 class CImportFileAPI(Resource):
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Imports data from an XML file',
-    nickname='cimport-file-post',
-    parameters=[
-      {
-        'name':'file',
-        "description": "The XML file to import",
-        "required": True,
-        "allowMultiple": False,
-        'type': 'file',
-        'paramType': 'form'
-      },
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'The provided file is not a valid XML file'
-      },
-      {
-        'code': BAD_REQUEST,
-        'message': '''Some parameters are missing. Be sure 'file_contents' and 'type' are defined.'''
-      }
-    ]
-  )
-  # endregion
+
   def post(self, type):
     session_id = get_session_id(session, request)
     try:

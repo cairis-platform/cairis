@@ -24,7 +24,6 @@ else:
   from httplib import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
 from flask import request, session, make_response
 from flask_restful import Resource
-from flask_restful_swagger import swagger
 from cairis.daemon.CairisHTTPError import ARMHTTPError
 from cairis.data.CountermeasureDAO import CountermeasureDAO
 from cairis.tools.JsonConverter import json_serialize
@@ -36,39 +35,7 @@ __author__ = 'Shamal Faily'
 
 
 class CountermeasuresAPI(Resource):
-  #region Swagger Doc
-  @swagger.operation(
-    notes='Get all countermeasures',
-    nickname='countermeasures-get',
-    responseClass=CountermeasureModel.__name__,
-    responseContainer='List',
-    parameters=[
-      {
-        "name": "constraint_id",
-        "description": "The constraint to use when querying the database",
-        "default": -1,
-        "required": False,
-        "allowMultiple": False,
-        "dataType": int.__name__,
-        "paramType": "query"
-      },
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-  )
-  #endregion
+
   def get(self):
     session_id = get_session_id(session, request)
     constraint_id = request.args.get('constraint_id', -1)
@@ -81,48 +48,6 @@ class CountermeasuresAPI(Resource):
     resp.contenttype = 'application/json'
     return resp
 
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Creates a new countermeasure',
-    nickname='countermeasures-post',
-    parameters=[
-      {
-        "name": "body",
-        "description": "The serialized version of the new countermeasure to be added",
-        "required": True,
-        "allowMultiple": False,
-        "type": CountermeasureMessage.__name__,
-        "paramType": "body"
-      },
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'One or more attributes are missing'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'Some problems were found during the name check'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'A database error has occurred'
-      },
-      {
-        'code': ARMHTTPError.status_code,
-        'message': ARMHTTPError.status
-      }
-    ]
-  )
-  # endregion
   def post(self):
     session_id = get_session_id(session, request)
 
@@ -137,29 +62,7 @@ class CountermeasuresAPI(Resource):
     return resp
 
 class CountermeasureByNameAPI(Resource):
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Get a countermeasure by name',
-    nickname='countermeasure-by-name-get',
-    responseClass=CountermeasureModel.__name__,
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-  )
-  # endregion
+
   def get(self, name):
     session_id = get_session_id(session, request)
 
@@ -171,40 +74,6 @@ class CountermeasureByNameAPI(Resource):
     resp.headers['Content-type'] = 'application/json'
     return resp
 
-  # region Swagger Docs
-  @swagger.operation(
-    notes='Updates a countermeasure',
-    nickname='countermeasure-by-name-put',
-    parameters=[
-      {
-        'name': 'body',
-        "description": "JSON serialized version of the countermeasure to be updated",
-        "required": True,
-        "allowMultiple": False,
-        'type': CountermeasureMessage.__name__,
-        'paramType': 'body'
-      },
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'The provided file is not a valid XML file'
-      },
-      {
-        'code': BAD_REQUEST,
-        'message': '''Some parameters are missing. Be sure 'Countermeasure' is defined.'''
-      }
-    ]
-  )
-  # endregion
   def put(self, name):
     session_id = get_session_id(session, request)
 
@@ -218,40 +87,6 @@ class CountermeasureByNameAPI(Resource):
     resp.headers['Content-type'] = 'application/json'
     return resp
 
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Deletes an existing countermeasure',
-    nickname='countermeasure-by-name-delete',
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'One or more attributes are missing'
-      },
-      {
-        'code': NOT_FOUND,
-        'message': 'The provided countermeasure name could not be found in the database'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'Some problems were found during the name check'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'A database error has occurred'
-      }
-    ]
-  )
-  # endregion
   def delete(self, name):
     session_id = get_session_id(session, request)
 
@@ -265,45 +100,7 @@ class CountermeasureByNameAPI(Resource):
     return resp
 
 class TargetsAPI(Resource):
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Get countermeasure targets by requirements',
-    nickname='countermeasure-targets-by-requirement-get',
-    responseClass=list.__name__,
-    parameters=[
-      {
-        "name": "environment",
-        "description": "Countermeasure environments",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      },
-      {
-        "name": "requirements",
-        "description": "Countermeasure requirements",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": list.__name__,
-        "paramType": "query"
-      },
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-  )
-  # endregion
+
   def get(self, environment):
     session_id = get_session_id(session, request)
     reqList = request.args.getlist('requirement')
@@ -316,45 +113,7 @@ class TargetsAPI(Resource):
 
 
 class CountermeasureTasksAPI(Resource):
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Get countermeasure tasks by roles',
-    nickname='countermeasure-tasks-by-role-get',
-    responseClass=CountermeasureTaskMessage.__name__,
-    parameters=[
-      {
-        "name": "environment",
-        "description": "Countermeasure environments",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      },
-      {
-        "name": "roles",
-        "description": "Countermeasure roles",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": list.__name__,
-        "paramType": "query"
-      },
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-  )
-  # endregion
+
   def get(self, environment):
     session_id = get_session_id(session, request)
     roleList = request.args.getlist('role')
@@ -369,40 +128,7 @@ class CountermeasureTasksAPI(Resource):
 
 
 class GenerateAssetAPI(Resource):
-  # region Swagger Docs
-  @swagger.operation(
-    notes='Generate asset based on countermeasure name',
-    nickname='countermeasure-generate-asset',
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'One or more attributes are missing'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'Some problems were found during the name check'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'A database error has occurred'
-      },
-      {
-        'code': ARMHTTPError.status_code,
-        'message': ARMHTTPError.status
-      }
-    ]
-  )
-  # endregion
+
   def post(self, name):
     session_id = get_session_id(session, request)
 
@@ -416,40 +142,7 @@ class GenerateAssetAPI(Resource):
     return resp
 
 class GenerateAssetFromTemplateAPI(Resource):
-  # region Swagger Docs
-  @swagger.operation(
-    notes='Generate asset from template based on countermeasure name',
-    nickname='countermeasure-generate-asset-from-template',
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'One or more attributes are missing'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'Some problems were found during the name check'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'A database error has occurred'
-      },
-      {
-        'code': ARMHTTPError.status_code,
-        'message': ARMHTTPError.status
-      }
-    ]
-  )
-  # endregion
+
   def post(self, name, template_asset_name):
     session_id = get_session_id(session, request)
 
@@ -463,40 +156,7 @@ class GenerateAssetFromTemplateAPI(Resource):
     return resp
 
 class SituateCountermeasurePatternAPI(Resource):
-  # region Swagger Docs
-  @swagger.operation(
-    notes='Situate Countermeasure Pattern',
-    nickname='countermeasure-situate-countermeasure-pattern',
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'One or more attributes are missing'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'Some problems were found during the name check'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'A database error has occurred'
-      },
-      {
-        'code': ARMHTTPError.status_code,
-        'message': ARMHTTPError.status
-      }
-    ]
-  )
-  # endregion
+
   def post(self, name, security_pattern_name):
     session_id = get_session_id(session, request)
 
@@ -510,40 +170,7 @@ class SituateCountermeasurePatternAPI(Resource):
     return resp
 
 class AssociateSituatedPatternAPI(Resource):
-  # region Swagger Docs
-  @swagger.operation(
-    notes='Associated Situated Pattern',
-    nickname='associate-situated-pattern',
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'One or more attributes are missing'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'Some problems were found during the name check'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'A database error has occurred'
-      },
-      {
-        'code': ARMHTTPError.status_code,
-        'message': ARMHTTPError.status
-      }
-    ]
-  )
-  # endregion
+
   def post(self, name, security_pattern_name):
     session_id = get_session_id(session, request)
 
@@ -557,40 +184,7 @@ class AssociateSituatedPatternAPI(Resource):
     return resp
 
 class RemoveSituatedPatternAPI(Resource):
-  # region Swagger Docs
-  @swagger.operation(
-    notes='Remove Situated Pattern',
-    nickname='remove-situated-pattern',
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'One or more attributes are missing'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'Some problems were found during the name check'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'A database error has occurred'
-      },
-      {
-        'code': ARMHTTPError.status_code,
-        'message': ARMHTTPError.status
-      }
-    ]
-  )
-  # endregion
+
   def delete(self, name, security_pattern_name):
     session_id = get_session_id(session, request)
 
@@ -604,40 +198,7 @@ class RemoveSituatedPatternAPI(Resource):
     return resp
 
 class CandidatePatternsAPI(Resource):
-  # region Swagger Docs
-  @swagger.operation(
-    notes='Get candidate countermeasure patterns',
-    nickname='candidate-countermeasure-patterns',
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'One or more attributes are missing'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'Some problems were found during the name check'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'A database error has occurred'
-      },
-      {
-        'code': ARMHTTPError.status_code,
-        'message': ARMHTTPError.status
-      }
-    ]
-  )
-  # endregion
+
   def get(self, name):
     session_id = get_session_id(session, request)
     dao = CountermeasureDAO(session_id)
@@ -648,40 +209,7 @@ class CandidatePatternsAPI(Resource):
     return resp
 
 class CountermeasurePatternsAPI(Resource):
-  # region Swagger Docs
-  @swagger.operation(
-    notes='Get countermeasure patterns',
-    nickname='countermeasure-patterns',
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'One or more attributes are missing'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'Some problems were found during the name check'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'A database error has occurred'
-      },
-      {
-        'code': ARMHTTPError.status_code,
-        'message': ARMHTTPError.status
-      }
-    ]
-  )
-  # endregion
+
   def get(self, name):
     session_id = get_session_id(session, request)
     dao = CountermeasureDAO(session_id)
@@ -690,4 +218,3 @@ class CountermeasurePatternsAPI(Resource):
     resp = make_response(json_serialize(spNames, session_id=session_id), OK)
     resp.contenttype = 'application/json'
     return resp
-

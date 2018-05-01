@@ -24,7 +24,6 @@ else:
   from httplib import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
 from flask import request, session, make_response
 from flask_restful import Resource
-from flask_restful_swagger import swagger
 from cairis.daemon.CairisHTTPError import ARMHTTPError
 from cairis.data.TaskDAO import TaskDAO
 from cairis.tools.JsonConverter import json_serialize
@@ -36,39 +35,7 @@ __author__ = 'Shamal Faily'
 
 
 class TasksAPI(Resource):
-  #region Swagger Doc
-  @swagger.operation(
-    notes='Get all tasks',
-    nickname='tasks-get',
-    responseClass=TaskModel.__name__,
-    responseContainer='List',
-    parameters=[
-      {
-        "name": "constraint_id",
-        "description": "The constraint to use when querying the database",
-        "default": -1,
-        "required": False,
-        "allowMultiple": False,
-        "dataType": int.__name__,
-        "paramType": "query"
-      },
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-  )
-  #endregion
+
   def get(self):
     session_id = get_session_id(session, request)
     constraint_id = request.args.get('constraint_id', -1)
@@ -81,48 +48,6 @@ class TasksAPI(Resource):
     resp.contenttype = 'application/json'
     return resp
 
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Creates a new task',
-    nickname='tasks-post',
-    parameters=[
-      {
-        "name": "body",
-        "description": "The serialized version of the new task to be added",
-        "required": True,
-        "allowMultiple": False,
-        "type": TaskMessage.__name__,
-        "paramType": "body"
-      },
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'One or more attributes are missing'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'Some problems were found during the name check'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'A database error has occurred'
-      },
-      {
-        'code': ARMHTTPError.status_code,
-        'message': ARMHTTPError.status
-      }
-    ]
-  )
-  # endregion
   def post(self):
     session_id = get_session_id(session, request)
 
@@ -137,29 +62,7 @@ class TasksAPI(Resource):
     return resp
 
 class TaskByNameAPI(Resource):
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Get a task by name',
-    nickname='task-by-name-get',
-    responseClass=TaskModel.__name__,
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-  )
-  # endregion
+
   def get(self, name):
     session_id = get_session_id(session, request)
 
@@ -171,40 +74,6 @@ class TaskByNameAPI(Resource):
     resp.headers['Content-type'] = 'application/json'
     return resp
 
-  # region Swagger Docs
-  @swagger.operation(
-    notes='Updates a task',
-    nickname='task-by-name-put',
-    parameters=[
-      {
-        'name': 'body',
-        "description": "JSON serialized version of the task to be updated",
-        "required": True,
-        "allowMultiple": False,
-        'type': TaskMessage.__name__,
-        'paramType': 'body'
-      },
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'The provided file is not a valid XML file'
-      },
-      {
-        'code': BAD_REQUEST,
-        'message': '''Some parameters are missing. Be sure 'Task' is defined.'''
-      }
-    ]
-  )
-  # endregion
   def put(self, name):
     session_id = get_session_id(session, request)
 
@@ -218,40 +87,6 @@ class TaskByNameAPI(Resource):
     resp.headers['Content-type'] = 'application/json'
     return resp
 
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Deletes an existing task',
-    nickname='task-by-name-delete',
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'One or more attributes are missing'
-      },
-      {
-        'code': NOT_FOUND,
-        'message': 'The provided task name could not be found in the database'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'Some problems were found during the name check'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'A database error has occurred'
-      }
-    ]
-  )
-  # endregion
   def delete(self, name):
     session_id = get_session_id(session, request)
 
@@ -265,53 +100,7 @@ class TaskByNameAPI(Resource):
     return resp
 
 class TaskModelByNameAPI(Resource):
-  #region Swagger Doc
-  @swagger.operation(
-    notes='Get task model for a specific environment',
-    responseClass=str.__name__,
-    nickname='task-model-by-task-environment-get',
-    parameters=[
-      {
-        "name": "environmentl",
-        "description": "The task model environment",
-        "required": True,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      },
-      {
-        "name": "task",
-        "description": "The task model filtering task",
-        "required": True,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      },
-      {
-        "name": "misusecase",
-        "description": "The task model filtering misusecase",
-        "required": True,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      },
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-  )
-  #endregion
+
   def get(self, environment,task,misusecase):
     session_id = get_session_id(session, request)
     model_generator = get_model_generator()
@@ -333,29 +122,7 @@ class TaskModelByNameAPI(Resource):
     return resp
 
 class TaskLoadByNameAPI(Resource):
-  #region Swagger Doc
-  @swagger.operation(
-    notes='Get task usability load score for a given task/environment',
-    responseClass=str.__name__,
-    nickname='task-load-by-task-environment-get',
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-  )
-  #endregion
+
   def get(self, task,environment):
     session_id = get_session_id(session, request)
     dao = TaskDAO(session_id)
@@ -365,29 +132,7 @@ class TaskLoadByNameAPI(Resource):
     return resp
 
 class TaskHindranceByNameAPI(Resource):
-  #region Swagger Doc
-  @swagger.operation(
-    notes='Get task hindrance score for a given task/environment',
-    responseClass=str.__name__,
-    nickname='task-hindrance-by-task-environment-get',
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-  )
-  #endregion
+
   def get(self, task,environment):
     session_id = get_session_id(session, request)
     dao = TaskDAO(session_id)
@@ -397,29 +142,7 @@ class TaskHindranceByNameAPI(Resource):
     return resp
 
 class TaskScoreByNameAPI(Resource):
-  #region Swagger Doc
-  @swagger.operation(
-    notes='Get task score for a given task/environment',
-    responseClass=str.__name__,
-    nickname='task-score-by-task-environment-get',
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-  )
-  #endregion
+
   def get(self, task,environment):
     session_id = get_session_id(session, request)
     dao = TaskDAO(session_id)
@@ -429,45 +152,7 @@ class TaskScoreByNameAPI(Resource):
     return resp
 
 class MisusabilityModelAPI(Resource):
-  #region Swagger Doc
-  @swagger.operation(
-    notes='Get task model for a specific environment',
-    responseClass=str.__name__,
-    nickname='task-model-by-task-environment-get',
-    parameters=[
-      {
-        "name": "mc_name",
-        "description": "The misusability case name",
-        "required": True,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      },
-      {
-        "name": "tc_name",
-        "description": "The task characteristic name",
-        "required": True,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      },
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-  )
-  #endregion
+
   def get(self, mc_name,tc_name):
     session_id = get_session_id(session, request)
     model_generator = get_model_generator()

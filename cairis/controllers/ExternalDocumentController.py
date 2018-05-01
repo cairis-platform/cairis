@@ -23,7 +23,6 @@ else:
   import httplib
   from httplib import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
 from flask import session, request, make_response
-from flask_restful_swagger import swagger
 from flask_restful import Resource
 from cairis.data.ExternalDocumentDAO import ExternalDocumentDAO
 from cairis.tools.JsonConverter import json_serialize
@@ -35,29 +34,7 @@ __author__ = 'Shamal Faily'
 
 
 class ExternalDocumentsAPI(Resource):
-  #region Swagger Doc
-  @swagger.operation(
-    notes='Get all external documents.',
-    responseClass=ExternalDocumentModel.__name__,
-    nickname='external_documents-get',
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-  )
-  #endregion
+
   def get(self):
     session_id = get_session_id(session, request)
     constraint_id = request.args.get('constraint_id', -1)
@@ -70,44 +47,6 @@ class ExternalDocumentsAPI(Resource):
     resp.headers['Content-Type'] = "application/json"
     return resp
 
-  #region Swagger Doc
-  @swagger.operation(
-    notes='Creates a new external document',
-    nickname='external_document-post',
-    parameters=[
-      {
-        "name": "body",
-        "description": "The serialized version of the new external document to be added",
-        "required": True,
-        "allowMultiple": False,
-        "type": ExternalDocumentMessage.__name__,
-        "paramType": "body"
-      },
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'One or more attributes are missing'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'Some problems were found during the name check'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'A database error has occurred'
-      }
-    ]
-  )
-  #endregion
   def post(self):
     session_id = get_session_id(session, request)
     dao = ExternalDocumentDAO(session_id)
@@ -122,29 +61,7 @@ class ExternalDocumentsAPI(Resource):
 
 
 class ExternalDocumentByNameAPI(Resource):
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Get an external document by name',
-    responseClass=ExternalDocumentModel.__name__,
-    nickname='external_document-by-name-get',
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-  )
-  # endregion
+
   def get(self, name):
     session_id = get_session_id(session, request)
 
@@ -156,44 +73,6 @@ class ExternalDocumentByNameAPI(Resource):
     resp.headers['Content-Type'] = "application/json"
     return resp
 
-  #region Swagger Doc
-  @swagger.operation(
-    notes='Updates an existing external document',
-    nickname='external_document-put',
-    parameters=[
-      {
-        "name": "body",
-        "description": "The serialized version of the external document to be updated",
-        "required": True,
-        "allowMultiple": False,
-        "type": ExternalDocumentMessage.__name__,
-        "paramType": "body"
-      },
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'One or more attributes are missing'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'Some problems were found during the name check'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'A database error has occurred'
-      }
-    ]
-  )
-  #endregion
   def put(self, name):
     session_id = get_session_id(session, request)
 
@@ -207,36 +86,6 @@ class ExternalDocumentByNameAPI(Resource):
     resp.contenttype = 'application/json'
     return resp
 
-  #region Swagger Doc
-  @swagger.operation(
-    notes='Deletes an existing external document',
-    nickname='external_document-by-id-delete',
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'One or more attributes are missing'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'Some problems were found during the name check'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'A database error has occurred'
-      }
-    ]
-  )
-  #endregion
   def delete(self, name):
     session_id = get_session_id(session, request)
 

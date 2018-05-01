@@ -19,13 +19,12 @@ __author__ = 'Shamal Faily'
 
 import os
 from flask import Blueprint
-from flask_restful_swagger import swagger
 from flask_restful import Api
 from cairis.core.Borg import Borg
 
 b = Borg()
 main = Blueprint('main',__name__,template_folder=os.path.join(b.cairisRoot, 'templates'),static_folder=b.staticDir,static_url_path='')
-api = swagger.docs(Api(main), apiVersion='1.2.10', description='CAIRIS API', api_spec_url='/api/cairis')
+api = Api(main)
 
 from cairis.daemon.main import views, errors
 

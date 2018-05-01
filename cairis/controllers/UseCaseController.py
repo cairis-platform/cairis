@@ -24,52 +24,18 @@ else:
   from httplib import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
 from flask import request, session, make_response
 from flask_restful import Resource
-from flask_restful_swagger import swagger
 from cairis.daemon.CairisHTTPError import ARMHTTPError
 from cairis.data.UseCaseDAO import UseCaseDAO
 from cairis.tools.JsonConverter import json_serialize
 from cairis.tools.MessageDefinitions import UseCaseMessage, ValueTypeMessage
 from cairis.tools.ModelDefinitions import UseCaseModel, ValueTypeModel
 from cairis.tools.SessionValidator import get_session_id, get_model_generator
-from cairis.tools.ModelDefinitions import ObjectSummaryModel as SwaggerObjectSummaryModel
 
 __author__ = 'Shamal Faily'
 
 
 class UseCasesAPI(Resource):
-  #region Swagger Doc
-  @swagger.operation(
-    notes='Get all usecases',
-    nickname='usecases-get',
-    responseClass=UseCaseModel.__name__,
-    responseContainer='List',
-    parameters=[
-      {
-        "name": "constraint_id",
-        "description": "The constraint to use when querying the database",
-        "default": -1,
-        "required": False,
-        "allowMultiple": False,
-        "dataType": int.__name__,
-        "paramType": "query"
-      },
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-  )
-  #endregion
+
   def get(self):
     session_id = get_session_id(session, request)
     constraint_id = request.args.get('constraint_id', -1)
@@ -82,48 +48,6 @@ class UseCasesAPI(Resource):
     resp.contenttype = 'application/json'
     return resp
 
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Creates a new usecase',
-    nickname='usecases-post',
-    parameters=[
-      {
-        "name": "body",
-        "description": "The serialized version of the new usecase to be added",
-        "required": True,
-        "allowMultiple": False,
-        "type": UseCaseMessage.__name__,
-        "paramType": "body"
-      },
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'One or more attributes are missing'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'Some problems were found during the name check'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'A database error has occurred'
-      },
-      {
-        'code': ARMHTTPError.status_code,
-        'message': ARMHTTPError.status
-      }
-    ]
-  )
-  # endregion
   def post(self):
     session_id = get_session_id(session, request)
 
@@ -140,29 +64,7 @@ class UseCasesAPI(Resource):
     return resp
 
 class UseCaseByNameAPI(Resource):
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Get a usecase by name',
-    nickname='usecase-by-name-get',
-    responseClass=UseCaseModel.__name__,
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-  )
-  # endregion
+
   def get(self, name):
     session_id = get_session_id(session, request)
 
@@ -174,40 +76,6 @@ class UseCaseByNameAPI(Resource):
     resp.headers['Content-type'] = 'application/json'
     return resp
 
-  # region Swagger Docs
-  @swagger.operation(
-    notes='Updates a usecase',
-    nickname='usecase-by-name-put',
-    parameters=[
-      {
-        'name': 'body',
-        "description": "JSON serialized version of the usecase to be updated",
-        "required": True,
-        "allowMultiple": False,
-        'type': UseCaseMessage.__name__,
-        'paramType': 'body'
-      },
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'The provided file is not a valid XML file'
-      },
-      {
-        'code': BAD_REQUEST,
-        'message': '''Some parameters are missing. Be sure 'UseCase' is defined.'''
-      }
-    ]
-  )
-  # endregion
   def put(self, name):
     session_id = get_session_id(session, request)
 
@@ -227,40 +95,6 @@ class UseCaseByNameAPI(Resource):
     resp.headers['Content-type'] = 'application/json'
     return resp
 
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Deletes an existing usecase',
-    nickname='usecase-by-name-delete',
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'One or more attributes are missing'
-      },
-      {
-        'code': NOT_FOUND,
-        'message': 'The provided usecase name could not be found in the database'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'Some problems were found during the name check'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'A database error has occurred'
-      }
-    ]
-  )
-  # endregion
   def delete(self, name):
     session_id = get_session_id(session, request)
 
@@ -274,41 +108,7 @@ class UseCaseByNameAPI(Resource):
     return resp
 
 class UseCaseRequirementsByNameAPI(Resource):
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Get requirements associated with usecase ',
-    nickname='usecase-requirements-by-name-get',
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      },
-      {
-        "name": "usecase_name",
-        "description": "The use case name",
-        "required": True,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      },
-      {
-        "code": CONFLICT,
-        "message": "Database conflict"
-      }
 
-    ]
-  )
-  # endregion
   def get(self, usecase_name):
     session_id = get_session_id(session, request)
 
@@ -321,49 +121,7 @@ class UseCaseRequirementsByNameAPI(Resource):
     return resp
 
 class UseCaseGoalsByNameAPI(Resource):
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Get goals associated with usecase ',
-    nickname='usecase-requirements-by-name-get',
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      },
-      {
-        "name": "usecase_name",
-        "description": "The use case name",
-        "required": True,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      },
-      {
-        "name": "environment_name",
-        "description": "The environment name",
-        "required": True,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      },
-      {
-        "code": CONFLICT,
-        "message": "Database conflict"
-      }
 
-    ]
-  )
-  # endregion
   def get(self, usecase_name,environment_name):
     session_id = get_session_id(session, request)
 
@@ -377,72 +135,7 @@ class UseCaseGoalsByNameAPI(Resource):
 
 
 class UseCaseExceptionAPI(Resource):
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Creates a new obstacle from use case exception',
-    nickname='usecase-exception-post',
-    parameters=[
-      {
-        "name": "body",
-        "description": "The serialized version of the exception",
-        "required": True,
-        "allowMultiple": False,
-        "type": UseCaseMessage.__name__,
-        "paramType": "body"
-      },
-      {
-        "name": "environment_name",
-        "description": "The environment name",
-        "required": True,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      },
-      {
-        "name": "step_name",
-        "description": "The step name",
-        "required": True,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      },
-      {
-        "name": "exception_name",
-        "description": "The exception name",
-        "required": True,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      },
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'One or more attributes are missing'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'Some problems were found during the name check'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'A database error has occurred'
-      },
-      {
-        'code': ARMHTTPError.status_code,
-        'message': ARMHTTPError.status
-      }
-    ]
-  )
-  # endregion
+
   def post(self,environment_name,step_name,exception_name):
     session_id = get_session_id(session, request)
 
@@ -457,29 +150,7 @@ class UseCaseExceptionAPI(Resource):
     return resp
 
 class UseCasesSummaryAPI(Resource):
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Get summary of use cases',
-    responseClass=SwaggerObjectSummaryModel.__name__,
-    nickname='usecases-summary-get',
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-  )
-  # endregion
+
   def get(self):
     session_id = get_session_id(session, request)
     dao = UseCaseDAO(session_id)

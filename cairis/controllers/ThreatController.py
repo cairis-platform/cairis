@@ -24,13 +24,11 @@ else:
   from httplib import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
 from flask import request, session, make_response
 from flask_restful import Resource
-from flask_restful_swagger import swagger
 
 from cairis.data.ThreatDAO import ThreatDAO
 from cairis.tools.JsonConverter import json_serialize
 from cairis.tools.MessageDefinitions import ThreatMessage, ValueTypeMessage
 from cairis.tools.ModelDefinitions import ThreatModel, ValueTypeModel, ThreatModelModel
-from cairis.tools.ModelDefinitions import ObjectSummaryModel as SwaggerObjectSummaryModel
 from cairis.tools.SessionValidator import get_session_id
 
 
@@ -38,39 +36,7 @@ __author__ = 'Robin Quetin, Shamal Faily'
 
 
 class ThreatAPI(Resource):
-  #region Swagger Doc
-  @swagger.operation(
-    notes='Get all threats',
-    nickname='threats-get',
-    responseClass=ThreatModel.__name__,
-    responseContainer='List',
-    parameters=[
-      {
-        "name": "ordered",
-        "description": "Defines if the list has to be order",
-        "default": 1,
-        "required": False,
-        "allowMultiple": False,
-        "dataType": int.__name__,
-        "paramType": "query"
-      },
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-  )
-  #endregion
+
   def get(self):
     session_id = get_session_id(session, request)
     constraint_id = request.args.get('constraint_id', -1)
@@ -83,44 +49,6 @@ class ThreatAPI(Resource):
     resp.contenttype = 'application/json'
     return resp
 
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Creates a new threat',
-    nickname='threats-post',
-    parameters=[
-      {
-        "name": "body",
-        "description": "The serialized version of the new threat to be added",
-        "required": True,
-        "allowMultiple": False,
-        "type": ThreatMessage.__name__,
-        "paramType": "body"
-      },
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'One or more attributes are missing'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'Some problems were found during the name check'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'A database error has occurred'
-      }
-    ]
-  )
-  # endregion
   def post(self):
     session_id = get_session_id(session, request)
 
@@ -135,29 +63,7 @@ class ThreatAPI(Resource):
     return resp
 
 class ThreatByIdAPI(Resource):
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Get a threat by ID',
-    nickname='threat-by-id-get',
-    responseClass=ThreatModel.__name__,
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-  )
-  # endregion
+
   def get(self, id):
     session_id = get_session_id(session, request)
 
@@ -170,29 +76,7 @@ class ThreatByIdAPI(Resource):
     return resp
 
 class ThreatByNameAPI(Resource):
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Get a threat by name',
-    nickname='threat-by-name-get',
-    responseClass=ThreatModel.__name__,
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-  )
-  # endregion
+
   def get(self, name):
     session_id = get_session_id(session, request)
 
@@ -204,40 +88,6 @@ class ThreatByNameAPI(Resource):
     resp.headers['Content-type'] = 'application/json'
     return resp
 
-  # region Swagger Docs
-  @swagger.operation(
-    notes='Updates a threat',
-    nickname='threat-by-name-put',
-    parameters=[
-      {
-        'name': 'body',
-        "description": "JSON serialized version of the threat to be updated",
-        "required": True,
-        "allowMultiple": False,
-        'type': ThreatMessage.__name__,
-        'paramType': 'body'
-      },
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'The provided file is not a valid XML file'
-      },
-      {
-        'code': BAD_REQUEST,
-        'message': '''Some parameters are missing. Be sure 'threat' is defined.'''
-      }
-    ]
-  )
-  # endregion
   def put(self, name):
     session_id = get_session_id(session, request)
 
@@ -251,40 +101,6 @@ class ThreatByNameAPI(Resource):
     resp.headers['Content-type'] = 'application/json'
     return resp
 
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Deletes an existing threat',
-    nickname='threat-by-name-delete',
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'One or more attributes are missing'
-      },
-      {
-        'code': NOT_FOUND,
-        'message': 'The provided threat name could not be found in the database'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'Some problems were found during the name check'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'A database error has occurred'
-      }
-    ]
-  )
-  # endregion
   def delete(self, name):
     session_id = get_session_id(session, request)
 
@@ -298,30 +114,7 @@ class ThreatByNameAPI(Resource):
     return resp
 
 class ThreatTypesAPI(Resource):
-  #region Swagger Doc
-  @swagger.operation(
-    notes='Get all threat types',
-    nickname='threats-types-get',
-    responseClass=ValueTypeModel.__name__,
-    responseContainer='List',
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-  )
-  #endregion
+
   def get(self):
     session_id = get_session_id(session, request)
     environment_name = request.args.get('environment', '')
@@ -334,44 +127,6 @@ class ThreatTypesAPI(Resource):
     resp.contenttype = 'application/json'
     return resp
 
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Creates a new threat type',
-    nickname='threat-type-by-name-post',
-    parameters=[
-      {
-        "name": "body",
-        "description": "The serialized version of the new threat type to be added",
-        "required": True,
-        "allowMultiple": False,
-        "type": ThreatMessage.__name__,
-        "paramType": "body"
-      },
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'One or more attributes are missing'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'Some problems were found during the name check'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'A database error has occurred'
-      }
-    ]
-  )
-  # endregion
   def post(self):
     session_id = get_session_id(session, request)
     environment_name = request.args.get('environment', '')
@@ -387,29 +142,7 @@ class ThreatTypesAPI(Resource):
     return resp
 
 class ThreatTypeByNameAPI(Resource):
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Get a threat type by name',
-    nickname='threat-type-by-name-get',
-    responseClass=ValueTypeModel.__name__,
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-  )
-  # endregion
+
   def get(self, name):
     session_id = get_session_id(session, request)
     environment_name = request.args.get('environment', '')
@@ -422,40 +155,6 @@ class ThreatTypeByNameAPI(Resource):
     resp.headers['Content-type'] = 'application/json'
     return resp
 
-  # region Swagger Docs
-  @swagger.operation(
-    notes='Updates a threat type',
-    nickname='threat-type-by-name-put',
-    parameters=[
-      {
-        'name': 'body',
-        "description": "",
-        "required": True,
-        "allowMultiple": False,
-        'type': ValueTypeMessage.__name__,
-        'paramType': 'body'
-      },
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'The provided file is not a valid XML file'
-      },
-      {
-        'code': BAD_REQUEST,
-        'message': '''Some parameters are missing. Be sure 'threat' is defined.'''
-      }
-    ]
-  )
-  # endregion
   def put(self, name):
     session_id = get_session_id(session, request)
     environment_name = request.args.get('environment', '')
@@ -470,40 +169,6 @@ class ThreatTypeByNameAPI(Resource):
     resp.headers['Content-type'] = 'application/json'
     return resp
 
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Deletes an existing threat type',
-    nickname='threat-type-by-name-delete',
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'One or more attributes are missing'
-      },
-      {
-        'code': NOT_FOUND,
-        'message': 'The provided threat name could not be found in the database'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'Some problems were found during the name check'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'A database error has occurred'
-      }
-    ]
-  )
-  # endregion
   def delete(self, name):
     session_id = get_session_id(session, request)
     environment_name = request.args.get('environment', '')
@@ -518,38 +183,7 @@ class ThreatTypeByNameAPI(Resource):
     return resp
 
 class ThreatModelAPI(Resource):
-  #region Swagger Doc
-  @swagger.operation(
-    notes='Get threat model',
-    nickname='threat-model-get',
-    responseClass=ThreatModelModel.__name__,
-    responseContainer='List',
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      },
-      {
-        "name": "environment_name",
-        "description": "Environment name",
-        "required": True,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      },
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-  )
-  #endregion
+
   def get(self,environment_name):
     session_id = get_session_id(session, request)
     dao = ThreatDAO(session_id)
@@ -560,29 +194,7 @@ class ThreatModelAPI(Resource):
     return resp
 
 class ThreatsSummaryAPI(Resource):
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Get summary of threats',
-    responseClass=SwaggerObjectSummaryModel.__name__,
-    nickname='threats-summary-get',
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-  )
-  # endregion
+
   def get(self):
     session_id = get_session_id(session, request)
     dao = ThreatDAO(session_id)

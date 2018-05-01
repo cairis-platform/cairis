@@ -24,7 +24,6 @@ else:
   from httplib import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
 from flask import session, request, make_response
 from flask_restful import Resource
-from flask_restful_swagger import swagger
 from cairis.data.ProjectDAO import ProjectDAO
 from cairis.tools.JsonConverter import json_serialize
 from cairis.tools.MessageDefinitions import ProjectMessage
@@ -35,29 +34,7 @@ __author__ = 'Robin Quetin, Shamal Faily'
 
 
 class ProjectCreateAPI(Resource):
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Create a new project',
-    nickname='project-create-get',
-    responseClass=str.__name__,
-    parameters=[
-      {
-        'name': 'session_id',
-        'description': 'The ID of the session to use',
-        'required': False,
-        'allowMultiple': False,
-        'type': 'string',
-        'paramType': 'query'
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'The provided parameters are invalid'
-      }
-    ]
-  )
-  # endregion
+
   def post(self):
     session_id = get_session_id(session, request)
 
@@ -71,37 +48,7 @@ class ProjectCreateAPI(Resource):
     return resp
 
 class ProjectCreateDatabaseAPI(Resource):
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Create a new database',
-    nickname='project-create-database-post',
-    responseClass=str.__name__,
-    parameters=[
-      {
-        'name': 'db_name',
-        'description': 'The name of the new database',
-        'required': True,
-        'allowMultiple': False,
-        'type': 'string',
-        'paramType': 'query'
-      },
-      {
-        'name': 'session_id',
-        'description': 'The ID of the session to use',
-        'required': False,
-        'allowMultiple': False,
-        'type': 'string',
-        'paramType': 'query'
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'The provided parameters are invalid'
-      }
-    ]
-  )
-  # endregion
+
   def post(self,db_name):
     session_id = get_session_id(session, request)
     dao = ProjectDAO(session_id)
@@ -114,37 +61,7 @@ class ProjectCreateDatabaseAPI(Resource):
 
 
 class ProjectOpenDatabaseAPI(Resource):
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Open an existing database',
-    nickname='project-open-database-post',
-    responseClass=str.__name__,
-    parameters=[
-      {
-        'name': 'db_name',
-        'description': 'The name of the existing database',
-        'required': True,
-        'allowMultiple': False,
-        'type': 'string',
-        'paramType': 'query'
-      },
-      {
-        'name': 'session_id',
-        'description': 'The ID of the session to use',
-        'required': False,
-        'allowMultiple': False,
-        'type': 'string',
-        'paramType': 'query'
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'The provided parameters are invalid'
-      }
-    ]
-  )
-  # endregion
+
   def post(self,db_name):
     session_id = get_session_id(session, request)
     dao = ProjectDAO(session_id)
@@ -157,37 +74,7 @@ class ProjectOpenDatabaseAPI(Resource):
 
 
 class ProjectDeleteDatabaseAPI(Resource):
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Delete an existing database',
-    nickname='project-delete-database-post',
-    responseClass=str.__name__,
-    parameters=[
-      {
-        'name': 'db_name',
-        'description': 'The name of the existing database',
-        'required': True,
-        'allowMultiple': False,
-        'type': 'string',
-        'paramType': 'query'
-      },
-      {
-        'name': 'session_id',
-        'description': 'The ID of the session to use',
-        'required': False,
-        'allowMultiple': False,
-        'type': 'string',
-        'paramType': 'query'
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'The provided parameters are invalid'
-      }
-    ]
-  )
-  # endregion
+
   def post(self,db_name):
     session_id = get_session_id(session, request)
     dao = ProjectDAO(session_id)
@@ -201,29 +88,7 @@ class ProjectDeleteDatabaseAPI(Resource):
 
 
 class ProjectShowDatabasesAPI(Resource):
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Show existing databases',
-    nickname='project-show-databases-get',
-    responseClass=str.__name__,
-    parameters=[
-      {
-        'name': 'session_id',
-        'description': 'The ID of the session to use',
-        'required': False,
-        'allowMultiple': False,
-        'type': 'string',
-        'paramType': 'query'
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'The provided parameters are invalid'
-      }
-    ]
-  )
-  # endregion
+
   def get(self):
     session_id = get_session_id(session, request)
     dao = ProjectDAO(session_id)
@@ -234,29 +99,7 @@ class ProjectShowDatabasesAPI(Resource):
     return resp
 
 class ProjectSettingsAPI(Resource):
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Get the project settings',
-    nickname='project-settings-get',
-    responseClass=ProjectSettings.__name__,
-    parameters=[
-      {
-        'name': 'session_id',
-        'description': 'The ID of the session to use',
-        'required': False,
-        'allowMultiple': False,
-        'type': 'string',
-        'paramType': 'query'
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'The provided parameters are invalid'
-      }
-    ]
-  )
-  # endregion
+
   def get(self):
     session_id = get_session_id(session, request)
 
@@ -267,37 +110,6 @@ class ProjectSettingsAPI(Resource):
     resp.contenttype = 'application/json'
     return resp
 
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Update the project settings',
-    nickname='project-settings-put',
-    parameters=[
-      {
-        'name': 'session_id',
-        'description': 'The ID of the session to use',
-        'required': False,
-        'allowMultiple': False,
-        'type': 'string',
-        'paramType': 'query'
-      },
-      {
-        'name': 'body',
-        'description': 'The settings to apply to the current project',
-        'required': True,
-        'allowMultiple': False,
-        'type': ProjectMessage.__name__,
-        'paramType': 'body'
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'The provided parameters are invalid'
-      }
-    ]
-  )
-
-  # endregion
   def put(self):
     session_id = get_session_id(session, request)
 

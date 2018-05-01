@@ -16,7 +16,6 @@
 #  under the License.
 
 from flask_restful import fields
-from flask_restful_swagger import swagger
 from . import PseudoClasses
 
 __author__ = 'Robin Quetin, Shamal Faily'
@@ -40,284 +39,114 @@ def gen_message_multival_fields(class_ref):
 class DefaultMessage(object):
   required = ['object']
 
-# region Swagger Doc
-@swagger.model
-@swagger.nested(
-  object=ModelDefinitions.AssetEnvironmentPropertiesModel.__name__
-)
-# endregion
 class AssetEnvironmentPropertiesMessage(DefaultMessage):
   resource_fields = gen_message_multival_fields(ModelDefinitions.AssetEnvironmentPropertiesModel)
   required = DefaultMessage.required
 
-# region Swagger Doc
-@swagger.model
-@swagger.nested(
-  object=ModelDefinitions.AssetModel.__name__
-)
-# endregion
 class AssetMessage(DefaultMessage):
   resource_fields = gen_message_fields(ModelDefinitions.AssetModel)
   required = DefaultMessage.required
 
-# region Swagger Doc
-@swagger.model
-@swagger.nested(
-  object=ModelDefinitions.ObjectSummaryModel.__name__
-)
-# endregion
 class ObjectSummaryMessage(DefaultMessage):
   resource_fields = gen_message_fields(ModelDefinitions.ObjectSummaryModel)
   required = DefaultMessage.required
 
-# region Swagger Doc
-@swagger.model
-@swagger.nested(
-  object=ModelDefinitions.AssetAssociationModel.__name__
-)
-# endregion
 class AssetAssociationMessage(DefaultMessage):
   resource_fields = gen_message_fields(ModelDefinitions.AssetAssociationModel)
   required = DefaultMessage.required
 
-# region Swagger Doc
-@swagger.model
-@swagger.nested(
-  object=ModelDefinitions.GoalAssociationModel.__name__
-)
-# endregion
 class GoalAssociationMessage(DefaultMessage):
   resource_fields = gen_message_fields(ModelDefinitions.GoalAssociationModel)
   required = DefaultMessage.required
 
-# region Swagger Doc
-@swagger.model
-@swagger.nested(
-  object=ModelDefinitions.AttackerModel.__name__,
-)
-# endregion
 class AttackerMessage(DefaultMessage):
   resource_fields = gen_message_fields(ModelDefinitions.AttackerModel)
   required = DefaultMessage.required
 
-# region Swagger Doc
-@swagger.model
-@swagger.nested(
-  object=ModelDefinitions.CImportParams.__name__
-)
-# endregion
 class CImportMessage(DefaultMessage):
   resource_fields = gen_message_fields(ModelDefinitions.CImportParams)
   required = DefaultMessage.required
 
-# region Swagger Doc
-@swagger.model
-@swagger.nested(
-  object=ModelDefinitions.CExportParams.__name__
-)
-# endregion
 class CExportMessage(DefaultMessage):
   resource_fields = gen_message_fields(ModelDefinitions.CExportParams)
   required = DefaultMessage.required
 
-# region Swagger Doc
-@swagger.model
-@swagger.nested(
-  object=ModelDefinitions.DocumentationParams.__name__
-)
-# endregion
 class DocumentationMessage(DefaultMessage):
   resource_fields = gen_message_fields(ModelDefinitions.DocumentationParams)
   required = DefaultMessage.required
 
-# region Swagger Doc
-@swagger.model
-@swagger.nested(
-  object=ModelDefinitions.DependencyModel.__name__
-)
-# endregion
 class DependencyMessage(DefaultMessage):
   resource_fields = gen_message_fields(ModelDefinitions.DependencyModel)
   required = DefaultMessage.required
 
-# region Swagger Doc
-@swagger.model
-@swagger.nested(
-  object=ModelDefinitions.EnvironmentModel.__name__
-)
-# endregion
 class EnvironmentMessage(DefaultMessage):
   resource_fields = gen_message_fields(ModelDefinitions.EnvironmentModel)
   required = DefaultMessage.required
 
-# region Swagger Doc
-@swagger.model
-@swagger.nested(
-  object=ModelDefinitions.GoalModel.__name__
-)
-# endregion
 class GoalMessage(DefaultMessage):
   resource_fields = gen_message_fields(ModelDefinitions.GoalModel)
   required = DefaultMessage.required
 
-# region Swagger Doc
-@swagger.model
-@swagger.nested(
-  object=ModelDefinitions.ObstacleModel.__name__
-)
-# endregion
 class ObstacleMessage(DefaultMessage):
   resource_fields = gen_message_fields(ModelDefinitions.ObstacleModel)
   required = DefaultMessage.required
 
-# region Swagger Doc
-@swagger.model
-@swagger.nested(
-  object=ModelDefinitions.DomainPropertyModel.__name__
-)
-# endregion
 class DomainPropertyMessage(DefaultMessage):
   resource_fields = gen_message_fields(ModelDefinitions.DomainPropertyModel)
   required = DefaultMessage.required
 
-# region Swagger Doc
-@swagger.model
-@swagger.nested(
-  object=ModelDefinitions.CountermeasureModel.__name__
-)
-# endregion
 class CountermeasureMessage(DefaultMessage):
   resource_fields = gen_message_fields(ModelDefinitions.CountermeasureModel)
   required = DefaultMessage.required
 
-# region Swagger Doc
-@swagger.model
-@swagger.nested(
-  object=PseudoClasses.ProjectSettings.__name__
-)
-# endregion
 class ProjectMessage(DefaultMessage):
   resource_fields = gen_message_fields(PseudoClasses.ProjectSettings)
   required = DefaultMessage.required
 
-# region Swagger Doc
-@swagger.model
-@swagger.nested(
-  object=ModelDefinitions.RequirementModel.__name__
-)
-# endregion
 class RequirementMessage(DefaultMessage):
   resource_fields = gen_message_fields(ModelDefinitions.RequirementModel)
   required = DefaultMessage.required
 
-# region Swagger Doc
-@swagger.model
-@swagger.nested(
-  object=ModelDefinitions.ResponseModel.__name__
-)
-# endregion
 class ResponseMessage(DefaultMessage):
   resource_fields = gen_message_fields(ModelDefinitions.ResponseModel)
   required = DefaultMessage.required
 
-# region Swagger Doc
-@swagger.model
-@swagger.nested(
-  object=ModelDefinitions.RiskModel.__name__
-)
-# endregion
 class RiskMessage(DefaultMessage):
   resource_fields = gen_message_fields(ModelDefinitions.RiskModel)
   required = DefaultMessage.required
 
-# region Swagger Doc
-@swagger.model
-@swagger.nested(
-  object=ModelDefinitions.RoleModel.__name__,
-  property_0=ModelDefinitions.RoleEnvironmentPropertiesModel.__name__
-)
-# endregion
 class RoleMessage(DefaultMessage):
   resource_fields = gen_message_fields(ModelDefinitions.RoleModel)
   required = DefaultMessage.required
 
-# region Swagger Doc
-@swagger.model
-@swagger.nested(
-  object=ModelDefinitions.ThreatModel.__name__
-)
-# endregion
 class ThreatMessage(DefaultMessage):
   resource_fields = gen_message_fields(ModelDefinitions.ThreatModel)
   required = DefaultMessage.required
 
-# region Swagger Doc
-@swagger.model
-@swagger.nested(
-  object=ModelDefinitions.ValueTypeModel.__name__
-)
-# endregion
 class ValueTypeMessage(DefaultMessage):
   resource_fields = gen_message_fields(ModelDefinitions.ValueTypeModel)
   required = DefaultMessage.required
 
-# region Swagger Doc
-@swagger.model
-@swagger.nested(
-  object=ModelDefinitions.VulnerabilityModel.__name__
-)
-# endregion
 class VulnerabilityMessage(DefaultMessage):
   resource_fields = gen_message_fields(ModelDefinitions.VulnerabilityModel)
   required = DefaultMessage.required
 
-# region Swagger Doc
-@swagger.model
-@swagger.nested(
-  object=ModelDefinitions.PersonaEnvironmentPropertiesModel.__name__
-)
-# endregion
 class PersonaEnvironmentPropertiesMessage(DefaultMessage):
   resource_fields = gen_message_multival_fields(ModelDefinitions.PersonaEnvironmentPropertiesModel)
   required = DefaultMessage.required
 
-# region Swagger Doc
-@swagger.model
-@swagger.nested(
-  object=ModelDefinitions.PersonaModel.__name__,
-)
-# endregion
 class PersonaMessage(DefaultMessage):
   resource_fields = gen_message_fields(ModelDefinitions.PersonaModel)
   required = DefaultMessage.required
 
-# region Swagger Doc
-@swagger.model
-@swagger.nested(
-  object=ModelDefinitions.TaskModel.__name__,
-)
-# endregion
 class TaskMessage(DefaultMessage):
   resource_fields = gen_message_fields(ModelDefinitions.TaskModel)
   required = DefaultMessage.required
 
-# region Swagger Doc
-@swagger.model
-@swagger.nested(
-  object=ModelDefinitions.UseCaseModel.__name__,
-)
-# endregion
 class UseCaseMessage(DefaultMessage):
   resource_fields = gen_message_fields(ModelDefinitions.UseCaseModel)
   required = DefaultMessage.required
 
-
-# region Swagger Doc
-@swagger.model
-@swagger.nested(
-  object=ModelDefinitions.FindModel.__name__,
-)
-# endregion
 class FindMessage(DefaultMessage):
   resource_fields = gen_message_fields(ModelDefinitions.FindModel)
   required = DefaultMessage.required
@@ -330,179 +159,69 @@ class ValidationMessage(DefaultMessage):
   resource_fields = gen_message_fields(ModelDefinitions.ValidationModel)
   required = DefaultMessage.required
 
-# region Swagger Doc
-@swagger.model
-@swagger.nested(
-  object=ModelDefinitions.ExternalDocumentModel.__name__,
-)
-# endregion
 class ExternalDocumentMessage(DefaultMessage):
   resource_fields = gen_message_fields(ModelDefinitions.ExternalDocumentModel)
   required = DefaultMessage.required
 
-# region Swagger Doc
-@swagger.model
-@swagger.nested(
-  object=ModelDefinitions.DocumentReferenceModel.__name__,
-)
-# endregion
 class DocumentReferenceMessage(DefaultMessage):
   resource_fields = gen_message_fields(ModelDefinitions.DocumentReferenceModel)
   required = DefaultMessage.required
 
-# region Swagger Doc
-@swagger.model
-@swagger.nested(
-  object=ModelDefinitions.ConceptReferenceModel.__name__,
-)
-# endregion
 class ConceptReferenceMessage(DefaultMessage):
   resource_fields = gen_message_fields(ModelDefinitions.ConceptReferenceModel)
   required = DefaultMessage.required
 
-# region Swagger Doc
-@swagger.model
-@swagger.nested(
-  object=ModelDefinitions.PersonaCharacteristicModel.__name__,
-)
-# endregion
 class PersonaCharacteristicMessage(DefaultMessage):
   resource_fields = gen_message_fields(ModelDefinitions.PersonaCharacteristicModel)
   required = DefaultMessage.required
 
-# region Swagger Doc
-@swagger.model
-@swagger.nested(
-  object=ModelDefinitions.TaskCharacteristicModel.__name__,
-)
-# endregion
 class TaskCharacteristicMessage(DefaultMessage):
   resource_fields = gen_message_fields(ModelDefinitions.TaskCharacteristicModel)
   required = DefaultMessage.required
 
-# region Swagger Doc
-@swagger.model
-@swagger.nested(
-  object=ModelDefinitions.ObjectDependencyModel.__name__,
-)
-# endregion
 class ObjectDependencyMessage(DefaultMessage):
   resource_fields = gen_message_fields(ModelDefinitions.ObjectDependencyModel)
   required = DefaultMessage.required
 
-# region Swagger Doc
-@swagger.model
-@swagger.nested(
-  object=ModelDefinitions.ArchitecturalPatternModel.__name__,
-)
-# endregion
 class ArchitecturalPatternMessage(DefaultMessage):
   resource_fields = gen_message_fields(ModelDefinitions.ArchitecturalPatternModel)
   required = DefaultMessage.required
 
-# region Swagger Doc
-@swagger.model
-@swagger.nested(
-  object=ModelDefinitions.ValueTypeModel.__name__,
-)
-# endregion
 class ValueTypeMessage(DefaultMessage):
   resource_fields = gen_message_fields(ModelDefinitions.ValueTypeModel)
   required = DefaultMessage.required
 
-# region Swagger Doc
-@swagger.model
-@swagger.nested(
-  object=ModelDefinitions.TemplateGoalModel.__name__,
-)
-# endregion
 class TemplateGoalMessage(DefaultMessage):
   resource_fields = gen_message_fields(ModelDefinitions.TemplateGoalModel)
   required = DefaultMessage.required
 
-# region Swagger Doc
-@swagger.model
-@swagger.nested(
-  object=ModelDefinitions.TemplateAssetModel.__name__,
-)
-# endregion
 class TemplateAssetMessage(DefaultMessage):
   resource_fields = gen_message_fields(ModelDefinitions.TemplateAssetModel)
   required = DefaultMessage.required
-
-# region Swagger Doc
-@swagger.model
-@swagger.nested(
-  object=ModelDefinitions.TemplateRequirementModel.__name__,
-)
-# endregion
 
 class LocationsMessage(DefaultMessage):
   resource_fields = gen_message_fields(ModelDefinitions.LocationsModel)
   required = DefaultMessage.required
 
-# region Swagger Doc
-@swagger.model
-@swagger.nested(
-  object=ModelDefinitions.LocationsModel.__name__,
-)
-# endregion
-
 class TraceMessage(DefaultMessage):
   resource_fields = gen_message_fields(ModelDefinitions.TraceModel)
   required = DefaultMessage.required
-
-# region Swagger Doc
-@swagger.model
-@swagger.nested(
-  object=ModelDefinitions.TraceModel.__name__,
-)
-# endregion
 
 class SecurityPatternMessage(DefaultMessage):
   resource_fields = gen_message_fields(ModelDefinitions.SecurityPatternModel)
   required = DefaultMessage.required
 
-# region Swagger Doc
-@swagger.model
-@swagger.nested(
-  object=ModelDefinitions.SecurityPatternModel.__name__,
-)
-# endregion
-
 class DataFlowMessage(DefaultMessage):
   resource_fields = gen_message_fields(ModelDefinitions.DataFlowModel)
   required = DefaultMessage.required
-
-# region Swagger Doc
-@swagger.model
-@swagger.nested(
-  object=ModelDefinitions.DataFlowModel.__name__,
-)
-# endregion
 
 class DirectoryMessage(DefaultMessage):
   resource_fields = gen_message_fields(ModelDefinitions.DirectoryModel)
   required = DefaultMessage.required
 
-# region Swagger Doc
-@swagger.model
-@swagger.nested(
-  object=ModelDefinitions.DirectoryModel.__name__,
-)
-# endregion
-
 class TrustBoundaryMessage(DefaultMessage):
   resource_fields = gen_message_fields(ModelDefinitions.TrustBoundaryModel)
   required = DefaultMessage.required
-
-# region Swagger Doc
-@swagger.model
-@swagger.nested(
-  object=ModelDefinitions.TrustBoundaryModel.__name__,
-)
-# endregion
-
 
 class TemplateRequirementMessage(DefaultMessage):
   resource_fields = gen_message_fields(ModelDefinitions.TemplateRequirementModel)

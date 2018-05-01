@@ -23,7 +23,6 @@ else:
   import httplib
   from httplib import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
 from flask import session, request, make_response
-from flask_restful_swagger import swagger
 from flask_restful import Resource
 from cairis.data.TraceDAO import TraceDAO
 from cairis.tools.JsonConverter import json_serialize
@@ -35,37 +34,7 @@ __author__ = 'Shamal Faily'
 
 
 class TraceByEnvironmentAPI(Resource):
-  #region Swagger Doc
-  @swagger.operation(
-    notes='Get all traces',
-    responseClass=TraceModel.__name__,
-    nickname='traces-get',
-    parameters=[
-      {
-        "name": "environment_name",
-        "description": "The relevant environment name",
-        "required": True,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      },
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-  )
-  #endregion
+
   def get(self,environment_name):
     session_id = get_session_id(session, request)
 
@@ -79,44 +48,7 @@ class TraceByEnvironmentAPI(Resource):
 
 
 class TracesAPI(Resource):
-  #region Swagger Doc
-  @swagger.operation(
-    notes='Creates a new trace',
-    nickname='trace-post',
-    parameters=[
-      {
-        "name": "body",
-        "description": "The serialized version of the new trace to be added",
-        "required": True,
-        "allowMultiple": False,
-        "type": TraceMessage.__name__,
-        "paramType": "body"
-      },
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'One or more attributes are missing'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'Some problems were found during the name check'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'A database error has occurred'
-      }
-    ]
-  )
-  #endregion
+
   def post(self):
     session_id = get_session_id(session, request)
 
@@ -132,36 +64,7 @@ class TracesAPI(Resource):
 
 
 class TraceByNameAPI(Resource):
-  #region Swagger Doc
-  @swagger.operation(
-    notes='Deletes an existing trace',
-    nickname='trace-by-id-delete',
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'One or more attributes are missing'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'Some problems were found during the name check'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'A database error has occurred'
-      }
-    ]
-  )
-  #endregion
+
   def delete(self, from_object,from_name,to_object,to_name):
     session_id = get_session_id(session, request)
 
@@ -175,36 +78,7 @@ class TraceByNameAPI(Resource):
     return resp
 
 class TraceDimensionsAPI(Resource):
-  #region Swagger Doc
-  @swagger.operation(
-    notes='Get trace dimensions',
-    nickname='trace-dimensions',
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'One or more attributes are missing'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'Some problems were found during the name check'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'A database error has occurred'
-      }
-    ]
-  )
-  #endregion
+
   def get(self, dimension_name,is_from):
     session_id = get_session_id(session, request)
 

@@ -24,7 +24,6 @@ else:
   from httplib import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
 from flask import session, request, make_response
 from flask_restful import Resource
-from flask_restful_swagger import swagger
 from cairis.daemon.CairisHTTPError import ARMHTTPError, ObjectNotFoundHTTPError
 from cairis.data.ArchitecturalPatternDAO import ArchitecturalPatternDAO
 from cairis.tools.JsonConverter import json_serialize
@@ -35,29 +34,7 @@ __author__ = 'Shamal Faily'
 
 
 class ArchitecturalPatternsAPI(Resource):
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Get architectural patterns',
-    nickname='architectural-patterns-get',
-    responseClass=str.__name__,
-    parameters=[
-      {
-        'name': 'session_id',
-        'description': 'The ID of the session to use',
-        'required': True,
-        'allowMultiple': False,
-        'type': 'string',
-        'paramType': 'query'
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'The database connection was not properly setup'
-      },
-    ]
-  )
-  # endregion
+
   def get(self):
     session_id = get_session_id(session, request)
     dao = ArchitecturalPatternDAO(session_id)
@@ -67,49 +44,6 @@ class ArchitecturalPatternsAPI(Resource):
     resp.contenttype = 'application/json'
     return resp
 
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Add architectural pattern',
-    nickname='architectural-pattern-add',
-    responseClass=str.__name__,
-    parameters=[
-      {
-        "name": "body",
-        "description": "The serialized version of the new architectural pattern to be added",
-        "required": True,
-        "allowMultiple": False,
-        "type": ArchitecturalPatternMessage.__name__,
-        "paramType": "body"
-      },
-      {
-        'name': 'session_id',
-        'description': 'The ID of the session to use',
-        'required': True,
-        'allowMultiple': False,
-        'type': 'string',
-        'paramType': 'query'
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'The database connection was not properly setup'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'Some problems were found during the name check'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'A database error has occurred'
-      },
-      {
-        'code': ARMHTTPError.status_code,
-        'message': ARMHTTPError.status
-      }
-    ]
-  )
-  # endregion
   def post(self):
     session_id = get_session_id(session, request)
     dao = ArchitecturalPatternDAO(session_id)
@@ -123,37 +57,7 @@ class ArchitecturalPatternsAPI(Resource):
 
 
 class ArchitecturalPatternByNameAPI(Resource):
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Get architectural patterns by name',
-    nickname='architectural-patterns-get-by-name',
-    responseClass=str.__name__,
-    parameters=[
-      {
-        'name': 'name',
-        'description': 'Architectural pattern name',
-        'required': True,
-        'allowMultiple': False,
-        'type': 'string',
-        'paramType': 'query'
-      },
-      {
-        'name': 'session_id',
-        'description': 'The ID of the session to use',
-        'required': True,
-        'allowMultiple': False,
-        'type': 'string',
-        'paramType': 'query'
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'The database connection was not properly setup'
-      },
-    ]
-  )
-  # endregion
+
   def get(self,name):
     session_id = get_session_id(session, request)
     dao = ArchitecturalPatternDAO(session_id)
@@ -163,58 +67,6 @@ class ArchitecturalPatternByNameAPI(Resource):
     resp.contenttype = 'application/json'
     return resp
 
-
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Update architectural pattern',
-    nickname='architectural-pattern-update',
-    responseClass=str.__name__,
-    parameters=[
-      {
-        'name': 'name',
-        'description': 'Architectural pattern name',
-        'required': True,
-        'allowMultiple': False,
-        'type': 'string',
-        'paramType': 'query'
-      },
-      {
-        "name": "body",
-        "description": "The serialized version of the architectural pattern to be updated",
-        "required": True,
-        "allowMultiple": False,
-        "type": ArchitecturalPatternMessage.__name__,
-        "paramType": "body"
-      },
-      {
-        'name': 'session_id',
-        'description': 'The ID of the session to use',
-        'required': True,
-        'allowMultiple': False,
-        'type': 'string',
-        'paramType': 'query'
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'The database connection was not properly setup'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'Some problems were found during the name check'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'A database error has occurred'
-      },
-      {
-        'code': ARMHTTPError.status_code,
-        'message': ARMHTTPError.status
-      }
-    ]
-  )
-  # endregion
   def put(self,name):
     session_id = get_session_id(session, request)
     dao = ArchitecturalPatternDAO(session_id)
@@ -226,50 +78,6 @@ class ArchitecturalPatternByNameAPI(Resource):
     resp.contenttype = 'application/json'
     return resp
 
-
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Delete an existing architectural patterns',
-    nickname='architectural-pattern-by-name-delete',
-    responseClass=str.__name__,
-    parameters=[
-      {
-        'name': 'name',
-        'description': 'Architectural pattern name',
-        'required': True,
-        'allowMultiple': False,
-        'type': 'string',
-        'paramType': 'query'
-      },
-      {
-        'name': 'session_id',
-        'description': 'The ID of the session to use',
-        'required': True,
-        'allowMultiple': False,
-        'type': 'string',
-        'paramType': 'query'
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'The database connection was not properly setup'
-      },
-      {
-        'code': NOT_FOUND,
-        'message': 'The provided threat name could not be found in the database'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'Some problems were found during the name check'
-      },
-      { 
-        'code': CONFLICT,
-        'message': 'A database error has occurred'
-      }
-    ]
-  )
-  # endregion
   def delete(self,name):
     session_id = get_session_id(session, request)
     dao = ArchitecturalPatternDAO(session_id)
@@ -282,36 +90,7 @@ class ArchitecturalPatternByNameAPI(Resource):
     return resp
 
 class ComponentAssetModelAPI(Resource):
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Get the asset model for a specific component',
-    nickname='component-asset-model-get',
-    parameters=[
-      {
-        "name": "component",
-        "description": "The component",
-        "required": True,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      },
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-  )
-  # endregion
+
   def get(self, component):
     session_id = get_session_id(session, request)
     model_generator = get_model_generator()
@@ -333,36 +112,7 @@ class ComponentAssetModelAPI(Resource):
     return resp
 
 class ComponentGoalModelAPI(Resource):
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Get the goal model for a specific component',
-    nickname='component-goal-model-get',
-    parameters=[
-      {
-        "name": "component",
-        "description": "The component",
-        "required": True,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      },
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-  )
-  # endregion
+
   def get(self, component):
     session_id = get_session_id(session, request)
     model_generator = get_model_generator()
@@ -384,36 +134,7 @@ class ComponentGoalModelAPI(Resource):
     return resp
 
 class ComponentModelAPI(Resource):
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Get the component model for a specific architectural pattern',
-    nickname='component-asset-model-get',
-    parameters=[
-      {
-        "name": "ap_name",
-        "description": "The architectural pattern",
-        "required": True,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      },
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-  )
-  # endregion
+
   def get(self, ap_name):
     session_id = get_session_id(session, request)
     model_generator = get_model_generator()
@@ -435,45 +156,7 @@ class ComponentModelAPI(Resource):
     return resp
 
 class WeaknessAnalysisAPI(Resource):
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Get weakness analysis',
-    nickname='architectural-patterns-weakness-analysis-get',
-    responseClass=str.__name__,
-    parameters=[
-      {
-        'name': 'session_id',
-        'description': 'The ID of the session to use',
-        'required': True,
-        'allowMultiple': False,
-        'type': 'string',
-        'paramType': 'query'
-      },
-      {
-        'name': 'architectural_pattern_name',
-        'description': 'The architectural pattern name',
-        'required': True,
-        'allowMultiple': False,
-        'type': 'string',
-        'paramType': 'query'
-      },
-      {
-        'name': 'environment_name',
-        'description': 'The environment name',
-        'required': True,
-        'allowMultiple': False,
-        'type': 'string',
-        'paramType': 'query'
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'The database connection was not properly setup'
-      },
-    ]
-  )
-  # endregion
+
   def get(self,architectural_pattern_name,environment_name):
     session_id = get_session_id(session, request)
     dao = ArchitecturalPatternDAO(session_id)
@@ -484,45 +167,7 @@ class WeaknessAnalysisAPI(Resource):
     return resp
 
 class SituateArchitecturalPatternAPI(Resource):
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Situate architectural pattern',
-    nickname='architectural-patterns-weakness-analysis-post',
-    responseClass=str.__name__,
-    parameters=[
-      {
-        'name': 'session_id',
-        'description': 'The ID of the session to use',
-        'required': True,
-        'allowMultiple': False,
-        'type': 'string',
-        'paramType': 'query'
-      },
-      {
-        'name': 'architectural_pattern_name',
-        'description': 'The architectural pattern name',
-        'required': True,
-        'allowMultiple': False,
-        'type': 'string',
-        'paramType': 'query'
-      },
-      {
-        'name': 'environment_name',
-        'description': 'The environment name',
-        'required': True,
-        'allowMultiple': False,
-        'type': 'string',
-        'paramType': 'query'
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'The database connection was not properly setup'
-      },
-    ]
-  )
-  # endregion
+
   def post(self,architectural_pattern_name,environment_name):
     session_id = get_session_id(session, request)
     dao = ArchitecturalPatternDAO(session_id)

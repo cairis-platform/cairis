@@ -19,7 +19,6 @@ from collections import OrderedDict
 import logging
 
 from flask_restful import fields
-from flask_restful_swagger import swagger
 from cairis.core.ReferenceSynopsis import ReferenceSynopsis
 from cairis.core.ReferenceContribution import ReferenceContribution
 
@@ -28,7 +27,6 @@ obj_id_field = '__python_obj__'
 def gen_class_metadata(class_ref):
   return {"enum": [class_ref.__module__+'.'+class_ref.__name__]}
 
-@swagger.model
 class CharacteristicReferenceSynopsis(object):
   resource_fields = {
     obj_id_field: fields.String,
@@ -39,9 +37,7 @@ class CharacteristicReferenceSynopsis(object):
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
-  swagger_metadata = {
-    obj_id_field : gen_class_metadata(ReferenceSynopsis)
-  }
+
   def __init__(self, rsName='', rsDim='', rsActorType='', rsActor=''):
     self.theSynopsis = rsName
     self.theDimension = rsDim
@@ -55,7 +51,6 @@ class CharacteristicReferenceSynopsis(object):
     elif (varName == 'theActor'): return self.theActor
     else: return None
 
-@swagger.model
 class CharacteristicReferenceContribution(object):
   resource_fields = {
     obj_id_field: fields.String,
@@ -64,9 +59,7 @@ class CharacteristicReferenceContribution(object):
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
-  swagger_metadata = {
-    obj_id_field : gen_class_metadata(ReferenceContribution)
-  }
+
   def __init__(self, rcMe='', rcCont=''):
     self.theMeansEnd = rcMe
     self.theContribution = rcCont
@@ -76,7 +69,6 @@ class CharacteristicReferenceContribution(object):
     elif (varName == 'theContribution'): return self.theContribution
     else: return None
 
-@swagger.model
 class CharacteristicReference(object):
   resource_fields = {
     obj_id_field: fields.String,
@@ -89,39 +81,7 @@ class CharacteristicReference(object):
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
-  swagger_metadata = {
-    obj_id_field: {
-      'enum': [__name__+'.CharacteristicReference']
-    },
-    "theCharacteristicType": {
-      "enum": [
-        "grounds",
-        "warrant",
-        "rebuttal"
-       ]
-    },
-    "theDimensionName" : {
-      "enum" : [
-        "document",
-        "asset",
-        "attacker",
-        "countermeasure",
-        "domainproperty",
-        "environment",
-        "goal",
-        "misusecase",
-        "obstacle",
-        "persona",
-        "requirement",
-        "response",
-        "risk",
-        "role",
-        "task",
-        "threat",
-        "vulnerability"
-      ]
-    } 
-  }
+
   def __init__(self, refName=None, crTypeName='grounds', refDesc=None, dimName='document',rSyn=None,rCont=None):
     """
     :type refName: str
@@ -136,7 +96,6 @@ class CharacteristicReference(object):
     self.theReferenceSynopsis = rSyn
     self.theReferenceContribution = rCont
 
-@swagger.model
 class Contributor(object):
   resource_fields = {
     obj_id_field: fields.String,
@@ -147,11 +106,6 @@ class Contributor(object):
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
-  swagger_metadata = {
-    obj_id_field: {
-      'enum': [__name__+'.Contributor']
-    }
-  }
 
   def __init__(self, first_name=None, surname=None, affiliation=None, role=None, tuple_form=None):
     """
@@ -172,9 +126,7 @@ class Contributor(object):
         self.__setattr__(attrs[idx], tuple_form[idx] or '')
 
 
-@swagger.model
 class EnvironmentTensionModel(object):
-  # region Swagger Doc
   resource_fields = {
     obj_id_field: fields.String,
     "base_attr_id": fields.Integer,
@@ -184,20 +136,6 @@ class EnvironmentTensionModel(object):
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
-  swagger_metadata = {
-    obj_id_field: {
-      "enum": ["tools.PseudoClasses."+__name__]
-    },
-    "base_attr_id": {
-      "enum": list(range(0,4))
-    },
-    "attr_id": {
-      "enum": list(range(4,8))
-    },
-    "value": {
-      "enum": [-1,0,1]
-    }
-  }
   attr_dictionary = {
     'Confidentiality': 0,
     'Integrity': 1,
@@ -238,9 +176,7 @@ class EnvironmentTensionModel(object):
     self.rationale = rationale
 
 
-@swagger.model
 class Revision(object):
-  # region Swagger Docs
   resource_fields = {
     obj_id_field: fields.String,
     'id': fields.Integer,
@@ -249,11 +185,6 @@ class Revision(object):
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
-  swagger_metadata = {
-    obj_id_field: { 'enum': [ __name__ + '.Revision'] },
-    'date' : { 'enum': ['YY-MM-DD hh:mm:ss'] }
-  }
-  # endregion
 
   def __init__(self, id=None, date=None, description=None, tuple_form=None):
     """
@@ -271,14 +202,7 @@ class Revision(object):
       for idx in range(0, len(tuple_form)):
         self.__setattr__(attrs[idx], tuple_form[idx] or '')
 
-
-@swagger.model
-@swagger.nested(
-  contributions=Contributor.__name__,
-  revisions=Revision.__name__
-)
 class ProjectSettings(object):
-  # region Swagger Docs
   resource_fields = {
     obj_id_field: fields.String,
     'fontName': fields.String,
@@ -295,12 +219,6 @@ class ProjectSettings(object):
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
-  swagger_metadata = {
-    obj_id_field: {
-     'enum': [__name__+'.ProjectSettings']
-    }
-  }
-  # endregion
   req_p_settings_keys = ['AP Font Size', 'Font Name', 'Font Size', 'Project Background', 'Project Goals', 'Project Name', 'Project Scope', 'Rich Picture']
 
   def __init__(self, pSettings=None, pDict=None, contributors=None, revisions=None):
@@ -333,10 +251,7 @@ class ProjectSettings(object):
       else:
         logger.warning('Item does not meet typical contributor structure. Passing this one.')
 
-
-@swagger.model
 class RiskScore(object):
-  # region Swagger Docs
   resource_fields = {
     obj_id_field: fields.String,
     'responseName': fields.String,
@@ -346,10 +261,7 @@ class RiskScore(object):
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
-  swagger_metadata = {
-    obj_id_field: { 'enum': [__name__+'.RiskScore'] }
-  }
-  # endregion
+
   def __init__(self, response_name, unmit_score, mit_score, details):
     """
     :type response_name: str
@@ -362,10 +274,7 @@ class RiskScore(object):
     self.mitScore = mit_score or -1
     self.details = details
 
-
-@swagger.model
 class RiskRating(object):
-  # region Swagger Doc
   resource_fields = {
     obj_id_field: fields.String,
     'rating': fields.String,
@@ -375,17 +284,13 @@ class RiskRating(object):
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
-  swagger_metadata = {
-    obj_id_field: { 'enum': [__name__+'.RiskRating'] }
-  }
-  # endregion
+
   def __init__(self, threat, vulnerability, environment, rating=None):
     self.threat = threat
     self.vulnerability = vulnerability
     self.environment = environment
     self.rating = rating
 
-@swagger.model
 class CountermeasureTarget(object):
   def __init__(self, tName=None, tEffectiveness=None, tRat=None):
     """
@@ -397,7 +302,6 @@ class CountermeasureTarget(object):
     self.theEffectiveness = tEffectiveness
     self.theRationale = tRat
 
-  # region Swagger Doc
   resource_fields = {
     "__python_obj__": fields.String,
     "theName": fields.String,
@@ -406,23 +310,12 @@ class CountermeasureTarget(object):
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
-  swagger_metadata = {
-    "theEffectiveness": {
-      "enum": [
-        "None",
-        "Low",
-        "Medium",
-        "High"
-       ]
-    } 
-  }
-  # endregion
+
   def name(self): return self.theName
   def effectiveness(self): return self.theEffectiveness
   def rationale(self): return self.theRationale
 
 
-@swagger.model
 class PersonaTaskCharacteristics(object):
   def __init__(self, pName, pDur, pFreq, pDemands, pGoalConflict):
     """
@@ -438,7 +331,6 @@ class PersonaTaskCharacteristics(object):
     self.theDemands = pDemands
     self.theGoalConflict = pGoalConflict
 
-  # region Swagger Doc
   resource_fields = {
     "__python_obj__": fields.String,
     "thePersona": fields.String,
@@ -449,46 +341,13 @@ class PersonaTaskCharacteristics(object):
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
-  swagger_metadata = {
-    "theDuration": {
-      "enum": [
-        "Low",
-        "Medium",
-        "High"
-       ]
-    },
-    "theFrequency": {
-      "enum": [
-        "Low",
-        "Medium",
-        "High"
-       ]
-    },
-    "theDemands": {
-      "enum": [
-        "None",
-        "Low",
-        "Medium",
-        "High"
-       ]
-    },
-    "theGoalConflict": {
-      "enum": [
-        "None",
-        "Low",
-        "Medium",
-        "High"
-       ]
-    }
-  }
-  # endregion
+
   def persona(self): return self.thePersona
   def duration(self): return self.theDuration
   def frequency(self): return self.theFrequency
   def demands(self): return self.theDemands
   def goalConflict(self): return self.theGoalConflict
 
-@swagger.model
 class CountermeasureTaskCharacteristics(object):
   def __init__(self, pTask, pName, pDur, pFreq, pDemands, pGoalConflict):
     """
@@ -506,7 +365,6 @@ class CountermeasureTaskCharacteristics(object):
     self.theDemands = pDemands
     self.theGoalConflict = pGoalConflict
 
-  # region Swagger Doc
   resource_fields = {
     "__python_obj__": fields.String,
     "theTask": fields.String,
@@ -518,45 +376,7 @@ class CountermeasureTaskCharacteristics(object):
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
-  swagger_metadata = {
-    "theDuration": {
-      "enum": [
-        "Low",
-        "Medium",
-        "High"
-       ]
-    },
-    "theFrequency": {
-      "enum": [
-        "Low",
-        "Medium",
-        "High"
-       ]
-    },
-    "theDemands": {
-      "enum": [
-        "High Help",
-        "Medium Help",
-        "Low Help",
-        "None",
-        "Low Hindrance",
-        "Medium Hindrance",
-        "High Hindrance"
-       ]
-    },
-    "theGoalConflict": {
-      "enum": [
-        "High Help",
-        "Medium Help",
-        "Low Help",
-        "None",
-        "Low Hindrance",
-        "Medium Hindrance",
-        "High Hindrance"
-       ]
-    }
-  }
-  # endregion
+
   def task(self): return self.theTask
   def persona(self): return self.thePersona
   def duration(self): return self.theDuration
@@ -565,8 +385,6 @@ class CountermeasureTaskCharacteristics(object):
   def goalConflict(self): return self.theGoalConflict
 
 
-
-@swagger.model
 class SecurityAttribute(object):
   def __init__(self, name=None, value=None, rationale=None):
     """
@@ -578,7 +396,6 @@ class SecurityAttribute(object):
     self.value = value
     self.rationale = rationale
 
-  # region Swagger Doc
   resource_fields = {
     "__python_obj__": fields.String,
     "name": fields.String,
@@ -587,32 +404,6 @@ class SecurityAttribute(object):
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
-  swagger_metadata = {
-    "__python_obj__": {
-      "enum": ["tools.PseudoClasses.SecurityAttribute"]
-    },
-    "name": {
-      "enum": [
-        'Confidentiality',
-        'Integrity',
-        'Availability',
-        'Accountability',
-        'Anonymity',
-        'Pseudonymity',
-        'Unlinkability',
-        'Unobservability'
-      ]
-    },
-    "value": {
-      "enum": [
-        "None",
-        "Low",
-        "Medium",
-        "High"
-       ]
-    } 
-  }
-  # endregion
 
   def get_attr_value(self, enum_obj):
     """
@@ -635,9 +426,7 @@ class SecurityAttribute(object):
     return value
 
 
-@swagger.model
 class ValuedRole(object):
-  # region Swagger Doc
   resource_fields = {
     obj_id_field: fields.String,
     'roleName': fields.String,
@@ -645,17 +434,12 @@ class ValuedRole(object):
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
-  swagger_metadata = {
-    obj_id_field: { 'enum': [__name__+'.ValuedRole'] }
-  }
-  # endregion
+
   def __init__(self, role_name, cost):
     self.roleName = role_name
     self.cost = cost
 
-@swagger.model
 class ExceptionAttributes(object):
-  # region Swagger Doc
   resource_fields = {
     obj_id_field: fields.String,
     'theName': fields.String,
@@ -666,10 +450,7 @@ class ExceptionAttributes(object):
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
-  swagger_metadata = {
-    obj_id_field: { 'enum': [__name__+'.ExceptionAttribute'] }
-  }
-  # endregion
+
   def __init__(self,excName,dimType,dimValue,catName,excDesc):
     self.theName = excName
     self.theDimensionType = dimType
@@ -677,9 +458,7 @@ class ExceptionAttributes(object):
     self.theCategoryName = catName
     self.theDescription = excDesc
 
-@swagger.model
 class StepAttributes(object):
-  # region Swagger Doc
   resource_fields = {
     obj_id_field: fields.String,
     'theStepText': fields.String,
@@ -691,10 +470,7 @@ class StepAttributes(object):
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
-  swagger_metadata = {
-    obj_id_field: { 'enum': [__name__+'.StepsAttribute'] }
-  }
-  # endregion
+
   def __init__(self,stepTxt,stepSyn,stepActor,stepActorType,stepTags,stepExceptions):
     self.theStepText = stepTxt
     self.theSynopsis = stepSyn
@@ -710,19 +486,14 @@ class StepAttributes(object):
   def setSynopsis(self,s): self.theSynopsis = s
   def setActor(self,a): self.theActor = a
 
-@swagger.model
 class StepsAttributes(object):
-  # region Swagger Doc
   resource_fields = {
     obj_id_field: fields.String,
     'theSteps': fields.List(fields.Nested(StepAttributes.resource_fields)),
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
-  swagger_metadata = {
-    obj_id_field: { 'enum': [__name__+'.StepsAttribute'] }
-  }
-  # endregion
+
   def __init__(self):
     self.theSteps = []
 
@@ -744,9 +515,7 @@ class StepsAttributes(object):
   def insert(self,pos,s):
     self.theSteps.insert(pos,s)
 
-@swagger.model
 class ObjectDependency(object):
-  # region Swagger Doc
   resource_fields = {
     obj_id_field: fields.String,
     'theDimensionName': fields.String,
@@ -754,10 +523,7 @@ class ObjectDependency(object):
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
-  swagger_metadata = {
-    obj_id_field: { 'enum': [__name__+'.ObjectDependency'] }
-  }
-  # endregion
+
   def __init__(self,dimension_name,object_name):
     self.theDimensionName = dimension_name
     self.theObjectName = object_name

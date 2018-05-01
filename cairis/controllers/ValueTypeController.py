@@ -23,7 +23,6 @@ else:
   import httplib
   from httplib import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
 from flask import session, request, make_response
-from flask_restful_swagger import swagger
 from flask_restful import Resource
 from cairis.data.ValueTypeDAO import ValueTypeDAO
 from cairis.tools.JsonConverter import json_serialize
@@ -35,47 +34,7 @@ __author__ = 'Shamal Faily'
 
 
 class ValueTypesAPI(Resource):
-  #region Swagger Doc
-  @swagger.operation(
-    notes='Get all value types.',
-    responseClass=ValueTypeModel.__name__,
-    nickname='value_types-get',
-    parameters=[
-      {
-        "name": "type_name",
-        "description": "The Value Type name",
-        "required": True,
-        "default": -1,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      },
-      {
-        "name": "environment_name",
-        "description": "The Value Type environment",
-        "required": False,
-        "default": "all",
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      },
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-  )
-  #endregion
+
   def get(self,type_name,environment_name):
     session_id = get_session_id(session, request)
 
@@ -92,44 +51,6 @@ class ValueTypesAPI(Resource):
 
 class ValueTypesCreateAPI(Resource):
 
-  #region Swagger Doc
-  @swagger.operation(
-    notes='Creates a new value type',
-    nickname='value_type-post',
-    parameters=[
-      {
-        "name": "body",
-        "description": "The serialized version of the new value type to be added",
-        "required": True,
-        "allowMultiple": False,
-        "type": ValueTypeMessage.__name__,
-        "paramType": "body"
-      },
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'One or more attributes are missing'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'Some problems were found during the name check'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'A database error has occurred'
-      }
-    ]
-  )
-  #endregion
   def post(self):
     session_id = get_session_id(session, request)
 
@@ -145,54 +66,7 @@ class ValueTypesCreateAPI(Resource):
 
 
 class ValueTypesByNameAPI(Resource):
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Get a value type by name',
-    responseClass=ValueTypeModel.__name__,
-    nickname='value_type-by-name-get',
-    parameters=[
-      {
-        "name": "type_name",
-        "description": "The Value Type name",
-        "required": True,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      },
-      {
-        "name": "environment_name",
-        "description": "The Value Type environment",
-        "required": False,
-        "default": "all",
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      },
-      {
-        "name": "object_name",
-        "description": "The Value Type object",
-        "required": True,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      },
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-  )
-  # endregion
+
   def get(self, type_name,environment_name,object_name):
     session_id = get_session_id(session, request)
 
@@ -205,69 +79,6 @@ class ValueTypesByNameAPI(Resource):
     return resp
 
 
-  #region Swagger Doc
-  @swagger.operation(
-    notes='Updates an existing value type',
-    nickname='value_types-put',
-    parameters=[
-      {
-        "name": "type_name",
-        "description": "The Value Type name",
-        "required": True,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      },
-      {
-        "name": "environment_name",
-        "description": "The Value Type environment",
-        "required": False,
-        "default": "all",
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      },
-      {
-        "name": "object_name",
-        "description": "The Value Type object",
-        "required": True,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      },
-      {
-        "name": "body",
-        "description": "The serialized version of the value type to be updated",
-        "required": True,
-        "allowMultiple": False,
-        "type": ValueTypeMessage.__name__,
-        "paramType": "body"
-      },
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'One or more attributes are missing'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'Some problems were found during the name check'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'A database error has occurred'
-      }
-    ]
-  )
-  #endregion
   def put(self, type_name, environment_name, object_name):
     session_id = get_session_id(session, request)
     dao = ValueTypeDAO(session_id)
@@ -280,61 +91,6 @@ class ValueTypesByNameAPI(Resource):
     resp.contenttype = 'application/json'
     return resp
 
-  #region Swagger Doc
-  @swagger.operation(
-    notes='Deletes an existing value type',
-    nickname='value_type-by-id-delete',
-    parameters=[
-      {
-        "name": "type_name",
-        "description": "The Value Type name",
-        "required": True,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      },
-      {
-        "name": "environment_name",
-        "description": "The Value Type environment",
-        "required": False,
-        "default": "all",
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      },
-      {
-        "name": "object_name",
-        "description": "The Value Type object",
-        "required": True,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      },
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'One or more attributes are missing'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'Some problems were found during the name check'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'A database error has occurred'
-      }
-    ]
-  )
-  #endregion
   def delete(self, type_name, environment_name, object_name):
     session_id = get_session_id(session, request)
 

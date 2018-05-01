@@ -24,7 +24,6 @@ else:
   from httplib import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
 from flask_restful import fields
 from flask import session, request, make_response
-from flask_restful_swagger import swagger
 from flask_restful import Resource
 from cairis.data.RiskLevelDAO import RiskLevelDAO
 from cairis.tools.SessionValidator import get_session_id
@@ -34,29 +33,7 @@ __author__ = 'Shamal Faily'
 
 
 class RiskLevelAPI(Resource):
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Get risk level for asset',
-    responseClass=fields.Integer,
-    nickname='risk-level-by-asset-get',
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-  )
-  # endregion
+
   def get(self, name):
     session_id = get_session_id(session, request)
 
@@ -70,29 +47,7 @@ class RiskLevelAPI(Resource):
  
 
 class RiskLevelByEnvironmentAPI(Resource):
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Get risk level for asset specific to environment',
-    responseClass=fields.Integer,
-    nickname='risk-level-by-asset-environment-get',
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-  )
-  # endregion
+
   def get(self, name, environment):
     session_id = get_session_id(session, request)
 
@@ -106,29 +61,7 @@ class RiskLevelByEnvironmentAPI(Resource):
 
 
 class RiskThreatLevelAPI(Resource):
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Get risk level for asset and threat',
-    responseClass=fields.Integer,
-    nickname='risk-level-by-asset-threat-get',
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-  )
-  # endregion
+
   def get(self,asset,threat):
     session_id = get_session_id(session, request)
 
@@ -141,29 +74,7 @@ class RiskThreatLevelAPI(Resource):
     return resp
 
 class RiskThreatLevelByEnvironmentAPI(Resource):
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Get risk level for asset and threat by environment',
-    responseClass=fields.Integer,
-    nickname='risk-level-by-asset-threat-environment-get',
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-  )
-  # endregion
+
   def get(self,asset,threat,environment):
     session_id = get_session_id(session, request)
 

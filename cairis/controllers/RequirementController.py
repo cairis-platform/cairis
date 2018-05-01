@@ -24,7 +24,6 @@ else:
   from httplib import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
 from flask import session, request, make_response
 from flask_restful import Resource
-from flask_restful_swagger import swagger
 from cairis.daemon.CairisHTTPError import ObjectNotFoundHTTPError, ARMHTTPError, MalformedJSONHTTPError, MissingParameterHTTPError
 from cairis.data.RequirementDAO import RequirementDAO
 from cairis.tools.MessageDefinitions import RequirementMessage
@@ -36,56 +35,7 @@ __author__ = 'Robin Quetin, Shamal Faily'
 
 
 class RequirementsAPI(Resource):
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Get all requirements',
-    nickname='requirements-get',
-    responseClass=RequirementModel.__name__,
-    responseContainer='List',
-    parameters=[
-      {
-        "name": "ordered",
-        "description": "Defines if the list has to be order",
-        "default": 1,
-        "required": False,
-        "allowMultiple": False,
-        "dataType": int.__name__,
-        "paramType": "query"
-      },
-      {
-        "name": "constraint_id",
-        "description": "The constraint used as filter to query the database",
-        "default": "",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      },
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      },
-      {
-        'code': ARMHTTPError.status_code,
-        'message': ARMHTTPError.status
-      },
-      {
-        'code': MissingParameterHTTPError.status_code,
-        'message': MissingParameterHTTPError.status
-      }
-    ]
-  )
-  # endregion
+
   def get(self):
     session_id = get_session_id(session, request)
     ordered = request.args.get('ordered', 0)
@@ -100,60 +50,6 @@ class RequirementsAPI(Resource):
     resp.headers['Access-Control-Allow-Origin'] = "*"
     return resp
 
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Creates a new requirement',
-    nickname='requirements-post',
-    parameters=[
-      {
-        "name": "body",
-        "description": "The serialized version of the new requirement to be added",
-        "required": True,
-        "allowMultiple": False,
-        "type": RequirementMessage.__name__,
-        "paramType": "body"
-      },
-      {
-        "name": "asset",
-        "description": "The name of the asset which is associated to the new requirement",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      },
-      {
-        "name": "environment",
-        "description": "The name of the environment which is associated to the new requirement",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      },
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        'code': MissingParameterHTTPError.status_code,
-        'message': MissingParameterHTTPError.status
-      },
-      {
-        'code': MalformedJSONHTTPError.status_code,
-        'message': MalformedJSONHTTPError.status
-      },
-      {
-        'code': ARMHTTPError.status_code,
-        'message': ARMHTTPError.status
-      }
-    ]
-  )
-  # endregion
   def post(self):
     session_id = get_session_id(session, request)
     asset_name = request.args.get('asset', None)
@@ -169,47 +65,7 @@ class RequirementsAPI(Resource):
     return resp
 
 class RequirementsByAssetAPI(Resource):
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Get the requirements associated with an asset',
-    nickname='requirements-by-asset-get',
-    responseClass=RequirementModel.__name__,
-    responseContainer='List',
-    parameters=[
-      {
-        "name": "ordered",
-        "description": "Defines if the list has to be order",
-        "default": 1,
-        "required": False,
-        "allowMultiple": False,
-        "dataType": int.__name__,
-        "paramType": "query"
-      },
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      },
-      {
-        'code': ARMHTTPError.status_code,
-        'message': ARMHTTPError.status
-      },
-      {
-        'code': MissingParameterHTTPError.status_code,
-        'message': MissingParameterHTTPError.status
-      }
-    ]
-  )
-  # endregion
+
   def get(self, name):
     session_id = get_session_id(session, request)
     ordered = request.args.get('ordered', '1')
@@ -224,47 +80,7 @@ class RequirementsByAssetAPI(Resource):
 
 
 class RequirementsByEnvironmentAPI(Resource):
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Get the requirements associated with an environment',
-    nickname='requirements-by-environment-get',
-    responseClass=RequirementModel.__name__,
-    responseContainer='List',
-    parameters=[
-      {
-        "name": "ordered",
-        "description": "Defines if the list has to be order",
-        "default": 1,
-        "required": False,
-        "allowMultiple": False,
-        "dataType": int.__name__,
-        "paramType": "query"
-      },
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      },
-      {
-        'code': ARMHTTPError.status_code,
-        'message': ARMHTTPError.status
-      },
-      {
-        'code': MissingParameterHTTPError.status_code,
-        'message': MissingParameterHTTPError.status
-      }
-    ]
-  )
-  # endregion
+
   def get(self, name):
     session_id = get_session_id(session, request)
     ordered = request.args.get('ordered', '1')
@@ -279,41 +95,7 @@ class RequirementsByEnvironmentAPI(Resource):
 
 
 class RequirementByNameAPI(Resource):
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Get a requirement by name',
-    nickname='requirement-by-name-get',
-    responseClass=RequirementModel.__name__,
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      },
-      {
-        'code': ARMHTTPError.status_code,
-        'message': ARMHTTPError.status
-      },
-      {
-        'code': MissingParameterHTTPError.status_code,
-        'message': MissingParameterHTTPError.status
-      },
-      {
-        'code': ObjectNotFoundHTTPError.status_code,
-        'message': ObjectNotFoundHTTPError.status
-      }
-    ]
-  )
-  # endregion
+
   def get(self, name):
     session_id = get_session_id(session, request)
 
@@ -325,40 +107,6 @@ class RequirementByNameAPI(Resource):
     resp.headers['Content-type'] = 'application/json'
     return resp
 
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Deletes an existing requirement',
-    nickname='requirement-by-name-delete',
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        'code': ARMHTTPError.status_code,
-        'message': ARMHTTPError.status
-      },
-      {
-        'code': MalformedJSONHTTPError.status_code,
-        'message': MalformedJSONHTTPError.status
-      },
-      {
-        'code': MissingParameterHTTPError.status_code,
-        'message': MissingParameterHTTPError.status
-      },
-      {
-        'code': ObjectNotFoundHTTPError.status_code,
-        'message': ObjectNotFoundHTTPError.status
-      }
-    ]
-  )
-  # endregion
   def delete(self, name):
     session_id = get_session_id(session, request)
 
@@ -371,40 +119,6 @@ class RequirementByNameAPI(Resource):
     resp.headers['Content-type'] = 'application/json'
     return resp
 
-  # region Swagger Docs
-  @swagger.operation(
-    notes='Updates a requirement',
-    nickname='requirement-update-put',
-    parameters=[
-      {
-        'name': 'body',
-        "description": "The new updated requirement",
-        "required": True,
-        "allowMultiple": False,
-        'type': RequirementMessage.__name__,
-        'paramType': 'body'
-      }
-    ],
-    responseMessages=[
-      {
-        'code': ObjectNotFoundHTTPError.status_code,
-        'message': ObjectNotFoundHTTPError.status
-      },
-      {
-        'code': MalformedJSONHTTPError.status_code,
-        'message': MalformedJSONHTTPError.status
-      },
-      {
-        'code': ARMHTTPError.status_code,
-        'message': ARMHTTPError.status
-      },
-      {
-        'code': MissingParameterHTTPError.status_code,
-        'message': MissingParameterHTTPError.status
-      }
-    ]
-  )
-  # endregion
   def put(self,name):
     session_id = get_session_id(session, request)
     dao = RequirementDAO(session_id)
@@ -418,37 +132,7 @@ class RequirementByNameAPI(Resource):
     return resp
 
 class RequirementByShortcodeAPI(Resource):
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Get a requirement by ID',
-    nickname='requirement-by-id-get',
-    responseClass=RequirementModel.__name__,
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        'code': ARMHTTPError.status_code,
-        'message': ARMHTTPError.status
-      },
-      {
-        'code': MissingParameterHTTPError.status_code,
-        'message': MissingParameterHTTPError.status
-      },
-      {
-        'code': ObjectNotFoundHTTPError.status_code,
-        'message': ObjectNotFoundHTTPError.status
-      }
-    ]
-  )
-  # endregion
+
   def get(self, shortcode):
     session_id = get_session_id(session, request)
 
@@ -461,44 +145,7 @@ class RequirementByShortcodeAPI(Resource):
     return resp
 
 class ConceptMapModelAPI(Resource):
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Get the concept map model for a specific environment',
-    nickname='concept-map-model-get',
-    parameters=[
-      {
-        "name": "environment",
-        "description": "The environment to be used for the asset model",
-        "required": True,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      },
-      {
-        "name": "requirement",
-        "description": "The requirement filter",
-        "required": True,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      },
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-  )
-  # endregion
+
   def get(self, environment,requirement):
     session_id = get_session_id(session, request)
     model_generator = get_model_generator()

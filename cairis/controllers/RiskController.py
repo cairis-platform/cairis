@@ -24,13 +24,10 @@ else:
   from httplib import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
 from flask import session, request, make_response
 from flask_restful import Resource
-from flask_restful_swagger import swagger
 from cairis.daemon.CairisHTTPError import MalformedJSONHTTPError, ARMHTTPError, ObjectNotFoundHTTPError
 from cairis.data.RiskDAO import RiskDAO
 from cairis.tools.JsonConverter import json_serialize
 from cairis.tools.MessageDefinitions import RiskMessage
-from cairis.tools.ModelDefinitions import RiskModel as SwaggerRiskModel
-from cairis.tools.ModelDefinitions import ObjectSummaryModel as SwaggerObjectSummaryModel
 from cairis.tools.PseudoClasses import RiskScore
 from cairis.tools.SessionValidator import get_session_id, get_model_generator
 
@@ -38,38 +35,7 @@ __author__ = 'Robin Quetin, Shamal Faily'
 
 
 class RisksAPI(Resource):
-  #region Swagger Doc
-  @swagger.operation(
-    notes='Get all risks',
-    responseClass=SwaggerRiskModel.__name__,
-    nickname='risks-get',
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      },
-      {
-        "name": "constraint_id",
-        "description": "An ID used to filter the risks",
-        "required": False,
-        "default": -1,
-        "allowMultiple": False,
-        "dataType": int.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-  )
-  #endregion
+
   def get(self):
     session_id = get_session_id(session, request)
     constraint_id = request.args.get('constraint_id', -1)
@@ -79,44 +45,6 @@ class RisksAPI(Resource):
     resp.contenttype = 'application/json'
     return resp
 
-  #region Swagger Docs
-  @swagger.operation(
-    notes='Add a new risk',
-    nickname='risks-post',
-    parameters=[
-      {
-        "name": "body",
-        "description": "The session ID and the serialized version of the asset to be updated",
-        "required": True,
-        "allowMultiple": False,
-        "type": RiskMessage.__name__,
-        "paramType": "body"
-      },
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      },
-      {
-        "code": MalformedJSONHTTPError.status_code,
-        "message": MalformedJSONHTTPError.status
-      },
-      {
-        "code": ARMHTTPError.status_code,
-        "message": ARMHTTPError.status
-      }
-    ]
-  )
-  #endregion
   def post(self):
     session_id = get_session_id(session, request)
     dao = RiskDAO(session_id)
@@ -129,29 +57,7 @@ class RisksAPI(Resource):
     return resp
 
 class RiskByNameAPI(Resource):
-  #region Swagger Docs
-  @swagger.operation(
-    notes='Get a risk by name',
-    nickname='risk-by-name-get',
-    responseClass=SwaggerRiskModel.__name__,
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-  )
-  #endregion
+
   def get(self, name):
     session_id = get_session_id(session, request)
 
@@ -163,48 +69,6 @@ class RiskByNameAPI(Resource):
     resp.headers['Content-type'] = 'application/json'
     return resp
 
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Updates an existing risk',
-    nickname='risk-by-name-put',
-    parameters=[
-      {
-        "name": "body",
-        "description": "The session ID and the serialized version of the asset to be updated",
-        "required": True,
-        "allowMultiple": False,
-        "type": SwaggerRiskModel.__name__,
-        "paramType": "body"
-      },
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'One or more attributes are missing'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'Some problems were found during the name check'
-      },
-      {
-        'code': ObjectNotFoundHTTPError.status_code,
-        'message': ObjectNotFoundHTTPError.status
-      },
-      {
-        'code': ARMHTTPError.status_code,
-        'message': ARMHTTPError.status
-      }
-    ]
-  )
-  # endregion
   def put(self, name):
     session_id = get_session_id(session, request)
     dao = RiskDAO(session_id)
@@ -217,40 +81,6 @@ class RiskByNameAPI(Resource):
     resp.headers['Content-type'] = 'application/json'
     return resp
 
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Delete an existing risk',
-    nickname='risk-name-delete',
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'One or more attributes are missing'
-      },
-      {
-        'code': CONFLICT,
-        'message': 'Some problems were found during the name check'
-      },
-      {
-        'code': ObjectNotFoundHTTPError.status_code,
-        'message': ObjectNotFoundHTTPError.status
-      },
-      {
-        'code': ARMHTTPError.status_code,
-        'message': ARMHTTPError.status
-      }
-    ]
-  )
-  # endregion
   def delete(self, name):
     session_id = get_session_id(session, request)
     dao = RiskDAO(session_id)
@@ -264,29 +94,7 @@ class RiskByNameAPI(Resource):
 
 
 class RiskAnalysisModelAPI(Resource):
-  #region Swagger Doc
-  @swagger.operation(
-    notes='Get risk model',
-    responseClass=str.__name__,
-    nickname='risk-analysis-model-get',
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-  )
-  #endregion
+
   def get(self, environment):
     session_id = get_session_id(session, request)
     model_generator = get_model_generator()
@@ -321,29 +129,7 @@ class RiskAnalysisModelAPI(Resource):
 
 
 class RisksScoreByNameAPI(Resource):
-  #region Swagger Doc
-  @swagger.operation(
-    notes='Get risk scores for a risk in a specific situation',
-    responseClass=RiskScore.__name__,
-    nickname='risks-scores-by-rtve-get',
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-  )
-  #endregion
+
   def get(self, name, threat, vulnerability, environment):
     session_id = get_session_id(session, request)
 
@@ -356,29 +142,7 @@ class RisksScoreByNameAPI(Resource):
 
 
 class RisksRatingByNameAPI(Resource):
-  #region Swagger Doc
-  @swagger.operation(
-    notes='Get risk rating for a risk in a specific situation',
-    responseClass=str.__name__,
-    nickname='risks-rating-by-tve-get',
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-  )
-  #endregion
+
   def get(self, threat, vulnerability, environment):
     session_id = get_session_id(session, request)
 
@@ -390,29 +154,7 @@ class RisksRatingByNameAPI(Resource):
     return resp
 
 class RiskAnalysisModelNamesAPI(Resource):
-  #region Swagger Doc
-  @swagger.operation(
-    notes='Get risk model object names',
-    responseClass=str.__name__,
-    nickname='risk-analysis-model-get-names',
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-  )
-  #endregion
+
   def get(self, environment):
     session_id = get_session_id(session, request)
     dao = RiskDAO(session_id)
@@ -422,29 +164,7 @@ class RiskAnalysisModelNamesAPI(Resource):
     return resp
 
 class RisksSummaryAPI(Resource):
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Get summary of risks',
-    responseClass=SwaggerObjectSummaryModel.__name__,
-    nickname='risks-summary-get',
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-  )
-  # endregion
+
   def get(self):
     session_id = get_session_id(session, request)
     dao = RiskDAO(session_id)

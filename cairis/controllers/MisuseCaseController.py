@@ -24,7 +24,6 @@ else:
   from httplib import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
 from flask import session, request, make_response
 from flask_restful import Resource
-from flask_restful_swagger import swagger
 from cairis.data.RiskDAO import RiskDAO
 from cairis.tools.ModelDefinitions import MisuseCaseModel
 from cairis.tools.SessionValidator import get_session_id
@@ -34,29 +33,7 @@ __author__ = 'Robin Quetin, Shamal Faily'
 
 
 class MisuseCasesAPI(Resource):
-  #region Swagger Docs
-  @swagger.operation(
-    notes='Get all misuse cases',
-    nickname='misuse-cases-get',
-    responseClass=MisuseCaseModel.__name__,
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-  )
-  #endregion
+
   def get(self):
     session_id = get_session_id(session, request)
     constraintsId = request.args.get('constraints_id', -1)
@@ -71,29 +48,7 @@ class MisuseCasesAPI(Resource):
 
 
 class MisuseCaseByRiskNameAPI(Resource):
-  #region Swagger Docs
-  @swagger.operation(
-    notes='Get a misuse case associated with a certain risk',
-    nickname='misuse-case-by-risk-name-get',
-    responseClass=MisuseCaseModel.__name__,
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-    )
-  #endregion
+
   def get(self, risk_name):
     session_id = get_session_id(session, request)
 
@@ -106,29 +61,7 @@ class MisuseCaseByRiskNameAPI(Resource):
     return resp
 
 class MisuseCaseByNameAPI(Resource):
-  #region Swagger Docs
-  @swagger.operation(
-    notes='Get a misuse case by name',
-    nickname='misuse-case-by-risk-name-get',
-    responseClass=MisuseCaseModel.__name__,
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-    )
-  #endregion
+
   def get(self, misuse_case_name):
     session_id = get_session_id(session, request)
 
@@ -141,29 +74,7 @@ class MisuseCaseByNameAPI(Resource):
     return resp
 
 class MisuseCaseByTVAPI(Resource):
-  #region Swagger Docs
-  @swagger.operation(
-    notes='Get a misuse case by threat and vulnerability',
-    nickname='misuse-case-by-threat-vulnerability-get',
-    responseClass=MisuseCaseModel.__name__,
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        "code": BAD_REQUEST,
-        "message": "The database connection was not properly set up"
-      }
-    ]
-    )
-  #endregion
+
   def get(self, threat,vulnerability):
     session_id = get_session_id(session, request)
 

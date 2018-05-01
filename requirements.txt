@@ -13,7 +13,6 @@ pytest-pep8>=1.0.6
 npyscreen>= 4.10.5
 Flask>=0.11.1
 Flask-RESTful>= 0.3.5
-flask-restful-swagger>= 0.19
 Flask-Cors>= 3.0.2
 Flask-SQLAlchemy>=2.1
 Flask-Security>=1.7.5

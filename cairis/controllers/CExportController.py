@@ -25,7 +25,6 @@ else:
 import os
 from flask import make_response, request, session, send_file
 from flask_restful import Resource
-from flask_restful_swagger import swagger
 from cairis.core.ARM import DatabaseProxyException, ARMException
 from cairis.core.Borg import Borg
 from cairis.daemon.CairisHTTPError import MalformedJSONHTTPError, CairisHTTPError, ARMHTTPError, MissingParameterHTTPError
@@ -40,32 +39,7 @@ __author__ = 'Shamal Faily'
 
 
 class CExportFileAPI(Resource):
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Exports data to XML file',
-    nickname='cexport-file-get',
-    parameters=[
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'The provided file is not a valid XML file'
-      },
-      {
-        'code': BAD_REQUEST,
-        'message': '''Some parameters are missing. Be sure 'file_contents' and 'type' are defined.'''
-      }
-    ]
-  )
-  # endregion
+
   def get(self):
     session_id = get_session_id(session, request)
     dao = ExportDAO(session_id)
@@ -77,40 +51,7 @@ class CExportFileAPI(Resource):
     return resp
 
 class CExportArchitecturalPatternAPI(Resource):
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Exports architectural pattern to XML file',
-    nickname='cexport-file-get',
-    parameters=[
-      {
-        "name": "architectural_pattern_name",
-        "description": "The architectural pattern name",
-        "required": True,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      },
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'The provided file is not a valid XML file'
-      },
-      {
-        'code': BAD_REQUEST,
-        'message': '''Some parameters are missing. Be sure 'file_contents' and 'type' are defined.'''
-      }
-    ]
-  )
-  # endregion
+
   def get(self,architectural_pattern_name):
     session_id = get_session_id(session, request)
     dao = ExportDAO(session_id)
@@ -123,56 +64,7 @@ class CExportArchitecturalPatternAPI(Resource):
 
 
 class CExportGRLAPI(Resource):
-  # region Swagger Doc
-  @swagger.operation(
-    notes='Exports GRL elements to GRL file',
-    nickname='cexport-file-get',
-    parameters=[
-      {
-        "name": "task_name",
-        "description": "The task name",
-        "required": True,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      },
-      {
-        "name": "persona_name",
-        "description": "The persona name",
-        "required": True,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      },
-      {
-        "name": "environment_name",
-        "description": "The environment name",
-        "required": True,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      },
-      {
-        "name": "session_id",
-        "description": "The ID of the user's session",
-        "required": False,
-        "allowMultiple": False,
-        "dataType": str.__name__,
-        "paramType": "query"
-      }
-    ],
-    responseMessages=[
-      {
-        'code': BAD_REQUEST,
-        'message': 'The provided file is not a valid XML file'
-      },
-      {
-        'code': BAD_REQUEST,
-        'message': '''Some parameters are missing. Be sure 'file_contents' and 'type' are defined.'''
-      }
-    ]
-  )
-  # endregion
+
   def get(self,task_name,persona_name,environment_name):
     session_id = get_session_id(session, request)
     dao = ExportDAO(session_id)
