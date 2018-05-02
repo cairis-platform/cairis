@@ -2183,7 +2183,7 @@ function clearLocalStorage(dimName) {
 }
 
 function filterReservedChars(event) {
-  var reservedChars = [34,35,36,37,38,39,42,47,51,60,62,63,92,95,96,156];
+  var reservedChars = [34,35,36,37,39,42,47,51,60,62,63,92,95,96,156];
   if (reservedChars.indexOf(event.keyCode) != -1) {
     return false;
   }
