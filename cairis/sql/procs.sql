@@ -24921,7 +24921,7 @@ begin
     union
     select drs.synopsis, uc.name, ce.name, lc.name from usecase_dr_contribution udc, document_reference_synopsis drs, usecase uc, contribution_end ce, link_contribution lc where udc.usecase_id = uc.id and udc.reference_id = drs.id and udc.end_id = lc.id and udc.contribution_id = ce.id;
   declare ucCursor cursor for
-    select uc.name, pcs.synopsis, ce.name, lc.name from usecase_pc_contribution upc, usecase uc, persona_characteristic_synopsis pcs, contribution_end ce, link_contribution lc where upc.usecase_id = uc.id and upc.characteristic_id = pcs.characteristic_id and upc.end_id = lc.id and upc.contribution_id = ce.id;
+    select uc.name, pcs.synopsis, ce.name, lc.name from usecase_pc_contribution upc, usecase uc, persona_characteristic_synopsis pcs, contribution_end ce, link_contribution lc where upc.usecase_id = uc.id and upc.characteristic_id = pcs.characteristic_id and upc.end_id = ce.id and upc.contribution_id = lc.id;
 
 
   declare continue handler for not found set done = 1;

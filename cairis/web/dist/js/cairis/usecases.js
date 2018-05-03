@@ -760,6 +760,7 @@ mainContent.on('change','#theGRLUCContributionTo',function() {
 
 mainContent.on('click', '#addContributionToUseCase', function () {
   $('#useCaseContributionDialog').attr('data-selectedIndex',undefined);
+  $('#AddUCContributionButton').text("Add");
   $('#theGRLUCContributionMeansEnd').val('means');
   $('#theGRLUCContribution').val('SomePositive');
   refreshDimensionSelector($('#theGRLBeneficiary'),'persona_characteristic_synopsis', undefined, function(){
@@ -772,6 +773,7 @@ $(document).on('click', "td.ucgrlcontribution-row", function () {
   var ucContIdx = $(this).closest('tr').index();
   $('#useCaseContributionDialog').attr('data-selectedIndex',ucContIdx);
   var uc = JSON.parse($.session.get("UseCase"));
+  $('#AddUCContributionButton').text("Update");
   var refCont = uc.theReferenceContributions[ucContIdx];
   $('#theGRLUCContributionMeansEnd').val(refCont.theReferenceContribution.theMeansEnd);
   $('#theGRLUCContribution').val(refCont.theReferenceContribution.theContribution);
