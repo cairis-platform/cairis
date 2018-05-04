@@ -360,18 +360,19 @@ $(document).on('click', 'td.deleteArchitecturalPatternButton', function (e) {
 });
 
 function appendComponent(component) {
-    $("#theComponents").find("tbody").append('<tr><td class="deleteComponent"><i class="fa fa-minus"></i></td><td class="component-row">'+ component.theName +'</td><td>' + component.theDescription + '</td></tr>');
+    $("#theComponents").find("tbody").append('<tr><td class="deleteComponent"><i class="fa fa-minus"></i></td><td class="component-row">'+ component.theName +'</td><td class="component-row">' + component.theDescription + '</td></tr>');
 };
 
 function appendConnector(connector) {
-    $("#theConnectors").find("tbody").append('<tr><td class="deleteConnector"><i class="fa fa-minus"></i></td><td class="connector-row">'+ connector.theConnectorName + '</td><td>' + connector.theFromComponent +'</td><td>' + connector.theFromRole + '</td><td>' + connector.theFromInterface + '</td><td>' + connector.theToComponent + '</td><td>' + connector.theToInterface + '</td><td>' + connector.theToRole + '</td><td>' + connector.theAssetName + '</td><td>' + connector.theProtocol + '</td><td>' + connector.theAccessRight + '</td></tr>');
+    $("#theConnectors").find("tbody").append('<tr><td class="deleteConnector"><i class="fa fa-minus"></i></td><td class="connector-row">'+ connector.theConnectorName + '</td><td class="connector-row">' + connector.theFromComponent +'</td><td class="connector-row">' + connector.theFromRole + '</td><td class="connector-row">' + connector.theFromInterface + '</td><td class="connector-row">' + connector.theToComponent + '</td><td class="connector-row">' + connector.theToInterface + '</td><td class="connector-row">' + connector.theToRole + '</td><td class="connector-row">' + connector.theAssetName + '</td><td class="connector-row">' + connector.theProtocol + '</td><td class="connector-row">' + connector.theAccessRight + '</td></tr>');
 };
 
 $(document).on('click', "td.component-row", function () {
   var comRow = $(this).closest("tr");
   $('#editComponentDiv').attr('data-selectedIndex',comRow.index());
   var ap = JSON.parse($.session.get("ArchitecturalPattern"));
-  var componentName = $(this).text();
+  var componentName = $(this).closest("tr").find("td:eq(1)").text();
+
   $.each(ap.theComponents,function(idx,apc) {
     if (apc.theName == componentName) {
       $.session.set("Component", JSON.stringify(apc));
@@ -513,7 +514,7 @@ function refreshConnectorPanels(ap) {
 
 mainContent.on('click', "td.connector-row", function () {
   var ap = JSON.parse($.session.get("ArchitecturalPattern"));
-  var connectorName = $(this).text();
+  var connectorName = $(this).closest("tr").find("td:eq(1)").text();
   $.each(ap.theConnectors, function(idx,conn) {
     if (connectorName == conn.theConnectorName) {
       $("#editArchitecturalPatternOptionsForm").hide();
@@ -619,7 +620,7 @@ function appendComponentGoal(comgoal) {
 };
 
 function appendComponentGoalAssociation(comga) {
-    $("#theGoalAssociations").find("tbody").append('<tr><td class="deleteComponentGoalAssociation"><i class="fa fa-minus"></i></td><td class="component-goalassociation">'+ comga.theGoalName + '</td><td>' + comga.theRefType + '</td><td>' + comga.theSubGoalName + '</td><td>' + comga.theRationale + '</td></tr>');
+    $("#theGoalAssociations").find("tbody").append('<tr><td class="deleteComponentGoalAssociation"><i class="fa fa-minus"></i></td><td class="component-goalassociation">'+ comga.theGoalName + '</td><td class="component-goalassociation">' + comga.theRefType + '</td><td class="component-goalassociation">' + comga.theSubGoalName + '</td><td class="component-goalassociation">' + comga.theRationale + '</td></tr>');
 };
 
 
@@ -1104,13 +1105,23 @@ $(document).on('shown.bs.modal','#addComponentGoalAssociationDialog',function() 
   $("#theSubGoalName option").remove();
   $.each(comp.theGoals,function(idx,goal) {
     $('#theGoalName').append($("<option></option>").attr("value",goal).text(goal));
-    $('#theSubGoalName').append($("<option></option>").attr("value",goal).text(goal));
   });
+
   if (selectedGa != undefined) {
     var ga = JSON.parse(selectedGa);
     $('#theGoalName').val(ga.theGoalName);
-    $('#theSubGoalName').val(ga.theSubGoalName);
     $('#theRefType').val(ga.theRefType);
+
+    if (ga.theRefType == 'responsible') {
+      refreshDimensionSelector($('#theSubGoalName'),'role',undefined,undefined,['All']);
+    }
+    else {
+      $.each(comp.theGoals,function(idx,goal) {
+        $('#theSubGoalName').append($("<option></option>").attr("value",goal).text(goal));
+      });
+    }
+    $('#theSubGoalName').val(ga.theSubGoalName);
+
     $('#theRationale').val(ga.theRationale);
   }
   else {
@@ -1118,9 +1129,23 @@ $(document).on('shown.bs.modal','#addComponentGoalAssociationDialog',function() 
     $('#theSubGoalName').val('');
     $('#theRefType').val('and');
     $('#theRationale').val('');
-
   }
 });
+
+mainContent.on('change','#theRefType',function() {
+  var refType = $(this).find('option:selected').text();
+  $("#theSubGoalName option").remove();
+  if (refType == 'responsible') {
+    refreshDimensionSelector($('#theSubGoalName'),'role');
+  }
+  else {
+    var comp = JSON.parse($.session.get("Component"));
+    $.each(comp.theGoals,function(idx,goal) {
+      $('#theSubGoalName').append($("<option></option>").attr("value",goal).text(goal));
+    });
+  }
+});
+
 
 
 mainContent.on('click','#AddComponentGoalAssociation',function() {
