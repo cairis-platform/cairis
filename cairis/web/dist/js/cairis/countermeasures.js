@@ -70,7 +70,7 @@ function createCountermeasuresTable(){
         textToInsert[i++] = key;
         textToInsert[i++] = '</td>';
 
-        textToInsert[i++] = '<td class="countermeasure-rows" name="theType">';
+        textToInsert[i++] = '<td class="countermeasure-row" name="theType">';
         textToInsert[i++] = item.theType;
         textToInsert[i++] = '</td>';
 
@@ -81,8 +81,8 @@ function createCountermeasuresTable(){
       theTable.css("visibility","visible");
       $.contextMenu('destroy',$('.requirement-rows'));
       $("#mainTable").find("tbody").removeClass();
-      $("#mainTable").find("tbody").addClass('countermeasure-rows');
-      $('.countermeasure-rows').contextMenu({
+      $("#mainTable").find("tbody").addClass('countermeasure-row');
+      $('.countermeasure-row').contextMenu({
         selector: 'td',
         items: {
           "generateAsset": {

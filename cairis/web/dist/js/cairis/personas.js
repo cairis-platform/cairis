@@ -61,7 +61,7 @@ function createPersonasTable(){
         textToInsert[i++] = item.theName;
         textToInsert[i++] = '</td>';
 
-        textToInsert[i++] = '<td class-"persona-row" name="thePersonaType">';
+        textToInsert[i++] = '<td class="persona-row" name="thePersonaType">';
         textToInsert[i++] = item.theType;
         textToInsert[i++] = '</td>';
 
