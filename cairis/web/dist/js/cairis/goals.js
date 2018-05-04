@@ -692,16 +692,16 @@ function appendGoalEnvironment(text){
   $("#theGoalEnvironments").append("<tr><td class='deleteGoalEnv addRemove'><i class='fa fa-minus'></i></td><td class='goalEnvProperties'>"+ text +"</td></tr>");
 }
 function appendGoalGoal(goal){
-  $("#editgoalsGoalsTable").append('<tr class="editGoalGoalRow addRemove"><td class="deleteGoalGoal"><i class="fa fa-minus"></i></td><td class="envGoalName">'+goal[0]+'</td><td>'+goal[1]+'</td><td>'+goal[2]+'</td><td>'+goal[3]+'</td><td>'+goal[4]+'</td></tr>');
+  $("#editgoalsGoalsTable").append('<tr class="addRemove"><td class="deleteGoalGoal"><i class="fa fa-minus"></i></td><td class="envGoalName editGoalGoalRow">'+goal[0]+'</td><td class="editGoalGoalRow">'+goal[1]+'</td><td class="editGoalGoalRow">'+goal[2]+'</td><td class="editGoalGoalRow">'+goal[3]+'</td><td class="editGoalGoalRow">'+goal[4]+'</td></tr>');
 }
 function appendGoalSubGoal(subgoal){
-  $("#editgoalsSubgoalsTable").append('<tr class="editGoalSubGoalRow addRemove"><td class="deleteGoalSubGoal"><i class="fa fa-minus"></i></td><td class="subGoalName">'+subgoal[0]+'</td><td>'+subgoal[1]+'</td><td>'+subgoal[2]+'</td><td>'+subgoal[3]+'</td><td>'+subgoal[4]+'</td></tr>');
+  $("#editgoalsSubgoalsTable").append('<tr class="addRemove"><td class="deleteGoalSubGoal"><i class="fa fa-minus"></i></td><td class="subGoalName editGoalSubGoalRow">'+subgoal[0]+'</td><td class="editGoalSubGoalRow">'+subgoal[1]+'</td><td class="editGoalSubGoalRow">'+subgoal[2]+'</td><td class="editGoalSubGoalRow">'+subgoal[3]+'</td><td class="editGoalSubGoalRow">'+subgoal[4]+'</td></tr>');
 }
 function appendGoalConcern(concern){
   $("#editgoalsConcernTable").append('<tr><td class="deleteGoalEnvConcern addRemove" value="'+ concern+'"><i class="fa fa-minus"></i></td><td class="GoalConcernName">'+concern+'</td></tr>');
 }
 function appendGoalConcernAssoc(assoc){
-  $("#editgoalsConcernassociationsTable").append('<tr><td class="deleteGoalEnvConcernAssoc addRemove"><i class="fa fa-minus"></i></td><td class="assocName editGoalConcernAssoc">'+assoc[0]+'</td><td class="assocN1">'+assoc[1]+'</td><td class="assocLink">'+assoc[2]+'</td><td class="assocN2">'+assoc[4]+'</td><td class="assocTarget">'+assoc[3]+'</td></tr>');
+  $("#editgoalsConcernassociationsTable").append('<tr><td class="deleteGoalEnvConcernAssoc addRemove"><i class="fa fa-minus"></i></td><td class="assocName editGoalConcernAssoc">'+assoc[0]+'</td><td class="assocN1">'+assoc[1]+'</td><td class="assocLink editGoalConcernAssoc">'+assoc[2]+'</td><td class="assocN2 editGoalConcernAssoc">'+assoc[4]+'</td><td class="assocTarget">'+assoc[3]+'</td></tr>');
 }
 
 mainContent.on('click', '#goalCancelButton', function (e) {

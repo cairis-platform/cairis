@@ -600,10 +600,10 @@ function appendObstacleEnvironment(text){
   $("#theObstacleEnvironments").append("<tr><td class='deleteObstacleEnv'><i class='fa fa-minus'></i></td><td class='obstacleEnvProperties'>"+ text +"</td></tr>");
 }
 function appendObstacleEnvGoals(obstacle){
-  $("#editObstaclesGoalsTable").append('<tr class="obstacle_editGoalGoalRow"><td class="obstacle_deleteGoalGoal"><i class="fa fa-minus"></i></td><td class="envGoalName">'+obstacle[0]+'</td><td>'+obstacle[1]+'</td><td>'+obstacle[2]+'</td><td>'+obstacle[3]+'</td><td>'+obstacle[4]+'</td></tr>');
+  $("#editObstaclesGoalsTable").append('<tr><td class="obstacle_deleteGoalGoal"><i class="fa fa-minus"></i></td><td class="envGoalName obstacle_editGoalGoalRow">'+obstacle[0]+'</td><td class="obstacle_editGoalGoalRow">'+obstacle[1]+'</td><td class="obstacle_editGoalGoalRow">'+obstacle[2]+'</td><td class="obstacle_editGoalGoalRow">'+obstacle[3]+'</td><td class="obstacle_editGoalGoalRow">'+obstacle[4]+'</td></tr>');
 }
 function appendObstacleSubGoal(subobstacle){
-  $("#editObstaclesSubGoalsTable").append('<tr class="obstacle_editGoalSubGoalRow"><td class="obstacle_deleteGoalSubGoal"><i class="fa fa-minus"></i></td><td class="subGoalName">'+subobstacle[0]+'</td><td>'+subobstacle[1]+'</td><td>'+subobstacle[2]+'</td><td>'+subobstacle[3]+'</td><td>'+subobstacle[4]+'</td></tr>');
+  $("#editObstaclesSubGoalsTable").append('<tr><td class="obstacle_deleteGoalSubGoal"><i class="fa fa-minus"></i></td><td class="subGoalName obstacle_editGoalSubGoalRow">'+subobstacle[0]+'</td><td class="obstacle_editGoalSubGoalRow">'+subobstacle[1]+'</td><td class="obstacle_editGoalSubGoalRow">'+subobstacle[2]+'</td><td>'+subobstacle[3]+'</td><td class="obstacle_editGoalSubGoalRow">'+subobstacle[4]+'</td></tr>');
 }
 function appendObstacleConcern(concern){
     $("#editObstaclesConcernTable").append('<tr><td class="deleteObstacleEnvConcern" value="'+ concern+'"><i class="fa fa-minus"></i></td><td class="ObstacleConcernName">'+concern+'</td></tr>');
