@@ -54,6 +54,13 @@ Manual traceability links can be removed by selecting the Options/Traceability m
 Visualising tasks
 -----------------
 
+Task models show the contribution that behavioural concepts in security and usability can have on each other.  These models are centred around tasks, show the personas that interact with them, and indicate how threats or vulnerabilities might impact them.
+These models also show the assets used in the tasks or threatened/exploited by misuse cases.  If traceability associations have been added between tasks and use cases, then these links are also shown.  Finally, if use case actors are also roles associated with personas in visible tasks, then the relationship between the roles and personas is also shown.  This is useful when putting use cases and their actors in context in tasks.
+
+.. figure:: TaskModelKey.jpg
+   :alt: Task Model key
+
+
 Task models can be viewed by selecting the Models/Task menu, and selecting the environment to view the model for.
 
 .. figure:: TaskModel.jpg

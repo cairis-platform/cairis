@@ -10,11 +10,12 @@ CAIRIS documentation
    :maxdepth: 2
    :caption: Contents:
 
+   install
    starting
-   projects
    databases
    reserved
    io
+   projects
    environments
    assets
    roles_personas

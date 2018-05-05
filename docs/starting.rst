@@ -1,9 +1,30 @@
 Starting CAIRIS
 ===============
 
-Before using CAIRIS, you need to install and start the CAIRIS services.  You can find details on how to do that `here <https://cairis.org/install/>`_.
+Starting the CAIRIS server
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-You can use CAIRIS on any modern web browser.  To start using CAIRIS, visit the site hosting CAIRIS services, e.g. https://demo.cairis.org, and authenticate using the credentials provided.  For example, on https://demo.cairis.org, you can login with the username / password of test / test.
+If you are using Docker then the command used to install the container also starts the CAIRIS server on port 80.
+
+If you are the only person that plans to use CAIRIS, using the Flask development server to run cairisd should be sufficient; you can find cairisd in the cairis/cairis/bin directory.
+
+.. code-block:: bash
+
+   ./cairisd.py runserver
+
+If you plan to use mod_wsgi-express then you need to use cairis.wsgi (also in cairis/cairis/bin):
+
+.. code-block:: bash
+
+   mod_wsgi-express start-server cairis.wsgi
+
+
+Starting the web application
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+You can use CAIRIS on any modern web browser except Microsoft Internet Explorer (although you can use Microsoft Edge).
+
+In your browser, visit the site hosting the CAIRIS server, and authenticate using credentials you have, or setup if you ran the quick_setup.py script.  If you are not using the live demo, or have not mapped mod_wsgi-express to port 80, you will need to also specify the port the CAIRIS server is listening on.  If you don't specify otherwise, cairisd will listen on port 7071, and mod_wsgi-express will listen on port 8000.  For example, if you are using cairisd on germaneriposte.org then you should connect to http://germaneriposte.org:7071
 
 .. figure:: login.jpg
    :alt: Login form
