@@ -103,7 +103,12 @@ def exportRedmineUseCases(outFile,session_id = None):
 
   buf = ''
   noUseCases = 0
-  ucDict = {'ID':[],'DA':[],'NM':[],'PS':[],'NC':[],'LC':[],'CAP':[],'TMS':[]}
+
+  ucDict = {}
+  envs = b.get_dbproxy(session_id).getEnvironments()
+  for envName in envs:
+    envShortCode = envs[envName].shortCode()
+    ucDict[envShortCode] = []
 
   for ucName,ucShortCode,ucAuthor,ucTxt in rmUseCases:
     ucCat = re.sub('[0-9]','',ucShortCode)
