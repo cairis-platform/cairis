@@ -10,6 +10,7 @@ CAIRIS documentation
    :maxdepth: 2
    :caption: Contents:
 
+   install
    starting
    projects
    databases
