@@ -19,5 +19,6 @@ Data Protection Impact Assessment A DPIA specification that conforms with the `I
 ================================= =====================================================================================================================================================================================================================
 
 If you want to create a custom specification then you may wish to generate an RTF specification, and generate the graphical models directly from CAIRIS.
-Models in CAIRIS are rendered as SVG, and you can extract these directly from the web app by installing the `SVG Crowbar <http://nytimes.github.io/svg-crowbar>`_ bookmarklet in your browser.
+
+Models in CAIRIS are rendered as SVG, and it can be useful to edit these models for improved readability.  You can extract these models directly from the web app by installing the `SVG Crowbar <http://nytimes.github.io/svg-crowbar>`_ bookmarklet in your browser.
 The resulting SVG file can then be tweaked using an SVG editor like `Inkscape <https://inkscape.org>`_ , exported to the graphics format of your choice, and then added to your specification document.
