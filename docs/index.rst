@@ -12,10 +12,10 @@ CAIRIS documentation
 
    install
    starting
-   projects
    databases
    reserved
    io
+   projects
    environments
    assets
    roles_personas
