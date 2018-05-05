@@ -59,7 +59,7 @@ Adding, updating, and deleting a risk
 Risk Analysis model
 -------------------
 
-Risk Analysis models show the contribution of that different design elements make to a risk, as shown below:
+Risk Analysis models show the contribution different design elements make to a risk, as shown below:
 
 .. figure:: RiskAnalysisModelKey.jpg
    :alt: Risk Analysis Model key
