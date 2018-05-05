@@ -13,14 +13,6 @@ Download and run the container, and its linked mysql container:
    sudo docker run --name cairis-mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql:5.7
    sudo docker run --name CAIRIS --link cairis-mysql:mysql -d -P -p 80:8000 --net=bridge shamalfaily/cairis
 
-From your web browser, connect to the CAIRIS URL, e.g. http://localhost
-When asked for credentials, provide test/test
-
-If you want to interact with a pre-existing CAIRIS model, you can find some examples on the CAIRIS github, repository, e.g. `NeuroGrid <https://github.com/failys/cairis/blob/master/examples/exemplars/NeuroGrid/NeuroGrid.xml>`_. You can import this from the System/Import menu, selecting type 'Model', and the model file to import. Allow a minute or two for this import to complete.
-
-.. figure:: CAIRIS_docker.jpg
-   :alt: CAIRIS front page
-
 Please feel free to use this container to evaluate CAIRIS, but do not use it for operational use without configuring the default credentials first.  The scripts used to build the container can be found on `GitHub <https://github.com/failys/cairis/tree/master/docker>`_, and provides a useful template for getting started.
 
 Installation and configuration via GitHub
