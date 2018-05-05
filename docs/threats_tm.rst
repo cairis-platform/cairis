@@ -55,6 +55,9 @@ Data flows and Data Flow Diagrams
 Data flow diagrams (DFDs) are graphical models that model the flow of information (data flows) between external human or system actors external to the system (entities), activities that manipulate data (processes), and persistent data storage (data stores).
 Together with attack trees.  In threat modelling, DFD model elements can be encompassed by *trust boundaries*; these occur where entities with different privileges interact.
 
+.. figure:: DFDKey.jpg
+   :alt: Data Flow Diagram key
+
 
 Adding, updating, and deleting entities, processes, and data stores
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
