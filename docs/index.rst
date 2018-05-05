@@ -15,6 +15,7 @@ CAIRIS documentation
    databases
    reserved
    io
+   examples
    projects
    environments
    assets
