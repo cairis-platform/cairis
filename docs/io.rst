@@ -34,7 +34,21 @@ Dataflows                                     dataflow.dtd                    da
 Attack Tree (Dot)                             N/A                             Graphviz (Dot) representation of an attack tree
 ============================================= =============================== ============================================================================================================================
 
+If you have command line access to the server running the CAIRIS server then a quicker way of importing a model is to use the cimport.py script, which can be found in cairis/cairis/bin.  The below command, which is run from cairis/cairis/bin, imports the ACME Water sample model into the default database of the test user. 
+
+.. code-block:: bash
+
+   ./cimport.py --user=test --database=test_default --type all --overwrite 1 ../../examples/exemplars/ACME_Water/ACME_Water.xml
+
+If you run cimport.py with the --help argument, you will see more detailed import options.
+
 Exporting models
 ----------------
 
 To export a model, select the System / Export Model option.  This will render the current CAIRIS database you are working with as a CAIRIS XML model (conforming to cairis_model.dtd).
+
+Like cimport.py, there is also a command line export script - cexport.py
+ 
+.. code-block:: bash
+
+   ./cexport.py --user=test --database=test_default --type all /tmp/acme.xml

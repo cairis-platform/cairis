@@ -19,6 +19,11 @@ ACME Water
 
 ACME Water is a fictional water company concerned with the delivery of wastewater and cleanwater services in a specific geographic region of the UK.  This exemplar specifies a secure operating environment for SCADA, telemetry, and control systems associated with assets owned and operated by ACME.  This exemplar also comes with a physical localtions file (Poole Waste Water Treatment Works).
 
+webinos
+~~~~~~~
+
+Although this is not part of the CAIRIS repository, the design data used to build `webinos <https://en.wikipedia.org/wiki/Webinos>`_ is available on `webinos-design-data GitHub repository <https://github.com/webinos/webinos-design-data>`_ and is compatible with CAIRIS.  The webinos design data repository is a good example of a non-trivial specification, with input data in a variety of formats including spreadsheets, text files, CAIRIS models.  A script is used to convert these files into CAIRIS models, which is then imported.  See the README file on the webinos-design-data repository for more information.
+
 
 Threat and Vulnerability Directories
 ------------------------------------
