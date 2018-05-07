@@ -571,7 +571,7 @@ Rick isn't a power-user; he acknowledges that younger "whizz kids" are much more
   <grounds type="document" reference="Copper theft" />
 </persona_characteristic>
 <persona_characteristic persona="Rick" behavioural_variable="Motivations" modal_qualifier="Always" >
-  <definition>Need to communicate and log to be ready for anyway.</definition>
+  <definition>Need to communicate and log to be ready for anything</definition>
   <grounds type="document" reference="Records piece things together" />
   <grounds type="document" reference="Status board communicates problems" />
   <warrant type="document" reference="Anything could happen" />
