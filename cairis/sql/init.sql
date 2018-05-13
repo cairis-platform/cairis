@@ -3957,7 +3957,7 @@ CREATE VIEW personal_risk as
 
 
 
-INSERT INTO version (major,minor,patch) VALUES (1,6,4);
+INSERT INTO version (major,minor,patch) VALUES (1,6,5);
 INSERT INTO attributes (id,name) VALUES (103,'did');
 INSERT INTO trace_dimension values (0,'requirement');
 INSERT INTO trace_dimension values (1,'persona');
