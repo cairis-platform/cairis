@@ -2083,9 +2083,7 @@ end
 
 create procedure risk_environments(in riskId int)
 begin
-  select tc.id,tc.name from environment tc, environment_threat ct, risk r where r.id = riskId and r.threat_id = ct.threat_id and ct.environment_id = tc.id 
-  union 
-  select vc.id,vc.name from environment vc, environment_vulnerability cv, risk r where r.id = riskId and r.vulnerability_id = cv.vulnerability_id and cv.environment_id = vc.id;
+  select er.environment_id,e.name from environment_risk er, environment e where er.id = riskId and er.environment_id = e.id;
 end
 //
 

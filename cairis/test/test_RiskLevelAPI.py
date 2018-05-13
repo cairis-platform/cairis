@@ -81,7 +81,7 @@ class RiskLevelAPITests(CairisDaemonTestCase):
     level = jsonpickle.decode(responseData)
     self.assertIsNotNone(level, 'No results after deserialization')
     self.assertIsInstance(level, int, 'The result is not an integer as expected')
-    self.assertEqual(level, 0)
+    self.assertEqual(level, 9)
 
   def test_get_risk_threat_level(self):
     method = 'test_get_risk_level'
