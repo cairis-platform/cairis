@@ -1846,7 +1846,7 @@ Due to the lack of ACME ICT support for PC hardware at his site, Barry has learn
   <grounds type="document" reference="Lack of night ICT support" />
 </persona_characteristic>
 <persona_characteristic persona="Rick" behavioural_variable="Motivations" modal_qualifier="Always" >
-  <definition>Need to communicate and log to be ready for anyway.</definition>
+  <definition>Need to communicate and log to be ready for anything</definition>
   <grounds type="document" reference="Records piece things together" />
   <grounds type="document" reference="Status board communicates problems" />
   <warrant type="document" reference="Anything could happen" />
