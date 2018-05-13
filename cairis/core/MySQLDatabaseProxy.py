@@ -1023,15 +1023,13 @@ class MySQLDatabaseProxy:
       mcName = row[1]
       risk = self.misuseCaseRisk(mcId)
       environmentProperties = []
-      for environmentId,environmentName in self.dimensionEnvironments(mcId,'misusecase'):
+      for environmentId,environmentName in self.dimensionEnvironments(riskId,'risk'):
         narrative = self.misuseCaseNarrative(mcId,environmentId)
         properties = MisuseCaseEnvironmentProperties(environmentName,narrative)
         environmentProperties.append(properties)
       parameters = MisuseCaseParameters(mcName,environmentProperties,risk)
       mc = ObjectFactory.build(mcId,parameters)
       return mc
-
-
 
   def misuseCaseRisk(self,mcId):
     return self.responseList('select misuseCaseRisk(:id)',{'id':mcId},'MySQL error getting risk for misuse case id ' + str(mcId))[0]

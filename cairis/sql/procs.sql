@@ -940,6 +940,7 @@ drop procedure if exists getPersonalRisks;
 drop procedure if exists getPersonalResponses;
 drop procedure if exists lawfulProcessingTable;
 drop procedure if exists synopsesToXml;
+drop procedure if exists newRiskContexts;
 
 delimiter //
 
@@ -1088,14 +1089,14 @@ begin
   declare compositeCount int;
   declare duplicatePolicy varchar(200);
   declare overridingEnvironmentId int;
-  declare cProperty int;
-  declare iProperty int;
-  declare avProperty int;
-  declare acProperty int;
-  declare anProperty int;
-  declare panProperty int;
-  declare unlProperty int;
-  declare unoProperty int;
+  declare cProperty int default 0;
+  declare iProperty int default 0;
+  declare avProperty int default 0;
+  declare acProperty int default 0;
+  declare anProperty int default 0;
+  declare panProperty int default 0;
+  declare unlProperty int default 0;
+  declare unoProperty int default 00;
   declare workingCProperty int default 0;
   declare workingIProperty int default 0;
   declare workingAvProperty int default 0;
@@ -1104,22 +1105,22 @@ begin
   declare workingPanProperty int default 0;
   declare workingUnlProperty int default 0;
   declare workingUnoProperty int default 0;
-  declare cRationale varchar(500);
-  declare iRationale varchar(500);
-  declare avRationale varchar(500);
-  declare acRationale varchar(500);
-  declare anRationale varchar(500);
-  declare panRationale varchar(500);
-  declare unlRationale varchar(500);
-  declare unoRationale varchar(500);
-  declare workingCRationale varchar(500);
-  declare workingIRationale varchar(500);
-  declare workingAvRationale varchar(500);
-  declare workingAcRationale varchar(500);
-  declare workingAnRationale varchar(500);
-  declare workingPanRationale varchar(500);
-  declare workingUnlRationale varchar(500);
-  declare workingUnoRationale varchar(500);
+  declare cRationale varchar(500) default '';
+  declare iRationale varchar(500) default '';
+  declare avRationale varchar(500) default '';
+  declare acRationale varchar(500) default '';
+  declare anRationale varchar(500) default '';
+  declare panRationale varchar(500) default '';
+  declare unlRationale varchar(500) default '';
+  declare unoRationale varchar(500) default '';
+  declare workingCRationale varchar(500) default '';
+  declare workingIRationale varchar(500) default '';
+  declare workingAvRationale varchar(500) default '';
+  declare workingAcRationale varchar(500) default '';
+  declare workingAnRationale varchar(500) default '';
+  declare workingPanRationale varchar(500) default '';
+  declare workingUnlRationale varchar(500) default '';
+  declare workingUnoRationale varchar(500) default '';
   declare done int default 0;
   declare currentEnvironmentId int;
   declare propertiesCursor cursor for select environment_id from composite_environment where composite_environment_id = environmentId;  
@@ -2082,8 +2083,6 @@ end
 
 create procedure risk_environments(in riskId int)
 begin
-  declare riskId int;
-  select id into riskId from risk where name = riskName limit 1;
   select tc.id,tc.name from environment tc, environment_threat ct, risk r where r.id = riskId and r.threat_id = ct.threat_id and ct.environment_id = tc.id 
   union 
   select vc.id,vc.name from environment vc, environment_vulnerability cv, risk r where r.id = riskId and r.vulnerability_id = cv.vulnerability_id and cv.environment_id = vc.id;
@@ -3436,6 +3435,10 @@ deterministic
 begin
   declare narrativeText varchar(5000);
   select narrative into narrativeText from misusecase_narrative where misusecase_id = mcId and environment_id = environmentId;
+  if narrativeText is null
+  then
+    set narrativeText = '';
+  end if;
   return narrativeText;
 end
 //
@@ -7837,7 +7840,6 @@ begin
     set detailsBuf = concat(detailsBuf,'Rounding severity up to 0.\n');
   end if;
  
-  
   call suppressedThreatProperties(threatId,envId);
   select cProperty,iProperty,avProperty,acProperty,anProperty,panProperty,unlProperty,unoProperty into threatCProperty,threatIProperty,threatAvProperty,threatAcProperty,threatAnProperty,threatPanProperty,threatUnlProperty,threatUnoProperty from temp_threatproperties;
 
@@ -7846,6 +7848,7 @@ begin
 
   set detailsBuf = concat(detailsBuf,'security property = (threat property x asset property) - (mean of mitigating properties)\n');
   set detailsBuf = concat(detailsBuf,'                  = ([',threatCProperty,' ',threatIProperty,' ',threatAvProperty,' ',threatAcProperty,' ',threatAnProperty,' ',threatPanProperty,' ',threatUnlProperty,' ',threatUnoProperty,'] x [',assetCProperty,' ',assetIProperty,' ',assetAvProperty,' ',assetAcProperty,' ',assetAnProperty,' ',assetPanProperty,' ',assetUnlProperty,' ',assetUnoProperty,']) - [',mitigatingCValue,' ',mitigatingIValue,' ',mitigatingAvValue,' ',mitigatingAcValue,' ',mitigatingAnValue,' ',mitigatingPanValue,' ',mitigatingUnlValue,' ',mitigatingUnoValue,']\n');
+
   
   set preAssetCValue = threatCProperty * assetCProperty;
   set assetCValue = preAssetCValue - mitigatingCValue;
@@ -24176,6 +24179,7 @@ begin
   call dataMinimisation_usecase(environmentId);
   call storageLimitationCheck(environmentId);
   call criticalPrivacyRisks(environmentId);
+  call newRiskContexts();
 
   select label,message from temp_vout;
 
@@ -25025,5 +25029,42 @@ begin
   
 end
 //
+
+create procedure newRiskContexts()
+begin
+  declare riskId int;
+  declare riskName varchar(100);
+  declare envName varchar(100);
+  declare done int default 0;
+  declare riskCursor cursor for select id,name from risk; 
+  declare meCursor cursor for select e.name from environment_risk er, environment e where er.id = riskId and er.environment_id = e.id and er.environment_id not in (select em.environment_id from environment_misusecase em, misusecase_risk mr where mr.risk_id = riskId and mr.misusecase_id = em.misusecase_id);
+  declare continue handler for not found set done = 1;
+
+
+  set done = 0;
+  open riskCursor;
+  risk_loop: loop
+    fetch riskCursor into riskId,riskName;
+    if done = 1
+    then
+      leave risk_loop;
+    end if;
+
+    open meCursor;
+    me_loop: loop
+      fetch meCursor into envName;
+      if done = 1
+      then
+        leave me_loop;
+      end if;
+      insert into temp_vout(label,message) values('New risk contexts',concat("Risk '",riskName,"' is present in environment '",envName,"', but no misuse case has been defined for this environment."));
+    end loop me_loop;
+    close meCursor;
+    set done = 0;
+  end loop risk_loop;
+  close riskCursor;
+end
+//
+
 
 delimiter ;

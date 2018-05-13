@@ -119,7 +119,18 @@ mainContent.on('click', "#editMisusedCase", function (e) {
     });
   }
   else {
-    $.ajax({
+    var risk = JSON.parse($.session.get("Risk"));
+    $.session.set("MisuseCase", JSON.stringify(risk.theMisuseCase));
+    $("#theMisuseName").val(risk.theMisuseCase.theName);
+    $("#theMisuseRisk").val(risk.theName);
+    $("#theMisuseEnvironments").find("tbody").empty();
+    $.each(risk.theMisuseCase.theEnvironmentProperties, function (idx,env) {
+      appendMisuseEnvironment(env.theEnvironmentName);
+    });
+    $("#theMisuseEnvironments").find(".misusecaseEnvironment:first").trigger('click');
+
+
+/*    $.ajax({
       type: "GET",
       dataType: "json",
       accept: "application/json",
@@ -142,7 +153,8 @@ mainContent.on('click', "#editMisusedCase", function (e) {
         debugLogger(String(this.url));
         debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
       }
-    });
+    });*/
+
   }
 });
 
@@ -258,6 +270,10 @@ $(document).on('click', 'td.risk-rows', function () {
             });
             vulnSelect.val(mainData.theVulnerabilityName);
             getRiskEnvironments();
+            var warningTxt = checkMisuseCase(mainData.theMisuseCase);
+            if (warningTxt != '') {
+              alert(warningTxt);
+            }
           });
         });
       });
@@ -268,6 +284,16 @@ $(document).on('click', 'td.risk-rows', function () {
     }
   });
 });
+
+function checkMisuseCase(mc) {
+  var warningTxt = ''
+  $.each(mc.theEnvironmentProperties,function(key,mce) {
+    if (mce.theDescription == '') {
+      warningTxt += 'No misuse case narrative for environment ' + mce.theEnvironmentName + '. '
+    }
+  });
+  return warningTxt;
+}
 
 $(document).on('click','#addNewRisk', function() {
   refreshObjectBreadCrumb('New Risk');
@@ -451,20 +477,31 @@ function commitRisk() {
     risk.theTags = tags;
   }
 
-  if($("#editRisksForm").hasClass("new")){
-    postRisk(risk, function () {
-      clearLocalStorage('risk');
-      $("#editRisksForm").removeClass("new")
-      $('#menuBCClick').attr('dimension','risk');
-      refreshMenuBreadCrumb('risk');
-    });
+  if (risk.theMisuseCase == '') {
+    alert("No misuse case defined");
   }
   else {
-    putRisk(risk, oldName, function () {
-      clearLocalStorage('risk');
-      $('#menuBCClick').attr('dimension','risk');
-      refreshMenuBreadCrumb('risk');
-    });
+    var warningTxt = checkMisuseCase(risk.theMisuseCase);
+    if (warningTxt != '') {
+      alert(warningTxt);
+    } 
+    else {
+      if($("#editRisksForm").hasClass("new")){
+        postRisk(risk, function () {
+          clearLocalStorage('risk');
+          $("#editRisksForm").removeClass("new")
+          $('#menuBCClick').attr('dimension','risk');
+          refreshMenuBreadCrumb('risk');
+        });
+      }
+      else {
+        putRisk(risk, oldName, function () {
+          clearLocalStorage('risk');
+          $('#menuBCClick').attr('dimension','risk');
+          refreshMenuBreadCrumb('risk');
+        });
+      }
+    }
   }
 }
 
