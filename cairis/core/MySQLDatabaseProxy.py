@@ -2695,7 +2695,8 @@ class MySQLDatabaseProxy:
     if (sys.version_info > (3,)):
       docName = parameters.name() 
     else:
-      docName = self.conn.connection().connection.escape_string(parameters.name().replace("\\u2018", "'").replace("\\u2019", "'").replace("\\u2013", "-").replace("\\u2022","*"))
+      docName = parameters.name().encode('ascii','ignore')
+      docName = self.conn.connection().connection.escape_string(docName.replace("\\u2018", "'").replace("\\u2019", "'").replace("\\u2013", "-").replace("\\u2022","*"))
     docVersion = parameters.version()
     docDate = self.conn.connection().connection.escape_string(parameters.date())
     docAuthors = self.conn.connection().connection.escape_string(parameters.authors())
@@ -2726,9 +2727,11 @@ class MySQLDatabaseProxy:
     cName = parameters.contributor()
     refExc = parameters.description()
     if (sys.version_info < (3,)):
-      refName = self.conn.connection().connection.escape_string(parameters.name().replace("\\u2018", "'").replace("\\u2019", "'").replace("\\u2013", "-").replace("\\u2022","*"))
-      refName = self.conn.connection().connection.escape_string(parameters.name().replace("\\u2018", "'").replace("\\u2019", "'").replace("\\u2013", "-"))
-      docName = self.conn.connection().connection.escape_string(parameters.document().replace("\\u2018", "'").replace("\\u2019", "'").replace("\\u2013", "-").replace("\\u2022","*"))
+      refName = parameters.name().encode('ascii','ignore')
+      refName = self.conn.connection().connection.escape_string(refName.replace("\\u2018", "'").replace("\\u2019", "'").replace("\\u2013", "-").replace("\\u2022","*"))
+      refName = self.conn.connection().connection.escape_string(refName.replace("\\u2018", "'").replace("\\u2019", "'").replace("\\u2013", "-"))
+      docName = parameters.document().encode('ascii','ignore')
+      docName = self.conn.connection().connection.escape_string(docName.replace("\\u2018", "'").replace("\\u2019", "'").replace("\\u2013", "-").replace("\\u2022","*").replace("\xb7","."))
       self.updateDatabase('call addDocumentReference(:rId,:rName,:dName,:cName,:rExec)',{'rId':refId,'rName':refName.encode('utf-8'),'dName':docName.encode('utf-8'),'cName':cName.encode('utf-8'),'rExec':refExc.encode('utf-8')},'MySQL error adding document reference')
     else:
       self.updateDatabase('call addDocumentReference(:rId,:rName,:dName,:cName,:rExec)',{'rId':refId,'rName':refName,'dName':docName,'cName':cName,'rExec':refExc},'MySQL error adding document reference')
