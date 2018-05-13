@@ -103,7 +103,7 @@ $('#toTrelloModal').on('click','#ExportReferences',function(){
          dataType: "json",
          accept: "application/json",
          data: {
-           session_id: 'test'
+           session_id: String($.session.get('sessionID'))
          },
          crossDomain: true,
          url: serverIP + "/api/document_references",
