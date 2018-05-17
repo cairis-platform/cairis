@@ -166,6 +166,7 @@ $('#fromTrelloModal').on('click','#ExportLists',function(){
         "theModQual" : "Perhaps",
         "theVariable" : itemArray[1].trim(),
         "theCharacteristic" : itemArray[0].trim(),
+        "theCharacteristicSynopsis" : referenceSynopsisDefault,
         "theGrounds" : [],
         "theWarrant" : [],
         "theRebuttal" : [],
