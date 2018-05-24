@@ -34,18 +34,13 @@ MISUSECASE_TYPE = 1
 def arrayToAssetSecurityPropertiesTable(spArray,objtName):
   colorScheme = ["black","red","green","blue","yellow","cyan","purple","gray"]
   buf = '<<TABLE cellborder="1" border="1" cellspacing="2">'
-  buf += '<TR><TD colspan="3">' + objtName + '</TD></TR>' 
+  buf += '<TR><TD colspan="3" bgcolor="white" border="0" align="center">' + objtName + '</TD></TR>' 
   ci = 0 
   for x in spArray:
     if x == 0:
       buf += '<TR><TD border="0"></TD></TR>'
     else:
-      i = x
-      buf += '<TR>'
-      while i > 0:
-        buf += '<TD bgcolor="' + colorScheme[ci] + '"></TD>'
-        i-= 1
-      buf += '</TR>'
+      buf += '<TR><TD bgcolor="' + colorScheme[ci] + '" colspan="' + str(x) + '"></TD></TR>'
     ci += 1
   buf += '</TABLE>>'
   return buf
@@ -59,9 +54,9 @@ def arrayToThreatSecurityPropertiesTable(spArray,objtName):
     if x == 0:
       buf += '<TR><TD border="0"></TD></TR>'
     else:
-      if x == 1: buf += '<TR><TD></TD><TD></TD><TD bgcolor="' + colorScheme[ci] + '"></TD></TR>'
-      elif x == 2: buf += '<TR><TD></TD><TD bgcolor="' + colorScheme[ci] + '" border="0"></TD><TD bgcolor="' + colorScheme[ci] + '" border="0"></TD></TR>'
-      else: buf += '<TR><TD bgcolor="' + colorScheme[ci] + '" border="0"></TD><TD bgcolor="' + colorScheme[ci] + '" border="0"></TD><TD bgcolor="' + colorScheme[ci] + '" border="0"></TD></TR>'
+      if x == 1: buf += '<TR><TD colspan="2"></TD><TD bgcolor="' + colorScheme[ci] + '"></TD></TR>'
+      elif x == 2: buf += '<TR><TD colspan="1"></TD><TD bgcolor="' + colorScheme[ci] + '" colspan="2"></TD></TR>'
+      else: buf += '<TR><TD bgcolor="' + colorScheme[ci] + '" colspan="3"></TD></TR>'
     ci += 1
   buf += '</TABLE>>'
   return buf
