@@ -12363,7 +12363,12 @@ begin
     union
     select 'obstacle' from_objt, o.name from_name, 'threat' to_objt, t.name to_name from obstacle o, threat t, risk r, obstaclethreat_goalassociation ot, environment_threat et where ot.goal_id = o.id and ot.subgoal_id = t.id and ot.subgoal_id = et.threat_id and et.environment_id = environmentId and et.environment_id = ot.environment_id and ot.subgoal_id = r.threat_id and r.id = riskId
     union
-    select 'obstacle' from_objt, o.name from_name, 'vulnerability' to_objt, v.name to_name from obstacle o, vulnerability v, obstaclevulnerability_goalassociation ov, environment_vulnerability ev, risk r where ov.goal_id = o.id and ov.subgoal_id = v.id and ov.subgoal_id = ev.vulnerability_id and ev.environment_id = environmentId and ev.environment_id = ov.environment_id and ov.subgoal_id = r.vulnerability_id and r.id = riskId;
+    select 'obstacle' from_objt, o.name from_name, 'vulnerability' to_objt, v.name to_name from obstacle o, vulnerability v, obstaclevulnerability_goalassociation ov, environment_vulnerability ev, risk r where ov.goal_id = o.id and ov.subgoal_id = v.id and ov.subgoal_id = ev.vulnerability_id and ev.environment_id = environmentId and ev.environment_id = ov.environment_id and ov.subgoal_id = r.vulnerability_id and r.id = riskId
+    union
+    select 'asset' from_objt, a.name from_name, 'requirement' to_objt, concat(a.short_code,'-',r.label) to_name from asset a, environment_asset ea, requirement r, asset_requirement ar, asset_threat at, risk ri where ea.environment_id = environmentId and ea.asset_id = a.id and a.id = ar.asset_id and ar.requirement_id = r.id and r.version = (select max(i.version) from requirement i where i.id = r.id) and ea.asset_id = at.asset_id and ea.environment_id = at.environment_id and at.threat_id = ri.threat_id and ri.id = riskId
+    union
+    select 'asset' from_objt, a.name from_name, 'requirement' to_objt, concat(a.short_code,'-',r.label) to_name from asset a, environment_asset ea, requirement r, asset_requirement ar, asset_vulnerability av, risk ri where ea.environment_id = environmentId and ea.asset_id = a.id and a.id = ar.asset_id and ar.requirement_id = r.id and r.version = (select max(i.version) from requirement i where i.id = r.id) and ea.asset_id = av.asset_id and ea.environment_id = av.environment_id and av.vulnerability_id = ri.threat_id and ri.id = riskId;
+
   else
     select 0;
   end if;
