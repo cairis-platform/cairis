@@ -471,13 +471,13 @@ $(document).on('click', 'td.deleteAttackerButton', function (e) {
 var uploading = false;
 $("#objectViewer").on('click', '#theAttackerImage', function () {
   if(!uploading) {
-    $('#fileupload').trigger("click");
+    $('#attackerimageupload').trigger("click");
   }
 });
 
-$("#objectViewer").on('change','#fileupload', function () {
+$("#objectViewer").on('change','#attackerimageupload', function () {
   uploading = true;
-  var test = $(document).find('#fileupload');
+  var test = $(document).find('#attackerimageupload');
   var fd = new FormData();
   fd.append("file", test[0].files[0]);
   var bar = $(".progress-bar");

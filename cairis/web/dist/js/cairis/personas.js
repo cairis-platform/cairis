@@ -371,14 +371,14 @@ $(document).on('click', 'td.deletePersonaButton', function (e) {
 var uploading = false;
 mainContent.on('click', '#theImage', function (e) {
   if(!uploading) {
-    $('#fileupload').trigger("click");
+    $('#personaimageupload').trigger("click");
   }
 });
 
 
-mainContent.on('change','#fileupload', function () {
+mainContent.on('change','#personaimageupload', function () {
   uploading = true;
-  var test = $(document).find('#fileupload');
+  var test = $(document).find('#personaimageupload');
   var fd = new FormData();
   fd.append("file", test[0].files[0]);
   var bar = $(".progress-bar");
