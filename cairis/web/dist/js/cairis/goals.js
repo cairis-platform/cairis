@@ -634,9 +634,6 @@ function fillGoalOptionMenu(data,callback){
       data.theTags = [];
       $('#editGoalOptionsForm').loadJSON(data, null);
 
-      $.each(data.theTags, function (index, tag) {
-        $("#theTags").append(tag + ", ");
-      });
       $.each(data.theEnvironmentProperties, function (index, prop) {
         appendGoalEnvironment(prop.theEnvironmentName);
       });

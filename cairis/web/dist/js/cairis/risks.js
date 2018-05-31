@@ -251,12 +251,7 @@ $(document).on('click', 'td.risk-rows', function () {
         $("#UpdateRisk").text("Update");
         $("#theName").val(mainData.theName);
         $("#editRisksForm").validator('update');
-        var tags = mainData.theTags;
-        var text = "";
-        $.each(tags, function (index, type) {
-          text += type + ", ";
-        });
-        $("#theTags").val(text);
+        $('#theTags').val(mainData.theTags.join(', '));
         var threatSelect = $("#theThreatNames");
         var vulnSelect = $("#theVulnerabilityNames");
         getThreats(function (data) {
@@ -472,10 +467,7 @@ function commitRisk() {
   risk.theRiskName = $("#theName").val();
   risk.theThreatName = $("#theThreatNames").val();
   risk.theVulnerabilityName = $("#theVulnerabilityNames").val();
-  var tags = $("#theTags").text().split(", ");
-  if(tags[0] != ""){
-    risk.theTags = tags;
-  }
+  risk.theTags = $('#theTags').val().split(',').map(function(t){return t.trim();});
 
   if (risk.theMisuseCase == '') {
     alert("No misuse case defined");
