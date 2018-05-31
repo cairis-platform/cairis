@@ -152,19 +152,9 @@ function viewTask(taskName) {
       fillOptionMenu("fastTemplates/editTaskOptions.html", "#objectViewer", null, true, true, function () {
         $("#UpdateTask").text("Update");
         $.session.set("Task", JSON.stringify(data));
+        $('#theTags').val(data.theTags.join(', '));
+        data.theTags = [];
         $('#editTaskOptionsForm').loadJSON(data, null);
-
-        if (data.theTags.length > 0) {
-          var text = "";
-          $.each(data.theTags, function (index, type) {
-            text += type;
-            if (index < (data.theTags.length - 1)) {
-              text += ", ";
-            }
-          });
-          $("#theTags").val(text);
-        }
-
         $.each(data.theEnvironmentProperties, function (index, env) {
           appendTaskEnvironment(env.theEnvironmentName);
         });
@@ -497,10 +487,7 @@ function commitTask() {
     task.theName = $("#theName").val();
     task.theAuthor = $("#theAuthor").val();
     task.theObjective = $("#theObjective").val();
-    var tags = $("#theTags").text().split(", ");
-    if(tags[0] != ""){
-      task.theTags = tags;
-    }
+    task.theTags = $('#theTags').val().split(',').map(function(t){return t.trim();});
 
     var envName = $.session.get("taskEnvironmentName");
     var updatedEnvProps = [];

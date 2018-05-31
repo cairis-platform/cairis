@@ -104,15 +104,12 @@ function viewResponse(responseName) {
     success: function (data) {
       fillOptionMenu("fastTemplates/editResponseOptions.html", "#objectViewer", null, true, true, function () {
         $("#UpdateResponse").text("Update");
-        var tags = data.theTags;
+
         $("#theResponseName").val(data.theName);
         $.session.set("ResponseName", data.theName);
         $.session.set("response", JSON.stringify(data));
-        var text = "";
-        $.each(tags, function (index, type) {
-          text += type + ", ";
-        });
-        $("#theTags").val(text);
+
+        $('#theTags').val(data.theTags.join(', '));
         if (data.theResponseType == 'Prevent' || data.theResponseType == 'Deter' || data.theResponseType == 'Detect' || data.theResponseType == 'React') {
           data.theResponseType = 'Mitigate';
         }
@@ -679,10 +676,7 @@ function commitResponse() {
   }
   if (valid) {
     resp.theName = $("#theResponseName").val();
-    var arr = $("#theTags").val().split(", ")
-    if(arr[0] != "") {
-      resp.TheTags = arr;
-    }
+    resp.theTags = $('#theTags').val().split(',').map(function(t){return t.trim();});
     resp.theRisk = $("#chooseRisk").val();
     resp.theResponseType = respKind;
 

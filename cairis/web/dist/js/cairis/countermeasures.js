@@ -176,13 +176,8 @@ function viewCountermeasure(cmName) {
       fillOptionMenu("fastTemplates/editCountermeasureOptions.html", "#objectViewer", null, true, true, function () {
         $.session.set("Countermeasure", JSON.stringify(data));
         $("#UpdateCountermeasure").text("Update");
-        var tags = data.theTags;
-        var text = "";
-        $.each(tags, function (index, type) {
-          text += type + ", ";
-        });
-        $("#theTags").val(text);
-
+        $('#theTags').val(data.theTags.join(', '));
+        data.theTags = [];
         $('#editCountermeasureOptionsForm').loadJSON(data, null);
         $.each(data.theEnvironmentProperties, function (index, env) {
           appendCountermeasureEnvironment(env.theEnvironmentName)
@@ -639,10 +634,7 @@ function commitCountermeasure() {
   else {
     var oldName = cm.theName;
     cm.theName = $("#theName").val();
-    var tags = $("#theTags").text().split(", ");
-    if(tags[0] != ""){
-      cm.theTags = tags;
-    }
+    cm.theTags = $('#theTags').val().split(',').map(function(t){return t.trim();});
     cm.theType = $("#theType option:selected").text();
 
     if($("#editCountermeasureOptionsForm").hasClass("new")){
