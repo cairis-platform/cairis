@@ -37,7 +37,7 @@ $("#FindButton").click(function(e){
       success: function (data) {
         $("#theResults").find("tbody").empty();
         $.each(data, function(idx,searchRes) {
-          appendResults(searchRes);
+          appendSearchResults(searchRes);
         });
       },
       error: function (xhr, textStatus, errorThrown) {
@@ -50,8 +50,8 @@ $("#FindButton").click(function(e){
   });
 });
 
-function appendResults(searchResults){
-  $("#theResults").append('<tr class="' + searchResults[1].replace(" ","").toLowerCase() + '-rows"><td>' + searchResults[0] +'</td><td>' + searchResults[1] + '</td><td>' + searchResults[2] + '</td></tr>');
+function appendSearchResults(searchResults){
+  $("#theResults").find('tbody').append('<tr class="' + searchResults[1].replace(" ","").toLowerCase() + '-rows"><td>' + searchResults[0] +'</td><td>' + searchResults[1] + '</td><td>' + searchResults[2] + '</td></tr>');
 }
 
 $(document).on('click', "tr.domainproperty-rows", function () {

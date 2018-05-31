@@ -15201,7 +15201,7 @@ begin
   insert into temp_searchresults (environment_name, dimension_name, object_name)
   select e.name,'Attacker',a.name from environment e, environment_attacker ea, attacker a, attacker_tag at, tag t where ea.environment_id = e.id and ea.attacker_id = a.id and at.attacker_id = a.id and at.tag_id = t.id and t.name like concat('%',inTxt,'%') 
   union
-  select e.name,'Asset',a.name from environment e, environment_asset ea, asset a, asset_tag at, tag t where ea.environment_id = e.id and ea.asset_id = a.id and at.asset_id = a.id and at.tag_id = t.id and t.name like concat('%',inTxt,'%') 
+  select '','Asset',a.name from asset a, asset_tag at, tag t where at.asset_id = a.id and at.tag_id = t.id and t.name like concat('%',inTxt,'%') 
   union
   select e.name,'Countermeasure',c.name from environment e, environment_countermeasure ec, countermeasure c, countermeasure_tag ct, tag t where ec.environment_id = e.id and ec.countermeasure_id = c.id and ct.countermeasure_id = c.id and ct.tag_id = t.id and t.name like concat('%',inTxt,'%') 
   union

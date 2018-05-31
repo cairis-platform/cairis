@@ -119,6 +119,8 @@ function viewAsset(assetName) {
         $.each(newdata.theInterfaces,function(idx,aInt) {
           appendAssetInterface(aInt);
         });
+        $('#theTags').val(newdata.theTags.join(', '));
+        newdata.theTags = []
         $('#editAssetsOptionsform').loadJSON(newdata,null);
         if (newdata.isCritical) {
           $('#theCriticalRationale').prop("disabled",false); 
@@ -620,6 +622,8 @@ function assetFormToJSON(data){
   json["theCriticalRationale"] = $(data).find('#theCriticalRationale').val();
   json["isCritical"] = +$("#isCritical").is( ':checked' );
   json.theType =  $(data).find( "#theType option:selected" ).text().trim();
+  json["theTags"] = $(data).find('#theTags').val().split(',').map(function(t){return t.trim();});
+
 
   $(data).children().each(function () {
     if(String($(this).prop("tagName")).toLowerCase() == "p"){

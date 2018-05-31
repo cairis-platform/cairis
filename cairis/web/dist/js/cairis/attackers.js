@@ -100,13 +100,9 @@ function viewAttacker(attackerName) {
       fillOptionMenu("fastTemplates/editAttackerOptions.html", "#objectViewer", null, true, true, function () {
         $("#UpdateAttacker").text("Update");
         $.session.set("Attacker", JSON.stringify(data));
+        $('#theTags').val(data.theTags.join(', '));
+        data.theTags = []
         $('#editAttackerOptionsForm').loadJSON(data, null);
-        var tags = data.theTags;
-        var text = "";
-        $.each(tags, function (index, type) {
-          text += type + ", ";
-        });
-        $("#theTags").val(text);
         $.each(data.theEnvironmentProperties, function (index, env) {
           appendAttackerEnvironment(env.theEnvironmentName);
         });
@@ -388,10 +384,7 @@ function commitAttacker() {
     var oldName = attacker.theName;
     attacker.theName = $("#theName").val();
     attacker.theDescription = $("#theDescription").val();
-    var tags = $("#theTags").text().split(", ");
-    if(tags[0] != ""){
-      attacker.theTags = tags;
-    }
+    attacker.theTags = $('#theTags').val().split(',').map(function(t){return t.trim();});
     if($("#editAttackerOptionsForm").hasClass("new")){
       postAttacker(attacker, function () {
         clearLocalStorage('attacker');

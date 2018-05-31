@@ -68,7 +68,7 @@ function validateModel() {
       success: function (data) {
         $("#theValidationResults").find("tbody").empty();
         $.each(data, function(idx,vr) {
-          appendResults(vr);
+          appendValidationResults(vr);
         });
       },
       error: function (xhr, textStatus, errorThrown) {
@@ -81,6 +81,6 @@ function validateModel() {
   });
 }
 
-function appendResults(vr){
+function appendValidationResults(vr){
   $("#theValidationResults").append('<tr class="mv-rows"><td>' + vr.theLabel +'</td><td>' + vr.theMessage + '</td></tr>');
 }

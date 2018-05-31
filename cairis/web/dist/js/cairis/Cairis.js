@@ -2188,4 +2188,3 @@ function filterReservedChars(event) {
     return false;
   }
 }
-

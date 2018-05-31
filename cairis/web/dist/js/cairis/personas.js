@@ -106,22 +106,13 @@ function viewPersona(personaName) {
       fillOptionMenu("fastTemplates/editPersonasOptions.html", "#objectViewer", null, true, true, function () {
         $("#UpdatePersona").text("Update");
         $.session.set("Persona", JSON.stringify(data));
+        $('#theTags').val(data.theTags.join(', '));
+        data.theTags = []
         $('#editPersonasOptionsForm').loadJSON(data, null);
 
         refreshDimensionSelector($('#thePersonaType'),'persona_type',undefined,function() {
           $("#thePersonaType").val(data.thePersonaType);
         },['All']);
-
-        if (data.theTags.length > 0) {
-          var text = "";
-          $.each(data.theTags, function (index, type) {
-            text += type;
-            if (index < (data.theTags.length - 1)) {
-              text += ", ";
-            }
-          });
-          $("#theTags").val(text);
-        }
 
         $.each(data.theEnvironmentProperties, function (index, env) {
           appendPersonaEnvironment(env.theEnvironmentName);
@@ -313,6 +304,7 @@ function commitPersona() {
     persona.theAssumption = 0;
     persona.thePersonaType = $("#thePersonaType :selected").text();
     persona.theCodes = [];
+    persona.theTags = $('#theTags').val().split(',').map(function(t){return t.trim();});
 
     var tags = $("#theTags").text().split(", ");
     if(tags[0] != ""){
