@@ -430,10 +430,8 @@ function commitObstacle() {
     var oldName = obstacle.theName;
     obstacle.theName = $("#theName").val();
     obstacle.theOriginator = $("#theOriginator").val();
-    var tags = $("#theTags").text().split(", ");
-    if(tags[0] != ""){
-      obstacle.theTags = tags;
-    }
+    obstacle.theTags = $('#theTags').val().split(',').map(function(t){return t.trim();});
+
     if($("#editObstacleOptionsForm").hasClass("new")){
       postObstacle(obstacle, function () {
         $("#editObstacleOptionsForm").removeClass("new")
@@ -514,11 +512,10 @@ function fillObstacleOptionMenu(data,callback){
     $("#updateObstacleButton").text("Update");
     if(data != null) {
       $.session.set("Obstacle", JSON.stringify(data));
-      $('#editObstacleOptionsForm').loadJSON(data, null);
 
-      $.each(data.theTags, function (index, tag) {
-        $("#theTags").append(tag + ", ");
-      });
+      $('#theTags').val(data.theTags.join(', '));
+      data.theTags = [];
+      $('#editObstacleOptionsForm').loadJSON(data, null);
       clearObstacleEnvironmentPanel();
       $.each(data.theEnvironmentProperties, function (index, prop) {
         appendObstacleEnvironment(prop.theEnvironmentName);

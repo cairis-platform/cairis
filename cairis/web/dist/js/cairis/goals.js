@@ -458,10 +458,8 @@ function commitGoal() {
       var oldName = goal.theName;
       goal.theName = $("#theName").val();
       goal.theOriginator = $("#theOriginator").val();
-      var tags = $("#theTags").text().split(", ");
-      if(tags[0] != ""){
-        goal.theTags = tags;
-      }
+      goal.theTags = $('#theTags').val().split(',').map(function(t){return t.trim();});
+
       if($("#editGoalOptionsForm").hasClass("new")){
         postGoal(goal, function () {
           clearLocalStorage("goal");
@@ -632,6 +630,8 @@ function fillGoalOptionMenu(data,callback){
     $("#updateGoalButton").text("Update");
     if(data != null) {
       $.session.set("Goal", JSON.stringify(data));
+      $('#theTags').val(data.theTags.join(', '));
+      data.theTags = [];
       $('#editGoalOptionsForm').loadJSON(data, null);
 
       $.each(data.theTags, function (index, tag) {
