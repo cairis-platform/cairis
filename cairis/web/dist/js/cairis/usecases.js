@@ -124,21 +124,14 @@ function viewUseCase(ucName) {
       fillOptionMenu("fastTemplates/editUseCaseOptions.html", "#objectViewer", null, true, true, function () {
         $('#UpdateUseCase').text("Update");
         $.session.set("UseCase", JSON.stringify(data));
+        $('#theTags').val(data.theTags.join(', '));
+        data.theTags = [];
+
         $('#editUseCaseOptionsForm').loadJSON(data, null);
         $.each(data.theActors, function (index, actor) {
           appendUseCaseActor(actor);
         });
 
-        if (data.theTags.length > 0) {
-          var text = "";
-          $.each(data.theTags, function (index, type) {
-            text += type;
-            if (index < (data.theTags.length - 1)) {
-              text += ", ";
-            }
-          });
-          $("#theTags").val(text);
-        }
         $.each(data.theReferenceContributions, function (index, refCont) {
           appendUseCaseContribution(refCont);
         });
@@ -466,10 +459,7 @@ function commitUseCase() {
     usecase.theAuthor = $("#theAuthor").val();
     usecase.theObjective = $("#theObjective").val();
     usecase.theDescription = $("#theDescription").val();
-    var tags = $("#theTags").text().split(", ");
-    if(tags[0] != ""){
-      usecase.theTags = tags;
-    }
+    usecase.theTags = $('#theTags').val().split(',').map(function(t){return t.trim();});
 
     var envName = $.session.get("usecaseEnvironmentName");
     var updatedEnvProps = [];

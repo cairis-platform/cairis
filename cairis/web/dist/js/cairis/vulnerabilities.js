@@ -113,14 +113,13 @@ function viewVulnerability(vulName) {
         $("#UpdateVulnerability").text("Update");
         $.session.set("Vulnerability", JSON.stringify(newdata));
         $.session.set("VulnerabilityName", newdata.theVulnerabilityName);
-        var jsondata = $.extend(true, {}, newdata);
-        jsondata.theTags = [];
-        $('#editVulnerabilityOptionsform').loadJSON(jsondata, null);
+        $('#theTags').val(newdata.theTags.join(', '));
+        newdata.theTags = [];
+        $('#editVulnerabilityOptionsform').loadJSON(newdata, null);
         var text = "";
         $.each(newdata.theTags, function (index, tag) {
           text += tag + ", ";
         });
-        $("#theTags").val(text);
         $("#editVulnerabilityOptionsform").validator('update');
 
         $.each(newdata.theEnvironmentProperties, function (index, envprop) {
@@ -282,9 +281,7 @@ function commitVulnerability() {
   }
   else {
     theVul.theVulnerabilityName = $("#theVulnerabilityName").val();
-    var arr = $("#theTags").val().split(", ")
-    arr = $.grep(arr,function(n){ return(n) });
-    theVul.TheType = arr;
+    theVul.theTags = $('#theTags').val().split(',').map(function(t){return t.trim();});
     theVul.theVulnerabilityDescription = $("#theVulnerabilityDescription").val();
     theVul.theVulnerabilityType = $("#theVulnerabilityType").val();
 

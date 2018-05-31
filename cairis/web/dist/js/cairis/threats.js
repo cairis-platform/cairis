@@ -105,16 +105,10 @@ function viewThreat(thrName) {
           $("#theType").val(data.theType);
         },['All']);
         $.session.set("theThreat", JSON.stringify(data));
-        var fillerJSON = data;
-        var tags = data.theTags;
-        fillerJSON.theTags = [];
-        var text = "";
-        $.each(tags, function (index, type) {
-          text += type + ", ";
-        });
-        $("#theTags").val(text);
 
-        $('#editThreatOptionsform').loadJSON(fillerJSON, null);
+        $('#theTags').val(data.theTags.join(', '));
+        data.theTags = [];
+        $('#editThreatOptionsform').loadJSON(data, null);
         $.each(data.theEnvironmentProperties, function (index, env) {
           appendThreatEnvironment(env.theEnvironmentName)
         });
@@ -427,10 +421,7 @@ function commitThreat() {
     var oldName = threat.theThreatName;
     threat.theThreatName = $("#theThreatName").val();
     threat.theMethod = $("#theMethod").val();
-    var tags = $("#theTags").text().split(", ");
-    if (tags[0] != "") {
-      threat.theTags = tags;
-    }
+    threat.theTags = $('#theTags').val().split(',').map(function(t){return t.trim();});
     threat.theType = $("#theType option:selected").text();
 
     if($("#editThreatOptionsform").hasClass("newThreat")){
