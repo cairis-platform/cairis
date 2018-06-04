@@ -16,7 +16,7 @@ description: Home Page of CAIRIS
 
 <section class="spotlight">
 																													<div class="image">
-<img src="/images/persona_arg_tile.gif" class="page-feature-image"></div><div class="content">
+<img src="/images/persona_frontpage.jpg" class="page-feature-image"></div><div class="content">
 <h2> Manage your security, usability, and design artifacts </h2>																												
 <p>Enter or import a wide range of security, usability, and requirements data, and find new insights ranging from interconnections between requirements and risks, to the justification behind persona characteristics.</p>
 </div>
