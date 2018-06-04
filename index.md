@@ -25,7 +25,7 @@ description: Home Page of CAIRIS
 
 <section class="spotlight">
 
-<div class="image"><img src="/images/kaos_chernoff_tile.gif" alt="" /></div><div class="content">
+<div class="image"><img src="/images/goalmodel_frontpage.jpg" alt="" /></div><div class="content">
 <h2> Visualise your design data </h2>																										<p>Automatically generate security, usability, and requirements visual models that summarise quantitative and qualitative data analysis.</p>
 </div>
 
