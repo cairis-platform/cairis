@@ -44,10 +44,18 @@ description: Home Page of CAIRIS
 </section>
 
 <section class="spotlight">
-  <div class="image"><img src="/images/volere_tile.gif" alt="" /></div>
+  <div class="image"><img src="/images/riskmodel_frontpage.jpg" alt="" /></div>
   <div class="content">
-    <h2>Create professional requirement specifications</h2>
-    <p>Generate Volere compliant requirement specifications in different formats, including DocBook, RTF, and PDF.</p>
+    <h2>Rationalise your risks</h2>
+    <p>Show all the security, usability, and design elements associated with your product's risks.</p>
+  </div>
+</section>
+
+<section class="spotlight">
+  <div class="image"><img src="/images/doc_frontpage.jpg" alt="" /></div>
+  <div class="content">
+    <h2>Create beautiful specifications</h2>
+    <p>Generate a range of documentation from Volere compliant requirement specifications to GDPR DPIA documents.</p>
   </div>
 </section>																										
 </section>																										
