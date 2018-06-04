@@ -1,7 +1,8 @@
 ---
-layout: default
+layout: page
 title: Rick
 description: A plant operator at ACME water
+info: A plant operator at ACME water
 categories: persona
 image:
   teaser: Rick_teaser.gif

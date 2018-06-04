@@ -7,7 +7,6 @@ teaser: teaser.gif # 400x250 px default teaser image used in image archive grid
 locale:
 url: https://cairis.org
 # Jekyll configuration
-
 sass:
     sass_dir: _sass
     style: compressed
@@ -25,17 +24,24 @@ plugins:
 
 
 # Site owner
-owner:
-  name: Shamal Faily
-  web: http://shamalfaily.com
-  twitter: CAIRISApp
-  email: cairisproject@gmail.com
-  google:
-    ad-client:
-    ad-slot:
-  bio:
-  avatar: bio-photo.jpg # 160x160 px image for author byline
-  disqus-shortname:
+#owner:
+#name: Shamal Faily
+#web: http://shamalfaily.com
+#twitter: CAIRISApp
+#email: cairisproject@gmail.com
+#google:
+#ad-client:
+#ad-slot:
+#bio:
+#avatar: bio-photo.jpg # 160x160 px image for author byline
+#disqus-shortname:
+
+social:
+  twitter: https://twitter.com/CAIRISApp
+  github: https://github.com/failys
+  linkedin-square: https://linkedin.com/in/<username>
+  facebook-official: https://facebook.com/<username>
+  google-plus-square: https://plus.google.com/u/0/+<username>
 
 
 exclude: ["lib", "config.rb", ".sass-cache", "Capfile", "config", "log", "Rakefile", "Rakefile.rb", "tmp", "*.sublime-project", "*.sublime-workspace", "Gemfile", "Gemfile.lock", "README.md", "LICENSE", "node_modules", "Gruntfile.js", "package.json"]

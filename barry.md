@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: page 
 title: Barry
 description: An Instrument Technician at ACME water
 categories: persona

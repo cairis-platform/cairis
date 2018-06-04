@@ -1,9 +1,10 @@
 ---
-layout: post
+layout: page
 title:  "Incorporating attack trees into CAIRIS"
 date:   2015-10-25 14:00:00
 categories: CAIRIS
 description: Attack trees are great for ideation, but how do you integrate them into a larger system's design with the minimum of effort?
+info: Attack trees are great for ideation, but how do you integrate them into a larger system's design with the minimum of effort?
 author: Shamal Faily
 image:
   teaser: attacktree_teaser.gif

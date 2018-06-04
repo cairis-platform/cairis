@@ -1,9 +1,10 @@
 ---
-layout: post
+layout: page
 title:  "the Persona Helper"
 date:   2017-01-03 01:00:00
 categories: CAIRIS
 description: A Chrome Extension that makes building personas from online data easier
+info: A Chrome Extension that makes building personas from online data easier
 image:
   teaser: ph_teaser.gif
 ---
