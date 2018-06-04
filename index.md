@@ -17,7 +17,7 @@ description: Home Page of CAIRIS
 <section class="spotlight">
 																													<div class="image">
 <img src="/images/persona_arg_tile.gif" class="page-feature-image"></div><div class="content">
-<h2> Manage your security, usability, and design artifacts </h2>								n																				
+<h2> Manage your security, usability, and design artifacts </h2>																												
 <p>Enter or import a wide range of security, usability, and requirements data, and find new insights ranging from interconnections between requirements and risks, to the justification behind persona characteristics.</p>
 </div>
 
@@ -54,15 +54,14 @@ description: Home Page of CAIRIS
 
 <li class="icon fa-paper-plane-o">
 <h3>What does CAIRIS do that other tools do not?</h3>
-<p> First, some tools focus on the specification of requirements. Others focus on modelling requirements together with related concepts. Still, others are centred around managing UX data. CAIRIS is the only tool that does all of this (and more).
-Second, CAIRIS is, to the best of our knowledge, the only security design tool that supports the notion of environments.
-Third, CAIRIS is scaleable
+<p>Some tools focus on the specification of requirements. Others focus on modelling requirements together with related concepts. Still, others are centred around managing UX data. CAIRIS is the only tool that does all of this (and more).
+CAIRIS is also the only security design tool that supports the notion of environments, making it possible to model contexts of use.
 </p>
 </li>
 
 <li class="icon fa-heart-o">
 <h3>Is CAIRIS free?</h3>
-<p>Yes. CAIRIS has been made freely available under an Apache Software License. You can find the source code for CAIRIS on <a href="https://github.com/failys/cairis">github</a>.</p>
+<p>Yes. CAIRIS has been made freely available under an Apache Software License.</p>
 </li>
 
 <li class="icon fa-laptop">
