@@ -1,7 +1,8 @@
 ---
-layout: default
+layout: page
 title: NeuroGrid
 description: A data grid for neuroscience
+info: A data grid for neuroscience
 categories: exemplar
 image:
   teaser: Exemplar_teaser.gif

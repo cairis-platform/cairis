@@ -1,7 +1,8 @@
 ---
-layout: default
+layout: page
 title: ACME Water
 description: A fictitious water company
+info: A ficitious water company
 categories: exemplar
 image:
   teaser: ACME_teaser.gif
@@ -28,7 +29,7 @@ To provide a secure operating environment for SCADA, Telemetry and Control Syste
 
 All ICT infrastructure in support of Enterprise SCADA, Telemetry and Control Systems indicated in the rich picture.
 
-![fig:ACMEContext]({{ site.baseurl }}/images/acmeContext.jpg "Context diagram")
+<p><img src="/images/acmeContext.jpg" style="width:100%;height:100%;" alt="fig:ACMEContext" title="Context diagram" /></p>
 
 <h2>Environments</h2>
 

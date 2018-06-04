@@ -1,6 +1,7 @@
 ---
-layout: archive
+layout: page
 title: Personas
+info: Examples of Varity Peronas
 ---
 
 <div class="tiles">

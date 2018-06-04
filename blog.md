@@ -1,6 +1,7 @@
 ---
-layout: archive
+layout: page
 title: Latest posts
+info: Our latest blogs
 ---
 
 <div class="tiles">

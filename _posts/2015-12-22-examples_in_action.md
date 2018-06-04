@@ -1,9 +1,10 @@
 ---
-layout: post
+layout: page
 title:  "CAIRIS examples"
 date:   2015-12-22 13:10:00
 categories: CAIRIS
 description: Specification Exemplars for Security using CAIRIS
+info: Specification Exemplars for Security using CAIRIS
 image:
   teaser: examples_teaser.gif
 ---

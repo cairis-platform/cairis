@@ -1,7 +1,8 @@
 ---
-layout: default
+layout: page
 title: Ben and Matt
 description: Penetration testers at TeamRed LLP
+info: Penetration testers at TeamRed LLP
 categories: persona
 image:
   teaser: Ben_teaser.gif

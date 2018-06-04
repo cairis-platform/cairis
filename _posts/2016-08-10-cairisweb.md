@@ -1,9 +1,10 @@
 ---
-layout: post
+layout: page
 title:  "Introducing the CAIRIS web app"
 date:   2016-08-10 23:00:00
 categories: CAIRIS
 description: Next steps in the evolution of CAIRIS
+info: Next steps in the evolution of CAIRIS
 image:
   teaser: cairisweb_teaser.gif
 ---

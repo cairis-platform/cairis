@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: page
 title: Designing Usable and Secure Software with IRIS and CAIRIS
 ---
 

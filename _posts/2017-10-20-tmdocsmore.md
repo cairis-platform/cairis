@@ -1,9 +1,10 @@
 ---
-layout: post
+layout: page
 title:  "Threat Modelling, Documentation and More"
 date:   2017-10-20 14:06:00
 categories: CAIRIS
 description: Just because we've been quiet doesn't mean we haven't been busy
+info:  Just because we've been quiet doesn't mean we haven't been busy
 image:
   teaser: dfd_teaser.gif
 ---
@@ -24,7 +25,8 @@ Our ESPRE 2017 paper was also a showcase for the CAIRIS web client, which is now
 We've also used the opportunity of migrating from the desktop to the web client to improve the stability and resilience of CAIRIS in general.  We closed a lot of long-standing open [issues](https://github.com/failys/cairis/issues), updated the back-end codebase to be compatible with Python 3, and discovered and resolved lots of issues in the web client.  There may still be other issues with the web client, so please don't hesitate to raise an issue if, while using CAIRIS, something doesn't feel right.
 
 
-![RTD]({{ site.baseurl }}/images/rtd.jpg)
+
+<p><img src="{{ site.baseurl }}/images/rtd.jpg" alt="RTD" style="width:100%;height:100;"/></p>
 
 We've also started the long-overdue overhaul of CAIRIS' documentation.  Until recently, this was maintained in github pages.  We've now made the documentation part of the codebase again, which is now rebuilt on the excellent [Read the Docs](http://cairis.readthedocs.io/en/latest/) platform after every update to GitHub.  The documentation for the desktop application has now been updated to reflect the web client, and we've started to document areas of CAIRIS we never got around to properly documenting first time around, e.g. use cases, traceability, etc.   There is still a lot to update, so if there is something you particularly want to see documented now then please raise an issue and we'll look at prioritising what you need.   We would also welcome pull requests for any typos you find or general improvements you think might be useful.
 
