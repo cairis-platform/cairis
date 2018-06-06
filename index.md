@@ -71,7 +71,7 @@ description: Home Page of CAIRIS
     <ul class="features">
       <li class="icon fa-paper-plane-o">
         <h3>What does CAIRIS do that other tools do not?</h3>
-        <p>Some tools focus on the specification of requirements. Others focus on modelling requirements together with related concepts. Still, others are centred around managing UX data. CAIRIS is the only tool that does all of this (and more).
+        <p>Some tools focus on the specification of requirements. Others focus on modelling threats. Still, others are centred around managing UX data. CAIRIS is the only tool that does all of this (and more).
 CAIRIS is also the only security design tool that supports the notion of environments, making it possible to model contexts of use.</p>
       </li>
 
@@ -82,16 +82,12 @@ CAIRIS is also the only security design tool that supports the notion of environ
 
       <li class="icon fa-laptop">
         <h3>Why do I need CAIRIS?</h3>
-        <p>CAIRIS helps by supporting the usability, security, and requirements engineering activities that one might use at the initial stages of a project. If you’re undertaking these activities then you’re collecting data that needs to go somewhere. By using CAIRIS as a repository for this data, you will benefit from CAIRIS’ automatic analysis and visualisation capabilities.</p>
+        <p>We expect security to be 'built in' software, but software is useless if people can't or won't use it.  We built CAIRIS to support the activities need to build security AND usability into the earliest stages of software design.  Additionally, by using CAIRIS as the repository for data you collect, you benefit from CAIRIS' automatic analysis and visualisation capabilities.</p> 
       </li>	
 
       <li class="icon fa-flag-o">
-        <h3>How can I sponsor CAIRIS?</h3>
-        <p>Providing people to help maintain and grow CAIRIS. <br/>
-        Providing [modest] financial support we can use to employ interns to develop CAIRIS.<br/>
-        Buying consultancy to help you adopt CAIRIS. Any income from CAIRIS consultancy, will go back into the development of CAIRIS.
-        <a href="https://connect.innovateuk.org/web/ktp">Knowledge Transfer Partnerships (KTPs).</a>
-        If you’re a UK SME and see CAIRIS as an important tool in growing your business, then a KTP is a great way of getting government funding to support us and your project.</p>
+        <h3>Can I see CAIRIS in action?</h3>
+        <p>We have a <a href="https://demo.cairis.org">live demo</a> you can play with that includes two preloaded models.</p>
       </li>
     </ul>
   </div>
