@@ -87,7 +87,7 @@ CAIRIS is also the only security design tool that supports the notion of environ
 
       <li class="icon fa-flag-o">
         <h3>Can I see CAIRIS in action?</h3>
-        <p>We have a <a href="https://demo.cairis.org">live demo</a> you can play with that includes two preloaded models.</p>
+        <p>We have a <a href="https://demo.cairis.org">live demo</a> where you can play with two preloaded models.</p>
       </li>
     </ul>
   </div>
