@@ -10,6 +10,7 @@ CAIRIS documentation
    :maxdepth: 2
    :caption: Contents:
 
+   gettingstarted
    install
    starting
    databases
