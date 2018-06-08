@@ -1,17 +1,5 @@
 # Site navigation links
 
-- title: Getting started
-  url: /GettingStarted
-  excerpt: "How to install and start CAIRIS"
-
-- title: Documentation
-  url: https://cairis.readthedocs.io
-  excerpt: "CAIRIS Documentation"
-
-- title: Examples
-  url: /examples
-  excerpt: "Sample models"
-
 - title: Blog
   url: /blog
   excerpt: "Posting about CAIRIS and related topics"
