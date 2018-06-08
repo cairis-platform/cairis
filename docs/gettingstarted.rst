@@ -26,7 +26,7 @@ You should :doc:`save </io>` your working model early and often.  Saving a model
 Supporting UX
 -------------
 
-CAIRIS supports the creation and management of :doc:`personas </roles_personas>` to represent archetypical users, and :doc:`tasks </tasks>` to describe how these interact with the system being designed.  You need to define `roles </roles_personas>` that the personas fulfil before creating personas, and personas before creating tasks.  As your design evolves `task models <http://cairis.readthedocs.io/en/latest/tasks.html#visualising-tasks>`_ and `risk analysis models <http://cairis.readthedocs.io/en/latest/risks.html#risk-analysis-model>`_ will summarise the impact that security and usability are having on each other.
+CAIRIS supports the creation and management of :doc:`personas </roles_personas>` to represent archetypical users, and :doc:`tasks </tasks>` to describe how these interact with the system being designed.  You need to define :doc:`roles </roles_personas>` that the personas fulfil before creating personas, and personas before creating tasks.  As your design evolves `task models <http://cairis.readthedocs.io/en/latest/tasks.html#visualising-tasks>`_ and `risk analysis models <http://cairis.readthedocs.io/en/latest/risks.html#risk-analysis-model>`_ will summarise the impact that security and usability are having on each other.
 
 Asset-driven security design
 ----------------------------
