@@ -22,16 +22,24 @@ description: Home Page of CAIRIS
 <section class="spotlight">
   <div class="image">
     <img src="/images/persona_frontpage.jpg" class="page-feature-image"></div><div class="content">
-    <h2>Manage your security, usability, and design artifacts</h2>
-    <p>Enter or import a wide range of security, usability, and requirements data, and find new insights ranging from interconnections between requirements and risks, to the justification behind persona characteristics.</p>
+    <h2>Manage your security, usability, and design artifacts in one place</h2>
+    <p>From assets to countermeasures, factoids to personas, and requirements to architectural components, enter or import a wide range of security, usability, and requirements data to find new insights ranging from interconnections between requirements and risks, to the justification behind persona characteristics.</p>
   </div>
 </section>
 
 <section class="spotlight">
   <div class="image"><img src="/images/goalmodel_frontpage.jpg" alt="" /></div>
   <div class="content">
-    <h2>Visualise your design data</h2>
-    <p>Automatically generate security, usability, and requirements visual models that summarise quantitative and qualitative data analysis.</p>
+    <h2>Visualise your design from different perspectives</h2>
+    <p>No single view captures a complex system, so automatically generate 12 different views of your emerging design from perspectives ranging from people, risks, requirements, architecture, and even physical location.</p>
+  </div>
+</section>																										
+
+<section class="spotlight">
+  <div class="image"><img src="/images/threatmodel_frontpage.jpg" alt="" /></div>
+  <div class="content">
+    <h2>Threat model as you design</h2>
+    <p>Automatically generate threat models such as Data Flow Diagrams (DFDs) as your early stage design evolves.</p>
   </div>
 </section>																										
 
