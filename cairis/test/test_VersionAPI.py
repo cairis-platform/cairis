@@ -51,4 +51,4 @@ class VersionAPITests(CairisDaemonTestCase):
       responseData = rv.data
     objts = jsonpickle.decode(responseData)
     self.assertIsNotNone(objts, 'No results after deserialization')
-    self.assertEqual(objts,'1.6.6')
+    self.assertEqual(objts,'1.6.7')
