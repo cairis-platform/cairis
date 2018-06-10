@@ -33,11 +33,11 @@ def threatColourCode(valueId):
 
 def threatLikelihoodColourCode(tlValue):
 # Based on orrd5 color scheme
-  if tlValue == 'Incredible': return '1'
-  elif tlValue == 'Improbable': return '2'
-  elif tlValue == 'Remote': return '3'
-  elif tlValue == 'Occasional': return '4'
-  else: return '5'
+  if tlValue == 'Incredible': return "#fef0d9"
+  elif tlValue == 'Improbable': return "#fdcc8a"
+  elif tlValue == 'Remote': return "#fc8d59" 
+  elif tlValue == 'Occasional': return "#e34a33"
+  else: return "#b30000"
 
 def vulnerabilitySeverityColourCode(vsValue):
 # Based on orrd4 color scheme

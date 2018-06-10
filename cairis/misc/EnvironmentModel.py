@@ -47,15 +47,15 @@ def arrayToAssetSecurityPropertiesTable(spArray,objtName):
 
 def arrayToThreatSecurityPropertiesTable(spArray,objtName):
   colorScheme = ["black","red","green","blue","yellow","cyan","purple","gray"]
-  buf = '<<TABLE cellborder="0" border="0" cellspacing="2">'
-  buf += '<TR><TD colspan="3">' + objtName + '</TD></TR>' 
+  buf = '<<TABLE cellborder="1" border="0" cellspacing="2">'
+  buf += '<TR><TD border="0" colspan="3">' + objtName + '</TD></TR>' 
   ci = 0 
   for x in spArray:
     if x == 0:
       buf += '<TR><TD border="0"></TD></TR>'
     else:
-      if x == 1: buf += '<TR><TD colspan="2"></TD><TD bgcolor="' + colorScheme[ci] + '"></TD></TR>'
-      elif x == 2: buf += '<TR><TD colspan="1"></TD><TD bgcolor="' + colorScheme[ci] + '" colspan="2"></TD></TR>'
+      if x == 1: buf += '<TR><TD border="0" colspan="2"></TD><TD bgcolor="' + colorScheme[ci] + '"></TD></TR>'
+      elif x == 2: buf += '<TR><TD border="0" colspan="1"></TD><TD bgcolor="' + colorScheme[ci] + '" colspan="2"></TD></TR>'
       else: buf += '<TR><TD bgcolor="' + colorScheme[ci] + '" colspan="3"></TD></TR>'
     ci += 1
   buf += '</TABLE>>'
@@ -101,7 +101,7 @@ class EnvironmentModel:
     elif (dimName == 'threat'):
       thrObjt = self.dbProxy.dimensionObject(objtName,'threat')
       thrLhood = thrObjt.likelihood(self.theEnvironmentName,self.theEnvironmentObject.duplicateProperty(),self.theEnvironmentObject.overridingEnvironment())
-      self.theGraph.add_node(pydot.Node(objtName,shape='record',style='filled',margin=0,colorscheme='orrd5',color='black',fillcolor=threatLikelihoodColourCode(thrLhood),fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl,label=arrayToThreatSecurityPropertiesTable(thrObjt.securityProperties(self.theEnvironmentName),objtName)))
+      self.theGraph.add_node(pydot.Node(objtName,shape='record',style='filled',margin=0,color='black',fillcolor=threatLikelihoodColourCode(thrLhood),fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl,label=arrayToThreatSecurityPropertiesTable(thrObjt.securityProperties(self.theEnvironmentName),objtName)))
     elif (dimName == 'vulnerability'):
       vulObjt = self.dbProxy.dimensionObject(objtName,'vulnerability')
       vulSev = vulObjt.severity(self.theEnvironmentName,self.theEnvironmentObject.duplicateProperty(),self.theEnvironmentObject.overridingEnvironment())
