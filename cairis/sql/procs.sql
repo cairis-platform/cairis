@@ -10209,7 +10209,7 @@ begin
   declare criticalId int default 0;
   declare threatName varchar(200);
   declare assetName varchar(200);
-  declare criticalCursor cursor for select a.is_critical,a.name from asset a, environment_asset ea,environment_threat et where ea.environment_id = envId and ea.asset_id = a.id and ea.environment_id = et.environment_id and et.threat_id = threatId;
+  declare criticalCursor cursor for select a.is_critical,a.name from asset a, asset_threat at where at.environment_id = envId and at.asset_id = a.id and at.threat_id = threatId;
   declare continue handler for not found set done = 1;
 
   set done = 0;
@@ -10239,7 +10239,8 @@ begin
   declare criticalId int default 0;
   declare vulName varchar(200);
   declare assetName varchar(200);
-  declare criticalCursor cursor for select a.is_critical,a.name from asset a, environment_asset ea,environment_vulnerability ev where ea.environment_id = envId and ea.asset_id = a.id and ea.environment_id = ev.environment_id and ev.vulnerability_id = vulId;
+
+  declare criticalCursor cursor for select a.is_critical,a.name from asset a, asset_vulnerability av where av.environment_id = envId and av.asset_id = a.id and av.vulnerability_id = vulId;
   declare continue handler for not found set done = 1;
 
   set done = 0;
