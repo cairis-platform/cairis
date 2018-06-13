@@ -384,7 +384,10 @@ function commitAttacker() {
     var oldName = attacker.theName;
     attacker.theName = $("#theName").val();
     attacker.theDescription = $("#theDescription").val();
-    attacker.theTags = $('#theTags').val().split(',').map(function(t){return t.trim();});
+
+    if ($('#theTags').val() != '') {
+      attacker.theTags = $('#theTags').val().split(',').map(function(t){return t.trim();});
+    }
     if($("#editAttackerOptionsForm").hasClass("new")){
       postAttacker(attacker, function () {
         clearLocalStorage('attacker');

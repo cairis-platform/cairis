@@ -304,7 +304,10 @@ function commitPersona() {
     persona.theAssumption = 0;
     persona.thePersonaType = $("#thePersonaType :selected").text();
     persona.theCodes = [];
-    persona.theTags = $('#theTags').val().split(',').map(function(t){return t.trim();});
+
+    if ($('#theTags').val() != '') {
+      persona.theTags = $('#theTags').val().split(',').map(function(t){return t.trim();});
+    }
 
     var tags = $("#theTags").text().split(", ");
     if(tags[0] != ""){

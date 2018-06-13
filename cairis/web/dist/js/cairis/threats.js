@@ -421,7 +421,9 @@ function commitThreat() {
     var oldName = threat.theThreatName;
     threat.theThreatName = $("#theThreatName").val();
     threat.theMethod = $("#theMethod").val();
-    threat.theTags = $('#theTags').val().split(',').map(function(t){return t.trim();});
+    if ($('#theTags').val() != '') {
+      threat.theTags = $('#theTags').val().split(',').map(function(t){return t.trim();});
+    }
     threat.theType = $("#theType option:selected").text();
 
     if($("#editThreatOptionsform").hasClass("newThreat")){

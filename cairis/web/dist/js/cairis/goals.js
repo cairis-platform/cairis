@@ -458,7 +458,10 @@ function commitGoal() {
       var oldName = goal.theName;
       goal.theName = $("#theName").val();
       goal.theOriginator = $("#theOriginator").val();
-      goal.theTags = $('#theTags').val().split(',').map(function(t){return t.trim();});
+
+      if ($('#theTags').val() != '') {
+        goal.theTags = $('#theTags').val().split(',').map(function(t){return t.trim();});
+      }
 
       if($("#editGoalOptionsForm").hasClass("new")){
         postGoal(goal, function () {

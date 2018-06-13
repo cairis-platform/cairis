@@ -634,7 +634,10 @@ function commitCountermeasure() {
   else {
     var oldName = cm.theName;
     cm.theName = $("#theName").val();
-    cm.theTags = $('#theTags').val().split(',').map(function(t){return t.trim();});
+
+    if ($('#theTags').val() != '') {
+      cm.theTags = $('#theTags').val().split(',').map(function(t){return t.trim();});
+    }
     cm.theType = $("#theType option:selected").text();
 
     if($("#editCountermeasureOptionsForm").hasClass("new")){

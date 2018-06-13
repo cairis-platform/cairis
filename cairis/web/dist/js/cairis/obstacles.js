@@ -430,7 +430,10 @@ function commitObstacle() {
     var oldName = obstacle.theName;
     obstacle.theName = $("#theName").val();
     obstacle.theOriginator = $("#theOriginator").val();
-    obstacle.theTags = $('#theTags').val().split(',').map(function(t){return t.trim();});
+    
+    if ($('#theTags').val() != '') {
+      obstacle.theTags = $('#theTags').val().split(',').map(function(t){return t.trim();});
+    }
 
     if($("#editObstacleOptionsForm").hasClass("new")){
       postObstacle(obstacle, function () {

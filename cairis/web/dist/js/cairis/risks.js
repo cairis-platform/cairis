@@ -467,7 +467,10 @@ function commitRisk() {
   risk.theRiskName = $("#theName").val();
   risk.theThreatName = $("#theThreatNames").val();
   risk.theVulnerabilityName = $("#theVulnerabilityNames").val();
-  risk.theTags = $('#theTags').val().split(',').map(function(t){return t.trim();});
+  
+  if ($('#theTags').val() != '') {
+    risk.theTags = $('#theTags').val().split(',').map(function(t){return t.trim();});
+  }
 
   if (risk.theMisuseCase == '') {
     alert("No misuse case defined");

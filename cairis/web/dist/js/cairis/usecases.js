@@ -463,7 +463,10 @@ function commitUseCase() {
     usecase.theAuthor = $("#theAuthor").val();
     usecase.theObjective = $("#theObjective").val();
     usecase.theDescription = $("#theDescription").val();
-    usecase.theTags = $('#theTags').val().split(',').map(function(t){return t.trim();});
+    
+    if ($('#theTags').val() != '') {
+      usecase.theTags = $('#theTags').val().split(',').map(function(t){return t.trim();});
+    }
 
     var envName = $.session.get("usecaseEnvironmentName");
     var updatedEnvProps = [];

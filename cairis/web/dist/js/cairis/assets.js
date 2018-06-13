@@ -622,8 +622,10 @@ function assetFormToJSON(data){
   json["theCriticalRationale"] = $(data).find('#theCriticalRationale').val();
   json["isCritical"] = +$("#isCritical").is( ':checked' );
   json.theType =  $(data).find( "#theType option:selected" ).text().trim();
-  json["theTags"] = $(data).find('#theTags').val().split(',').map(function(t){return t.trim();});
-
+  
+  if ($('#theTags').val() != '') {
+    json["theTags"] = $(data).find('#theTags').val().split(',').map(function(t){return t.trim();});
+  }
 
   $(data).children().each(function () {
     if(String($(this).prop("tagName")).toLowerCase() == "p"){

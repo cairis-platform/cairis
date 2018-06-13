@@ -676,7 +676,10 @@ function commitResponse() {
   }
   if (valid) {
     resp.theName = $("#theResponseName").val();
-    resp.theTags = $('#theTags').val().split(',').map(function(t){return t.trim();});
+  
+    if ($('#theTags').val() != '') {
+      resp.theTags = $('#theTags').val().split(',').map(function(t){return t.trim();});
+    }
     resp.theRisk = $("#chooseRisk").val();
     resp.theResponseType = respKind;
 

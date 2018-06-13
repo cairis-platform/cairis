@@ -487,7 +487,10 @@ function commitTask() {
     task.theName = $("#theName").val();
     task.theAuthor = $("#theAuthor").val();
     task.theObjective = $("#theObjective").val();
-    task.theTags = $('#theTags').val().split(',').map(function(t){return t.trim();});
+
+    if ($('#theTags').val() != '') {
+      task.theTags = $('#theTags').val().split(',').map(function(t){return t.trim();});
+    }
 
     var envName = $.session.get("taskEnvironmentName");
     var updatedEnvProps = [];
