@@ -126,8 +126,12 @@ function viewUseCase(ucName) {
         $.session.set("UseCase", JSON.stringify(data));
         $('#theTags').val(data.theTags.join(', '));
         data.theTags = [];
+        var theActors = Object.assign(data.theActors)
+        data.theActors = [];
 
         $('#editUseCaseOptionsForm').loadJSON(data, null);
+        
+        data.theActors = theActors;
         $.each(data.theActors, function (index, actor) {
           appendUseCaseActor(actor);
         });
