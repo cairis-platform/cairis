@@ -124,6 +124,10 @@ function viewAsset(assetName) {
         $('#editAssetsOptionsform').loadJSON(newdata,null);
         if (newdata.isCritical) {
           $('#theCriticalRationale').prop("disabled",false); 
+          $('#isCritical').prop('checked',true);
+        }
+        else {
+          $('#isCritical').prop('checked',false);
         }
         fillAssetEnvironments(newdata.theEnvironmentProperties);
         $('#editAssetsOptionsform').validator('update');
