@@ -24279,7 +24279,7 @@ begin
         leave pa_loop;
       end if;
 
-      select count(pr.role_id) into prCount from persona_role pr, task_persona tp, role r, role_type rt where tp.task_id = taskId and tp.environment_id = environmentId and tp.persona_id = pr.persona_id and tp.environment_id = pr.environment_id and pr.role_id = r.id and r.role_type_id = rt.id and rt.name in ('Data Processor','Data Controller');
+      select count(pr.role_id) into prCount from persona_role pr, task_persona tp, role r, role_type rt where tp.task_id = taskId and tp.environment_id = environmentId and tp.persona_id = pr.persona_id and tp.environment_id = pr.environment_id and pr.role_id = r.id and r.role_type_id = rt.id and rt.name in ('Data Processor','Data Controller','Data Subject');
       if prCount = 0
       then
         insert into temp_vout(label,message) values('Lawfulness, Fairness, and Privacy: Lawful data handling',concat('Task ',taskName,' handles personal data but no personas associated with this task are data controllers or data processors'));
@@ -24322,7 +24322,7 @@ begin
         leave pa_loop;
       end if;
 
-      select count(ur.role_id) into arCount from usecase uc, usecase_role ur, process_asset pa, role r, role_type rt where uc.id = ucId and uc.id = ur.usecase_id and uc.id = pa.usecase_id and pa.environment_id = environmentId and ur.role_id = r.id and r.role_type_id = rt.id and rt.name in ('Data Controller','Data Processor');
+      select count(ur.role_id) into arCount from usecase uc, usecase_role ur, process_asset pa, role r, role_type rt where uc.id = ucId and uc.id = ur.usecase_id and uc.id = pa.usecase_id and pa.environment_id = environmentId and ur.role_id = r.id and r.role_type_id = rt.id and rt.name in ('Data Controller','Data Processor','Data Subject');
 
       if arCount = 0
       then
