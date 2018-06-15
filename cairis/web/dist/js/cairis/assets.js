@@ -274,8 +274,8 @@ mainContent.on('click', '.theAssetPropName', function(){
 });
 
 mainContent.on('click', '.clickable-association', function(){
-  $.session.set("AssociationIndex",$(this).index());
   var row =  $(this).closest("tr");
+  $.session.set("AssociationIndex",row.index());
   $("#editAssetsOptionsform").hide();
   $("#editAssociationsWindow").show(function() {
     refreshDimensionSelector($('#tailAsset'),'asset', $.session.get('assetEnvironmentName'), function(){
