@@ -32,12 +32,11 @@ env:
 install:
 - pip install -r requirements.txt
 - pip install -r test_requirements.txt
-- pip install -r wsgi_requirements.txt
 - pip install coveralls
 - cairis/bin/add_cairis_user.py test test
 
 before_script:
-- mod_wsgi-express start-server cairis/cairis/bin/cairis.wsgi --user www-data --group www-data
+- cairis/bin/cairisd.py runserver & 
 
 script: 
 - py.test cairis/test --doctest-modules -v --cov cairis/core cairis/daemon cairis/controllers cairis/data cairis/tools --cov-report term-missing
