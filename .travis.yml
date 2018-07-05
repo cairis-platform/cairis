@@ -33,6 +33,7 @@ install:
 - pip install -r requirements.txt
 - pip install -r test_requirements.txt
 - pip install coveralls
+- pip install flask
 
 before_script:
 - cairis/bin/cairisd.py runserver & 
