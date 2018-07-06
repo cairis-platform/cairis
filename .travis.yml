@@ -3,7 +3,7 @@ python:
  - "3.6"
 
 dist: trusty
-sudo: required
+sudo: false
 
 services:
  - mysql
@@ -15,7 +15,6 @@ addons:
     - build-essential 
     - graphviz 
     - python-pip 
-    - python3-pip 
     - python-numpy 
     - git 
     - libmysqlclient-dev
@@ -34,10 +33,6 @@ install:
 - pip install -r requirements.txt
 - sudo pip install -r test_requirements.txt
 - pip install coveralls
-
-before_script:
-- wget http://chromedriver.storage.googleapis.com/2.40/chromedriver_linux64.zip
-- unzip chromedriver_linux64.zip -d /home/travis/virtualenv/python3.6.3/bin
 
 script: 
 - py.test cairis/test --doctest-modules -v --cov cairis/core cairis/daemon cairis/controllers cairis/data cairis/tools --cov-report term-missing
