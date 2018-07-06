@@ -15,6 +15,7 @@ addons:
     - build-essential 
     - graphviz 
     - python-pip 
+    - python3-pip 
     - python-numpy 
     - git 
     - libmysqlclient-dev
