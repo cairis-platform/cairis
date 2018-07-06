@@ -40,9 +40,9 @@ class UploadAPITests(CairisDaemonTestCase):
     name = ''
     request = ''
     if (sys.version_info > (3,)):
-      name, request = urllib.request.urlretrieve('http://high-resolution-photos.com/stock_photos/royalty_free_3.jpg')
+      name, request = urllib.request.urlretrieve('https://cairis.org/images/persona_frontpage.jpg')
     else:
-      name, request = urllib.urlretrieve('http://high-resolution-photos.com/stock_photos/royalty_free_3.jpg')
+      name, request = urllib.urlretrieve('https://cairis.org/images/persona_frontpage.jpg')
     if name and os.path.exists(name):
       fs_image = open(name, 'rb')
       image_bytes = fs_image.read()
