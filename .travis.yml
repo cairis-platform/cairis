@@ -17,6 +17,7 @@ addons:
     - python-pip 
     - python3-pip 
     - python-numpy 
+    - python-selenium
     - git 
     - libmysqlclient-dev
     - docbook
