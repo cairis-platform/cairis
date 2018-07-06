@@ -34,8 +34,11 @@ install:
 - pip install -r test_requirements.txt
 - pip install coveralls
 
+before_script:
+- wget http://chromedriver.storage.googleapis.com/2.40/chromedriver_linux64.zip
+- unzip chromedriver_linux64.zip -d /tmp
+
 script: 
-- cairis/bin/add_cairis_user.py test test
 - py.test cairis/test --doctest-modules -v --cov cairis/core cairis/daemon cairis/controllers cairis/data cairis/tools --cov-report term-missing
 
 after_success:
