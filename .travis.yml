@@ -1,5 +1,3 @@
-build: trusty
-
 language: python
 python: 
  - "3.6"
@@ -33,10 +31,10 @@ env:
 - PYTHONPATH=. CAIRIS_SRC=$PYTHONPATH/cairis CAIRIS_CFG=cairis_travis.cnf XML_CATALOG_FILES=$CAIRIS_SRC/config/catalog $CAIRIS_CFG_DIR=./travisConfig
 
 install:
-- pip3 install -r requirements.txt
-- pip3 install -r test_requirements.txt
-- pip3 install coveralls
-- sudo pip3 install selenium
+- pip install -r requirements.txt
+- pip install -r test_requirements.txt
+- pip install coveralls
+- pip install selenium
 
 before_script:
 - wget http://chromedriver.storage.googleapis.com/2.40/chromedriver_linux64.zip
