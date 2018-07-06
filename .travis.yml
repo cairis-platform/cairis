@@ -33,6 +33,7 @@ install:
 - pip install -r requirements.txt
 - pip install -r test_requirements.txt
 - pip install coveralls
+- sudo pip install selenium
 
 before_script:
 - wget http://chromedriver.storage.googleapis.com/2.40/chromedriver_linux64.zip
