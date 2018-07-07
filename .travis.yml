@@ -2,7 +2,7 @@ language: python
 python:
 - '3.6'
 dist: trusty
-sudo: required
+sudo: false
 services:
 - mysql
 addons:
@@ -31,9 +31,6 @@ install:
 - pip install -r requirements.txt
 - pip install -r test_requirements.txt
 - pip install coveralls
-
-before_script:
-- pip install selenium
 
 script:
 - py.test cairis/test --doctest-modules -v --cov cairis/core cairis/daemon cairis/controllers
