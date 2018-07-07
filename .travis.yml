@@ -22,10 +22,6 @@ addons:
     - docbook-utils
     - libxml2-dev
     - libxslt1-dev
-  sauce_connect:
-    username: sfaily
-    access_key:
-      secure: z4HXDqfFhC4ejYFeVHEdED4N+kyXoXugS6CTu+POS92IvPLomntjis2hQCVUstKZtN9hXciEa1q1hFBGHueGsUHJhfTibKjTCXjp6Ndc11aHv0ajxZJLNwfnEsSVcNJgXHOrEgfTliYMrnwaow2n/Atnk3I1DpzEBuMt/N/kSM+cqjs2SsDR/d7aDYUZCcOyIZhOQFHKpUI3J/Y0FBM9EliHSJpXqKMMwijxI7dNLXct1KmP+/eERtRSyzrV3rqWvBK0oE4+sb1+M2wOeOvudKfdVX6vkw7PmY5r6yrnUW7odc0KD+F3dglu+z1I/rIDT7xbEdYtRbd/No3rpT0kuQp3Q2WqBDyRRL9MXUQQV2fVrmljXZH3BJFRnfKzyQKlS2oyrl37PKwNpR8XoTeZC0kcjkQn/y7HLLUS8DwlqACPQdsczkCjRrIvoY8i3pLBwhn+4mfpDopRRquBpnJcOz1K3Uv2EjB8m2BsKR5HsPeAeL5PTdIOUJZv2eiq0uZq7HiBWdFCj4haZWZCSJG8dKfV4NNVqP64NiTs/V4SgoALHdSP/aLj76mzsMqHYkuo7qRRG038G5iaVEWwC1ilvevtUAOVkWpzyH65V3O0LRKTIQW7PDbHwusqtvRT/1g1xuPR1RHpnNs/aHRxjs7lqT5YBfWD3vF5yv0UFH8gAho=
       
 env:
   - PYTHONPATH=. CAIRIS_SRC=$PYTHONPATH/cairis CAIRIS_CFG=cairis_travis.cnf XML_CATALOG_FILES=$CAIRIS_SRC/config/catalog
@@ -33,8 +29,10 @@ env:
 
 install:
 - pip install -r requirements.txt
-- sudo pip install -r test_requirements.txt
+- pip install -r test_requirements.txt
 - pip install coveralls
+- pip install -U selenium
+
 script:
 - py.test cairis/test --doctest-modules -v --cov cairis/core cairis/daemon cairis/controllers
   cairis/data cairis/tools --cov-report term-missing
