@@ -116,11 +116,9 @@ class AssetEnvironmentPropertiesModel(object):
     "theAssociations": fields.List(fields.List(fields.String)),
     "theProperties": fields.List(fields.Nested(SecurityAttribute.resource_fields)),
     "theEnvironmentName": fields.String
-#    "theRationale": fields.List(fields.String)
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
-#  required.remove("theRationale")
 
 class AssetModel(object):
   resource_fields = {
