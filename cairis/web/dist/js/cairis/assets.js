@@ -34,9 +34,6 @@ function createAssetsTable(){
     type: "GET",
     dataType: "json",
     accept: "application/json",
-    data: {
-      session_id: String($.session.get('sessionID'))
-    },
     crossDomain: true,
     url: serverIP + "/api/assets/summary",
     success: function (data) {
@@ -104,9 +101,6 @@ function viewAsset(assetName) {
     type: "GET",
     dataType: "json",
     accept: "application/json",
-    data: {
-      session_id: String($.session.get('sessionID'))
-    },
     crossDomain: true,
     url: serverIP + "/api/assets/name/" + encodeURIComponent(assetName),
     success: function (newdata) {
@@ -426,9 +420,6 @@ $(document).on('click', "#addNewAsset",function(){
       type: "GET",
       dataType: "json",
       accept: "application/json",
-      data: {
-        session_id: String($.session.get('sessionID'))
-      },
       crossDomain: true,
       url: serverIP + "/api/assets/types",
       success: function (data) {
@@ -462,10 +453,6 @@ $(document).on('click', "td.deleteAssetButton",function(e){
       type: "DELETE",
       dataType: "json",
       accept: "application/json",
-      data: {
-        session_id: String($.session.get('sessionID')),
-        name: assetName
-      },
       crossDomain: true,
       url: serverIP + "/api/assets/name/" + encodeURIComponent(assetName) + "?session_id=" + $.session.get('sessionID'),
       success: function (data) {
@@ -487,19 +474,19 @@ function updateAssetPropertyList() {
   resetSecurityPropertyList();
 
   var currentProperty = $("#chooseSecurityProperty").attr('data-currentproperty');
-  if (currentProperty != '') {
+  if ((currentProperty != '') && (currentProperty != undefined)) {
     currentProperty = JSON.parse(currentProperty);
   }
 
   $("#definitionTable").find(".theAssetPropName").each(function(index, prop){
-    if ((currentProperty != '') && (currentProperty.name == $(prop).text())) {
+    if ((currentProperty != '') && (currentProperty != undefined) && (currentProperty.name == $(prop).text())) {
       // don't remove
     }
     else {
       $("#theSecurityPropertyName option[value='" + $(prop).text() + "']").remove();
     }
   });
-  if (currentProperty != '') {
+  if ((currentProperty != '') && (currentProperty != undefined)) {
     $("#theSecurityPropertyName").val(currentProperty.name);
     $("#theSecurityPropertyValue").val(currentProperty.value);
     $("#theSecurityPropertyRationale").val(currentProperty.rationale);
@@ -532,6 +519,7 @@ function addAssetSecurityProperty(e) {
 }
 
 mainContent.on("click", "#addNewProperty", function(){
+  $('#chooseSecurityProperty').removeAttr('data-currentproperty');
   $("#chooseSecurityProperty").attr('data-updatepropertylist',"updateAssetPropertyList");
   $("#chooseSecurityProperty").attr("data-buildproperty","addAssetSecurityProperty");
   $("#chooseSecurityProperty").modal('show');
@@ -554,9 +542,9 @@ mainContent.on("click", "#addNewAssociation", function(){
       dataType: "json",
       contentType: "application/json",
       accept: "application/json",
-      data: {
+/*      data: {
         session_id: String($.session.get('sessionID'))
-      },
+      }, */
       crossDomain: true,
       url: ursl,
       success: function (data) {

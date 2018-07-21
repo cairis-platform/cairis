@@ -1375,7 +1375,7 @@ function resetSecurityPropertyList() {
   });
 }
 
-$("#chooseSecurityProperty").on('shown.bs.modal', function() {
+$("#chooseSecurityProperty").on('show.bs.modal', function() {
   var cmd = eval($("#chooseSecurityProperty").attr("data-updatepropertylist"));
   cmd();
 });

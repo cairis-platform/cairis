@@ -281,19 +281,19 @@ function updateThreatPropertyList() {
   resetSecurityPropertyList();
 
   var currentProperty = $("#chooseSecurityProperty").attr('data-currentproperty');
-  if (currentProperty != '') {
+  if ((currentProperty != '') && (currentProperty != undefined)) {
     currentProperty = JSON.parse(currentProperty);
   }
 
   $("#threatProperties").find(".threatProperties").each(function(index, prop){
-    if ((currentProperty != '') && (currentProperty.name == $(prop).text())) {
+    if ((currentProperty != '') && (currentProperty != undefined) && (currentProperty.name == $(prop).text())) {
       // don't remove
     }
     else {
       $("#theSecurityPropertyName option[value='" + $(prop).text() + "']").remove();
     }
   });
-  if (currentProperty != '') {
+  if ((currentProperty != '') && (currentProperty != undefined)) {
     $("#theSecurityPropertyName").val(currentProperty.name);
     $("#theSecurityPropertyValue").val(currentProperty.value);
     $("#theSecurityPropertyRationale").val(currentProperty.rationale);
@@ -329,6 +329,7 @@ function addThreatSecurityProperty(e) {
 
 
 mainContent.on('click','#addPropertytoThreat', function () {
+  $('#chooseSecurityProperty').removeAttr('data-currentproperty');
   $("#chooseSecurityProperty").attr('data-updatepropertylist',"updateThreatPropertyList");
   $("#chooseSecurityProperty").attr("data-buildproperty","addThreatSecurityProperty");
   $("#chooseSecurityProperty").modal('show');
