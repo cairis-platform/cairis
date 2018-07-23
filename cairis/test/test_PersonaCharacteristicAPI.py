@@ -24,6 +24,7 @@ else:
 from io import StringIO
 import os
 import jsonpickle
+import json
 from cairis.tools.JsonConverter import json_deserialize
 from cairis.core.PersonaCharacteristic import PersonaCharacteristic
 from cairis.test.CairisDaemonTestCase import CairisDaemonTestCase
@@ -43,17 +44,17 @@ class PersonaCharacteristicAPITests(CairisDaemonTestCase):
 
   def setUp(self):
     self.logger = logging.getLogger(__name__)
-    self.new_pc = PersonaCharacteristic(
-      pcId = -1,
-      pName = 'Rick',
-      modQual = 'Maybe',
-      vName = 'Activities',
-      cDesc = 'This is a test characteristic',
-      pcGrounds = [{"theReferenceName": "Line manager site authorisation", "theDimensionName": "document", "theCharacteristicType": "grounds", "__python_obj__": "cairis.tools.PseudoClasses.CharacteristicReference", "theReferenceDescription": "Can only access sites they have been authorised to; permission for authorisation changes need to be sought from the line manager.","theReferenceSynopsis":{"__python_obj__" : "cairis.tools.PseudoClasses.CharacteristicReferenceSynopsis", "theActor" : "Rick", "theActorType" : "persona", "theSynopsis" : "Holds authorisation", "theDimension" : "goal"}, "theReferenceContribution" : {"__python_obj__" : "cairis.tools.PseudoClasses.CharacteristicReferenceContribution", "theMeansEnd" : "means", "theContribution" : "SomePositive"}}],
-      pcWarrant = [{"theReferenceDescription": "Work reports are filed and sent to ACME monthly.", "theDimensionName": "document", "theCharacteristicType": "warrant", "__python_obj__": "cairis.tools.PseudoClasses.CharacteristicReference", "theReferenceName": "Work reports are filed","theReferenceSynopsis":{"__python_obj__" : "cairis.tools.PseudoClasses.CharacteristicReferenceSynopsis", "theActor" : "", "theActorType" : "", "theSynopsis" : "", "theDimension" : ""}, "theReferenceContribution" : {"__python_obj__" : "cairis.tools.PseudoClasses.CharacteristicReferenceContribution", "theMeansEnd" : "", "theContribution" : ""}}],
-      pcRebuttal = [{"theReferenceDescription": "Everything that happens is logged.", "theDimensionName": "document", "theCharacteristicType": "rebuttal", "__python_obj__": "cairis.tools.PseudoClasses.CharacteristicReference", "theReferenceName": "Everything is logged","theReferenceSynopsis":{"__python_obj__" : "cairis.tools.PseudoClasses.CharacteristicReferenceSynopsis", "theActor" : "", "theActorType" : "", "theSynopsis" : "", "theDimension" : ""}, "theReferenceContribution" : {"__python_obj__" : "cairis.tools.PseudoClasses.CharacteristicReferenceContribution", "theMeansEnd" : "", "theContribution" : ""}}],
-      pcBacking = ['Business compliance GT concept'])
-    self.new_pc.theCharacteristicSynopsis = {"__python_obj__" : "cairis.tools.PseudoClasses.CharacteristicReferenceSynopsis", "theActor" : "Rick", "theActorType" : "persona", "theSynopsis" : "Characteristic tested", "theDimension" : "goal"}
+    self.new_pc = {
+      "thePersonaName" : "Rick",
+      "theModQual" : "Maybe",
+      "theVariable" : "Activities",
+      "theCharacteristic" : "This is a test characteristic",
+      "theGrounds" : [{"theReferenceName": "Line manager site authorisation", "theDimensionName": "document", "theCharacteristicType": "grounds" , "theReferenceDescription": "Can only access sites they have been authorised to; permission for authorisation changes need to be sought from the line manager.","theReferenceSynopsis":{"theActor" : "Rick", "theActorType" : "persona", "theSynopsis" : "Holds authorisation", "theDimension" : "goal"}, "theReferenceContribution" : {"theMeansEnd" : "means", "theContribution" : "SomePositive"}}],
+      "theWarrant" : [{"theReferenceDescription": "Work reports are filed and sent to ACME monthly.", "theDimensionName": "document", "theCharacteristicType": "warrant", "theReferenceName": "Work reports are filed","theReferenceSynopsis":{"theActor" : "", "theActorType" : "", "theSynopsis" : "", "theDimension" : ""}, "theReferenceContribution" : {"theMeansEnd" : "means", "theContribution" : "SomePositive"}}],
+      "theRebuttal" : [{"theReferenceDescription": "Everything that happens is logged.", "theDimensionName": "document", "theCharacteristicType": "rebuttal", "theReferenceName": "Everything is logged","theReferenceSynopsis":{"theActor" : "", "theActorType" : "", "theSynopsis" : "", "theDimension" : ""}, "theReferenceContribution" : {"theMeansEnd" : "means", "theContribution" : "SomePositive"}}],
+      "theBacking" : ['Business compliance GT concept'],
+      "theCharacteristicSynopsis" : {"theActor" : "Rick", "theActorType" : "persona", "theSynopsis" : "Characteristic tested", "theDimension" : "goal"}
+    }
     self.new_pc_dict = {
       'session_id' : 'test',
       'object': self.new_pc
@@ -106,7 +107,7 @@ class PersonaCharacteristicAPITests(CairisDaemonTestCase):
 
   def test_post(self):
     method = 'test_post_new'
-    rv = self.app.post('/api/persona_characteristics', content_type='application/json', data=jsonpickle.encode(self.new_pc_dict))
+    rv = self.app.post('/api/persona_characteristics', content_type='application/json', data=json.dumps(self.new_pc_dict))
     if (sys.version_info > (3,)):
       responseData = rv.data.decode('utf-8')
     else:
@@ -120,9 +121,9 @@ class PersonaCharacteristicAPITests(CairisDaemonTestCase):
 
   def test_put(self):
     method = 'test_put'
-    self.new_pc_dict['object'].theExcerpt = 'Updated text segment'
-    url = '/api/persona_characteristics/name/%s?session_id=test' % quote(self.new_pc.theCharacteristic)
-    rv = self.app.put(url, content_type='application/json', data=jsonpickle.encode(self.new_pc_dict))
+    self.new_pc_dict['object']['theCharacteristic'] = 'Updated text segment'
+    url = '/api/persona_characteristics/name/%s?session_id=test' % quote('This is a test characteristic')
+    rv = self.app.put(url, content_type='application/json', data=json.dumps(self.new_pc_dict))
     if (sys.version_info > (3,)):
       responseData = rv.data.decode('utf-8')
     else:
@@ -136,7 +137,7 @@ class PersonaCharacteristicAPITests(CairisDaemonTestCase):
 
   def test_delete(self):
     method = 'test_delete'
-    rv = self.app.post('/api/persona_characteristics', content_type='application/json', data=jsonpickle.encode(self.new_pc_dict))
+    rv = self.app.post('/api/persona_characteristics', content_type='application/json', data=json.dumps(self.new_pc_dict))
     if (sys.version_info > (3,)):
       responseData = rv.data.decode('utf-8')
     else:
@@ -144,7 +145,7 @@ class PersonaCharacteristicAPITests(CairisDaemonTestCase):
     self.logger.debug('[%s] Response data: %s', method, responseData)
     json_resp = json_deserialize(responseData)
 
-    url = '/api/persona_characteristics/name/%s?session_id=test' % quote(self.new_pc.theCharacteristic)
+    url = '/api/persona_characteristics/name/%s?session_id=test' % quote('This is a test characteristic')
     rv = self.app.delete(url)
 
     if (sys.version_info > (3,)):
