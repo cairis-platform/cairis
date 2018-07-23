@@ -56,7 +56,7 @@ class MisuseCaseAPITests(CairisDaemonTestCase):
     self.assertGreater(len(misuse_cases), 0, 'No misuse_cases in the dictionary')
     self.logger.info('[%s] MisuseCases found: %d', method, len(misuse_cases))
     misuse_case = list(misuse_cases.values())[0]
-    self.logger.info('[%s] First misuse_case: %s [%d]\n', method, misuse_case['theName'], misuse_case['theId'])
+    self.logger.info('[%s] First misuse_case: %s\n', method, misuse_case['theName'])
 
   def test_get_by_name(self):
     method = 'test_get_by_risk'
@@ -70,7 +70,7 @@ class MisuseCaseAPITests(CairisDaemonTestCase):
     self.logger.debug('[%s] Response data: %s', method, responseData)
     misuse_case = jsonpickle.decode(responseData)
     self.assertIsNotNone(misuse_case, 'No results after deserialization')
-    self.logger.info('[%s] MisuseCase: %s [%d]\n', method, misuse_case['theName'], misuse_case['theId'])
+    self.logger.info('[%s] MisuseCase: %s\n', method, misuse_case['theName'])
 
   def test_get_by_threat_vulnerability(self):
     method = 'test_get_by_threat_vulnerability'

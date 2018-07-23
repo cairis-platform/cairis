@@ -481,7 +481,6 @@ class RiskDAO(CairisDAO):
     elif isinstance(obj, MisuseCase):
       misuse_case = obj
 
-    del misuse_case.theEnvironmentDictionary
     del misuse_case.theId
 
     if isinstance(obj, Risk):
