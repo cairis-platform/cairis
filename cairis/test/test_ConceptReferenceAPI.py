@@ -67,7 +67,7 @@ class ConceptReferenceAPITests(CairisDaemonTestCase):
     self.assertGreater(len(crs), 0, 'No concept references in the dictionary')
     self.logger.info('[%s] Concept references found: %d', method, len(crs))
     cr = list(crs.values())[0]
-    self.logger.info('[%s] First concept reference: %s [%d]\n', method, cr['theName'], cr['theId'])
+    self.logger.info('[%s] First concept reference: %s\n', method, cr['theName'])
 
   def test_get_by_name(self):
     method = 'test_get_by_name'
@@ -81,7 +81,7 @@ class ConceptReferenceAPITests(CairisDaemonTestCase):
     self.logger.debug('[%s] Response data: %s', method, responseData)
     cr = jsonpickle.decode(responseData)
     self.assertIsNotNone(cr, 'No results after deserialization')
-    self.logger.info('[%s] Concept reference: %s [%d]\n', method, cr['theName'], cr['theId'])
+    self.logger.info('[%s] Concept reference: %s\n', method, cr['theName'])
 
   def test_post(self):
     method = 'test_post_new'

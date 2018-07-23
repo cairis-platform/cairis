@@ -224,7 +224,9 @@ function templateGoalFormToJSON(data){
 }
 
 function putTemplateGoalForm(data){
-  putTemplateGoal(templateGoalFormToJSON(data));
+  var json =  JSON.parse($.session.get("TemplateGoal"));
+  var oldName = json['theName'];
+  putTemplateGoal(oldName,templateGoalFormToJSON(data));
 }
 
 function postTemplateGoalForm(data,callback){
@@ -236,8 +238,8 @@ function postTemplateGoalForm(data,callback){
   postTemplateGoal(tgobject,callback);
 }
 
-function putTemplateGoal(json){
-  var ursl = serverIP + "/api/template_goals/name/"+ encodeURIComponent(json.theName) + "?session_id=" + String($.session.get('sessionID'));
+function putTemplateGoal(oldName,json){
+  var ursl = serverIP + "/api/template_goals/name/"+ encodeURIComponent(oldName) + "?session_id=" + String($.session.get('sessionID'));
   var output = {};
   output.object = json;
   output = JSON.stringify(output);

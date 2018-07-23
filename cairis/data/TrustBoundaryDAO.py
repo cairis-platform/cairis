@@ -31,17 +31,9 @@ __author__ = 'Shamal Faily'
 class TrustBoundaryDAO(CairisDAO):
 
   def __init__(self, session_id):
-    """
-    :raise CairisHTTPError:
-    """
     CairisDAO.__init__(self, session_id)
 
   def get_trust_boundaries(self, constraint_id = -1):
-    """
-    :rtype: dict[str,TrustBoundary]
-    :return
-    :raise ARMHTTPError:
-    """
     try:
       tbs = self.db_proxy.getTrustBoundaries(constraint_id)
       for key, value in list(tbs.items()):
@@ -56,11 +48,6 @@ class TrustBoundaryDAO(CairisDAO):
 
 
   def get_trust_boundary_by_name(self, trust_boundary_name):
-    """
-    :rtype: TrustBoundary
-    :raise ObjectNotFoundHTTPError:
-    """
-
     tbId = self.db_proxy.getDimensionId(trust_boundary_name,'trust_boundary')
     tbs = self.get_trust_boundaries(tbId)
     if len(tbs) == 0:
@@ -106,10 +93,6 @@ class TrustBoundaryDAO(CairisDAO):
       raise ARMHTTPError(ex)
 
   def check_existing_trust_boundary(self, trust_boundary_name):
-    """
-    :rtype: bool
-    :raise: ARMHTTPError
-    """
     try:
       self.db_proxy.nameCheck(trust_boundary_name, 'trust_boundary')
       return False
@@ -126,10 +109,6 @@ class TrustBoundaryDAO(CairisDAO):
 
 
   def from_json(self, request):
-    """
-    :rtype : TrustBoundary
-    :raise MalformedJSONHTTPError:
-    """
     json = request.get_json(silent=True)
     if json is False or json is None:
       self.close()
@@ -152,6 +131,7 @@ class TrustBoundaryDAO(CairisDAO):
 
   def simplify(self, tb):
     assert isinstance(tb, TrustBoundary)
+    del tb.theId
     tb.theEnvironmentProperties = self.convert_props(real_props=tb.theEnvironmentProperties)
     return tb
 

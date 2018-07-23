@@ -50,11 +50,6 @@ class TemplateAssetDAO(CairisDAO):
 
 
   def get_template_assets(self,constraint_id = -1):
-    """
-    :rtype: dict[str,TemplateAsset]
-    :return
-    :raise ARMHTTPError:
-    """
     try:
       tas = self.db_proxy.getTemplateAssets(constraint_id)
     except DatabaseProxyException as ex:
@@ -98,7 +93,6 @@ class TemplateAssetDAO(CairisDAO):
       raise ARMHTTPError(ex)
 
   def update_template_asset(self,ta,name):
-    found_ta = self.get_template_asset(name)
     taParams = TemplateAssetParameters(
       assetName=ta.theName,
       shortCode=ta.theShortCode,
@@ -111,17 +105,18 @@ class TemplateAssetDAO(CairisDAO):
       spRationale=ta.theRationale,
       tags=ta.theTags,
       ifs=ta.theInterfaces)
-    taParams.setId(found_ta.theId)
     try:
+      taId = self.db_proxy.getDimensionId(name,'template_asset')
+      taParams.setId(taId)
       self.db_proxy.updateTemplateAsset(taParams)
     except ARMException as ex:
       self.close()
       raise ARMHTTPError(ex)
 
   def delete_template_asset(self, name):
-    ta = self.get_template_asset(name)
     try:
-      self.db_proxy.deleteTemplateAsset(ta.theId)
+      taId = self.db_proxy.getDimensionId(name,'template_asset')
+      self.db_proxy.deleteTemplateAsset(taId)
     except ARMException as ex:
       self.close()
       raise ARMHTTPError(ex)
@@ -153,6 +148,7 @@ class TemplateAssetDAO(CairisDAO):
 
   def simplify(self, ta):
     assert isinstance(ta, TemplateAsset)
+    del ta.theId
     ta.theInterfaces = self.convert_ifs(real_ifs=ta.theInterfaces)
     ta.theProperties = self.convert_props(real_props=ta.theProperties,fake_props=None,rationales=ta.theRationale)
     return ta

@@ -261,7 +261,9 @@ function templateRequirementFormToJSON(data){
 }
 
 function putTemplateRequirementForm(data){
-  putTemplateRequirement(templateRequirementFormToJSON(data));
+  var json =  JSON.parse($.session.get("TemplateRequirement"));
+  var oldName = json['theName'];
+  putTemplateRequirement(oldName,templateRequirementFormToJSON(data));
 }
 
 function postTemplateRequirementForm(data,callback){
@@ -273,8 +275,8 @@ function postTemplateRequirementForm(data,callback){
   postTemplateRequirement(trobject,callback);
 }
 
-function putTemplateRequirement(json){
-  var ursl = serverIP + "/api/template_requirements/name/"+ encodeURIComponent(json.theName) + "?session_id=" + String($.session.get('sessionID'));
+function putTemplateRequirement(oldName,json){
+  var ursl = serverIP + "/api/template_requirements/name/"+ encodeURIComponent(oldName) + "?session_id=" + String($.session.get('sessionID'));
   var output = {};
   output.object = json;
   output = JSON.stringify(output);

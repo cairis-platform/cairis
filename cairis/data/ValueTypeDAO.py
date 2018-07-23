@@ -32,12 +32,7 @@ class ValueTypeDAO(CairisDAO):
   def __init__(self, session_id):
     CairisDAO.__init__(self, session_id)
 
-  def get_value_types(self,dimName,envName = ''):
-    """
-    :rtype: [ValueType]
-    :return
-    :raise ARMHTTPError:
-    """
+  def get_value_types(self,dimName,envName = '',deleteId=True):
     try:
       vts = self.db_proxy.getValueTypes(dimName,envName)
     except DatabaseProxyException as ex:
@@ -46,10 +41,16 @@ class ValueTypeDAO(CairisDAO):
     except ARMException as ex:
       self.close()
       raise ARMHTTPError(ex)
-    return vts
+
+    vtso = []
+    for vt in vts:
+      if (deleteId == True):
+        del vt.theId
+      vtso.append(vt)
+    return vtso
 
   def get_value_type(self, dimName,envName,objtName):
-    vts = self.get_value_types(dimName,envName)
+    vts = self.get_value_types(dimName,envName,False)
     if vts is None or len(vts) < 1:
       self.close()
       raise ObjectNotFoundHTTPError(dimName)

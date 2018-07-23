@@ -72,7 +72,7 @@ class TaskAPITests(CairisDaemonTestCase):
     self.assertGreater(len(tasks), 0, 'No tasks in the dictionary')
     self.logger.info('[%s] Tasks found: %d', method, len(tasks))
     task = list(tasks.values())[0]
-    self.logger.info('[%s] First task: %s [%d]\n', method, task['theName'], task['theId'])
+    self.logger.info('[%s] First task: %s\n', method, task['theName'])
 
   def test_get_by_name(self):
     method = 'test_get_by_name'
@@ -86,7 +86,7 @@ class TaskAPITests(CairisDaemonTestCase):
     self.logger.debug('[%s] Response data: %s', method, responseData)
     task = jsonpickle.decode(responseData)
     self.assertIsNotNone(task, 'No results after deserialization')
-    self.logger.info('[%s] Task: %s [%d]\n', method, task['theName'], task['theId'])
+    self.logger.info('[%s] Task: %s\n', method, task['theName'])
 
   def test_load_by_name(self):
     method = 'test_load_by_name'
@@ -164,10 +164,9 @@ class TaskAPITests(CairisDaemonTestCase):
     self.logger.debug('[%s] Response data: %s', method, responseData)
     json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
-    env_id = json_resp.get('task_id', None)
-    self.assertIsNotNone(env_id, 'No task ID returned')
-    self.assertGreater(env_id, 0, 'Invalid task ID returned [%d]' % env_id)
-    self.logger.info('[%s] Task ID: %d\n', method, env_id)
+    msg = json_resp.get('message', None)
+    self.assertIsNotNone(msg, 'No message returned')
+    self.logger.info('[%s] Message: %s\n', method, msg)
 
     rv = self.app.delete('/api/tasks/name/%s?session_id=test' % quote(self.prepare_new_task().name()))
 
@@ -186,14 +185,12 @@ class TaskAPITests(CairisDaemonTestCase):
     self.logger.debug('[%s] Response data: %s', method, responseData)
     json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
-    env_id = json_resp.get('task_id', None)
-    self.assertIsNotNone(env_id, 'No task ID returned')
-    self.assertGreater(env_id, 0, 'Invalid task ID returned [%d]' % env_id)
-    self.logger.info('[%s] Task ID: %d', method, env_id)
+    msg = json_resp.get('message', None)
+    self.assertIsNotNone(msg, 'No message returned')
+    self.logger.info('[%s] Message: %s', method, msg)
 
     task_to_update = self.prepare_new_task()
     task_to_update.theName = 'Edited test task'
-    task_to_update.theId = env_id
     upd_env_body = self.prepare_json(task=task_to_update)
     rv = self.app.put('/api/tasks/name/%s?session_id=test' % quote(self.prepare_new_task().name()), data=upd_env_body, content_type='application/json')
     self.assertIsNotNone(rv.data, 'No response')
@@ -217,7 +214,7 @@ class TaskAPITests(CairisDaemonTestCase):
     upd_task = jsonpickle.decode(responseData)
     self.assertIsNotNone(upd_task, 'Unable to decode JSON data')
     self.logger.debug('[%s] Response data: %s', method, responseData)
-    self.logger.info('[%s] Task: %s [%d]\n', method, upd_task['theName'], upd_task['theId'])
+    self.logger.info('[%s] Task: %s\n', method, upd_task['theName'])
 
     rv = self.app.delete('/api/tasks/name/%s?session_id=test' % quote(task_to_update.theName))
 

@@ -25,7 +25,6 @@ else:
 import jsonpickle
 from cairis.core.UseCase import UseCase
 from cairis.core.Trace import Trace
-from cairis.core.ObjectSummary import ObjectSummary
 from cairis.tools.JsonConverter import json_deserialize
 from cairis.core.UseCaseEnvironmentProperties import UseCaseEnvironmentProperties
 from cairis.test.CairisDaemonTestCase import CairisDaemonTestCase
@@ -76,7 +75,7 @@ class UseCaseAPITests(CairisDaemonTestCase):
     self.assertGreater(len(usecases), 0, 'No usecases in the dictionary')
     self.logger.info('[%s] Use Cases found: %d', method, len(usecases))
     usecase = list(usecases.values())[0]
-    self.logger.info('[%s] First usecase: %s [%d]\n', method, usecase['theName'], usecase['theId'])
+    self.logger.info('[%s] First usecase: %s\n', method, usecase['theName'])
 
   def test_get_all_summary(self):
     method = 'test_get_all_summary'
@@ -87,9 +86,8 @@ class UseCaseAPITests(CairisDaemonTestCase):
       ucs = json_deserialize(rv.data)
     self.assertIsNotNone(ucs, 'No results after deserialization')
     self.assertGreater(len(ucs), 0, 'No goal summaries')
-    self.assertIsInstance(ucs[0], ObjectSummary)
     self.logger.info('[%s] Use Cases found: %d', method, len(ucs))
-    self.logger.info('[%s] First use case summary: %s [%s]\n', method, ucs[0].theName)
+    self.logger.info('[%s] First use case summary: %s \n', method, ucs[0]['theName'])
 
   def test_get_by_name(self):
     method = 'test_get_by_name'
@@ -103,7 +101,7 @@ class UseCaseAPITests(CairisDaemonTestCase):
     self.logger.debug('[%s] Response data: %s', method, responseData)
     usecase = jsonpickle.decode(responseData)
     self.assertIsNotNone(usecase, 'No results after deserialization')
-    self.logger.info('[%s] UseCase: %s [%d]\n', method, usecase['theName'], usecase['theId'])
+    self.logger.info('[%s] UseCase: %s\n', method, usecase['theName'])
 
   def test_get_usecase_requirements(self):
     new_tr = Trace(
@@ -167,7 +165,7 @@ class UseCaseAPITests(CairisDaemonTestCase):
     else:
       responseData = rv.data
     pc = jsonpickle.decode(responseData)
-    pc['theCharacteristicSynopsis'] = {"__python_obj__" : "cairis.tools.PseudoClasses.CharacteristicReferenceSynopsis", "theActor" : "Claire", "theActorType" : "persona", "theSynopsis" : "Security delegated", "theDimension" : "goal"}
+    pc['theCharacteristicSynopsis'] = {"theActor" : "Claire", "theActorType" : "persona", "theSynopsis" : "Security delegated", "theDimension" : "goal"}
     pcDict = {'session_id' : 'test','object' : pc}
     rv = self.app.put('/api/persona_characteristics/name/Managers%20delegate%20security%20decisions?session_id=test', content_type='application/json', data=jsonpickle.encode(pcDict))
     url = '/api/usecases/name/%s?session_id=test' % quote(self.prepare_new_usecase().name())
@@ -199,7 +197,7 @@ class UseCaseAPITests(CairisDaemonTestCase):
     else:
       responseData = rv.data
     pc = jsonpickle.decode(responseData)
-    pc['theCharacteristicSynopsis'] = {"__python_obj__" : "cairis.tools.PseudoClasses.CharacteristicReferenceSynopsis", "theActor" : "Claire", "theActorType" : "persona", "theSynopsis" : "Security delegated", "theDimension" : "goal"}
+    pc['theCharacteristicSynopsis'] = {"theActor" : "Claire", "theActorType" : "persona", "theSynopsis" : "Security delegated", "theDimension" : "goal"}
     pcDict = {'session_id' : 'test','object' : pc}
     rv = self.app.put('/api/persona_characteristics/name/Managers%20delegate%20security%20decisions?session_id=test', content_type='application/json', data=jsonpickle.encode(pcDict))
     if (sys.version_info > (3,)):
@@ -280,7 +278,7 @@ class UseCaseAPITests(CairisDaemonTestCase):
     upd_usecase = jsonpickle.decode(responseData)
     self.assertIsNotNone(upd_usecase, 'Unable to decode JSON data')
     self.logger.debug('[%s] Response data: %s', method, responseData)
-    self.logger.info('[%s] UseCase: %s [%d]\n', method, upd_usecase['theName'], upd_usecase['theId'])
+    self.logger.info('[%s] UseCase: %s\n', method, upd_usecase['theName'])
 
     rv = self.app.delete('/api/usecases/name/%s?session_id=test' % quote(usecase_to_update.theName))
 

@@ -34,11 +34,6 @@ class LocationsDAO(CairisDAO):
     CairisDAO.__init__(self, session_id)
 
   def get_locations(self,constraint_id = -1):
-    """
-    :rtype: dict[str,Locations]
-    :return
-    :raise ARMHTTPError:
-    """
     try:
       locs = self.db_proxy.getLocations(constraint_id)
     except DatabaseProxyException as ex:
@@ -124,6 +119,7 @@ class LocationsDAO(CairisDAO):
 
   def simplify(self, obj):
     assert isinstance(obj, Locations)
+    del obj.theId
     obj.theLocations = self.convert_loc_list(real_loc_list=obj.theLocations)
     obj.theLinks = []
     return obj

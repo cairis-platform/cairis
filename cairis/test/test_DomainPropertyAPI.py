@@ -63,7 +63,7 @@ class DomainPropertyAPITests(CairisDaemonTestCase):
     self.assertGreater(len(domainproperties), 0, 'No domainproperties in the dictionary')
     self.logger.info('[%s] DomainProperties found: %d', method, len(domainproperties))
     domainproperty = list(domainproperties.values())[0]
-    self.logger.info('[%s] First domainproperty: %s [%d]\n', method, domainproperty['theName'], domainproperty['theId'])
+    self.logger.info('[%s] First domainproperty: %s [%d]\n', method, domainproperty['theName'])
 
   def test_get_by_name(self):
     method = 'test_get_by_name'
@@ -77,7 +77,7 @@ class DomainPropertyAPITests(CairisDaemonTestCase):
     self.logger.debug('[%s] Response data: %s', method, responseData)
     domainproperty = jsonpickle.decode(responseData)
     self.assertIsNotNone(domainproperty, 'No results after deserialization')
-    self.logger.info('[%s] Domain Property: %s [%d]\n', method, domainproperty['theName'], domainproperty['theId'])
+    self.logger.info('[%s] Domain Property: %s [%d]\n', method, domainproperty['theName'])
 
   def test_delete(self):
     method = 'test_delete'
@@ -157,7 +157,7 @@ class DomainPropertyAPITests(CairisDaemonTestCase):
     upd_domainproperty = jsonpickle.decode(responseData)
     self.assertIsNotNone(upd_domainproperty, 'Unable to decode JSON data')
     self.logger.debug('[%s] Response data: %s', method, responseData)
-    self.logger.info('[%s] Domain Property: %s [%d]\n', method, upd_domainproperty['theName'], upd_domainproperty['theId'])
+    self.logger.info('[%s] Domain Property: %s [%d]\n', method, upd_domainproperty['theName'])
 
     rv = self.app.delete('/api/domainproperties/name/%s?session_id=test' % quote(domainproperty_to_update.theName))
 

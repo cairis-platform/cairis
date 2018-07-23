@@ -38,17 +38,9 @@ __author__ = 'Shamal Faily'
 class TaskDAO(CairisDAO):
 
   def __init__(self, session_id):
-    """
-    :raise CairisHTTPError:
-    """
     CairisDAO.__init__(self, session_id)
 
   def get_tasks(self, constraint_id=-1, simplify=True):
-    """
-    :rtype: dict[str,Task]
-    :return
-    :raise ARMHTTPError:
-    """
     try:
       tasks = self.db_proxy.getTasks(constraint_id)
     except DatabaseProxyException as ex:
@@ -65,10 +57,6 @@ class TaskDAO(CairisDAO):
     return tasks
 
   def get_task_by_name(self, name, simplify=True):
-    """
-    :rtype: Task
-    :raise ObjectNotFoundHTTPError:
-    """
     try:
       taskId = self.db_proxy.getDimensionId(name,'task')
       tasks = self.db_proxy.getTasks(taskId)
@@ -88,11 +76,6 @@ class TaskDAO(CairisDAO):
     return found_task
 
   def add_task(self, task):
-    """
-    :type task: Task
-    :rtype: int
-    :raise ARMHTTPError:
-    """
     task_params = TaskParameters(
       tName=task.name(),
       tSName=task.shortCode(),
@@ -105,8 +88,7 @@ class TaskDAO(CairisDAO):
 
     try:
       if not self.check_existing_task(task.name()):
-        new_id = self.db_proxy.addTask(task_params)
-        return new_id
+        self.db_proxy.addTask(task_params)
       else:
         self.close()
         raise OverwriteNotAllowedHTTPError(obj_name=task.name())
@@ -118,8 +100,6 @@ class TaskDAO(CairisDAO):
       raise ARMHTTPError(ex)
 
   def update_task(self, task, name):
-    found_task = self.get_task_by_name(name, simplify=False)
-
     task_params = TaskParameters(
       tName=task.name(),
       tSName=task.shortCode(),
@@ -129,10 +109,9 @@ class TaskDAO(CairisDAO):
       tags=task.tags(),
       cProps=task.environmentProperties()
     )
-
-    task_params.setId(found_task.id())
-
     try:
+      taskId = self.db_proxy.getDimensionId(name,'task')
+      task_params.setId(taskId)
       self.db_proxy.updateTask(task_params)
     except DatabaseProxyException as ex:
       self.close()
@@ -142,11 +121,9 @@ class TaskDAO(CairisDAO):
       raise ARMHTTPError(ex)
 
   def delete_task(self, name):
-    found_task = self.get_task_by_name(name, simplify=False)
-    task_id = found_task.id()
-
     try:
-      self.db_proxy.deleteTask(task_id)
+      taskId = self.db_proxy.getDimensionId(name,'task')
+      self.db_proxy.deleteTask(taskId)
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)
@@ -155,10 +132,6 @@ class TaskDAO(CairisDAO):
       raise ARMHTTPError(ex)
 
   def check_existing_task(self, name):
-    """
-    :rtype: bool
-    :raise: ARMHTTPError
-    """
     try:
       self.db_proxy.nameCheck(name, 'task')
       return False
@@ -175,10 +148,6 @@ class TaskDAO(CairisDAO):
 
 
   def from_json(self, request):
-    """
-    :rtype : Task
-    :raise MalformedJSONHTTPError:
-    """
     json = request.get_json(silent=True)
     if json is False or json is None:
       self.close()
@@ -202,9 +171,8 @@ class TaskDAO(CairisDAO):
 
   def simplify(self, obj):
     assert isinstance(obj, Task)
-    obj.theEnvironmentDictionary = {}
-
-    delattr(obj, 'theEnvironmentDictionary')
+    del obj.theId
+    del obj.theEnvironmentDictionary
     obj.theEnvironmentProperties = self.convert_props(real_props=obj.theEnvironmentProperties)
     return obj
 

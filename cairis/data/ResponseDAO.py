@@ -38,9 +38,6 @@ class ResponseDAO(CairisDAO):
     CairisDAO.__init__(self, session_id)
 
   def get_responses(self, constraint_id=-1, simplify=True):
-    """
-    :rtype : dict[str, Response]
-    """
     try:
       responses = self.db_proxy.getResponses(constraintId=constraint_id)
     except DatabaseProxyException as ex:
@@ -57,12 +54,6 @@ class ResponseDAO(CairisDAO):
     return responses
 
   def get_response_by_name(self, response_name, simplify=True):
-    """
-    :rtype : Response
-    :raises:
-     ObjectNotFoundHTTPError:
-     ARMHTTPError:
-    """
     responses = self.get_responses(simplify=simplify)
     found_response = responses.get(response_name, None)
 
@@ -72,13 +63,9 @@ class ResponseDAO(CairisDAO):
     return found_response
 
   def delete_response(self, response_name):
-    """
-    :raise: ARMHTTPError:
-    """
-    found_response = self.get_response_by_name(response_name)
-
     try:
-      self.db_proxy.deleteResponse(found_response.theId)
+      respId = self.db_proxy.getDimensionId(response_name,'response')
+      self.db_proxy.deleteResponse(respId)
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)
@@ -87,11 +74,6 @@ class ResponseDAO(CairisDAO):
       raise ARMHTTPError(ex)
 
   def add_response(self, response):
-    """
-    :raises:
-    ARMHTTPError:
-    OverwriteNotAllowedHTTPError:
-    """
     if self.check_existing_response(response.theName):
       self.close()
       raise OverwriteNotAllowedHTTPError('The provided response name')
@@ -105,8 +87,7 @@ class ResponseDAO(CairisDAO):
     )
 
     try:
-      resp_id = self.db_proxy.addResponse(params)
-      return resp_id
+      self.db_proxy.addResponse(params)
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)
@@ -115,7 +96,6 @@ class ResponseDAO(CairisDAO):
       raise ARMHTTPError(ex)
 
   def update_response(self, resp_name, response):
-    found_response = self.get_response_by_name(resp_name)
     params = ResponseParameters(
             respName=response.theName,
             respRisk=response.theRisk,
@@ -123,9 +103,9 @@ class ResponseDAO(CairisDAO):
             cProps=response.theEnvironmentProperties,
             rType=response.theResponseType
     )
-    params.setId(found_response.theId)
-
     try:
+      respId = self.db_proxy.getDimensionId(resp_name,'response')
+      params.setId(respId)
       self.db_proxy.updateResponse(params)
     except DatabaseProxyException as ex:
       self.close()
@@ -135,10 +115,6 @@ class ResponseDAO(CairisDAO):
       raise ARMHTTPError(ex)
 
   def check_existing_response(self, risk_name):
-    """
-    :rtype : bool
-    :raise: ARMHTTPError:
-    """
     try:
       self.get_response_by_name(risk_name)
       return True
@@ -147,10 +123,6 @@ class ResponseDAO(CairisDAO):
       return False
 
   def from_json(self, request):
-    """
-    :rtype : Response
-    :raise: MalformedJSONHTTPError:
-    """
     json = request.get_json(silent=True)
     if json is False or json is None:
       self.close()
@@ -177,11 +149,6 @@ class ResponseDAO(CairisDAO):
       raise ex
 
   def convert_props(self, real_props=None, fake_props=None, response_type=None):
-    """
-    :type real_props: list
-    :type fake_props: dict[str,list[dict]]
-    :type response_type: str
-    """
     response_type = response_type.lower()
 
     if real_props:
@@ -240,15 +207,9 @@ class ResponseDAO(CairisDAO):
     return new_props
 
   def simplify(self, obj):
-    """
-    :type obj: Response
-    :rtype: Response
-    """
-    obj.theEnvironmentDictionary = {}
-    obj.costLookup = {}
-    delattr(obj, 'costLookup')
-    delattr(obj, 'theEnvironmentDictionary')
-
+    del obj.theId
+    del obj.theEnvironmentDictionary
+    del obj.costLookup
     try:
       obj.theEnvironmentProperties = self.convert_props(real_props=obj.theEnvironmentProperties, response_type=obj.theResponseType)
     except MalformedJSONHTTPError as ex:
@@ -276,6 +237,3 @@ class ResponseDAO(CairisDAO):
     except ARMException as ex:
       self.close()
       raise ARMHTTPError(ex)
-
-
-

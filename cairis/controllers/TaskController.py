@@ -56,7 +56,7 @@ class TasksAPI(Resource):
     task_id = dao.add_task(new_task)
     dao.close()
 
-    resp_dict = {'message': 'Task successfully added', 'task_id': task_id}
+    resp_dict = {'message': 'Task successfully added'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp

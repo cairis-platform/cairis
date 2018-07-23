@@ -54,25 +54,12 @@ class ThreatAPI(Resource):
 
     dao = ThreatDAO(session_id)
     new_threat = dao.from_json(request)
-    threat_id = dao.add_threat(new_threat)
+    dao.add_threat(new_threat)
     dao.close()
 
-    resp_dict = {'message': 'Threat successfully added', 'threat_id': threat_id}
+    resp_dict = {'message': 'Threat successfully added'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
-    return resp
-
-class ThreatByIdAPI(Resource):
-
-  def get(self, id):
-    session_id = get_session_id(session, request)
-
-    dao = ThreatDAO(session_id)
-    threat = dao.get_threat_by_id(threat_id=id)
-    dao.close()
-
-    resp = make_response(json_serialize(threat, session_id=session_id), OK)
-    resp.headers['Content-type'] = 'application/json'
     return resp
 
 class ThreatByNameAPI(Resource):
@@ -133,10 +120,10 @@ class ThreatTypesAPI(Resource):
 
     dao = ThreatDAO(session_id)
     new_value_type = dao.type_from_json(request)
-    threat_type_id = dao.add_threat_type(new_value_type, environment_name=environment_name)
+    dao.add_threat_type(new_value_type, environment_name=environment_name)
     dao.close()
 
-    resp_dict = {'message': 'Threat type successfully added', 'threat_type_id': threat_type_id}
+    resp_dict = {'message': 'Threat type successfully added'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp

@@ -88,7 +88,9 @@ class GoalAssociationAPITests(CairisDaemonTestCase):
     method = 'test_put'
 
     self.new_assoc_dict['object'].theAlternativeId = '1'
-    rv = self.app.put('/api/goals/association', content_type='application/json', data=jsonpickle.encode(self.new_assoc_dict))
+    url = '/api/goals/association/environment/Psychosis/goal/Upload%20clinical%20data%20to%20NeuroGrid/subgoal/Anonymise%20data?session_id=test'
+
+    rv = self.app.put(url, content_type='application/json', data=jsonpickle.encode(self.new_assoc_dict))
     if (sys.version_info > (3,)):
       responseData = rv.data.decode('utf-8')
     else:

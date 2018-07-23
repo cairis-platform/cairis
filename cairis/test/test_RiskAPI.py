@@ -23,7 +23,6 @@ else:
   from urllib import quote
 import jsonpickle
 import os
-from cairis.core.ObjectSummary import ObjectSummary
 from cairis.tools.JsonConverter import json_deserialize
 from cairis.core.MisuseCaseParameters import MisuseCaseParameters
 from cairis.core.MisuseCaseEnvironmentProperties import MisuseCaseEnvironmentProperties
@@ -65,7 +64,7 @@ class RiskAPITests(CairisDaemonTestCase):
         self.assertGreater(len(risks), 0, 'No risks in the dictionary')
         self.logger.info('[%s] Risks found: %d', method, len(risks))
         risk = list(risks.values())[0]
-        self.logger.info('[%s] First risk: %s [%d]\n', method, risk['theName'], risk['theId'])
+        self.logger.info('[%s] First risk: %s\n', method, risk['theName'])
 
     def test_get_all_summary(self):
         method = 'test_get_all_summary'
@@ -76,9 +75,9 @@ class RiskAPITests(CairisDaemonTestCase):
           risks = json_deserialize(rv.data)
         self.assertIsNotNone(risks, 'No results after deserialization')
         self.assertGreater(len(risks), 0, 'No risk summaries')
-        self.assertIsInstance(risks[0], ObjectSummary)
+        self.assertIsInstance(risks[0], dict)
         self.logger.info('[%s] Risks found: %d', method, len(risks))
-        self.logger.info('[%s] First risk summary: %s [%d]\n', method, risks[0].theName)
+        self.logger.info('[%s] First risk summary: %s [%d]\n', method, risks[0]['theName'])
 
 
     def test_get_risk_model_elements(self):
@@ -103,7 +102,7 @@ class RiskAPITests(CairisDaemonTestCase):
         self.logger.debug('[%s] Response data: %s', method, responseData)
         risk = jsonpickle.decode(responseData)
         self.assertIsNotNone(risk, 'No results after deserialization')
-        self.logger.info('[%s] Risk: %s [%d]\n', method, risk['theName'], risk['theId'])
+        self.logger.info('[%s] Risk: %s\n', method, risk['theName'])
 
     def test_delete(self):
         method = 'test_delete'
@@ -161,7 +160,6 @@ class RiskAPITests(CairisDaemonTestCase):
 
         risk_to_update = self.prepare_new_risk()
         risk_to_update.theName = 'Edited test risk'
-        risk_to_update.theId = -1
         upd_env_body = self.prepare_json(risk=risk_to_update)
         rv = self.app.put('/api/risks/name/%s?session_id=test' % quote(self.prepare_new_risk().name()), data=upd_env_body, content_type='application/json')
         if (sys.version_info > (3,)):

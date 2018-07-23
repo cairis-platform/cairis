@@ -23,7 +23,6 @@ if (sys.version_info > (3,)):
 else:
   from urllib import quote
 import jsonpickle
-from cairis.core.ObjectSummary import ObjectSummary
 from cairis.tools.JsonConverter import json_deserialize
 from cairis.core.Obstacle import Obstacle
 from cairis.core.ObstacleEnvironmentProperties import ObstacleEnvironmentProperties
@@ -64,7 +63,7 @@ class ObstacleAPITests(CairisDaemonTestCase):
     self.assertGreater(len(obstacles), 0, 'No obstacles in the dictionary')
     self.logger.info('[%s] Obstacles found: %d', method, len(obstacles))
     obstacle = list(obstacles.values())[0]
-    self.logger.info('[%s] First obstacle: %s [%d]\n', method, obstacle['theName'], obstacle['theId'])
+    self.logger.info('[%s] First obstacle: %s \n', method, obstacle['theName'])
 
   def test_get_all_summary(self):
     method = 'test_get_all_summary'
@@ -75,9 +74,8 @@ class ObstacleAPITests(CairisDaemonTestCase):
       obs = json_deserialize(rv.data)
     self.assertIsNotNone(obs, 'No results after deserialization')
     self.assertGreater(len(obs), 0, 'No goal summaries')
-    self.assertIsInstance(obs[0], ObjectSummary)
     self.logger.info('[%s] Obstacles found: %d', method, len(obs))
-    self.logger.info('[%s] First obstacle summary: %s [%d]\n', method, obs[0].theName)
+    self.logger.info('[%s] First obstacle summary: %s\n', method, obs[0]['theName'])
     
   def test_get_by_name(self):
     method = 'test_get_by_name'
@@ -91,7 +89,7 @@ class ObstacleAPITests(CairisDaemonTestCase):
     self.logger.debug('[%s] Response data: %s', method, responseData)
     obstacle = jsonpickle.decode(responseData)
     self.assertIsNotNone(obstacle, 'No results after deserialization')
-    self.logger.info('[%s] Obstacle: %s [%d]\n', method, obstacle['theName'], obstacle['theId'])
+    self.logger.info('[%s] Obstacle: %s \n', method, obstacle['theName'])
     
   def test_delete(self):
     method = 'test_delete'
@@ -182,7 +180,7 @@ class ObstacleAPITests(CairisDaemonTestCase):
     upd_obstacle = jsonpickle.decode(responseData)
     self.assertIsNotNone(upd_obstacle, 'Unable to decode JSON data')
     self.logger.debug('[%s] Response data: %s', method, responseData)
-    self.logger.info('[%s] Obstacle: %s [%d]\n', method, upd_obstacle['theName'], upd_obstacle['theId'])
+    self.logger.info('[%s] Obstacle: %s\n', method, upd_obstacle['theName'])
     rv = self.app.delete('/api/obstacles/name/%s?session_id=test' % quote(obstacle_to_update.theName))
 
   def test_generate_vulnerability(self):

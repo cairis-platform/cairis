@@ -49,7 +49,7 @@ class ResponsesAPI(Resource):
     dao = ResponseDAO(session_id)
     response = dao.from_json(request)
     response_id = dao.add_response(response)
-    resp_dict = {'message': 'Response successfully added', 'response_id': response_id}
+    resp_dict = {'message': 'Response successfully added'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp

@@ -35,11 +35,9 @@ class EnvironmentAPITests(CairisDaemonTestCase):
 
   def setUp(self):
     importModelFile(os.environ['CAIRIS_SRC'] + '/../examples/exemplars/NeuroGrid/NeuroGrid.xml',1,'test')
-    # region Class fields
     self.logger = logging.getLogger(__name__)
     self.existing_environment_name = 'Stroke'
     self.environment_class = Environment.__module__+'.'+Environment.__name__
-    # endregion
     
   def test_get_all(self):
     method = 'test_get_all'
@@ -54,7 +52,7 @@ class EnvironmentAPITests(CairisDaemonTestCase):
     self.assertGreater(len(environments), 0, 'No environments in the dictionary')
     self.logger.info('[%s] Environments found: %d', method, len(environments))
     environment = list(environments.values())[0]
-    self.logger.info('[%s] First environment: %s [%d]\n', method, environment['theName'], environment['theId'])
+    self.logger.info('[%s] First environment: %s\n', method, environment['theName'])
 
   def test_get_all_names(self):
     method = 'test_get_all_names'
@@ -100,7 +98,7 @@ class EnvironmentAPITests(CairisDaemonTestCase):
     self.logger.debug('[%s] Response data: %s', method, responseData)
     environment = jsonpickle.decode(responseData)
     self.assertIsNotNone(environment, 'No results after deserialization')
-    self.logger.info('[%s] Environment: %s [%d]\n', method, environment['theName'], environment['theId'])
+    self.logger.info('[%s] Environment: %s\n', method, environment['theName'])
 
   def test_delete(self):
     method = 'test_delete'
@@ -138,10 +136,9 @@ class EnvironmentAPITests(CairisDaemonTestCase):
     self.logger.debug('[%s] Response data: %s', method, responseData)
     json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
-    env_id = json_resp.get('environment_id', None)
-    self.assertIsNotNone(env_id, 'No environment ID returned')
-    self.assertGreater(env_id, 0, 'Invalid environment ID returned [%d]' % env_id)
-    self.logger.info('[%s] Environment ID: %d\n', method, env_id)
+    msg = json_resp.get('message', None)
+    self.assertIsNotNone(msg, 'No message returned')
+    self.logger.info('[%s] Message: %s\n', method, msg)
 
     rv = self.app.delete('/api/environments/name/%s?session_id=test' % quote(self.prepare_new_environment().theName))
 
@@ -160,14 +157,12 @@ class EnvironmentAPITests(CairisDaemonTestCase):
     self.logger.debug('[%s] Response data: %s', method, responseData)
     json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
-    env_id = json_resp.get('environment_id', None)
-    self.assertIsNotNone(env_id, 'No environment ID returned')
-    self.assertGreater(env_id, 0, 'Invalid environment ID returned [%d]' % env_id)
-    self.logger.info('[%s] Environment ID: %d', method, env_id)
+    msg = json_resp.get('message', None)
+    self.assertIsNotNone(msg, 'No message returned')
+    self.logger.info('[%s] Message: %s', method, msg)
 
     environment_to_update = self.prepare_new_environment()
     environment_to_update.theName = 'Edited test environment'
-    environment_to_update.theId = env_id
     upd_env_body = self.prepare_json(environment=environment_to_update)
     rv = self.app.put('/api/environments/name/%s?session_id=test' % quote(self.prepare_new_environment().theName), data=upd_env_body, content_type='application/json')
     self.assertIsNotNone(rv.data, 'No response')
@@ -191,7 +186,7 @@ class EnvironmentAPITests(CairisDaemonTestCase):
     upd_environment = jsonpickle.decode(responseData)
     self.assertIsNotNone(upd_environment, 'Unable to decode JSON data')
     self.logger.debug('[%s] Response data: %s', method, responseData)
-    self.logger.info('[%s] Environment: %s [%d]\n', method, upd_environment['theName'], upd_environment['theId'])
+    self.logger.info('[%s] Environment: %s\n', method, upd_environment['theName'])
     rv = self.app.delete('/api/environments/name/%s?session_id=test' % quote(environment_to_update.theName))
 
 
@@ -207,14 +202,12 @@ class EnvironmentAPITests(CairisDaemonTestCase):
     self.logger.debug('[%s] Response data: %s', method, responseData)
     json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
-    env_id = json_resp.get('environment_id', None)
-    self.assertIsNotNone(env_id, 'No environment ID returned')
-    self.assertGreater(env_id, 0, 'Invalid environment ID returned [%d]' % env_id)
-    self.logger.info('[%s] Environment ID: %d', method, env_id)
+    msg = json_resp.get('message', None)
+    self.assertIsNotNone(msg, 'No message returned')
+    self.logger.info('[%s] Message: %s', method, msg)
 
     environment_to_update = self.prepare_comp_environment()
     environment_to_update.theName = 'Edited test environment'
-    environment_to_update.theId = env_id
     upd_env_body = self.prepare_json(environment=environment_to_update)
     rv = self.app.put('/api/environments/name/%s?session_id=test' % quote(self.prepare_comp_environment().theName), data=upd_env_body, content_type='application/json')
     self.assertIsNotNone(rv.data, 'No response')
@@ -238,7 +231,7 @@ class EnvironmentAPITests(CairisDaemonTestCase):
     upd_environment = jsonpickle.decode(responseData)
     self.assertIsNotNone(upd_environment, 'Unable to decode JSON data')
     self.logger.debug('[%s] Response data: %s', method, responseData)
-    self.logger.info('[%s] Environment: %s [%d]\n', method, upd_environment['theName'], upd_environment['theId'])
+    self.logger.info('[%s] Environment: %s\n', method, upd_environment['theName'])
     rv = self.app.delete('/api/environments/name/%s?session_id=test' % quote(environment_to_update.theName))
 
 

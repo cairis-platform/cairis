@@ -40,9 +40,6 @@ __author__ = 'Shamal Faily'
 class CountermeasureDAO(CairisDAO):
 
   def __init__(self, session_id):
-    """
-    :raise CairisHTTPError:
-    """
     CairisDAO.__init__(self, session_id)
     self.prop_dict = {
       0:'None',
@@ -68,14 +65,7 @@ class CountermeasureDAO(CairisDAO):
       self.rev_prop_dict[value] = key
 
 
-
-
   def get_countermeasures(self, constraint_id=-1, simplify=True):
-    """
-    :rtype: dict[str,Countermeasure]
-    :return
-    :raise ARMHTTPError:
-    """
     try:
       countermeasures = self.db_proxy.getCountermeasures(constraint_id)
     except DatabaseProxyException as ex:
@@ -92,10 +82,6 @@ class CountermeasureDAO(CairisDAO):
     return countermeasures
 
   def get_countermeasure_by_name(self, name, simplify=True):
-    """
-    :rtype: Countermeasure
-    :raise ObjectNotFoundHTTPError:
-    """
     countermeasures = self.get_countermeasures(simplify=simplify)
     found_countermeasure = countermeasures.get(name, None)
 
@@ -106,11 +92,6 @@ class CountermeasureDAO(CairisDAO):
     return found_countermeasure
 
   def add_countermeasure(self, countermeasure):
-    """
-    :type countermeasure: Countermeasure
-    :rtype: int
-    :raise ARMHTTPError:
-    """
     countermeasure_params = CountermeasureParameters(
       cmName=countermeasure.name(),
       cmDesc=countermeasure.description(),
@@ -121,8 +102,7 @@ class CountermeasureDAO(CairisDAO):
 
     try:
       if not self.check_existing_countermeasure(countermeasure.name()):
-        new_id = self.db_proxy.addCountermeasure(countermeasure_params)
-        return new_id
+        self.db_proxy.addCountermeasure(countermeasure_params)
       else:
         self.close()
         raise OverwriteNotAllowedHTTPError(obj_name=countermeasure.name())
@@ -134,8 +114,6 @@ class CountermeasureDAO(CairisDAO):
       raise ARMHTTPError(ex)
 
   def update_countermeasure(self, countermeasure, name):
-    found_countermeasure = self.get_countermeasure_by_name(name, simplify=False)
-
     countermeasure_params = CountermeasureParameters(
       cmName=countermeasure.name(),
       cmDesc=countermeasure.description(),
@@ -143,9 +121,10 @@ class CountermeasureDAO(CairisDAO):
       tags=countermeasure.tags(),
       cProps=countermeasure.environmentProperties()
     )
-    countermeasure_params.setId(found_countermeasure.id())
 
     try:
+      cmId = self.db_proxy.getDimensionId(name,'countermeasure')
+      countermeasure_params.setId(cmId)
       self.db_proxy.updateCountermeasure(countermeasure_params)
     except DatabaseProxyException as ex:
       self.close()
@@ -155,11 +134,9 @@ class CountermeasureDAO(CairisDAO):
       raise ARMHTTPError(ex)
 
   def delete_countermeasure(self, name):
-    found_countermeasure = self.get_countermeasure_by_name(name, simplify=False)
-    countermeasure_id = found_countermeasure.id()
-
     try:
-      self.db_proxy.deleteCountermeasure(countermeasure_id)
+      cmId = self.db_proxy.getDimensionId(name,'countermeasure')
+      self.db_proxy.deleteCountermeasure(cmId)
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)
@@ -168,10 +145,6 @@ class CountermeasureDAO(CairisDAO):
       raise ARMHTTPError(ex)
 
   def check_existing_countermeasure(self, name):
-    """
-    :rtype: bool
-    :raise: ARMHTTPError
-    """
     try:
       self.db_proxy.nameCheck(name, 'countermeasure')
       return False
@@ -187,11 +160,6 @@ class CountermeasureDAO(CairisDAO):
         raise ARMHTTPError(ex)
 
   def get_countermeasure_targets(self,reqList,envName):
-    """
-    Get the available target names.
-    :rtype list[str]
-    :raise ARMHTTPError:
-    """
     try:
       return list(self.db_proxy.targetNames(reqList,envName).keys())
     except DatabaseProxyException as ex:
@@ -202,11 +170,6 @@ class CountermeasureDAO(CairisDAO):
       raise ARMHTTPError(ex)
 
   def get_countermeasure_tasks(self,roleList,envName):
-    """
-    Get the available task names.
-    :rtype list[str]
-    :raise ARMHTTPError:
-    """
     try:
       roleTasks = self.db_proxy.roleTasks(envName,roleList)
       outRoleTasks = []
@@ -306,10 +269,6 @@ class CountermeasureDAO(CairisDAO):
       raise ARMHTTPError(ex)
 
   def from_json(self, request):
-    """
-    :rtype : Countermeasure
-    :raise MalformedJSONHTTPError:
-    """
     json = request.get_json(silent=True)
     if json is False or json is None:
       self.close()
@@ -333,12 +292,11 @@ class CountermeasureDAO(CairisDAO):
 
   def simplify(self, obj):
     assert isinstance(obj, Countermeasure)
-    obj.theEnvironmentDictionary = {}
-
-    delattr(obj, 'theEnvironmentDictionary')
-    delattr(obj, 'theCountermeasurePropertyDictionary')
-    delattr(obj, 'costLookup')
-    delattr(obj, 'effectivenessLookup')
+    del obj.theId
+    del obj.theEnvironmentDictionary
+    del obj.theCountermeasurePropertyDictionary
+    del obj.costLookup
+    del obj.effectivenessLookup
     obj.theEnvironmentProperties = self.convert_props(real_props=obj.theEnvironmentProperties)
     return obj
 

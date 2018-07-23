@@ -33,11 +33,6 @@ class ExternalDocumentDAO(CairisDAO):
     CairisDAO.__init__(self, session_id)
 
   def get_external_documents(self,constraint_id = -1):
-    """
-    :rtype: dict[str,ExternalDocument]
-    :return
-    :raise ARMHTTPError:
-    """
     try:
       edocs = self.db_proxy.getExternalDocuments(constraint_id)
     except DatabaseProxyException as ex:
@@ -46,6 +41,11 @@ class ExternalDocumentDAO(CairisDAO):
     except ARMException as ex:
       self.close()
       raise ARMHTTPError(ex)
+
+    for key in edocs:
+      edoc = edocs[key]
+      del edoc.theId
+      edocs[key] = edoc
 
     return edocs
 
@@ -76,24 +76,24 @@ class ExternalDocumentDAO(CairisDAO):
 
 
   def update_external_document(self,edoc,name):
-    found_edoc = self.get_external_document(name)
     edParams = ExternalDocumentParameters(
       edName=edoc.theName,
       edVersion=edoc.theVersion,
       edDate=edoc.thePublicationDate,
       edAuths=edoc.theAuthors,
       edDesc=edoc.theDescription)
-    edParams.setId(found_edoc.theId)
     try:
+      edId = self.db_proxy.getDimensionId(name,'external_document')
+      edParams.setId(edId)
       self.db_proxy.updateExternalDocument(edParams)
     except ARMException as ex:
       self.close()
       raise ARMHTTPError(ex)
 
   def delete_external_document(self, name):
-    edoc = self.get_external_document(name)
     try:
-      self.db_proxy.deleteExternalDocument(edoc.theId)
+      edId = self.db_proxy.getDimensionId(name,'external_document')
+      self.db_proxy.deleteExternalDocument(edId)
     except ARMException as ex:
       self.close()
       raise ARMHTTPError(ex)

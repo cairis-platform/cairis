@@ -23,7 +23,6 @@ if (sys.version_info > (3,)):
 else:
   from urllib import quote
 import jsonpickle
-from cairis.core.ObjectSummary import ObjectSummary
 from cairis.tools.JsonConverter import json_deserialize
 from cairis.core.Goal import Goal
 from cairis.core.GoalEnvironmentProperties import GoalEnvironmentProperties
@@ -63,7 +62,7 @@ class GoalAPITests(CairisDaemonTestCase):
     self.assertGreater(len(goals), 0, 'No goals in the dictionary')
     self.logger.info('[%s] Goals found: %d', method, len(goals))
     goal = list(goals.values())[0]
-    self.logger.info('[%s] First goal: %s [%d]\n', method, goal['theName'], goal['theId'])
+    self.logger.info('[%s] First goal: %s [%d]\n', method, goal['theName'])
 
   def test_get_all_summary(self):
     method = 'test_get_all_summary'
@@ -74,9 +73,8 @@ class GoalAPITests(CairisDaemonTestCase):
       goals = json_deserialize(rv.data)
     self.assertIsNotNone(goals, 'No results after deserialization')
     self.assertGreater(len(goals), 0, 'No goal summaries')
-    self.assertIsInstance(goals[0], ObjectSummary)
     self.logger.info('[%s] Goals found: %d', method, len(goals))
-    self.logger.info('[%s] First goal summary: %s [%s]\n', method, goals[0].theName)
+    self.logger.info('[%s] First goal summary: %s \n', method, goals[0]['theName'])
 
   def test_get_all_coloured(self):
     method = 'test_get_all_coloured'
@@ -91,7 +89,7 @@ class GoalAPITests(CairisDaemonTestCase):
     self.assertGreater(len(goals), 0, 'No goals in the dictionary')
     self.logger.info('[%s] Goals found: %d', method, len(goals))
     goal = list(goals.values())[0]
-    self.logger.info('[%s] First goal: %s [%d]\n', method, goal['theName'], goal['theId'])
+    self.logger.info('[%s] First goal: %s [%d]\n', method, goal['theName'])
 
 
     
@@ -107,7 +105,7 @@ class GoalAPITests(CairisDaemonTestCase):
     self.logger.debug('[%s] Response data: %s', method, responseData)
     goal = jsonpickle.decode(responseData)
     self.assertIsNotNone(goal, 'No results after deserialization')
-    self.logger.info('[%s] Goal: %s [%d]\n', method, goal['theName'], goal['theId'])
+    self.logger.info('[%s] Goal: %s [%d]\n', method, goal['theName'])
     
   def test_delete(self):
     method = 'test_delete'
@@ -199,7 +197,7 @@ class GoalAPITests(CairisDaemonTestCase):
     upd_goal = jsonpickle.decode(responseData)
     self.assertIsNotNone(upd_goal, 'Unable to decode JSON data')
     self.logger.debug('[%s] Response data: %s', method, responseData)
-    self.logger.info('[%s] Goal: %s [%d]\n', method, upd_goal['theName'], upd_goal['theId'])
+    self.logger.info('[%s] Goal: %s [%d]\n', method, upd_goal['theName'])
   
     rv = self.app.delete('/api/goals/name/%s?session_id=test' % quote(goal_to_update.theName))
 

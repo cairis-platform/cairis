@@ -81,9 +81,9 @@ class SecurityPatternDAO(CairisDAO):
     sp['theRequirements'] = []
     for req in rsp.requirements():
       freq = {}
-      freq["theName"] = req[0]
-      freq["theDescription"] = req[1]
-      freq["theType"] = req[2]
+      freq["theName"] = req[1]
+      freq["theDescription"] = req[2]
+      freq["theType"] = req[0]
       freq["theRationale"] = req[3]
       freq["theFitCriterion"] = req[4]
       freq["theAsset"] = req[5]

@@ -73,7 +73,7 @@ class CountermeasureAPITests(CairisDaemonTestCase):
     self.assertGreater(len(countermeasures), 0, 'No countermeasures in the dictionary')
     self.logger.info('[%s] Countermeasures found: %d', method, len(countermeasures))
     countermeasure = list(countermeasures.values())[0]
-    self.logger.info('[%s] First countermeasure: %s [%d]\n', method, countermeasure['theName'], countermeasure['theId'])
+    self.logger.info('[%s] First countermeasure: %s\n', method, countermeasure['theName'])
 
   def test_get_by_name(self):
     method = 'test_get_by_name'
@@ -87,7 +87,7 @@ class CountermeasureAPITests(CairisDaemonTestCase):
     self.logger.debug('[%s] Response data: %s', method, responseData)
     countermeasure = jsonpickle.decode(responseData)
     self.assertIsNotNone(countermeasure, 'No results after deserialization')
-    self.logger.info('[%s] Countermeasure: %s [%d]\n', method, countermeasure['theName'], countermeasure['theId'])
+    self.logger.info('[%s] Countermeasure: %s\n', method, countermeasure['theName'])
 
   def test_delete(self):
     method = 'test_delete'
@@ -126,10 +126,9 @@ class CountermeasureAPITests(CairisDaemonTestCase):
     self.logger.debug('[%s] Response data: %s', method, responseData)
     json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
-    env_id = json_resp.get('countermeasure_id', None)
-    self.assertIsNotNone(env_id, 'No countermeasure ID returned')
-    self.assertGreater(env_id, 0, 'Invalid countermeasure ID returned [%d]' % env_id)
-    self.logger.info('[%s] Countermeasure ID: %d\n', method, env_id)
+    msg = json_resp.get('message', None)
+    self.assertIsNotNone(msg, 'No message returned')
+    self.logger.info('[%s] Message: %d\n', method, msg)
     rv = self.app.delete('/api/countermeasures/name/%s?session_id=test' % quote(self.prepare_new_countermeasure().name()))
 
   def test_target_names(self):
@@ -175,14 +174,12 @@ class CountermeasureAPITests(CairisDaemonTestCase):
     self.logger.debug('[%s] Response data: %s', method, responseData)
     json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
-    env_id = json_resp.get('countermeasure_id', None)
-    self.assertIsNotNone(env_id, 'No countermeasure ID returned')
-    self.assertGreater(env_id, 0, 'Invalid countermeasure ID returned [%d]' % env_id)
-    self.logger.info('[%s] Countermeasure ID: %d', method, env_id)
+    msg = json_resp.get('message', None)
+    self.assertIsNotNone(msg, 'No message returned')
+    self.logger.info('[%s] Message: %s', method, msg)
 
     countermeasure_to_update = self.prepare_new_countermeasure()
     countermeasure_to_update.theName = 'Edited test countermeasure'
-    countermeasure_to_update.theId = env_id
     upd_env_body = self.prepare_json(countermeasure=countermeasure_to_update)
     rv = self.app.put('/api/countermeasures/name/%s?session_id=test' % quote(self.prepare_new_countermeasure().name()), data=upd_env_body, content_type='application/json')
     self.assertIsNotNone(rv.data, 'No response')
@@ -206,7 +203,7 @@ class CountermeasureAPITests(CairisDaemonTestCase):
     upd_countermeasure = jsonpickle.decode(responseData)
     self.assertIsNotNone(upd_countermeasure, 'Unable to decode JSON data')
     self.logger.debug('[%s] Response data: %s', method, rv.data)
-    self.logger.info('[%s] Countermeasure: %s [%d]\n', method, upd_countermeasure['theName'], upd_countermeasure['theId'])
+    self.logger.info('[%s] Countermeasure: %s\n', method, upd_countermeasure['theName'])
     rv = self.app.delete('/api/countermeasures/name/%s?session_id=test' % quote(countermeasure_to_update.theName))
 
   def test_generate_asset(self):
@@ -363,8 +360,6 @@ class CountermeasureAPITests(CairisDaemonTestCase):
       cProps=[]
     )
     new_countermeasure.theEnvironmentProperties = new_countermeasure_props
-    new_countermeasure.theEnvironmentDictionary = {}
-    delattr(new_countermeasure, 'theEnvironmentDictionary')
     return new_countermeasure
 
   def prepare_dict(self, countermeasure=None):

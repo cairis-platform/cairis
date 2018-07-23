@@ -1195,9 +1195,12 @@ class MySQLDatabaseProxy:
     inTxt = parameters.intent()
     self.updateDatabase('call updateRisk(:threat,:vuln,:rId,:risk,:txt)',{'threat':threatName,'vuln':vulName,'rId':riskId,'risk':riskName,'txt':inTxt},'MySQL error updating risk')
     self.addTags(riskName,'risk',tags)
+
     mc = parameters.misuseCase()
-    mcParameters = MisuseCaseParameters('Exploit ' + riskName,mc.environmentProperties(),riskName)
-    mcParameters.setId(mc.id())
+    mcName = 'Exploit ' + riskName
+    mcId,oldMcName = self.responseList('call riskMisuseCase(:id)',{'id':riskId},'MySQL error getting risk misuse case')[0]
+    mcParameters = MisuseCaseParameters(mcName,mc.environmentProperties(),riskName)
+    mcParameters.setId(mcId)
     self.updateMisuseCase(mcParameters)
 
   def deleteRisk(self,riskId):

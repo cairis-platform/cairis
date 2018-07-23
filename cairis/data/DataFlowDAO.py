@@ -34,17 +34,9 @@ __author__ = 'Shamal Faily'
 class DataFlowDAO(CairisDAO):
 
   def __init__(self, session_id):
-    """
-    :raise CairisHTTPError:
-    """
     CairisDAO.__init__(self, session_id)
 
   def get_dataflows(self, dataflow_name = '', environment_name = ''):
-    """
-    :rtype: dict[str,DataFlow]
-    :return
-    :raise ARMHTTPError:
-    """
     try:
       dfs = self.db_proxy.getDataFlows(dataflow_name,environment_name)
       return dfs
@@ -57,10 +49,6 @@ class DataFlowDAO(CairisDAO):
 
 
   def get_dataflow_by_name(self, dataflow_name, environment_name):
-    """
-    :rtype: DataFlow
-    :raise ObjectNotFoundHTTPError:
-    """
     dfs = self.get_dataflows(dataflow_name,environment_name)
     if len(dfs) == 0:
       self.close()
@@ -123,10 +111,6 @@ class DataFlowDAO(CairisDAO):
       raise ARMHTTPError(ex)
 
   def check_existing_dataflow(self, dataflow_name, environment_name):
-    """
-    :rtype: bool
-    :raise: ARMHTTPError
-    """
     try:
       self.db_proxy.nameCheckEnvironment(dataflow_name, environment_name, 'dataflow')
       return False
@@ -143,10 +127,6 @@ class DataFlowDAO(CairisDAO):
 
 
   def from_json(self, request):
-    """
-    :rtype : DataFlow
-    :raise MalformedJSONHTTPError:
-    """
     json = request.get_json(silent=True)
     if json is False or json is None:
       self.close()

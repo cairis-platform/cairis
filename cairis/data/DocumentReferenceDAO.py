@@ -33,11 +33,6 @@ class DocumentReferenceDAO(CairisDAO):
     CairisDAO.__init__(self, session_id)
 
   def get_document_references(self,constraint_id = -1):
-    """
-    :rtype: dict[str,DocumentReference]
-    :return
-    :raise ARMHTTPError:
-    """
     try:
       drs = self.db_proxy.getDocumentReferences(constraint_id)
     except DatabaseProxyException as ex:
@@ -46,6 +41,11 @@ class DocumentReferenceDAO(CairisDAO):
     except ARMException as ex:
       self.close()
       raise ARMHTTPError(ex)
+
+    for key in drs:
+      dr = drs[key]
+      del dr.theId
+      drs[key] = dr
 
     return drs
 
@@ -75,23 +75,23 @@ class DocumentReferenceDAO(CairisDAO):
 
 
   def update_document_reference(self,dr,name):
-    found_dr = self.get_document_reference(name)
     drParams = DocumentReferenceParameters(
       refName=dr.theName,
       docName=dr.theDocName,
       cName=dr.theContributor,
       docExc=dr.theExcerpt)
-    drParams.setId(found_dr.theId)
     try:
+      drId = self.db_proxy.getDimensionId(name,'document_reference')
+      drParams.setId(drId)
       self.db_proxy.updateDocumentReference(drParams)
     except ARMException as ex:
       self.close()
       raise ARMHTTPError(ex)
 
   def delete_document_reference(self, name):
-    dr = self.get_document_reference(name)
     try:
-      self.db_proxy.deleteDocumentReference(dr.theId)
+      drId = self.db_proxy.getDimensionId(name,'document_reference')
+      self.db_proxy.deleteDocumentReference(drId)
     except ARMException as ex:
       self.close()
       raise ARMHTTPError(ex)

@@ -32,7 +32,7 @@ class GoalAssociationDAO(CairisDAO):
   def __init__(self, session_id):
     CairisDAO.__init__(self, session_id)
 
-  def get_goal_association(self, environment_name, goal_name, subgoal_name):
+  def get_goal_association(self, environment_name, goal_name, subgoal_name, deleteId=True):
     assocs = self.db_proxy.goalModel(environment_name)
     if assocs is None or len(assocs) < 1:
       self.close()
@@ -41,6 +41,8 @@ class GoalAssociationDAO(CairisDAO):
       envName,goalName,subGoalName,aType = key.split('/')
       if (envName == environment_name) and (((goalName == goal_name) and (subGoalName == subgoal_name)) or ((goalName == subgoal_name) and (subGoalName == goal_name))):
         assoc = assocs[key]
+        if (deleteId == True):
+          del assoc.theId
         return assoc 
     self.close()
     raise ObjectNotFoundHTTPError('The provided goal association parameters')
@@ -62,9 +64,11 @@ class GoalAssociationDAO(CairisDAO):
       raise ARMHTTPError(ex)
 
 
-  def update_goal_association(self,assoc):
-    old_assoc = self.get_goal_association(assoc.theEnvironmentName,assoc.theGoal,assoc.theSubGoal)
-    id = old_assoc.theId
+  def update_goal_association(self,assoc,environment_name,goal_name,subgoal_name):
+
+    old_assoc = self.get_goal_association(environment_name,goal_name,subgoal_name,False)
+    assocId = old_assoc.theId
+
     assocParams = GoalAssociationParameters(
       envName=assoc.theEnvironmentName,
       goalName=assoc.theGoal,
@@ -74,7 +78,7 @@ class GoalAssociationDAO(CairisDAO):
       subGoalDimName=assoc.theSubGoalDimension,
       alternativeId=assoc.theAlternativeId,
       rationale=assoc.theRationale)
-    assocParams.setId(id)
+    assocParams.setId(assocId)
     try:
       self.db_proxy.updateGoalAssociation(assocParams)
     except ARMException as ex:
@@ -82,7 +86,7 @@ class GoalAssociationDAO(CairisDAO):
       raise ARMHTTPError(ex)
 
   def delete_goal_association(self, environment_name, goal_name, subgoal_name):
-    assoc = self.get_goal_association(environment_name,goal_name,subgoal_name)
+    assoc = self.get_goal_association(environment_name,goal_name,subgoal_name,False)
     try:
       self.db_proxy.deleteGoalAssociation(assoc.theId,goal_name,subgoal_name)
     except ARMException as ex:

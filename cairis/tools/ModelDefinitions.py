@@ -173,9 +173,7 @@ class AttackerEnvironmentPropertiesModel(object):
 class AttackerModel(object):
   resource_fields = {
     obj_id_field: fields.String,
-    'theEnvironmentDictionary': fields.List(fields.Nested(AttackerEnvironmentPropertiesModel.resource_fields)),
     'theDescription': fields.String,
-    'theId': fields.Integer,
     'theTags': fields.List(fields.String),
     'isPersona': fields.Integer,
     'theName': fields.String,
@@ -184,7 +182,6 @@ class AttackerModel(object):
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
-  required.remove('theEnvironmentDictionary')
 
 class CImportParams(object):
   resource_fields = {
@@ -217,7 +214,6 @@ class DependencyModel(object):
     'theDepender': fields.String,
     'theDependee': fields.String,
     'theDependency': fields.String,
-    'theId': fields.Integer,
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
@@ -239,7 +235,6 @@ class ClassAssociationModel(object):
     'theTailDim': fields.String,
     'theTailAsset': fields.String,
     'theRationale': fields.String,
-    'theId': fields.Integer,
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
@@ -255,7 +250,6 @@ class GoalAssociationModel(object):
     'theSubGoalDimension': fields.String,
     'theAlternativeId': fields.String,
     'theRationale': fields.String,
-    'theId': fields.Integer,
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
@@ -263,7 +257,6 @@ class GoalAssociationModel(object):
 class EnvironmentModel(object):
   resource_fields = {
     obj_id_field: fields.String,
-    "theId": fields.Integer,
     "theName": fields.String,
     "theShortCode": fields.String,
     "theDescription": fields.String,
@@ -296,17 +289,13 @@ class GoalEnvironmentPropertiesModel(object):
 class GoalModel(object):
   resource_fields = {
     obj_id_field: fields.String,
-    "theColour": fields.String,
-    "theEnvironmentDictionary": fields.List,
     "theEnvironmentProperties": fields.List(fields.Nested(GoalEnvironmentPropertiesModel.resource_fields)),
-    "theId": fields.Integer,
     "theName": fields.String,
     "theOriginator": fields.String,
     "theTags": fields.List(fields.String)
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
-  required.remove("theEnvironmentDictionary")
 
 class ObstacleEnvironmentPropertiesModel(object):
   resource_fields = {
@@ -326,21 +315,17 @@ class ObstacleEnvironmentPropertiesModel(object):
 class ObstacleModel(object):
   resource_fields = {
     obj_id_field: fields.String,
-    "theId": fields.Integer,
     "theName": fields.String,
     "theTags": fields.List(fields.String),
     "theOriginator": fields.String,
     "theEnvironmentProperties": fields.List(fields.Nested(ObstacleEnvironmentPropertiesModel.resource_fields)),
-    "theEnvironmentDictionary": fields.List
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
-  required.remove("theEnvironmentDictionary")
 
 class DomainPropertyModel(object):
   resource_fields = {
     obj_id_field: fields.String,
-    "theId": fields.Integer,
     "theName": fields.String,
     "theTags": fields.List(fields.String),
     "theDescription": fields.String,
@@ -371,12 +356,10 @@ class MisuseCaseModel(object):
     obj_id_field: fields.String,
     "theName": fields.String,
     "theRiskName": fields.String,
-    "theEnvironmentDictionary": fields.List(fields.Nested(MisuseCaseEnvironmentPropertiesModel.resource_fields)),
     "theEnvironmentProperties": fields.List(fields.Nested(MisuseCaseEnvironmentPropertiesModel.resource_fields))
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
-  required.remove("theEnvironmentDictionary")
 
 class RequirementAttributesModel(object):
   resource_fields = {
@@ -444,7 +427,6 @@ class ResponseEnvironmentPropertiesModel(object):
 class ResponseModel(object):
   resource_fields = {
     obj_id_field: fields.String,
-    'theId': fields.Integer,
     'theTags': fields.List(fields.String),
     'theRisk': fields.String,
     'theName': fields.String,
@@ -471,17 +453,14 @@ class RiskModel(object):
 class RoleModel(object):
   resource_fields = {
     obj_id_field: fields.String,
-    "theId": fields.Integer,
     "theName": fields.String,
     "theType": fields.String,
     "theShortCode": fields.String,
     "theDescription": fields.String,
-    "theEnvironmentProperties": None
   }
 
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
-  required.remove("theEnvironmentProperties")
 
 class RoleEnvironmentPropertiesModel(object):
   resource_fields = {
@@ -500,31 +479,22 @@ class ThreatEnvironmentPropertiesModel(object):
     'theLikelihood': fields.String,
     'theEnvironmentName': fields.String,
     'theAttackers': fields.List(fields.String),
-    'theRationale': fields.List(fields.String),
     'theProperties': fields.List(fields.Nested(SecurityAttribute.resource_fields)),
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
-  required.remove('theRationale')
 
 class ThreatModel(object):
   resource_fields = {
     obj_id_field: fields.String,
-    'theEnvironmentDictionary': fields.List(fields.String),
-    'theId': fields.Integer,
     'theTags': fields.List(fields.String),
-    'theThreatPropertyDictionary': fields.List(fields.String),
     'theThreatName': fields.String,
     'theType': fields.String,
     'theMethod': fields.String,
     'theEnvironmentProperties': fields.List(fields.Nested(ThreatEnvironmentPropertiesModel.resource_fields)),
-    'likelihoodLookup': fields.List(fields.String),
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
-  required.remove('theThreatPropertyDictionary')
-  required.remove('theEnvironmentDictionary')
-  required.remove('likelihoodLookup')
 
 class UserConfigModel(object):
   resource_fields = {
@@ -551,19 +521,14 @@ class VulnerabilityEnvironmentPropertiesModel(object):
 class VulnerabilityModel(object):
   resource_fields = {
     obj_id_field: fields.String,
-    'theEnvironmentDictionary': fields.List(fields.Nested(VulnerabilityEnvironmentPropertiesModel.resource_fields)),
     'theVulnerabilityName': fields.String,
     'theVulnerabilityType': fields.String,
     'theTags': fields.List(fields.String),
     'theVulnerabilityDescription': fields.String,
-    'theVulnerabilityId': fields.Integer,
-    'severityLookup': fields.List(fields.String),
     'theEnvironmentProperties': fields.List(fields.Nested(VulnerabilityEnvironmentPropertiesModel.resource_fields))
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
-  required.remove('theEnvironmentDictionary')
-  required.remove('severityLookup')
 
 class CountermeasureTask(object):
   resource_fields = {
@@ -606,12 +571,11 @@ class CountermeasureModel(object):
     'theTags': fields.List(fields.String),
     'theDescription': fields.String,
     'theType': fields.String,
-    'theEnvironmentDictionary': fields.List(fields.Nested(CountermeasureEnvironmentPropertiesModel.resource_fields)),
+    'theEnvironmentProperties': fields.List(fields.Nested(CountermeasureEnvironmentPropertiesModel.resource_fields)),
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
   required.remove('theTags')
-  required.remove('theEnvironmentDictionary')
 
 class PersonaEnvironmentPropertiesModel(object):
   resource_fields = {
@@ -627,8 +591,6 @@ class PersonaEnvironmentPropertiesModel(object):
 class PersonaModel(object):
   resource_fields = {
     obj_id_field: fields.String,
-      'theEnvironmentDictionary': fields.List(fields.Nested(PersonaEnvironmentPropertiesModel.resource_fields)),
-      'theId': fields.Integer,
       'theName': fields.String,
       'theTags': fields.List(fields.String),
       'theActivities': fields.String,
@@ -646,7 +608,6 @@ class PersonaModel(object):
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
-  required.remove('theEnvironmentDictionary')
 
 class TaskConcernAssociationModel(object):
   resource_fields = {
@@ -686,8 +647,6 @@ class TaskEnvironmentPropertiesModel(object):
 class TaskModel(object):
   resource_fields = {
     obj_id_field: fields.String,
-    'theEnvironmentDictionary': fields.List(fields.Nested(TaskEnvironmentPropertiesModel.resource_fields)),
-    'theId': fields.Integer,
     'theName': fields.String,
     'theShortCode': fields.String,
     'theObjective': fields.String,
@@ -698,7 +657,6 @@ class TaskModel(object):
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
-  required.remove('theEnvironmentDictionary')
 
 class UseCaseEnvironmentPropertiesModel(object):
   resource_fields = {
@@ -733,8 +691,6 @@ class UseCaseContributionModel(object):
 class UseCaseModel(object):
   resource_fields = {
     obj_id_field: fields.String,
-    'theEnvironmentDictionary': fields.List(fields.Nested(UseCaseEnvironmentPropertiesModel.resource_fields)),
-    'theId': fields.Integer,
     'theName': fields.String,
     'theTags': fields.List(fields.String),
     'theAuthor': fields.String,
@@ -746,7 +702,6 @@ class UseCaseModel(object):
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
-  required.remove('theEnvironmentDictionary')
 
 class SearchValuesModel(object):
   resource_fields = {

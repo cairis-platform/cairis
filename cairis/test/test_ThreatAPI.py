@@ -23,7 +23,6 @@ else:
   from urllib import quote
 import jsonpickle
 from cairis.core.Threat import Threat
-from cairis.core.ObjectSummary import ObjectSummary
 from cairis.tools.JsonConverter import json_deserialize
 from cairis.core.ThreatEnvironmentProperties import ThreatEnvironmentProperties
 from cairis.core.ValueType import ValueType
@@ -68,7 +67,7 @@ class ThreatAPITests(CairisDaemonTestCase):
     self.assertGreater(len(threats), 0, 'No threats in the dictionary')
     self.logger.info('[%s] Threats found: %d', method, len(threats))
     threat = list(threats.values())[0]
-    self.logger.info('[%s] First threat: %s [%d]\n', method, threat['theThreatName'], threat['theId'])
+    self.logger.info('[%s] First threat: %s\n', method, threat['theThreatName'])
 
   def test_get_all_summary(self):
     method = 'test_get_all_summary'
@@ -79,9 +78,9 @@ class ThreatAPITests(CairisDaemonTestCase):
       thrs = json_deserialize(rv.data)
     self.assertIsNotNone(thrs, 'No results after deserialization')
     self.assertGreater(len(thrs), 0, 'No threat summaries')
-    self.assertIsInstance(thrs[0], ObjectSummary)
+    self.assertIsInstance(thrs[0], dict)
     self.logger.info('[%s] Threats found: %d', method, len(thrs))
-    self.logger.info('[%s] First threat summary: %s [%s]\n', method, thrs[0].theName)
+    self.logger.info('[%s] First threat summary: %s [%s]\n', method, thrs[0]['theName'])
 
   def test_get_threat_model(self):
     method = 'test_get_threat_model'
@@ -108,7 +107,7 @@ class ThreatAPITests(CairisDaemonTestCase):
     self.logger.debug('[%s] Response data: %s', method, responseData)
     threat = jsonpickle.decode(responseData)
     self.assertIsNotNone(threat, 'No results after deserialization')
-    self.logger.info('[%s] Threat: %s [%d]\n', method, threat['theThreatName'], threat['theId'])
+    self.logger.info('[%s] Threat: %s\n', method, threat['theThreatName'])
 
   def test_delete(self):
     method = 'test_delete'
@@ -147,11 +146,9 @@ class ThreatAPITests(CairisDaemonTestCase):
     self.logger.debug('[%s] Response data: %s', method, responseData)
     json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
-    env_id = json_resp.get('threat_id', None)
-    self.assertIsNotNone(env_id, 'No threat ID returned')
-    self.assertGreater(env_id, 0, 'Invalid threat ID returned [%d]' % env_id)
-    self.logger.info('[%s] Threat ID: %d\n', method, env_id)
-
+    msg = json_resp.get('message', None)
+    self.assertIsNotNone(msg, 'No message returned')
+    self.logger.info('[%s] Message: %s\n', method, msg)
     rv = self.app.delete('/api/threats/name/%s?session_id=test' % quote(self.prepare_new_threat().theThreatName))
 
   def test_put(self):
@@ -169,14 +166,12 @@ class ThreatAPITests(CairisDaemonTestCase):
     self.logger.debug('[%s] Response data: %s', method, responseData)
     json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
-    env_id = json_resp.get('threat_id', None)
-    self.assertIsNotNone(env_id, 'No threat ID returned')
-    self.assertGreater(env_id, 0, 'Invalid threat ID returned [%d]' % env_id)
-    self.logger.info('[%s] Threat ID: %d', method, env_id)
+    msg = json_resp.get('message', None)
+    self.assertIsNotNone(msg, 'No message returned')
+    self.logger.info('[%s] Message: %s', method, msg)
 
     threat_to_update = self.prepare_new_threat()
     threat_to_update.theThreatName = 'Edited test threat'
-    threat_to_update.theId = env_id
     upd_env_body = self.prepare_json(threat=threat_to_update)
     rv = self.app.put('/api/threats/name/%s?session_id=test' % quote(self.prepare_new_threat().theThreatName), data=upd_env_body, content_type='application/json')
     self.assertIsNotNone(rv.data, 'No response')
@@ -200,7 +195,7 @@ class ThreatAPITests(CairisDaemonTestCase):
     upd_threat = jsonpickle.decode(responseData)
     self.assertIsNotNone(upd_threat, 'Unable to decode JSON data')
     self.logger.debug('[%s] Response data: %s', method, responseData)
-    self.logger.info('[%s] Threat: %s [%d]\n', method, upd_threat['theThreatName'], upd_threat['theId'])
+    self.logger.info('[%s] Threat: %s\n', method, upd_threat['theThreatName'])
 
     rv = self.app.delete('/api/threats/name/%s?session_id=test' % quote(threat_to_update.theThreatName))
 
@@ -217,7 +212,7 @@ class ThreatAPITests(CairisDaemonTestCase):
     self.assertGreater(len(threats), 0, 'No threats in the dictionary')
     self.logger.info('[%s] Threat types found: %d', method, len(threats))
     threat_type = threats[0]
-    self.logger.info('[%s] First threat type: %s [%d]\n', method, threat_type['theName'], threat_type['theId'])
+    self.logger.info('[%s] First threat type: %s\n', method, threat_type['theName'])
 
   def test_types_delete(self):
     method = 'test_types_delete'
@@ -309,7 +304,7 @@ class ThreatAPITests(CairisDaemonTestCase):
     upd_threat_type = jsonpickle.decode(responseData)
     self.assertIsNotNone(upd_threat_type, 'Unable to decode JSON data')
     self.logger.debug('[%s] Response data: %s', method, responseData)
-    self.logger.info('[%s] Threat type: %s [%d]\n', method, upd_threat_type['theName'], upd_threat_type['theId'])
+    self.logger.info('[%s] Threat type: %s\n', method, upd_threat_type['theName'])
 
     rv = self.app.delete('/api/threats/types/name/%s?session_id=test' % quote(type_to_update.theName))
 

@@ -109,10 +109,9 @@ class GoalDAO(CairisDAO):
       raise ARMHTTPError(ex)
 
   def delete_goal(self, name):
-    found_goal = self.get_goal_by_name(name)
-
     try:
-      self.db_proxy.deleteGoal(found_goal.theId)
+      goalId = self.db_proxy.getDimensionId(name,'goal')
+      self.db_proxy.deleteGoal(goalId)
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)
@@ -388,9 +387,9 @@ class GoalDAO(CairisDAO):
     """
     goal.theEnvironmentProperties = self.convert_properties(real_props=goal.theEnvironmentProperties)
     assert isinstance(goal, Goal)
-    goal.theEnvironmentDictionary = {}
-
-    delattr(goal, 'theEnvironmentDictionary')
+    del goal.theId
+    del goal.theEnvironmentDictionary
+    del goal.theColour
     return goal
 
   def get_goal_names(self, environment=''):

@@ -65,7 +65,7 @@ class PersonaAPITests(CairisDaemonTestCase):
     self.assertGreater(len(personas), 0, 'No personas in the dictionary')
     self.logger.info('[%s] Personas found: %d', method, len(personas))
     persona = list(personas.values())[0]
-    self.logger.info('[%s] First persona: %s [%d]\n', method, persona['theName'], persona['theId'])
+    self.logger.info('[%s] First persona: %s\n', method, persona['theName'])
 
   def test_get_all_summary(self):
     method = 'test_get_all_summary'
@@ -76,9 +76,9 @@ class PersonaAPITests(CairisDaemonTestCase):
       ps = json_deserialize(rv.data)
     self.assertIsNotNone(ps, 'No results after deserialization')
     self.assertGreater(len(ps), 0, 'No persona summaries')
-    self.assertIsInstance(ps[0], ObjectSummary)
+    self.assertIsInstance(ps[0], dict)
     self.logger.info('[%s] Personas found: %d', method, len(ps))
-    self.logger.info('[%s] First persona summary: %s [%s]\n', method, ps[0].theName)
+    self.logger.info('[%s] First persona summary: %s [%s]\n', method, ps[0]['theName'])
 
   def test_get_by_name(self):
     method = 'test_get_by_name'
@@ -92,7 +92,7 @@ class PersonaAPITests(CairisDaemonTestCase):
     self.logger.debug('[%s] Response data: %s', method, responseData)
     persona = jsonpickle.decode(responseData)
     self.assertIsNotNone(persona, 'No results after deserialization')
-    self.logger.info('[%s] Persona: %s [%d]\n', method, persona['theName'], persona['theId'])
+    self.logger.info('[%s] Persona: %s\n', method, persona['theName'])
 
   def test_delete(self):
     method = 'test_delete'
@@ -131,10 +131,9 @@ class PersonaAPITests(CairisDaemonTestCase):
     self.logger.debug('[%s] Response data: %s', method, responseData)
     json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
-    env_id = json_resp.get('persona_id', None)
-    self.assertIsNotNone(env_id, 'No persona ID returned')
-    self.assertGreater(env_id, 0, 'Invalid persona ID returned [%d]' % env_id)
-    self.logger.info('[%s] Persona ID: %d\n', method, env_id)
+    msg = json_resp.get('message', None)
+    self.assertIsNotNone(msg, 'No persona ID returned')
+    self.logger.info('[%s] Message:  %s\n', method, msg)
 
     rv = self.app.delete('/api/personas/name/%s?session_id=test' % quote(self.prepare_new_persona().name()))
 
@@ -153,14 +152,12 @@ class PersonaAPITests(CairisDaemonTestCase):
     self.logger.debug('[%s] Response data: %s', method, responseData)
     json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
-    env_id = json_resp.get('persona_id', None)
-    self.assertIsNotNone(env_id, 'No persona ID returned')
-    self.assertGreater(env_id, 0, 'Invalid persona ID returned [%d]' % env_id)
-    self.logger.info('[%s] Persona ID: %d', method, env_id)
+    msg = json_resp.get('message', None)
+    self.assertIsNotNone(msg, 'No message returned')
+    self.logger.info('[%s] Message: %s', method, msg)
 
     persona_to_update = self.prepare_new_persona()
     persona_to_update.theName = 'Edited test persona'
-    persona_to_update.theId = env_id
     upd_env_body = self.prepare_json(persona=persona_to_update)
     rv = self.app.put('/api/personas/name/%s?session_id=test' % quote(self.prepare_new_persona().name()), data=upd_env_body, content_type='application/json')
     self.assertIsNotNone(rv.data, 'No response')
@@ -184,7 +181,7 @@ class PersonaAPITests(CairisDaemonTestCase):
     upd_persona = jsonpickle.decode(responseData)
     self.assertIsNotNone(upd_persona, 'Unable to decode JSON data')
     self.logger.debug('[%s] Response data: %s', method, rv.data)
-    self.logger.info('[%s] Persona: %s [%d]\n', method, upd_persona['theName'], upd_persona['theId'])
+    self.logger.info('[%s] Persona: %s\n', method, upd_persona['theName'])
 
     rv = self.app.delete('/api/personas/name/%s?session_id=test' % quote(persona_to_update.theName))
 

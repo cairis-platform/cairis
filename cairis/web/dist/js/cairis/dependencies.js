@@ -113,6 +113,7 @@ $(document).on('click', "td.dependency-rows", function(){
           $('#theDependeeName').val(dependency.theDependee);
           $('#theDependencyType').val(dependency.theDependencyType);
           refreshDimensionSelector($('#theDependencyName'),dependency.theDependencyType,undefined,function() {
+            $('#theDependencyName').val(dependency.theDependency);
             $('#theRationale').val(dependency.theRationale);
             $.session.set("Dependency", JSON.stringify(dependency));
             $('#editDependencyOptionsForm').loadJSON(dependency, null);

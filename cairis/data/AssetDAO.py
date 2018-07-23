@@ -26,9 +26,6 @@ from cairis.core.ValueType import ValueType
 from cairis.core.ValueTypeParameters import ValueTypeParameters
 import cairis.core.armid
 from cairis.data.CairisDAO import CairisDAO
-from cairis.data.EnvironmentDAO import EnvironmentDAO
-from cairis.data.VulnerabilityDAO import VulnerabilityDAO
-from cairis.data.ThreatDAO import ThreatDAO
 from cairis.tools.JsonConverter import json_serialize, json_deserialize
 from cairis.tools.ModelDefinitions import AssetEnvironmentPropertiesModel, SecurityAttribute, AssetModel
 from cairis.tools.SessionValidator import check_required_keys, get_fonts
@@ -108,27 +105,9 @@ class AssetDAO(CairisDAO):
     return found_asset
 
   def get_threatened_assets(self, threat_name, environment_name):
-    """
-    :type threat_name: str
-    :type environment_name: str
-    :rtype: list[Asset]
-    """
-    threat_dao = ThreatDAO(self.session_id)
-
     try:
-      found_threat = threat_dao.get_threat_by_name(threat_name)
-      threat_id = found_threat.theId
-    except ObjectNotFoundHTTPError as ex:
-      self.close()
-      raise ex
-    except ARMHTTPError as ex:
-      self.close()
-      raise ex
-
-    environment_dao = EnvironmentDAO(self.session_id)
-    try:
-      found_environment = environment_dao.get_environment_by_name(environment_name)
-      environment_id = found_environment.theId
+      threat_id = self.db_proxy.getDimensionId(threat_name,'threat')
+      environment_id = self.db_proxy.getDimensionId(environment_name,'environment')
     except ObjectNotFoundHTTPError as ex:
       self.close()
       raise ex
@@ -148,27 +127,9 @@ class AssetDAO(CairisDAO):
     return threatened_assets
 
   def get_vulnerable_assets(self, vulnerability_name, environment_name):
-    """
-    :type vulnerability_name: str
-    :type environment_name: str
-    :rtype: list[Asset]
-    """
-    vulnerability_dao = VulnerabilityDAO(self.session_id)
-
     try:
-      found_vulnerability = vulnerability_dao.get_vulnerability_by_name(vulnerability_name)
-      vulnerability_id = found_vulnerability.theVulnerabilityId
-    except ObjectNotFoundHTTPError as ex:
-      self.close()
-      raise ex
-    except ARMHTTPError as ex:
-      self.close()
-      raise ex
-
-    environment_dao = EnvironmentDAO(self.session_id)
-    try:
-      found_environment = environment_dao.get_environment_by_name(environment_name)
-      environment_id = found_environment.theId
+      vulnerability_id = self.db_proxy.getDimensionId(vulnerability_name,'vulnerability')
+      environment_id = self.db_proxy.getDimensionId(environment_name,'environment')
     except ObjectNotFoundHTTPError as ex:
       self.close()
       raise ex
@@ -220,8 +181,6 @@ class AssetDAO(CairisDAO):
     return asset_id
 
   def update_asset(self, asset, name):
-    old_asset = self.get_asset_by_name(name, simplify=False)
-    id = old_asset.theId
     params = AssetParameters(
       assetName=asset.theName,
       shortCode=asset.theShortCode,
@@ -234,9 +193,10 @@ class AssetDAO(CairisDAO):
       ifs=asset.theInterfaces,
       cProperties=asset.theEnvironmentProperties
     )
-    params.setId(id)
 
     try:
+      assetId = self.db_proxy.getDimensionId(name,'asset')
+      params.setId(assetId)
       self.db_proxy.updateAsset(params)
     except DatabaseProxyException as ex:
       self.close()
@@ -274,21 +234,10 @@ class AssetDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def delete_asset(self, name=None):
-    if name is not None:
-      assetId = self.db_proxy.getDimensionId(name,'asset')
-      assets = self.db_proxy.getAssets(assetId)
-      found_asset = assets.get(name)
-    else:
-      self.close()
-      raise MissingParameterHTTPError(param_names=['name'])
-
-    if found_asset is None or not isinstance(found_asset, Asset):
-      self.close()
-      raise ObjectNotFoundHTTPError('The provided asset name')
-
+  def delete_asset(self, name):
     try:
-      self.db_proxy.deleteAsset(found_asset.theId)
+      assetId = self.db_proxy.getDimensionId(name,'asset')
+      self.db_proxy.deleteAsset(assetId)
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)
@@ -419,9 +368,6 @@ class AssetDAO(CairisDAO):
 
   # region Asset values
   def get_asset_values(self, environment_name=''):
-    """
-    :rtype : list[ValueType]
-    """
     try:
       asset_values = self.db_proxy.getValueTypes('asset_value', environment_name)
       return asset_values
@@ -568,14 +514,15 @@ class AssetDAO(CairisDAO):
 
     json_dict = json['object']
     check_required_keys(json_dict, AssetModel.required)
-    json_dict['__python_obj__'] = Asset.__module__+'.'+Asset.__name__
     env_props = json_dict.pop('theEnvironmentProperties', [])
     env_props = self.convert_props(fake_props=env_props)
     ifs = json_dict.pop('theInterfaces',[])
     ifs = self.convert_ifs(fake_ifs=ifs)
     json_dict.pop('theEnvironmentDictionary', None)
     json_dict.pop('theAssetPropertyDictionary', None)
-    asset = json_serialize(json_dict)
+#    asset = json_serialize(json_dict)
+    asset = json_dict
+    asset['__python_obj__'] = Asset.__module__+'.'+Asset.__name__
     asset = json_deserialize(asset)
 
     if isinstance(asset, Asset):

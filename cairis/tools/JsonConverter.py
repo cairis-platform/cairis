@@ -61,9 +61,9 @@ def json_serialize(obj, pretty_printing=False, session_id=None):
     pretty_printing = s.get('jsonPrettyPrint', False)
 
   if pretty_printing:
-    json_string = dumps(loads(serialize(obj)), indent=4)
+    json_string = dumps(loads(serialize(obj,unpicklable=False)), indent=4)
   else:
-    json_string = serialize(obj)
+    json_string = serialize(obj,unpicklable=False)
 
   for key in conv_terms:
     json_string = json_string.replace(key, conv_terms[key])

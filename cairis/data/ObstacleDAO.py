@@ -100,10 +100,9 @@ class ObstacleDAO(CairisDAO):
       raise ARMHTTPError(ex)
 
   def delete_obstacle(self, name):
-    found_obstacle = self.get_obstacle_by_name(name)
-
     try:
-      self.db_proxy.deleteObstacle(found_obstacle.theId)
+      obsId = self.db_proxy.getDimensionId(name,'obstacle')
+      self.db_proxy.deleteObstacle(obsId)
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)
@@ -331,8 +330,8 @@ class ObstacleDAO(CairisDAO):
     """
     obstacle.theEnvironmentProperties = self.convert_properties(real_props=obstacle.theEnvironmentProperties)
     assert isinstance(obstacle, Obstacle)
-    obstacle.theEnvironmentDictionary = {}
-    delattr(obstacle, 'theEnvironmentDictionary')
+    del obstacle.theId
+    del obstacle.theEnvironmentDictionary
     return obstacle
 
   def get_obstacle_names(self, environment=''):

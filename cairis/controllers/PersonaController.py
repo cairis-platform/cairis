@@ -27,7 +27,7 @@ from flask_restful import Resource
 from cairis.daemon.CairisHTTPError import ARMHTTPError
 from cairis.data.PersonaDAO import PersonaDAO
 from cairis.tools.JsonConverter import json_serialize
-from cairis.tools.MessageDefinitions import PersonaMessage, PersonaEnvironmentPropertiesMessage, ValueTypeMessage
+from cairis.tools.MessageDefinitions import PersonaMessage, ValueTypeMessage
 from cairis.tools.ModelDefinitions import PersonaModel, PersonaEnvironmentPropertiesModel, ValueTypeModel
 from cairis.tools.SessionValidator import get_session_id, get_model_generator
 __author__ = 'Shamal Faily'
@@ -52,10 +52,10 @@ class PersonasAPI(Resource):
 
     dao = PersonaDAO(session_id)
     new_persona = dao.from_json(request)
-    persona_id = dao.add_persona(new_persona)
+    dao.add_persona(new_persona)
     dao.close()
 
-    resp_dict = {'message': 'Persona successfully added', 'persona_id': persona_id}
+    resp_dict = {'message': 'Persona successfully added'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp
@@ -155,28 +155,6 @@ class PersonaTypesAPI(Resource):
     pTypes = dao.get_persona_types()
     dao.close()
     resp = make_response(json_serialize(pTypes, session_id=session_id), OK)
-    resp.contenttype = 'application/json'
-    return resp
-
-class PersonaEnvironmentPropertiesAPI(Resource):
-
-  def get(self, persona_name):
-    session_id = get_session_id(session, request)
-    dao = PersonaDAO(session_id)
-    persona_props = dao.get_persona_props(name=persona_name)
-    dao.close()
-    resp = make_response(json_serialize(asset_props, session_id=session_id))
-    resp.contenttype = 'application/json'
-    return resp
-
-  def put(self, persona_name):
-    session_id = get_session_id(session, request)
-    dao = PersonaDAO(session_id)
-    persona_prop = dao.from_json(request, to_props=True)
-    dao.update_persona_properties(persona_prop, name=persona_name)
-    dao.close()
-    resp_dict = {'message': 'The persona properties were successfully updated.'}
-    resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp
 

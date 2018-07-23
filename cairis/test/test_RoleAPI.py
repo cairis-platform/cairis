@@ -41,7 +41,6 @@ class RoleAPITests(CairisDaemonTestCase):
 
   def setUp(self):
     self.logger = logging.getLogger(__name__)
-    self.existing_role_id = 122
     self.existing_role_name = 'Certificate Authority'
     self.role_class = Role.__module__+'.'+Role.__name__
     self.new_role = Role(
@@ -76,13 +75,13 @@ class RoleAPITests(CairisDaemonTestCase):
       responseData = rv.data.decode('utf-8')
     else:
       responseData = rv.data
-    roles = json_deserialize(responseData)
+    roles = jsonpickle.decode(responseData)
     self.assertIsNotNone(roles, 'No results after deserialization')
     self.assertIsInstance(roles, dict, 'The result is not a dictionary as expected')
     self.assertGreater(len(roles), 0, 'No roles in the dictionary')
-    self.assertIsInstance(list(roles.values())[0], Role)
+    self.assertIsInstance(list(roles.values())[0], dict)
     self.logger.info('[%s] Roles found: %d', method, len(roles))
-    self.logger.info('[%s] First role: %s [%d]\n', method, list(roles.values())[0].theName, list(roles.values())[0].theId)
+    self.logger.info('[%s] First role: %s\n', method, list(roles.values())[0]['theName'])
 
   def test_post(self):
     method = 'test_post_new'
@@ -94,33 +93,9 @@ class RoleAPITests(CairisDaemonTestCase):
     self.logger.debug('[%s] Response data: %s', method, responseData)
     json_resp = json_deserialize(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
-    role_id = json_resp.get('role_id', None)
-    self.assertIsNotNone(role_id, 'No role ID returned')
-    self.logger.info('[%s] Role ID: %d', method, role_id)
-
-    rv = self.app.get('/api/roles/id/%d?session_id=test' % role_id)
-    if (sys.version_info > (3,)):
-      responseData = rv.data.decode('utf-8')
-    else:
-      responseData = rv.data
-    role = jsonpickle.decode(responseData)
-    self.logger.info('[%s] Role: %s [%d]\n', method, role['theName'], role['theId'])
-
-  def test_get_id(self):
-    method = 'test_get_id'
-    url = '/api/roles/id/%d?session_id=test' % self.existing_role_id
-    self.logger.info('[%s] URL: %s', method, url)
-    rv = self.app.get(url)
-    self.assertIsNotNone(rv.data, 'No response')
-    if (sys.version_info > (3,)):
-      responseData = rv.data.decode('utf-8')
-    else:
-      responseData = rv.data
-    self.logger.debug('[%s] Response data: %s', method, responseData)
-    role = jsonpickle.decode(responseData)
-    self.assertIsNotNone(role, 'No results after deserialization')
-    self.assertEqual(role['__python_obj__'], self.role_class, 'The result is not an role as expected')
-    self.logger.info('[%s] Role: %s [%d]\n', method, role['theName'], role['theId'])
+    message = json_resp.get('message', None)
+    self.assertIsNotNone(message, 'No message returned')
+    self.assertEqual(message, 'Add successful')
 
   def test_get_name(self):
     method = 'test_get_name'
@@ -130,10 +105,10 @@ class RoleAPITests(CairisDaemonTestCase):
       responseData = rv.data.decode('utf-8')
     else:
       responseData = rv.data
-    role = json_deserialize(responseData)
+    role = jsonpickle.decode(responseData)
     self.assertIsNotNone(role, 'No results after deserialization')
-    self.assertIsInstance(role, Role, 'The result is not an role as expected')
-    self.logger.info('[%s] Role: %s [%d]\n', method, role.theName, role.theId)
+    self.assertIsInstance(role, dict, 'The result is not a dict as expected')
+    self.logger.info('[%s] Role: %s\n', method, role['theName'])
 
   def test_put_name(self):
     method = 'test_put_name'
@@ -158,6 +133,7 @@ class RoleAPITests(CairisDaemonTestCase):
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     message = json_resp.get('message', None)
     self.assertIsNotNone(message, 'No message returned')
+    self.assertEqual(message, 'Update successful')
 
     rv = self.app.get('/api/roles/name/Test3?session_id=test')
     if (sys.version_info > (3,)):
@@ -165,47 +141,7 @@ class RoleAPITests(CairisDaemonTestCase):
     else:
       responseData = rv.data
     role = json_deserialize(responseData)
-    self.logger.info('[%s] Role: %s [%d]\n', method, role.theName, role.theId)
-
-  def test_put_id(self):
-    method = 'test_put_id'
-
-    rv = self.app.post('/api/roles', content_type='application/json', data=self.new_role_body)
-
-    rv = self.app.get('/api/roles?session_id=test')
-    if (sys.version_info > (3,)):
-      responseData = rv.data.decode('utf-8')
-    else:
-      responseData = rv.data
-    roles = json_deserialize(responseData)
-    role = roles.get(self.new_role.theName)
-    url = '/api/roles/id/%d' % role.theId
-
-    upd_role = self.new_role
-    upd_role.theName = 'Test2'
-    upd_role_dict = self.new_role_dict
-    upd_role_dict['object'] = upd_role
-    upd_role_body = jsonpickle.encode(upd_role_dict)
-    self.logger.info('[%s] JSON data: %s', method, upd_role_body)
-
-    rv = self.app.put(url, content_type='application/json', data=upd_role_body)
-    if (sys.version_info > (3,)):
-      responseData = rv.data.decode('utf-8')
-    else:
-      responseData = rv.data
-    self.logger.debug('[%s] Response data: %s', method, responseData)
-    json_resp = json_deserialize(responseData)
-    self.assertIsNotNone(json_resp, 'No results after deserialization')
-    message = json_resp.get('message', None)
-    self.assertIsNotNone(message, 'No message returned')
-
-    rv = self.app.get('/api/roles/name/Test2?session_id=test')
-    if (sys.version_info > (3,)):
-      responseData = rv.data.decode('utf-8')
-    else:
-      responseData = rv.data
-    role = json_deserialize(responseData)
-    self.logger.info('[%s] Role: %s [%d]\n', method, role.theName, role.theId)
+    self.logger.info('[%s] Role: %s\n', method, role['theName'])
 
   def test_x_delete_name(self):
     method = 'test_delete_name'
@@ -233,7 +169,8 @@ class RoleAPITests(CairisDaemonTestCase):
       responseData = rv.data
     roles = json_deserialize(responseData)
     role = roles.get(self.new_role.theName)
-    url = '/api/roles/id/%d' % role.theId
+
+    url = '/api/roles/name/Test2'
 
     upd_role = self.new_role
     upd_role.theName = 'Test2'
@@ -258,5 +195,4 @@ class RoleAPITests(CairisDaemonTestCase):
     self.assertIsNotNone(role_props, 'No results after deserialization')
     self.assertGreater(len(role_props), 0, 'List does not contain any elements')
     role_prop = role_props[0]
-    self.assertEqual(cls_role_prop, role_prop['__python_obj__'], 'The result is not an role as expected')
     self.logger.info('[%s] Role property: %s\n', method, role_props[0]['theEnvironmentName'])

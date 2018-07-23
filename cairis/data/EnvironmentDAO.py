@@ -33,12 +33,6 @@ class EnvironmentDAO(CairisDAO):
     CairisDAO.__init__(self, session_id)
 
   def get_environments(self, constraint_id=-1, simplify=True):
-    """
-    Get all the environments in dictionary form with the key being the environment name.
-    :param simplify: Defines if the environment should be changed to be compatible with JSON
-    :rtype list
-    :raise ARMHTTPError:
-    """
     try:
       environments = self.db_proxy.getEnvironments(constraint_id)
     except DatabaseProxyException as ex:
@@ -51,11 +45,6 @@ class EnvironmentDAO(CairisDAO):
     return environments
 
   def get_environment_names(self):
-    """
-    Get the available environment names.
-    :rtype list[str]
-    :raise ARMHTTPError:
-    """
     try:
       environment_names = self.db_proxy.getEnvironmentNames()
       return environment_names
@@ -67,10 +56,6 @@ class EnvironmentDAO(CairisDAO):
       raise ARMHTTPError(ex)
     
   def get_environment_by_name(self, name, simplify=True):
-    """
-    :rtype: Environment
-    :raise ObjectNotFoundHTTPError:
-    """
     found_environment = None
     try:
       environments = self.db_proxy.getEnvironments()
@@ -90,39 +75,7 @@ class EnvironmentDAO(CairisDAO):
 
     return found_environment
 
-  def get_environment_by_id(self, env_id, simplify=True):
-    """
-    :rtype: Environment
-    :raise ObjectNotFoundHTTPError:
-    """
-    found_environment = None
-    try:
-      environments = self.db_proxy.getEnvironments()
-    except DatabaseProxyException as ex:
-      self.close()
-      raise ARMHTTPError(ex)
-
-    if environments is not None:
-      found_environment = None
-      idx = 0
-      while found_environment is None and idx < len(environments):
-        if list(environments.values())[idx].theId == env_id:
-          found_environment = list(environments.values())[idx]
-        idx += 1
-
-    if found_environment is None:
-      self.close()
-      raise ObjectNotFoundHTTPError('The provided environment name')
-
-    if simplify:
-      found_environment = self.simplify(found_environment)
-
-    return found_environment
-
   def get_environments_by_threat_vulnerability(self, threat_name, vulnerability_name):
-    """
-    :rtype : dict[str, Environment]
-    """
     env_names = self.get_environment_names_by_threat_vulnerability(threat_name, vulnerability_name)
     environments = {}
     for env_name in env_names:
@@ -135,9 +88,6 @@ class EnvironmentDAO(CairisDAO):
     return environments
 
   def get_environment_names_by_threat_vulnerability(self, threat_name, vulnerability_name):
-    """
-    :rtype : list[str]
-    """
     try:
       environments = self.db_proxy.riskEnvironments(threat_name, vulnerability_name)
       return environments
@@ -149,9 +99,6 @@ class EnvironmentDAO(CairisDAO):
       raise ARMHTTPError(ex)
 
   def get_environment_names_by_risk(self, risk_name):
-    """
-    :rtype : list[str]
-    """
     try:
       environments = self.db_proxy.riskEnvironmentsByRisk(risk_name)
       return environments
@@ -163,10 +110,6 @@ class EnvironmentDAO(CairisDAO):
       raise ARMHTTPError(ex)
 
   def add_environment(self, environment):
-    """
-    :return: Returns the ID of the new environment
-    :raise ARMHTTPError:
-    """
     env_params = self.to_environment_parameters(environment)
     try:
       if not self.check_existing_environment(environment.theName):
@@ -175,35 +118,18 @@ class EnvironmentDAO(CairisDAO):
         self.close()
         raise DatabaseProxyException('Environment name already exists within the database.')
     except DatabaseProxyException as ex:
-            self.close()
-            raise ARMHTTPError(ex)
+      self.close()
+      raise ARMHTTPError(ex)
     except ARMException as ex:
-            self.close()
-            raise ARMHTTPError(ex)
+      self.close()
+      raise ARMHTTPError(ex)
 
-    try:
-      new_environment = self.get_environment_by_name(environment.theName, simplify=False)
-      if new_environment is not None:
-        return new_environment.theId
-    except ObjectNotFoundHTTPError:
-      self.logger.warning('The new environment was not found in the database')
-      self.logger.warning('Environment name: %s', environment.theName)
-      return -1
-
-  def update_environment(self, environment, name=None, env_id=None):
-    if name is not None:
-      environment_to_update = self.get_environment_by_name(name)
-    elif env_id is not None:
-      environment_to_update = self.get_environment_by_id(env_id)
-
+  def update_environment(self, environment, name):
     env_params = self.to_environment_parameters(environment)
-    env_params.setId(environment_to_update.theId)
-    if env_id is not None:
-      name = environment.theName
-
     try:
-      if self.check_existing_environment(name):
-        self.db_proxy.updateEnvironment(env_params)
+      envId = self.db_proxy.getDimensionId(name,'environment')
+      env_params.setId(envId)
+      self.db_proxy.updateEnvironment(env_params)
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)
@@ -211,30 +137,18 @@ class EnvironmentDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def delete_environment(self, name=None, env_id=None):
-    if name is not None:
-      found_environment = self.get_environment_by_name(name, simplify=False)
-      if found_environment is None:
-        raise ObjectNotFoundHTTPError('The provided environment name')
-      env_id = found_environment.theId
-
-    if env_id is not None and env_id > -1:
-      try:
-        self.db_proxy.deleteEnvironment(env_id)
-      except DatabaseProxyException as ex:
-        self.close()
-        raise ARMHTTPError(ex)
-      except ARMException as ex:
-        self.close()
-        raise ARMHTTPError(ex)
-    else:
+  def delete_environment(self, name):
+    try:
+      envId = self.db_proxy.getDimensionId(name,'environment')
+      self.db_proxy.deleteEnvironment(envId)
+    except DatabaseProxyException as ex:
       self.close()
-      raise MissingParameterHTTPError(param_names=['id'])
+      raise ARMHTTPError(ex)
+    except ARMException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
 
   def check_existing_environment(self, environment_name):
-    """
-    :raise ARMHTTPError:
-    """
     try:
       self.db_proxy.nameCheck(environment_name, 'environment')
       return False
@@ -285,6 +199,7 @@ class EnvironmentDAO(CairisDAO):
         value = tuple([tension['value'], tension['rationale']])
         json_dict['theTensions'][key] = value
 
+    json_dict['theId'] = -1
     new_json_environment = json_serialize(json_dict)
     environment = json_deserialize(new_json_environment)
     if not isinstance(environment, Environment):
@@ -295,6 +210,7 @@ class EnvironmentDAO(CairisDAO):
 
   def simplify(self, obj):
     assert isinstance(obj, Environment)
+    del obj.theId
     the_tensions = obj.theTensions
     assert isinstance(the_tensions, dict)
     obj.theTensions = []

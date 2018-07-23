@@ -131,10 +131,6 @@ class VulnerabilityMessage(DefaultMessage):
   resource_fields = gen_message_fields(ModelDefinitions.VulnerabilityModel)
   required = DefaultMessage.required
 
-class PersonaEnvironmentPropertiesMessage(DefaultMessage):
-  resource_fields = gen_message_multival_fields(ModelDefinitions.PersonaEnvironmentPropertiesModel)
-  required = DefaultMessage.required
-
 class PersonaMessage(DefaultMessage):
   resource_fields = gen_message_fields(ModelDefinitions.PersonaModel)
   required = DefaultMessage.required

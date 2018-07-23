@@ -65,7 +65,7 @@ class ResponseAPITests(CairisDaemonTestCase):
     self.assertGreater(len(responses), 0, 'No responses in the dictionary')
     self.logger.info('[%s] Responses found: %d', method, len(responses))
     response = list(responses.values())[0]
-    self.logger.info('[%s] First response: %s [%d]\n', method, response['theName'], response['theId'])
+    self.logger.info('[%s] First response: %s\n', method, response['theName'])
 
   def test_get_by_name(self):
     method = 'test_get_by_name'
@@ -79,7 +79,7 @@ class ResponseAPITests(CairisDaemonTestCase):
     self.logger.debug('[%s] Response data: %s', method, responseData)
     response = jsonpickle.decode(responseData)
     self.assertIsNotNone(response, 'No results after deserialization')
-    self.logger.info('[%s] Response: %s [%d]\n', method, response['theName'], response['theId'])
+    self.logger.info('[%s] Response: %s\n', method, response['theName'])
 
   def test_delete(self):
     method = 'test_delete'
@@ -118,10 +118,9 @@ class ResponseAPITests(CairisDaemonTestCase):
     self.logger.debug('[%s] Response data: %s', method, responseData)
     json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
-    env_id = json_resp.get('response_id', None)
-    self.assertIsNotNone(env_id, 'No response ID returned')
-    self.assertGreater(env_id, 0, 'Invalid response ID returned [%d]' % env_id)
-    self.logger.info('[%s] Response ID: %d\n', method, env_id)
+    msg = json_resp.get('message', None)
+    self.assertIsNotNone(msg, 'No message returned')
+    self.logger.info('[%s] Message: %s\n', method, msg)
 
     rv = self.app.delete('/api/responses/name/%s?session_id=test' % quote(self.prepare_new_response().theName))
 
@@ -140,10 +139,9 @@ class ResponseAPITests(CairisDaemonTestCase):
     self.logger.debug('[%s] Response data: %s', method, responseData)
     json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
-    env_id = json_resp.get('response_id', None)
-    self.assertIsNotNone(env_id, 'No response ID returned')
-    self.assertGreater(env_id, 0, 'Invalid response ID returned [%d]' % env_id)
-    self.logger.info('[%s] Response ID: %d\n', method, env_id)
+    msg = json_resp.get('message', None)
+    self.assertIsNotNone(msg, 'No message returned')
+    self.logger.info('[%s] Message: %s\n', method, msg)
 
     rv = self.app.post('/api/responses/name/%s/generate_goal?session_id=test' % quote(self.prepare_new_response().theName))
     if (sys.version_info > (3,)):
@@ -194,14 +192,12 @@ class ResponseAPITests(CairisDaemonTestCase):
     self.logger.debug('[%s] Response data: %s', method, responseData)
     json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
-    env_id = json_resp.get('response_id', None)
-    self.assertIsNotNone(env_id, 'No response ID returned')
-    self.assertGreater(env_id, 0, 'Invalid response ID returned [%d]' % env_id)
-    self.logger.info('[%s] Response ID: %d', method, env_id)
+    msg = json_resp.get('message', None)
+    self.assertIsNotNone(msg, 'No message returned')
+    self.logger.info('[%s] Message: %s', method, msg)
 
     response_to_update = self.prepare_new_response()
     response_to_update.theName = 'Edited test response'
-    response_to_update.theId = env_id
     upd_env_body = self.prepare_json(response=response_to_update)
     rv = self.app.put('/api/responses/name/%s?session_id=test' % quote(self.prepare_new_response().theName), data=upd_env_body, content_type='application/json')
     self.assertIsNotNone(rv.data, 'No response')
@@ -225,7 +221,7 @@ class ResponseAPITests(CairisDaemonTestCase):
     upd_response = jsonpickle.decode(responseData)
     self.assertIsNotNone(upd_response, 'Unable to decode JSON data')
     self.logger.debug('[%s] Response data: %s', method, responseData)
-    self.logger.info('[%s] Response: %s [%d]\n', method, upd_response['theName'], upd_response['theId'])
+    self.logger.info('[%s] Response: %s\n', method, upd_response['theName'])
 
     rv = self.app.delete('/api/responses/name/%s?session_id=test' % quote(response_to_update.theName))
 

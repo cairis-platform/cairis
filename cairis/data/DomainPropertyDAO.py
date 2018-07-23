@@ -180,4 +180,5 @@ class DomainPropertyDAO(CairisDAO):
 
   def simplify(self, obj):
     assert isinstance(obj, DomainProperty)
+    del obj.theId
     return obj

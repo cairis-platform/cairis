@@ -24,7 +24,6 @@ else:
   from urllib import quote
 import jsonpickle
 from cairis.core.Attacker import Attacker
-from cairis.core.ObjectSummary import ObjectSummary
 from cairis.tools.JsonConverter import json_deserialize
 from cairis.core.AttackerEnvironmentProperties import AttackerEnvironmentProperties
 from cairis.test.CairisDaemonTestCase import CairisDaemonTestCase
@@ -74,7 +73,7 @@ class AttackerAPITests(CairisDaemonTestCase):
     self.assertGreater(len(attackers), 0, 'No attackers in the dictionary')
     self.logger.info('[%s] Attackers found: %d', method, len(attackers))
     attacker = list(attackers.values())[0]
-    self.logger.info('[%s] First attacker: %s [%d]\n', method, attacker['theName'], attacker['theId'])
+    self.logger.info('[%s] First attacker: %s\n', method, attacker['theName'])
 
   def test_get_all_summary(self):
     method = 'test_get_all_summary'
@@ -85,9 +84,9 @@ class AttackerAPITests(CairisDaemonTestCase):
       ats = json_deserialize(rv.data)
     self.assertIsNotNone(ats, 'No results after deserialization')
     self.assertGreater(len(ats), 0, 'No attacker summaries')
-    self.assertIsInstance(ats[0], ObjectSummary)
+    self.assertIsInstance(ats[0], dict)
     self.logger.info('[%s] Attackers found: %d', method, len(ats))
-    self.logger.info('[%s] First attacker summary: %s [%s]\n', method, ats[0].theName)
+    self.logger.info('[%s] First attacker summary: %s [%s]\n', method, ats[0]['theName'])
 
   def test_get_by_name(self):
     method = 'test_get_by_name'
@@ -100,7 +99,7 @@ class AttackerAPITests(CairisDaemonTestCase):
     else:
       attacker = jsonpickle.decode(rv.data)
     self.assertIsNotNone(attacker, 'No results after deserialization')
-    self.logger.info('[%s] Attacker: %s [%d]\n', method, attacker['theName'], attacker['theId'])
+    self.logger.info('[%s] Attacker: %s\n', method, attacker['theName'])
 
   def test_delete(self):
     method = 'test_delete'
@@ -184,7 +183,7 @@ class AttackerAPITests(CairisDaemonTestCase):
     upd_attacker = jsonpickle.decode(responseData)
     self.assertIsNotNone(upd_attacker, 'Unable to decode JSON data')
     self.logger.debug('[%s] Response data: %s', method, responseData)
-    self.logger.info('[%s] Attacker: %s [%d]\n', method, upd_attacker['theName'], upd_attacker['theId'])
+    self.logger.info('[%s] Attacker: %s\n', method, upd_attacker['theName'])
 
     rv = self.app.delete('/api/attackers/name/%s?session_id=test' % quote(attacker_to_update.theName))
 

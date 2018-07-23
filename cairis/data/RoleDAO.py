@@ -25,161 +25,123 @@ from cairis.tools.JsonConverter import json_serialize, json_deserialize
 from cairis.tools.ModelDefinitions import RoleModel
 from cairis.tools.SessionValidator import check_required_keys
 
-__author__ = 'Robin Quetin'
+__author__ = 'Robin Quetin, Shamal Faily'
 
 
 class RoleDAO(CairisDAO):
-    def __init__(self, session_id):
-        CairisDAO.__init__(self, session_id)
+  def __init__(self, session_id):
+    CairisDAO.__init__(self, session_id)
 
-    def get_roles(self, constraint_id=-1, simplify=True):
-        roles = self.db_proxy.getRoles(constraint_id)
+  def get_roles(self, constraint_id=-1, simplify=True):
+    roles = self.db_proxy.getRoles(constraint_id)
 
-        if simplify:
-            for key in roles:
-                roles[key] = self.simplify(roles[key])
+    if simplify:
+      for key in roles:
+        roles[key] = self.simplify(roles[key])
 
-        return roles
+    return roles
 
-    def get_role_by_name(self, name, simplify=True):
-        found_role = None
-        roles = self.db_proxy.getRoles()
+  def get_role_by_name(self, name, simplify=True):
+    found_role = None
+    roles = self.db_proxy.getRoles()
 
-        if roles is not None:
-            found_role = roles.get(name)
+    if roles is not None:
+      found_role = roles.get(name)
 
-        if found_role is None:
-            self.close()
-            raise ObjectNotFoundHTTPError('The provided role name')
+    if found_role is None:
+      self.close()
+      raise ObjectNotFoundHTTPError('The provided role name')
 
-        if simplify:
-            found_role = self.simplify(found_role)
+    if simplify:
+      found_role = self.simplify(found_role)
 
-        return found_role
+    return found_role
 
-    def get_role_by_id(self, role_id, simplify=True):
-        found_role = None
-        roles = self.db_proxy.getRoles()
-        idx = 0
+  def get_role_by_id(self, role_id, simplify=True):
+    found_role = None
+    roles = self.db_proxy.getRoles()
+    idx = 0
 
-        while found_role is None and idx < len(roles):
-            if list(roles.values())[idx].theId == role_id:
-                found_role = list(roles.values())[idx]
-            idx += 1
+    while found_role is None and idx < len(roles):
+      if list(roles.values())[idx].theId == role_id:
+        found_role = list(roles.values())[idx]
+      idx += 1
 
-        if found_role is None:
-            self.close()
-            raise ObjectNotFoundHTTPError('The provided role name')
+      if found_role is None:
+        self.close()
+        raise ObjectNotFoundHTTPError('The provided role name')
 
-        if simplify:
-            found_role = self.simplify(found_role)
+      if simplify:
+        found_role = self.simplify(found_role)
 
-        return found_role
+    return found_role
 
-    def add_role(self, role):
-        """
-        Adds a new Role to the database
-        :type role_props: RoleEnvironmentProperties
-        :type role: Role
-        :return Returns the role's new ID
-        :rtype int
-        """
-        try:
-            self.db_proxy.nameCheck(role.theName, 'role')
-        except ARMException as ex:
-            self.close()
-            raise ARMHTTPError(ex)
+  def add_role(self, role):
+    role_params = RoleParameters(
+      name=role.theName,
+      rType=role.theType,
+      sCode=role.theShortCode,
+      desc=role.theDescription,
+      cProperties=[]
+    )
+    try:
+      self.db_proxy.nameCheck(role.theName, 'role')
+      self.db_proxy.addRole(role_params)
+    except ARMException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
 
-        role_params = RoleParameters(
-            name=role.theName,
-            rType=role.theType,
-            sCode=role.theShortCode,
-            desc=role.theDescription,
-            cProperties=[]
-        )
+  def update_role(self, role, name):
+    params = RoleParameters(
+      name=role.theName,
+      rType=role.theType,
+      sCode=role.theShortCode,
+      desc=role.theDescription,
+      cProperties=[]
+    )
+    try:
+      roleId = self.db_proxy.getDimensionId(name,'role')
+      params.setId(roleId)
+      self.db_proxy.updateRole(params)
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
 
-        role_id = self.db_proxy.addRole(role_params)
+  def get_role_props(self, name):
+    role = self.get_role_by_name(name, simplify=False)
+    props = role.theEnvironmentProperties
+    return props
 
-        return role_id
+  def delete_role(self, name):
+    try:
+      roleId = self.db_proxy.getDimensionId(name,'role')
+      self.db_proxy.deleteRole(roleId)
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+    except ARMException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
 
-    def update_role(self, role, name=None, role_id=-1):
-        if name is not None:
-            old_role = self.get_role_by_name(name, simplify=False)
-            if role is None:
-                self.close()
-                raise ObjectNotFoundHTTPError('The asset')
-            role_id = old_role.theId
+  def from_json(self, request):
+    json = request.get_json(silent=True)
+    if json is False or json is None:
+      self.close()
+      raise MalformedJSONHTTPError(data=request.get_data())
 
-        if role_id > -1:
-            params = RoleParameters(
-                name=role.theName,
-                rType=role.theType,
-                sCode=role.theShortCode,
-                desc=role.theDescription,
-                cProperties=[]
-            )
-            params.setId(role_id)
+    json_dict = json['object']
+    check_required_keys(json_dict, RoleModel.required)
+    json_dict['__python_obj__'] = Role.__module__+'.'+Role.__name__
+    role = json_serialize(json_dict)
+    role = json_deserialize(role)
+    if not isinstance(role, Role):
+      self.close()
+      raise MalformedJSONHTTPError(data=request.get_data())
+    else:
+      return role
 
-            try:
-                self.db_proxy.updateRole(params)
-            except DatabaseProxyException as ex:
-                self.close()
-                raise ARMHTTPError(ex)
-        else:
-            self.close()
-            raise MissingParameterHTTPError(param_names=['id'])
-
-    def get_role_props(self, name):
-        role = self.get_role_by_name(name, simplify=False)
-        props = role.theEnvironmentProperties
-        return props
-
-    def delete_role(self, name=None, role_id=-1):
-        if name is not None:
-            found_role = self.get_role_by_name(name)
-        elif role_id > -1:
-            found_role = self.get_role_by_id(role_id)
-        else:
-            self.close()
-            raise MissingParameterHTTPError(param_names=['name'])
-
-        if found_role is None or not isinstance(found_role, Role):
-            self.close()
-            raise ObjectNotFoundHTTPError('The provided role name')
-
-        try:
-            self.db_proxy.deleteRole(found_role.theId)
-        except DatabaseProxyException as ex:
-            self.close()
-            raise ARMHTTPError(ex)
-        except ARMException as ex:
-            self.close()
-            raise ARMHTTPError(ex)
-
-    def from_json(self, request):
-        """
-        :rtype Role
-        """
-        json = request.get_json(silent=True)
-        if json is False or json is None:
-            self.close()
-            raise MalformedJSONHTTPError(data=request.get_data())
-
-        json_dict = json['object']
-        check_required_keys(json_dict, RoleModel.required)
-        json_dict['__python_obj__'] = Role.__module__+'.'+Role.__name__
-        role = json_serialize(json_dict)
-        role = json_deserialize(role)
-        if not isinstance(role, Role):
-            self.close()
-            raise MalformedJSONHTTPError(data=request.get_data())
-        else:
-            return role
-
-    def simplify(self, obj):
-        """
-        :type obj: Role
-        """
-        obj.theEnvironmentDictionary = {}
-        obj.theEnvironmentProperties = []
-        return obj
+  def simplify(self, obj):
+    del obj.theId
+    del obj.theEnvironmentDictionary
+    del obj.theEnvironmentProperties
+    return obj

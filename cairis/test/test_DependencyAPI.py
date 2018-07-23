@@ -59,7 +59,7 @@ class DependencyAPITests(CairisDaemonTestCase):
     self.assertGreater(len(json_dict), 0, 'No dependencies found')
     assert isinstance(json_dict, dict)
     item = list(json_dict.items())[0]
-    self.logger.info('[%s] First dependency: %s [%d]\n', method, item[0], item[1]['theId'])
+    self.logger.info('[%s] First dependency: %s\n', method, item[1]['theDependency'])
 
   def test_dependencies_name_get(self):
     method = 'test_dependencies_name_get'
@@ -75,10 +75,10 @@ class DependencyAPITests(CairisDaemonTestCase):
     self.assertIsInstance(json_dict, list, 'The response is not a valid JSON dictionary')
     self.assertGreater(len(json_dict), 0, 'No dependencies found')
     assert isinstance(json_dict, list)
-    ids = []
+    deps = []
     for dep in json_dict:
-      ids.append(str(dep['theId']))
-    self.logger.info('[%s] Dependency IDs: %s\n', method, ', '.join(ids))
+      deps.append(str(dep['theDependency']))
+    self.logger.info('[%s] Dependency IDs: %s\n', method, ', '.join(deps))
 
   def test_dependency_name_get(self):
     method = 'test_dependency_name_get'
@@ -98,7 +98,7 @@ class DependencyAPITests(CairisDaemonTestCase):
     has_keys = all (k in item for k in DependencyModel.required)
     self.assertTrue(has_keys, 'Result is not a dependency')
     dep_name = '/'.join([item['theEnvironmentName'], item['theDepender'], item['theDependee'], item['theDependency']])
-    self.logger.info('[%s] Dependency: %s [%d]\n', method, dep_name, item['theId'])
+    self.logger.info('[%s] Dependency: %s\n', method, dep_name)
 
   def test_dependency_post(self):
     method = 'test_dependency_post'
@@ -126,9 +126,6 @@ class DependencyAPITests(CairisDaemonTestCase):
     self.assertIsNotNone(message, 'No message in response')
     self.assertNotIsInstance(message, dict, 'Message is an object')
     self.logger.info('[%s] Message: %s', method, message)
-    dep_id = json_dict.get('dependency_id', None)
-    self.assertIsNotNone(dep_id, 'No dependency ID returned')
-    self.logger.info('[%s] New dependency ID: %d\n', method, dep_id)
 
     new_name = (new_dep.theEnvironmentName, new_dep.theDepender, new_dep.theDependee, new_dep.theDependency)
     delete_url = '/api/dependencies/environment/%s/depender/%s/dependee/%s/dependency/%s?session_id=test' % new_name

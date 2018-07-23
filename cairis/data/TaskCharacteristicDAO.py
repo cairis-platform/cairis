@@ -34,11 +34,6 @@ class TaskCharacteristicDAO(CairisDAO):
     CairisDAO.__init__(self, session_id)
 
   def get_task_characteristics(self,constraint_id = -1,simplify=True):
-    """
-    :rtype: dict[str,TaskCharacteristic]
-    :return
-    :raise ARMHTTPError:
-    """
     try:
       tcs = self.db_proxy.getTaskCharacteristics(constraint_id)
     except DatabaseProxyException as ex:
@@ -50,6 +45,7 @@ class TaskCharacteristicDAO(CairisDAO):
 
     if simplify:
       for key, value in list(tcs.items()):
+        del value.theId
         tcs[key] = self.convert_tcrs(real_tc=value) 
 
     return tcs
@@ -84,7 +80,6 @@ class TaskCharacteristicDAO(CairisDAO):
 
 
   def update_task_characteristic(self,tc,name):
-    found_tc = self.get_task_characteristic(name)
     tcParams = TaskCharacteristicParameters(
       pName=tc.theTaskName,
       modQual=tc.theModQual,
@@ -94,17 +89,18 @@ class TaskCharacteristicDAO(CairisDAO):
       pcBacking=[],
       pcRebuttal=tc.theRebuttal)
 
-    tcParams.setId(found_tc.theId)
     try:
+      tcId = self.db_proxy.getDimensionId(name,'task_characteristic')
+      tcParams.setId(tcId)
       self.db_proxy.updateTaskCharacteristic(tcParams)
     except ARMException as ex:
       self.close()
       raise ARMHTTPError(ex)
 
   def delete_task_characteristic(self, name):
-    tc = self.get_task_characteristic(name)
     try:
-      self.db_proxy.deleteTaskCharacteristic(tc.theId)
+      tcId = self.db_proxy.getDimensionId(name,'task_characteristic')
+      self.db_proxy.deleteTaskCharacteristic(tcId)
     except ARMException as ex:
       self.close()
       raise ARMHTTPError(ex)

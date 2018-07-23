@@ -33,11 +33,6 @@ class TemplateGoalDAO(CairisDAO):
     CairisDAO.__init__(self, session_id)
 
   def get_template_goals(self,constraint_id = -1):
-    """
-    :rtype: dict[str,TemplateGoal]
-    :return
-    :raise ARMHTTPError:
-    """
     try:
       tgs = self.db_proxy.getTemplateGoals(constraint_id)
     except DatabaseProxyException as ex:
@@ -46,6 +41,11 @@ class TemplateGoalDAO(CairisDAO):
     except ARMException as ex:
       self.close()
       raise ARMHTTPError(ex)
+
+    for key in tgs:
+      tg = tgs[key]
+      del tg.theId
+      tgs[key] = tg
     return tgs
 
   def get_template_goal(self, template_goal_name):
@@ -74,24 +74,25 @@ class TemplateGoalDAO(CairisDAO):
       raise ARMHTTPError(ex)
 
   def update_template_goal(self,tg,name):
-    found_tg = self.get_template_goal(name)
     tgParams = TemplateGoalParameters(
       goalName=tg.theName,
       goalDef=tg.theDefinition,
       goalRat=tg.theRationale,
       goalConcerns=tg.theConcerns,
       goalResp=tg.theResponsibilities)
-    tgParams.setId(found_tg.theId)
+
     try:
+      tgId = self.db_proxy.getDimensionId(name,'template_goal')
+      tgParams.setId(tgId)
       self.db_proxy.updateTemplateGoal(tgParams)
     except ARMException as ex:
       self.close()
       raise ARMHTTPError(ex)
 
   def delete_template_goal(self, name):
-    tg = self.get_template_goal(name)
     try:
-      self.db_proxy.deleteTemplateGoal(tg.theId)
+      tgId = self.db_proxy.getDimensionId(name,'template_goal')
+      self.db_proxy.deleteTemplateGoal(tgId)
     except ARMException as ex:
       self.close()
       raise ARMHTTPError(ex)

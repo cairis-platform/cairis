@@ -33,11 +33,6 @@ class ConceptReferenceDAO(CairisDAO):
     CairisDAO.__init__(self, session_id)
 
   def get_concept_references(self,constraint_id = -1):
-    """
-    :rtype: dict[str,ConceptReference]
-    :return
-    :raise ARMHTTPError:
-    """
     try:
       crs = self.db_proxy.getConceptReferences(constraint_id)
     except DatabaseProxyException as ex:
@@ -46,6 +41,11 @@ class ConceptReferenceDAO(CairisDAO):
     except ARMException as ex:
       self.close()
       raise ARMHTTPError(ex)
+
+    for key in crs:
+      cr = crs[key]
+      del cr.theId
+      crs[key] = cr
 
     return crs
 
@@ -75,14 +75,14 @@ class ConceptReferenceDAO(CairisDAO):
 
 
   def update_concept_reference(self,cr,name):
-    found_cr = self.get_concept_reference(name)
     crParams = ConceptReferenceParameters(
       refName=cr.theName,
       dimName=cr.theDimName,
       objtName=cr.theObjtName,
       cDesc=cr.theDescription)
-    crParams.setId(found_cr.theId)
     try:
+      crId = self.db_proxy.getDimensionId(name,'concept_reference')
+      crParams.setId(crId)
       self.db_proxy.updateConceptReference(crParams)
     except ARMException as ex:
       self.close()
@@ -91,7 +91,8 @@ class ConceptReferenceDAO(CairisDAO):
   def delete_concept_reference(self, name):
     cr = self.get_concept_reference(name)
     try:
-      self.db_proxy.deleteConceptReference(cr.theId,cr.dimension())
+      crId = self.db_proxy.getDimensionId(name,'concept_reference')
+      self.db_proxy.deleteConceptReference(crId,cr.dimension())
     except ARMException as ex:
       self.close()
       raise ARMHTTPError(ex)

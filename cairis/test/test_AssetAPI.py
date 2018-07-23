@@ -96,9 +96,9 @@ class AssetAPITests(CairisDaemonTestCase):
     self.assertIsNotNone(assets, 'No results after deserialization')
     self.assertIsInstance(assets, dict, 'The result is not a dictionary as expected')
     self.assertGreater(len(assets), 0, 'No assets in the dictionary')
-    self.assertIsInstance(list(assets.values())[0], Asset)
+    self.assertIsInstance(list(assets.values())[0], dict)
     self.logger.info('[%s] Assets found: %d', method, len(assets))
-    self.logger.info('[%s] First asset: %s\n', method, list(assets.values())[0].theName)
+    self.logger.info('[%s] First asset: %s\n', method, list(assets.values())[0]['theName'])
 
   def test_get_all_summary(self):
     method = 'test_get_all_summary'
@@ -109,9 +109,9 @@ class AssetAPITests(CairisDaemonTestCase):
       assets = json_deserialize(rv.data)
     self.assertIsNotNone(assets, 'No results after deserialization')
     self.assertGreater(len(assets), 0, 'No asset summaries')
-    self.assertIsInstance(assets[0], ObjectSummary)
+    self.assertIsInstance(assets[0], dict)
     self.logger.info('[%s] Assets found: %d', method, len(assets))
-    self.logger.info('[%s] First asset summary: %s [%d]\n', method, assets[0].theName, assets[0].theType)
+    self.logger.info('[%s] First asset summary: %s [%d]\n', method, assets[0]['theName'], assets[0]['theType'])
 
   def test_post(self):
     method = 'test_post_new'
@@ -129,7 +129,7 @@ class AssetAPITests(CairisDaemonTestCase):
       asset = json_deserialize(rv.data.decode('utf-8'))
     else:
       asset = json_deserialize(rv.data)
-    self.logger.info('[%s] Asset: %s\n', method, asset.theName)
+    self.logger.info('[%s] Asset: %s\n', method, asset['theName'])
 
   def test_get_name(self):
     method = 'test_get_name'
@@ -140,8 +140,8 @@ class AssetAPITests(CairisDaemonTestCase):
     else:
       asset = json_deserialize(rv.data)
     self.assertIsNotNone(asset, 'No results after deserialization')
-    self.assertIsInstance(asset, Asset, 'The result is not an asset as expected')
-    self.logger.info('[%s] Asset: %s\n', method, asset.theName)
+    self.assertIsInstance(asset, dict, 'The result is not a dict as expected')
+    self.logger.info('[%s] Asset: %s\n', method, asset['theName'])
 
   def test_put_name(self):
     method = 'test_put_name'
@@ -171,7 +171,7 @@ class AssetAPITests(CairisDaemonTestCase):
       asset = json_deserialize(rv.data.decode('utf-8'))
     else:
       asset = json_deserialize(rv.data)
-    self.logger.info('[%s] Asset: %s\n', method, asset.name)
+    self.logger.info('[%s] Asset: %s\n', method, asset['theName'])
 
   def test_delete_name(self):
     method = 'test_delete_name'

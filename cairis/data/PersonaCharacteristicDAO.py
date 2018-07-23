@@ -36,11 +36,6 @@ class PersonaCharacteristicDAO(CairisDAO):
     CairisDAO.__init__(self, session_id)
 
   def get_persona_characteristics(self,constraint_id = -1,simplify=True):
-    """
-    :rtype: dict[str,PersonaCharacteristic]
-    :return
-    :raise ARMHTTPError:
-    """
     try:
       pcs = self.db_proxy.getPersonaCharacteristics(constraint_id)
     except DatabaseProxyException as ex:
@@ -52,6 +47,7 @@ class PersonaCharacteristicDAO(CairisDAO):
 
     if simplify:
       for key, value in list(pcs.items()):
+        del value.theId
         pcs[key] = self.convert_pcrs(real_pc=value) 
         pName,bvName,pcDesc = key.split('/')
         cs = self.db_proxy.getCharacteristicSynopsis(pcDesc)
@@ -100,7 +96,6 @@ class PersonaCharacteristicDAO(CairisDAO):
 
 
   def update_persona_characteristic(self,pc,name):
-    found_pc = self.get_persona_characteristic(name)
     pcParams = PersonaCharacteristicParameters(
       pName=pc.thePersonaName,
       modQual=pc.theModQual,
@@ -110,17 +105,18 @@ class PersonaCharacteristicDAO(CairisDAO):
       pcWarrant=pc.theWarrant,
       pcBacking=[],
       pcRebuttal=pc.theRebuttal)
-    pcParams.setId(found_pc.theId)
     try:
+      pcId = self.db_proxy.getDimensionId(name,'persona_characteristic')
+      pcParams.setId(pcId)
       self.db_proxy.updatePersonaCharacteristic(pcParams)
     except ARMException as ex:
       self.close()
       raise ARMHTTPError(ex)
 
   def delete_persona_characteristic(self, name):
-    pc = self.get_persona_characteristic(name)
     try:
-      self.db_proxy.deletePersonaCharacteristic(pc.theId)
+      pcId = self.db_proxy.getDimensionId(name,'persona_characteristic')
+      self.db_proxy.deletePersonaCharacteristic(pcId)
     except ARMException as ex:
       self.close()
       raise ARMHTTPError(ex)
@@ -177,39 +173,39 @@ class PersonaCharacteristicDAO(CairisDAO):
       pcr_list = []
       ps = None
       fcs = fake_pc.theCharacteristicSynopsis
-      if (fcs.theSynopsis != ""):
-        ps = ReferenceSynopsis(-1,fake_pc.theCharacteristic,fcs.theSynopsis,fcs.theDimension,fcs.theActorType,fcs.theActor)
+      if (fcs['theSynopsis'] != ""):
+        ps = ReferenceSynopsis(-1,fake_pc.theCharacteristic,fcs['theSynopsis'],fcs['theDimension'],fcs['theActorType'],fcs['theActor'])
       rss = []
       rcs = []
       
       if len(fake_pc.theGrounds) > 0:
         for pcr in fake_pc.theGrounds:
-          pcr_list.append((pcr.theReferenceName,pcr.theReferenceDescription,pcr.theDimensionName))
+          pcr_list.append((pcr['theReferenceName'],pcr['theReferenceDescription'],pcr['theDimensionName']))
           if (ps != None):
-            frs = pcr.theReferenceSynopsis
-            rss.append(ReferenceSynopsis(-1,pcr.theReferenceName,frs['theSynopsis'],frs['theDimension'],frs['theActorType'],frs['theActor']))
-            frc = pcr.theReferenceContribution
-            rcs.append(ReferenceContribution(frs['theSynopsis'],fcs.theSynopsis,frc['theMeansEnd'],frc['theContribution']))
+            frs = pcr['theReferenceSynopsis']
+            rss.append(ReferenceSynopsis(-1,pcr['theReferenceName'],frs['theSynopsis'],frs['theDimension'],frs['theActorType'],frs['theActor']))
+            frc = pcr['theReferenceContribution']
+            rcs.append(ReferenceContribution(frs['theSynopsis'],fcs['theSynopsis'],frc['theMeansEnd'],frc['theContribution']))
         fake_pc.theGrounds = pcr_list
       if len(fake_pc.theWarrant) > 0:
         pcr_list = []
         for pcr in fake_pc.theWarrant:
-          pcr_list.append((pcr.theReferenceName,pcr.theReferenceDescription,pcr.theDimensionName))
+          pcr_list.append((pcr['theReferenceName'],pcr['theReferenceDescription'],pcr['theDimensionName']))
           if (ps != None):
-            frs = pcr.theReferenceSynopsis
-            rss.append(ReferenceSynopsis(-1,pcr.theReferenceName,frs['theSynopsis'],frs['theDimension'],frs['theActorType'],frs['theActor']))
-            frc = pcr.theReferenceContribution
-            rcs.append(ReferenceContribution(frs['theSynopsis'],fcs.theSynopsis,frc['theMeansEnd'],frc['theContribution']))
+            frs = pcr['theReferenceSynopsis']
+            rss.append(ReferenceSynopsis(-1,pcr['theReferenceName'],frs['theSynopsis'],frs['theDimension'],frs['theActorType'],frs['theActor']))
+            frc = pcr['theReferenceContribution']
+            rcs.append(ReferenceContribution(frs['theSynopsis'],fcs['theSynopsis'],frc['theMeansEnd'],frc['theContribution']))
         fake_pc.theWarrant = pcr_list
       if len(fake_pc.theRebuttal) > 0:
         pcr_list = []
         for pcr in fake_pc.theRebuttal:
-          pcr_list.append((pcr.theReferenceName,pcr.theReferenceDescription,pcr.theDimensionName))
+          pcr_list.append((pcr['theReferenceName'],pcr['theReferenceDescription'],pcr['theDimensionName']))
           if (ps != None):
-            frs = pcr.theReferenceSynopsis
-            rss.append(ReferenceSynopsis(-1,pcr.theReferenceName,frs['theSynopsis'],frs['theDimension'],frs['theActorType'],frs['theActor']))
-            frc = pcr.theReferenceContribution
-            rcs.append(ReferenceContribution(frs['theSynopsis'],fcs.theSynopsis,frc['theMeansEnd'],frc['theContribution']))
+            frs = pcr['theReferenceSynopsis']
+            rss.append(ReferenceSynopsis(-1,pcr['theReferenceName'],frs['theSynopsis'],frs['theDimension'],frs['theActorType'],frs['theActor']))
+            frc = pcr['theReferenceContribution']
+            rcs.append(ReferenceContribution(frs['theSynopsis'],fcs['theSynopsis'],frc['theMeansEnd'],frc['theContribution']))
         fake_pc.theRebuttal = pcr_list
       return fake_pc,ps,rss,rcs
 

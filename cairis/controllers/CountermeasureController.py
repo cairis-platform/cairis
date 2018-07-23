@@ -53,10 +53,10 @@ class CountermeasuresAPI(Resource):
 
     dao = CountermeasureDAO(session_id)
     new_countermeasure = dao.from_json(request)
-    countermeasure_id = dao.add_countermeasure(new_countermeasure)
+    dao.add_countermeasure(new_countermeasure)
     dao.close()
 
-    resp_dict = {'message': 'Countermeasure successfully added', 'countermeasure_id': countermeasure_id}
+    resp_dict = {'message': 'Countermeasure successfully added'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp

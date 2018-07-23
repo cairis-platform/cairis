@@ -183,6 +183,18 @@ class GoalAssociationByNameAPI(Resource):
     resp.contenttype = 'application/json'
     return resp
 
+  def put(self,environment_name,goal_name,subgoal_name):
+    session_id = get_session_id(session, request)
+    dao = GoalAssociationDAO(session_id)
+    assoc = dao.from_json(request)
+    dao.update_goal_association(assoc,unquote(environment_name),unquote(goal_name),unquote(subgoal_name))
+    dao.close()
+
+    resp_dict = {'message': 'Goal Association successfully updated'}
+    resp = make_response(json_serialize(resp_dict), OK)
+    resp.contenttype = 'application/json'
+    return resp
+
 class GoalAssociationAPI(Resource):
 
   def post(self):
@@ -198,17 +210,6 @@ class GoalAssociationAPI(Resource):
     resp.contenttype = 'application/json'
     return resp
 
-  def put(self):
-    session_id = get_session_id(session, request)
-    dao = GoalAssociationDAO(session_id)
-    assoc = dao.from_json(request)
-    dao.update_goal_association(assoc)
-    dao.close()
-
-    resp_dict = {'message': 'Goal Association successfully updated'}
-    resp = make_response(json_serialize(resp_dict), OK)
-    resp.contenttype = 'application/json'
-    return resp
 
 class GoalsSummaryAPI(Resource):
 

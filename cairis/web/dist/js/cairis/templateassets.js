@@ -380,7 +380,9 @@ function templateAssetFormToJSON(data){
 }
 
 function putTemplateAssetForm(data){
-  putTemplateAsset(templateAssetFormToJSON(data));
+  var json =  JSON.parse($.session.get("TemplateAsset"));
+  var oldName = json['theName'];
+  putTemplateAsset(oldName,templateAssetFormToJSON(data));
 }
 
 function postTemplateAssetForm(data,callback){
@@ -392,8 +394,8 @@ function postTemplateAssetForm(data,callback){
   postTemplateAsset(asobject,callback);
 }
 
-function putTemplateAsset(json){
-  var ursl = serverIP + "/api/template_assets/name/"+ encodeURIComponent(json.theName) + "?session_id=" + String($.session.get('sessionID'));
+function putTemplateAsset(oldName,json){
+  var ursl = serverIP + "/api/template_assets/name/"+ encodeURIComponent(oldName) + "?session_id=" + String($.session.get('sessionID'));
   var output = {};
   output.object = json;
   output = JSON.stringify(output);

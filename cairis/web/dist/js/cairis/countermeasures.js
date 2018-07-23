@@ -208,7 +208,7 @@ $(document).on("click", "#addNewCountermeasure", function () {
         $("#UpdateCountermeasure").text("Create");
         $("#editCountermeasureOptionsForm").addClass("new");
         $.session.set("Countermeasure", JSON.stringify(jQuery.extend(true, {},countermeasureDefault )));
-        $("#Properties").hide();
+        $("#cmtabsID").hide();
       });
     }
   });
@@ -256,6 +256,7 @@ mainContent.on("click", ".countermeasuresEnvironments", function () {
           appendCountermeasureProperty(prop);
         }
       });
+      $("#cmtabsID").show("fast");
     }
   });
 });
@@ -620,7 +621,7 @@ function addCountermeasureEnvironment() {
   $(document).find(".countermeasuresEnvironments").each(function () {
     if($(this).text() == text) {
       $(this).trigger("click");
-      $("#Properties").show("fast");
+      $("#cmtabsID").show("fast");
       $('#chooseEnvironment').modal('hide');
     }
   });
@@ -634,6 +635,7 @@ function commitCountermeasure() {
   else {
     var oldName = cm.theName;
     cm.theName = $("#theName").val();
+    cm.theDescription = $("#theDescription").val();
 
     if ($('#theTags').val() != '') {
       cm.theTags = $('#theTags').val().split(',').map(function(t){return t.trim();});
@@ -672,7 +674,7 @@ mainContent.on('click', ".deleteCountermeasureEnv", function () {
         UIenv.find(".countermeasuresEnvironments:first").trigger('click');
       }
       else {
-        $("#Properties").hide("fast");
+        $("#cmtabsID").hide("fast");
       }
       return false;
     }

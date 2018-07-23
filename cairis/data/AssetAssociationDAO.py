@@ -41,16 +41,24 @@ class AssetAssociationDAO(CairisDAO):
       envName,headName,tailName = key.split('/')
       if (envName == environment_name) and (((headName == head_name) and (tailName == tail_name)) or ((headName == tail_name) and (tailName == head_name))):
         assoc = assocs[key]
+        del assoc.theId
         return assoc 
     self.close()
     raise ObjectNotFoundHTTPError('The provided asset association parameters')
 
   def get_asset_associations(self):
     try:
-      return self.db_proxy.getClassAssociations()
+      cas = self.db_proxy.getClassAssociations()
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)
+
+    for key in cas:
+      ca = cas[key]
+      del ca.theId
+      cas[key] = ca
+
+    return cas
 
   def add_asset_association(self, assoc):
     assocParams = ClassAssociationParameters(
@@ -76,9 +84,6 @@ class AssetAssociationDAO(CairisDAO):
 
 
   def update_asset_association(self,oldEnvName,oldHeadAsset,oldTailAsset,assoc):
-    old_assoc = self.get_asset_association(oldEnvName,oldHeadAsset,oldTailAsset)
-    id = old_assoc.theId
-    
     assocParams = ClassAssociationParameters(
       envName=assoc.theEnvironmentName,
       headName=assoc.theHeadAsset,
@@ -94,17 +99,18 @@ class AssetAssociationDAO(CairisDAO):
       tailDim=assoc.theTailDim,
       tailName=assoc.theTailAsset,
       rationale=assoc.theRationale)
-    assocParams.setId(id)
     try:
+      caId = self.db_proxy.getDimensionId(oldEnvName + '/' + oldHeadAsset + '/' + oldTailAsset,'classassociation')
+      assocParams.setId(caId)
       self.db_proxy.updateClassAssociation(assocParams)
     except ARMException as ex:
       self.close()
       raise ARMHTTPError(ex)
 
   def delete_asset_association(self, environment_name, head_name, tail_name):
-    assoc = self.get_asset_association(environment_name,head_name,tail_name)
     try:
-      self.db_proxy.deleteClassAssociation(assoc.theId)
+      caId = self.db_proxy.getDimensionId(environment_name + '/' + head_name + '/' + tail_name,'classassociation')
+      self.db_proxy.deleteClassAssociation(caId)
     except ARMException as ex:
       self.close()
       raise ARMHTTPError(ex)

@@ -138,7 +138,8 @@ class RiskDAO(CairisDAO):
     found_risk = self.get_risk_by_name(name)
 
     try:
-      self.db_proxy.deleteRisk(found_risk.theId)
+      riskId = self.db_proxy.getDimensionId(name,'risk')
+      self.db_proxy.deleteRisk(riskId)
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)
@@ -156,8 +157,7 @@ class RiskDAO(CairisDAO):
     params = RiskParameters(riskName=risk.name(),threatName=risk.threat(),vulName=risk.vulnerability(),mc=risk.misuseCase(),rTags=risk.tags())
 
     try:
-      risk_id = self.db_proxy.addRisk(params)
-      return risk_id
+      self.db_proxy.addRisk(params)
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)
@@ -166,14 +166,10 @@ class RiskDAO(CairisDAO):
       raise ARMHTTPError(ex)
 
   def update_risk(self, risk_name, risk):
-    found_risk = self.get_risk_by_name(risk_name)
-    found_mc = self.get_misuse_case_by_risk_name(risk_name)
-    risk.theMisuseCase.theId = found_mc.theId
-
     params = RiskParameters(riskName=risk.theName,threatName=risk.theThreatName,vulName=risk.theVulnerabilityName,mc=risk.theMisuseCase,rTags=risk.theTags)
-    params.setId(found_risk.theId)
-
     try:
+      riskId = self.db_proxy.getDimensionId(risk_name,'risk')
+      params.setId(riskId)
       self.db_proxy.updateRisk(params)
     except DatabaseProxyException as ex:
       self.close()
@@ -233,10 +229,9 @@ class RiskDAO(CairisDAO):
     
 
   def get_misuse_case_by_risk_name(self, risk_name, simplify=True):
-    found_risk = self.get_risk_by_name(risk_name, skip_misuse=True)
-
     try:
-      misuse_case = self.db_proxy.riskMisuseCase(found_risk.theId)
+      riskId = self.db_proxy.getDimensionId(risk_name,'risk')
+      misuse_case = self.db_proxy.riskMisuseCase(riskId)
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)
@@ -486,11 +481,12 @@ class RiskDAO(CairisDAO):
     elif isinstance(obj, MisuseCase):
       misuse_case = obj
 
-    misuse_case.theEnvironmentDictionary = {}
-    delattr(misuse_case, 'theEnvironmentDictionary')
+    del misuse_case.theEnvironmentDictionary
+    del misuse_case.theId
 
     if isinstance(obj, Risk):
       obj.theMisuseCase = misuse_case
+      del obj.theId
     elif isinstance(obj, MisuseCase):
       obj = misuse_case
 

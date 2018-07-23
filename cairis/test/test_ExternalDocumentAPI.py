@@ -69,7 +69,7 @@ class ExternalDocumentAPITests(CairisDaemonTestCase):
     self.assertGreater(len(edocs), 0, 'No external documents in the dictionary')
     self.logger.info('[%s] External documents found: %d', method, len(edocs))
     edoc = list(edocs.values())[0]
-    self.logger.info('[%s] First external document: %s [%d]\n', method, edoc['theName'], edoc['theId'])
+    self.logger.info('[%s] First external document: %s\n', method, edoc['theName'])
 
   def test_get_by_name(self):
     method = 'test_get_by_name'
@@ -83,7 +83,7 @@ class ExternalDocumentAPITests(CairisDaemonTestCase):
     self.logger.debug('[%s] Response data: %s', method, responseData)
     edoc = jsonpickle.decode(responseData)
     self.assertIsNotNone(edoc, 'No results after deserialization')
-    self.logger.info('[%s] External document: %s [%d]\n', method, edoc['theName'], edoc['theId'])
+    self.logger.info('[%s] External document: %s\n', method, edoc['theName'])
 
   def test_post(self):
     method = 'test_post_new'

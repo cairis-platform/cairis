@@ -91,7 +91,7 @@ class LocationsAPITests(CairisDaemonTestCase):
     self.assertGreater(len(locs), 0, 'No Locations in the dictionary')
     self.logger.info('[%s] Locations found: %d', method, len(locs))
     locs = list(locs.values())[0]
-    self.logger.info('[%s] First locations: %s [%d]\n', method, locs['theName'], locs['theId'])
+    self.logger.info('[%s] First locations: %s\n', method, locs['theName'])
 
   def test_get_by_name(self):
     method = 'test_get_by_name'
@@ -105,7 +105,7 @@ class LocationsAPITests(CairisDaemonTestCase):
     self.logger.debug('[%s] Response data: %s', method, responseData)
     locs = jsonpickle.decode(responseData)
     self.assertIsNotNone(locs, 'No results after deserialization')
-    self.logger.info('[%s] Locations: %s [%d]\n', method, locs['theName'], locs['theId'])
+    self.logger.info('[%s] Locations: %s\n', method, locs['theName'])
 
   def test_post(self):
     method = 'test_post_new'

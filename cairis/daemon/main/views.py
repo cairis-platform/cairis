@@ -324,7 +324,6 @@ api.add_resource(PersonaController.PersonaByNameAPI, '/api/personas/name/<string
 api.add_resource(PersonaController.PersonaModelByNameAPI, '/api/personas/model/name/<string:persona>/variable/<string:variable>/characteristic/<string:characteristic>',endpoint='persona_model')
 api.add_resource(PersonaController.PersonaCharacteristicsByNameAPI, '/api/personas/characteristics/name/<string:persona>/variable/<string:variable>/characteristic/<string:characteristic>',endpoint='persona_characteristic_persona')
 api.add_resource(PersonaController.PersonaTypesAPI, '/api/personas/types',endpoint='persona_types')
-api.add_resource(PersonaController.PersonaEnvironmentPropertiesAPI, '/api/personas/name/<string:persona_name>/properties','/persona_environment_properties',endpoint='persona_environment_properties')
 
 # Persona Characteristic routes
 api.add_resource(PersonaCharacteristicController.PersonaCharacteristicsAPI, '/api/persona_characteristics',endpoint='persona_characteristics')
@@ -377,7 +376,6 @@ api.add_resource(RiskLevelController.RiskThreatLevelByEnvironmentAPI, '/api/risk
 # Role routes
 api.add_resource(RoleController.RolesAPI, '/api/roles',endpoint='roles')
 api.add_resource(RoleController.RolesByNameAPI, '/api/roles/name/<string:name>',endpoint='role')
-api.add_resource(RoleController.RolesByIdAPI, '/api/roles/id/<int:id>',endpoint='roles_id')
 api.add_resource(RoleController.RoleEnvironmentPropertiesAPI, '/api/roles/name/<string:name>/properties',endpoint='role_properties')
 
 # Security pattern routes
@@ -416,7 +414,6 @@ api.add_resource(TemplateRequirementController.TemplateRequirementByNameAPI, '/a
 # Threat routes
 api.add_resource(ThreatController.ThreatAPI, '/api/threats',endpoint='threats')
 api.add_resource(ThreatController.ThreatsSummaryAPI, '/api/threats/summary',endpoint='threatssummary')
-api.add_resource(ThreatController.ThreatByIdAPI, '/api/threats/id/<int:id>',endpoint='threat_id')
 api.add_resource(ThreatController.ThreatByNameAPI, '/api/threats/name/<string:name>',endpoint='threat')
 api.add_resource(ThreatController.ThreatTypesAPI, '/api/threats/types',endpoint='threat_types')
 api.add_resource(ThreatController.ThreatTypeByNameAPI, '/api/threats/types/name/<string:name>',endpoint='threat_type')

@@ -141,7 +141,6 @@ class UseCaseDAO(CairisDAO):
       raise ARMHTTPError(ex)
 
   def update_usecase(self, usecase, name):
-    found_usecase = self.get_usecase_by_name(name, simplify=False)
     usecase_params = UseCaseParameters(
       ucName=usecase.name(),
       ucAuth=usecase.author(),
@@ -151,9 +150,9 @@ class UseCaseDAO(CairisDAO):
       tags=usecase.tags(),
       cProps=usecase.environmentProperties()
     )
-    usecase_params.setId(found_usecase.id())
-
     try:
+      ucId = self.db_proxy.getDimensionId(name,'usecase')
+      usecase_params.setId(ucId)
       self.db_proxy.updateUseCase(usecase_params)
     except DatabaseProxyException as ex:
       self.close()
@@ -163,11 +162,9 @@ class UseCaseDAO(CairisDAO):
       raise ARMHTTPError(ex)
 
   def delete_usecase(self, name):
-    found_usecase = self.get_usecase_by_name(name, simplify=False)
-    usecase_id = found_usecase.id()
-
     try:
-      self.db_proxy.deleteUseCase(usecase_id)
+      ucId = self.db_proxy.getDimensionId(name,'usecase')
+      self.db_proxy.deleteUseCase(ucId)
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)
@@ -248,9 +245,8 @@ class UseCaseDAO(CairisDAO):
 
   def simplify(self, obj):
     assert isinstance(obj, UseCase)
-    obj.theEnvironmentDictionary = {}
-
-    delattr(obj, 'theEnvironmentDictionary')
+    del obj.theId
+    del obj.theEnvironmentDictionary
     obj.theEnvironmentProperties = self.convert_props(real_props=obj.theEnvironmentProperties)
     return obj
 

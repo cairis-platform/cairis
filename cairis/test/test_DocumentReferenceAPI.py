@@ -68,7 +68,7 @@ class DocumentReferenceAPITests(CairisDaemonTestCase):
     self.assertGreater(len(drs), 0, 'No document references in the dictionary')
     self.logger.info('[%s] Document references found: %d', method, len(drs))
     dr = list(drs.values())[0]
-    self.logger.info('[%s] First document reference: %s [%d]\n', method, dr['theName'], dr['theId'])
+    self.logger.info('[%s] First document reference: %s\n', method, dr['theName'])
 
   def test_get_by_name(self):
     method = 'test_get_by_name'
@@ -82,7 +82,7 @@ class DocumentReferenceAPITests(CairisDaemonTestCase):
     self.logger.debug('[%s] Response data: %s', method, responseData)
     dr = jsonpickle.decode(responseData)
     self.assertIsNotNone(dr, 'No results after deserialization')
-    self.logger.info('[%s] Document reference: %s [%d]\n', method, dr['theName'], dr['theId'])
+    self.logger.info('[%s] Document reference: %s\n', method, dr['theName'])
 
   def test_post(self):
     method = 'test_post_new'

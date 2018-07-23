@@ -72,7 +72,7 @@ class TaskCharacteristicAPITests(CairisDaemonTestCase):
     self.assertGreater(len(tcs), 0, 'No task characteristics in the dictionary')
     self.logger.info('[%s] Task characteristics found: %d', method, len(tcs))
     tc = list(tcs.values())[0]
-    self.logger.info('[%s] First task characteristic: %s [%d]\n', method, tc['theCharacteristic'], tc['theId'])
+    self.logger.info('[%s] First task characteristic: %s\n', method, tc['theCharacteristic'])
 
   def test_get_by_name(self):
     method = 'test_get_by_name'
@@ -86,7 +86,7 @@ class TaskCharacteristicAPITests(CairisDaemonTestCase):
     self.logger.debug('[%s] Response data: %s', method, responseData)
     tc = jsonpickle.decode(responseData)
     self.assertIsNotNone(tc, 'No results after deserialization')
-    self.logger.info('[%s] Task characteristic: %s [%d]\n', method, tc['theCharacteristic'], tc['theId'])
+    self.logger.info('[%s] Task characteristic: %s\n', method, tc['theCharacteristic'])
 
   def test_post(self):
     method = 'test_post_new'

@@ -49,41 +49,9 @@ class RolesAPI(Resource):
     session_id = get_session_id(session, request)
     dao = RoleDAO(session_id)
     new_role = dao.from_json(request)
-    role_id = dao.add_role(new_role)
+    dao.add_role(new_role)
     dao.close()
-    resp_dict = {'role_id': role_id}
-    resp = make_response(json_serialize(resp_dict, session_id=session_id), OK)
-    resp.contenttype = 'application/json'
-    return resp
-
-class RolesByIdAPI(Resource):
-
-  def get(self, id):
-    session_id = get_session_id(session, request)
-    dao = RoleDAO(session_id)
-    found_role = dao.get_role_by_id(id)
-    dao.close()
-    resp = make_response(json_serialize(found_role, session_id=session_id))
-    resp.headers['Content-Type'] = "application/json"
-    return resp
-
-  def put(self, id):
-    session_id = get_session_id(session, request)
-    dao = RoleDAO(session_id)
-    upd_role = dao.from_json(request)
-    dao.update_role(upd_role, role_id=id)
-    dao.close()
-    resp_dict = {'message': 'Update successful'}
-    resp = make_response(json_serialize(resp_dict, session_id=session_id), OK)
-    resp.contenttype = 'application/json'
-    return resp
-
-  def delete(self, id):
-    session_id = get_session_id(session, request)
-    dao = RoleDAO(session_id)
-    dao.delete_role(role_id=id)
-    dao.close()
-    resp_dict = {'message': 'Role successfully deleted'}
+    resp_dict = {'message': 'Add successful'}
     resp = make_response(json_serialize(resp_dict, session_id=session_id), OK)
     resp.contenttype = 'application/json'
     return resp
