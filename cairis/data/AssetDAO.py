@@ -545,8 +545,8 @@ class AssetDAO(CairisDAO):
     del asset.theId
     asset.theInterfaces = self.convert_ifs(real_ifs=asset.theInterfaces)
     asset.theEnvironmentProperties = self.convert_props(real_props=asset.theEnvironmentProperties)
-    asset.theEnvironmentDictionary = {}
-    asset.theAssetPropertyDictionary = {}
+    del asset.theEnvironmentDictionary
+    del asset.theAssetPropertyDictionary
     return asset
 
   def get_asset_association(self, environment_name, head_name, tail_name):
