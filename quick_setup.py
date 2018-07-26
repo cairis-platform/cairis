@@ -64,6 +64,8 @@ class CAIRISDatabaseConfigurationForm(np.ActionForm):
     try:
       if (len(self.theUsername.value) > 255):
         raise ARMException("Username cannot be longer than 255 characters")
+      if (self.theUsername.value == "root"):
+        raise ARMException("Username cannot be root")
       self.createUserDatabase()
       self.createCairisCnf()
       os.environ["CAIRIS_CFG"] = str(self.theFileName.value)
