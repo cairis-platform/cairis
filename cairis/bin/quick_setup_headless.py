@@ -48,6 +48,6 @@ if __name__ == '__main__':
     from cairis.core.ARM import ARMException
     main()
   except ARMException as e:
-    print('Fatal cimport error: ' + str(e))
+    print('Fatal setup error: ' + str(e))
     sys.exit(-1)
 
