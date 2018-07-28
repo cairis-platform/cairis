@@ -66,7 +66,7 @@ def createUserDatabase(dbHost,dbPort,dbRootPassword,rootDir):
   try:
     dropUserDbSql = "drop database if exists cairis_user"
     rootCursor.execute(dropUserDbSql)
-  except _mysql_exceptions.DatabaseError e:
+  except _mysql_exceptions.DatabaseError as e:
     id,msg = e
     exceptionText = 'MySQL error removing existing cairis_user database (id: ' + str(id) + ', message: ' + msg
     raise ARMException(exceptionText)
@@ -78,7 +78,7 @@ def createUserDatabase(dbHost,dbPort,dbRootPassword,rootDir):
   try:
     createUserDbSql = "create database if not exists cairis_user"
     rootCursor.execute(createUserDbSql)
-  except _mysql_exceptions.DatabaseError e:
+  except _mysql_exceptions.DatabaseError as e:
     id,msg = e
     exceptionText = 'MySQL error creating cairis_user database (id: ' + str(id) + ', message: ' + msg
     raise ARMException(exceptionText)
