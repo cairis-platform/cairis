@@ -51,6 +51,8 @@ class ProjectDAO(CairisDAO):
     try:
       if (db_name in ['null','']):
         raise ARMException('No database name defined')
+      if (db_name not in self.show_databases()):
+        raise ARMException(db_name + ' does not exist')
       self.db_proxy.openDatabase(db_name,self.session_id)
     except DatabaseProxyException as ex:
       raise ARMHTTPError(ex)
@@ -61,6 +63,8 @@ class ProjectDAO(CairisDAO):
     try:
       if (db_name in ['null','']):
         raise ARMException('No database name defined')
+      if (db_name not in self.show_databases()):
+        raise ARMException(db_name + ' does not exist')
       self.db_proxy.deleteDatabase(db_name,self.session_id)
     except DatabaseProxyException as ex:
       raise ARMHTTPError(ex)
