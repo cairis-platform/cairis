@@ -39,6 +39,8 @@ class ProjectDAO(CairisDAO):
 
   def create_new_database(self,db_name):
     try:
+      if (db_name in ['null','']):
+        raise ARMException('No database name defined')
       self.db_proxy.createDatabase(db_name,self.session_id)
     except DatabaseProxyException as ex:
       raise ARMHTTPError(ex)
@@ -47,6 +49,8 @@ class ProjectDAO(CairisDAO):
 
   def open_database(self,db_name):
     try:
+      if (db_name in ['null','']):
+        raise ARMException('No database name defined')
       self.db_proxy.openDatabase(db_name,self.session_id)
     except DatabaseProxyException as ex:
       raise ARMHTTPError(ex)
@@ -55,6 +59,8 @@ class ProjectDAO(CairisDAO):
 
   def delete_database(self,db_name):
     try:
+      if (db_name in ['null','']):
+        raise ARMException('No database name defined')
       self.db_proxy.deleteDatabase(db_name,self.session_id)
     except DatabaseProxyException as ex:
       raise ARMHTTPError(ex)

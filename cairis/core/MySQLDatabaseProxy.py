@@ -18,6 +18,7 @@
 
 from .Borg import Borg
 import MySQLdb
+from sqlalchemy.exc import OperationalError
 from . import RequirementFactory
 from .Environment import Environment
 from .ARM import *
@@ -134,6 +135,9 @@ def createDatabaseAccount(rPasswd,dbHost,dbPort,dbUser,dbPasswd):
       rootCursor.execute(stmt)
     rootCursor.close()
     rootConn.close()
+  except OperationalError as e:
+    exceptionText = 'MySQL error creating database account ' + dbUser + ' (message:' + format(e) + ')'
+    raise DatabaseProxyException(exceptionText) 
   except _mysql_exceptions.DatabaseError as e:
     id,msg = e
     exceptionText = 'MySQL error creating database account ' + dbUser + ' (id:' + str(id) + ',message:' + msg
@@ -154,6 +158,11 @@ def createDatabaseAndPrivileges(rPasswd,dbHost,dbPort,dbUser,dbPasswd,dbName):
       rootCursor.execute(stmt)
     rootCursor.close()
     rootConn.close()
+  except OperationalError as e:
+    exceptionText = 'MySQL error creating CAIRIS database ' + dbName + ' on host ' + dbHost + ' at port ' + str(dbPort) + ' with user ' + dbUser + ' (message:' + format(e) + ')'
+    id,msg = e
+    exceptionText = 'MySQL error creating CAIRIS database ' + dbName + ' on host ' + dbHost + ' at port ' + str(dbPort) + ' with user ' + dbUser + ' (id:' + str(id) + ',message:' + msg
+    raise DatabaseProxyException(exceptionText) 
   except _mysql_exceptions.DatabaseError as e:
     id,msg = e
     exceptionText = 'MySQL error creating CAIRIS database ' + dbName + ' on host ' + dbHost + ' at port ' + str(dbPort) + ' with user ' + dbUser + ' (id:' + str(id) + ',message:' + msg
@@ -173,6 +182,9 @@ class MySQLDatabaseProxy:
       dbEngine = create_engine('mysql+mysqldb://'+user+':'+passwd+'@'+host+':'+str(port)+'/'+db+'?charset=utf8')
       self.conn = scoped_session(sessionmaker(bind=dbEngine))
       self.conn.execute("set session max_sp_recursion_depth = 255")
+    except OperationalError as e:
+      exceptionText = 'MySQL error connecting to the CAIRIS database ' + db + ' on host ' + host + ' at port ' + str(port) + ' with user ' + user + ' (message:' + format(e) + ')'
+      raise DatabaseProxyException(exceptionText) 
     except _mysql_exceptions.DatabaseError as e:
       id,msg = e
       exceptionText = 'MySQL error connecting to the CAIRIS database ' + db + ' on host ' + host + ' at port ' + str(port) + ' with user ' + user + ' (id:' + str(id) + ',message:' + msg
@@ -195,6 +207,9 @@ class MySQLDatabaseProxy:
         self.conn.execute("set session max_sp_recursion_depth = 255")
       else:
         raise RuntimeError('Run mode not recognized')
+    except OperationalError as e:
+      exceptionText = 'MySQL error re-connecting to the CAIRIS database ' + b.dbName + ' on host ' + b.dbHost + ' at port ' + str(b.dbPort) + ' with user ' + b.dbUser + ' (message:' + format(e) + ')'
+      raise DatabaseProxyException(exceptionText) 
     except _mysql_exceptions.DatabaseError as e:
       exceptionText = 'MySQL error re-connecting to the CAIRIS database ' + b.dbName + ' on host ' + b.dbHost + ' at port ' + str(b.dbPort) + ' with user ' + b.dbUser + ' (id:' + str(id) + ',message:' + format(e)
       raise DatabaseProxyException(exceptionText) 
@@ -243,9 +258,12 @@ class MySQLDatabaseProxy:
     try:
       session.commit()
       session.close()
+    except OperationalError as e:
+      exceptionText = 'Commit error (message:' + format(e) + ')'
+      raise DatabaseProxyException(exceptionText) 
     except _mysql_exceptions.DatabaseError as e:
       id,msg = e
-      exceptionText = errorTxt + ' (id:' + str(id) + ',message:' + msg
+      exceptionText = 'Commit error (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
 
   def updateDatabase(self,callTxt,argDict,errorTxt,session = None,doCommit = True):
@@ -259,9 +277,12 @@ class MySQLDatabaseProxy:
         return None
       else:
         return session
+    except OperationalError as e:
+      exceptionText = 'Update error (message:' + format(e) + ')'
+      raise DatabaseProxyException(exceptionText) 
     except _mysql_exceptions.DatabaseError as e:
       id,msg = e
-      exceptionText = errorTxt + ' (id:' + str(id) + ',message:' + msg
+      exceptionText = 'Update error (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
 
   def addRequirement(self,req,assetName,isAsset = True):
@@ -345,6 +366,9 @@ class MySQLDatabaseProxy:
       rs.close()
       session.close()
       return responseList
+    except OperationalError as e:
+      exceptionText = 'MySQL error calling ' + callTxt + ' (message:' + format(e) + ')'
+      raise DatabaseProxyException(exceptionText) 
     except _mysql_exceptions.DatabaseError as e:
       id,msg = e
       exceptionText = errorTxt + ' (id:' + str(id) + ',message:' + msg + ')'
@@ -722,6 +746,10 @@ class MySQLDatabaseProxy:
       rs.close()
       session.close()
       return dimId
+    except OperationalError as e:
+      exceptionText = 'MySQL error getting '
+      exceptionText += dimensionTable + ' (message:' + format(e) + ')'
+      raise DatabaseProxyException(exceptionText) 
     except _mysql_exceptions.DatabaseError as e:
       id,msg = e
       exceptionText = 'MySQL error getting '
@@ -1412,6 +1440,9 @@ class MySQLDatabaseProxy:
     except _mysql_exceptions.IntegrityError as e:
       exceptionText = 'Cannot remove environment due to dependent data (' + str(e) + ').'
       raise IntegrityException(exceptionText) 
+    except OperationalError as e:
+      exceptionText = 'MySQL error deleting environments (' + format(e) + ')'
+      raise DatabaseProxyException(exceptionText)  
     except _mysql_exceptions.DatabaseError as e:
       exceptionText = 'MySQL error deleting environments (' + str(e) + ')'
       raise DatabaseProxyException(exceptionText)  
@@ -3411,6 +3442,8 @@ class MySQLDatabaseProxy:
     for tag in tags:
       try:
         curs.execute('call addTag(%s,%s,%s)',[dimObjt,tag,dimName])
+      except OperationalError as e:
+        raise DatabaseProxyException('MySQL error adding tag (message: ' + format(e))
       except _mysql_exceptions.DatabaseError as e:
         id,msg = e
         raise DatabaseProxyException('MySQL error adding tag (id:' + str(id) + ', message: ' + msg)
@@ -3511,6 +3544,9 @@ class MySQLDatabaseProxy:
       self.deleteInterfaces(dimObjt,dimName)
       for ifName,ifType,arName,pName in ifs:
         self.addInterface(dimObjt,ifName,ifType,arName,pName,dimName)
+    except OperationalError as e:
+      exceptionText = 'MySQL error adding interfaces to ' + dimName + ' ' + dimObjt +  ' (message:' + format(e) + ')'
+      raise DatabaseProxyException(exceptionText) 
     except _mysql_exceptions.DatabaseError as e:
       id,msg = e
       exceptionText = 'MySQL error adding interfaces to ' + dimName + ' ' + dimObjt +  ' (id:' + str(id) + ',message:' + msg + ')'
@@ -4477,9 +4513,12 @@ class MySQLDatabaseProxy:
       session.execute(stmt)
       session.close()
       tmpConn.remove()
+    except OperationalError as e:
+      exceptionText = 'MySQL error creating CAIRIS database ' + dbName + '(message:' + format(e) + ')'
+      raise DatabaseProxyException(exceptionText) 
     except _mysql_exceptions.DatabaseError as e:
       id,msg = e
-      exceptionText = 'MySQL error creating CAIRIS database ' + dbName + '(id:' + str(id) + ',message:' + msg
+      exceptionText = 'MySQL error creating CAIRIS database ' + dbName + '(id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
 
   def getUseCaseRequirements(self,ucName):

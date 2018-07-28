@@ -491,11 +491,17 @@ $("#openClick").click(function () {
     crossDomain: true,
     url: serverIP + "/api/settings/databases",
     success: function (data) {
-      $("#chooseDatabaseSelect").empty();
-      $.each(data, function(i, item) {
-        $("#chooseDatabaseSelect").append('<option value="' + item + '">'  + item + '</option>');
-      });
-      $('#chooseDatabase').modal('show');
+      if (data.length > 0) {
+        $('#chooseDatabaseButton').val('Open')
+        $("#chooseDatabaseSelect").empty();
+        $.each(data, function(i, item) {
+          $("#chooseDatabaseSelect").append('<option value="' + item + '">'  + item + '</option>');
+        });
+        $('#chooseDatabase').modal('show');
+      }
+      else {
+        alert("No other databases created");
+      }
     },
     error: function (xhr, textStatus, errorThrown) {
       debugLogger(String(this.url));
@@ -515,12 +521,17 @@ $("#deleteClick").click(function () {
     crossDomain: true,
     url: serverIP + "/api/settings/databases",
     success: function (data) {
-      $('#chooseDatabaseButton').val('Delete')
-      $("#chooseDatabaseSelect").empty();
-      $.each(data, function(i, item) {
-        $("#chooseDatabaseSelect").append('<option value="' + item + '">'  + item + '</option>');
-      });
-      $('#chooseDatabase').modal('show');
+      if (data.length > 0) {
+        $('#chooseDatabaseButton').val('Delete')
+        $("#chooseDatabaseSelect").empty();
+        $.each(data, function(i, item) {
+          $("#chooseDatabaseSelect").append('<option value="' + item + '">'  + item + '</option>');
+        });
+        $('#chooseDatabase').modal('show');
+      }
+      else {
+        alert("No other databases created");
+      }
     },
     error: function (xhr, textStatus, errorThrown) {
       debugLogger(String(this.url));
@@ -556,6 +567,7 @@ $("#createDatabase").on('click', '#createDatabaseButton',function(e) {
     },
     error: function (xhr, textStatus, errorThrown) {
       var error = JSON.parse(xhr.responseText);
+      hideLoading();
       showPopup(false, String(error.message));
     }
   });
@@ -589,6 +601,8 @@ $("#chooseDatabase").on('click', '#chooseDatabaseButton',function(e) {
       showPopup(true);
     },
     error: function (xhr, textStatus, errorThrown) {
+      $('#chooseDatabase').modal('hide');
+      hideLoading();
       var error = JSON.parse(xhr.responseText);
       showPopup(false, String(error.message));
     }

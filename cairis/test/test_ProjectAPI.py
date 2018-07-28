@@ -187,6 +187,39 @@ class ProjectAPITests(CairisDaemonTestCase):
     self.logger.info('[%s] Message: %s', method, message)
     self.assertGreater(message.find('successfully'), -1, 'Failed to create new database')
 
+  def test_database_exceptions(self):
+    method = 'test_database_exceptions'
+    url = '/api/settings/database/nodb/open?session_id=test'
+    rv = self.app.post(url)
+    self.assertIsNotNone(rv.data, 'No response')
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    json_dict = jsonpickle.decode(responseData)
+    self.assertIsInstance(json_dict, dict, 'Response is not a valid JSON dictionary')
+    self.assertTrue('message' in json_dict, 'No message in reponse')
+    message = str(json_dict['message'])
+    self.logger.info('[%s] Message: %s', method, message)
+    self.assertGreater(message.find('Access denied'), -1, 'Error expected but not raised')
+
+    url = '/api/settings/database/null/open?session_id=test'
+    rv = self.app.post(url)
+    self.assertIsNotNone(rv.data, 'No response')
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    json_dict = jsonpickle.decode(responseData)
+    self.assertIsInstance(json_dict, dict, 'Response is not a valid JSON dictionary')
+    self.assertTrue('message' in json_dict, 'No message in reponse')
+    message = str(json_dict['message'])
+    self.logger.info('[%s] Message: %s', method, message)
+    self.assertGreater(message.find('No database name defined'), -1, 'Error expected but not raised')
+
+
+
+
   def test_open_database(self):
     method = 'test_open_database'
     url = '/api/settings/database/testdb/create?session_id=test'
