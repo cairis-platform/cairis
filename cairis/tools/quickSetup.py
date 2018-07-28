@@ -66,7 +66,7 @@ def createUserDatabase(dbHost,dbPort,dbRootPassword,rootDir):
   try:
     dropUserDbSql = "drop database if exists cairis_user"
     rootCursor.execute(dropUserDbSql)
-  except _mysql_exceptions.DatabaseError, e:
+  except _mysql_exceptions.DatabaseError e:
     id,msg = e
     exceptionText = 'MySQL error removing existing cairis_user database (id: ' + str(id) + ', message: ' + msg
     raise ARMException(exceptionText)
@@ -78,7 +78,7 @@ def createUserDatabase(dbHost,dbPort,dbRootPassword,rootDir):
   try:
     createUserDbSql = "create database if not exists cairis_user"
     rootCursor.execute(createUserDbSql)
-  except _mysql_exceptions.DatabaseError, e:
+  except _mysql_exceptions.DatabaseError e:
     id,msg = e
     exceptionText = 'MySQL error creating cairis_user database (id: ' + str(id) + ', message: ' + msg
     raise ARMException(exceptionText)
@@ -86,7 +86,7 @@ def createUserDatabase(dbHost,dbPort,dbRootPassword,rootDir):
   try:
     recursionDepthSql = "set global max_sp_recursion_depth = 255"
     rootCursor.execute(recursionDepthSql)
-  except _mysql_exceptions.DatabaseError, e:
+  except _mysql_exceptions.DatabaseError as e:
     id,msg = e
     exceptionText = 'MySQL error setting recursion depth (id: ' + str(id) + ', message: ' + msg
     raise ARMException(exceptionText)
@@ -94,7 +94,7 @@ def createUserDatabase(dbHost,dbPort,dbRootPassword,rootDir):
   try:
     flushPrivilegesSql = "flush privileges"
     rootCursor.execute(flushPrivilegesSql)
-  except _mysql_exceptions.DatabaseError, e:
+  except _mysql_exceptions.DatabaseError as e:
     id,msg = e
     exceptionText = 'MySQL error flushing privileges (id: ' + str(id) + ', message: ' + msg
     raise ARMException(exceptionText)
