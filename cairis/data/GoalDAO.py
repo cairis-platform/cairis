@@ -60,21 +60,28 @@ class GoalDAO(CairisDAO):
 
 
   def get_goal_by_name(self, name, coloured=False, simplify=True):
-    found_goal = None
-    goalId = self.db_proxy.getDimensionId(name,'goal')
-    goals = self.get_goals(goalId,coloured=coloured, simplify=False)
-
-    if goals is not None:
-      found_goal = goals.get(name)
-
-    if found_goal is None:
+    try:
+      found_goal = None
+      goalId = self.db_proxy.getDimensionId(name,'goal')
+      goals = self.get_goals(goalId,coloured=coloured, simplify=False)
+      if goals is not None:
+        found_goal = goals.get(name)
+      if found_goal is None:
+        self.close()
+        raise ObjectNotFoundHTTPError('The provided goal name')
+      if simplify:
+        found_goal = self.simplify(found_goal)
+      return found_goal
+    except ObjectNotFound as ex:
       self.close()
       raise ObjectNotFoundHTTPError('The provided goal name')
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+    except ARMException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
 
-    if simplify:
-      found_goal = self.simplify(found_goal)
-
-    return found_goal
 
   def add_goal(self, goal):
     goalParams = GoalParameters(
@@ -82,28 +89,30 @@ class GoalDAO(CairisDAO):
             goalOrig=goal.theOriginator,
             tags=goal.theTags,
             properties=goal.theEnvironmentProperties)
-
-    if not self.check_existing_goal(goal.theName):
-      goal_id = self.db_proxy.addGoal(goalParams)
-    else:
+    try:
+      if not self.check_existing_goal(goal.theName):
+        self.db_proxy.addGoal(goalParams)
+      else:
+        self.close()
+        raise OverwriteNotAllowedHTTPError('The provided goal name')
+    except DatabaseProxyException as ex:
       self.close()
-      raise OverwriteNotAllowedHTTPError('The provided goal name')
-
-    return goal_id
+      raise ARMHTTPError(ex)
 
   def update_goal(self, goal, name):
-    old_goal = self.get_goal_by_name(name, simplify=False)
-    id = old_goal.theId
-
     params = GoalParameters(
             goalName=goal.theName,
             goalOrig=goal.theOriginator,
             tags=goal.theTags,
             properties=goal.theEnvironmentProperties)
-    params.setId(id)
 
     try:
+      goalId = self.db_proxy.getDimensionId(name,'goal')
+      params.setId(goalId)
       self.db_proxy.updateGoal(params)
+    except ObjectNotFound as ex:
+      self.close()
+      raise ObjectNotFoundHTTPError(ex)
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)
@@ -112,6 +121,9 @@ class GoalDAO(CairisDAO):
     try:
       goalId = self.db_proxy.getDimensionId(name,'goal')
       self.db_proxy.deleteGoal(goalId)
+    except ObjectNotFound as ex:
+      self.close()
+      raise ObjectNotFoundHTTPError(ex)
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)

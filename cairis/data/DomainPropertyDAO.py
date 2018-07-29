@@ -33,17 +33,9 @@ __author__ = 'Shamal Faily'
 class DomainPropertyDAO(CairisDAO):
 
   def __init__(self, session_id):
-    """
-    :raise CairisHTTPError:
-    """
     CairisDAO.__init__(self, session_id)
 
   def get_domain_properties(self, constraint_id=-1, simplify=True):
-    """
-    :rtype: dict[str,DomainProperty]
-    :return
-    :raise ARMHTTPError:
-    """
     try:
       domain_properties = self.db_proxy.getDomainProperties(constraint_id)
     except DatabaseProxyException as ex:
@@ -60,25 +52,26 @@ class DomainPropertyDAO(CairisDAO):
     return domain_properties
 
   def get_domain_property_by_name(self, name, simplify=True):
-    """
-    :rtype: DomainProperty
-    :raise ObjectNotFoundHTTPError:
-    """
-    domain_properties = self.get_domain_properties(simplify=simplify)
-    found_domain_property = domain_properties.get(name, None)
-
-    if found_domain_property is None:
+    try:
+      dpId = self.db_proxy.getDimensionId(name,'domainproperty')
+      domain_properties = self.db_proxy.getDomainProperties(dpId)
+      found_domain_property = domain_properties.get(name, None)
+      if found_domain_property is None:
+        self.close()
+        raise ObjectNotFoundHTTPError('The provided domain_property name')
+      return found_domain_property
+    except ObjectNotFound as ex:
       self.close()
-      raise ObjectNotFoundHTTPError('The provided domain_property name')
+      raise ObjectNotFoundHTTPError('The provided asset name')
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+    except ARMException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
 
-    return found_domain_property
 
   def add_domain_property(self, domain_property):
-    """
-    :type domain_property: DomainProperty
-    :rtype: int
-    :raise ARMHTTPError:
-    """
     domain_property_params = DomainPropertyParameters(
       name=domain_property.name(),
       desc=domain_property.description(),
@@ -102,8 +95,6 @@ class DomainPropertyDAO(CairisDAO):
       raise ARMHTTPError(ex)
 
   def update_domain_property(self, domain_property, name):
-    found_domain_property = self.get_domain_property_by_name(name, simplify=False)
-
 
     domain_property_params = DomainPropertyParameters(
       name=domain_property.name(),
@@ -112,10 +103,14 @@ class DomainPropertyDAO(CairisDAO):
       dpOrig=domain_property.originator(),
       tags=domain_property.tags()
     )
-    domain_property_params.setId(found_domain_property.id())
 
     try:
+      dpId = self.db_proxy.getDimensionId(name,'domainproperty')
+      domain_property_params.setId(dpId)
       self.db_proxy.updateDomainProperty(domain_property_params)
+    except ObjectNotFound as ex:
+      self.close()
+      raise ObjectNotFoundHTTPError(ex)
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)
@@ -124,11 +119,12 @@ class DomainPropertyDAO(CairisDAO):
       raise ARMHTTPError(ex)
 
   def delete_domain_property(self, name):
-    found_domain_property = self.get_domain_property_by_name(name, simplify=False)
-    domain_property_id = found_domain_property.id()
-
     try:
-      self.db_proxy.deleteDomainProperty(domain_property_id)
+      dpId = self.db_proxy.getDimensionId(name,'domainproperty')
+      self.db_proxy.deleteDomainProperty(dpId)
+    except ObjectNotFound as ex:
+      self.close()
+      raise ObjectNotFoundHTTPError(ex)
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)
@@ -137,10 +133,6 @@ class DomainPropertyDAO(CairisDAO):
       raise ARMHTTPError(ex)
 
   def check_existing_domain_property(self, name):
-    """
-    :rtype: bool
-    :raise: ARMHTTPError
-    """
     try:
       self.db_proxy.nameCheck(name, 'domainproperty')
       return False
@@ -157,10 +149,6 @@ class DomainPropertyDAO(CairisDAO):
 
 
   def from_json(self, request):
-    """
-    :rtype : DomainProperty
-    :raise MalformedJSONHTTPError:
-    """
     json = request.get_json(silent=True)
     if json is False or json is None:
       self.close()

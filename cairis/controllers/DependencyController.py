@@ -52,9 +52,9 @@ class DependenciesAPI(Resource):
     session_id = get_session_id(session, request)
     dao = DependencyDAO(session_id)
     new_dependency = dao.from_json(request)
-    new_dependency_id = dao.add_dependency(new_dependency)
+    dao.add_dependency(new_dependency)
     dao.close()
-    resp_dict = {'message': 'Dependency successfully added', 'dependency_id': new_dependency_id}
+    resp_dict = {'message': 'Dependency successfully added'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp

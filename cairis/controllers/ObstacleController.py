@@ -55,7 +55,7 @@ class ObstaclesAPI(Resource):
     new_obstacle_id = dao.add_obstacle(new_obstacle)
     dao.close()
 
-    resp_dict = {'message': 'Obstacle successfully added', 'obstacle_id': new_obstacle_id}
+    resp_dict = {'message': 'Obstacle successfully added'}
     resp = make_response(json_serialize(resp_dict, session_id=session_id), OK)
     resp.contenttype = 'application/json'
     return resp

@@ -128,10 +128,9 @@ class ObstacleAPITests(CairisDaemonTestCase):
     self.logger.debug('[%s] Response data: %s', method, responseData)
     json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
-    env_id = json_resp.get('obstacle_id', None)
-    self.assertIsNotNone(env_id, 'No obstacle ID returned')
-    self.assertGreater(env_id, 0, 'Invalid obstacle ID returned [%d]' % env_id)
-    self.logger.info('[%s] Obstacle ID: %d\n', method, env_id)
+    msg = json_resp.get('message', None)
+    self.assertIsNotNone(msg, 'No message returned')
+    self.logger.info('[%s] Message: %s\n', method, msg)
     
     rv = self.app.delete('/api/obstacles/name/%s?session_id=test' % quote(self.prepare_new_obstacle().theName))
     
@@ -149,14 +148,12 @@ class ObstacleAPITests(CairisDaemonTestCase):
     self.logger.debug('[%s] Response data: %s', method, responseData)
     json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
-    env_id = json_resp.get('obstacle_id', None)
-    self.assertIsNotNone(env_id, 'No obstacle ID returned')
-    self.assertGreater(env_id, 0, 'Invalid obstacle ID returned [%d]' % env_id)
-    self.logger.info('[%s] Obstacle ID: %d', method, env_id)
+    msg = json_resp.get('message', None)
+    self.assertIsNotNone(msg, 'No message returned')
+    self.logger.info('[%s] Message: %s', method, msg)
     
     obstacle_to_update = self.prepare_new_obstacle()
     obstacle_to_update.theName = 'Edited test obstacle'
-    obstacle_to_update.theId = env_id
     upd_env_body = self.prepare_json(obstacle=obstacle_to_update)
     rv = self.app.put('/api/obstacles/name/%s?session_id=test' % quote(self.prepare_new_obstacle().theName), data=upd_env_body, content_type='application/json')
     self.assertIsNotNone(rv.data, 'No response')

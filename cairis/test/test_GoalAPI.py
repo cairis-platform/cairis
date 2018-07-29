@@ -144,10 +144,9 @@ class GoalAPITests(CairisDaemonTestCase):
     self.logger.debug('[%s] Response data: %s', method, responseData)
     json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
-    env_id = json_resp.get('goal_id', None)
-    self.assertIsNotNone(env_id, 'No goal ID returned')
-    self.assertGreater(env_id, 0, 'Invalid goal ID returned [%d]' % env_id)
-    self.logger.info('[%s] Goal ID: %d\n', method, env_id)
+    msg = json_resp.get('message', None)
+    self.assertIsNotNone(msg, 'No message returned')
+    self.logger.info('[%s] Message: %s\n', method, msg)
     
     rv = self.app.delete('/api/goals/name/%s?session_id=test' % quote(self.prepare_new_goal().theName))
     
@@ -166,14 +165,12 @@ class GoalAPITests(CairisDaemonTestCase):
     self.logger.debug('[%s] Response data: %s', method, responseData)
     json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
-    env_id = json_resp.get('goal_id', None)
-    self.assertIsNotNone(env_id, 'No goal ID returned')
-    self.assertGreater(env_id, 0, 'Invalid goal ID returned [%d]' % env_id)
-    self.logger.info('[%s] Goal ID: %d', method, env_id)
+    msg = json_resp.get('message', None)
+    self.assertIsNotNone(msg, 'No message returned')
+    self.logger.info('[%s] Message: %s', method, msg)
     
     goal_to_update = self.prepare_new_goal()
     goal_to_update.theName = 'Edited test goal'
-    goal_to_update.theId = env_id
     upd_env_body = self.prepare_json(goal=goal_to_update)
     rv = self.app.put('/api/goals/name/%s?session_id=test' % quote(self.prepare_new_goal().theName), data=upd_env_body, content_type='application/json')
     self.assertIsNotNone(rv.data, 'No response')

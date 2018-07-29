@@ -224,10 +224,9 @@ class UseCaseAPITests(CairisDaemonTestCase):
     self.logger.debug('[%s] Response data: %s', method, responseData)
     json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
-    env_id = json_resp.get('usecase_id', None)
-    self.assertIsNotNone(env_id, 'No usecase ID returned')
-    self.assertGreater(env_id, 0, 'Invalid usecase ID returned [%d]' % env_id)
-    self.logger.info('[%s] UseCase ID: %d\n', method, env_id)
+    msg = json_resp.get('message', None)
+    self.assertIsNotNone(msg, 'No message returned')
+    self.logger.info('[%s] Message: %s\n', method, msg)
     rv = self.app.delete('/api/usecases/name/%s?session_id=test' % quote(self.prepare_new_usecase().name()))
 
 
@@ -247,14 +246,12 @@ class UseCaseAPITests(CairisDaemonTestCase):
     self.logger.debug('[%s] Response data: %s', method, responseData)
     json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
-    env_id = json_resp.get('usecase_id', None)
-    self.assertIsNotNone(env_id, 'No usecase ID returned')
-    self.assertGreater(env_id, 0, 'Invalid usecase ID returned [%d]' % env_id)
-    self.logger.info('[%s] UseCase ID: %d', method, env_id)
+    msg = json_resp.get('message', None)
+    self.assertIsNotNone(msg, 'No message returned')
+    self.logger.info('[%s] Message: %s', method, msg)
 
     usecase_to_update = self.prepare_new_usecase()
     usecase_to_update.theName = 'Edited test usecase'
-    usecase_to_update.theId = env_id
     upd_env_body = self.prepare_json(usecase=usecase_to_update)
     rv = self.app.put('/api/usecases/name/%s?session_id=test' % quote(self.prepare_new_usecase().name()), data=upd_env_body, content_type='application/json')
     self.assertIsNotNone(rv.data, 'No response')

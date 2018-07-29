@@ -53,12 +53,12 @@ class UseCasesAPI(Resource):
 
     dao = UseCaseDAO(session_id)
     new_usecase,ucContribs = dao.from_json(request)
-    usecase_id = dao.add_usecase(new_usecase)
+    dao.add_usecase(new_usecase)
     for rc in ucContribs:
       dao.assign_usecase_contribution(rc)
     dao.close()
 
-    resp_dict = {'message': 'UseCase successfully added', 'usecase_id': usecase_id}
+    resp_dict = {'message': 'UseCase successfully added'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp

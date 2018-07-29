@@ -60,7 +60,7 @@ class GoalsAPI(Resource):
     new_goal_id = dao.add_goal(new_goal)
     dao.close()
 
-    resp_dict = {'message': 'Goal successfully added', 'goal_id': new_goal_id}
+    resp_dict = {'message': 'Goal successfully added'}
     resp = make_response(json_serialize(resp_dict, session_id=session_id), OK)
     resp.contenttype = 'application/json'
     return resp
