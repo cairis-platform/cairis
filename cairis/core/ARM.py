@@ -25,6 +25,9 @@ class ARMException(Exception):
 class EnvironmentValidationError(ARMException):
   def __init__(self,value): ARMException.__init__(self,value)
 
+class ObjectNotFound(ARMException):
+  def __init__(self,value): ARMException.__init__(self,value)
+
 class DatabaseProxyException(ARMException):
   def __init__(self,value): ARMException.__init__(self,value)
 

@@ -86,6 +86,9 @@ class AssetDAO(CairisDAO):
     try:
       assetId = self.db_proxy.getDimensionId(name,'asset')
       assets = self.db_proxy.getAssets(assetId)
+    except ObjectNotFound as ex:
+      self.close()
+      raise ObjectNotFoundHTTPError('The provided asset name')
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)
@@ -96,10 +99,6 @@ class AssetDAO(CairisDAO):
     if assets is not None:
       found_asset = assets.get(name)
 
-    if found_asset is None:
-      self.close()
-      raise ObjectNotFoundHTTPError('The provided asset name')
-
     if simplify:
       found_asset = self.simplify(found_asset)
     return found_asset
@@ -108,6 +107,9 @@ class AssetDAO(CairisDAO):
     try:
       threat_id = self.db_proxy.getDimensionId(threat_name,'threat')
       environment_id = self.db_proxy.getDimensionId(environment_name,'environment')
+    except ObjectNotFound as ex:
+      self.close()
+      raise ObjectNotFoundHTTPError(ex)
     except ObjectNotFoundHTTPError as ex:
       self.close()
       raise ex
@@ -130,6 +132,9 @@ class AssetDAO(CairisDAO):
     try:
       vulnerability_id = self.db_proxy.getDimensionId(vulnerability_name,'vulnerability')
       environment_id = self.db_proxy.getDimensionId(environment_name,'environment')
+    except ObjectNotFound as ex:
+      self.close()
+      raise ObjectNotFoundHTTPError(ex)
     except ObjectNotFoundHTTPError as ex:
       self.close()
       raise ex
@@ -198,6 +203,9 @@ class AssetDAO(CairisDAO):
       assetId = self.db_proxy.getDimensionId(name,'asset')
       params.setId(assetId)
       self.db_proxy.updateAsset(params)
+    except ObjectNotFound as ex:
+      self.close()
+      raise ObjectNotFoundHTTPError(ex)
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)
@@ -238,6 +246,9 @@ class AssetDAO(CairisDAO):
     try:
       assetId = self.db_proxy.getDimensionId(name,'asset')
       self.db_proxy.deleteAsset(assetId)
+    except ObjectNotFound as ex:
+      self.close()
+      raise ObjectNotFoundHTTPError(ex)
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)

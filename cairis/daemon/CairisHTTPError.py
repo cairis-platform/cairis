@@ -18,10 +18,10 @@
 import sys
 if (sys.version_info > (3,)):
   import http.client
-  from http.client import INTERNAL_SERVER_ERROR, CONFLICT
+  from http.client import INTERNAL_SERVER_ERROR, BAD_REQUEST
 else:
   import httplib
-  from httplib import INTERNAL_SERVER_ERROR, CONFLICT
+  from httplib import INTERNAL_SERVER_ERROR, BAD_REQUEST
 
 import logging
 
@@ -90,8 +90,8 @@ class CairisHTTPError(HTTPException):
     return json_serialize({'message': self.message, 'code': self.status_code, 'status': self.status})
 
 class ARMHTTPError(CairisHTTPError):
-  status_code=CONFLICT
-  status='Database conflict'
+  status_code=BAD_REQUEST
+  status='Database error'
 
   def __init__(self, exception):
     """
@@ -103,11 +103,11 @@ class ARMHTTPError(CairisHTTPError):
     CairisHTTPError.__init__(self,
       status_code=self.status_code,
       message=str(real_exception.value),
-      status='Database conflict'
+      status='Database error'
     )
 
 class NoSessionError(CairisHTTPError):
-  status_code=CONFLICT
+  status_code=BAD_REQUEST
   status='Session error'
 
   def __init__(self, exception):
@@ -191,7 +191,7 @@ class ObjectNotFoundHTTPError(CairisHTTPError):
     )
 
 class OverwriteNotAllowedHTTPError(CairisHTTPError):
-  status_code=CONFLICT
+  status_code=BAD_REQUEST
   status='Object already exists'
 
   def __init__(self, obj_name):

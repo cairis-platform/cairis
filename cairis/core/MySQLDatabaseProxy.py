@@ -735,7 +735,7 @@ class MySQLDatabaseProxy:
       if (rs.rowcount == 0):
         exceptionText = 'No identifier associated with '
         exceptionText += dimensionTable + ' object ' + str(dimensionName)
-        raise DatabaseProxyException(exceptionText)
+        raise ObjectNotFound(exceptionText)
 
       row = rs.fetchone() 
       dimId = row[0]

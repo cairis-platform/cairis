@@ -55,7 +55,7 @@ class AssetsAPI(Resource):
     new_id = dao.add_asset(asset)
     dao.close()
 
-    resp_dict = {'asset_id': new_id}
+    resp_dict = {'message': 'Create successful'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp
