@@ -326,7 +326,6 @@ var classAssociationDefault = {
   "theEnvironmentName" : "",
   "theHeadAsset" : "",
   "theHeadType" : "",
-  "theHeadDim" : "",
   "theHeadNavigation" : "",
   "theHeadMultiplicity" : "",
   "theHeadRole" : "",
@@ -334,7 +333,6 @@ var classAssociationDefault = {
   "theTailMultiplicity" : "",
   "theTailType" : "",
   "theTailNavigation" : "",
-  "theTailDim" : "",
   "theTailAsset" : "",
   "theRationale" : ""
 };

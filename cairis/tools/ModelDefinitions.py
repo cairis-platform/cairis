@@ -223,7 +223,6 @@ class ClassAssociationModel(object):
     obj_id_field: fields.String,
     'theEnvironmentName': fields.String,
     'theHeadAsset': fields.String,
-    'theHeadDim': fields.String,
     'theHeadNav': fields.String,
     'theHeadType': fields.String,
     'theHeadMultiplicity': fields.String,
@@ -232,7 +231,6 @@ class ClassAssociationModel(object):
     'theTailMultiplicity': fields.String,
     'theTailType': fields.String,
     'theTailNav': fields.String,
-    'theTailDim': fields.String,
     'theTailAsset': fields.String,
     'theRationale': fields.String,
   }
@@ -744,7 +742,6 @@ class AssetAssociationModel(object):
     "theEnvironmentName": fields.String,
     "theHeadAsset": fields.String,
     "theHeadType": fields.String,
-    "theHeadDim": fields.String,
     "theHeadNavigation": fields.String,
     "theHeadMultiplicity": fields.String,
     "theHeadRole": fields.String,
@@ -752,7 +749,6 @@ class AssetAssociationModel(object):
     "theTailMultiplicity": fields.String,
     "theTailType": fields.String,
     "theTailNavigation": fields.String,
-    "theTailDim": fields.String,
     "theTailAsset": fields.String,
     "theRationale": fields.String
   }

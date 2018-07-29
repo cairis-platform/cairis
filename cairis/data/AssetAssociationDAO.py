@@ -56,6 +56,8 @@ class AssetAssociationDAO(CairisDAO):
     for key in cas:
       ca = cas[key]
       del ca.theId
+      del ca.theHeadDim
+      del ca.theTailDim
       cas[key] = ca
 
     return cas
@@ -64,7 +66,7 @@ class AssetAssociationDAO(CairisDAO):
     assocParams = ClassAssociationParameters(
       envName=assoc.theEnvironmentName,
       headName=assoc.theHeadAsset,
-      headDim=assoc.theHeadDim,
+      headDim='asset',
       headNav=assoc.theHeadNavigation,
       headType=assoc.theHeadType,
       headMultiplicity=assoc.theHeadMultiplicity,
@@ -73,7 +75,7 @@ class AssetAssociationDAO(CairisDAO):
       tailMultiplicity=assoc.theTailMultiplicity,
       tailType=assoc.theTailType,
       tailNav=assoc.theTailNavigation,
-      tailDim=assoc.theTailDim,
+      tailDim='asset',
       tailName=assoc.theTailAsset,
       rationale=assoc.theRationale)
     try:
@@ -87,7 +89,7 @@ class AssetAssociationDAO(CairisDAO):
     assocParams = ClassAssociationParameters(
       envName=assoc.theEnvironmentName,
       headName=assoc.theHeadAsset,
-      headDim=assoc.theHeadDim,
+      headDim='asset',
       headNav=assoc.theHeadNavigation,
       headType=assoc.theHeadType,
       headMultiplicity=assoc.theHeadMultiplicity,
@@ -96,7 +98,7 @@ class AssetAssociationDAO(CairisDAO):
       tailMultiplicity=assoc.theTailMultiplicity,
       tailType=assoc.theTailType,
       tailNav=assoc.theTailNavigation,
-      tailDim=assoc.theTailDim,
+      tailDim='asset',
       tailName=assoc.theTailAsset,
       rationale=assoc.theRationale)
     try:

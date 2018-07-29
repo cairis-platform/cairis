@@ -579,7 +579,7 @@ class AssetDAO(CairisDAO):
     assocParams = ClassAssociationParameters(
       envName=assoc.theEnvironmentName,
       headName=assoc.theHeadAsset,
-      headDim=assoc.theHeadDim,
+      headDim='asset',
       headNav=assoc.theHeadNav,
       headType=assoc.theHeadType,
       headMultiplicity=assoc.theHeadMultiplicity,
@@ -588,7 +588,7 @@ class AssetDAO(CairisDAO):
       tailMultiplicity=assoc.theTailMultiplicity,
       tailType=assoc.theTailType,
       tailNav=assoc.theTailNav,
-      tailDim=assoc.theTailDim,
+      tailDim='asset',
       tailName=assoc.theTailAsset,
       rationale=asset.theRationale)
     try:
@@ -605,7 +605,7 @@ class AssetDAO(CairisDAO):
     assocParams = ClassAssociationParameters(
       envName=assoc.theEnvironmentName,
       headName=assoc.theHeadAsset,
-      headDim=assoc.theHeadDim,
+      headDim='asset',
       headNav=assoc.theHeadNav,
       headType=assoc.theHeadType,
       headMultiplicity=assoc.theHeadMultiplicity,
@@ -614,7 +614,7 @@ class AssetDAO(CairisDAO):
       tailMultiplicity=assoc.theTailMultiplicity,
       tailType=assoc.theTailType,
       tailNav=assoc.theTailNav,
-      tailDim=assoc.theTailDim,
+      tailDim='asset',
       tailName=assoc.theTailAsset,
       rationale=asset.theRationale)
     assocParams.setId(id)
