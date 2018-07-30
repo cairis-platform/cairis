@@ -34,11 +34,23 @@ class RequirementDAO(CairisDAO):
 
   def get_requirements(self, constraint_id='', is_asset=True, ordered=False):
     try:
+      if (constraint_id != ''):
+        if (is_asset == True):
+          self.db_proxy.getDimensionId(constraint_id,'asset')
+        else:
+          self.db_proxy.getDimensionId(constraint_id,'environment')
+        
       if ordered:
         requirements = self.simplifyList(self.db_proxy.getOrderedRequirements(constraint_id, is_asset))
       else:
         requirements = self.simplifyList((self.db_proxy.getRequirements(constraint_id, is_asset)).values())
       return requirements
+    except ObjectNotFound as ex:
+      self.close()
+      dimName = 'environment'
+      if (is_asset == True):
+        dimName = 'asset'
+      raise ObjectNotFoundHTTPError('The provided ' + dimName + ' name')
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)

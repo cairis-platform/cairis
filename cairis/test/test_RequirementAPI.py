@@ -110,7 +110,7 @@ class RequirementAPITests(CairisDaemonTestCase):
 
   def test_get_environment_name(self):
     method = 'test_environment_get_name'
-    url = '/api/requirements/environment/%s?session_id=test' % quote(self.existing_asset_name)
+    url = '/api/requirements/environment/%s?session_id=test' % quote(self.existing_environment_name)
     rv = self.app.get(url)
     if (sys.version_info > (3,)):
       responseData = rv.data.decode('utf-8')
@@ -121,7 +121,7 @@ class RequirementAPITests(CairisDaemonTestCase):
     requirements = jsonpickle.decode(responseData)
     self.assertIsNotNone(requirements, 'No results after deserialization')
     if len(requirements) > 0:
-      self.logger.info('[%s] Requirement: %s [%d]\n', method, requirements[0]['theName'])
+      self.logger.info('[%s] Requirement: %s\n', method, requirements[0]['theName'])
 
   def test_x_put(self):
     method = 'test_x_put'
