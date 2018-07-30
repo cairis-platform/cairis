@@ -35,19 +35,24 @@ class RequirementDAO(CairisDAO):
   def get_requirements(self, constraint_id='', is_asset=True, ordered=False):
     try:
       if ordered:
-        requirements = self.db_proxy.getOrderedRequirements(constraint_id, is_asset)
+        requirements = self.simplifyList(self.db_proxy.getOrderedRequirements(constraint_id, is_asset))
       else:
-        requirements = self.db_proxy.getRequirements(constraint_id, is_asset)
+        requirements = self.simplifyList((self.db_proxy.getRequirements(constraint_id, is_asset)).values())
+      return requirements
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)
 
-    return requirements
+  def simplifyList(self,requirements):
+    reqList = []
+    for r in requirements:
+      reqList.append(self.simplify(r))
+    return reqList
 
   def get_requirement_by_name(self, name):
     found_requirement = None
     try:
-      requirements = self.db_proxy.getRequirements()
+      requirements = self.simplifyList(self.db_proxy.getRequirements())
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)
@@ -62,23 +67,6 @@ class RequirementDAO(CairisDAO):
     if found_requirement is None:
       self.close()
       raise ObjectNotFoundHTTPError('The provided requirement name ' + '"' + name + '"')
-
-    return found_requirement
-
-  def get_requirement_by_shortcode(self, shortcode):
-    found_requirement = None
-    requirements = list(self.get_requirements().values())
-    idx = 0
-
-    while found_requirement is None and idx < len(requirements):
-      requirement = requirements[idx]
-      if requirement.theLabel == shortcode:
-        found_requirement = requirement
-      idx +=1
-
-    if found_requirement is None:
-      self.close()
-      raise ObjectNotFoundHTTPError(obj='The provided requirement shortcode')
 
     return found_requirement
 
@@ -154,6 +142,15 @@ class RequirementDAO(CairisDAO):
     json_dict = json['object']
     check_required_keys(json_dict, RequirementModel.required)
     json_dict['__python_obj__'] = Requirement.__module__+'.'+Requirement.__name__
+    json_dict['attrs'] = {}
+    json_dict['dirtyAttrs'] = {}
+    json_dict['theVersion'] = -1
+    json_dict['attrs']['originator'] = json_dict['theOriginator']
+    json_dict['attrs']['supportingMaterial'] = ''
+    json_dict['attrs']['fitCriterion'] = json_dict['theFitCriterion']
+    json_dict['attrs']['asset'] = json_dict['theAsset']
+    json_dict['attrs']['rationale'] = json_dict['theRationale']
+    json_dict['attrs']['type'] = json_dict['theType']
     requirement = json_serialize(json_dict)
     requirement = json_deserialize(requirement)
     if not isinstance(requirement, Requirement):
@@ -163,6 +160,11 @@ class RequirementDAO(CairisDAO):
       return requirement
 
   def simplify(self, obj):
+    del obj.theId
+    del obj.theSupportingMaterial
+    del obj.attrs
+    del obj.dirtyAttrs
+    del obj.theVersion
     return obj
 
   def get_concept_map_model(self, environment_name, requirement_name):

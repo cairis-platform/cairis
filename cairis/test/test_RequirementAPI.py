@@ -22,6 +22,7 @@ if (sys.version_info > (3,)):
 else:
   from urllib import quote
 import jsonpickle
+import json
 from cairis.core.Requirement import Requirement
 from cairis.core.Trace import Trace
 from cairis.test.CairisDaemonTestCase import CairisDaemonTestCase
@@ -44,23 +45,22 @@ class RequirementAPITests(CairisDaemonTestCase):
     self.existing_asset_name = 'Analysis data'
     self.existing_environment_name = 'Core Technology'
     self.requirement_class = Requirement.__module__+'.'+Requirement.__name__
-    self.new_requirement = Requirement(
-      id=-1,
-      label='1',
-      name='Test requirement',
-      description='This is a test description',
-      priority='1',
-      rationale='This is to test the requirements controller',
-      fitCriterion='None',
-      originator='Student',
-      type='Functional',
-      asset='Analysis data'
-    )
+    self.new_requirement = {
+      'theLabel' : '1',
+      'theName' : 'Test requirement',
+      'theDescription' : 'This is a test description',
+      'thePriority' : '1',
+      'theRationale' : 'This is to test the requirements controller',
+      'theFitCriterion' : 'None',
+      'theOriginator' : 'Student',
+      'theType' : 'Functional',
+      'theAsset' : 'Analysis data'
+    }
     self.new_requirement_dict = {
       'session_id': 'test',
       'object': self.new_requirement,
     }
-    self.new_requirement_body = jsonpickle.encode(self.new_requirement_dict)
+    self.new_requirement_body = json.dumps(self.new_requirement_dict)
     self.to_delete_ids = []
     # endregion
     self.logger.info('JSON data: %s', self.new_requirement_body)
@@ -72,12 +72,11 @@ class RequirementAPITests(CairisDaemonTestCase):
       responseData = rv.data.decode('utf-8')
     else:
       responseData = rv.data
-    requirements_dict = jsonpickle.decode(responseData)
-    self.assertIsNotNone(requirements_dict, 'No results after deserialization')
-    self.assertIsInstance(requirements_dict, dict, 'The result is not a dictionary as expected')
-    assert isinstance(requirements_dict, dict)
-    self.assertGreater(len(requirements_dict), 0, 'No requirements in the dictionary')
-    requirements = list(requirements_dict.values())
+    requirements = jsonpickle.decode(responseData)
+    self.assertIsNotNone(requirements, 'No results after deserialization')
+    self.assertIsInstance(requirements, list, 'The result is not a dictionary as expected')
+    assert isinstance(requirements, list)
+    self.assertGreater(len(requirements), 0, 'No requirements in the dictionary')
     self.logger.info('[%s] Requirements found: %d', method, len(requirements))
     self.logger.info('[%s] First requirement: %s [%d]\n', method, requirements[0]['theName'])
 
@@ -93,14 +92,6 @@ class RequirementAPITests(CairisDaemonTestCase):
     self.logger.debug('[%s] Response data: %s', method, responseData)
     json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
-
-    rv = self.app.get('/api/requirements/shortcode/%d?session_id=test' % int(self.new_requirement.label()))
-    if (sys.version_info > (3,)):
-      responseData = rv.data.decode('utf-8')
-    else:
-      responseData = rv.data
-    requirement = jsonpickle.decode(responseData)
-    self.logger.info('[%s] Requirement: %s [%d]\n', method, self.new_requirement.name(), self.new_requirement.label())
 
   def test_get_asset_name(self):
     method = 'test_asset_get_name'
@@ -138,20 +129,11 @@ class RequirementAPITests(CairisDaemonTestCase):
     url = '/api/requirements?asset=%s' % quote(self.existing_asset_name)
     rv = self.app.post(url, content_type='application/json', data=self.new_requirement_body)
 
-    url = '/api/requirements'
-    rv = self.app.get('/api/requirements?session_id=test')
-    if (sys.version_info > (3,)):
-      responseData = rv.data.decode('utf-8')
-    else:
-      responseData = rv.data
-    reqs = jsonpickle.decode(responseData)
-    requirement = reqs.get(self.new_requirement.theDescription)
-
     upd_requirement = self.new_requirement
-    upd_requirement.theName = 'Test2'
+    upd_requirement['theName'] = 'Test2'
     upd_requirement_dict = self.new_requirement_dict
     upd_requirement_dict['object'] = upd_requirement
-    upd_requirement_body = jsonpickle.encode(upd_requirement_dict)
+    upd_requirement_body = json.dumps(upd_requirement_dict)
     self.logger.info('[%s] JSON data: %s', method, upd_requirement_body)
 
     rv = self.app.put(url, content_type='application/json', data=upd_requirement_body)
@@ -173,18 +155,17 @@ class RequirementAPITests(CairisDaemonTestCase):
       responseData = rv.data
     self.logger.debug('[%s] Response data: %s', method, responseData)
     requirements = jsonpickle.decode(responseData)
-    requirement = requirements.get(upd_requirement.theDescription, None)
+    requirement = requirements[0]
     self.assertIsNotNone(requirement, 'Requirement not updated as expected')
-    self.logger.info('[%s] Requirement: %s [%d]\n', method, requirement['theName'])
+    self.logger.info('[%s] Requirement: %s\n', method, requirement['theName'])
 
   def test_concept_map_model(self):
     url = '/api/requirements?environment=%s' % quote('Psychosis')
     reqBody1 = self.new_requirement_dict
-    reqBody1['object'].theLabel='1'
-    reqBody1['object'].theName='OneRequirement'
-    reqBody1['object'].theDescription='OneRequirement description'
-    reqBody1['object'].attrs['asset'] =''
-    rv = self.app.post(url, content_type='application/json', data=jsonpickle.encode(reqBody1))
+    reqBody1['object']['theLabel']='1'
+    reqBody1['object']['theName']='OneRequirement'
+    reqBody1['object']['theDescription']='OneRequirement description'
+    rv = self.app.post(url, content_type='application/json', data=json.dumps(reqBody1))
     if (sys.version_info > (3,)):
       responseData = rv.data.decode('utf-8')
     else:
@@ -193,11 +174,10 @@ class RequirementAPITests(CairisDaemonTestCase):
     self.assertIsNotNone(json_resp, 'No results after deserialization')
 
     reqBody2 = self.new_requirement_dict
-    reqBody2['object'].theLabel='2'
-    reqBody2['object'].theName='AnotherRequirement'
-    reqBody2['object'].theDescription='AnotherRequirement description'
-    reqBody2['object'].attrs['asset'] =''
-    rv = self.app.post(url, content_type='application/json', data=jsonpickle.encode(reqBody2))
+    reqBody2['object']['theLabel']='2'
+    reqBody2['object']['theName']='AnotherRequirement'
+    reqBody2['object']['theDescription']='AnotherRequirement description'
+    rv = self.app.post(url, content_type='application/json', data=json.dumps(reqBody2))
     if (sys.version_info > (3,)):
       responseData = rv.data.decode('utf-8')
     else:

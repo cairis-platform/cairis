@@ -228,7 +228,6 @@ function updateRequirement(row){
 
 function reqRowtoJSON(row){
   var json = {};
-  json.attrs = {};
 
   $.each(row[0].children, function (i, v) {
     name =  $(v).attr("name");
@@ -246,7 +245,7 @@ function reqRowtoJSON(row){
   if (reqDomain == null) {
     reqDomain = $('#environmentsbox').val();
   } 
-  json['asset'] = reqDomain;
+  json['theAsset'] = reqDomain;
   return json
 }
 

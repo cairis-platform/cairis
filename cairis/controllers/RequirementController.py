@@ -131,19 +131,6 @@ class RequirementByNameAPI(Resource):
     resp.headers['Content-type'] = 'application/json'
     return resp
 
-class RequirementByShortcodeAPI(Resource):
-
-  def get(self, shortcode):
-    session_id = get_session_id(session, request)
-
-    dao = RequirementDAO(session_id)
-    req = dao.get_requirement_by_shortcode(shortcode)
-    dao.close()
-
-    resp = make_response(json_serialize(req, session_id=session_id), OK)
-    resp.headers['Content-type'] = 'application/json'
-    return resp
-
 class ConceptMapModelAPI(Resource):
 
   def get(self, environment,requirement):

@@ -359,24 +359,18 @@ class MisuseCaseModel(object):
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
 
-class RequirementAttributesModel(object):
-  resource_fields = {
-    "originator": fields.String,
-    "supportingMaterial": fields.String,
-    "fitCriterion": fields.String,
-    "asset": fields.String,
-    "rationale": fields.String,
-    "type": fields.String
-  }
-
 class RequirementModel(object):
   resource_fields = {
     obj_id_field: fields.String,
-    "attrs": fields.Nested(RequirementAttributesModel.resource_fields),
     "theName": fields.String,
     "theLabel": fields.String,
     "theDescription": fields.String,
-    "thePriority": fields.Integer
+    "thePriority": fields.Integer,
+    "theOriginator": fields.String,
+    "theFitCriterion": fields.String,
+    "theRationale": fields.String,
+    "theAsset": fields.String,
+    "theType": fields.String
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
