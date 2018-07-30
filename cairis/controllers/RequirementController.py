@@ -55,7 +55,11 @@ class RequirementsAPI(Resource):
     asset_name = request.args.get('asset', None)
     environment_name = request.args.get('environment', None)
     dao = RequirementDAO(session_id)
-    new_req = dao.from_json(request)
+
+    domain_name = asset_name
+    if (environment_name != None):
+      domain_name = environment_name
+    new_req = dao.from_json(request,domain_name)
     dao.add_requirement(new_req, asset_name=asset_name, environment_name=environment_name)
     dao.close()
 
@@ -122,7 +126,7 @@ class RequirementByNameAPI(Resource):
   def put(self,name):
     session_id = get_session_id(session, request)
     dao = RequirementDAO(session_id)
-    req = dao.from_json(request)
+    req = dao.from_json(request,name)
     dao.update_requirement(req, name=name)
     dao.close()
 

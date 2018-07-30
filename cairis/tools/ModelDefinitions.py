@@ -369,7 +369,6 @@ class RequirementModel(object):
     "theOriginator": fields.String,
     "theFitCriterion": fields.String,
     "theRationale": fields.String,
-    "theAsset": fields.String,
     "theType": fields.String
   }
   required = list(resource_fields.keys())

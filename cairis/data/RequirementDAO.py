@@ -130,7 +130,7 @@ class RequirementDAO(CairisDAO):
       self.close()
       raise MissingParameterHTTPError(param_names=['id'])
 
-  def from_json(self, request):
+  def from_json(self, request,domain_name):
     """
     :rtype Requirement
     """
@@ -148,7 +148,7 @@ class RequirementDAO(CairisDAO):
     json_dict['attrs']['originator'] = json_dict['theOriginator']
     json_dict['attrs']['supportingMaterial'] = ''
     json_dict['attrs']['fitCriterion'] = json_dict['theFitCriterion']
-    json_dict['attrs']['asset'] = json_dict['theAsset']
+    json_dict['attrs']['asset'] = domain_name
     json_dict['attrs']['rationale'] = json_dict['theRationale']
     json_dict['attrs']['type'] = json_dict['theType']
     requirement = json_serialize(json_dict)
@@ -165,6 +165,7 @@ class RequirementDAO(CairisDAO):
     del obj.attrs
     del obj.dirtyAttrs
     del obj.theVersion
+    del obj.theAsset
     return obj
 
   def get_concept_map_model(self, environment_name, requirement_name):
