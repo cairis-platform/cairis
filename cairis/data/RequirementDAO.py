@@ -131,9 +131,6 @@ class RequirementDAO(CairisDAO):
       raise MissingParameterHTTPError(param_names=['id'])
 
   def from_json(self, request,domain_name):
-    """
-    :rtype Requirement
-    """
     json = request.get_json(silent=True)
     if json is False or json is None:
       self.close()

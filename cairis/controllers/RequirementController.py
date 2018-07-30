@@ -59,6 +59,7 @@ class RequirementsAPI(Resource):
     domain_name = asset_name
     if (environment_name != None):
       domain_name = environment_name
+
     new_req = dao.from_json(request,domain_name)
     dao.add_requirement(new_req, asset_name=asset_name, environment_name=environment_name)
     dao.close()
