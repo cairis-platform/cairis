@@ -64,7 +64,7 @@ class RequirementDAO(CairisDAO):
   def get_requirement_by_name(self, name):
     found_requirement = None
     try:
-      requirements = self.simplifyList(self.db_proxy.getRequirements())
+      requirements = self.simplifyList(self.db_proxy.getRequirements().values())
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)
@@ -72,8 +72,8 @@ class RequirementDAO(CairisDAO):
     if requirements is not None:
       idx = 0
       while found_requirement is None and idx < len(requirements):
-        if (list(requirements.values())[idx].theName == name) or (list(requirements.values())[idx].theLabel == name):
-          found_requirement = list(requirements.values())[idx]
+        if (list(requirements)[idx].theName == name) or (list(requirements)[idx].theLabel == name):
+          found_requirement = list(requirements)[idx]
         idx += 1
 
     if found_requirement is None:
