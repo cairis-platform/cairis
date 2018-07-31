@@ -180,10 +180,14 @@ class RequirementDAO(CairisDAO):
   def get_concept_map_model(self, environment_name, requirement_name):
     fontName, fontSize, apFontName = get_fonts(session_id=self.session_id)
     try:
+      self.db_proxy.getDimensionId(environment_name,'environment')
       associationDictionary = self.db_proxy.conceptMapModel(environment_name, requirement_name)
       associations = GraphicalConceptMapModel(list(associationDictionary.values()), environment_name, requirement_name, True, db_proxy=self.db_proxy, font_name=fontName, font_size=fontSize)
       dot_code = associations.graph()
       return dot_code
+    except ObjectNotFound as ex:
+      self.close()
+      raise ObjectNotFoundHTTPError('The provided environment name')
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)
