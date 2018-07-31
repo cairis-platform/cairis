@@ -18,6 +18,7 @@
 from cairis.core.ARM import *
 from cairis.daemon.CairisHTTPError import ARMHTTPError, MalformedJSONHTTPError, MissingParameterHTTPError, SilentHTTPError
 from cairis.data.CairisDAO import CairisDAO
+from cairis.core.Borg import Borg
 from cairis.tools.JsonConverter import json_deserialize
 from cairis.tools.PseudoClasses import ProjectSettings, Contributor, Revision
 from cairis.tools.SessionValidator import check_required_keys
@@ -51,8 +52,7 @@ class ProjectDAO(CairisDAO):
     try:
       if (db_name in ['null','']):
         raise ARMException('No database name defined')
-      if (db_name not in self.show_databases()):
-        raise ARMException(db_name + ' does not exist')
+      b = Borg()
       self.db_proxy.openDatabase(db_name,self.session_id)
     except DatabaseProxyException as ex:
       raise ARMHTTPError(ex)
@@ -63,8 +63,7 @@ class ProjectDAO(CairisDAO):
     try:
       if (db_name in ['null','']):
         raise ARMException('No database name defined')
-      if (db_name not in self.show_databases()):
-        raise ARMException(db_name + ' does not exist')
+      b = Borg()
       self.db_proxy.deleteDatabase(db_name,self.session_id)
     except DatabaseProxyException as ex:
       raise ARMHTTPError(ex)

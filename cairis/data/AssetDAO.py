@@ -259,10 +259,17 @@ class AssetDAO(CairisDAO):
   def get_asset_model(self, environment_name, asset_name, hide_concerns=True):
     fontName, fontSize, apFontName = get_fonts(session_id=self.session_id)
     try:
+      self.db_proxy.getDimensionId(environment_name,'environment')
+      if (asset_name != ''):
+        self.db_proxy.getDimensionId(asset_name,'asset')
+
       associationDictionary = self.db_proxy.classModel(environment_name, asset_name, hideConcerns=hide_concerns)
       associations = GraphicalAssetModel(list(associationDictionary.values()), environment_name, asset_name, hideConcerns=hide_concerns, db_proxy=self.db_proxy, fontName=fontName, fontSize=fontSize)
       dot_code = associations.graph()
       return dot_code
+    except ObjectNotFound as ex:
+      self.close()
+      raise ObjectNotFoundHTTPError(ex)
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)
