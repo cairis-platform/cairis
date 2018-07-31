@@ -16,7 +16,7 @@
 #  under the License.
 
 from cairis.core.ARM import *
-from cairis.daemon.CairisHTTPError import ARMHTTPError, MalformedJSONHTTPError, MissingParameterHTTPError, SilentHTTPError
+from cairis.daemon.CairisHTTPError import ARMHTTPError, MalformedJSONHTTPError, MissingParameterHTTPError, SilentHTTPError, ObjectNotFoundHTTPError
 from cairis.data.CairisDAO import CairisDAO
 from cairis.core.Borg import Borg
 from cairis.tools.JsonConverter import json_deserialize
@@ -52,8 +52,12 @@ class ProjectDAO(CairisDAO):
     try:
       if (db_name in ['null','']):
         raise ARMException('No database name defined')
-      b = Borg()
+      if (db_name not in self.show_databases()):
+        raise ObjectNotFound(db_name + " does not exist")
       self.db_proxy.openDatabase(db_name,self.session_id)
+    except ObjectNotFound as ex:
+      self.close()
+      raise ObjectNotFoundHTTPError(db_name + ' does not exist')
     except DatabaseProxyException as ex:
       raise ARMHTTPError(ex)
     except ARMException as ex:
@@ -63,8 +67,12 @@ class ProjectDAO(CairisDAO):
     try:
       if (db_name in ['null','']):
         raise ARMException('No database name defined')
-      b = Borg()
+      if (db_name not in self.show_databases()):
+        raise ObjectNotFound(db_name + " does not exist")
       self.db_proxy.deleteDatabase(db_name,self.session_id)
+    except ObjectNotFound as ex:
+      self.close()
+      raise ObjectNotFoundHTTPError('The provided asset name')
     except DatabaseProxyException as ex:
       raise ARMHTTPError(ex)
     except ARMException as ex:

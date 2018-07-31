@@ -44,11 +44,6 @@ def importModel(url,dbName,modelFile,session):
     exceptionTxt = 'Cannot create database ' + dbName + ': ' + newDbResp.text
     raise Exception(exceptionTxt)
 
-  openDbResp = requests.post(url + '/api/settings/database/' + quote(dbName) + '/open',data=data)
-  if not openDbResp.ok:
-    exceptionTxt = 'Cannot open database ' + dbName + ': ' + openDbResp.text
-    raise Exception(exceptionTxt)
-
   buf = open(modelFile,'rb').read().decode('utf-8')
   import_json = {'session_id' : session ,'object': {'urlenc_file_contents':buf,'overwrite': 1,'type':'all'}}
   hdrs = {'Content-type': 'application/json'}
