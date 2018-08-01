@@ -1872,7 +1872,7 @@ Matt is also the designated NeuroGrid Certificate Authority and, as such, is oft
   <definition>We assume the process of submitting workflows to a NeuroGrid node is secure.</definition>
 </domainproperty>
 <domainproperty name="Infrastructure knowledge" type="Hypothesis" originator="Shamal Faily" >
-  <definition>NeuroGrid API users have a working knowledge of the NeuroGrid infrastructure, and the the security mechanisms used by it.</definition>
+  <definition>NeuroGrid API users have a working knowledge of the NeuroGrid infrastructure, and the security mechanisms used by it.</definition>
 </domainproperty>
 <domainproperty name="Physical infrastructure security" type="Hypothesis" originator="Shamal Faily" >
   <definition>The NeuroGrid server nodes are physically secure.</definition>
