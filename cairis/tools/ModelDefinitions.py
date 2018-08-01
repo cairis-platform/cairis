@@ -173,11 +173,10 @@ class AttackerEnvironmentPropertiesModel(object):
 class AttackerModel(object):
   resource_fields = {
     obj_id_field: fields.String,
-    'theDescription': fields.String,
-    'theTags': fields.List(fields.String),
-    'isPersona': fields.Integer,
     'theName': fields.String,
     'theImage': fields.String,
+    'theDescription': fields.String,
+    'theTags': fields.List(fields.String),
     'theEnvironmentProperties': fields.List(fields.Nested(AttackerEnvironmentPropertiesModel.resource_fields)),
   }
   required = list(resource_fields.keys())
@@ -907,6 +906,7 @@ class ArchitecturalPatternModel(object):
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
+  required.remove('theAttackSurfaceMetric')
 
 class ValueTypeModel(object):
   resource_fields = {

@@ -160,7 +160,6 @@ var attackerEnvDefault = {
 var attackerDefault = {
   "theDescription": "",
   "theTags": [],
-  "isPersona": false,
   "theName": "",
   "theImage": "",
   "theEnvironmentProperties": []
@@ -482,8 +481,7 @@ var architecturalPatternDefault = {
   "theName" : "",
   "theSynopsis" : "",
   "theComponents" : [],
-  "theConnectors" : [],
-  "theAttackSurfaceMetric" : [0,0,0]
+  "theConnectors" : []
 };
 var templateRequirementDefault = {
   "theName" : "",

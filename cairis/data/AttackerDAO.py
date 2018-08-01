@@ -369,6 +369,7 @@ class AttackerDAO(CairisDAO):
     assert isinstance(obj, Attacker)
     del obj.theEnvironmentDictionary
     del obj.theId
+    del obj.isPersona
     obj.theEnvironmentProperties = self.convert_props(real_props=obj.theEnvironmentProperties)
     return obj
 
