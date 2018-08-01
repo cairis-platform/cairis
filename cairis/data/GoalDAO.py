@@ -25,7 +25,7 @@ from cairis.core.ValueType import ValueType
 from cairis.core.ValueTypeParameters import ValueTypeParameters
 from cairis.data.CairisDAO import CairisDAO
 from cairis.tools.JsonConverter import json_serialize, json_deserialize
-from cairis.tools.ModelDefinitions import GoalEnvironmentPropertiesModel, GoalModel
+from cairis.tools.ModelDefinitions import GoalEnvironmentPropertiesModel, GoalModel, ConcernAssociationModel, RefinementModel
 from cairis.tools.SessionValidator import check_required_keys, get_fonts
 
 __author__ = 'Robin Quetin, Shamal Faily'
@@ -317,15 +317,15 @@ class GoalDAO(CairisDAO):
         del real_prop.theLabel
         new_concern_assocs = []
         for concern_assoc in real_prop.theConcernAssociations:
-          new_concern_assocs.append(list(concern_assoc))
+          new_concern_assocs.append(ConcernAssociationModel(concern_assoc[0],concern_assoc[1],concern_assoc[2],concern_assoc[3],concern_assoc[4]))
 
         new_goal_refinements = []
-        for goal_refinement in real_prop.theGoalRefinements:
-          new_goal_refinements.append(list(goal_refinement))
+        for gr in real_prop.theGoalRefinements:
+          new_goal_refinements.append(RefinementModel(gr[0],gr[1],gr[2],gr[3],gr[4]))
 
         new_subgoal_refinements = []
-        for subgoal_refinement in real_prop.theSubGoalRefinements:
-          new_subgoal_refinements.append(list(subgoal_refinement))
+        for sgr in real_prop.theSubGoalRefinements:
+          new_subgoal_refinements.append(RefinementModel(sgr[0],sgr[1],sgr[2],sgr[3],sgr[4]))
 
         real_prop.theConcernAssociations = new_concern_assocs
         real_prop.theGoalRefinements = new_goal_refinements
@@ -337,15 +337,15 @@ class GoalDAO(CairisDAO):
 
         new_concern_assocs = []
         for concern_assoc in fake_prop['theConcernAssociations']:
-          new_concern_assocs.append(tuple(concern_assoc))
+          new_concern_assocs.append([concern_assoc['theSource'],concern_assoc['theSourceNry'],concern_assoc['theLinkVerb'],concern_assoc['theTarget'],concern_assoc['theTargetNry']])
 
         new_goal_refinements = []
-        for goal_refinement in fake_prop['theGoalRefinements']:
-          new_goal_refinements.append(tuple(goal_refinement))
+        for gr in fake_prop['theGoalRefinements']:
+          new_goal_refinements.append((gr['theEndName'],gr['theEndType'],gr['theRefType'],gr['isAlternate'],gr['theRationale']))
 
         new_subgoal_refinements = []
-        for subgoal_refinement in fake_prop['theSubGoalRefinements']:
-          new_subgoal_refinements.append(tuple(subgoal_refinement))
+        for sgr in fake_prop['theSubGoalRefinements']:
+          new_subgoal_refinements.append((sgr['theEndName'],sgr['theEndType'],sgr['theRefType'],sgr['isAlternate'],sgr['theRationale']))
 
         new_prop = GoalEnvironmentProperties(
           environmentName=fake_prop['theEnvironmentName'],

@@ -27,6 +27,7 @@ from cairis.tools.JsonConverter import json_deserialize
 from cairis.core.Goal import Goal
 from cairis.core.GoalEnvironmentProperties import GoalEnvironmentProperties
 from cairis.test.CairisDaemonTestCase import CairisDaemonTestCase
+from cairis.tools.ModelDefinitions import RefinementModel
 import os
 from cairis.mio.ModelImport import importModelFile
 
@@ -62,7 +63,7 @@ class GoalAPITests(CairisDaemonTestCase):
     self.assertGreater(len(goals), 0, 'No goals in the dictionary')
     self.logger.info('[%s] Goals found: %d', method, len(goals))
     goal = list(goals.values())[0]
-    self.logger.info('[%s] First goal: %s [%d]\n', method, goal['theName'])
+    self.logger.info('[%s] First goal: %s\n', method, goal['theName'])
 
   def test_get_all_summary(self):
     method = 'test_get_all_summary'
@@ -89,7 +90,7 @@ class GoalAPITests(CairisDaemonTestCase):
     self.assertGreater(len(goals), 0, 'No goals in the dictionary')
     self.logger.info('[%s] Goals found: %d', method, len(goals))
     goal = list(goals.values())[0]
-    self.logger.info('[%s] First goal: %s [%d]\n', method, goal['theName'])
+    self.logger.info('[%s] First goal: %s\n', method, goal['theName'])
 
 
     
@@ -105,7 +106,7 @@ class GoalAPITests(CairisDaemonTestCase):
     self.logger.debug('[%s] Response data: %s', method, responseData)
     goal = jsonpickle.decode(responseData)
     self.assertIsNotNone(goal, 'No results after deserialization')
-    self.logger.info('[%s] Goal: %s [%d]\n', method, goal['theName'])
+    self.logger.info('[%s] Goal: %s\n', method, goal['theName'])
     
   def test_delete(self):
     method = 'test_delete'
@@ -194,28 +195,24 @@ class GoalAPITests(CairisDaemonTestCase):
     upd_goal = jsonpickle.decode(responseData)
     self.assertIsNotNone(upd_goal, 'Unable to decode JSON data')
     self.logger.debug('[%s] Response data: %s', method, responseData)
-    self.logger.info('[%s] Goal: %s [%d]\n', method, upd_goal['theName'])
+    self.logger.info('[%s] Goal: %s\n', method, upd_goal['theName'])
   
     rv = self.app.delete('/api/goals/name/%s?session_id=test' % quote(goal_to_update.theName))
 
   def prepare_new_goal(self):
     new_goal_refinements = [
-      [
-        "PreventUnauthorised Certificate Access",
-        "goal",
-        "or",
-        "No",
-        "None"
-      ]
+      RefinementModel("PreventUnauthorised Certificate Access",
+      "goal",
+      "or",
+      "No",
+      "None")
     ]
     new_subgoal_refinements = [
-      [
-        "PreventUnauthorised Certificate Access",
-        "goal",
-        "or",
-        "No",
-        "None"
-      ]
+      RefinementModel("PreventUnauthorised Certificate Access",
+      "goal",
+      "or",
+      "No",
+      "None")
     ]
     new_goal_props = [
       GoalEnvironmentProperties(

@@ -29,7 +29,7 @@ from cairis.core.ValueType import ValueType
 from cairis.core.ValueTypeParameters import ValueTypeParameters
 from cairis.data.CairisDAO import CairisDAO
 from cairis.tools.JsonConverter import json_serialize, json_deserialize
-from cairis.tools.ModelDefinitions import ObstacleEnvironmentPropertiesModel, ObstacleModel
+from cairis.tools.ModelDefinitions import ObstacleEnvironmentPropertiesModel, ObstacleModel, RefinementModel
 from cairis.tools.SessionValidator import check_required_keys, get_fonts
 
 __author__ = 'Shamal Faily'
@@ -256,14 +256,15 @@ class ObstacleDAO(CairisDAO):
     if real_props is not None:
       for real_prop in real_props:
         assert isinstance(real_prop, ObstacleEnvironmentProperties)
+        del real_prop.theLabel
 
         new_goal_refinements = []
-        for goal_refinement in real_prop.theGoalRefinements:
-          new_goal_refinements.append(list(goal_refinement))
+        for gr in real_prop.theGoalRefinements:
+          new_goal_refinements.append(RefinementModel(gr[0],gr[1],gr[2],gr[3],gr[4]))
 
         new_subgoal_refinements = []
-        for subgoal_refinement in real_prop.theSubGoalRefinements:
-          new_subgoal_refinements.append(list(subgoal_refinement))
+        for sgr in real_prop.theSubGoalRefinements:
+          new_subgoal_refinements.append(RefinementModel(sgr[0],sgr[1],sgr[2],sgr[3],sgr[4]))
 
         real_prop.theGoalRefinements = new_goal_refinements
         real_prop.theSubGoalRefinements = new_subgoal_refinements
@@ -273,16 +274,16 @@ class ObstacleDAO(CairisDAO):
         check_required_keys(fake_prop, ObstacleEnvironmentPropertiesModel.required)
 
         new_goal_refinements = []
-        for goal_refinement in fake_prop['theGoalRefinements']:
-          new_goal_refinements.append(tuple(goal_refinement))
+        for gr in fake_prop['theGoalRefinements']:
+          new_goal_refinements.append((gr['theEndName'],gr['theEndType'],gr['theRefType'],gr['isAlternate'],gr['theRationale']))
 
         new_subgoal_refinements = []
-        for subgoal_refinement in fake_prop['theSubGoalRefinements']:
-          new_subgoal_refinements.append(tuple(subgoal_refinement))
+        for sgr in fake_prop['theSubGoalRefinements']:
+          new_subgoal_refinements.append((sgr['theEndName'],sgr['theEndType'],sgr['theRefType'],sgr['isAlternate'],sgr['theRationale']))
 
         new_prop = ObstacleEnvironmentProperties(
                    environmentName=fake_prop['theEnvironmentName'],
-                   lbl=fake_prop['theLabel'],
+                   lbl='',
                    definition=fake_prop['theDefinition'],
                    category=fake_prop['theCategory'],
                    gRefs=new_goal_refinements,

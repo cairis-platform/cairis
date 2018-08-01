@@ -139,7 +139,7 @@ mainContent.on('click', '.deleteGoalEnvConcernAssoc', function () {
   $.each(goal.theEnvironmentProperties, function (index, env) {
     if(env.theEnvironmentName == envName){
       $.each(env.theConcernAssociations, function (ix, assoc) {
-        if(assoc[0] == theAssoc){
+        if(assoc.theSource == theAssoc){
           env.theConcernAssociations.splice(ix,1)
           $.session.set("Goal", JSON.stringify(goal));
           return;
@@ -151,12 +151,12 @@ mainContent.on('click', '.deleteGoalEnvConcernAssoc', function () {
 
 mainContent.on('click', '#AddGoalConcernAssociationButton', function () {
 
-  var assoc = [];
-  assoc[0] = $("#theSourceSelect").val();
-  assoc[1] = $("#theNSelect").val();
-  assoc[2] = $("#theLink").val();
-  assoc[3] = $("#theTargetSelect").val();
-  assoc[4] = $("#theN2Select").val();
+  var assoc = {};
+  assoc.theSource = $("#theSourceSelect").val();
+  assoc.theSourceNry = $("#theNSelect").val();
+  assoc.theLinkVerb = $("#theLink").val();
+  assoc.theTargetNry = $("#theTargetSelect").val();
+  assoc.theTarget = $("#theN2Select").val();
 
   var goal = JSON.parse($.session.get("Goal"));
   var envName = $.session.get("GoalEnvName");
@@ -166,11 +166,11 @@ mainContent.on('click', '#AddGoalConcernAssociationButton', function () {
       if (selectedIdx != undefined) {
         env.theConcernAssociations[selectedIdx] = assoc;
         $.session.set("Goal", JSON.stringify(goal));
-        $('#editgoalsConcernassociationsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(1)").text(assoc[0]);
-        $('#editgoalsConcernassociationsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(2)").text(assoc[1]);
-        $('#editgoalsConcernassociationsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(3)").text(assoc[2]);
-        $('#editgoalsConcernassociationsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(4)").text(assoc[3]);
-        $('#editgoalsConcernassociationsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(5)").text(assoc[4]);
+        $('#editgoalsConcernassociationsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(1)").text(assoc.theSource);
+        $('#editgoalsConcernassociationsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(2)").text(assoc.theSourceNry);
+        $('#editgoalsConcernassociationsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(3)").text(assoc.theLinkVerb);
+        $('#editgoalsConcernassociationsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(4)").text(assoc.theTargetNry);
+        $('#editgoalsConcernassociationsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(5)").text(assoc.theTarget);
       }
       else {
         env.theConcernAssociations.push(assoc);
@@ -238,7 +238,7 @@ mainContent.on('click',".deleteGoalGoal", function () {
     if(env.theEnvironmentName == envName){
       $.each(env.theGoalRefinements, function (ix, thegoal) {
         if(typeof thegoal != "undefined"){
-          if(thegoal[0] == subGoalName){
+          if(thegoal['theEndName'] == subGoalName){
             env.theGoalRefinements.splice(ix,1)
             $.session.set("Goal", JSON.stringify(goal));
             return;
@@ -376,14 +376,14 @@ mainContent.on('click', '#updateGoalSubGoal', function () {
   if(selectedIdx == undefined) {
     $.each(goal.theEnvironmentProperties, function (index, env) {
       if(env.theEnvironmentName == envName){
-        var array = [];
-        array[1] = $("#theSubgoalType").val();
-        array[0] = $("#theSubGoalName").val();
-        array[2] = $("#theRefinementSelect").val();
-        array[3] = $("#theAlternate").val();
-        array[4] = $("#theGoalSubGoalRationale").val();
-        env.theSubGoalRefinements.push(array);
-        appendGoalSubGoal(array);
+        var gr = {};
+        gr['theEndName'] = $("#theSubGoalName").val();
+        gr['theEndType'] = $("#theSubgoalType").val();
+        gr['theRefType'] = $("#theRefinementSelect").val();
+        gr['isAlternate'] = $("#theAlternate").val();
+        gr['theRationale'] = $("#theGoalSubGoalRationale").val();
+        env.theSubGoalRefinements.push(gr);
+        appendGoalSubGoal(gr);
         $.session.set("Goal", JSON.stringify(goal));
         $("#editGoalSubGoal").modal('hide');
       }
@@ -393,19 +393,19 @@ mainContent.on('click', '#updateGoalSubGoal', function () {
     var oldName = $.session.get("oldsubGoalName");
     $.each(goal.theEnvironmentProperties, function (index, env) {
       if(env.theEnvironmentName == envName){
-        $.each(env.theSubGoalRefinements, function (index, arr) {
-          if(arr[0] == oldName){
-            arr[1] = $("#theSubgoalType").val();
-            arr[0] = $("#theSubGoalName").val();
-            arr[2] = $("#theRefinementSelect").val();
-            arr[3] = $("#theAlternate").val();
-            arr[4] = $("#theGoalSubGoalRationale").val();
+        $.each(env.theSubGoalRefinements, function (index, gr) {
+          if(gr['theEndName'] == oldName){
+            gr['theEndName'] = $("#theSubGoalName").val();
+            gr['theEndType'] = $("#theSubgoalType").val();
+            gr['theRefType'] = $("#theRefinementSelect").val();
+            gr['isAlternate'] = $("#theAlternate").val();
+            gr['theRationale'] = $("#theGoalSubGoalRationale").val();
             $.session.set("Goal", JSON.stringify(goal));
-            $('#editgoalsSubgoalsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(1)").text(arr[0]);
-            $('#editgoalsSubgoalsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(2)").text(arr[1]);
-            $('#editgoalsSubgoalsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(3)").text(arr[2]);
-            $('#editgoalsSubgoalsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(4)").text(arr[3]);
-            $('#editgoalsSubgoalsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(5)").text(arr[4]);
+            $('#editgoalsSubgoalsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(1)").text(gr['theEndName']);
+            $('#editgoalsSubgoalsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(2)").text(gr['theEndType']);
+            $('#editgoalsSubgoalsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(3)").text(gr['theRefType']);
+            $('#editgoalsSubgoalsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(4)").text(gr['isAlternate']);
+            $('#editgoalsSubgoalsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(5)").text(gr['theRationale']);
             $("#editGoalSubGoal").modal('hide');
           }
         });
@@ -567,14 +567,14 @@ mainContent.on('click',"#updateGoalGoal", function () {
   if(selectedIdx == undefined) {
     $.each(goal.theEnvironmentProperties, function (index, env) {
       if(env.theEnvironmentName == envName){
-        var array = [];
-        array[1] = $("#theGoalType").val();
-        array[0] = $("#theGoalName").val();
-        array[2] = $("#theGoalRefinementSelect").val();
-        array[3] = $("#theGoalAlternate").val();
-        array[4] = $("#theGoalGoalRationale").val();
-        env.theGoalRefinements.push(array);
-        appendGoalGoal(array);
+        var gr = {};
+        gr['theEndType'] = $("#theGoalType").val();
+        gr['theEndName'] = $("#theGoalName").val();
+        gr['theRefType'] = $("#theGoalRefinementSelect").val();
+        gr['isAlternate'] = $("#theGoalAlternate").val();
+        gr['theRationale'] = $("#theGoalGoalRationale").val();
+        env.theGoalRefinements.push(gr);
+        appendGoalGoal(gr);
         $.session.set("Goal", JSON.stringify(goal));
         $("#editGoalGoal").modal('hide');
       }
@@ -584,19 +584,19 @@ mainContent.on('click',"#updateGoalGoal", function () {
     var oldName = $.session.get("oldGoalName");
     $.each(goal.theEnvironmentProperties, function (index, env) {
       if(env.theEnvironmentName == envName){
-        $.each(env.theGoalRefinements, function (index, arr) {
-          if(arr[0] == oldName){
-            arr[1] = $("#theGoalType").val();
-            arr[0] = $("#theGoalName").val();
-            arr[2] = $("#theGoalRefinementSelect").val();
-            arr[3] = $("#theGoalAlternate").val();
-            arr[4] = $("#theGoalGoalRationale").val();
+        $.each(env.theGoalRefinements, function (index, gr) {
+          if(gr['theEndName'] == oldName){
+            gr['theEndType'] = $("#theGoalType").val();
+            gr['theEndName'] = $("#theGoalName").val();
+            gr['theRefType'] = $("#theGoalRefinementSelect").val();
+            gr['isAlternate'] = $("#theGoalAlternate").val();
+            gr['theRationale'] = $("#theGoalGoalRationale").val();
             $.session.set("Goal", JSON.stringify(goal));
-            $('#editgoalsGoalsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(1)").text(arr[0]);
-            $('#editgoalsGoalsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(2)").text(arr[1]);
-            $('#editgoalsGoalsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(3)").text(arr[2]);
-            $('#editgoalsGoalsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(4)").text(arr[3]);
-            $('#editgoalsGoalsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(5)").text(arr[4]);
+            $('#editgoalsGoalsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(1)").text(gr['theEndName']);
+            $('#editgoalsGoalsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(2)").text(gr['theEndType']);
+            $('#editgoalsGoalsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(3)").text(gr['theRefType']);
+            $('#editgoalsGoalsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(4)").text(gr['isAlternate']);
+            $('#editgoalsGoalsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(5)").text(gr['theRationale']);
             $("#editGoalGoal").modal('hide');
           }
         });
@@ -692,16 +692,16 @@ function appendGoalEnvironment(text){
   $("#theGoalEnvironments").append("<tr><td class='deleteGoalEnv addRemove'><i class='fa fa-minus'></i></td><td class='goalEnvProperties'>"+ text +"</td></tr>");
 }
 function appendGoalGoal(goal){
-  $("#editgoalsGoalsTable").append('<tr class="addRemove"><td class="deleteGoalGoal"><i class="fa fa-minus"></i></td><td class="envGoalName editGoalGoalRow">'+goal[0]+'</td><td class="editGoalGoalRow">'+goal[1]+'</td><td class="editGoalGoalRow">'+goal[2]+'</td><td class="editGoalGoalRow">'+goal[3]+'</td><td class="editGoalGoalRow">'+goal[4]+'</td></tr>');
+  $("#editgoalsGoalsTable").append('<tr class="addRemove"><td class="deleteGoalGoal"><i class="fa fa-minus"></i></td><td class="envGoalName editGoalGoalRow">'+goal['theEndName']+'</td><td class="editGoalGoalRow">'+goal['theEndType']+'</td><td class="editGoalGoalRow">'+goal['theRefType']+'</td><td class="editGoalGoalRow">'+goal['isAlternate']+'</td><td class="editGoalGoalRow">'+goal['theRationale']+'</td></tr>');
 }
 function appendGoalSubGoal(subgoal){
-  $("#editgoalsSubgoalsTable").append('<tr class="addRemove"><td class="deleteGoalSubGoal"><i class="fa fa-minus"></i></td><td class="subGoalName editGoalSubGoalRow">'+subgoal[0]+'</td><td class="editGoalSubGoalRow">'+subgoal[1]+'</td><td class="editGoalSubGoalRow">'+subgoal[2]+'</td><td class="editGoalSubGoalRow">'+subgoal[3]+'</td><td class="editGoalSubGoalRow">'+subgoal[4]+'</td></tr>');
+  $("#editgoalsSubgoalsTable").append('<tr class="addRemove"><td class="deleteGoalSubGoal"><i class="fa fa-minus"></i></td><td class="subGoalName editGoalSubGoalRow">'+subgoal['theEndName']+'</td><td class="editGoalSubGoalRow">'+subgoal['theEndType']+'</td><td class="editGoalSubGoalRow">'+subgoal['theRefType']+'</td><td class="editGoalSubGoalRow">'+subgoal['isAlternate']+'</td><td class="editGoalSubGoalRow">'+subgoal['theRationale']+'</td></tr>');
 }
 function appendGoalConcern(concern){
   $("#editgoalsConcernTable").append('<tr><td class="deleteGoalEnvConcern addRemove" value="'+ concern+'"><i class="fa fa-minus"></i></td><td class="GoalConcernName">'+concern+'</td></tr>');
 }
 function appendGoalConcernAssoc(assoc){
-  $("#editgoalsConcernassociationsTable").append('<tr><td class="deleteGoalEnvConcernAssoc addRemove"><i class="fa fa-minus"></i></td><td class="assocName editGoalConcernAssoc">'+assoc[0]+'</td><td class="assocN1">'+assoc[1]+'</td><td class="assocLink editGoalConcernAssoc">'+assoc[2]+'</td><td class="assocN2 editGoalConcernAssoc">'+assoc[4]+'</td><td class="assocTarget">'+assoc[3]+'</td></tr>');
+  $("#editgoalsConcernassociationsTable").append('<tr><td class="deleteGoalEnvConcernAssoc addRemove"><i class="fa fa-minus"></i></td><td class="assocName editGoalConcernAssoc">'+assoc.theSource+'</td><td class="assocN1">'+assoc.theSourceNry+'</td><td class="assocLink editGoalConcernAssoc">'+assoc.theLinkVerb+'</td><td class="assocN2 editGoalConcernAssoc">'+assoc.theTargetNry+'</td><td class="assocTarget">'+assoc.theTarget+'</td></tr>');
 }
 
 mainContent.on('click', '#goalCancelButton', function (e) {

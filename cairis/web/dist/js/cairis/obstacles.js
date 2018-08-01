@@ -128,7 +128,7 @@ mainContent.on('click',".obstacle_deleteGoalSubGoal", function () {
   $.each(obstacle.theEnvironmentProperties, function (index, env) {
     if(env.theEnvironmentName == envName){
       $.each(env.theSubGoalRefinements, function (ix, subobstacle) {
-        if(subobstacle[0] == subGoalName){
+        if(subobstacle['theEndName'] == subGoalName){
           env.theSubGoalRefinements.splice(ix,1)
           $.session.set("Obstacle", JSON.stringify(obstacle));
           return;
@@ -175,7 +175,7 @@ mainContent.on('click',".obstacle_deleteGoalGoal", function () {
     if(env.theEnvironmentName == envName){
       $.each(env.theGoalRefinements, function (ix, theobstacle) {
         if(typeof theobstacle != "undefined"){
-          if(theobstacle[0] == subGoalName){
+          if(theobstacle['theEndName'] == subGoalName){
             env.theGoalRefinements.splice(ix,1)
             $.session.set("Obstacle", JSON.stringify(obstacle));
             return;
@@ -307,14 +307,14 @@ mainContent.on('click', '#obstacle_updateGoalSubGoal', function () {
   if(selectedIdx == undefined) {
     $.each(obstacle.theEnvironmentProperties, function (index, env) {
       if(env.theEnvironmentName == envName){
-        var array = [];
-        array[1] = $("#obstacle_theSubgoalType").val();
-        array[0] = $("#obstacle_theSubGoalName").val();
-        array[2] = $("#obstacle_theRefinementSelect").val();
-        array[3] = $("#obstacle_theAlternate").val();
-        array[4] = $("#obstacle_theGoalSubGoalRationale").val();
-        env.theSubGoalRefinements.push(array);
-        appendObstacleSubGoal(array);
+        var sgr = {};
+        sgr['theEndName'] = $("#obstacle_theSubGoalName").val();
+        sgr['theEndType'] = $("#obstacle_theSubgoalType").val();
+        sgr['theRefType'] = $("#obstacle_theRefinementSelect").val();
+        sgr['isAlternate'] = $("#obstacle_theAlternate").val();
+        sgr['theRationale'] = $("#obstacle_theGoalSubGoalRationale").val();
+        env.theSubGoalRefinements.push(sgr);
+        appendObstacleSubGoal(sgr);
         $.session.set("Obstacle", JSON.stringify(obstacle));
         $("#obstacle_editGoalSubGoal").modal('hide');
       }
@@ -324,19 +324,19 @@ mainContent.on('click', '#obstacle_updateGoalSubGoal', function () {
     var oldName = $.session.get("oldsubGoalName");
     $.each(obstacle.theEnvironmentProperties, function (index, env) {
       if(env.theEnvironmentName == envName){
-        $.each(env.theSubGoalRefinements, function (index, arr) {
-          if(arr[0] == oldName) {
-            arr[1] = $("#obstacle_theSubgoalType").val();
-            arr[0] = $("#obstacle_theSubGoalName").val();
-            arr[2] = $("#obstacle_theRefinementSelect").val();
-            arr[3] = $("#obstacle_theAlternate").val();
-            arr[4] = $("#obstacle_theGoalSubGoalRationale").val();
+        $.each(env.theSubGoalRefinements, function (index, sgr) {
+          if(sgr['theEndName'] == oldName) {
+            sgr['theEndName'] = $("#obstacle_theSubGoalName").val();
+            sgr['theEndType'] = $("#obstacle_theSubgoalType").val();
+            sgr['theRefType'] = $("#obstacle_theRefinementSelect").val();
+            sgr['isAlternate'] = $("#obstacle_theAlternate").val();
+            sgr['theRationale'] = $("#obstacle_theGoalSubGoalRationale").val();
             $.session.set("Obstacle", JSON.stringify(obstacle));
-            $('#editObstaclesSubGoalsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(1)").text(arr[0]);
-            $('#editObstaclesSubGoalsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(2)").text(arr[1]);
-            $('#editObstaclesSubGoalsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(3)").text(arr[2]);
-            $('#editObstaclesSubGoalsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(4)").text(arr[3]);
-            $('#editObstaclesSubGoalsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(5)").text(arr[4]);
+            $('#editObstaclesSubGoalsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(1)").text(sgr['theEndName']);
+            $('#editObstaclesSubGoalsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(2)").text(sgr['theEndType']);
+            $('#editObstaclesSubGoalsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(3)").text(sgr['theRefType']);
+            $('#editObstaclesSubGoalsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(4)").text(sgr['isAlternate']);
+            $('#editObstaclesSubGoalsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(5)").text(sgr['theRationale']);
             $("#obstacle_editGoalSubGoal").modal('hide');
           }
         });
@@ -353,14 +353,14 @@ mainContent.on('click', '#obstacle_updateGoalGoal', function () {
   if(selectedIdx == undefined) {
     $.each(obstacle.theEnvironmentProperties, function (index, env) {
       if(env.theEnvironmentName == envName){
-        var array = [];
-        array[1] = $("#obstacle_theGoalType").val();
-        array[0] = $("#obstacle_theGoalName").val();
-        array[2] = $("#obstacle_theGoalRefinementSelect").val();
-        array[3] = $("#obstacle_theGoalAlternate").val();
-        array[4] = $("#obstacle_theGoalGoalRationale").val();
-        env.theGoalRefinements.push(array);
-        appendObstacleEnvGoals(array);
+        var gr = {};
+        gr['theEndName'] = $("#obstacle_theGoalName").val();
+        gr['theEndType'] = $("#obstacle_theGoalType").val();
+        gr['theRefType'] = $("#obstacle_theGoalRefinementSelect").val();
+        gr['isAlternate'] = $("#obstacle_theGoalAlternate").val();
+        gr['theRationale'] = $("#obstacle_theGoalGoalRationale").val();
+        env.theGoalRefinements.push(gr);
+        appendObstacleEnvGoals(gr);
         $.session.set("Obstacle", JSON.stringify(obstacle));
         $("#obstacle_editGoalGoal").modal('hide');
       }
@@ -370,19 +370,19 @@ mainContent.on('click', '#obstacle_updateGoalGoal', function () {
     var oldName = $.session.get("oldGoalName");
     $.each(obstacle.theEnvironmentProperties, function (index, env) {
       if(env.theEnvironmentName == envName){
-        $.each(env.theGoalRefinements, function (index, arr) {
-          if(arr[0] == oldName) {
-            arr[1] = $("#obstacle_theGoalType").val();
-            arr[0] = $("#obstacle_theGoalName").val();
-            arr[2] = $("#obstacle_theGoalRefinementSelect").val();
-            arr[3] = $("#obstacle_theGoalAlternate").val();
-            arr[4] = $("#obstacle_theGoalGoalRationale").val();
+        $.each(env.theGoalRefinements, function (index, gr) {
+          if(gr['theEndName'] == oldName) {
+            gr['theEndType'] = $("#obstacle_theGoalType").val();
+            gr['theEndName'] = $("#obstacle_theGoalName").val();
+            gr['theRefType'] = $("#obstacle_theGoalRefinementSelect").val();
+            gr['isAlternate'] = $("#obstacle_theGoalAlternate").val();
+            gr['theRationale'] = $("#obstacle_theGoalGoalRationale").val();
             $.session.set("Obstacle", JSON.stringify(obstacle));
-            $('#editObstaclesGoalsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(1)").text(arr[0]);
-            $('#editObstaclesGoalsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(2)").text(arr[1]);
-            $('#editObstaclesGoalsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(3)").text(arr[2]);
-            $('#editObstaclesGoalsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(4)").text(arr[3]);
-            $('#editObstaclesGoalsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(5)").text(arr[4]);
+            $('#editObstaclesGoalsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(1)").text(gr['theEndName']);
+            $('#editObstaclesGoalsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(2)").text(gr['theEndType']);
+            $('#editObstaclesGoalsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(3)").text(gr['theRefType']);
+            $('#editObstaclesGoalsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(4)").text(gr['isAlternate']);
+            $('#editObstaclesGoalsTable').find('tbody').find('tr:eq(' + selectedIdx + ')').find("td:eq(5)").text(gr['theRationale']);
             $("#obstacle_editGoalGoal").modal('hide');
           }
         });
@@ -600,10 +600,10 @@ function appendObstacleEnvironment(text){
   $("#theObstacleEnvironments").append("<tr><td class='deleteObstacleEnv'><i class='fa fa-minus'></i></td><td class='obstacleEnvProperties'>"+ text +"</td></tr>");
 }
 function appendObstacleEnvGoals(obstacle){
-  $("#editObstaclesGoalsTable").append('<tr><td class="obstacle_deleteGoalGoal"><i class="fa fa-minus"></i></td><td class="envGoalName obstacle_editGoalGoalRow">'+obstacle[0]+'</td><td class="obstacle_editGoalGoalRow">'+obstacle[1]+'</td><td class="obstacle_editGoalGoalRow">'+obstacle[2]+'</td><td class="obstacle_editGoalGoalRow">'+obstacle[3]+'</td><td class="obstacle_editGoalGoalRow">'+obstacle[4]+'</td></tr>');
+  $("#editObstaclesGoalsTable").append('<tr><td class="obstacle_deleteGoalGoal"><i class="fa fa-minus"></i></td><td class="envGoalName obstacle_editGoalGoalRow">'+obstacle['theEndName']+'</td><td class="obstacle_editGoalGoalRow">'+obstacle['theEndType']+'</td><td class="obstacle_editGoalGoalRow">'+obstacle['theRefType']+'</td><td class="obstacle_editGoalGoalRow">'+obstacle['isAlternate']+'</td><td class="obstacle_editGoalGoalRow">'+obstacle['theRationale']+'</td></tr>');
 }
 function appendObstacleSubGoal(subobstacle){
-  $("#editObstaclesSubGoalsTable").append('<tr><td class="obstacle_deleteGoalSubGoal"><i class="fa fa-minus"></i></td><td class="subGoalName obstacle_editGoalSubGoalRow">'+subobstacle[0]+'</td><td class="obstacle_editGoalSubGoalRow">'+subobstacle[1]+'</td><td class="obstacle_editGoalSubGoalRow">'+subobstacle[2]+'</td><td>'+subobstacle[3]+'</td><td class="obstacle_editGoalSubGoalRow">'+subobstacle[4]+'</td></tr>');
+  $("#editObstaclesSubGoalsTable").append('<tr><td class="obstacle_deleteGoalSubGoal"><i class="fa fa-minus"></i></td><td class="subGoalName obstacle_editGoalSubGoalRow">'+subobstacle['theEndName']+'</td><td class="obstacle_editGoalSubGoalRow">'+subobstacle['theEndType']+'</td><td class="obstacle_editGoalSubGoalRow">'+subobstacle['theRefType']+'</td><td>'+subobstacle['isAlternate']+'</td><td class="obstacle_editGoalSubGoalRow">'+subobstacle['theRationale']+'</td></tr>');
 }
 function appendObstacleConcern(concern){
     $("#editObstaclesConcernTable").append('<tr><td class="deleteObstacleEnvConcern" value="'+ concern+'"><i class="fa fa-minus"></i></td><td class="ObstacleConcernName">'+concern+'</td></tr>');

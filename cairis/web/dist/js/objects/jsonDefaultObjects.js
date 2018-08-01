@@ -250,7 +250,6 @@ var goalDefault = {
 };
 
 var obstacleEnvDefault =     {
-  "theLabel": "",
   "theDefinition": "None",
   "theCategory": "Vulnerability",
   "theGoalRefinements": [],

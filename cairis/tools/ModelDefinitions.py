@@ -265,19 +265,58 @@ class EnvironmentModel(object):
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
 
+class ConcernAssociationModel(object):
+  resource_fields = {
+    obj_id_field: fields.String,
+    'theSource': fields.String,
+    'theSourceNry': fields.String,
+    'theLinkVerb': fields.String,
+    'theTargetNry': fields.String,
+    'theTarget': fields.String
+  }
+  required = list(resource_fields.keys())
+  required.remove(obj_id_field)
+
+  def __init__(self,src,srcNry,linkVerb,targ,targNry):
+    self.theSource = src
+    self.theSourceNry = srcNry
+    self.theLinkVerb = linkVerb
+    self.theTargetNry = targNry
+    self.theTarget = targ
+
+class RefinementModel(object):
+  resource_fields = {
+    obj_id_field: fields.String,
+    'theEndName': fields.String,
+    'theEndType': fields.String,
+    'theRefType': fields.String,
+    'isAlternate': fields.String,
+    'theRationale': fields.String
+  }
+  required = list(resource_fields.keys())
+  required.remove(obj_id_field)
+
+  def __init__(self,eName,eType,refType,isAlt,refRat):
+    self.theEndName = eName
+    self.theEndType = eType
+    self.theRefType = refType
+    self.isAlternate = isAlt
+    self.theRationale = refRat
+
+
 class GoalEnvironmentPropertiesModel(object):
   resource_fields = {
     obj_id_field: fields.String,
     "theCategory": fields.String,
-    "theConcernAssociations": fields.List(fields.String),
+    "theConcernAssociations": fields.List(fields.Nested(ConcernAssociationModel.resource_fields)),
     "theConcerns": fields.List(fields.String),
     "theDefinition": fields.String,
     "theEnvironmentName": fields.String,
     "theFitCriterion": fields.String,
-    "theGoalRefinements": fields.List(fields.String),
+    "theGoalRefinements": fields.List(fields.Nested(RefinementModel.resource_fields)),
     "theIssue": fields.String,
     "thePriority": fields.String,
-    "theSubGoalRefinements": fields.List(fields.String)
+    "theSubGoalRefinements": fields.List(fields.Nested(RefinementModel.resource_fields))
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
@@ -296,11 +335,10 @@ class GoalModel(object):
 class ObstacleEnvironmentPropertiesModel(object):
   resource_fields = {
     obj_id_field: fields.String,
-    "theLabel": fields.String,
     "theDefinition": fields.String,
     "theCategory": fields.String,
-    "theGoalRefinements": fields.List(fields.String),
-    "theSubGoalRefinements": fields.List(fields.String),
+    "theGoalRefinements": fields.List(fields.Nested(RefinementModel.resource_fields)),
+    "theSubGoalRefinements": fields.List(fields.Nested(RefinementModel.resource_fields)),
     "theConcerns": fields.List(fields.String),
     "theProbability": fields.Float,
     "theProbabilityRationale": fields.String
@@ -598,25 +636,6 @@ class PersonaModel(object):
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
 
-class TaskConcernAssociationModel(object):
-  resource_fields = {
-    obj_id_field: fields.String,
-    'theSource': fields.String,
-    'theSourceNry': fields.String,
-    'theLinkVerb': fields.String,
-    'theTargetNry': fields.String,
-    'theTarget': fields.String
-  }
-  required = list(resource_fields.keys())
-  required.remove(obj_id_field)
-
-  def __init__(self,src,srcNry,linkVerb,targ,targNry):
-    self.theSource = src
-    self.theSourceNry = srcNry
-    self.theLinkVerb = linkVerb
-    self.theTargetNry = targNry
-    self.theTarget = targ
-    
 
 class TaskEnvironmentPropertiesModel(object):
   resource_fields = {
@@ -627,7 +646,7 @@ class TaskEnvironmentPropertiesModel(object):
     'theNarrative': fields.String,
     'theConsequences': fields.String,
     'theBenefits': fields.String,
-    'theConcernAssociations': fields.List(fields.Nested(TaskConcernAssociationModel.resource_fields)),
+    'theConcernAssociations': fields.List(fields.Nested(ConcernAssociationModel.resource_fields)),
     'theCodes': fields.List(fields.String)
   }
   required = list(resource_fields.keys())
