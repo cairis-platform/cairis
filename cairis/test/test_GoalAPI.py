@@ -220,7 +220,7 @@ class GoalAPITests(CairisDaemonTestCase):
     new_goal_props = [
       GoalEnvironmentProperties(
         environmentName=self.existing_environment_name_1,
-        lbl='Test 1',
+        lbl='',
         definition='This is a first test property',
         category=self.existing_category,
         priority='Medium',
@@ -232,7 +232,7 @@ class GoalAPITests(CairisDaemonTestCase):
       ),
       GoalEnvironmentProperties(
         environmentName=self.existing_environment_name_2,
-        lbl='Test 2',
+        lbl='',
         definition='This is a second test property',
         category=self.existing_category,
         priority='Low',

@@ -276,7 +276,6 @@ class GoalEnvironmentPropertiesModel(object):
     "theFitCriterion": fields.String,
     "theGoalRefinements": fields.List(fields.String),
     "theIssue": fields.String,
-    "theLabel": fields.String,
     "thePriority": fields.String,
     "theSubGoalRefinements": fields.List(fields.String)
   }

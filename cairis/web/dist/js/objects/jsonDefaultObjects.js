@@ -240,11 +240,9 @@ var goalEnvDefault = {
   "theDefinition": "None",
   "theConcernAssociations": [],
   "theGoalRefinements": [],
-  "theLabel": "",
   "theIssue": ""
 };
 var goalDefault = {
-  "theColour": "",
   "theOriginator": "",
   "theTags": [],
   "theName": "",

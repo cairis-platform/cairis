@@ -314,7 +314,7 @@ class GoalDAO(CairisDAO):
     if real_props is not None:
       for real_prop in real_props:
         assert isinstance(real_prop, GoalEnvironmentProperties)
-
+        del real_prop.theLabel
         new_concern_assocs = []
         for concern_assoc in real_prop.theConcernAssociations:
           new_concern_assocs.append(list(concern_assoc))
@@ -349,7 +349,7 @@ class GoalDAO(CairisDAO):
 
         new_prop = GoalEnvironmentProperties(
           environmentName=fake_prop['theEnvironmentName'],
-          lbl=fake_prop['theLabel'],
+          lbl='',
           definition=fake_prop['theDefinition'],
           category=fake_prop['theCategory'],
           priority=fake_prop['thePriority'],
@@ -390,13 +390,6 @@ class GoalDAO(CairisDAO):
       return new_json_goal
 
   def simplify(self, goal):
-    """
-    Simplifies the Goal object by removing the environment properties
-    :param goal: The Goal to simplify
-    :type goal: Goal
-    :return: The simplified Goal
-    :rtype: Goal
-    """
     goal.theEnvironmentProperties = self.convert_properties(real_props=goal.theEnvironmentProperties)
     assert isinstance(goal, Goal)
     del goal.theId
