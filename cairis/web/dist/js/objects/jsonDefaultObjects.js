@@ -139,7 +139,6 @@ var threatEnvironmentDefault = {
   "theLikelihood": "",
   "theEnvironmentName": "",
   "theAttackers": [],
-  "theRationale": [],
   "theProperties": [ConfidentialitySecurityAttribute,IntegritySecurityAttribute,AvailabilitySecurityAttribute,AccountabilitySecurityAttribute,AnonymitySecurityAttribute,PseudonymitySecurityAttribute,UnlinkabilitySecurityAttribute,UnobservabilitySecurityAttribute]
 };
 var threatDefault = {
@@ -147,7 +146,7 @@ var threatDefault = {
   "theThreatName": "",
   "theType": "",
   "theMethod": "",
-  "theProperties": []
+  "theEnvironmentProperties": []
 };
 
 var attackerEnvDefault = {

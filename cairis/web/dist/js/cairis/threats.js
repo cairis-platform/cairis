@@ -104,7 +104,7 @@ function viewThreat(thrName) {
         refreshDimensionSelector($('#theType'),'threat_type',undefined,function(){
           $("#theType").val(data.theType);
         },['All']);
-        $.session.set("theThreat", JSON.stringify(data));
+        $.session.set("Threat", JSON.stringify(data));
 
         $('#theTags').val(data.theTags.join(', '));
         data.theTags = [];
@@ -128,14 +128,14 @@ function viewThreat(thrName) {
 $(document).on("click", "#addNewThreat", function () {
   refreshObjectBreadCrumb('New Threat');
   activeElement("objectViewer");
+  $.session.set("Threat", JSON.stringify(jQuery.extend(true, {},threatDefault )));
   fillOptionMenu("fastTemplates/editThreatOptions.html", "#objectViewer", null, true, true, function () {
     $("#editThreatOptionsform").validator();
     $("#UpdateThreat").text("Create");
     $("#editThreatOptionsform").addClass("newThreat");
     refreshDimensionSelector($('#theType'),'threat_type',undefined,function() {
-      $("#Properties").hide();
+      $("#threatstabsID").hide();
     },['All']);
-    $.session.set("theThreat", JSON.stringify(jQuery.extend(true, {},threatDefault )));
   });
 });
 
@@ -146,9 +146,9 @@ function viewIntroducedThreat(dirEntry) {
     $("#UpdateThreat").text("Create");
     $("#editThreatOptionsform").addClass("newThreat");
     refreshDimensionSelector($('#theType'),'threat_type',undefined,function() {
-      $("#Properties").hide();
+      $("#threatstabsID").hide();
     },['All']);
-    $.session.set("theThreat", JSON.stringify(jQuery.extend(true, {},threatDefault )));
+    $.session.set("Threat", JSON.stringify(jQuery.extend(true, {},threatDefault )));
     $('#theThreatName').val(dirEntry.theLabel);
     $('#theType').val(dirEntry.theType); 
     $('#theMethod').val(dirEntry.theName + ': ' + dirEntry.theDescription + "\nReference: " + dirEntry.theReference); 
@@ -163,7 +163,7 @@ $(document).on("click","#introduceThreatDirectoryEntry", function() {
 mainContent.on("click", ".threatEnvironments", function () {
   $(this).closest('tr').addClass('active').siblings().removeClass('active');
   clearThreatEnvInfo();
-  var threat = JSON.parse($.session.get("theThreat"));
+  var threat = JSON.parse($.session.get("Threat"));
   var envName = $(this).text();
   $.session.set("threatEnvironmentName", envName);
   $("#threatAssets").find("tbody").empty();
@@ -202,12 +202,12 @@ mainContent.on('click', '#addAssettoThreat', function () {
 
 function addAssetToThreatEnvironment() {
   var text = $("#chooseEnvironmentSelect").val();
-  var threat = JSON.parse($.session.get("theThreat"));
+  var threat = JSON.parse($.session.get("Threat"));
   var theEnvName = $.session.get("threatEnvironmentName");
   $.each(threat.theEnvironmentProperties, function (index, env) {
     if(env.theEnvironmentName == theEnvName){
       env.theAssets.push(text);
-      $.session.set("theThreat", JSON.stringify(threat));
+      $.session.set("Threat", JSON.stringify(threat));
       appendThreatAsset(text);
     }
   });
@@ -230,23 +230,23 @@ mainContent.on('click','#addAttackertoThreat', function () {
 function addAttackerToEnvironment() {
   var text = $("#chooseEnvironmentSelect").val();
   var theEnvName = $.session.get("threatEnvironmentName");
-  var threat = JSON.parse($.session.get("theThreat"));
+  var threat = JSON.parse($.session.get("Threat"));
   $.each(threat.theEnvironmentProperties, function (index, env) {
     if (env.theEnvironmentName == theEnvName) {
       env.theAttackers.push(text);
-      $.session.set("theThreat", JSON.stringify(threat));
+      $.session.set("Threat", JSON.stringify(threat));
       appendThreatAttacker(text);
     }
   });
 };
 
 mainContent.on('change', '#theLikelihood', function () {
-  var threat = JSON.parse($.session.get("theThreat"));
+  var threat = JSON.parse($.session.get("Threat"));
   var theEnvName = $.session.get("threatEnvironmentName");
   $.each(threat.theEnvironmentProperties, function (index, env) {
     if(env.theEnvironmentName == theEnvName){
       env.theLikelihood = $("#theLikelihood option:selected").text();
-      $.session.set("theThreat", JSON.stringify(threat));
+      $.session.set("Threat", JSON.stringify(threat));
     }
   });
 });
@@ -254,12 +254,12 @@ mainContent.on('change', '#theLikelihood', function () {
 mainContent.on('click', '.removeThreatAsset', function () {
   var assetText = $(this).closest(".threatAssets").text();
   $(this).closest("tr").remove();
-  var threat = JSON.parse($.session.get("theThreat"));
+  var threat = JSON.parse($.session.get("Threat"));
   var theEnvName = $.session.get("threatEnvironmentName");
   $.each(threat.theEnvironmentProperties, function (index, env) {
     if(env.theEnvironmentName == theEnvName){
       env.theAssets.splice( $.inArray(assetText,env.theAssets) ,1 );
-      $.session.set("theThreat", JSON.stringify(threat));
+      $.session.set("Threat", JSON.stringify(threat));
     }
   });
 });
@@ -268,11 +268,11 @@ mainContent.on('click','.removeThreatAttacker', function () {
   var attackerName = $(this).closest(".threatAttackers").text();
   $(this).closest("tr").remove();
   var theEnvName = $.session.get("threatEnvironmentName");
-  var threat = JSON.parse($.session.get("theThreat"));
+  var threat = JSON.parse($.session.get("Threat"));
   $.each(threat.theEnvironmentProperties, function (index, env) {
     if(env.theEnvironmentName == theEnvName){
       env.theAttackers.splice( $.inArray(attackerName,env.theAttackers) ,1 );
-      $.session.set("theThreat", JSON.stringify(threat));
+      $.session.set("Threat", JSON.stringify(threat));
     }
   });
 });
@@ -307,7 +307,7 @@ function addThreatSecurityProperty(e) {
   prop.value =  $("#theSecurityPropertyValue").val();
   prop.rationale =  $("#theSecurityPropertyRationale").val()
 
-  var threat = JSON.parse($.session.get("theThreat"));
+  var threat = JSON.parse($.session.get("Threat"));
   var theEnvName = $.session.get("threatEnvironmentName");
   $.each(threat.theEnvironmentProperties, function (index, env) {
     if(env.theEnvironmentName == theEnvName){
@@ -316,7 +316,7 @@ function addThreatSecurityProperty(e) {
           secProp.value = prop.value;
           secProp.rationale = prop.rationale;
           threat.theEnvironmentProperties[index].theProperties[idx] = secProp;
-          $.session.set("theThreat", JSON.stringify(threat));
+          $.session.set("Threat", JSON.stringify(threat));
           appendThreatProperty(prop);
         }
       });
@@ -350,7 +350,7 @@ function updateThreatSecurityProperty() {
   updProp.value =  $("#theSecurityPropertyValue").val();
   updProp.rationale =  $("#theSecurityPropertyRationale").val();
 
-  var threat = JSON.parse($.session.get("theThreat"));
+  var threat = JSON.parse($.session.get("Threat"));
   var theEnvName = $.session.get("threatEnvironmentName");
 
   $.each(threat.theEnvironmentProperties, function (index, env) {
@@ -358,7 +358,7 @@ function updateThreatSecurityProperty() {
       $.each(env.theProperties, function(idx, secProp){
         if (updProp.name == secProp.name) {
           threat.theEnvironmentProperties[index].theProperties[idx] = updProp;
-          $.session.set("theThreat", JSON.stringify(threat));
+          $.session.set("Threat", JSON.stringify(threat));
           propRow.find("td:eq(1)").text(updProp.name);
           propRow.find("td:eq(2)").text(updProp.value);
           propRow.find("td:eq(3)").text(updProp.rationale);
@@ -402,19 +402,19 @@ function addThreatEnvironment() {
   appendThreatEnvironment(text);
   var environment =  jQuery.extend(true, {},threatEnvironmentDefault );
   environment.theEnvironmentName = text;
-  var threat = JSON.parse($.session.get("theThreat"));
+  var threat = JSON.parse($.session.get("Threat"));
   threat.theEnvironmentProperties.push(environment);
-  $.session.set("theThreat", JSON.stringify(threat));
+  $.session.set("Threat", JSON.stringify(threat));
   $(document).find(".threatEnvironments").each(function () {
     if($(this).text() == text){
       $(this).trigger("click");
-      $("#Properties").show("fast");
+      $("#threatstabsID").show("fast");
     }
   });
 };
 
 function commitThreat() {
-  var threat = JSON.parse($.session.get("theThreat"));
+  var threat = JSON.parse($.session.get("Threat"));
   if (threat.theEnvironmentProperties.length == 0) {
     alert("Environments not defined");
   }
@@ -447,17 +447,17 @@ function commitThreat() {
 mainContent.on('click', ".deleteThreatEnv", function () {
   var envi = $(this).next(".threatEnvironments").text();
   $(this).closest("tr").remove();
-  var threat = JSON.parse($.session.get("theThreat"));
+  var threat = JSON.parse($.session.get("Threat"));
   $.each(threat.theEnvironmentProperties, function (index, env) {
     if(env.theEnvironmentName == envi){
       threat.theEnvironmentProperties.splice( index ,1 );
-      $.session.set("theThreat", JSON.stringify(threat));
+      $.session.set("Threat", JSON.stringify(threat));
       var UIenv = $("#theThreatEnvironments").find("tbody");
       if(jQuery(UIenv).has(".threatEnvironments").length){
         UIenv.find(".threatEnvironments:first").trigger('click');
       }
       else {
-        $("#Properties").hide("fast");
+        $("#threatstabsID").hide("fast");
       }
       return false;
     }
@@ -467,7 +467,7 @@ mainContent.on('click', ".deleteThreatEnv", function () {
 mainContent.on('click', ".removeThreatProperty", function () {
   var propName = $(this).closest("tr").find("td:eq(1)").text();
   $(this).closest("tr").remove();
-  var threat = JSON.parse($.session.get("theThreat"));
+  var threat = JSON.parse($.session.get("Threat"));
   var theEnvName = $.session.get("threatEnvironmentName");
   $.each(threat.theEnvironmentProperties, function (index, env) {
     if(env.theEnvironmentName == theEnvName){
@@ -477,7 +477,7 @@ mainContent.on('click', ".removeThreatProperty", function () {
           threat.theEnvironmentProperties[index].theProperties[idx].rationale = 'None';
         }
       });
-      $.session.set("theThreat", JSON.stringify(threat));
+      $.session.set("Threat", JSON.stringify(threat));
     }
   });
 });
@@ -513,7 +513,7 @@ $(document).on('click', 'td.deleteThreatButton', function (e) {
 function fillThreatPropProperties(extra){
   var propBox = $("#thePropName");
   propBox.empty();
-  var threat = JSON.parse($.session.get("theThreat"));
+  var threat = JSON.parse($.session.get("Threat"));
   var theEnvName = $.session.get("threatEnvironmentName");
   $.each(threat.theEnvironmentProperties, function (index, env) {
     if(env.theEnvironmentName == theEnvName){

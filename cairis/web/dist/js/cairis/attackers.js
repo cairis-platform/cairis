@@ -309,7 +309,7 @@ mainContent.on('click', ".deleteAttackerEnv", function () {
         UIenv.find(".attackerEnvironment:first").trigger('click');
       }
       else {
-        $("#Properties").hide("fast");
+        $("#attackerstabsID").hide("fast");
       }
       return false;
     }
@@ -340,7 +340,7 @@ function addAttackerEnvironment() {
   $(document).find(".attackerEnvironment").each(function () {
     if($(this).text() == text){
       $(this).trigger("click");
-      $("#Properties").show("fast");
+      $("#attackerstabsID").show("fast");
       $('#chooseEnvironment').modal('hide');
     }
   });
@@ -413,7 +413,7 @@ $(document).on("click", "#addNewAttacker", function () {
     $("#editAttackerOptionsForm").validator();
     $("#UpdateAttacker").text("Create");
     $("#editAttackerOptionsForm").addClass("new");
-    $("#Properties").hide();
+    $("#attackerstabsID").hide();
     $.session.set("Attacker", JSON.stringify(jQuery.extend(true, {},attackerDefault )));
   });
 });

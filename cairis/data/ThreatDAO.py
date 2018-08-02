@@ -349,6 +349,7 @@ class ThreatDAO(CairisDAO):
             new_attr = SecurityAttribute(attr_name, attr_value, attr_rationale)
             new_attrs.append(new_attr)
           real_prop.theProperties = new_attrs
+          del real_prop.theRationale
           new_props.append(real_prop)
 
       return new_props
