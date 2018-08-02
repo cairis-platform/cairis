@@ -290,7 +290,8 @@ function postDependency(dependency, callback){
     processData: false,
     origin: serverIP,
     data: output,
-    url: serverIP +  "/api/dependencies/environment/" + encodeURIComponent(dependency.theEnvironmentName) + "/depender/" + encodeURIComponent(dependency.theDepender) + "/dependee/" + dependency.theDependee + "/dependency/" + encodeURIComponent(dependency.theDependency) + "?session_id=" + $.session.get('sessionID'),
+//    url: serverIP +  "/api/dependencies/environment/" + encodeURIComponent(dependency.theEnvironmentName) + "/depender/" + encodeURIComponent(dependency.theDepender) + "/dependee/" + dependency.theDependee + "/dependency/" + encodeURIComponent(dependency.theDependency) + "?session_id=" + $.session.get('sessionID'),
+    url: serverIP +  "/api/dependencies",
     success: function (data) {
       showPopup(true);
       if(jQuery.isFunction(callback)){
