@@ -40,11 +40,6 @@ class RiskDAO(CairisDAO):
     CairisDAO.__init__(self, session_id)
 
   def get_risks(self, constraint_id=-1, simplify=True, skip_misuse=False):
-    """
-    :type constraint_id: int
-    :type simplify: bool
-    :rtype: dict[str,Risk]
-    """
     try:
       risks = self.db_proxy.getRisks(constraintId=constraint_id)
     except DatabaseProxyException as ex:
@@ -248,6 +243,7 @@ class RiskDAO(CairisDAO):
 
     if simplify:
       misuse_case = self.simplify(misuse_case)
+    del misuse_case.theId
 
     return misuse_case
 
@@ -472,13 +468,11 @@ class RiskDAO(CairisDAO):
       raise MalformedJSONHTTPError()
 
   def simplify(self, obj):
-    """
-    :type obj: Risk|MisuseCase
-    """
     misuse_case = None
     if isinstance(obj, Risk):
       misuse_case = obj.theMisuseCase
     elif isinstance(obj, MisuseCase):
+      del obj.theId
       misuse_case = obj
 
     if isinstance(obj, Risk):
@@ -486,5 +480,4 @@ class RiskDAO(CairisDAO):
       del obj.theId
     elif isinstance(obj, MisuseCase):
       obj = misuse_case
-
     return obj
