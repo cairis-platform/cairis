@@ -326,6 +326,7 @@ class CountermeasureDAO(CairisDAO):
             tRat = real_prop.theTargets[idx][2]
             new_targets.append(CountermeasureTarget(tName,tEff,tRat))
           real_prop.theTargets = new_targets
+          del real_prop.theRationale
           new_props.append(real_prop)
       return new_props
     elif fake_props is not None:

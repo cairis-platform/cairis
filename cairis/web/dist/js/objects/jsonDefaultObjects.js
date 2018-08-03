@@ -171,8 +171,7 @@ var taskEnvDefault = {
   "theNarrative": "",
   "theConsequences": "",
   "theBenefits": "",
-  "theConcernAssociations": [],
-  "theCodes": []
+  "theConcernAssociations": []
 };
 
 var taskDefault = {
@@ -268,7 +267,6 @@ var countermeasureEnvDefault =     {
   "theRequirements": [],
   "theTargets": [],
   "theProperties": [ConfidentialitySecurityAttribute,IntegritySecurityAttribute,AvailabilitySecurityAttribute,AccountabilitySecurityAttribute,AnonymitySecurityAttribute,PseudonymitySecurityAttribute,UnlinkabilitySecurityAttribute,UnobservabilitySecurityAttribute],
-  "theRationale": [],
   "theRoles": [],
   "thePersonas": []
 };

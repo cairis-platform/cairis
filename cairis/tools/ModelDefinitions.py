@@ -583,7 +583,6 @@ class CountermeasureEnvironmentPropertiesModel(object):
     "theRequirements": fields.List(fields.String),
     "theTargets": fields.List(fields.Nested(CountermeasureTarget.resource_fields)),
     'theProperties': fields.List(fields.Nested(SecurityAttribute.resource_fields)),
-    "theRationale": fields.List(fields.String),
     "theCost": fields.String,
     "theRoles": fields.List(fields.String),
     "thePersonas": fields.List(fields.Nested(CountermeasureTask.resource_fields))
@@ -644,8 +643,7 @@ class TaskEnvironmentPropertiesModel(object):
     'theNarrative': fields.String,
     'theConsequences': fields.String,
     'theBenefits': fields.String,
-    'theConcernAssociations': fields.List(fields.Nested(ConcernAssociationModel.resource_fields)),
-    'theCodes': fields.List(fields.String)
+    'theConcernAssociations': fields.List(fields.Nested(ConcernAssociationModel.resource_fields))
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)

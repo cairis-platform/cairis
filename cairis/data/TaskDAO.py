@@ -173,6 +173,7 @@ class TaskDAO(CairisDAO):
     assert isinstance(obj, Task)
     del obj.theId
     del obj.theEnvironmentDictionary
+    del obj.scoreLookup
     obj.theEnvironmentProperties = self.convert_props(real_props=obj.theEnvironmentProperties)
     return obj
 
@@ -182,6 +183,7 @@ class TaskDAO(CairisDAO):
       if len(real_props) > 0:
         for real_prop in real_props:
           assert isinstance(real_prop, TaskEnvironmentProperties)
+          del real_prop.theCodes
           ptList = []
           for ptc in real_prop.personas():
             ptList.append(PersonaTaskCharacteristics(ptc[0],ptc[1],ptc[2],ptc[3],ptc[4])) 
