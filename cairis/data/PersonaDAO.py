@@ -204,6 +204,7 @@ class PersonaDAO(CairisDAO):
     assert isinstance(obj, Persona)
     del obj.theId
     del obj.theEnvironmentDictionary
+    del obj.theCodes
     obj.theEnvironmentProperties = self.convert_props(real_props=obj.theEnvironmentProperties)
     return obj
 
@@ -213,6 +214,7 @@ class PersonaDAO(CairisDAO):
       if len(real_props) > 0:
         for real_prop in real_props:
           assert isinstance(real_prop, PersonaEnvironmentProperties)
+          del real_prop.theCodes
           new_props.append(real_prop)
     elif fake_props is not None:
       if len(fake_props) > 0:
@@ -223,7 +225,7 @@ class PersonaDAO(CairisDAO):
                        direct=fake_prop['theDirectFlag'],
                        description=fake_prop['theNarrative'],
                        roles=fake_prop['theRoles'],
-                       pCodes=fake_prop['theCodes']
+                       pCodes=[]
                      )
           new_props.append(new_prop)
     else:

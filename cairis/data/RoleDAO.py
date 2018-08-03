@@ -142,6 +142,7 @@ class RoleDAO(CairisDAO):
 
   def simplify(self, obj):
     del obj.theId
+    del obj.costLookup
     del obj.theEnvironmentDictionary
     del obj.theEnvironmentProperties
     return obj

@@ -101,7 +101,6 @@ var templateAssetDefault = {
 };
 
 var roleDefaultObject = {
-  "costLookup": {},
   "theType": "",
   "theName": "",
   "theShortCode": "",
@@ -208,8 +207,7 @@ var useCaseDefault = {
 var personaEnvDefault = {
   "theDirectFlag": 1,
   "theNarrative": "",
-  "theRoles": [],
-  "theCodes": []
+  "theRoles": []
 };
 
 var personaDefault = {

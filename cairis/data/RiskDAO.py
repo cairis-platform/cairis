@@ -244,6 +244,7 @@ class RiskDAO(CairisDAO):
     if simplify:
       misuse_case = self.simplify(misuse_case)
     del misuse_case.theId
+    del misuse_case.theEnvironmentDictionary
 
     return misuse_case
 

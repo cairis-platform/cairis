@@ -609,8 +609,7 @@ class PersonaEnvironmentPropertiesModel(object):
     obj_id_field: fields.String,
     'theDirectFlag': fields.Integer,
     'theNarrative': fields.String,
-    'theRoles': fields.List(fields.String),
-    'theCodes': fields.List(fields.String)
+    'theRoles': fields.List(fields.String)
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
@@ -630,8 +629,7 @@ class PersonaModel(object):
       'theImage': fields.String,
       'isAssumption': fields.Integer,
       'thePersonaType': fields.String,
-      'theEnvironmentProperties': fields.List(fields.Nested(PersonaEnvironmentPropertiesModel.resource_fields)),
-      'theCodes': fields.List(fields.String)
+      'theEnvironmentProperties': fields.List(fields.Nested(PersonaEnvironmentPropertiesModel.resource_fields))
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
