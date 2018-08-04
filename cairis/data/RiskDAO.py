@@ -243,7 +243,8 @@ class RiskDAO(CairisDAO):
 
     if simplify:
       misuse_case = self.simplify(misuse_case)
-    del misuse_case.theId
+    if hasattr(misuse_case,'theId'):
+      del misuse_case.theId
     del misuse_case.theEnvironmentDictionary
 
     return misuse_case
@@ -473,7 +474,8 @@ class RiskDAO(CairisDAO):
     if isinstance(obj, Risk):
       misuse_case = obj.theMisuseCase
     elif isinstance(obj, MisuseCase):
-      del obj.theId
+      if hasattr(obj,'theId'):
+        del obj.theId
       misuse_case = obj
 
     if isinstance(obj, Risk):
