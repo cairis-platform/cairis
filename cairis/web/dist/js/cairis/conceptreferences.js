@@ -20,7 +20,10 @@
 'use strict';
 
 $("#conceptReferencesClick").click(function(){
-  createConceptReferencesTable();
+  clearLocalStorage($('#menuBCClick').attr('dimension'));
+  $("#objectViewer").empty();
+  $('#menuBCClick').attr('dimension','concept_reference');
+  refreshMenuBreadCrumb('concept_reference');
 });
 
 function createConceptReferencesTable(){
@@ -85,6 +88,7 @@ function createConceptReferencesTable(){
 $(document).on('click', "td.conceptreference-rows", function () {
   activeElement("objectViewer");
   var name = $(this).closest("tr").find("td:eq(1)").text();
+  refreshObjectBreadCrumb(name);
 
   $.ajax({
     type: "GET",
@@ -153,6 +157,7 @@ $(document).on('click', 'td.deleteConceptReferenceButton', function (e) {
 });
 
 $(document).on("click", "#addNewConceptReference", function () {
+  refreshObjectBreadCrumb('New Concept Reference');
   activeElement("objectViewer");
   fillOptionMenu("fastTemplates/editConceptReferenceOptions.html", "#objectViewer", null, true, true, function () {
     refreshDimensionSelector($('#theObjtName'),$('#theDimName').val(),undefined,function() {

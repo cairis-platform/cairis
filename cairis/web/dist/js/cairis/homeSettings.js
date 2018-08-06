@@ -150,6 +150,11 @@ function refreshMenuBreadCrumb(dimName,envName) {
     $('#menuBCClick').show();
     createDocumentReferencesTable();
   }
+  else if (dimName == 'concept_reference') {
+    $('#menuBCClick').text('Concept References');
+    $('#menuBCClick').show();
+    createConceptReferencesTable();
+  }
   else if (dimName == 'persona_characteristic') {
     $('#menuBCClick').text('Persona Characteristics');
     $('#menuBCClick').show();

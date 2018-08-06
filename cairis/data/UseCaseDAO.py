@@ -262,7 +262,7 @@ class UseCaseDAO(CairisDAO):
             for excKey in step.exceptions():
               exc = step.exception(excKey)
               excs.append(ExceptionAttributes(exc[0],exc[1],exc[2],exc[3],exc[4]))
-            s.append(StepAttributes(step.text(),step.synopsis(),step.actor(),step.actorType(),step.tags(),excs)) 
+            s.append(StepAttributes(step.text(),step.synopsis(),step.actor(),step.actorType(),excs)) 
           real_prop.theSteps = s
           new_props.append(real_prop)
     elif fake_props is not None:
@@ -271,7 +271,7 @@ class UseCaseDAO(CairisDAO):
           check_required_keys(fake_prop, UseCaseEnvironmentPropertiesModel.required)
           steps = Steps()
           for fs in fake_prop['theSteps']:
-            aStep = Step(fs['theStepText'],fs['theSynopsis'],fs['theActor'],fs['theActorType'],fs['theTags'])
+            aStep = Step(fs['theStepText'],fs['theSynopsis'],fs['theActor'],fs['theActorType'],[])
             for exc in fs['theExceptions']:
               aStep.addException((exc['theName'],exc['theDimensionType'],exc['theDimensionValue'],exc['theCategoryName'],exc['theDescription']))
             steps.append(aStep)

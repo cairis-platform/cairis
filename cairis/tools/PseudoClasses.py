@@ -465,18 +465,16 @@ class StepAttributes(object):
     'theSynopsis': fields.String,
     'theActor': fields.String,
     'theActorType': fields.String,
-    'theTags': fields.List(fields.String),
     'theExceptions': fields.List(fields.Nested(ExceptionAttributes.resource_fields)),
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
 
-  def __init__(self,stepTxt,stepSyn,stepActor,stepActorType,stepTags,stepExceptions):
+  def __init__(self,stepTxt,stepSyn,stepActor,stepActorType,stepExceptions):
     self.theStepText = stepTxt
     self.theSynopsis = stepSyn
     self.theActor = stepActor
     self.theActorType = stepActorType
-    self.theTags = stepTags
     self.theExceptions = stepExceptions
 
   def synopsis(self): return self.theSynopsis

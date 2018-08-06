@@ -56,8 +56,8 @@ class UseCaseAPITests(CairisDaemonTestCase):
     self.existing_precond = 'Test preconditions'
     self.existing_steps = []
     anException = ExceptionAttributes('anException','requirement','Anonymisation guidelines','Confidentiality Threat','anException description')
-    self.existing_steps.append(StepAttributes('Researcher does something','','','',[],[anException]))
-    self.existing_steps.append(StepAttributes('System does something','','','',[],[]))
+    self.existing_steps.append(StepAttributes('Researcher does something','','','',[anException]))
+    self.existing_steps.append(StepAttributes('System does something','','','',[]))
     self.existing_postcond = 'Test postconditions'
     usecase_class = UseCase.__module__+'.'+UseCase.__name__
     # endregion
