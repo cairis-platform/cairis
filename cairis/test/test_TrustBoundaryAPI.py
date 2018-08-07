@@ -128,8 +128,6 @@ class TrustBoundaryAPITests(CairisDaemonTestCase):
     self.assertIsNotNone(upd_tb, 'No results after deserialization')
     self.assertEqual(upd_tb['theName'],'Shibboleth')
     self.assertEqual(upd_tb['theDescription'],'Identity provider')
-    import pytest
-    pytest.set_trace()
     self.assertEqual(upd_tb['theEnvironmentProperties'][0]['theComponents'][0]['theName'],'Authenticate Researcher')
     self.assertEqual(upd_tb['theEnvironmentProperties'][0]['theComponents'][0]['theType'],'process')
     rv = self.app.delete('/api/trust_boundaries/name/Shibboleth?session_id=test')
