@@ -438,6 +438,7 @@
 
 <!ELEMENT trust_boundary (description,trust_boundary_environment+)>
 <!ATTLIST trust_boundary name CDATA #REQUIRED>
+<!ATTLIST trust_boundary privilege CDATA #IMPLIED>
 <!ELEMENT trust_boundary_environment (trust_boundary_component+)>
 <!ATTLIST trust_boundary_environment name CDATA #REQUIRED>
 <!ELEMENT trust_boundary_component EMPTY>

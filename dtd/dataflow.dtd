@@ -37,6 +37,7 @@
 <!ELEMENT description (#PCDATA)>
 <!ELEMENT trust_boundary_environment (trust_boundary_component+)>
 <!ATTLIST trust_boundary_environment name CDATA #REQUIRED>
+<!ATTLIST trust_boundary_environment privilege CDATA #IMPLIED>
 <!ELEMENT trust_boundary_component EMPTY>
 <!ATTLIST trust_boundary_component name CDATA #REQUIRED>
 <!ATTLIST trust_boundary_component type CDATA #REQUIRED>
