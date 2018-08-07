@@ -4597,32 +4597,55 @@ class MySQLDatabaseProxy:
     tbRows = self.responseList('call getTrustBoundaries(:id)',{'id':constraintId},'MySQL error getting trust boundaries')
     tbs = {} 
     for tbId,tbName,tbDesc in tbRows:
-      environmentProperties = {}
+      components = {}
+      privileges = {}
       for environmentId,environmentName in self.dimensionEnvironments(tbId,'trust_boundary'):
-        environmentProperties[environmentName] = self.trustBoundaryComponents(tbId,environmentId)
-      tbs[tbName] = TrustBoundary(tbId,tbName,tbDesc,environmentProperties)
+        components[environmentName] = self.trustBoundaryComponents(tbId,environmentId)
+        privileges[environmentName] = self.trustBoundaryPrivilege(tbId,environmentId)
+      tbs[tbName] = TrustBoundary(tbId,tbName,tbDesc,components,privileges)
     return tbs
 
   def trustBoundaryComponents(self,tbId, envId):
     return self.responseList('call trustBoundaryComponents(:tbId,:envId)',{'tbId':tbId,'envId':envId},'MySQL error getting trust boundary components for trust boundary id ' + str(tbId))
 
+  def trustBoundaryPrivilege(self,tbId, envId):
+    return self.responseList('select trustBoundaryPrivilege(:tbId,:envId)',{'tbId':tbId,'envId':envId},'MySQL error getting the trust boundary privilege level for trust boundary id ' + str(tbId))[0]
+
   def addTrustBoundary(self,tb):
     tbId = self.newId()
     self.updateDatabase("call addTrustBoundary(:id,:name,:desc)",{'id':tbId,'name':tb.name(),'desc':tb.description()},'MySQL error adding trust boundary ' + str(tbId))
-    for environmentName in list(tb.environmentProperties().keys()):
-      for tbComponentType,tbComponent in tb.environmentProperties()[environmentName]:
+    defaultPrivilegeLevels = {}
+    for environmentName in list(tb.components().keys()):
+      defaultPrivilegeLevels[environmentName] = 'None'
+      for tbComponentType,tbComponent in tb.components()[environmentName]:
         self.addTrustBoundaryComponent(tbId,environmentName,tbComponent)
+    tbPrivilegeLevels = tb.privilegeLevels()
+    if (len(tbPrivilegeLevels) == 0):
+      tbPrivilegeLevels = defaultPrivilegeLevels
+    for environmentName in list(tbPrivilegeLevels.keys()):
+      self.addTrustBoundaryPrivilege(tbId,environmentName,self.privilegeValue(tbPrivilegeLevels[environmentName]))
+
+  def privilegeValue(self,pName): return self.responseList('select privilegeValue(:pName)',{'pName':pName},'MySQL error getting privilege value')[0]
 
   def addTrustBoundaryComponent(self,tbId,envName,tbComponent):
     self.updateDatabase('call addTrustBoundaryComponent(:id,:environment,:component)',{'id':tbId,'environment':envName,'component':tbComponent},'MySQL error adding trust boundary component ' + tbComponent + ' to trust boundary id ' + str(tbId))
 
+  def addTrustBoundaryPrivilege(self,tbId,envName,pValue):
+    self.updateDatabase('call addTrustBoundaryPrivilege(:id,:environment,:pValue)',{'id':tbId,'environment':envName,'pValue':pValue},'MySQL error adding trust boundary privilege ' + str(pValue) + ' to trust boundary id ' + str(tbId))
 
   def updateTrustBoundary(self,tb):
     self.updateDatabase('call deleteTrustBoundaryComponents(:id)',{'id':tb.id()},'MySQL error deleting trust boundary components for ' + tb.name())
     self.updateDatabase("call updateTrustBoundary(:id,:name,:desc)",{'id':tb.id(),'name':tb.name(),'desc':tb.description()},'MySQL error adding trust boundary ' + tb.name())
-    for environmentName in list(tb.environmentProperties().keys()):
-      for tbComponentType,tbComponent in tb.environmentProperties()[environmentName]:
+    defaultPrivilegeLevels = {}
+    for environmentName in list(tb.components().keys()):
+      defaultPrivilegeLevels[environmentName] = 'None'
+      for tbComponentType,tbComponent in tb.components()[environmentName]:
         self.addTrustBoundaryComponent(tb.id(),environmentName,tbComponent)
+    tbPrivilegeLevels = tb.privilegeLevels()
+    if (len(tbPrivilegeLevels) == 0):
+      tbPrivilegeLevels = defaultPrivilegeLevels
+    for environmentName in list(tbPrivilegeLevels.keys()):
+      self.addTrustBoundaryPrivilege(tb.id(),environmentName,self.privilegeValue(tbPrivilegeLevels[environmentName]))
 
   def deleteTrustBoundary(self,tbId):
     self.deleteObject(tbId,'trust_boundary')

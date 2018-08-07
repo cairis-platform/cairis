@@ -90,16 +90,22 @@ $(document).on('click', "td.trustboundary-rows", function(){
   $.session.set("TrustBoundary", JSON.stringify(tb));
 
   fillOptionMenu("fastTemplates/editTrustBoundaryOptions.html","#objectViewer",null,true,true, function(){
-    $('#UpdateTrustBoundary').text("Update");
-    $('#theTrustBoundaryName').val(tb.theName);
-    $('#theTrustBoundaryDescription').val(tb.theDescription);
+    refreshDimensionSelector($('#thePrivilege'),'privilege',undefined,function() {
+      if (tb.theEnvironmentProperties.length == 0) {
+        $("#trustBoundariesTabID").hide();
+      }
+      $('#UpdateTrustBoundary').text("Update");
+      $('#theTrustBoundaryName').val(tb.theName);
+      $('#theTrustBoundaryDescription').val(tb.theDescription);
+      $('#editTrustBoundaryOptionsForm').validator('update');
 
-    $.each(tb.theEnvironmentProperties, function (index, envprop) {
-      appendTrustBoundaryEnvironment(envprop.theName);
+      $.each(tb.theEnvironmentProperties, function (index, envprop) {
+        appendTrustBoundaryEnvironment(envprop.theName);
+      });
+      $("#theTrustBoundaryEnvironments").find(".trustBoundaryEnvironmentProperties:first").trigger('click');
+      var envName = $("#theTrustBoundaryEnvironments").find(".trustBoundaryEnvironmentProperties:first").text();
+      $.session.set("TrustBoundaryEnvironmentName", envName);
     });
-    $("#theTrustBoundaryEnvironments").find(".trustBoundaryEnvironmentProperties:first").trigger('click');
-    $('#editTrustBoundaryOptionsForm').validator('update');
-    $.session.set("TrustBoundaryEnvironmentName", $("#theTrustBoundaryEnvironments").find(".trustBoundaryEnvironmentProperties:first").text());
   });
 });
     
@@ -141,14 +147,16 @@ function commitTrustBoundary() {
 $(document).on("click", "#addNewTrustBoundary", function () {
   activeElement("objectViewer");
   fillOptionMenu("fastTemplates/editTrustBoundaryOptions.html", "#objectViewer", null, true, true, function () {
-    $('#editTrustBoundaryOptionsForm').validator();
-    $('#UpdateTrustBoundary').text("Create");
-    $("#editTrustBoundaryOptionsForm").addClass("new");
-    $('#theTrustBoundaryName').val('');
-    $('#theTrustBoundaryDescription').val('');
-    $("#trustBoundariesTabID").hide();
-    $.session.set("TrustBoundary", JSON.stringify(jQuery.extend(true, {},trustBoundaryDefault )));
-    $('#editTrustBoundaryOptionsForm').loadJSON(trustBoundaryDefault, null);
+    refreshDimensionSelector($('#thePrivilege'),'privilege',undefined,function() {
+      $('#editTrustBoundaryOptionsForm').validator();
+      $('#UpdateTrustBoundary').text("Create");
+      $("#editTrustBoundaryOptionsForm").addClass("new");
+      $('#theTrustBoundaryName').val('');
+      $('#theTrustBoundaryDescription').val('');
+      $("#trustBoundariesTabID").hide();
+      $.session.set("TrustBoundary", JSON.stringify(jQuery.extend(true, {},trustBoundaryDefault )));
+      $('#editTrustBoundaryOptionsForm').loadJSON(trustBoundaryDefault, null);
+    });
   });
 });
 
@@ -263,16 +271,16 @@ function postTrustBoundary(tb, callback){
 }
 
 mainContent.on('click', '.deleteTrustBoundaryEnvironment', function () {
-  var propEnvName = $(this).next("td").text();
+  var envName = $(this).next(".trustBoundaryEnvironmentProperties").text();
+  $(this).closest("tr").remove();
   var tb = JSON.parse($.session.get("TrustBoundary"));
 
   $.each(tb.theEnvironmentProperties, function (index, prop) {
-    if(tb.theEnvironmentName == propEnvName){
+    if(prop.theName == envName){
       tb.theEnvironmentProperties.splice(index,1);
     }
   });
   $.session.set("TrustBoundary", JSON.stringify(tb));
-  $(this).closest("tr").remove();
   var UIenv = $("#theTrustBoundaryEnvironments").find("tbody");
   if(jQuery(UIenv).has(".trustBoundaryEnvironmentProperties").length){
     UIenv.find(".trustBoundaryEnvironmentProperties:first").trigger('click');
@@ -293,6 +301,7 @@ mainContent.on("click", ".trustBoundaryEnvironmentProperties", function () {
       $.each(prop.theComponents, function (index, tbComponent) {
         appendTrustBoundaryComponent(tbComponent);
       });
+      $("#thePrivilege").val(prop.thePrivilege);
     }
   });
 });
@@ -425,4 +434,15 @@ function addTrustBoundaryEnvironment() {
     }
   });
 }
+
+mainContent.on('change', '#thePrivilege', function () {
+  var tb = JSON.parse($.session.get("TrustBoundary"));
+  var envName = $.session.get("TrustBoundaryEnvironmentName");
+  $.each(tb.theEnvironmentProperties, function (index, env) {
+    if(env.theName == envName){
+      env.thePrivilege = $("#thePrivilege option:selected").text();
+      $.session.set("TrustBoundary", JSON.stringify(tb));
+    }
+  });
+});
 

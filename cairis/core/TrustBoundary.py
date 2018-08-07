@@ -18,13 +18,15 @@
 __author__ = 'Shamal Faily'
 
 class TrustBoundary:
-  def __init__(self,tbId = -1,tbName = '',tbDesc = '',comps = {}):
+  def __init__(self,tbId = -1,tbName = '',tbDesc = '',comps = {}, pl = {}):
     self.theId = tbId
     self.theName = tbName
     self.theDescription = tbDesc
-    self.theEnvironmentProperties = comps
+    self.theComponents = comps
+    self.thePrivilegeLevels = pl
 
   def id(self): return self.theId
   def name(self): return self.theName
   def description(self): return self.theDescription
-  def environmentProperties(self): return self.theEnvironmentProperties
+  def components(self): return self.theComponents
+  def privilegeLevels(self): return self.thePrivilegeLevels

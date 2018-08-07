@@ -51,8 +51,9 @@ class DataflowsContentHandler(ContentHandler,EntityResolver):
     self.theDescription = ''
     self.theName = ''
     self.theEnvironmentName = ''
-    self.theEnvironmentProperties = {}
+    self.theEnvironmentComponents = {}
     self.theComponents = []
+    self.theEnvironmentPrivileges = {}
 
   def startElement(self,name,attrs):
     self.currentElementName = name
@@ -73,6 +74,10 @@ class DataflowsContentHandler(ContentHandler,EntityResolver):
       self.theDescription = ''
     elif name == 'trust_boundary_environment':
       self.theEnvironmentName = attrs['name']
+      pLevel = 'None'
+      if ('privilege' in attrs):
+        pLevel = attrs['privilege']
+      self.theEnvironmentPrivileges[self.theEnvironmentName] = pLevel
     elif name == 'trust_boundary_component':
       self.theComponents.append((attrs['type'],attrs['name']))
 
@@ -85,11 +90,11 @@ class DataflowsContentHandler(ContentHandler,EntityResolver):
       self.theDataFlows.append(DataFlowParameters(self.theName,self.theEnvironmentName,self.theFromName,self.theFromType,self.theToName,self.theToType,self.theAssets))
       self.resetDataFlowAttributes()
     elif name == 'trust_boundary_environment':
-      self.theEnvironmentProperties[self.theEnvironmentName] = self.theComponents
+      self.theEnvironmentComponents[self.theEnvironmentName] = self.theComponents
       self.theComponents = []
       self.theEnvironmentName = ''
     elif name == 'trust_boundary':
-      self.theTrustBoundaries.append(TrustBoundary(-1,self.theName,self.theDescription,self.theEnvironmentProperties))
+      self.theTrustBoundaries.append(TrustBoundary(-1,self.theName,self.theDescription,self.theEnvironmentComponents,self.theEnvironmentPrivileges))
       self.resetTrustBoundaryAttributes()
     elif name == 'description':
       self.inDescription = 0

@@ -81,7 +81,7 @@ class DataFlowDiagram:
         self.theClusters[tbName] = c
         self.theGraph.add_subgraph(c)
         try:
-          for tbType,tbComponent in tbs[tbName].environmentProperties()[self.theEnvironmentName]:
+          for tbType,tbComponent in tbs[tbName].components()[self.theEnvironmentName]:
             self.tbDict[tbComponent] = tbName
         except KeyError:
           pass

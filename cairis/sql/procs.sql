@@ -941,6 +941,10 @@ drop procedure if exists getPersonalResponses;
 drop procedure if exists lawfulProcessingTable;
 drop procedure if exists synopsesToXml;
 drop procedure if exists newRiskContexts;
+drop function if exists privilegeValue;
+drop procedure if exists addTrustBoundaryPrivilege;
+drop function if exists trustBoundaryPrivilege;
+
 
 delimiter //
 
@@ -24015,6 +24019,7 @@ create procedure deleteTrustBoundaryComponents(in tbId int)
 begin
   delete from trust_boundary_usecase where trust_boundary_id = tbId;
   delete from trust_boundary_asset where trust_boundary_id = tbId;
+  delete from trust_boundary_privilege where trust_boundary_id = tbId;
 end
 //
 
@@ -24041,6 +24046,8 @@ begin
   end if;
 end
 //
+
+
 
 create procedure relabelRequirements(in reqReference text)
 begin
@@ -25091,5 +25098,34 @@ begin
 end
 //
 
+create function privilegeValue(pName text) 
+returns int
+deterministic 
+begin
+  declare pLevel int default 0;
+  select ifnull(value,0) into pLevel from privilege where name = pName limit 1;
+  return pLevel;
+end
+//
+
+create procedure addTrustBoundaryPrivilege(in tbId int, in envName text, in pValue int)
+begin
+  declare envId int;
+  select id into envId from environment where name = envName;
+  insert into trust_boundary_privilege(trust_boundary_id,environment_id,privilege_value) value (tbId,envId,pValue);
+end
+//
+
+create function trustBoundaryPrivilege(tbId int, envId int) 
+returns text
+deterministic 
+begin
+  declare vId int;
+  declare pLevel varchar(50) default 'None';
+  select ifnull(privilege_value,0) into vId from trust_boundary_privilege  where trust_boundary_id = tbId and environment_id = envId limit 1;
+  select ifnull(name,'None') into pLevel from privilege where value = vId limit 1;
+  return pLevel;
+end
+//
 
 delimiter ;

@@ -117,12 +117,13 @@ class TrustBoundaryDAO(CairisDAO):
     json_dict = json['object']
     check_required_keys(json_dict, TrustBoundaryModel.required)
     json_dict['__python_obj__'] = TrustBoundary.__module__ + '.' + TrustBoundary.__name__
-    env_props = self.convert_props(fake_props=json_dict['theEnvironmentProperties'])
+    comps,pls = self.convert_props(fake_props=json_dict['theEnvironmentProperties'])
     json_dict['theEnvironmentProperties'] = []
 
     tb = json_serialize(json_dict)
     tb = json_deserialize(tb)
-    tb.theEnvironmentProperties = env_props
+    tb.theComponents = comps
+    tb.thePrivilegeLevels = pls
     if not isinstance(tb, TrustBoundary):
       self.close()
       raise MalformedJSONHTTPError(data=request.get_data())
@@ -132,25 +133,34 @@ class TrustBoundaryDAO(CairisDAO):
   def simplify(self, tb):
     assert isinstance(tb, TrustBoundary)
     del tb.theId
-    tb.theEnvironmentProperties = self.convert_props(real_props=tb.theEnvironmentProperties)
+    tb.theEnvironmentProperties = self.convert_props(real_props=(tb.theComponents,tb.thePrivilegeLevels))
+    del tb.theComponents
+    del tb.thePrivilegeLevels
     return tb
 
 
   def convert_props(self, real_props=None, fake_props=None):
     if real_props is not None:
+      real_comps = real_props[0]
+      real_pls = real_props[1]
       new_props = []
-      for envName in real_props:
+      for envName in real_comps:
         compList = []
-        for tbCompType,tbComp in real_props[envName]:
+        for tbCompType,tbComp in real_comps[envName]:
           compList.append(TrustBoundaryComponent(tbComp,tbCompType))
-        new_props.append(TrustBoundaryEnvironmentModel(envName,compList))
+        pLevel = real_pls[envName]
+        new_props.append(TrustBoundaryEnvironmentModel(envName,compList,pLevel))
       return new_props
     elif fake_props is not None:
       new_props = {}
+      new_pls = {}
+     
       for fake_prop in fake_props:
         envName = fake_prop['theName']
+        pLevel = fake_prop['thePrivilege']
         compList = []
         for comp in fake_prop['theComponents']:
           compList.append((comp['theType'],comp['theName']))
         new_props[envName] = compList
-      return new_props
+        new_pls[envName] = pLevel
+      return (new_props,new_pls)

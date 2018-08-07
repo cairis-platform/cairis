@@ -4,6 +4,7 @@
      "theDescription" : "Identity Provider",
      "theEnvironmentProperties" : [
        {"theName" : "Psychosis",
+        "thePrivilege" : "None",
         "theComponents" :[{"theName": "Authenticate Researcher","theType" : "process"}]
        }
      ]

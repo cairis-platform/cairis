@@ -99,6 +99,8 @@ Adding, updating, or deleting trust boundaries
 
 -   Click the Add button in the Components table to situate a process or data store within this environment specific trust boundary.
 
+-   Select the level of privilege that the components in this trust boundary operate at.
+
 -   Click on the Create button to add the trust boundary to the Trust Boundary table.
 
 -   An existing trust boundary can be edited by clicking on a trust boundary in the Trust Boundaries table, updating any aspect of the trust boundary, and clicking on the Update button.

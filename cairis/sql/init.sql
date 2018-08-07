@@ -60,6 +60,7 @@ DROP VIEW IF EXISTS personal_risk;
 
 DROP TABLE IF EXISTS trust_boundary_usecase;
 DROP TABLE IF EXISTS trust_boundary_asset;
+DROP TABLE IF EXISTS trust_boundary_privilege;
 DROP TABLE IF EXISTS trust_boundary;
 DROP TABLE IF EXISTS dataflow_process_process;
 DROP TABLE IF EXISTS dataflow_entity_process;
@@ -3361,6 +3362,16 @@ create TABLE trust_boundary_asset (
   FOREIGN KEY(environment_id) REFERENCES environment(id),
   FOREIGN KEY(asset_id) REFERENCES asset(id)
 ) ENGINE=INNODB;
+
+create TABLE trust_boundary_privilege (
+  trust_boundary_id INT NOT NULL,
+  environment_id INT NOT NULL,
+  privilege_value INT NOT NULL,
+  PRIMARY KEY(trust_boundary_id,environment_id,privilege_value),
+  FOREIGN KEY(trust_boundary_id) REFERENCES trust_boundary(id),
+  FOREIGN KEY(environment_id) REFERENCES environment(id)
+) ENGINE=INNODB;
+
 
 delimiter //
 
