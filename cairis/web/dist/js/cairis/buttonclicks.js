@@ -569,7 +569,7 @@ $("#chooseLocationsEnvironmentDialog").on('click', '#chooseLocationEnvironmentBu
 
 $("#clearClick").click(function () {
   showLoading();
-  postNewProject(function () {
+  postClearProject(function () {
     refreshHomeBreadCrumb();
   });
 });

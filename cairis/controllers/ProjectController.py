@@ -33,16 +33,15 @@ from cairis.tools.SessionValidator import get_session_id
 __author__ = 'Robin Quetin, Shamal Faily'
 
 
-class ProjectCreateAPI(Resource):
+class ProjectClearAPI(Resource):
 
   def post(self):
     session_id = get_session_id(session, request)
 
     dao = ProjectDAO(session_id)
-    dao.create_new_project()
+    dao.clear_project()
     dao.close()
-
-    resp_dict = {'message': 'New project successfully created'}
+    resp_dict = {'message': 'Project cleared successfully'}
     resp = make_response(json_serialize(resp_dict, session_id=session_id), OK)
     resp.contenttype = 'application/json'
     return resp

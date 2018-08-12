@@ -63,7 +63,7 @@ class LocationsDAO(CairisDAO):
       locsName=locs.name(),
       locsDiagram=locs.diagram(),
       locs=locs.locations(),
-      links=locs.links())
+      links=[])
     try:
       self.db_proxy.addLocations(p)
     except ARMException as ex:
@@ -77,7 +77,7 @@ class LocationsDAO(CairisDAO):
       locsName=locs.name(),
       locsDiagram=locs.diagram(),
       locs=locs.locations(),
-      links=locs.links())
+      links=[])
     p.setId(locs_id)
     try:
       self.db_proxy.updateLocations(p)
@@ -120,8 +120,8 @@ class LocationsDAO(CairisDAO):
   def simplify(self, obj):
     assert isinstance(obj, Locations)
     del obj.theId
+    del obj.theLinks
     obj.theLocations = self.convert_loc_list(real_loc_list=obj.theLocations)
-    obj.theLinks = []
     return obj
 
   def convert_loc_list(self,real_loc_list = None, fake_loc_list = None):

@@ -98,8 +98,8 @@ class ProjectAPITests(CairisDaemonTestCase):
     json_body = jsonpickle.encode(new_json_dict)
     rv = self.app.put(url, data=json_body, content_type='application/json')
 
-  def test_create_new_project(self):
-    url = '/api/settings/create?session_id=test'
+  def test_clear_project(self):
+    url = '/api/settings/clear?session_id=test'
     import_url = '/api/import/file/type/all'
     method = 'test_create_new_project'
     rv = self.app.post(url)
@@ -113,7 +113,7 @@ class ProjectAPITests(CairisDaemonTestCase):
     self.assertTrue('message' in json_dict, 'No message in reponse')
     message = str(json_dict['message'])
     self.logger.info('[%s] Message: %s', method, message)
-    self.assertGreater(message.find('successfully'), -1, 'Failed to create new project')
+    self.assertGreater(message.find('successfully'), -1, 'Failed to clear project')
 
     fs_xmlfile = open(self.xmlfile, 'rb')
     file_contents = fs_xmlfile.read()

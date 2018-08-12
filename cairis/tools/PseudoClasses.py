@@ -205,11 +205,8 @@ class Revision(object):
 class ProjectSettings(object):
   resource_fields = {
     obj_id_field: fields.String,
-    'fontName': fields.String,
-    'apFontSize': fields.String,
     'projectName': fields.String,
     'richPicture': fields.String,
-    'fontSize': fields.String,
     'projectScope': fields.String,
     'definitions': fields.String,
     'projectGoals': fields.String,
@@ -219,15 +216,12 @@ class ProjectSettings(object):
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
-  req_p_settings_keys = ['AP Font Size', 'Font Name', 'Font Size', 'Project Background', 'Project Goals', 'Project Name', 'Project Scope', 'Rich Picture']
+  req_p_settings_keys = ['Project Background', 'Project Goals', 'Project Name', 'Project Scope', 'Rich Picture']
 
   def __init__(self, pSettings=None, pDict=None, contributors=None, revisions=None):
     logger = logging.getLogger('cairisd')
     project_settings = pSettings or {}
 
-    self.apFontSize = project_settings.get("AP Font Size", "13")
-    self.fontName = project_settings.get("Font Name", "Times New Roman")
-    self.fontSize = project_settings.get("Font Size", "7.5")
     self.projectBackground = project_settings.get("Project Background", "")
     self.projectGoals = project_settings.get("Project Goals", "")
     self.projectName = project_settings.get("Project Name", "")

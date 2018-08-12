@@ -210,6 +210,9 @@ class MySQLDatabaseProxy:
     except OperationalError as e:
       exceptionText = 'MySQL error re-connecting to the CAIRIS database ' + b.dbName + ' on host ' + b.dbHost + ' at port ' + str(b.dbPort) + ' with user ' + b.dbUser + ' (message:' + format(e) + ')'
       raise DatabaseProxyException(exceptionText) 
+    except _mysql_exceptions.IntegrityError as e:
+      exceptionText = 'MySQL error re-connecting to the CAIRIS database ' + b.dbName + ' on host ' + b.dbHost + ' at port ' + str(b.dbPort) + ' with user ' + b.dbUser + ' (id:' + str(id) + ',message:' + format(e)
+      raise DatabaseProxyException(exceptionText) 
     except _mysql_exceptions.DatabaseError as e:
       exceptionText = 'MySQL error re-connecting to the CAIRIS database ' + b.dbName + ' on host ' + b.dbHost + ' at port ' + str(b.dbPort) + ' with user ' + b.dbUser + ' (id:' + str(id) + ',message:' + format(e)
       raise DatabaseProxyException(exceptionText) 

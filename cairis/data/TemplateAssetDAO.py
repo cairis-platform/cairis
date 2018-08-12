@@ -151,6 +151,7 @@ class TemplateAssetDAO(CairisDAO):
     del ta.theId
     ta.theInterfaces = self.convert_ifs(real_ifs=ta.theInterfaces)
     ta.theProperties = self.convert_props(real_props=ta.theProperties,fake_props=None,rationales=ta.theRationale)
+    del ta.theRationale
     return ta
 
   def convert_ifs(self, real_ifs=None, fake_ifs=None):

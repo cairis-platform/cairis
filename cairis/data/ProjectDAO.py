@@ -30,7 +30,7 @@ class ProjectDAO(CairisDAO):
   def __init__(self, session_id):
     CairisDAO.__init__(self, session_id)
 
-  def create_new_project(self):
+  def clear_project(self):
     try:
       self.db_proxy.clearDatabase(session_id=self.session_id)
     except DatabaseProxyException as ex:
@@ -102,6 +102,7 @@ class ProjectDAO(CairisDAO):
 
   def apply_settings(self, settings):
     try:
+      b = Borg()
       self.db_proxy.updateSettings(
         settings.projectName,
         settings.projectBackground,
@@ -111,8 +112,8 @@ class ProjectDAO(CairisDAO):
         settings.contributions,
         settings.revisions,
         settings.richPicture,
-        settings.fontSize,
-        settings.fontName
+        b.settings[self.session_id]['fontSize'],
+        b.settings[self.session_id]['fontName']
       )
     except DatabaseProxyException as ex:
       raise ARMHTTPError(ex)

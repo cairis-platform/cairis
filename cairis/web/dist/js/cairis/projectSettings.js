@@ -428,7 +428,7 @@ function getDate(format, utc) {
   return format;
 }
 
-function postNewProject(callback){
+function postClearProject(callback){
   $.ajax({
     type: "POST",
     dataType: "json",
@@ -437,7 +437,7 @@ function postNewProject(callback){
     crossDomain: true,
     processData: false,
     origin: serverIP,
-    url: serverIP + "/api/settings/create" + "?session_id=" + $.session.get('sessionID'),
+    url: serverIP + "/api/settings/clear" + "?session_id=" + $.session.get('sessionID'),
     success: function (data) {
       callback();
     },

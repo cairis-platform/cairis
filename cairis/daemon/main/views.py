@@ -332,7 +332,7 @@ api.add_resource(PersonaCharacteristicController.PersonaCharacteristicByNameAPI,
 
 # Project routes
 api.add_resource(ProjectController.ProjectSettingsAPI, '/api/settings',endpoint='project_settings')
-api.add_resource(ProjectController.ProjectCreateAPI, '/api/settings/create',endpoint='project_create')
+api.add_resource(ProjectController.ProjectClearAPI, '/api/settings/clear',endpoint='project_clear')
 api.add_resource(ProjectController.ProjectCreateDatabaseAPI, '/api/settings/database/<string:db_name>/create',endpoint='database_create')
 api.add_resource(ProjectController.ProjectOpenDatabaseAPI, '/api/settings/database/<string:db_name>/open',endpoint='database_open')
 api.add_resource(ProjectController.ProjectDeleteDatabaseAPI, '/api/settings/database/<string:db_name>/delete',endpoint='database_delete')
