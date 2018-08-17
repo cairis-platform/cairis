@@ -178,9 +178,12 @@ function createValueTypesTable(valueType,envName){
 
 $(document).on('click', "td.valuetype-rows", function () {
   activeElement("objectViewer");
-  var name = $(this).closest("tr").find("td:eq(1)").text();
   refreshObjectBreadCrumb(name);
   var valueType = $.session.get("value_type");
+  var name = $(this).closest("tr").find("td:eq(1)").text();
+  if (valueType == 'asset_value') {
+    name = $(this).closest("tr").find("td:eq(0)").text();
+  }
   var envName = $.session.get("environment");
   if (envName == undefined) {
     envName = 'all';

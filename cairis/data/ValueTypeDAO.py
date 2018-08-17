@@ -49,13 +49,15 @@ class ValueTypeDAO(CairisDAO):
       vtso.append(vt)
     return vtso
 
-  def get_value_type(self, dimName,envName,objtName):
+  def get_value_type(self, dimName,envName,objtName,deleteId=True):
     vts = self.get_value_types(dimName,envName,False)
     if vts is None or len(vts) < 1:
       self.close()
       raise ObjectNotFoundHTTPError(dimName)
     for vt in vts:
       if (vt.name() == objtName):
+        if (deleteId == True):
+          del vt.theId
         return vt
     self.close()
     raise ObjectNotFoundHTTPError('The provided ' + dimName + ' value types')
@@ -76,7 +78,7 @@ class ValueTypeDAO(CairisDAO):
 
 
   def update_value_type(self,vt,type_name,environment_name,object_name):
-    found_vt = self.get_value_type(type_name,environment_name,object_name)
+    found_vt = self.get_value_type(type_name,environment_name,object_name,False)
     vtParams = ValueTypeParameters(
       vtName=vt.theName,
       vtDesc=vt.theDescription,
@@ -92,7 +94,7 @@ class ValueTypeDAO(CairisDAO):
       raise ARMHTTPError(ex)
 
   def delete_value_type(self, type_name,environment_name,object_name):
-    vt = self.get_value_type(type_name,environment_name,object_name)
+    vt = self.get_value_type(type_name,environment_name,object_name,False)
     try:
       self.db_proxy.deleteValueType(vt.theId,type_name)
     except ARMException as ex:
