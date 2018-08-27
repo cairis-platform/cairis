@@ -1871,7 +1871,10 @@ function dimensionCheck(dimensionName,callback) {
 
 function refreshHomeBreadCrumb() {
   $('#BC').hide();
-  summaryTables();
+  getProjectSettings(function(data) {
+    document.title = data.projectName;
+    summaryTables();
+  });
 }
 
 

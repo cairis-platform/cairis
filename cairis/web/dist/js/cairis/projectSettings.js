@@ -28,7 +28,7 @@ $("#projectClick").click(function () {
 function showProjectSettingsForm() {
   activeElement("objectViewer");
   getProjectSettings(function (data) {
-
+    document.title = data.projectName;
     fillOptionMenu("fastTemplates/editProjectSettings.html", "#objectViewer", null, true, false, function () {
       var image = $("#theImages");
       $('#ProjectsProperties').loadJSON(data, null);
