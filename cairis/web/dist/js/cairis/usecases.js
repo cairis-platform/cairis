@@ -143,6 +143,7 @@ function viewUseCase(ucName) {
         $.each(data.theEnvironmentProperties, function (index, env) {
           appendUseCaseEnvironment(env.theEnvironmentName);
         });
+        $("#theEnvironments").find(".usecaseEnvironment:first").closest('tr').addClass('initialView');
         $("#theEnvironments").find(".usecaseEnvironment:first").trigger('click');
         $('#editUseCaseOptionsForm').validator('update');
       });
@@ -159,8 +160,14 @@ function viewUseCase(ucName) {
 
 var mainContent = $("#objectViewer");
 mainContent.on("click",".usecaseEnvironment", function () {
-  $(this).closest('tr').addClass('active').siblings().removeClass('active');
-  updateUseCaseEnvInfo();
+  var row = $(this).closest('tr');
+  row.addClass('active').siblings().removeClass('active');
+  if (row.hasClass('initialView')) {
+    row.removeClass('initialView');
+  }
+  else {
+    updateUseCaseEnvInfo();
+  }
   var usecase = JSON.parse($.session.get("UseCase"));
   var theEnvName = $(this).text();
   $.session.set("usecaseEnvironmentName", theEnvName);
