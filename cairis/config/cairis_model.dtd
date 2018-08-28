@@ -324,9 +324,9 @@
 <!ATTLIST step description CDATA #REQUIRED>
 <!ELEMENT exception (definition)>
 <!ATTLIST exception name CDATA #REQUIRED>
-<!ATTLIST exception type (Goal | Requirement) #REQUIRED>
-<!ATTLIST exception value CDATA #REQUIRED>
-<!ATTLIST exception category (Confidentiality_Threat | Integrity_Threat | Availability_Threat | Accountability_Threat | Vulnerability | Duration | Frequency | Demands | Goal_Support | Anonymity_Threat | Pseudonymity_Threat | Unlinkability_Threat | Unobservability_Threat | Threat ) #REQUIRED>
+<!ATTLIST exception type (None | Goal | Requirement) #REQUIRED>
+<!ATTLIST exception value CDATA #IMPLIED>
+<!ATTLIST exception category (Confidentiality_Threat | Integrity_Threat | Availability_Threat | Accountability_Threat | Vulnerability | Duration | Frequency | Demands | Goal_Support | Anonymity_Threat | Pseudonymity_Threat | Unlinkability_Threat | Unobservability_Threat | Threat ) #IMPLIED>
 <!ELEMENT postconditions (#PCDATA)>
 
 
