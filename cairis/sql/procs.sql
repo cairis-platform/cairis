@@ -944,6 +944,7 @@ drop procedure if exists newRiskContexts;
 drop function if exists privilegeValue;
 drop procedure if exists addTrustBoundaryPrivilege;
 drop function if exists trustBoundaryPrivilege;
+drop procedure if exists unrelatedExceptionCheck;
 
 
 delimiter //
@@ -3335,6 +3336,8 @@ end
 
 create procedure useCaseStepExceptions(in ucId int, in envId int, in stepNo int)
 begin
+  select usne.name, 'none' dimension, 'None', 'None', usne.description from usecase_step_none_exception usne where usne.usecase_id = ucId and usne.environment_id = envId and usne.step_no = stepNo
+  union
   select usge.name, 'goal' dimension, g.name value, oct.name category, usge.description from usecase_step_goal_exception usge, goal g, obstacle_category_type oct where usge.usecase_id = ucId and usge.environment_id = envId and usge.step_no = stepNo and usge.goal_id = g.id and usge.category_type_id = oct.id
   union
   select usge.name, 'requirement' dimension, r.name value, oct.name category, usge.description from usecase_step_requirement_exception usge, requirement r, asset_requirement ar, asset a, obstacle_category_type oct where usge.usecase_id = ucId and usge.environment_id = envId and usge.step_no = stepNo and usge.goal_id = r.id and r.id = ar.requirement_id and ar.asset_id = a.id and r.version = (select max(i.version) from requirement i where i.id = r.id) and usge.category_type_id = oct.id
@@ -3355,11 +3358,16 @@ begin
   select id into envId from environment where name = envName;
   select id into catTypeId from obstacle_category_type where name = catName;
 
-  if dimType = 'goal'
+
+  if dimType = 'none'
+  then
+    insert into usecase_step_none_exception(usecase_id,environment_id,step_no,name,description) values(ucId,envId,stepNo,exName,excDesc);
+  elseif dimType = 'goal'
   then
     select id into goalId from goal where name = dimName;
     insert into usecase_step_goal_exception(usecase_id,environment_id,step_no,name,goal_id,category_type_id,description) values (ucId,envId,stepNo,exName,goalId,catTypeId,excDesc);
-  else
+  elseif dimType = 'requirement'
+  then
     select o.id into goalId from requirement o where o.name = dimName and o.version = (select max(i.version) from requirement i where i.id = o.id);
     insert into usecase_step_requirement_exception(usecase_id,environment_id,step_no,name,goal_id,category_type_id,description) values (ucId,envId,stepNo,exName,goalId,catTypeId,excDesc);
   end if;
@@ -3563,6 +3571,7 @@ begin
   delete from usecase_role where usecase_id = ucId;
   delete from usecase_conditions where usecase_id = ucId;
   delete from usecase_step where usecase_id = ucId;
+  delete from usecase_step_none_exception where usecase_id = ucId;
   delete from usecase_step_goal_exception where usecase_id = ucId;
   delete from usecase_step_requirement_exception where usecase_id = ucId;
   delete from usecase_step_synopsis where usecase_id = ucId;
@@ -13138,6 +13147,8 @@ begin
   declare ucActorCursor cursor for select r.name from usecase_role ur, role r where ur.usecase_id = ucId and ur.role_id = r.id;
   declare ucStepCursor cursor for select step_no,description from usecase_step where usecase_id = ucId and environment_id = envId order by 1;
   declare ucStepExceptionCursor cursor for
+    select name, 'None', 'None', 'None' from usecase_step_none_exception where usecase_id = ucId and environment_id = envId and step_no = stepNo
+    union
     select usge.name, 'Goal', g.name, oct.name, usge.description from usecase_step_goal_exception usge, goal g, obstacle_category_type oct where usge.usecase_id = ucId and usge.environment_id = envId and usge.step_no = stepNo and usge.goal_id = g.id and usge.category_type_id = oct.id
     union
     select usge.name, 'Requirement', concat(a.short_code,'-',r.label), oct.name, usge.description from usecase_step_requirement_exception usge, requirement r, asset_requirement ar, asset a, obstacle_category_type oct where usge.usecase_id = ucId and usge.environment_id = envId and usge.step_no = stepNo and usge.goal_id = r.id and r.id = ar.requirement_id and ar.asset_id = a.id and r.version = (select max(i.version) from requirement i where i.id = r.id) and usge.category_type_id = oct.id
@@ -17798,6 +17809,8 @@ begin
   declare flowCursor cursor for
     select step_no,description from usecase_step where usecase_id = ucId and environment_id = envId order by 1;
   declare excCursor cursor for
+    select step_no,description from usecase_step_none_exception where usecase_id = ucId and environment_id = envId
+    union
     select step_no,description from usecase_step_goal_exception where usecase_id = ucId and environment_id = envId
     union
     select step_no,description from usecase_step_requirement_exception where usecase_id = ucId and environment_id = envId order by 1;
@@ -24212,6 +24225,7 @@ begin
   call storageLimitationCheck(environmentId);
   call criticalPrivacyRisks(environmentId);
   call newRiskContexts();
+  call unrelatedExceptionCheck(environmentId);
 
   select label,message from temp_vout;
 
@@ -25125,6 +25139,46 @@ begin
   select ifnull(privilege_value,0) into vId from trust_boundary_privilege  where trust_boundary_id = tbId and environment_id = envId limit 1;
   select ifnull(name,'None') into pLevel from privilege where value = vId limit 1;
   return pLevel;
+end
+//
+
+create procedure unrelatedExceptionCheck(in environmentId int)
+begin
+  declare done int default 0;
+  declare stepNo int;
+  declare envName varchar(50);
+  declare excName varchar(200);
+  declare ucId int;
+  declare ucName varchar(200);
+  declare ucCursor cursor for select uc.name,uc.id from environment_usecase eu, usecase uc where eu.environment_id = environmentId and eu.usecase_id = uc.id;
+  declare stepCursor cursor for select usne.step_no, usne.name from usecase_step_none_exception usne where usne.usecase_id = ucId and usne.environment_id = environmentId order by 1;
+  declare continue handler for not found set done = 1;
+
+  select name into envName from environment where id = environmentId limit 1;
+
+  open ucCursor;
+  uc_loop: loop
+    fetch ucCursor into ucName,ucId;
+    if done = 1
+    then
+      leave uc_loop;
+    end if;
+
+    open stepCursor;
+    step_loop: loop
+      fetch stepCursor into stepNo, excName;
+      if done = 1
+      then
+        leave step_loop;
+      end if;    
+      insert into temp_vout(label,message) values('Uncovered exception',concat("Use case '",ucName,"' is present in environment '",envName,"', but step ",stepNo," of the flow in this environment has an exception (", excName,") with no related obstacle."));
+    end loop step_loop;
+    close stepCursor;
+    set done = 0;
+  end loop uc_loop;
+  close ucCursor;
+  set done = 0;
+
 end
 //
 

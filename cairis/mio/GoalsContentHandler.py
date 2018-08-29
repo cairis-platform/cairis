@@ -288,8 +288,15 @@ class GoalsContentHandler(ContentHandler,EntityResolver):
     elif name == 'exception':
       self.theExcName = attrs['name']
       self.theExcType = attrs['type']
-      self.theExcValue = attrs['value']
-      self.theExcCat = u2s(attrs['category'])
+      if (self.theExcType == 'None'):
+        self.theExcValue = 'None'
+        self.theExcCat = 'None'
+      else: 
+        try: 
+          self.theExcValue = attrs['value']
+          self.theExcCat = u2s(attrs['category'])
+        except KeyError:
+          raise ARMException('Exception ' + self.theExcName + ' has a goal or requirement exception type but no related goal/requirement name or exception category')
     elif name == 'countermeasure':
       self.theName = attrs['name']
       self.theType = attrs['type']
@@ -385,7 +392,7 @@ class GoalsContentHandler(ContentHandler,EntityResolver):
       self.theRequirements.append((r,self.theReference,self.theReferenceType))
       self.resetRequirementAttributes()
     elif name == 'exception':
-      self.theCurrentStep.addException((self.theExcName,self.theExcType,self.theExcValue,self.theExcCat,unescape(self.theDefinition)))
+      self.theCurrentStep.addException((self.theExcName,self.theExcType.lower(),self.theExcValue,self.theExcCat,unescape(self.theDefinition)))
     elif name == 'step':
       self.theCurrentStep.setTags(self.theTags)
       self.theSteps.append(self.theCurrentStep)

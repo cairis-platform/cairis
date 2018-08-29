@@ -19,6 +19,7 @@ Check                             Description
 ================================= ======================================================================================================
 Composition/Aggregation Integrity For Hardware/Software/Information assets, checks head asset integrity isn't lower than the tail asset.
 New risk contexts                 Risks present in environments that haven't been accounted for.
+Uncovered exception               Exception present in use case without a related obstacle.
 ================================= ======================================================================================================
 
 

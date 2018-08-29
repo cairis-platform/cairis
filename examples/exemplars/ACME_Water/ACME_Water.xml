@@ -2920,6 +2920,9 @@ Standard 7.11(vvv)</issue>
     <preconditions>Software repository online.  Alarm mechanisms online.  Instrument technician authenticated with outstation.  Instrument technician authenticated with telemetry network.  Modified software on laptop and outstation.</preconditions>
     <flow>
       <step number="1" description="Instrument Technician requests verification of software change" >
+        <exception name="No changes" type="None">
+          <definition>No software has been changed.</definition>
+        </exception>
       </step>
       <step number="2" description="System sends software change alarm to Telemetry Network" >
       </step>

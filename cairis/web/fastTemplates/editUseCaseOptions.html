@@ -221,13 +221,16 @@
         <div class="form-group panel panel-default">
           <div class="panel-heading">Type</div>
           <div class="panel-body">
+            <label id="theExceptionTypeNoneRadioLabel" class="radio-inline control-label"><input type="radio" name="theExceptionTypeRadio" selected>None</label>
             <label id="theExceptionTypeGoalRadioLabel" class="radio-inline control-label"><input type="radio" name="theExceptionTypeRadio" selected>Goal</label>
             <label id="theExceptionTypeRequirementRadioLabel" class="radio-inline control-label"><input type="radio" name="theExceptionTypeRadio">Requirement</label>
             </br>
-            <select name="theExceptionTypeValues" class="form-control" id="theExceptionTypeValues"></select>
+            <div id="exceptionValues">
+              <select name="theExceptionTypeValues" class="form-control" id="theExceptionTypeValues"></select>
+            </div>
           </div>
         </div>
-        <div class="form-group">
+        <div class="form-group" id="exceptionCategories">
           <label for="theExceptionCategory" class="control-label">Category</label>
           <select name="TheExceptionCategory" class="form-control" id="theExceptionCategory">
             <option value="Confidentiality Threat">Confidentiality Threat</option>

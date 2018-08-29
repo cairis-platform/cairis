@@ -189,9 +189,10 @@ mainContent.on("click",".usecaseEnvironment", function () {
             }
           }
         });
-        $.each(env.theSteps[i].theExceptions,function(idx,exc){
-          appendUseCaseStepException(exc.theName);
-        });
+        $("#theSteps").find(".usecase-step:first").trigger('click');
+        //$.each(env.theSteps[i].theExceptions,function(idx,exc){
+        //  appendUseCaseStepException(exc.theName);
+        //});
       }
       $("#useCaseProperties").show("fast");
     }
@@ -204,9 +205,12 @@ function generateObstacleFromException(exceptionIdx) {
   var envName = $.session.get('usecaseEnvironmentName');
   $.each(uc.theEnvironmentProperties, function (index, env) {
     if(env.theEnvironmentName == envName){
+      var exc = env.theSteps[stepIdx].theExceptions[exceptionIdx];
+      if (exc.theDimensionType == 'none') {
+        alert('Cannot generate an obstacle for this step without a related goal or requirement');
+        return;
+      }
       var stepTxt = env.theSteps[stepIdx].theStepText;
-      var excTxt = env.theSteps[stepIdx].theExceptions[exceptionIdx].theName;
-
       var output = {};
       output.object = uc;
       output.session_id = $.session.get('sessionID');
@@ -221,7 +225,7 @@ function generateObstacleFromException(exceptionIdx) {
         processData: false,
         origin: serverIP,
         data: output,
-        url: serverIP + "/api/usecases/environment/" + encodeURIComponent(envName) + "/step/" + encodeURIComponent(stepTxt) + "/exception/" + encodeURIComponent(excTxt) + "/generate_obstacle?session_id=" + $.session.get('sessionID'),
+        url: serverIP + "/api/usecases/environment/" + encodeURIComponent(envName) + "/step/" + encodeURIComponent(stepTxt) + "/exception/" + encodeURIComponent(exc.theName) + "/generate_obstacle?session_id=" + $.session.get('sessionID'),
         success: function (data) {
           showPopup(true);
         },
@@ -654,13 +658,16 @@ mainContent.on('shown.bs.modal','#useCaseStepExceptionDialog',function() {
         $('#theExceptionName').val(currentExc.theName);
         $('#theExceptionDefinition').val(currentExc.theDescription);
         $('#theExceptionCategory').val(currentExc.theCategoryName);
-        if (currentExc.theDimensionType == 'goal') {
+        if (currentExc.theDimensionType == 'none') {
+          $($('#theExceptionTypeNoneRadioLabel').children()[0]).prop('checked','checked')
+        }
+        else if (currentExc.theDimensionType == 'goal') {
           $($('#theExceptionTypeGoalRadioLabel').children()[0]).prop('checked','checked')
         }
         else {
           $($('#theExceptionTypeRequirementRadioLabel').children()[0]).prop('checked','checked')
         }
-        refreshExceptionTypeValues(currentExc.theDimensionType,currentExc.theDimensionValue);
+        refreshExceptionTypeValues(currentExc.theDimensionType.toLowerCase(),currentExc.theDimensionValue);
       }
     });
   }
@@ -669,8 +676,8 @@ mainContent.on('shown.bs.modal','#useCaseStepExceptionDialog',function() {
     $('#theExceptionName').val('');
     $('#theExceptionDefinition').val('');
     $('#theExceptionCategory').val('Confidentiality Threat');
-    $($('#theExceptionTypeGoalRadioLabel').children()[0]).prop('checked','checked')
-    refreshExceptionTypeValues('goal');
+    $($('#theExceptionTypeNoneRadioLabel').children()[0]).prop('checked','checked')
+    refreshExceptionTypeValues('none');
   }
 });
 
@@ -682,6 +689,14 @@ mainContent.on('change','input:radio[name="theExceptionTypeRadio"]',function() {
 function refreshExceptionTypeValues(excType,excTypeValue) {
   var uc = JSON.parse($.session.get("UseCase"));
   var urlPrefix = '/api/usecases/name/' + encodeURIComponent(uc.theName);
+  
+  if (excType == 'none') {
+    $('#theExceptionTypeValues').empty();
+    $('#exceptionValues').hide();
+    $('#exceptionCategories').hide();
+    return;
+  }
+
   if (excType == 'goal') {
     var envName = $.session.get('usecaseEnvironmentName');
     urlPrefix += '/environment/' + encodeURIComponent(envName) + '/goals'
@@ -690,18 +705,33 @@ function refreshExceptionTypeValues(excType,excTypeValue) {
     urlPrefix += '/requirements'
   }
   refreshSpecificSelector($('#theExceptionTypeValues'),urlPrefix,function() {
+    if ($('#theExceptionTypeValues').is(':empty')) {
+      $($('#theExceptionTypeNoneRadioLabel').children()[0]).prop('checked','checked')
+      $('#exceptionValues').hide();
+      $('#exceptionCategories').hide();
+      alert('No ' + excType + 's associated with this usecase');
+      return;
+    }
+    $('#exceptionValues').show();
+    $('#exceptionCategories').show();
     if (excTypeValue != undefined) {
       $('#theExceptionTypeValues').val(excTypeValue);
     }
-  },['All'],excType);
+  });
 };
 
 mainContent.on('click',"#AddStepExceptionButton", function() {
   var exc = {};
   exc.theName = $('#theExceptionName').val();
   exc.theDimensionType = $('input:radio[name="theExceptionTypeRadio"]:checked').parent().text().toLowerCase();
-  exc.theDimensionValue = $('#theExceptionTypeValues').val();
-  exc.theCategoryName = $('#theExceptionCategory').val();
+  if (exc.theDimensionType == 'none') {
+    exc.theDimensionValue = 'None';
+    exc.theCategoryName = 'None';
+  }
+  else {
+    exc.theDimensionValue = $('#theExceptionTypeValues').val();
+    exc.theCategoryName = $('#theExceptionCategory').val();
+  }
   exc.theDescription = $('#theExceptionDefinition').val();
 
   var stepIdx = $('#theSteps').find('.active').index();

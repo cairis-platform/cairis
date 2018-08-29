@@ -288,6 +288,7 @@ DROP TABLE IF EXISTS characteristic_reference_type;
 DROP TABLE IF EXISTS domainproperty_task;
 DROP TABLE IF EXISTS domainproperty;
 DROP TABLE IF EXISTS domainproperty_type;
+DROP TABLE IF EXISTS usecase_step_none_exception;
 DROP TABLE IF EXISTS usecase_step_goal_exception;
 DROP TABLE IF EXISTS usecase_step_requirement_exception;
 DROP TABLE IF EXISTS goal;
@@ -2404,6 +2405,16 @@ CREATE TABLE persona_characteristic_vulnerability (
   FOREIGN KEY(characteristic_id) REFERENCES persona_characteristic(id),
   FOREIGN KEY(characteristic_reference_type_id) REFERENCES characteristic_reference_type(id),
   FOREIGN KEY(reference_id) REFERENCES vulnerability_reference(id)
+) ENGINE=INNODB;
+CREATE TABLE usecase_step_none_exception (
+  usecase_id INT NOT NULL,
+  environment_id INT NOT NULL,
+  step_no INT NOT NULL,
+  name VARCHAR(200) NOT NULL,
+  description VARCHAR(2000) NOT NULL,
+  PRIMARY KEY(usecase_id,environment_id,step_no,name),
+  FOREIGN KEY(usecase_id) REFERENCES usecase(id),
+  FOREIGN KEY(environment_id) REFERENCES environment(id)
 ) ENGINE=INNODB;
 CREATE TABLE usecase_step_goal_exception (
   usecase_id INT NOT NULL,

@@ -877,8 +877,8 @@ function refreshSpecificSelector(sBox,urlPrefix,callback,filterList,dimName) {
     success: function (data) {
       data.sort();
       sBox.empty();
-      sBox.append("<option>All</option>");
       if (filterList != undefined) {
+        sBox.append("<option>All</option>");
         data = data.filter(x => filterList.indexOf(x) < 0);
       }
       if (data.length == 0 && filterList != undefined && dimName != undefined) {
