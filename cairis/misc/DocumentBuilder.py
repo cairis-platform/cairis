@@ -69,30 +69,30 @@ def listToRows(l):
     rows.append((row.name(),paraText(row.description())))
   return rows
 
-def listToPara(l):
+def listToPara(dList):
   paraTxt = ''
-  for v in l:
-    paraTxt += '<para>' + v + '</para>'
+  for rowTxt in dList:
+    paraTxt += '<para>' + rowTxt + '</para>'
   return paraTxt
 
-def listToItems(l):
-  if len(l) == 0:
+def listToItems(dList):
+  if len(dList) == 0:
     return 'None'
   else:
     paraTxt = '<itemizedlist>'
-    for v in l:
-      paraTxt += '<listitem><para>' + v + '</para></listitem>'
-    paraTxt += '</itemizedlist>'
-
-def tupledListToItems(l):
-  if len(l) == 0:
-    return 'None'
-  else:
-    paraTxt = '<itemizedlist>'
-    for v in l:
-        paraTxt += '<listitem><para>' + v[0] + ' : ' + v[1] + '</para></listitem>'
+    for rowTxt in dList:
+      paraTxt += '<listitem><para>' + rowTxt + '</para></listitem>'
     paraTxt += '</itemizedlist>'
     return paraTxt
+
+def tupledListToItems(dList):
+  if len(dList) == 0:
+    return 'None'
+  else:
+    paraTxt = '<itemizedlist>'
+    for tup in dList:
+        paraTxt += '<listitem><para>' + tup[0] + ' : ' + tup[1] + '</para></listitem>'
+    paraTxt += '</itemizedlist>'
     return paraTxt
 
 
