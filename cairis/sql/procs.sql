@@ -13147,7 +13147,7 @@ begin
   declare ucActorCursor cursor for select r.name from usecase_role ur, role r where ur.usecase_id = ucId and ur.role_id = r.id;
   declare ucStepCursor cursor for select step_no,description from usecase_step where usecase_id = ucId and environment_id = envId order by 1;
   declare ucStepExceptionCursor cursor for
-    select name, 'None', 'None', 'None' from usecase_step_none_exception where usecase_id = ucId and environment_id = envId and step_no = stepNo
+    select usne.name, 'None', 'None', 'None', usne.description from usecase_step_none_exception usne where usne.usecase_id = ucId and usne.environment_id = envId and usne.step_no = stepNo
     union
     select usge.name, 'Goal', g.name, oct.name, usge.description from usecase_step_goal_exception usge, goal g, obstacle_category_type oct where usge.usecase_id = ucId and usge.environment_id = envId and usge.step_no = stepNo and usge.goal_id = g.id and usge.category_type_id = oct.id
     union
