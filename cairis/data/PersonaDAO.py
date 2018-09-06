@@ -107,7 +107,7 @@ class PersonaDAO(CairisDAO):
       pType=persona.type(),
       tags=persona.tags(),
       properties=persona.environmentProperties(),
-      pCodes=persona.theCodes
+      pCodes=[]
     )
 
     try:
@@ -138,7 +138,7 @@ class PersonaDAO(CairisDAO):
       pType=persona.type(),
       tags=persona.tags(),
       properties=persona.environmentProperties(),
-      pCodes=persona.theCodes
+      pCodes=[]
     )
     try:
       personaId = self.db_proxy.getDimensionId(name,'persona')
