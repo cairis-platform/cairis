@@ -30,7 +30,6 @@ env:
 install:
 - pip install -r requirements.txt
 - pip install -r test_requirements.txt
-- pip install coveralls
 
 script:
 - py.test cairis/test --doctest-modules -v --cov cairis/core cairis/daemon cairis/controllers
