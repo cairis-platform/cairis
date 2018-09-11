@@ -90,7 +90,7 @@ Adding, updating, or deleting a persona
 -  If you have decided to personalise the persona with a picture, this
    can be added by clicking on avatar silhouette next to the persona
    description, and selecting a image to represent the persona. Please note that the image itself is NOT
-   imported into the database, only the file path to the picture.  The image will be uploaded to the directory corresponding with the upload_dir value in cairis.cnf.  Persona images are loaded from the directory stipuloaded by the default_image_dir value in cairis.cnf.
+   imported into the database, only the file path to the picture.  The image will be uploaded to the directory corresponding with the upload_dir value in cairis.cnf.  Persona images are loaded from the directory stipulated by the default_image_dir value in cairis.cnf.
 
 -  If the persona is not derived from empirical data, then select the
    Asssumption Persona check-box. Ticking this box has the effect of
