@@ -230,8 +230,9 @@ identified.
    the Environments combo box, the editor will be reloaded with the
    requirement associated with the selected asset or environment.
 
--  A requirement can be deleting by right clicking on any cell in the row to be removed, and selecting Remove from the speed menu. Deleting a requirement also has the effect of re-ordering the
-   requirement labels.
+-  A requirement can be deleting by right clicking on any cell in the row to be removed, and selecting Remove from the speed menu. Deleting a requirement also has the effect of re-ordering the requirement labels.
+
+-  A requirement can be reassociated with another asset or environment by right clicking on any cell in the requirement to be updated, and selecting Move from the speed menu.  In the modal dialog, select whether the requirement is to be moved to an asset or environment, and the name of the asset or environment.  Moving a requirement also has the effect of re-ordering the requirement labels.
 
 
 Visualising Requirements Quality using Chernoff Faces

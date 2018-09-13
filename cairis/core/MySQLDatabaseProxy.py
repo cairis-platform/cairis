@@ -4686,3 +4686,6 @@ class MySQLDatabaseProxy:
 
   def lawfulProcessingTable(self,envName):
     return self.responseList('call lawfulProcessingTable(:envName)',{'envName':envName},'MySQL error getting lawful processing table')
+
+  def reassociateRequirement(self,reqName,domName):
+    self.updateDatabase('call reassociateRequirement(:reqName,:domName)',{'reqName':reqName,'domName':domName},'MySQL error associating requirement ' + reqName + ' with domain ' + domName)

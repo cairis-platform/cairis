@@ -127,7 +127,7 @@ class RequirementByNameAPI(Resource):
   def put(self,name):
     session_id = get_session_id(session, request)
     dao = RequirementDAO(session_id)
-    req = dao.from_json(request,name)
+    req = dao.from_json(request)
     dao.update_requirement(req, name=name)
     dao.close()
 

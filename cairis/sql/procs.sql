@@ -945,6 +945,7 @@ drop function if exists privilegeValue;
 drop procedure if exists addTrustBoundaryPrivilege;
 drop function if exists trustBoundaryPrivilege;
 drop procedure if exists unrelatedExceptionCheck;
+drop procedure if exists reassociateRequirement;
 
 
 delimiter //
@@ -24067,10 +24068,10 @@ begin
   declare refId int;
   declare reqId int;
   declare newLabel int default 1;
-  declare oldLabel int;
+  declare reqName longtext;
   declare done int default 0;
-  declare assetReqCursor cursor for select o.label, o.id from requirement o, asset_requirement ar where o.version = (select max(i.version) from requirement i where i.id = o.id) and o.id = ar.requirement_id and ar.asset_id = refId order by o.label;
-  declare envReqCursor cursor for select o.label, o.id from requirement o, environment_requirement er where o.version = (select max(i.version) from requirement i where i.id = o.id) and o.id = er.requirement_id and er.environment_id = refId order by o.label;
+  declare assetReqCursor cursor for select o.name, o.id from requirement o, asset_requirement ar where o.version = (select max(i.version) from requirement i where i.id = o.id) and o.id = ar.requirement_id and ar.asset_id = refId order by o.name;
+  declare envReqCursor cursor for select o.name, o.id from requirement o, environment_requirement er where o.version = (select max(i.version) from requirement i where i.id = o.id) and o.id = er.requirement_id and er.environment_id = refId order by o.name;
   declare continue handler for not found set done = 1;
 
 
@@ -24081,7 +24082,7 @@ begin
     set done = 0;
     open envReqCursor;
     er_loop: loop
-      fetch envReqCursor into oldLabel,reqId;
+      fetch envReqCursor into reqName,reqId;
       if done = 1
       then
         leave er_loop;
@@ -24094,7 +24095,7 @@ begin
     set done = 0;
     open assetReqCursor;
     ar_loop: loop
-      fetch assetReqCursor into oldLabel,reqId;
+      fetch assetReqCursor into reqName,reqId;
       if done = 1
       then
         leave ar_loop;
@@ -25179,6 +25180,26 @@ begin
   close ucCursor;
   set done = 0;
 
+end
+//
+
+create procedure reassociateRequirement(in reqName text, in domName text)
+begin
+  declare domId int;
+  declare reqId int;
+
+  select requirementNameId(reqName) into reqId;
+  delete from asset_requirement where requirement_id = reqId; 
+  delete from environment_requirement where requirement_id = reqId; 
+
+  select id into domId from asset where name = domName limit 1;
+  if domId is null
+  then
+    select id into domId from environment where name = domName limit 1;
+    insert into environment_requirement(environment_id,requirement_id) values (domId,reqId);
+  else
+    insert into asset_requirement(asset_id,requirement_id) values (domId,reqId);
+  end if;
 end
 //
 

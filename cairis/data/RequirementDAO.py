@@ -123,8 +123,10 @@ class RequirementDAO(CairisDAO):
 
   def update_requirement(self, requirement, name=None):
     old_requirement = None
+    old_reference = None
     if name is not None:
       old_requirement = self.db_proxy.getRequirement(name)
+      old_reference = old_requirement.asset()
     else:
       self.close()
       raise MissingParameterHTTPError(param_names=['theId'])
@@ -135,6 +137,11 @@ class RequirementDAO(CairisDAO):
         requirement.theId = old_requirement.theId
         requirement.incrementVersion()
         self.db_proxy.updateRequirement(requirement)
+        reqReference = requirement.asset()
+        if (reqReference != old_reference):
+          self.db_proxy.reassociateRequirement(requirement.name(),reqReference)
+          self.db_proxy.relabelRequirements(reqReference)
+          self.db_proxy.relabelRequirements(old_reference)
       except DatabaseProxyException as ex:
         self.close()
         raise ARMHTTPError(ex)
@@ -142,7 +149,7 @@ class RequirementDAO(CairisDAO):
       self.close()
       raise MissingParameterHTTPError(param_names=['id'])
 
-  def from_json(self, request,domain_name):
+  def from_json(self, request,domain_name=None):
     json = request.get_json(silent=True)
     if json is False or json is None:
       self.close()
@@ -157,7 +164,11 @@ class RequirementDAO(CairisDAO):
     json_dict['attrs']['originator'] = json_dict['theOriginator']
     json_dict['attrs']['supportingMaterial'] = ''
     json_dict['attrs']['fitCriterion'] = json_dict['theFitCriterion']
-    json_dict['attrs']['asset'] = domain_name
+     
+    if (domain_name != None):
+      json_dict['attrs']['asset'] = domain_name
+    else:
+      json_dict['attrs']['asset'] = json_dict['theDomain']
     json_dict['attrs']['rationale'] = json_dict['theRationale']
     json_dict['attrs']['type'] = json_dict['theType']
     requirement = json_serialize(json_dict)
@@ -166,6 +177,7 @@ class RequirementDAO(CairisDAO):
       self.close()
       raise MalformedJSONHTTPError(data=request.get_data())
     else:
+      requirement.theAsset = json_dict['attrs']['asset']
       return requirement
 
   def simplify(self, obj):

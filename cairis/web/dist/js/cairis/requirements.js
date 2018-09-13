@@ -182,6 +182,12 @@ function createRequirementsTable(data){
           removeReq(reqName);
         }
       },
+      "move": {
+        name: "Move", 
+        callback: function(key, opt) {
+          moveReq($(this).closest('tr').index());
+        }
+      },
       "supports": {
         name: "Supported by", 
         callback: function(key, opt) {
@@ -311,3 +317,62 @@ function postRequirementRow(row,whatKind,value){
     }
   });
 }
+
+function moveReq(rowIdx) {
+  var assetName = $('#assetsbox').val();
+  if (assetName == null) {
+    $('#moveReqDialog').attr('data-filterName',$('#environmentsbox').val());
+  }
+  else {
+    $('#moveReqDialog').attr('data-filterName',assetName);
+  }
+    $('#moveReqDialog').attr('data-rowIdx',rowIdx);
+    
+  $($('#theRequirementAssetRadioLabel').children()[0]).prop('checked','checked');
+  refreshDimensionSelector($('#theMrRadioValues'),'asset',undefined,undefined,['All']);
+  $('#moveReqDialog').modal('show');
+}
+
+$('#moveReqDialog').on('change','input:radio[name="theRequirementTypeRadio"]',function() {
+  var filterType = $(this).parent().text().toLowerCase();
+  refreshDimensionSelector($('#theMrRadioValues'),filterType,undefined,undefined,[$('#moveReqDialog').attr('data-filterName')]);
+});
+
+$("#moveReqDialog").on('click', '#moveRequirementButton',function(e) {
+  var rowIdx = $('#moveReqDialog').attr('data-rowIdx');
+  var row = $('#mainTable').find("tbody").find('tr:eq(' + rowIdx + ')');
+  var req = reqRowtoJSON(row);
+  req['theDomain'] = $('#theMrRadioValues').val();
+  $('#moveReqDialog').modal('hide');
+  var object = {};
+  object.object = req;
+  object.session_id= $.session.get('sessionID');
+  var objectoutput = JSON.stringify(object);
+  $.ajax({
+    type: "PUT",
+    dataType: "json",
+    contentType: "application/json",
+    accept: "application/json",
+    data: objectoutput,
+    crossDomain: true,
+    url: serverIP + "/api/requirements/name/" + encodeURIComponent($(row).attr('data-name')),
+    success: function (data) {
+      $('#mainTable').find("tbody").find('tr:eq(' + rowIdx + ')').detach();
+      var refName = $('#assetsbox').val()
+      if (refName != null) {
+        updateAssetRequirementsTable(refName);
+      }
+      else {
+        refName = $('#environmentsbox').val()
+        updateEnvironmentRequirementsTable(refName);
+      }
+      showPopup(true);
+    },
+    error: function (xhr, textStatus, errorThrown) {
+      var error = JSON.parse(xhr.responseText);
+      showPopup(false, String(error.message));
+      debugLogger(String(this.url));
+      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
+    }
+  });
+});

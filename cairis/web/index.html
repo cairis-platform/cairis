@@ -1197,6 +1197,32 @@
     </div>
   </div>
   </div>
+  <div class="modal fade" id="moveReqDialog" tabindex="-1" role="dialog" aria-labelledby="mrd_label">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="mrdTitle">Move Requirement</h4>
+        </div>
+        <div class="modal-body">
+          <div class="container">
+            <div class="form-group" style="width: 45%;">
+              <label id="theRequirementAssetRadioLabel" class="radio-inline control-label"><input type="radio" name="theRequirementTypeRadio" selected>Asset</label>
+              <label id="theRequirementEnvironmentRadioLabel" class="radio-inline control-label"><input type="radio" name="theRequirementTypeRadio">Environment</label>
+            </div>
+            <div class="form-group" style="width: 45%;">
+              <select name="theMrRadioValues" class="form-control" id="theMrRadioValues"></select>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <div class="form-group col-md-2 col-md-offset-5">
+            <button type="button" id="moveRequirementButton" class="btn btn-primary">Move</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
   <div class="modal fade" id="weaknessAnalysisDialog" tabindex="-1" role="dialog" aria-labelledby="wad_label">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
