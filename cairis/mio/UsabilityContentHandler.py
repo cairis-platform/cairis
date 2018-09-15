@@ -97,6 +97,7 @@ class UsabilityContentHandler(ContentHandler,EntityResolver):
     return self.theTasks
 
   def resetPersonaAttributes(self):
+    self.inPersona = 0
     self.inActivities = 0
     self.inAttitudes = 0
     self.inAptitudes = 0
@@ -152,6 +153,7 @@ class UsabilityContentHandler(ContentHandler,EntityResolver):
     self.theRebuttals = []
 
   def resetTaskAttributes(self):
+    self.inTask = 0
     self.theName = ''
     self.theTags = []
     self.theCode = ''
@@ -179,6 +181,7 @@ class UsabilityContentHandler(ContentHandler,EntityResolver):
   def startElement(self,name,attrs):
     self.currentElementName = name
     if name == 'persona':
+      self.inPersona = 1
       self.theName = attrs['name']
       self.theType = attrs['type']
       self.theImage = attrs['image']
@@ -222,6 +225,7 @@ class UsabilityContentHandler(ContentHandler,EntityResolver):
       refArtifact = ''
       self.theRebuttals.append((refName,'',refType))
     elif name == 'task':
+      self.inTask = 1
       self.theName = attrs['name']
       try:
         self.theCode = attrs['code']
@@ -284,7 +288,8 @@ class UsabilityContentHandler(ContentHandler,EntityResolver):
       self.inObjective = 1
       self.theObjective = ''
     elif name == 'tag':
-      self.theTags.append(attrs['name'])
+      if ((self.inPersona == 1) or (self.inTask == 1)):
+        self.theTags.append(attrs['name'])
 
   def characters(self,data):
     if self.inActivities:

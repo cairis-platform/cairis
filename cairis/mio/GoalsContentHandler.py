@@ -109,6 +109,7 @@ class GoalsContentHandler(ContentHandler,EntityResolver):
     return self.theCountermeasures
 
   def resetDomainPropertyAttributes(self):
+    self.inDomainProperty = 0
     self.theName = ''
     self.theTags = []
     self.theType = ''
@@ -116,6 +117,7 @@ class GoalsContentHandler(ContentHandler,EntityResolver):
     self.theOriginator = ''
 
   def resetGoalAttributes(self):
+    self.inGoal = 0
     self.theName = ''
     self.theTags = []
     self.theOriginator = ''
@@ -123,6 +125,7 @@ class GoalsContentHandler(ContentHandler,EntityResolver):
     self.resetGoalEnvironmentAttributes()
 
   def resetObstacleAttributes(self):
+    self.inObstacle = 0
     self.theName = ''
     self.theTags = []
     self.theOriginator = ''
@@ -170,6 +173,7 @@ class GoalsContentHandler(ContentHandler,EntityResolver):
     self.theOriginator = 0
 
   def resetUseCaseAttributes(self):
+    self.inUseCase = 0
     self.theName = ''
     self.theTags = []
     self.theAuthor = ''
@@ -234,13 +238,16 @@ class GoalsContentHandler(ContentHandler,EntityResolver):
   def startElement(self,name,attrs):
     self.currentElementName = name
     if name == 'domainproperty':
+      self.inDomainProperty = 1
       self.theName = attrs['name']
       self.theType = attrs['type']
       self.theOriginator = attrs['originator']
     elif name == 'goal':
+      self.inGoal = 1
       self.theName = attrs['name']
       self.theOriginator = attrs['originator']
     elif name == 'obstacle':
+      self.inObstacle = 1
       self.theName = attrs['name']
       self.theOriginator = attrs['originator']
     elif name == 'goal_environment':
@@ -275,6 +282,7 @@ class GoalsContentHandler(ContentHandler,EntityResolver):
       self.theType = u2s(attrs['type'])
       self.thePriority = attrs['priority']
     elif name == 'usecase':
+      self.inUseCase = 1
       self.theName = attrs['name']
       self.theAuthor = attrs['author']
       self.theCode = attrs['code']
@@ -342,7 +350,8 @@ class GoalsContentHandler(ContentHandler,EntityResolver):
       self.inPostconditions = 1
       self.thePostconditions = ''
     elif name == 'tag':
-      self.theTags.append(attrs['name'])
+      if ((self.inDomainProperty == 1) or (self.inGoal == 1) or (self.inObstacle == 1) or (self.inUseCase == 1)):
+        self.theTags.append(attrs['name'])
 
   def characters(self,data):
     if self.inDescription:
