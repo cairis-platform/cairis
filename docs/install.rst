@@ -53,15 +53,33 @@ Logout of your current account or, alternatively, reload your .bashrc file i.e.
 
    source .bashrc
 
-You should now start up your CAIRIS server.  If you are the only person that plans to use CAIRIS, using the Flask development server to run cairisd should be sufficient; you can find cairisd in the cairis/cairis/bin directory.
+You should now start up your CAIRIS server.  Create the following *cairis.service* file, substituting *cairisuser* for the name of your account.  Using sudo or root, copy this file to /etc/systemd/system.
 
 .. code-block:: bash
 
-   ./cairisd.py runserver
+   [Unit]
+   Description=cairisd
+
+   [Service]
+   User=cairisuser
+   WorkingDirectory=/home/cairisuser/cairis
+   Environment="CAIRIS_CFG=/home/cairisuser/cairis.cnf"
+   Environment="PYTHONPATH=${PYTHONPATH}:/home/cairisuser/cairis"
+   ExecStart=/home/cairisuser/cairis/cairis/bin/cairisd.py runserver
+   Restart=on-failure
+
+   [Install]
+   WantedBy=multi-user.target
+
+You can now launch cairisd as a system service:
+
+.. code-block:: bash
+
+   sudo systemctl enable --now /etc/systemd/system/cairis.service
 
 [Optional] Multiple users using CAIRIS
 
-If multiple users will be using CAIRIS, or you want to run CAIRIS in a production environment then it may be sensible to use mod_wsgi-express rather than cairisd.  
+cairisd relies on the Flask development server, which is fine for a single user, or development and troubleshooting.  However, if multiple users will use the same CAIRIS service at once, or you want to run CAIRIS in a production environment then it may be sensible to use mod_wsgi-express instead.
 To do this, you will need to install the requisite Apache2 packages.
 
 .. code-block:: bash
@@ -79,6 +97,8 @@ You should then use mod_wsgi-express to run cairis.wsgi (also in cairis/cairis/b
 .. code-block:: bash
 
    mod_wsgi-express start-server cairis.wsgi
+
+Don't forget to modify *cairis.service* accordingly!
 
 [Optional] Additional steps for developers
 
