@@ -216,7 +216,7 @@ class TaskDAO(CairisDAO):
                        narrative=fake_prop['theNarrative'],
                        consequences=fake_prop['theConsequences'],
                        benefits=fake_prop['theBenefits'],
-                       tCodes=fake_prop['theCodes']
+                       tCodes=[]
                      )
           new_props.append(new_prop)
     else:
