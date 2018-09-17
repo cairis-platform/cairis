@@ -24967,14 +24967,17 @@ begin
     select pc.description,pcs.synopsis,td.name,'persona',p.name from persona_characteristic_synopsis pcs, persona_characteristic pc, trace_dimension td, persona p where pcs.characteristic_id = pc.id and pc.persona_id = p.id and pcs.dimension_id = td.id;
   declare rsCursor cursor for
     select dr.name,drs.synopsis,td.name,'persona',p.name from document_reference_synopsis drs,document_reference dr, trace_dimension td, persona p where drs.reference_id = dr.id and drs.dimension_id = td.id and drs.actor_id = p.id;
+
   declare envCursor cursor for 
     select id,name from environment;
+
   declare ssCursor cursor for
     select uc.name,ucss.step_no,ucss.synopsis,'asset',a.name from usecase uc, usecase_step_synopsis ucss, asset a where ucss.usecase_id = uc.id and ucss.environment_id = envId and ucss.actor_id = a.id and ucss.actor_type_id = 3
     union
     select uc.name,ucss.step_no,ucss.synopsis,'component',c.name from usecase uc, usecase_step_synopsis ucss, component c where ucss.usecase_id = uc.id and ucss.environment_id = envId and ucss.actor_id = c.id and ucss.actor_type_id = 21
     union
     select uc.name,ucss.step_no,ucss.synopsis,'role',r.name from usecase uc, usecase_step_synopsis ucss, role r where ucss.usecase_id = uc.id and ucss.environment_id = envId and ucss.actor_id = r.id and ucss.actor_type_id = 10;
+
   declare rcCursor cursor for
     select drs.synopsis, pcs.synopsis, ce.name, lc.name from document_reference_contribution drc, document_reference_synopsis drs, persona_characteristic_synopsis pcs, contribution_end ce, link_contribution lc where drc.reference_id = drs.id and drc.characteristic_id = pcs.characteristic_id and drc.end_id = lc.id and drc.contribution_id = ce.id
     union
@@ -25032,8 +25035,7 @@ begin
       then
         leave ss_loop;
       end if;
-
-      set buf = concat(buf,'  <step_synopsis environment="',envName,'" usecase="',ucName,'" step_no="',stepNo,'" synopsis="',synName,'" dimension="',synDim,'" actor_type="',aType,'" actor="',aName,'" />\n');
+      set buf = concat(buf,'  <step_synopsis environment="',envName,'" usecase="',ucName,'" step_no="',stepNo,'" synopsis="',synName,'" actor_type="',aType,'" actor="',aName,'" />\n');
       set ssCount = ssCount + 1;
     end loop ss_loop;
     close ssCursor;
