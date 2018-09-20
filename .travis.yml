@@ -7,6 +7,8 @@ services:
 - mysql
 addons:
   apt:
+    sources:
+    - sourceline "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main"
     packages:
     - python-dev
     - build-essential
@@ -22,18 +24,26 @@ addons:
     - docbook-utils
     - libxml2-dev
     - libxslt1-dev
-      
+    - google-chrome-stable
+
 env:
-  - PYTHONPATH=. CAIRIS_SRC=$PYTHONPATH/cairis CAIRIS_CFG=cairis_travis.cnf XML_CATALOG_FILES=$CAIRIS_SRC/config/catalog
+- PYTHONPATH=. CAIRIS_SRC=$PYTHONPATH/cairis CAIRIS_CFG=cairis_travis.cnf XML_CATALOG_FILES=$CAIRIS_SRC/config/catalog
     $CAIRIS_CFG_DIR=./travisConfig
 
 install:
 - pip install -r test_requirements.txt
 - pip install -r requirements.txt
+- pip install selenium
+
+before_script:
+- wget https://chromedriver.storage.googleapis.com/2.42/chromedriver_linux64.zip
+- sudo unzip chromedriver_linux64 -d /usr/bin
+- sudo chmod a+x /usr/bin/chromedriver
 
 script:
 - py.test cairis/test --doctest-modules -v --cov cairis/core cairis/daemon cairis/controllers
   cairis/data cairis/tools --cov-report term-missing
+- python cairis/selenium/test_login.py
 
 after_success:
 - coveralls
