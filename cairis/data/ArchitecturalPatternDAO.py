@@ -72,8 +72,7 @@ class ArchitecturalPatternDAO(CairisDAO):
 
   def realToFakeAPs(self,cvs):
     fakeAPs = []
-    cvKeys = cvs.keys()
-    cvKeys.sort()
+    cvKeys = sorted(cvs.keys())
     for cvKey in cvKeys:
       fakeAPs.append(self.realToFakeAP(cvs[cvKey]))
     return fakeAPs

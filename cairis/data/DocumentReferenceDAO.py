@@ -42,8 +42,7 @@ class DocumentReferenceDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-    drsKeys = drs.keys()
-    drsKeys.sort()
+    drsKeys = sorted(drs.keys())
     drsList = []
     for key in drsKeys:
       dr = drs[key]

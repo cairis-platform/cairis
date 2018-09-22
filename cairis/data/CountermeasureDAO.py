@@ -75,8 +75,7 @@ class CountermeasureDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-    cmKeys = countermeasures.keys()
-    cmKeys.sort()
+    cmKeys = sorted(countermeasures.keys())
     cmList = []
     for key in cmKeys:
       value = countermeasures[key]

@@ -39,8 +39,7 @@ class EnvironmentDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-    envKeys = environments.keys()
-    envKeys.sort()
+    envKeys = sorted(environments.keys())
     envList = []
     for key in envKeys:
       value = environments[key]

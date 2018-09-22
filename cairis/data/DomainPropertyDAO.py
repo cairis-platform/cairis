@@ -44,8 +44,7 @@ class DomainPropertyDAO(CairisDAO):
     except ARMException as ex:
       self.close()
       raise ARMHTTPError(ex)
-    dpKeys = domain_properties.keys()
-    dpKeys.sort()
+    dpKeys = sorted(domain_properties.keys())
     dpList = []
     for key in dpKeys:
       value = domain_properties[key]

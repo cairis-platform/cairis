@@ -43,8 +43,7 @@ class TaskCharacteristicDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-    tcsKeys = tcs.keys()
-    tcsKeys.sort()
+    tcsKeys = sorted(tcs.keys())
     tcsList = []
     for key in tcsKeys:
       value = tcs[key]

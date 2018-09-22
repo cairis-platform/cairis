@@ -42,8 +42,7 @@ class ExternalDocumentDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-    edocsKeys = edocs.keys()
-    edocsKeys.sort()
+    edocsKeys = sorted(edocs.keys())
     edocsList = []  
     for key in edocsKeys:
       edoc = edocs[key]

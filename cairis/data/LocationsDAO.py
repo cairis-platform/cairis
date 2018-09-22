@@ -42,8 +42,7 @@ class LocationsDAO(CairisDAO):
     except ARMException as ex:
       self.close()
       raise ARMHTTPError(ex)
-    locsKeys = locs.keys()
-    locsKeys.sort()
+    locsKeys = sorted(locs.keys())
     locsList = []
     for key in locsKeys:
       locsList.append(self.simplify(locs[key]))

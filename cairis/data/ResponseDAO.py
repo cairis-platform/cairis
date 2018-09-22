@@ -47,8 +47,7 @@ class ResponseDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-    respKeys = responses.keys()
-    respKeys.sort()
+    respKeys = sorted(responses.keys())
     respList = []
     for key in respKeys:
       respList.append(self.simplify(responses[key]))
