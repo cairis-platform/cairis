@@ -68,10 +68,10 @@ class TaskCharacteristicAPITests(CairisDaemonTestCase):
       responseData = rv.data
     tcs = jsonpickle.decode(responseData)
     self.assertIsNotNone(tcs, 'No results after deserialization')
-    self.assertIsInstance(tcs, dict, 'The result is not a dictionary as expected')
+    self.assertIsInstance(tcs, list, 'The result is not a dictionary as expected')
     self.assertGreater(len(tcs), 0, 'No task characteristics in the dictionary')
     self.logger.info('[%s] Task characteristics found: %d', method, len(tcs))
-    tc = list(tcs.values())[0]
+    tc = tcs[0]
     self.logger.info('[%s] First task characteristic: %s\n', method, tc['theCharacteristic'])
 
   def test_get_by_name(self):

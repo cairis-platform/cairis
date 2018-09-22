@@ -37,7 +37,7 @@ class ResponseDAO(CairisDAO):
   def __init__(self, session_id):
     CairisDAO.__init__(self, session_id)
 
-  def get_responses(self, constraint_id=-1, simplify=True):
+  def get_responses(self, constraint_id=-1):
     try:
       responses = self.db_proxy.getResponses(constraintId=constraint_id)
     except DatabaseProxyException as ex:
@@ -47,25 +47,30 @@ class ResponseDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-    if simplify:
-      for key in responses:
-        responses[key] = self.simplify(responses[key])
+    respKeys = responses.keys()
+    respKeys.sort()
+    respList = []
+    for key in respKeys:
+      respList.append(self.simplify(responses[key]))
+    return respList
 
-    return responses
-
-  def get_response_by_name(self, response_name, simplify=True):
-    responses = self.get_responses(simplify=simplify)
+  def get_response_by_name(self, response_name):
+    respId = self.db_proxy.getDimensionId(response_name,'response')
+    responses = self.db_proxy.getResponses(respId)
     found_response = responses.get(response_name, None)
 
     if not found_response:
       self.close()
       raise ObjectNotFoundHTTPError(obj='The provided response name')
-    return found_response
+    return self.simplify(found_response)
 
   def delete_response(self, response_name):
     try:
       respId = self.db_proxy.getDimensionId(response_name,'response')
       self.db_proxy.deleteResponse(respId)
+    except ObjectNotFound as ex:
+      self.close()
+      raise ObjectNotFoundHTTPError('The provided response name')
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)
@@ -107,6 +112,9 @@ class ResponseDAO(CairisDAO):
       respId = self.db_proxy.getDimensionId(resp_name,'response')
       params.setId(respId)
       self.db_proxy.updateResponse(params)
+    except ObjectNotFound as ex:
+      self.close()
+      raise ObjectNotFoundHTTPError('The provided response name')
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)
@@ -118,6 +126,8 @@ class ResponseDAO(CairisDAO):
     try:
       self.get_response_by_name(risk_name)
       return True
+    except ObjectNotFound as ex:
+      return False
     except ObjectNotFoundHTTPError:
       self.db_proxy.reconnect(session_id=self.session_id)
       return False
@@ -231,6 +241,9 @@ class ResponseDAO(CairisDAO):
         vulnerabilityParameters = goalParameters[2]
         self.db_proxy.addGoal(vulnerabilityParameters)
         self.db_proxy.addGoal(threatParameters)
+    except ObjectNotFound as ex:
+      self.close()
+      raise ObjectNotFoundHTTPError('The provided object name')
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)

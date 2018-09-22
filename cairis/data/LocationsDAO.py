@@ -42,18 +42,20 @@ class LocationsDAO(CairisDAO):
     except ARMException as ex:
       self.close()
       raise ARMHTTPError(ex)
-    for key in locs:
-      locs[key] = self.simplify(locs[key])
-    return locs
+    locsKeys = locs.keys()
+    locsKeys.sort()
+    locsList = []
+    for key in locsKeys:
+      locsList.append(self.simplify(locs[key]))
+    return locsList
 
   def get_locations_name(self, locations_name):
-    locsDict = self.get_locations()
-    if locsDict is None or len(locsDict) < 1:
+    locsList = self.get_locations()
+    if locsList is None or len(locsList) < 1:
       self.close()
       raise ObjectNotFoundHTTPError('Locations')
-    for key in locsDict:
-      if (key == locations_name):
-        locs = locsDict[key]
+    for locs in locsList:
+      if (locs.name() == locations_name):
         return locs
     self.close()
     raise ObjectNotFoundHTTPError('The provided Locations parameters')

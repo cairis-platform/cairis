@@ -59,10 +59,10 @@ class DomainPropertyAPITests(CairisDaemonTestCase):
       responseData = rv.data
     domainproperties = jsonpickle.decode(responseData)
     self.assertIsNotNone(domainproperties, 'No results after deserialization')
-    self.assertIsInstance(domainproperties, dict, 'The result is not a dictionary as expected')
+    self.assertIsInstance(domainproperties, list, 'The result is a list as expected')
     self.assertGreater(len(domainproperties), 0, 'No domainproperties in the dictionary')
     self.logger.info('[%s] DomainProperties found: %d', method, len(domainproperties))
-    domainproperty = list(domainproperties.values())[0]
+    domainproperty = domainproperties[0]
     self.logger.info('[%s] First domainproperty: %s\n', method, domainproperty['theName'])
 
   def test_get_by_name(self):

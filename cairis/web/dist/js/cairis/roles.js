@@ -43,14 +43,7 @@ function fillRolesTable(){
       var i = 0;
       var textToInsert = [];
 
-      var keys = [];
-      for (key in json) {
-        keys.push(key);
-      }
-      keys.sort();
-
-      for (var ki = 0; ki < keys.length; ki++) {
-        var key = keys[ki];
+      for (var key in json) {
         var value = json[key];
 
         textToInsert[i++] = "<tr>";

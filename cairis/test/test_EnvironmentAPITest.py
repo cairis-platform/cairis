@@ -33,8 +33,13 @@ __author__ = 'Robin Quetin, Shamal Faily'
 
 class EnvironmentAPITests(CairisDaemonTestCase):
 
-  def setUp(self):
+  @classmethod
+  def setUpClass(cls):
     importModelFile(os.environ['CAIRIS_SRC'] + '/../examples/exemplars/NeuroGrid/NeuroGrid.xml',1,'test')
+
+
+  def setUp(self):
+#    importModelFile(os.environ['CAIRIS_SRC'] + '/../examples/exemplars/NeuroGrid/NeuroGrid.xml',1,'test')
     self.logger = logging.getLogger(__name__)
     self.existing_environment_name = 'Stroke'
     self.environment_class = Environment.__module__+'.'+Environment.__name__
@@ -48,10 +53,10 @@ class EnvironmentAPITests(CairisDaemonTestCase):
       responseData = rv.data
     environments = jsonpickle.decode(responseData)
     self.assertIsNotNone(environments, 'No results after deserialization')
-    self.assertIsInstance(environments, dict, 'The result is not a dictionary as expected')
+    self.assertIsInstance(environments, list, 'The result is not a list as expected')
     self.assertGreater(len(environments), 0, 'No environments in the dictionary')
     self.logger.info('[%s] Environments found: %d', method, len(environments))
-    environment = list(environments.values())[0]
+    environment = environments[0]
     self.logger.info('[%s] First environment: %s\n', method, environment['theName'])
 
   def test_get_all_names(self):

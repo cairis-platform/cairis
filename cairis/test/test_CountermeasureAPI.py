@@ -69,10 +69,10 @@ class CountermeasureAPITests(CairisDaemonTestCase):
       responseData = rv.data
     countermeasures = jsonpickle.decode(responseData)
     self.assertIsNotNone(countermeasures, 'No results after deserialization')
-    self.assertIsInstance(countermeasures, dict, 'The result is not a dictionary as expected')
+    self.assertIsInstance(countermeasures, list, 'The result is not a list as expected')
     self.assertGreater(len(countermeasures), 0, 'No countermeasures in the dictionary')
     self.logger.info('[%s] Countermeasures found: %d', method, len(countermeasures))
-    countermeasure = list(countermeasures.values())[0]
+    countermeasure = countermeasures[0]
     self.logger.info('[%s] First countermeasure: %s\n', method, countermeasure['theName'])
 
   def test_get_by_name(self):

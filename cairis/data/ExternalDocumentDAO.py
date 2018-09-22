@@ -42,21 +42,22 @@ class ExternalDocumentDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-    for key in edocs:
+    edocsKeys = edocs.keys()
+    edocsKeys.sort()
+    edocsList = []  
+    for key in edocsKeys:
       edoc = edocs[key]
       del edoc.theId
-      edocs[key] = edoc
-
-    return edocs
+      edocsList.append(edoc)
+    return edocsList
 
   def get_external_document(self, external_document_name):
     edocs = self.get_external_documents()
     if edocs is None or len(edocs) < 1:
       self.close()
       raise ObjectNotFoundHTTPError('External Documents')
-    for key in edocs:
-      if (key == external_document_name):
-        edoc = edocs[key]
+    for edoc in edocs:
+      if (edoc.name() == external_document_name):
         return edoc
     self.close()
     raise ObjectNotFoundHTTPError('The provided external document parameters')

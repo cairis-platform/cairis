@@ -42,21 +42,22 @@ class DocumentReferenceDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-    for key in drs:
+    drsKeys = drs.keys()
+    drsKeys.sort()
+    drsList = []
+    for key in drsKeys:
       dr = drs[key]
       del dr.theId
-      drs[key] = dr
-
-    return drs
+      drsList.append(dr)
+    return drsList
 
   def get_document_reference(self, document_reference_name):
     drs = self.get_document_references()
     if drs is None or len(drs) < 1:
       self.close()
       raise ObjectNotFoundHTTPError('External Documents')
-    for key in drs:
-      if (key == document_reference_name):
-        dr = drs[key]
+    for dr in drs:
+      if (dr.name() == document_reference_name):
         return dr 
     self.close()
     raise ObjectNotFoundHTTPError('The provided document reference parameters')

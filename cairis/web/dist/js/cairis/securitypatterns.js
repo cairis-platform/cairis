@@ -46,14 +46,7 @@ function createSecurityPatternsTable(){
       var textToInsert = [];
       var i = 0;
 
-      var keys = [];
-      for (key in data) {
-        keys.push(key);
-      }
-      keys.sort();
-
-      for (var ki = 0; ki < keys.length; ki++) {
-        var key = keys[ki];
+      for (var key in data) {
         var item = data[key];
 
         textToInsert[i++] = "<tr>";

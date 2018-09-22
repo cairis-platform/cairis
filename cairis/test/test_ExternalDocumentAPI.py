@@ -65,10 +65,10 @@ class ExternalDocumentAPITests(CairisDaemonTestCase):
       responseData = rv.data
     edocs = jsonpickle.decode(responseData)
     self.assertIsNotNone(edocs, 'No results after deserialization')
-    self.assertIsInstance(edocs, dict, 'The result is not a dictionary as expected')
+    self.assertIsInstance(edocs, list, 'The result is not a dictionary as expected')
     self.assertGreater(len(edocs), 0, 'No external documents in the dictionary')
     self.logger.info('[%s] External documents found: %d', method, len(edocs))
-    edoc = list(edocs.values())[0]
+    edoc = edocs[0]
     self.logger.info('[%s] First external document: %s\n', method, edoc['theName'])
 
   def test_get_by_name(self):

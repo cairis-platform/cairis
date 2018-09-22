@@ -54,20 +54,13 @@ function createCountermeasuresTable(){
       var textToInsert = [];
       var i = 0;
 
-      var keys = [];
-      for (key in data) {
-        keys.push(key);
-      }
-      keys.sort();
-
-      for (var ki = 0; ki < keys.length; ki++) {
-        var key = keys[ki];
+      for (var key in data) {
         var item = data[key];
         textToInsert[i++] = "<tr>";
 
-        textToInsert[i++] = '<td class="deleteCountermeasureButton"><i class="fa fa-minus" value="' + key + '"></i></td>';
+        textToInsert[i++] = '<td class="deleteCountermeasureButton"><i class="fa fa-minus" value="' + item.theName + '"></i></td>';
         textToInsert[i++] = '<td class="countermeasure-row" name="theName">';
-        textToInsert[i++] = key;
+        textToInsert[i++] = item.theName;
         textToInsert[i++] = '</td>';
 
         textToInsert[i++] = '<td class="countermeasure-row" name="theType">';

@@ -65,7 +65,7 @@ class CountermeasureDAO(CairisDAO):
       self.rev_prop_dict[value] = key
 
 
-  def get_countermeasures(self, constraint_id=-1, simplify=True):
+  def get_countermeasures(self, constraint_id=-1):
     try:
       countermeasures = self.db_proxy.getCountermeasures(constraint_id)
     except DatabaseProxyException as ex:
@@ -75,21 +75,30 @@ class CountermeasureDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-    if simplify:
-      for key, value in list(countermeasures.items()):
-        countermeasures[key] = self.simplify(value)
+    cmKeys = countermeasures.keys()
+    cmKeys.sort()
+    cmList = []
+    for key in cmKeys:
+      value = countermeasures[key]
+      cmList.append(self.simplify(value))
+    return cmList
 
-    return countermeasures
-
-  def get_countermeasure_by_name(self, name, simplify=True):
-    countermeasures = self.get_countermeasures(simplify=simplify)
-    found_countermeasure = countermeasures.get(name, None)
-
-    if found_countermeasure is None:
+  def get_countermeasure_by_name(self, name):
+    try:
+      cmId = self.db_proxy.getDimensionId(name,'countermeasure')
+      countermeasures = self.get_countermeasures(cmId)
+      return countermeasures[0]
+    except ObjectNotFound as ex:
       self.close()
       raise ObjectNotFoundHTTPError('The provided countermeasure name')
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+    except ARMException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
 
-    return found_countermeasure
+
 
   def add_countermeasure(self, countermeasure):
     countermeasure_params = CountermeasureParameters(
@@ -126,6 +135,9 @@ class CountermeasureDAO(CairisDAO):
       cmId = self.db_proxy.getDimensionId(name,'countermeasure')
       countermeasure_params.setId(cmId)
       self.db_proxy.updateCountermeasure(countermeasure_params)
+    except ObjectNotFound as ex:
+      self.close()
+      raise ObjectNotFoundHTTPError('The provided countermeasure name')
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)
@@ -137,6 +149,9 @@ class CountermeasureDAO(CairisDAO):
     try:
       cmId = self.db_proxy.getDimensionId(name,'countermeasure')
       self.db_proxy.deleteCountermeasure(cmId)
+    except ObjectNotFound as ex:
+      self.close()
+      raise ObjectNotFoundHTTPError('The provided countermeasure name')
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)
@@ -186,9 +201,12 @@ class CountermeasureDAO(CairisDAO):
 
   def generate_asset(self,cmName):
     try:
-      cm = self.get_countermeasure_by_name(cmName, simplify=False)
+      cm = self.db_proxy.dimensionObject(cmName,'countermeasure')
       assetId = self.db_proxy.addAsset(cairis.core.AssetParametersFactory.build(cm,self.db_proxy))
       self.db_proxy.addTrace('countermeasure_asset',cm.id(),assetId)
+    except ObjectNotFound as ex:
+      self.close()
+      raise ObjectNotFoundHTTPError('The provided countermeasure name')
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)
@@ -198,9 +216,12 @@ class CountermeasureDAO(CairisDAO):
 
   def generate_asset_from_template(self,cmName,taName):
     try:
-      cm = self.get_countermeasure_by_name(cmName, simplify=False)
+      cm = self.db_proxy.dimensionObject(cmName,'countermeasure')
       assetId = self.db_proxy.addAsset(cairis.core.AssetParametersFactory.buildFromTemplate(taName,cm.environments()))
       self.db_proxy.addTrace('countermeasure_asset',cm.id(),assetId)
+    except ObjectNotFound as ex:
+      self.close()
+      raise ObjectNotFoundHTTPError('The provided countermeasure name')
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)
@@ -210,13 +231,16 @@ class CountermeasureDAO(CairisDAO):
 
   def situate_countermeasure_pattern(self,cmName,spName):
     try:
-      cm = self.get_countermeasure_by_name(cmName, simplify=False)
+      cm = self.db_proxy.dimensionObject(cmName,'countermeasure')
       patternId = self.db_proxy.getDimensionId(spName,'securitypattern')
       assetParametersList = []
       for assetName in self.db_proxy.patternAssets(patternId):
         assetParametersList.append(cairis.core.AssetParametersFactory.buildFromTemplate(assetName,cm.environments()))
       self.db_proxy.addSituatedAssets(patternId,assetParametersList)
       self.db_proxy.addTrace('countermeasure_securitypattern',cm.id(),patternId)
+    except ObjectNotFound as ex:
+      self.close()
+      raise ObjectNotFoundHTTPError('The provided countermeasure name')
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)
@@ -228,6 +252,9 @@ class CountermeasureDAO(CairisDAO):
     try:
       cmId = self.db_proxy.getDimensionId(cmName,'countermeasure')
       self.db_proxy.associateCountermeasureToPattern(cmId,spName)
+    except ObjectNotFound as ex:
+      self.close()
+      raise ObjectNotFoundHTTPError('The provided countermeasure name')
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)
@@ -239,6 +266,9 @@ class CountermeasureDAO(CairisDAO):
     try:
       cmId = self.db_proxy.getDimensionId(cmName,'countermeasure')
       self.db_proxy.deleteSituatedPattern(cmId,spName)
+    except ObjectNotFound as ex:
+      self.close()
+      raise ObjectNotFoundHTTPError('The provided countermeasure name')
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)
@@ -250,6 +280,9 @@ class CountermeasureDAO(CairisDAO):
     try:
       cmId = self.db_proxy.getDimensionId(cmName,'countermeasure')
       return self.db_proxy.candidateCountermeasurePatterns(cmId)
+    except ObjectNotFound as ex:
+      self.close()
+      raise ObjectNotFoundHTTPError('The provided countermeasure name')
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)

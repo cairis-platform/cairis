@@ -32,17 +32,20 @@ class EnvironmentDAO(CairisDAO):
   def __init__(self, session_id):
     CairisDAO.__init__(self, session_id)
 
-  def get_environments(self, constraint_id=-1, simplify=True):
+  def get_environments(self, constraint_id=-1):
     try:
       environments = self.db_proxy.getEnvironments(constraint_id)
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)
 
-    if simplify:
-      for key, value in list(environments.items()):
-        environments[key] = self.simplify(value)
-    return environments
+    envKeys = environments.keys()
+    envKeys.sort()
+    envList = []
+    for key in envKeys:
+      value = environments[key]
+      envList.append(self.simplify(value))
+    return envList
 
   def get_environment_names(self):
     try:

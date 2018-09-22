@@ -33,7 +33,7 @@ class TaskCharacteristicDAO(CairisDAO):
   def __init__(self, session_id):
     CairisDAO.__init__(self, session_id)
 
-  def get_task_characteristics(self,constraint_id = -1,simplify=True):
+  def get_task_characteristics(self,constraint_id = -1):
     try:
       tcs = self.db_proxy.getTaskCharacteristics(constraint_id)
     except DatabaseProxyException as ex:
@@ -43,22 +43,22 @@ class TaskCharacteristicDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-    if simplify:
-      for key, value in list(tcs.items()):
-        del value.theId
-        tcs[key] = self.convert_tcrs(real_tc=value) 
-
-    return tcs
+    tcsKeys = tcs.keys()
+    tcsKeys.sort()
+    tcsList = []
+    for key in tcsKeys:
+      value = tcs[key]
+      del value.theId
+      tcsList.append(self.convert_tcrs(real_tc=value))
+    return tcsList
 
   def get_task_characteristic(self, task_characteristic_name):
     tcs = self.get_task_characteristics()
     if tcs is None or len(tcs) < 1:
       self.close()
       raise ObjectNotFoundHTTPError('Task characteristic')
-    for key in tcs:
-      tName,tcDesc = key.split('/')
-      if (tcDesc == task_characteristic_name):
-        tc = tcs[key]
+    for tc in tcs:
+      if (tc.characteristic() == task_characteristic_name):
         return tc
     self.close()
     raise ObjectNotFoundHTTPError('Task characteristic:\"' + task_characteristic_name + '\"')
@@ -93,6 +93,9 @@ class TaskCharacteristicDAO(CairisDAO):
       tcId = self.db_proxy.getDimensionId(name,'task_characteristic')
       tcParams.setId(tcId)
       self.db_proxy.updateTaskCharacteristic(tcParams)
+    except ObjectNotFound as ex:
+      self.close()
+      raise ObjectNotFoundHTTPError('The provided task characteristic')
     except ARMException as ex:
       self.close()
       raise ARMHTTPError(ex)

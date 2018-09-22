@@ -87,10 +87,10 @@ class LocationsAPITests(CairisDaemonTestCase):
       responseData = rv.data
     locs = jsonpickle.decode(responseData)
     self.assertIsNotNone(locs, 'No results after deserialization')
-    self.assertIsInstance(locs, dict, 'The result is not a dictionary as expected')
+    self.assertIsInstance(locs, list, 'The result is not a dictionary as expected')
     self.assertGreater(len(locs), 0, 'No Locations in the dictionary')
     self.logger.info('[%s] Locations found: %d', method, len(locs))
-    locs = list(locs.values())[0]
+    locs = locs[0]
     self.logger.info('[%s] First locations: %s\n', method, locs['theName'])
 
   def test_get_by_name(self):

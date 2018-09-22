@@ -64,10 +64,10 @@ class DocumentReferenceAPITests(CairisDaemonTestCase):
       responseData = rv.data
     drs = jsonpickle.decode(responseData)
     self.assertIsNotNone(drs, 'No results after deserialization')
-    self.assertIsInstance(drs, dict, 'The result is not a dictionary as expected')
+    self.assertIsInstance(drs, list, 'The result is not a list as expected')
     self.assertGreater(len(drs), 0, 'No document references in the dictionary')
     self.logger.info('[%s] Document references found: %d', method, len(drs))
-    dr = list(drs.values())[0]
+    dr = drs[0]
     self.logger.info('[%s] First document reference: %s\n', method, dr['theName'])
 
   def test_get_by_name(self):

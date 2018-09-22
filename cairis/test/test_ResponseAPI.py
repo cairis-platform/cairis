@@ -61,10 +61,10 @@ class ResponseAPITests(CairisDaemonTestCase):
       responseData = rv.data
     responses = jsonpickle.decode(responseData)
     self.assertIsNotNone(responses, 'No results after deserialization')
-    self.assertIsInstance(responses, dict, 'The result is not a dictionary as expected')
+    self.assertIsInstance(responses, list, 'The result is not a dictionary as expected')
     self.assertGreater(len(responses), 0, 'No responses in the dictionary')
     self.logger.info('[%s] Responses found: %d', method, len(responses))
-    response = list(responses.values())[0]
+    response = responses[0]
     self.logger.info('[%s] First response: %s\n', method, response['theName'])
 
   def test_get_by_name(self):

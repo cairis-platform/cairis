@@ -35,7 +35,7 @@ class DomainPropertyDAO(CairisDAO):
   def __init__(self, session_id):
     CairisDAO.__init__(self, session_id)
 
-  def get_domain_properties(self, constraint_id=-1, simplify=True):
+  def get_domain_properties(self, constraint_id=-1):
     try:
       domain_properties = self.db_proxy.getDomainProperties(constraint_id)
     except DatabaseProxyException as ex:
@@ -44,12 +44,13 @@ class DomainPropertyDAO(CairisDAO):
     except ARMException as ex:
       self.close()
       raise ARMHTTPError(ex)
-
-    if simplify:
-      for key, value in list(domain_properties.items()):
-        domain_properties[key] = self.simplify(value)
-
-    return domain_properties
+    dpKeys = domain_properties.keys()
+    dpKeys.sort()
+    dpList = []
+    for key in dpKeys:
+      value = domain_properties[key]
+      dpList.append(self.simplify(value))
+    return dpList
 
   def get_domain_property_by_name(self, name, simplify=True):
     try:
@@ -59,7 +60,7 @@ class DomainPropertyDAO(CairisDAO):
       if found_domain_property is None:
         self.close()
         raise ObjectNotFoundHTTPError('The provided domain_property name')
-      return found_domain_property
+      return self.simplify(found_domain_property)
     except ObjectNotFound as ex:
       self.close()
       raise ObjectNotFoundHTTPError('The provided asset name')

@@ -44,18 +44,11 @@ function createTaskCharacteristicsTable(){
       var textToInsert = [];
       var i = 0;
 
-      var keys = [];
-      for (key in data) {
-        keys.push(key);
-      }
-      keys.sort();
-
-      for (var ki = 0; ki < keys.length; ki++) {
-        var key = keys[ki];
+      for (var key in data) {
         var item = data[key];
         textToInsert[i++] = "<tr>";
 
-        textToInsert[i++] = '<td class="deleteTaskCharacteristicButton"><i class="fa fa-minus" value="' + key + '"></i></td>';
+        textToInsert[i++] = '<td class="deleteTaskCharacteristicButton"><i class="fa fa-minus" value="' + item.theTaskName + '"></i></td>';
         textToInsert[i++] = '<td class="taskcharacteristic-rows" name="theName">';
         textToInsert[i++] = item.theTaskName;
         textToInsert[i++] = '</td>';

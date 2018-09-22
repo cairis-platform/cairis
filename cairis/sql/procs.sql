@@ -10432,9 +10432,9 @@ create procedure getSecurityPatterns(in constraintId int)
 begin
   if constraintId = -1
   then
-    select id,name,context,problem,solution from securitypattern;
+    select id,name,context,problem,solution from securitypattern order by 2;
   else
-    select id,name,context,problem,solution from securitypattern where id = constraintId;
+    select id,name,context,problem,solution from securitypattern where id = constraintId order by 2;
   end if;
 end
 //
@@ -18832,7 +18832,7 @@ create procedure getComponentView(in constraintId int)
 begin
   if constraintId = -1
   then
-    select id,name,synopsis from component_view;
+    select id,name,synopsis from component_view order by 2;
   else
     select id,name,synopsis from component_view where id = constraintId;
   end if;

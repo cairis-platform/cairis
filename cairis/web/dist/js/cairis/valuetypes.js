@@ -134,16 +134,9 @@ function createValueTypesTable(valueType,envName){
       $(".theTable tr").not(function(){if ($(this).has('th').length){return true}}).remove();
       var textToInsert = [];
       var i = 0;
-      var keys = [];
-      for (key in data) {
-        keys.push(key);
-      }
-      keys.sort();
 
-      for (var ki = 0; ki < keys.length; ki++) {
-        var key = keys[ki];
+      for (var key in data) {
         var item = data[key];
-
         textToInsert[i++] = "<tr>";
 	      if (envName == undefined) {
           textToInsert[i++] = '<td class="deleteValueTypeButton"><i class="fa fa-minus" value="' + item.theName + '"></i></td>';
