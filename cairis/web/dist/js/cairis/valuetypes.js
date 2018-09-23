@@ -252,7 +252,7 @@ function commitValueType() {
   else {
     putValueType(vt, oldName, function () {
       clearLocalStorage("value_type");
-      refreshMenuBreadCrumb(vt.theType,$.session.get("environment"))
+      refreshMenuBreadCrumb(vt.theType,vt.theEnvironmentName)
     });
   }
 }
