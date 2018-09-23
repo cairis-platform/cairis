@@ -580,13 +580,17 @@ function commitAsset(){
   }
   else {
     if($("#editAssetsOptionsform").hasClass("new")){
-      postAssetForm($("#editAssetsOptionsform"), function(){});
+      postAssetForm($("#editAssetsOptionsform"), function(){
+        $('#menuBCClick').attr('dimension','asset');
+        refreshMenuBreadCrumb('asset');
+      });
     }
     else{
-      putAsset(assetName,assetFormToJSON($('#editAssetsOptionsform')));
+      putAsset(assetName,assetFormToJSON($('#editAssetsOptionsform')), function () {
+        $('#menuBCClick').attr('dimension','asset');
+        refreshMenuBreadCrumb('asset');
+      });
     }
-    $('#menuBCClick').attr('dimension','asset');
-    refreshMenuBreadCrumb('asset');
   }
 }
 
@@ -663,7 +667,7 @@ function getAssetDefinition(props){
   $('#Properties').find('tbody').append(textToInsert.join(''));
 }
 
-function putAsset(assetName,json){
+function putAsset(assetName,json,callback){
   var ursl = serverIP + "/api/assets/name/"+ encodeURIComponent(assetName) + "?session_id=" + String($.session.get('sessionID'));
   var output = {};
   output.object = json;
@@ -680,6 +684,9 @@ function putAsset(assetName,json){
     url: ursl,
     success: function (data) {
       showPopup(true);
+      if(typeof(callback) == "function"){
+        callback();
+      }
     },
     error: function (xhr, textStatus, errorThrown) {
       var error = JSON.parse(xhr.responseText);
