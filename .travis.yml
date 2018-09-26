@@ -39,7 +39,7 @@ before_script:
 - sudo chmod a+x /usr/bin/chromedriver
 
 script:
-- behave cairis/selenium/features/    
+- behave
 - py.test cairis/test --doctest-modules -v --cov cairis/core cairis/daemon cairis/controllers
   cairis/data cairis/tools --cov-report term-missing
 

@@ -22,4 +22,4 @@ Feature: Login and Logout
   Scenario: Logout
     Given I have successfully authenticated with CAIRIS
     When I click logout
-    Then I am returned to the landing page 
+    Then I am returned to the landing page
