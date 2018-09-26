@@ -7,8 +7,6 @@ services:
 - mysql
 addons:
   apt:
-    sources:
-    - sourceline "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main"
     packages:
     - python-dev
     - build-essential
@@ -33,18 +31,17 @@ env:
 install:
 - pip install -r test_requirements.txt
 - pip install -r requirements.txt
-- pip install selenium
-- pip install behave
 
 before_script:
-- wget https://chromedriver.storage.googleapis.com/2.42/chromedriver_linux64.zip
+- latestChromeDriver=$(curl https://chromedriver.storage.googleapis.com/LATEST_RELEASE)
+- wget https://chromedriver.storage.googleapis.com/$latestChromeDriver/chromedriver_linux64.zip
 - sudo unzip chromedriver_linux64 -d /usr/bin
 - sudo chmod a+x /usr/bin/chromedriver
 
 script:
 - behave cairis/selenium/features/    
-#- py.test cairis/test --doctest-modules -v --cov cairis/core cairis/daemon cairis/controllers
-#  cairis/data cairis/tools --cov-report term-missing
+- py.test cairis/test --doctest-modules -v --cov cairis/core cairis/daemon cairis/controllers
+  cairis/data cairis/tools --cov-report term-missing
 
 after_success:
 - coveralls
