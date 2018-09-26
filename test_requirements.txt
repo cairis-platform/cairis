@@ -2,3 +2,5 @@ python-coveralls
 codecov
 #httpretty
 git+https://github.com/melor/HTTPretty.git@py33
+selenium
+behave
