@@ -34,6 +34,7 @@ install:
 - pip install -r test_requirements.txt
 - pip install -r requirements.txt
 - pip install selenium
+- pip install behave
 
 before_script:
 - wget https://chromedriver.storage.googleapis.com/2.42/chromedriver_linux64.zip
@@ -41,9 +42,9 @@ before_script:
 - sudo chmod a+x /usr/bin/chromedriver
 
 script:
-- py.test cairis/test --doctest-modules -v --cov cairis/core cairis/daemon cairis/controllers
-  cairis/data cairis/tools --cov-report term-missing
-- python cairis/selenium/test_login.py
+- behave cairis/selenium/features/    
+#- py.test cairis/test --doctest-modules -v --cov cairis/core cairis/daemon cairis/controllers
+#  cairis/data cairis/tools --cov-report term-missing
 
 after_success:
 - coveralls
