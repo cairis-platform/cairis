@@ -61,6 +61,14 @@ description: Home Page of CAIRIS
 </section>
 
 <section class="spotlight">
+  <div class="image"><img src="/images/SwaggerHub.jpg" alt="" /></div>
+  <div class="content">
+    <h2>Integrate into your ecosystem</h2>
+    <p>Use the CAIRIS API to build design apps or integrate CAIRIS into your existing toolchain.</p>
+  </div>
+</section>
+
+<section class="spotlight">
   <div class="image"><img src="/images/doc_frontpage.jpg" alt="" /></div>
   <div class="content">
     <h2>Create beautiful specifications</h2>
