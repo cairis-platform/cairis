@@ -1,5 +1,13 @@
 # Site navigation links
 
+- title: Documentation
+  url: /docs
+  excerpt: "Documentation"
+
+- title: Book
+  url: /book
+  excerpt: "Designing Usable and Secure Software with IRIS and CAIRIS"
+
 - title: Blog
   url: /blog
   excerpt: "Posting about CAIRIS and related topics"
@@ -7,10 +15,6 @@
 - title: Media
   url: /media
   excerpt: "Videos about CAIRIS and Security-by-Design"
-
-- title: Book
-  url: /book
-  excerpt: "Designing Usable and Secure Software with IRIS and CAIRIS"
 
 - title: About
   url: /about
