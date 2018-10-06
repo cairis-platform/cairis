@@ -160,8 +160,6 @@ $('#fromTrelloModal').on('click','#ExportLists',function(){
     $.each(data,function(idx,item){
       var itemArray = item.name.split(':')
       var pc = {
-        "__python_obj__": "PersonaCharacteristic.PersonaCharacteristic",
-        "theId": -1,
         "thePersonaName" : pName,
         "theModQual" : "Perhaps",
         "theVariable" : itemArray[1].trim(),
@@ -176,7 +174,6 @@ $('#fromTrelloModal').on('click','#ExportLists',function(){
       Trello.get('/lists/' + item.id + '/cards',function(cards) {
         $.each(cards,function(idx,card){
           var ref = {
-             "__python_obj__" : "cairis.tools.PseudoClasses.CharacteristicReference",
              "theCharacteristicType" : card.labels[0].name,
              "theDimensionName" : "document",
              "theReferenceName" : card.name,

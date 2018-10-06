@@ -3472,7 +3472,11 @@ CREATE VIEW object_name as
   union 
   select name from locations
   union
-  select name from location;
+  select name from location
+  union
+  select description name from persona_characteristic
+  union
+  select description name from task_characteristic;
 
 CREATE VIEW entity as
   select id,name,short_code,description,significance,asset_type_id,is_critical,critical_rationale from asset where asset_type_id in (1,3,4);

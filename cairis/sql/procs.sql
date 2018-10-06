@@ -10795,9 +10795,15 @@ end
 create procedure nameExists(in objtName text, in dimName text)
 begin
   declare objtCount int;
+  declare nameVar varchar(11) default 'name';
   declare ncSql varchar(4000);
 
-  set ncSql = concat('select count(id) into @objtCount from ',dimName,' where name = "',objtName,'" limit 1');
+  if dimName = 'persona_characteristic'
+  then
+    set nameVar = 'description';
+  end if;
+
+  set ncSql = concat('select count(id) into @objtCount from ',dimName,' where ',nameVar,' = "',objtName,'" limit 1');
   set @sql = ncSql;
   prepare stmt from @sql;
   execute stmt;

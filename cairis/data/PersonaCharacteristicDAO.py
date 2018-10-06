@@ -79,6 +79,12 @@ class PersonaCharacteristicDAO(CairisDAO):
     raise ObjectNotFoundHTTPError('Persona characteristic:\"' + persona_characteristic_name + '\"')
 
   def add_persona_characteristic(self, pc):
+    try:
+      self.db_proxy.nameCheck(pc.theCharacteristic, 'persona_characteristic')
+    except ARMException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+
     pcParams = PersonaCharacteristicParameters(
       pName=pc.thePersonaName,
       modQual=pc.theModQual,
