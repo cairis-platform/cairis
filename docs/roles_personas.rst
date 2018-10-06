@@ -202,3 +202,18 @@ Recording persona assumptions
 -  Existing characteristics can be modified by double clicking on the
    characteristics in the Persona Characteristic dialog box, making the
    necessary changes, and clicking on the Update button.
+
+Automating persona creation
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The `Persona Helper <https://chrome.google.com/webstore/detail/persona-helper/mhojpjjecjmdbbooonpglohcedhnjkho>`_ Chrome Extension can be used to automatically create document references from highlighted text on a web page open in Chrome.  This might be useful when eliciting factoids from website.
+
+CAIRIS also supports the ability to export document references to Trello for online affinity diagramming, and import affinity diagrams from Trello into CAIRIS as argumentation models.
+
+Both the Persona Helper and the Trello import/export facilities are illustrated in the video below.
+
+.. raw:: html
+
+    <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; height: auto;">
+        <iframe src="https://vimeo.com/208162116" frameborder="0" allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
+    </div>
