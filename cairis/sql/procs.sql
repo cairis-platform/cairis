@@ -11025,12 +11025,25 @@ create procedure addPersonaCharacteristicReference(in pcId int, in refName text,
 begin
   declare crTypeId int;
   declare refId int;
+  declare edId int;
 
   select id into crTypeId from characteristic_reference_type where name = crTypeName;
 
   if dimName = 'document'
   then
     select id into refId from document_reference where name = refName;
+    if refId is null
+    then
+      select id into edId from external_document where name = 'Unknown';
+      if edId is null
+      then
+        call newId2(edId);
+        call addExternalDocument(edId,'Unknown','1','Unknown','Unknown','Factoids of unknown origin');
+      end if;
+      set refDesc = refName;
+      call newId2(refId);
+      call addDocumentReference(refId, refName,'Unknown','Unknown',refName);
+    end if;
     if (refDesc != '')
     then
       update document_reference set excerpt = refDesc where id = refId;
