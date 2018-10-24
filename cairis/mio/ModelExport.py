@@ -292,7 +292,8 @@ def exportModel(outFile = None,session_id = None):
   xmlBuf+= b.get_dbproxy(session_id).goalsToXml(0)[0] + '\n\n'
   xmlBuf+= b.get_dbproxy(session_id).associationsToXml(0)[0] + '\n\n'
   xmlBuf+= b.get_dbproxy(session_id).misusabilityToXml(0)[0] + '\n\n'
-  xmlBuf+= b.get_dbproxy(session_id).dataflowsToXml(0)[0] + '\n\n</cairis_model>'
+  xmlBuf+= b.get_dbproxy(session_id).dataflowsToXml(0)[0] + '\n\n'
+  xmlBuf+= b.get_dbproxy(session_id).locationsToXml()[0] + '\n\n</cairis_model>'
   if outFile == None:
     return xmlBuf
   else:

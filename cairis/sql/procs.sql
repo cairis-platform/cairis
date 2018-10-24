@@ -946,6 +946,7 @@ drop procedure if exists addTrustBoundaryPrivilege;
 drop function if exists trustBoundaryPrivilege;
 drop procedure if exists unrelatedExceptionCheck;
 drop procedure if exists reassociateRequirement;
+drop procedure if exists locationsToXml;
 
 
 delimiter //
@@ -25223,5 +25224,82 @@ begin
   end if;
 end
 //
+
+create procedure locationsToXml()
+begin
+  declare locsCount int default 0;
+  declare locsId int;
+  declare locsName varchar(1000);
+  declare locsDia varchar(1000);
+  declare locId int;
+  declare locName varchar(1000);
+  declare aiName varchar(1000);
+  declare assetName varchar(200);
+  declare piName varchar(1000);
+  declare personaName varchar(50);
+
+  declare done int default 0;
+  declare buf LONGTEXT default '';
+  declare locsCursor cursor for select id,name,diagram from locations order by 2;
+  declare locCursor cursor for select id,name from location where locations_id = locsId order by 2;
+  declare aiCursor cursor for select ai.name,a.name from asset_instance ai, asset a where location_id = locId and ai.asset_id = a.id order by 1;
+  declare piCursor cursor for select pi.name,p.name from persona_instance pi, persona p where location_id = locId and pi.persona_id = p.id order by 1;
+  declare continue handler for not found set done = 1;
+
+  open locsCursor;
+  locs_loop: loop
+    fetch locsCursor into locsId, locsName, locsDia;
+    if done = 1
+    then
+      leave locs_loop;
+    end if;
+    set buf = concat(buf,'<locations name=\"',locsName,'\"  diagram=\"',locsDia,'\" >\n');
+    set locsCount = locsCount + 1;
+
+    open locCursor;
+    loc_loop: loop
+      fetch locCursor into locId,locName;
+      if done = 1
+      then
+        leave loc_loop;
+      end if;
+      set buf = concat(buf,'  <location name=\"',locName,'\" >\n');
+
+      open aiCursor;
+      ai_loop: loop
+        fetch aiCursor into aiName, assetName;
+        if done = 1
+        then
+          leave ai_loop;
+        end if;
+        set buf = concat(buf,'    <asset_instance name=\"',aiName,'\" asset=\"',assetName,'\" />\n');
+      end loop ai_loop;
+      close aiCursor;
+      set done = 0;
+
+      open piCursor;
+      pi_loop: loop
+        fetch piCursor into piName, personaName;
+        if done = 1
+        then
+          leave pi_loop;
+        end if;
+        set buf = concat(buf,'    <persona_instance name=\"',piName,'\" persona=\"',personaName,'\" />\n');
+      end loop pi_loop;
+      close piCursor;
+      set done = 0;
+    
+      set buf = concat(buf,'  </location>\n');
+    end loop loc_loop;
+    close locCursor;  
+    set done = 0; 
+
+    set buf = concat(buf,'</locations>\n');
+  end loop locs_loop;
+  close locsCursor;
+  select buf,locsCount;
+end
+//
+
 
 delimiter ;

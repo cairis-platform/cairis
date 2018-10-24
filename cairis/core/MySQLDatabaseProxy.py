@@ -3358,6 +3358,8 @@ class MySQLDatabaseProxy:
   def domainValuesToXml(self,includeHeader=True):
     return self.responseList('call domainValuesToXml(:head)',{'head':includeHeader},'MySQL error exporting domain values to XML')[0]
 
+  def locationsToXml(self):
+    return self.responseList('call locationsToXml()',{},'MySQL error exporting locations to XML')[0]
 
   def clearDatabase(self,session_id = None,dbUser=None,dbPasswd=None,dbName=None):
     b = Borg()

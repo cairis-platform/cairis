@@ -19,7 +19,7 @@
 
 <!-- DTD for CAIRIS XML model file -->
 
-<!ELEMENT cairis_model (tvtypes?,domainvalues?,cairis?,riskanalysis?,usability?,goals?,associations?,synopses?,misusability?,dataflows?)>
+<!ELEMENT cairis_model (tvtypes?,domainvalues?,cairis?,riskanalysis?,usability?,goals?,associations?,synopses?,misusability?,dataflows?,locations?)>
 
 <!ELEMENT tvtypes (vulnerability_type+,threat_type+)>
 <!ELEMENT vulnerability_type (description)>
@@ -444,3 +444,21 @@
 <!ELEMENT trust_boundary_component EMPTY>
 <!ATTLIST trust_boundary_component name CDATA #REQUIRED>
 <!ATTLIST trust_boundary_component type CDATA #REQUIRED>
+
+<!ELEMENT locations (location*)>
+<!ATTLIST locations name CDATA #REQUIRED>
+<!ATTLIST locations diagram CDATA #REQUIRED>
+
+<!ELEMENT location (asset_instance*,persona_instance*,link+)>
+<!ATTLIST location name CDATA #REQUIRED>
+
+<!ELEMENT asset_instance EMPTY>
+<!ATTLIST asset_instance name CDATA #REQUIRED>
+<!ATTLIST asset_instance asset CDATA #REQUIRED>
+
+<!ELEMENT persona_instance EMPTY>
+<!ATTLIST persona_instance name CDATA #REQUIRED>
+<!ATTLIST persona_instance persona CDATA #REQUIRED>
+
+<!ELEMENT link EMPTY>
+<!ATTLIST link name CDATA #REQUIRED>
