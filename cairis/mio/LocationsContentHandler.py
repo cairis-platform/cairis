@@ -29,10 +29,9 @@ class LocationsContentHandler(ContentHandler,EntityResolver):
   def __init__(self):
     b = Borg()
     self.configDir = b.configDir
-    self.theLocationsName = ''
-    self.theDiagram = ''
-    self.theLocations = []
+    self.allLocations = []
 
+    self.resetLocationsAttributes()
     self.resetLocationAttributes()
 
   def resolveEntity(self,publicId,systemId):
@@ -42,11 +41,7 @@ class LocationsContentHandler(ContentHandler,EntityResolver):
   def diagram(self): return self.theDiagram
 
   def locations(self):
-    if (self.theLocationsName != ''):
-      return LocationsParameters(self.theLocationsName,self.theDiagram,self.theLocations)
-    else:
-      return None
-
+    return self.allLocations
 
   def links(self):
     return self.theLinks
@@ -56,6 +51,12 @@ class LocationsContentHandler(ContentHandler,EntityResolver):
     self.theAssetInstances = []
     self.thePersonaInstances = []
     self.theLinks = []
+
+  def resetLocationsAttributes(self):
+    self.theLocationsName = ''
+    self.theDiagram = ''
+    self.theLocations = []
+
 
   def startElement(self,name,attrs):
     self.currentElementName = name
@@ -75,6 +76,7 @@ class LocationsContentHandler(ContentHandler,EntityResolver):
   def endElement(self,name):
     if name == 'location':
       self.theLocations.append(Location(-1,self.theName,self.theAssetInstances,self.thePersonaInstances,self.theLinks))
-      self.theAssetInstances = []
-      self.thePersonaInstances = []
-      self.theLinks = []
+      self.resetLocationAttributes()
+    elif name == 'locations':
+      self.allLocations.reset(LocationsParameters(self.theLocationsName,self.theDiagram,self.theLocations))
+      self.resetLocationsAttributes()
