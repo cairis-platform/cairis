@@ -733,7 +733,8 @@ def importLocationsFile(importFile,session_id = None):
     parser.setEntityResolver(handler)
     parser.parse(importFile)
     locations = handler.locations()
-    return importLocations(locations,session_id)
+    if (locations != None):
+      return importLocations(locations,session_id)
   except xml.sax.SAXException as e:
     raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
   
@@ -805,7 +806,9 @@ def importModelFile(importFile,isOverwrite = 1,session_id = None):
     modelTxt += importSynopsesFile(importFile,session_id) + ' '
     modelTxt += importMisusabilityFile(importFile,session_id) + ' '
     modelTxt += importDataflowsFile(importFile,session_id) + ' '
-    modelTxt += importLocationsFile(importFile,session_id)
+    locs = importLocationsFile(importFile,session_id)
+    if (locs != None):
+      modelTxt += locs
     return modelTxt
   except xml.sax.SAXException as e:
     raise ARMException("Error parsing" + importFile + ": " + e.getMessage())

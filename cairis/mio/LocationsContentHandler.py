@@ -42,7 +42,11 @@ class LocationsContentHandler(ContentHandler,EntityResolver):
   def diagram(self): return self.theDiagram
 
   def locations(self):
-    return LocationsParameters(self.theLocationsName,self.theDiagram,self.theLocations)
+    if (self.theLocationsName != ''):
+      return LocationsParameters(self.theLocationsName,self.theDiagram,self.theLocations)
+    else:
+      return None
+
 
   def links(self):
     return self.theLinks
