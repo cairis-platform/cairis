@@ -78,5 +78,5 @@ class LocationsContentHandler(ContentHandler,EntityResolver):
       self.theLocations.append(Location(-1,self.theName,self.theAssetInstances,self.thePersonaInstances,self.theLinks))
       self.resetLocationAttributes()
     elif name == 'locations':
-      self.allLocations.reset(LocationsParameters(self.theLocationsName,self.theDiagram,self.theLocations))
+      self.allLocations.append(LocationsParameters(self.theLocationsName,self.theDiagram,self.theLocations))
       self.resetLocationsAttributes()

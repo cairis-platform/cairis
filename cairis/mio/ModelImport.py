@@ -743,8 +743,10 @@ def importLocationsFile(importFile,session_id = None):
 def importLocations(locations,session_id):
   b = Borg()
   db_proxy = b.get_dbproxy(session_id)
-  db_proxy.addLocations(locations)
-  msgStr = 'Imported ' + locations.name()
+  msgStr = ''
+  for locs in locations:
+    db_proxy.addLocations(locs)
+    msgStr = 'Imported ' + locs.name() + '. '
   return msgStr
 
 def importDataflowsFile(importFile,session_id = None):
