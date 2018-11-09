@@ -1,0 +1,12 @@
+docker volume create --name cairisDocumentation
+sudo docker run --name cairis-mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql:5.7
+sudo docker run --name cairis-latex -d -v cairisDocumentation:/tmpDocker
+sudo docker run --name CAIRIS --link cairis-mysql:mysql -d -P -p 80:8000 --net=bridge -v cairisDocumentation:/tmpDocker shamalfaily/cairis
+
+
+docker volume create --name cairisDocumentation
+docker build . -t cairis -f ./Dockerfile
+docker build . -t cairis-latex -f ./Dockerfile
+
+docker run --name cairis-latex -d -v cairisDocumentation:/tmpDocker -v cairisImage:/images -t cairis-latex
+docker run --name cairis -d --link cairis-mysql:mysql --link cairis-latex:latex -P -p 80:8000 --net=bridge -v cairisDocumentation:/tmpDocker -v cairisImage:/images -t cairis
