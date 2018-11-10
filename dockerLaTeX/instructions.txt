@@ -4,7 +4,6 @@ sudo docker run --name cairis-latex -d -v cairisDocumentation:/tmpDocker
 sudo docker run --name CAIRIS --link cairis-mysql:mysql -d -P -p 80:8000 --net=bridge -v cairisDocumentation:/tmpDocker shamalfaily/cairis
 
 
-docker volume create --name cairisDocumentation
 docker build . -t cairis -f ./Dockerfile
 docker build . -t cairis-latex -f ./Dockerfile
 
