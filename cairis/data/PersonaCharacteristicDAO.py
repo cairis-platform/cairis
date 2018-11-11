@@ -158,7 +158,8 @@ class PersonaCharacteristicDAO(CairisDAO):
           frc = CharacteristicReferenceContribution(rc.meansEnd(),rc.contribution())
           pcr_list.append(CharacteristicReference(real_pcr[0],'grounds',real_pcr[1],real_pcr[2],crs,frc))
         real_pc.theGrounds = pcr_list
-        pcr_list = []
+      pcr_list = []
+      if len(real_pc.theWarrant) > 0:
         for real_pcr in real_pc.theWarrant:
           rs = self.db_proxy.getReferenceSynopsis(real_pcr[0])
           crs = CharacteristicReferenceSynopsis(rs.synopsis(),rs.dimension(),rs.actorType(),rs.actor())
@@ -166,7 +167,8 @@ class PersonaCharacteristicDAO(CairisDAO):
           frc = CharacteristicReferenceContribution(rc.meansEnd(),rc.contribution())
           pcr_list.append(CharacteristicReference(real_pcr[0],'warrant',real_pcr[1],real_pcr[2],crs,frc))
         real_pc.theWarrant = pcr_list
-        pcr_list = []
+      pcr_list = []
+      if len(real_pc.theRebuttal) > 0:
         for real_pcr in real_pc.theRebuttal:
           rs = self.db_proxy.getReferenceSynopsis(real_pcr[0])
           crs = CharacteristicReferenceSynopsis(rs.synopsis(),rs.dimension(),rs.actorType(),rs.actor())

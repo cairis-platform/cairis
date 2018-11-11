@@ -156,44 +156,93 @@ $('#fromTrelloModal').on('shown.bs.modal',function() {
 $('#fromTrelloModal').on('click','#ExportLists',function(){
   var boardId = $('#theFromBoards').val();
   var pName = $("#theFromBoards option[value='" + boardId + "']").text();
+  var varList = ['activities','aptitudes','attitudes','motivations','skills','intrinsic','contextual'];
+  var charList = ['grounds','warrant','rebuttal'];
   Trello.get('/boards/' + boardId + '/lists',function(data){
     $.each(data,function(idx,item){
       var itemArray = item.name.split(':')
-      var pc = {
-        "thePersonaName" : pName,
-        "theModQual" : "Perhaps",
-        "theVariable" : itemArray[1].trim(),
-        "theCharacteristic" : itemArray[0].trim(),
-        "theCharacteristicSynopsis" : referenceSynopsisDefault,
-        "theGrounds" : [],
-        "theWarrant" : [],
-        "theRebuttal" : [],
-        "theBacking" :[]
-      };
+      var variableName = itemArray[1].trim();
+      if (varList.indexOf(variableName) != -1) {
+        var pc = {
+          "thePersonaName" : pName,
+          "theModQual" : "Perhaps",
+          "theVariable" : variableName,
+          "theCharacteristic" : itemArray[0].trim(),
+          "theCharacteristicSynopsis" : referenceSynopsisDefault,
+          "theGrounds" : [],
+          "theWarrant" : [],
+          "theRebuttal" : [],
+          "theBacking" :[]
+        };
 
-      Trello.get('/lists/' + item.id + '/cards',function(cards) {
-        $.each(cards,function(idx,card){
-          var ref = {
-             "theCharacteristicType" : card.labels[0].name,
+        Trello.get('/lists/' + item.id + '/cards',function(cards) {
+          $.each(cards,function(idx,card){
+            var cardName = card.name;
+            if (containsReserved(cardName)) {
+              alert("Card name " + cardName + " contains a reserved or non-ASCII character");
+              isError = 1;
+            }
+            var cardDesc = card.desc;
+            if (cardDesc == "") {
+              cardDesc = cardName;
+            }
+            if (containsReserved(cardDesc)) {
+              alert("Card description " + cardDesc + " contains a reserved or non-ASCII character");
+              isError = 1;
+            }
+            if (card.labels.length == 0) {
+              alert("No card labels set.  Permissable values: grounds, warrant, rebuttal");
+              isError = 1;
+            }
+            var charType = card.labels[0].name;
+            if (charList.indexOf(charType) == -1) {
+              alert("Card label " + charType + " is invalid.  Permissable values: grounds, warrant, rebuttal");
+              isError = 1;
+            }
+
+            var ref = {
+             "theCharacteristicType" : charType,
              "theDimensionName" : "document",
-             "theReferenceName" : card.name,
-             "theReferenceDescription" : card.desc
-          };
-          if (ref.theCharacteristicType == 'warrant') {
-            pc.theWarrant.push(ref);
-          }
-          else if (ref.theCharacteristicType == 'rebuttal') {
-            pc.theRebuttal.push(ref);
-          }
-          else {
-            pc.theGrounds.push(ref);
+             "theReferenceName" : cardName,
+             "theReferenceDescription" : cardDesc
+            };
+            if (ref.theCharacteristicType == 'warrant') {
+              pc.theWarrant.push(ref);
+            }
+            else if (ref.theCharacteristicType == 'rebuttal') {
+              pc.theRebuttal.push(ref);
+            }
+            else {
+              pc.theGrounds.push(ref);
+            }
+          });
+          if (isError != 1) {
+            var isError = 0;
+            postPersonaCharacteristic(pc,function() {
+              $("#fromTrelloModal").modal('hide');
+              showPopup(true);
+            });
           }
         });
-        postPersonaCharacteristic(pc,function() {
-          $("#fromTrelloModal").modal('hide');
-          showPopup(true);
-        });
-      });
+      }
+      else {
+        showPopup(false,variableName + " is an invalid behavioural variable.  Permissable values: activities, aptitudes, attitudes, motivations, skills, intrinsic, contextual");
+        return;
+      }
     });
   });
 });
+
+function containsReserved(trelloStr) {
+  var reservedChars = [34,35,36,37,39,42,47,51,60,62,63,92,95,96];
+  for (var i = 0; i < trelloStr.length; i++) {
+    var cCode = trelloStr[i].charCodeAt(0);
+    if (reservedChars.indexOf(cCode) != -1) {
+      return true;
+    }
+    if (cCode > 127) {
+      return true;
+    }
+  }
+  return false;
+}
