@@ -865,7 +865,7 @@ def buildPersonas(p,docDir,chapterTxt,isDpia = False):
       chapterTxt = buildPersonaRationale(p,persona.name(), docDir, chapterTxt)
     chapterTxt += """   
       </section>"""
-    return chapterTxt
+  return chapterTxt
 
 def buildPersonaRationale(p,personaName,docDir,chapterTxt):
   chapterTxt += personaModelSection(p,personaName,docDir)
