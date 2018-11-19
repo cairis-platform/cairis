@@ -33,7 +33,6 @@ from .LocationModel import LocationModel
 from .AssumptionPersonaModel import AssumptionPersonaModel
 from cairis.core.armid import *
 import requests
-import urllib
 
 __author__ = 'Shamal Faily'
 
@@ -2035,7 +2034,19 @@ def build(dbProxy,docType,sectionFlags,typeFlags,fileName,docDir):
   f = open(docFile,'w')
   f.write(specDoc)
   f.close()
-
-  data = {'docDir': docDir, 'docFile': docFile, 'typeFlags':typeFlags}
-  requestString = "http://127.0.0.1:5000/latexApi/fileName/{}".format(fileName)
-  response = requests.get(requestString, params=data)
+  
+  b = Borg()
+  if(b.docker == True):
+    requestString = "http://cairis-latex:5000/latexApi/fileName/{}".format(fileName)
+    requests.post(requestString, data={'docDir': docDir, 'docFile': docFile, 'typeFlags':typeFlags}) 
+  else:
+    if (typeFlags[DOCOPT_HTML_ID]):
+      htmlGenCmd = 'docbook2html -o ' + docDir + ' ' + docFile
+      os.system(htmlGenCmd)
+    if (typeFlags[DOCOPT_RTF_ID]):
+      rtfGenCmd = 'docbook2rtf -o ' + docDir + ' ' + docFile
+      os.system(rtfGenCmd)
+    if (typeFlags[DOCOPT_PDF_ID]):
+      pdfGenCmd = 'dblatex --param=table.in.float="0" -o  ' + docDir + '/' + fileName + '.pdf '  + docFile
+      os.system(pdfGenCmd)
+      

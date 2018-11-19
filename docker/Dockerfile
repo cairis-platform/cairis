@@ -38,10 +38,6 @@ COPY addAccount.sh /
 EXPOSE 8000
 
 RUN apt-get remove --purge -y git
-#RUN apt-get remove --purge -y python-pip
-#RUN apt-get remove --purge -y python-apt
 RUN apt-get autoremove -y
 
-COPY DocumentBuilder.py /cairis/cairis/misc/
-COPY BorgFactory.py /cairis/cairis/core/
 CMD ["./setupDb.sh"]
