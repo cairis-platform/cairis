@@ -151,6 +151,7 @@ function viewTask(taskName) {
         $.each(data.theEnvironmentProperties, function (index, env) {
           appendTaskEnvironment(env.theEnvironmentName);
         });
+        $("#theEnvironments").find(".taskEnvironment:first").closest('tr').addClass('initialView');
         $("#theEnvironments").find("tbody").find(".taskEnvironment:first").trigger('click');
         $("#editTaskOptionsForm").validator('update');
       });
@@ -187,8 +188,16 @@ function fillTaskEnvInfo(env) {
 
 var mainContent = $("#objectViewer");
 mainContent.on("click",".taskEnvironment", function () {
-  $(this).closest('tr').addClass('active').siblings().removeClass('active');
-  updateTaskEnvInfo();
+  var row = $(this).closest('tr');
+  row.addClass('active').siblings().removeClass('active');
+  if (row.hasClass('initialView')) {
+    row.removeClass('initialView');
+  }
+  else {
+    updateTaskEnvInfo();
+  }
+
+
   var task = JSON.parse($.session.get("Task"));
   var envName = $(this).text();
   $.session.set("taskEnvironmentName", envName);
