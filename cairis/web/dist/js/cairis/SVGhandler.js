@@ -286,10 +286,10 @@ function handleNodeClick(event,objt) {
           $.session.set("Requirement", JSON.stringify(data));
           $('#requirementsForm').loadJSON(data,null);
           $("#optionsHeaderGear").text("Requirement properties");
-          $('#originator').val(data.attrs.originator);
-          $('#rationale').val(data.attrs.rationale);
-          $('#fitCriterion').val(data.attrs.fitCriterion);
-          $('#type').val(data.attrs.type);
+          $('#originator').val(data['theOriginator']);
+          $('#rationale').val(data['theRationale']);
+          $('#fitCriterion').val(data['theFitCriterion']);
+          $('#type').val(data['theType']);
           forceOpenOptions();
         });
       },

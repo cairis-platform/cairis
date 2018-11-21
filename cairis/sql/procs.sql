@@ -5101,7 +5101,19 @@ returns int
 deterministic
 begin
   declare reqId int;
+  declare shortCode varchar(100);
+  declare reqLabel int;
+
   select o.id into reqId from requirement o where o.name = reqName and o.version = (select max(i.version) from requirement i where i.id = o.id);
+  if reqId is null
+  then
+    call requirementLabelComponents(reqName,shortCode,reqLabel);
+    select o.id into reqId from requirement o, asset_requirement ar, asset a where o.label = reqLabel and o.id = ar.requirement_id and ar.asset_id = a.id and a.short_code = shortCode and o.version = (select max(i.version) from requirement i where i.id = o.id);
+    if reqId is null
+    then
+      select o.id into reqId from requirement o, environment_requirement ar, environment a where o.label = reqLabel and o.id = ar.requirement_id and ar.environment_id = a.id and a.short_code = shortCode and o.version = (select max(i.version) from requirement i where i.id = o.id);
+    end if;
+  end if;
   return reqId;
 end
 //

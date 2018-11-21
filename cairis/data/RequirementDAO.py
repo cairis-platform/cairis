@@ -62,25 +62,21 @@ class RequirementDAO(CairisDAO):
     return reqList
 
   def get_requirement_by_name(self, name):
-    found_requirement = None
     try:
-      requirements = self.simplifyList(self.db_proxy.getRequirements().values())
+      req = self.db_proxy.getRequirement(name)
+      if (req == None):
+        self.close()
+        raise ObjectNotFoundHTTPError('The provided requirement name ' + name)
+      return self.simplify(req)
+    except ObjectNotFound as ex:
+      self.close()
+      raise ObjectNotFoundHTTPError('The provided requirement name')
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)
-
-    if requirements is not None:
-      idx = 0
-      while found_requirement is None and idx < len(requirements):
-        if (list(requirements)[idx].theName == name) or (list(requirements)[idx].theLabel == name):
-          found_requirement = list(requirements)[idx]
-        idx += 1
-
-    if found_requirement is None:
+    except ARMException as ex:
       self.close()
-      raise ObjectNotFoundHTTPError('The provided requirement name ' + '"' + name + '"')
-
-    return found_requirement
+      raise ARMHTTPError(ex)
 
   def add_requirement(self, requirement, asset_name=None, environment_name=None):
     try:
