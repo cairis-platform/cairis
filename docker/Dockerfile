@@ -25,6 +25,9 @@ ENV CAIRIS_CFG_DIR=/cairis/docker
 ENV CAIRIS_CFG=cairis.cnf
 ENV PYTHONPATH=/cairis
 
+RUN mkdir /tmpDocker
+RUN mkdir /images
+
 RUN git clone --depth 1 -b master https://github.com/failys/cairis /cairis
 RUN mkdir /cairisTmp
 RUN mv /cairis/cairis /cairisTmp/cairis

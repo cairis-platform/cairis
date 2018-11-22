@@ -2035,18 +2035,17 @@ def build(dbProxy,docType,sectionFlags,typeFlags,fileName,docDir):
   f.write(specDoc)
   f.close()
   
+ 
+  if (typeFlags[DOCOPT_HTML_ID]):
+    docBookCmd = 'docbook2html -o ' + docDir + ' ' + docFile
+  if (typeFlags[DOCOPT_RTF_ID]):
+    docBookCmd = 'docbook2rtf -o ' + docDir + ' ' + docFile
+  if (typeFlags[DOCOPT_PDF_ID]):
+    docBookCmd = 'dblatex --param=table.in.float="0" -o  ' + docDir + '/' + fileName + '.pdf '  + docFile
+
   b = Borg()
   if(b.docker == True):
-    requestString = "http://cairis-latex:5000/latexApi/fileName/{}".format(fileName)
-    requests.post(requestString, data={'docDir': docDir, 'docFile': docFile, 'typeFlags':typeFlags}) 
+    requestString = "http://cairis-docs:5000/latexApi"
+    requests.post(requestString, data={'docBookCmd': dockBookCmd})
   else:
-    if (typeFlags[DOCOPT_HTML_ID]):
-      htmlGenCmd = 'docbook2html -o ' + docDir + ' ' + docFile
-      os.system(htmlGenCmd)
-    if (typeFlags[DOCOPT_RTF_ID]):
-      rtfGenCmd = 'docbook2rtf -o ' + docDir + ' ' + docFile
-      os.system(rtfGenCmd)
-    if (typeFlags[DOCOPT_PDF_ID]):
-      pdfGenCmd = 'dblatex --param=table.in.float="0" -o  ' + docDir + '/' + fileName + '.pdf '  + docFile
-      os.system(pdfGenCmd)
-      
+    os.system(docBookCmd)
