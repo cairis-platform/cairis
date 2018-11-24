@@ -254,7 +254,7 @@ function handleNodeClick(event,objt) {
               dimValues = [];
               for (var i = 0; i < env.theProperties.length; i++) {
                 if (env.theProperties[i].value != "None") {
-                  dimValues.push("<tr><td>" + env.theProperties[i].name + "</td><td>" + env.theProperties[i].value + "</td><td>" + env.theRationale[i] + "</td></tr>"); 
+                  dimValues.push("<tr><td>" + env.theProperties[i].name + "</td><td>" + env.theProperties[i].value + "</td><td>" + env.theProperties[i].rationale + "</td></tr>"); 
                 }
               }
               $("#propTable").find("tbody").append(dimValues.join(' '));
