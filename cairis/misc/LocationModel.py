@@ -68,7 +68,10 @@ class LocationModel:
       for persona in personaInstances:
         instName = persona[0]
         personaName = persona[1] 
-        locCluster.add_node(pydot.Node(instName,label=instName,shapefile=b.staticDir + '/assets/modelActor.png',fontname=self.fontName,fontsize=self.fontSize,URL='persona#' + personaName,peripheries='0'))
+        actorFile = b.staticDir + '/assets/modelActor.png'
+        if (b.docker == True):
+          actorFile = '/cairis/modelActor.png'
+        locCluster.add_node(pydot.Node(instName,label=instName,shapefile=actorFile,fontname=self.fontName,fontsize=self.fontSize,URL='persona#' + personaName,peripheries='0'))
 
       self.theGraph.add_subgraph(locCluster)
 

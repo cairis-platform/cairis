@@ -46,8 +46,11 @@ class AssumptionPersonaModel:
   def buildNode(self,dimName,objtName):
     objtUrl = dimName + '#' + str(objtName)
     b = Borg()
+    actorFile = b.staticDir + '/assets/modelActor.png'
+    if (b.docker == True):
+      actorFile = '/cairis/modelActor.png'
     if (dimName == 'persona'):
-      self.theGraph.add_node(pydot.Node(objtName,shapefile=b.staticDir + '/assets/modelActor.png',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl,peripheries='0'))
+      self.theGraph.add_node(pydot.Node(objtName,shapefile=actorFile,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl,peripheries='0'))
     elif (dimName == 'persona_characteristic'):
       self.theGraph.add_node(pydot.Node(objtName,shape='record',margin=0,fontname=self.fontName,style='filled',fillcolor='green',fontcolor='white',fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'implied_characteristic'):
