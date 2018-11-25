@@ -15,4 +15,4 @@
 
 CAIRIS (Computer Aided Integration of Requirements and Information Security) is a platform for specifying and modelling secure and usable systems. CAIRIS was built from the ground-up to support the elements necessary for usability, requirements, and risk analysis. 
 
-See [the CAIRIS website](https://cairis.org) for more information on the platform, and details on how to get started.
+See [the CAIRIS website](https://cairis.org) for more information on the platform, and details on how to get started. 
