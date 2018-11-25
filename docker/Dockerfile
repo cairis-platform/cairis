@@ -1,6 +1,21 @@
 FROM ubuntu:xenial
 MAINTAINER Shamal Faily <sfaily@bournemouth.ac.uk>
-RUN apt-get update && apt-get install -y python-dev build-essential mysql-client graphviz python-pip python-numpy git libmysqlclient-dev docbook python-apt dblatex texlive-latex-extra docbook-utils inkscape libxml2-dev libxslt1-dev libxslt1-dev apache2 apache2-dev poppler-utils
+RUN apt-get update 
+RUN apt-get install -y python-dev
+RUN apt-get install -y build-essential
+RUN apt-get install -y mysql-client
+RUN apt-get install -y graphviz
+RUN apt-get install -y python-pip
+RUN apt-get install -y python-numpy
+RUN apt-get install -y git
+RUN apt-get install -y libmysqlclient-dev
+RUN apt-get install -y python-apt
+RUN apt-get install -y libxml2-dev
+RUN apt-get install -y libxslt1-dev 
+RUN apt-get install -y apache2
+RUN apt-get install -y apache2-dev
+RUN apt-get install -y poppler-utils
+
 COPY requirements.txt /
 COPY wsgi_requirements.txt /
 RUN pip install -r requirements.txt
@@ -9,13 +24,23 @@ ENV CAIRIS_SRC=/cairis/cairis
 ENV CAIRIS_CFG_DIR=/cairis/docker
 ENV CAIRIS_CFG=cairis.cnf
 ENV PYTHONPATH=/cairis
+
+RUN mkdir /tmpDocker
 RUN mkdir /images
-RUN chown www-data /images
-RUN chgrp www-data /images
-RUN git clone https://github.com/failys/cairis /cairis
+
+RUN git clone --depth 1 -b master https://github.com/failys/cairis /cairis
+RUN mkdir /cairisTmp
+RUN mv /cairis/cairis /cairisTmp/cairis
+RUN rm -rf /cairis/
+RUN mv /cairisTmp/ /cairis/
+
 COPY cairis.cnf /
 COPY setupDb.sh /
 COPY createdb.sql /
 COPY addAccount.sh /
 EXPOSE 8000
+
+RUN apt-get remove --purge -y git
+RUN apt-get autoremove -y
+
 CMD ["./setupDb.sh"]

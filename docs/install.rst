@@ -6,7 +6,17 @@ Installation via Docker
 
 If you have Docker installed on your laptop or an available machine, the easiest way of getting up and running with the web application is to download the CAIRIS container from `Docker hub <https://hub.docker.com/r/shamalfaily/cairis/>`_.  Like the live demo, this is built from the latest version of CAIRIS in GitHub, and uses `mod_wsgi-express <https://pypi.python.org/pypi/mod_wsgi>`_ to deliver the CAIRIS web services.
 
-Download and run the container, and its linked mysql container:
+There are two options for running the container, a full install of everything or a smaller install which doesn't provide pdf export functionality:
+
+For the full install (with pdf export functionality) download and run the container, the documentation container, and its linked mysql container:
+
+.. code-block:: bash
+ 
+   sudo docker run --name cairis-mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql:5.7
+   sudo docker run --name cairis-docs -d -v cairisDocumentation:/tmpDocker -v cairisImage:/images -t shamalfaily/cairis-docs
+   sudo docker run --name CAIRIS -d --link cairis-mysql:mysql --link cairis-docs:docs -P -p 80:8000 --net=bridge -v cairisDocumentation:/tmpDocker -v cairisImage:/images shamalfaily/cairis
+
+For the smaller install (without pdf export functionality) download and run the container, and its linked mysql container:
 
 .. code-block:: bash
  

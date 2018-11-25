@@ -10,4 +10,7 @@ set global max_sp_recursion_depth = 255;
 flush tables;
 flush privileges;
 !
+chown www-data /images
+chgrp www-data /images
+chmod 1777 /tmpDocker
 mod_wsgi-express start-server /cairis/cairis/bin/cairis.wsgi --user www-data --group www-data

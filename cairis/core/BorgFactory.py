@@ -78,6 +78,7 @@ def initialiseCairisDbSettings(cfgDict):
   b.cairisRoot = cfgDict['root']
   b.imageDir = os.path.abspath(cfgDict['default_image_dir'])
   b.rPasswd = ''
+  b.docker = True if 'docker' in cfgDict else False
   
   try:
     b.rPasswd = cfgDict['rpasswd']
@@ -87,7 +88,7 @@ def initialiseCairisDbSettings(cfgDict):
 def setupDocBookConfig():
   b = Borg()
   b.docBookDir = 'http://www.docbook.org/sgml/4.5'
-  if os.path.exists('/usr/share/sgml/docbook/dtd/4.5'):
+  if os.path.exists('/usr/share/sgml/docbook/dtd/4.5') or b.docker:
     b.docBookDir = '/usr/share/sgml/docbook/dtd/4.5'
   else:
     b.logger.warning('Unable to find DocBook schemes. Check if DocBook is correctly installed.')

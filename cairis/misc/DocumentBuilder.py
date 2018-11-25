@@ -32,6 +32,7 @@ from .DataFlowDiagram import DataFlowDiagram
 from .LocationModel import LocationModel
 from .AssumptionPersonaModel import AssumptionPersonaModel
 from cairis.core.armid import *
+import requests
 
 __author__ = 'Shamal Faily'
 
@@ -2033,15 +2034,18 @@ def build(dbProxy,docType,sectionFlags,typeFlags,fileName,docDir):
   f = open(docFile,'w')
   f.write(specDoc)
   f.close()
-
+  
+ 
   if (typeFlags[DOCOPT_HTML_ID]):
-    htmlGenCmd = 'docbook2html -o ' + docDir + ' ' + docFile
-    os.system(htmlGenCmd)
+    docBookCmd = 'docbook2html -o ' + docDir + ' ' + docFile
   if (typeFlags[DOCOPT_RTF_ID]):
-    rtfGenCmd = 'docbook2rtf -o ' + docDir + ' ' + docFile
-    os.system(rtfGenCmd)
+    docBookCmd = 'docbook2rtf -o ' + docDir + ' ' + docFile
   if (typeFlags[DOCOPT_PDF_ID]):
-    pdfGenCmd = 'dblatex --param=table.in.float="0" -o  ' + docDir + '/' + fileName + '.pdf '  + docFile
-    os.system(pdfGenCmd)
+    docBookCmd = 'dblatex --param=table.in.float="0" -o  ' + docDir + '/' + fileName + '.pdf '  + docFile
 
-
+  b = Borg()
+  if(b.docker == True):
+    requestString = "http://cairis-docs:5000/latexApi"
+    requests.post(requestString, data={'docBookCmd': dockBookCmd})
+  else:
+    os.system(docBookCmd)
