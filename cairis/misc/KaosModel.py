@@ -138,6 +138,7 @@ class KaosModel:
     return open(self.theGraphName).read()
 
   def buildGoalModel(self,isComponent=False):
+    b = Borg()
     conflictFile = b.staticDir + '/assets/modelConflict.png'
     self.nodeNameSet = set([])
     refNodes = set([])
