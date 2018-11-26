@@ -63,7 +63,6 @@ class KaosModel:
     b = Borg()
     actorFile = b.staticDir + '/assets/modelActor.png'
     attackerFile = b.staticDir + '/assets/modelAttacker.png'
-    conflictFile = b.staticDir + '/assets/modelConflict.png'
       
     if ((dimName == 'goal') or (dimName == 'template_goal')):
       self.theGraph.add_node(pydot.Node(objtName,shape='parallelogram',margin=0,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
@@ -139,6 +138,7 @@ class KaosModel:
     return open(self.theGraphName).read()
 
   def buildGoalModel(self,isComponent=False):
+    conflictFile = b.staticDir + '/assets/modelConflict.png'
     self.nodeNameSet = set([])
     refNodes = set([])
     # the Graph get_edge function doesn't appear to work, so we'll keep a set of edges ourselves.
