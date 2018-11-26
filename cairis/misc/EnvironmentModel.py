@@ -89,9 +89,9 @@ class EnvironmentModel:
     attackerFile = b.staticDir + '/assets/modelAttacker.png'
     roleFile = b.staticDir + '/assets/modelRole.png'
     if (b.docker == True):
-      actorFile = '/cairis/modelActor.png'
-      attackerFile = '/cairis/modelAttacker.png'
-      roleFile = '/cairis/modelRole.png'
+      actorFile = '/cairis/cairis/modelActor.png'
+      attackerFile = '/cairis/cairis/modelAttacker.png'
+      roleFile = '/cairis/cairis/modelRole.png'
     objtUrl = dimName + '#' + str(objtName)
     if (dimName == 'persona'):
       self.theGraph.add_node(pydot.Node(objtName,shapefile=actorFile,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl,peripheries='0'))
