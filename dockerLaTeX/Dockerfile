@@ -16,7 +16,7 @@ RUN git clone --depth 1 -b master https://github.com/failys/cairis /cairis
 
 RUN mkdir -p /cairisTmp/cairis
 RUN mv /cairis/cairis/config /cairisTmp/cairis
-RUN mv /cairis/cairis/web/assets/model*png /cairisTmp/cairis
+RUN mv /cairis/cairis/web /cairisTmp/cairis
 RUN mv /cairis/cairis/core/armid.py /latex/armid.py
 RUN rm -rf /cairis
 RUN mv /cairisTmp /cairis

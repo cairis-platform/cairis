@@ -55,8 +55,6 @@ class AssetModel:
       objt = self.dbProxy.dimensionObject(objtName,'persona')
       b = Borg()
       actorFile = b.staticDir + '/assets/modelActor.png'
-      if (b.docker == True):
-        actorFile = '/cairis/cairis/modelActor.png'
       if (objt.assumption() == True):
         objtLabel = "&lt;&lt;Assumption&gt;&gt;" + objtName
         self.theGraph.add_node(pydot.Node(objtName,label=objtLabel,shapefile=actorFile,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl,peripheries='0'))

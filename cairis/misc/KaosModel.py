@@ -64,10 +64,6 @@ class KaosModel:
     actorFile = b.staticDir + '/assets/modelActor.png'
     attackerFile = b.staticDir + '/assets/modelAttacker.png'
     conflictFile = b.staticDir + '/assets/modelConflict.png'
-    if (b.docker == True):
-      actorFile = '/cairis/cairis/modelActor.png'
-      attackerFile = '/cairis/cairis/modelAttacker.png'
-      conflictFile = '/cairis/cairis/modelConflict.png'
       
     if ((dimName == 'goal') or (dimName == 'template_goal')):
       self.theGraph.add_node(pydot.Node(objtName,shape='parallelogram',margin=0,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
