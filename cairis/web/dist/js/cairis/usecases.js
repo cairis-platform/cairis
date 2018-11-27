@@ -478,6 +478,9 @@ function commitUseCase() {
     if ($('#theTags').val() != '') {
       usecase.theTags = $('#theTags').val().split(',').map(function(t){return t.trim();});
     }
+    else {
+      usecase.theTags = [];
+    }
 
     var envName = $.session.get("usecaseEnvironmentName");
     var updatedEnvProps = [];

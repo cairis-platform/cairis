@@ -144,6 +144,9 @@ function commitDomainProperty() {
     if(tags[0] != ""){
       dp.theTags = tags;
     }
+    else {
+      dp.theTags = []; 
+    }
     if($("#editDomainPropertyOptionsForm").hasClass("new")){
       postDomainProperty(dp, function () {
         clearLocalStorage("domain_property");

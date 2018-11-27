@@ -462,6 +462,9 @@ function commitGoal() {
       if ($('#theTags').val() != '') {
         goal.theTags = $('#theTags').val().split(',').map(function(t){return t.trim();});
       }
+      else {
+        goal.theTags = [];
+      }
 
       if($("#editGoalOptionsForm").hasClass("new")){
         postGoal(goal, function () {

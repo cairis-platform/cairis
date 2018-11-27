@@ -308,6 +308,9 @@ function commitPersona() {
     if ($('#theTags').val() != '') {
       persona.theTags = $('#theTags').val().split(',').map(function(t){return t.trim();});
     }
+    else {
+      persona.theTags = [];
+    }
 
     var tags = $("#theTags").text().split(", ");
     if(tags[0] != ""){

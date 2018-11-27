@@ -673,6 +673,10 @@ function commitResponse() {
     if ($('#theTags').val() != '') {
       resp.theTags = $('#theTags').val().split(',').map(function(t){return t.trim();});
     }
+    else {
+      resp.theTags = [];
+    }
+
     resp.theRisk = $("#chooseRisk").val();
     resp.theResponseType = respKind;
 

@@ -263,6 +263,9 @@ function commitVulnerability() {
     if ($('#theTags').val() != '') {
       theVul.theTags = $('#theTags').val().split(',').map(function(t){return t.trim();});
     }
+    else {
+      theVul.theTags = [];
+    }
     theVul.theVulnerabilityDescription = $("#theVulnerabilityDescription").val();
     theVul.theVulnerabilityType = $("#theVulnerabilityType").val();
 

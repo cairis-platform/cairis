@@ -471,6 +471,9 @@ function commitRisk() {
   if ($('#theTags').val() != '') {
     risk.theTags = $('#theTags').val().split(',').map(function(t){return t.trim();});
   }
+  else {
+    risk.theTags = [];
+  }
 
   if (risk.theMisuseCase == '') {
     alert("No misuse case defined");

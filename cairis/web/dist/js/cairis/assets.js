@@ -622,6 +622,9 @@ function assetFormToJSON(data){
   if ($('#theTags').val() != '') {
     json["theTags"] = $(data).find('#theTags').val().split(',').map(function(t){return t.trim();});
   }
+  else {
+    json["theTags"] = [];
+  }
 
   $(data).children().each(function () {
     if(String($(this).prop("tagName")).toLowerCase() == "p"){

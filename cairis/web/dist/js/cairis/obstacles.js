@@ -434,6 +434,9 @@ function commitObstacle() {
     if ($('#theTags').val() != '') {
       obstacle.theTags = $('#theTags').val().split(',').map(function(t){return t.trim();});
     }
+    else {
+      obstacle.theTags = [];
+    }
 
     if($("#editObstacleOptionsForm").hasClass("new")){
       postObstacle(obstacle, function () {

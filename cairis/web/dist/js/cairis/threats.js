@@ -425,6 +425,9 @@ function commitThreat() {
     if ($('#theTags').val() != '') {
       threat.theTags = $('#theTags').val().split(',').map(function(t){return t.trim();});
     }
+    else {
+      threat.theTags = [];
+    }
     threat.theType = $("#theType option:selected").text();
 
     if($("#editThreatOptionsform").hasClass("newThreat")){

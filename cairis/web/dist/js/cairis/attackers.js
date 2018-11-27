@@ -388,6 +388,9 @@ function commitAttacker() {
     if ($('#theTags').val() != '') {
       attacker.theTags = $('#theTags').val().split(',').map(function(t){return t.trim();});
     }
+    else {
+      attacker.theTags = [];
+    }
     if($("#editAttackerOptionsForm").hasClass("new")){
       postAttacker(attacker, function () {
         clearLocalStorage('attacker');

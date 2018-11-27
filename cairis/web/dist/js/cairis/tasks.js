@@ -493,6 +493,9 @@ function commitTask() {
     if ($('#theTags').val() != '') {
       task.theTags = $('#theTags').val().split(',').map(function(t){return t.trim();});
     }
+    else {
+      task.theTags = [];
+    }
 
     var envName = $.session.get("taskEnvironmentName");
     var updatedEnvProps = [];
