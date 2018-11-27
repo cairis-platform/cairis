@@ -14,9 +14,10 @@ sudo docker rm $(sudo docker ps -aq)
 sudo docker rmi $(sudo docker images -q)
 sudo docker volume rm $(docker volume ls)
 sudo docker run --name cairis-mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql:5.7
-sudo docker run --name CAIRIS --link cairis-mysql:mysql -d -P -p 80:8000 --net=bridge shamalfaily/cairis
-sleep 60
+sudo docker run --name cairis-docs -d -v cairisDocumentation:/tmpDocker -v cairisImage:/images -t shamalfaily/cairis-docs
+sudo docker run --name CAIRIS -d --link cairis-mysql:mysql --link cairis-docs:docs -P -p 80:8000 --net=bridge -v cairisDocumentation:/tmpDocker -v cairisImage:/images shamalfaily/cairis
 
+sleep 60
 
 # Make sure the requests and argparse packages are installed before running model_import_web.py or web_cimport.py.
 $CAIRIS_REPO/cairis/bin/model_import_web.py --url http://localhost --database NeuroGrid --image_dir $CAIRIS_REPO/examples/exemplars/NeuroGrid --rich_pic NeuroGridContext.jpg $CAIRIS_REPO/examples/exemplars/NeuroGrid/NeuroGrid.xml
