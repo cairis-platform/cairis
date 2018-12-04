@@ -155,8 +155,8 @@ mainContent.on('click', '#AddGoalConcernAssociationButton', function () {
   assoc.theSource = $("#theSourceSelect").val();
   assoc.theSourceNry = $("#theNSelect").val();
   assoc.theLinkVerb = $("#theLink").val();
-  assoc.theTargetNry = $("#theTargetSelect").val();
-  assoc.theTarget = $("#theN2Select").val();
+  assoc.theTargetNry = $("#theN2Select").val();
+  assoc.theTarget = $("#theTargetSelect").val();
 
   var goal = JSON.parse($.session.get("Goal"));
   var envName = $.session.get("GoalEnvName");
