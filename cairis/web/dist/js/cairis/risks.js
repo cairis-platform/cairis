@@ -254,15 +254,15 @@ $(document).on('click', 'td.risk-rows', function () {
         $('#theTags').val(mainData.theTags.join(', '));
         var threatSelect = $("#theThreatNames");
         var vulnSelect = $("#theVulnerabilityNames");
-        getThreats(function (data) {
-          $.each(data, function (key, obj) {
-            threatSelect.append($("<option></option>").attr("value",key).text(key));
-          });
+        getRiskFormDimensions('threats',function (data) {
+          for (var tr = 0; tr < data.length; tr++) {
+            threatSelect.append($("<option></option>").attr("value",data[tr].theThreatName).text(data[tr].theThreatName));
+          }
           threatSelect.val(mainData.theThreatName);
-          getVulnerabilities(function (data) {
-            $.each(data, function (key, obj) {
-              vulnSelect.append($("<option></option>").attr("value",key).text(key));
-            });
+          getRiskFormDimensions('vulnerabilities',function (data) {
+            for (var vr = 0; vr < data.length; vr++) {
+              vulnSelect.append($("<option></option>").attr("value",data[vr].theVulnerabilityName).text(data[vr].theVulnerabilityName));
+            }
             vulnSelect.val(mainData.theVulnerabilityName);
             getRiskEnvironments();
             var warningTxt = checkMisuseCase(mainData.theMisuseCase);
@@ -300,14 +300,14 @@ $(document).on('click','#addNewRisk', function() {
     $("#editRisksForm").addClass("new");
     var threatSelect = $("#theThreatNames");
     var vulnSelect = $("#theVulnerabilityNames");
-    getThreats(function (data) {
-      $.each(data, function (key, obj) {
-        threatSelect.append($("<option></option>").attr("value",key).text(key));
-      });
-      getVulnerabilities(function (data) {
-        $.each(data, function (key, obj) {
-          vulnSelect.append($("<option></option>").attr("value",key).text(key));
-        });
+    getRiskFormDimensions('threats',function (data) {
+      for (var tr = 0; tr < data.length; tr++) {
+        threatSelect.append($("<option></option>").attr("value",data[tr].theThreatName).text(data[tr].theThreatName));
+      }
+      getRiskFormDimensions('vulnerabilities',function (data) {
+        for (var vr = 0; vr < data.length; vr++) {
+          vulnSelect.append($("<option></option>").attr("value",data[vr].theVulnerabilityName).text(data[vr].theVulnerabilityName));
+        }
         getRiskEnvironments();
       });
     });
@@ -407,7 +407,7 @@ function getRiskEnvironmentDetails(name, environment){
   });
 }
 
-function getThreats(callback){
+function getRiskFormDimensions(dims,callback){
   $.ajax({
     type: "GET",
     dataType: "json",
@@ -416,7 +416,7 @@ function getThreats(callback){
       session_id: String($.session.get('sessionID'))
     },
     crfossDomain: true,
-    url: serverIP + "/api/threats",
+    url: serverIP + "/api/" + dims,
     success: function (data) {
       if(jQuery.isFunction(callback)){
         callback(data);
@@ -429,27 +429,6 @@ function getThreats(callback){
   });
 }
 
-function getVulnerabilities(callback){
-  $.ajax({
-    type: "GET",
-    dataType: "json",
-    accept: "application/json",
-    data: {
-      session_id: String($.session.get('sessionID'))
-    },
-    crfossDomain: true,
-    url: serverIP + "/api/vulnerabilities",
-    success: function (data) {
-      if(jQuery.isFunction(callback)){
-        callback(data);
-      }
-    },
-    error: function (xhr, textStatus, errorThrown) {
-      debugLogger(String(this.url));
-      debugLogger("error: " + xhr.responseText +  ", textstatus: " + textStatus + ", thrown: " + errorThrown);
-    }
-  });
-}
 function appendRiskEnvironment(environment){
   $("#theRiskEnvironments").find("tbody").append('<tr></td><td class="riskEnvironment">'+environment+'</td></tr>');
 }

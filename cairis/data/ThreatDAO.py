@@ -61,18 +61,18 @@ class ThreatDAO(CairisDAO):
     for key, value in list(self.prop_dict.items()):
       self.rev_prop_dict[value] = key
 
-  def get_threats(self, constraint_id=-1, simplify=True):
+  def get_threats(self, constraint_id=-1):
     try:
       threats = self.db_proxy.getThreats(constraint_id)
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)
 
-    if simplify:
-      for key, value in list(threats.items()):
-        threats[key] = self.simplify(value)
-
-    return threats
+    threatKeys = sorted(threats.keys())
+    threatList = []
+    for key in threatKeys:
+      threatList.append(self.simplify(threats[key]))
+    return threatList
 
   def get_threats_summary(self):
     try:

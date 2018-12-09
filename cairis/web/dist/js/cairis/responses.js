@@ -460,8 +460,8 @@ function createResponsesTable(){
       var textToInsert = [];
       var i = 0;
 
-      for (var key in data) {
-        var item = data[key];
+      for (var r = 0; r < data.length; r++) {
+        var item = data[r];
         textToInsert[i++] = "<tr>";
 
         textToInsert[i++] = '<td class="deleteResponseButton"><i class="fa fa-minus" value="' + item.theName + '"></i></td>';

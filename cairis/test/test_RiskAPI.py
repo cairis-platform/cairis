@@ -60,10 +60,10 @@ class RiskAPITests(CairisDaemonTestCase):
           responseData = rv.data
         risks = jsonpickle.decode(responseData)
         self.assertIsNotNone(risks, 'No results after deserialization')
-        self.assertIsInstance(risks, dict, 'The result is not a dictionary as expected')
+        self.assertIsInstance(risks, list, 'The result is not a list as expected')
         self.assertGreater(len(risks), 0, 'No risks in the dictionary')
         self.logger.info('[%s] Risks found: %d', method, len(risks))
-        risk = list(risks.values())[0]
+        risk = risks[0]
         self.logger.info('[%s] First risk: %s\n', method, risk['theName'])
 
     def test_get_all_summary(self):

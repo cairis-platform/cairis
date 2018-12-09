@@ -135,12 +135,12 @@ function createValueTypesTable(valueType,envName){
       var textToInsert = [];
       var i = 0;
 
-      for (var key in data) {
-        var item = data[key];
+      for (var r = 0; r < data.length; r++) {
+        var item = data[r];
         textToInsert[i++] = "<tr>";
-	      if (envName == undefined) {
+	if (envName == undefined) {
           textToInsert[i++] = '<td class="deleteValueTypeButton"><i class="fa fa-minus" value="' + item.theName + '"></i></td>';
-	      }
+	}
         textToInsert[i++] = '<td class="valuetype-rows" name="theName">';
         textToInsert[i++] = item.theName;
         textToInsert[i++] = '</td>';

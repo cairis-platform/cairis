@@ -49,14 +49,15 @@ class RiskDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-    if isinstance(risks, dict):
-      for key, value in list(risks.items()):
-        if value.theMisuseCase and not skip_misuse:
-          risks[key].theMisuseCase = self.get_misuse_case_by_risk_name(value.theName, simplify=False)
-        if simplify:
-          risks[key] = self.simplify(value)
+    riskKeys = sorted(risks.keys())
+    riskList = []
+    for key in riskKeys:
+      value = risks[key]
+      if value.theMisuseCase:
+        value.theMisuseCase = self.get_misuse_case_by_risk_name(value.theName, simplify=False)
+        riskList.append(self.simplify(value))
+    return riskList
 
-      return risks
 
   def get_risks_summary(self):
     try:

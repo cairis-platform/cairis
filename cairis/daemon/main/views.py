@@ -193,7 +193,6 @@ api.add_resource(AssetController.AssetTypeByNameAPI, '/api/assets/types/name/<st
 api.add_resource(AssetController.AssetValuesAPI, '/api/environments/<string:environment_name>/asset-values',endpoint='assetvalues')
 api.add_resource(AssetController.AssetValueByNameAPI, '/api/environments/<string:environment_name>/asset-values/name/<string:name>',endpoint='assetvaluebyname')
 api.add_resource(AssetController.AssetModelAPI, '/api/assets/model/environment/<string:environment>/asset/<string:asset>',endpoint='assetmodel')
-api.add_resource(AssetController.AssetEnvironmentPropertiesAPI, '/api/assets/name/<string:asset_name>/properties',endpoint='assetenvironmentproperties')
 api.add_resource(AssetController.AssetAssociationAPI, '/api/assets/association',endpoint='assetassociation')
 api.add_resource(AssetController.AssetAssociationByNameAPI, '/api/assets/association/environment/<string:environment_name>/head/<string:head_name>/tail/<string:tail_name>',endpoint='assetassociationbyname')
 

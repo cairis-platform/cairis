@@ -40,7 +40,7 @@ class TaskDAO(CairisDAO):
   def __init__(self, session_id):
     CairisDAO.__init__(self, session_id)
 
-  def get_tasks(self, constraint_id=-1, simplify=True):
+  def get_tasks(self, constraint_id=-1):
     try:
       tasks = self.db_proxy.getTasks(constraint_id)
     except DatabaseProxyException as ex:
@@ -50,11 +50,11 @@ class TaskDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-    if simplify:
-      for key, value in list(tasks.items()):
-        tasks[key] = self.simplify(value)
-
-    return tasks
+    taskKeys = sorted(tasks.keys())
+    taskList = []
+    for key in taskKeys:
+      taskList.append(self.simplify(tasks[key]))
+    return taskList
 
   def get_task_by_name(self, name, simplify=True):
     try:

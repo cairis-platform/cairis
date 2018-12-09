@@ -43,8 +43,8 @@ function fillRolesTable(){
       var i = 0;
       var textToInsert = [];
 
-      for (var key in json) {
-        var value = json[key];
+      for (var r = 0; r < json.length; r++) {
+        var value = json[r];
 
         textToInsert[i++] = "<tr>";
         textToInsert[i++] = '<td class="deleteRoleButton"><i class="fa fa-minus" value="' + value.theName + '"></i></td>';

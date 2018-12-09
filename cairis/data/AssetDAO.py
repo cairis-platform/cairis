@@ -82,10 +82,11 @@ class AssetDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def get_asset_by_name(self, name, simplify=True):
+  def get_asset_by_name(self, name):
     try:
       assetId = self.db_proxy.getDimensionId(name,'asset')
       assets = self.db_proxy.getAssets(assetId)
+      return self.simplify(assets.get(name))
     except ObjectNotFound as ex:
       self.close()
       raise ObjectNotFoundHTTPError('The provided asset name')
@@ -95,13 +96,6 @@ class AssetDAO(CairisDAO):
     except ARMException as ex:
       self.close()
       raise ARMHTTPError(ex)
-
-    if assets is not None:
-      found_asset = assets.get(name)
-
-    if simplify:
-      found_asset = self.simplify(found_asset)
-    return found_asset
 
   def get_threatened_assets(self, threat_name, environment_name):
     try:
@@ -153,15 +147,6 @@ class AssetDAO(CairisDAO):
 
     return vulnerable_assets
 
-  def get_asset_props(self, name, simplify=True):
-    asset = self.get_asset_by_name(name, simplify=False)
-    props = asset.theEnvironmentProperties
-
-    if simplify:
-      props = self.convert_props(real_props=props)
-
-    return props
-
   def add_asset(self, asset, asset_props=None):
     try:
       self.db_proxy.nameCheck(asset.theName, 'asset')
@@ -206,35 +191,6 @@ class AssetDAO(CairisDAO):
     except ObjectNotFound as ex:
       self.close()
       raise ObjectNotFoundHTTPError(ex)
-    except DatabaseProxyException as ex:
-      self.close()
-      raise ARMHTTPError(ex)
-    except ARMException as ex:
-      self.close()
-      raise ARMHTTPError(ex)
-
-  def update_asset_properties(self, props, name, existing_params=None):
-    if existing_params is None:
-      asset = self.get_asset_by_name(name, simplify=False)
-
-      existing_params = AssetParameters(
-        assetName=asset.theName,
-        shortCode=asset.theShortCode,
-        assetDesc=asset.theDescription,
-        assetSig=asset.theSignificance,
-        assetType=asset.theType,
-        cFlag=asset.isCritical,
-        cRationale=asset.theCriticalRationale,
-        tags=asset.theTags,
-        ifs=asset.theInterfaces,
-        cProperties=[]
-      )
-      existing_params.setId(asset.theId)
-
-    existing_params.theEnvironmentProperties = props
-
-    try:
-      self.db_proxy.updateAsset(existing_params)
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)

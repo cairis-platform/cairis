@@ -58,11 +58,11 @@ class DomainPropertyDAO(CairisDAO):
       found_domain_property = domain_properties.get(name, None)
       if found_domain_property is None:
         self.close()
-        raise ObjectNotFoundHTTPError('The provided domain_property name')
+        raise ObjectNotFoundHTTPError('The provided domain property name')
       return self.simplify(found_domain_property)
     except ObjectNotFound as ex:
       self.close()
-      raise ObjectNotFoundHTTPError('The provided asset name')
+      raise ObjectNotFoundHTTPError('The provided domain property name')
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)

@@ -141,7 +141,6 @@ class AssetAPITests(CairisDaemonTestCase):
     else:
       msg = json_deserialize(rv.data)
     self.assertIsNotNone(msg, 'No results after deserialization')
-    self.assertIsInstance(msg, dict, 'The result is not a dict as expected')
     self.assertEqual(msg['code'],404)
    
 
@@ -154,8 +153,7 @@ class AssetAPITests(CairisDaemonTestCase):
     else:
       asset = json_deserialize(rv.data)
     self.assertIsNotNone(asset, 'No results after deserialization')
-    self.assertIsInstance(asset, dict, 'The result is not a dict as expected')
-    self.logger.info('[%s] Asset: %s\n', method, asset['theName'])
+    self.assertEqual(asset['theName'],self.existing_asset_name)
 
   def test_put_name(self):
     method = 'test_put_name'
@@ -203,21 +201,6 @@ class AssetAPITests(CairisDaemonTestCase):
     message = json_resp.get('message', None)
     self.assertIsNotNone(message, 'No message returned')
     self.logger.info('[%s] Message: %s\n', method, message)
-
-  def test_get_props_name_get(self):
-    method = 'test_get_props_name_get'
-    url = '/api/assets/name/%s/properties?session_id=test' % quote(self.existing_asset_name)
-
-    rv = self.app.get(url)
-    if (sys.version_info > (3,)):
-      asset_props = jsonpickle.decode(rv.data.decode('utf-8'))
-    else:
-      asset_props = jsonpickle.decode(rv.data)
-    self.assertIsNotNone(asset_props, 'No results after deserialization')
-    self.assertIsInstance(asset_props, list, 'Result is not a list')
-    self.assertGreater(len(asset_props), 0, 'List does not contain any elements')
-    asset_prop = asset_props[0]
-    self.logger.info('[%s] Asset property: %s\n', method, asset_prop['theEnvironmentName'])
 
   def test_types_get(self):
     method = 'test_types_get'

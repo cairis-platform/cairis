@@ -42,12 +42,13 @@ class ConceptReferenceDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-    for key in crs:
+    crsKeys = sorted(crs.keys())
+    crsList = []
+    for key in crsKeys:
       cr = crs[key]
       del cr.theId
-      crs[key] = cr
-
-    return crs
+      crsList.append(cr)
+    return crsList
 
   def get_concept_reference(self, concept_reference_name):
     crs = self.get_concept_references()

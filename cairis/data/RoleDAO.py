@@ -32,49 +32,48 @@ class RoleDAO(CairisDAO):
   def __init__(self, session_id):
     CairisDAO.__init__(self, session_id)
 
-  def get_roles(self, constraint_id=-1, simplify=True):
-    roles = self.db_proxy.getRoles(constraint_id)
-
-    if simplify:
-      for key in roles:
-        roles[key] = self.simplify(roles[key])
-
-    return roles
+  def get_roles(self, constraint_id=-1):
+    try:
+      roles = self.db_proxy.getRoles(constraint_id)
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+    except ARMException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+    roleKeys = sorted(roles.keys())
+    roleList = []
+    for key in roleKeys:
+      roleList.append(self.simplify(roles[key]))
+    return roleList
 
   def get_role_by_name(self, name, simplify=True):
-    found_role = None
-    roles = self.db_proxy.getRoles()
-
-    if roles is not None:
-      found_role = roles.get(name)
-
-    if found_role is None:
-      self.close()
-      raise ObjectNotFoundHTTPError('The provided role name')
-
-    if simplify:
-      found_role = self.simplify(found_role)
-
-    return found_role
-
-  def get_role_by_id(self, role_id, simplify=True):
-    found_role = None
-    roles = self.db_proxy.getRoles()
-    idx = 0
-
-    while found_role is None and idx < len(roles):
-      if list(roles.values())[idx].theId == role_id:
-        found_role = list(roles.values())[idx]
-      idx += 1
-
+    try:
+      roleId = self.db_proxy.getDimensionId(name,'role')
+      roles = self.db_proxy.getRoles(roleId)
+      found_role = roles.get(name, None)
       if found_role is None:
         self.close()
         raise ObjectNotFoundHTTPError('The provided role name')
+      if (simplify == True):
+        return self.simplify(found_role)
+      else:
+        return found_role
+    except ObjectNotFound as ex:
+      self.close()
+      raise ObjectNotFoundHTTPError('The provided role name')
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+    except ARMException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
 
-      if simplify:
-        found_role = self.simplify(found_role)
+  def get_role_props(self, name):
+    role = self.get_role_by_name(name, simplify=False)
+    props = role.theEnvironmentProperties
+    return props
 
-    return found_role
 
   def add_role(self, role):
     role_params = RoleParameters(
@@ -106,11 +105,6 @@ class RoleDAO(CairisDAO):
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)
-
-  def get_role_props(self, name):
-    role = self.get_role_by_name(name, simplify=False)
-    props = role.theEnvironmentProperties
-    return props
 
   def delete_role(self, name):
     try:

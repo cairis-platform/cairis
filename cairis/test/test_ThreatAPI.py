@@ -63,10 +63,10 @@ class ThreatAPITests(CairisDaemonTestCase):
       responseData = rv.data
     threats = jsonpickle.decode(responseData)
     self.assertIsNotNone(threats, 'No results after deserialization')
-    self.assertIsInstance(threats, dict, 'The result is not a dictionary as expected')
+    self.assertIsInstance(threats, list, 'The result is not a list as expected')
     self.assertGreater(len(threats), 0, 'No threats in the dictionary')
     self.logger.info('[%s] Threats found: %d', method, len(threats))
-    threat = list(threats.values())[0]
+    threat = threats[0]
     self.logger.info('[%s] First threat: %s\n', method, threat['theThreatName'])
 
   def test_get_all_summary(self):

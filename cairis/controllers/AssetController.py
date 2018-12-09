@@ -157,33 +157,6 @@ class AssetModelAPI(Resource):
     return resp
 
 
-class AssetEnvironmentPropertiesAPI(Resource):
-
-  def get(self, asset_name):
-    session_id = get_session_id(session, request)
-
-    dao = AssetDAO(session_id)
-    asset_props = dao.get_asset_props(name=asset_name)
-    dao.close()
-
-    resp = make_response(json_serialize(asset_props, session_id=session_id))
-    resp.contenttype = 'application/json'
-    return resp
-
-  def put(self, asset_name):
-    session_id = get_session_id(session, request)
-
-    dao = AssetDAO(session_id)
-    asset_prop = dao.from_json(request, to_props=True)
-    dao.update_asset_properties(asset_prop, name=asset_name)
-    dao.close()
-
-    resp_dict = {'message': 'The asset properties were successfully updated.'}
-    resp = make_response(json_serialize(resp_dict), OK)
-    resp.contenttype = 'application/json'
-    return resp
-
-
 class AssetTypesAPI(Resource):
 
   def get(self):
