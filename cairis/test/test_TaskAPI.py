@@ -68,10 +68,10 @@ class TaskAPITests(CairisDaemonTestCase):
       responseData = rv.data
     tasks = jsonpickle.decode(responseData)
     self.assertIsNotNone(tasks, 'No results after deserialization')
-    self.assertIsInstance(tasks, dict, 'The result is not a dictionary as expected')
-    self.assertGreater(len(tasks), 0, 'No tasks in the dictionary')
+    self.assertIsInstance(tasks, list, 'The result is not a list as expected')
+    self.assertGreater(len(tasks), 0, 'No tasks in the list')
     self.logger.info('[%s] Tasks found: %d', method, len(tasks))
-    task = list(tasks.values())[0]
+    task = tasks[0]
     self.logger.info('[%s] First task: %s\n', method, task['theName'])
 
   def test_get_by_name(self):
