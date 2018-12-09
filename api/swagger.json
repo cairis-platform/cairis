@@ -2396,7 +2396,7 @@
         }, {
           "name" : "filter",
           "in" : "path",
-          "description" : "filter element name or None if this no filter is set.",
+          "description" : "filter element name or None if no filter is set.",
           "required" : true,
           "schema" : {
             "type" : "string"
