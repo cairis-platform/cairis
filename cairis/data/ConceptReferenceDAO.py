@@ -51,16 +51,23 @@ class ConceptReferenceDAO(CairisDAO):
     return crsList
 
   def get_concept_reference(self, concept_reference_name):
-    crs = self.get_concept_references()
-    if crs is None or len(crs) < 1:
+    try:
+      crId = self.db_proxy.getDimensionId(concept_reference_name,'concept_reference')
+      crs = self.db_proxy.getConceptReferences(crId)
+      found_cr = crs.get(concept_reference_name, None)
+      if found_cr is None:
+        self.close()
+        raise ObjectNotFoundHTTPError('The provided concept reference name')
+      return found_cr
+    except ObjectNotFound as ex:
       self.close()
-      raise ObjectNotFoundHTTPError('Concept Reference')
-    for key in crs:
-      if (key == concept_reference_name):
-        cr = crs[key]
-        return cr 
-    self.close()
-    raise ObjectNotFoundHTTPError('The provided concept reference parameters')
+      raise ObjectNotFoundHTTPError('The provided concept reference name')
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+    except ARMException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
 
   def add_concept_reference(self, cr):
     crParams = ConceptReferenceParameters(
