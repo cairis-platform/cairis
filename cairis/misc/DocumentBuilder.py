@@ -56,7 +56,7 @@ def listToString(l):
 def paraText(txt):
   paraTxt = ''
   for c in txt:
-    if c == '\n':
+    if (c == '\n') and (txt != '\n'):
       paraTxt += '</para><para>'
     elif c == '&':
       c = '\&'

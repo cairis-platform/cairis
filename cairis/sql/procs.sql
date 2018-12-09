@@ -13899,7 +13899,7 @@ begin
     select 'threat',cr.name,c.name from persona_characteristic_threat pc, threat_reference cr, threat c where pc.characteristic_id = pcId and pc.reference_id = cr.id and cr.threat_id = c.id and pc.characteristic_reference_type_id = 2
     union
     select 'vulnerability',cr.name,c.name from persona_characteristic_vulnerability pc, vulnerability_reference cr, vulnerability c where pc.characteristic_id = pcId and pc.reference_id = cr.id and cr.vulnerability_id = c.id and pc.characteristic_reference_type_id = 2;
-  declare taskCursor cursor for select id,name,xmlEscaped(short_code),author,xmlEscaped(objective),assumption_id from task;
+  declare taskCursor cursor for select id,name,xmlEscaped(short_code),xmlEscaped(author),xmlEscaped(objective),assumption_id from task;
   declare taskEnvCursor cursor for select et.environment_id,e.name from environment_task et, environment e where et.task_id = taskId and et.environment_id = e.id;  
   declare taskPersonaCursor cursor for select p.name,duv.name,fv.name,dev.name,gv.name from persona p, task_persona tp, security_property_value duv, security_property_value fv, security_property_value dev, security_property_value gv where tp.task_id = taskId and tp.environment_id = envId and tp.persona_id = p.id and tp.duration_id = duv.id and tp.frequency_id = fv.id and tp.demands_id = dev.id and tp.goalsupport_id = gv.id;
   declare taskConcernCursor cursor for select a.name from task_asset tc, asset a where tc.task_id = taskId and tc.environment_id = envId and tc.asset_id = a.id;
