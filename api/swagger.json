@@ -5107,6 +5107,68 @@
         }
       }
     },
+    "/api/object_dependency/dimension/{dimension}/object/{object}" : {
+      "get" : {
+        "security" : [ {
+          "cairisAuth" : [ ]
+        } ],
+        "tags" : [ "object dependency" ],
+        "summary" : "Get types and name of objects dependent on the passed dimension/object",
+        "operationId" : "getObjectDependencies",
+        "parameters" : [ {
+          "name" : "dimension",
+          "in" : "path",
+          "description" : "dimension name",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "object",
+          "in" : "path",
+          "description" : "object name",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "List of object dependencies",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/ObjectDependency"
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Object dependency retrieval error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UnexpectedMessage"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Unknown error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UnexpectedMessage"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/obstacles" : {
       "post" : {
         "summary" : "Add a new obstacle",
@@ -13903,6 +13965,21 @@
             "type" : "string",
             "enum" : [ "", "Before", "At", "After" ],
             "description" : "Indicates whether this response detects the risk before, at the time, or after a risk occurs in the environment.  Before/At/After values are relevant only if the response type is Detect."
+          }
+        }
+      },
+      "ObjectDependency" : {
+        "required" : [ "theDimensionName", "theObjectName" ],
+        "properties" : {
+          "theDimensionName" : {
+            "type" : "string",
+            "description" : "The name of the dependent object's dimension",
+            "example" : "obstacle"
+          },
+          "theObjectName" : {
+            "type" : "string",
+            "description" : "THe name of the dependent object",
+            "example" : "Insecure internal data transmission"
           }
         }
       },
