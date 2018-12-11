@@ -129,6 +129,9 @@
       "url" : "http://cairis.readthedocs.io/en/latest/locations.html"
     }
   }, {
+    "name" : "object dependency",
+    "description" : "Object dependencies API"
+  }, {
     "name" : "obstacle",
     "description" : "Obstacles API",
     "externalDocs" : {
