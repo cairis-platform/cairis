@@ -35,7 +35,7 @@ Finally, although CAIRIS' origins are in specifying requirements, it has been re
 
 <h2>Is CAIRIS used in the real world?</h2>
 
-CAIRIS has been used in a number of real-world case studies.  You can read about some of these studies [here]({{site.baseurl }}/papers).  We're currently working with a number of companies (both large and small) who are looking to adopt CAIRIS.  
+CAIRIS has been used in a number of real-world case studies.  We're currently working with a number of companies (both large and small) who are looking to adopt CAIRIS.  
 
 We're always interested in hearing from others interested in adopting the tool, so please [get in touch](mailto:sfaily@bournemouth.ac.uk) if you want to use CAIRIS and need help getting started.
 
