@@ -19,6 +19,8 @@ Existing asset type name and descriptions can be modified by clicking on an asse
 
 A selected asset type can be deleted by clicking on its delete button.  Although possible, we do not recommend deleting the standard asset types that come with CAIRIS.
 
+If you are modelling a System of Systems, you may also benefit from using the asset type of *Systems - General*, used to reperesent organisations, groups, or social systems, and asset type *System of Systems* representing the combination of Independent Systems (collaborating to achieve a new combined purpose and goal).
+
 
 Other Types
 -----------
