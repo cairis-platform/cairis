@@ -129,6 +129,9 @@
       "url" : "http://cairis.readthedocs.io/en/latest/locations.html"
     }
   }, {
+    "name" : "object dependency",
+    "description" : "Object dependencies API"
+  }, {
     "name" : "obstacle",
     "description" : "Obstacles API",
     "externalDocs" : {
@@ -5083,6 +5086,68 @@
           },
           "400" : {
             "description" : "Model retrieval error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UnexpectedMessage"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Unknown error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UnexpectedMessage"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/object_dependency/dimension/{dimension}/object/{object}" : {
+      "get" : {
+        "security" : [ {
+          "cairisAuth" : [ ]
+        } ],
+        "tags" : [ "object dependency" ],
+        "summary" : "Get types and name of objects dependent on the passed dimension/object",
+        "operationId" : "getObjectDependencies",
+        "parameters" : [ {
+          "name" : "dimension",
+          "in" : "path",
+          "description" : "dimension name",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "object",
+          "in" : "path",
+          "description" : "object name",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "List of object dependencies",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/ObjectDependency"
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Object dependency retrieval error",
             "content" : {
               "application/json" : {
                 "schema" : {
@@ -10858,6 +10923,59 @@
         }
       }
     },
+    "/api/upload/image" : {
+      "post" : {
+        "summary" : "Upload image",
+        "operationId" : "uploadImage",
+        "security" : [ {
+          "cairisAuth" : [ ]
+        } ],
+        "tags" : [ "import" ],
+        "requestBody" : {
+          "description" : "Image upload arguments",
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ImageUploadArguments"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Image uploaded",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ExpectedMessage"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Image upload error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UnexpectedMessage"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Image upload error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UnexpectedMessage"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/usecases" : {
       "post" : {
         "summary" : "Add a new use case",
@@ -13371,6 +13489,26 @@
           }
         }
       },
+      "ImageUploadArguments" : {
+        "required" : [ "file" ],
+        "properties" : {
+          "file" : {
+            "type" : "object",
+            "properties" : {
+              "buf" : {
+                "type" : "string",
+                "description" : "Binary image data",
+                "example" : ""
+              },
+              "name" : {
+                "type" : "string",
+                "description" : "Name of image file to be created",
+                "example" : "Claire.jpg"
+              }
+            }
+          }
+        }
+      },
       "ImportArguments" : {
         "required" : [ "overwrite", "type", "urlenc_file_contents" ],
         "properties" : {
@@ -13900,6 +14038,21 @@
             "type" : "string",
             "enum" : [ "", "Before", "At", "After" ],
             "description" : "Indicates whether this response detects the risk before, at the time, or after a risk occurs in the environment.  Before/At/After values are relevant only if the response type is Detect."
+          }
+        }
+      },
+      "ObjectDependency" : {
+        "required" : [ "theDimensionName", "theObjectName" ],
+        "properties" : {
+          "theDimensionName" : {
+            "type" : "string",
+            "description" : "The name of the dependent object's dimension",
+            "example" : "obstacle"
+          },
+          "theObjectName" : {
+            "type" : "string",
+            "description" : "THe name of the dependent object",
+            "example" : "Insecure internal data transmission"
           }
         }
       },
