@@ -947,6 +947,8 @@ drop function if exists trustBoundaryPrivilege;
 drop procedure if exists unrelatedExceptionCheck;
 drop procedure if exists reassociateRequirement;
 drop procedure if exists locationsToXml;
+drop procedure if exists implicitAssetInclusionCheck;
+drop procedure if exists implicitAssetVulnerabilityCheck;
 
 
 delimiter //
@@ -9265,20 +9267,28 @@ begin
   if headCount = 0
   then
     insert into environment_asset (environment_id,asset_id) values (envId,headId);
-    insert into asset_property (asset_id,environment_id,property_id,property_value_id) values (headId,envId,0,0);
-    insert into asset_property (asset_id,environment_id,property_id,property_value_id) values (headId,envId,1,0);
-    insert into asset_property (asset_id,environment_id,property_id,property_value_id) values (headId,envId,2,0);
-    insert into asset_property (asset_id,environment_id,property_id,property_value_id) values (headId,envId,3,0);
+    insert into asset_property (asset_id,environment_id,property_id,property_value_id,property_rationale) values (headId,envId,0,0,'Implicit');
+    insert into asset_property (asset_id,environment_id,property_id,property_value_id,property_rationale) values (headId,envId,1,0,'Implicit');
+    insert into asset_property (asset_id,environment_id,property_id,property_value_id,property_rationale) values (headId,envId,2,0,'Implicit');
+    insert into asset_property (asset_id,environment_id,property_id,property_value_id,property_rationale) values (headId,envId,3,0,'Implicit');
+    insert into asset_property (asset_id,environment_id,property_id,property_value_id,property_rationale) values (headId,envId,4,0,'Implicit');
+    insert into asset_property (asset_id,environment_id,property_id,property_value_id,property_rationale) values (headId,envId,5,0,'Implicit');
+    insert into asset_property (asset_id,environment_id,property_id,property_value_id,property_rationale) values (headId,envId,6,0,'Implicit');
+    insert into asset_property (asset_id,environment_id,property_id,property_value_id,property_rationale) values (headId,envId,7,0,'Implicit');
   end if;
   
   select count(asset_id) into tailCount from environment_asset where environment_id = envId and asset_id = tailId;
   if tailCount = 0
   then
     insert into environment_asset (environment_id,asset_id) values (envId,tailId);
-    insert into asset_property (asset_id,environment_id,property_id,property_value_id) values (tailId,envId,0,0);
-    insert into asset_property (asset_id,environment_id,property_id,property_value_id) values (tailId,envId,1,0);
-    insert into asset_property (asset_id,environment_id,property_id,property_value_id) values (tailId,envId,2,0);
-    insert into asset_property (asset_id,environment_id,property_id,property_value_id) values (tailId,envId,3,0);
+    insert into asset_property (asset_id,environment_id,property_id,property_value_id,property_rationale) values (tailId,envId,0,0,'Implicit');
+    insert into asset_property (asset_id,environment_id,property_id,property_value_id,property_rationale) values (tailId,envId,1,0,'Implicit');
+    insert into asset_property (asset_id,environment_id,property_id,property_value_id,property_rationale) values (tailId,envId,2,0,'Implicit');
+    insert into asset_property (asset_id,environment_id,property_id,property_value_id,property_rationale) values (tailId,envId,3,0,'Implicit');
+    insert into asset_property (asset_id,environment_id,property_id,property_value_id,property_rationale) values (tailId,envId,4,0,'Implicit');
+    insert into asset_property (asset_id,environment_id,property_id,property_value_id,property_rationale) values (tailId,envId,5,0,'Implicit');
+    insert into asset_property (asset_id,environment_id,property_id,property_value_id,property_rationale) values (tailId,envId,6,0,'Implicit');
+    insert into asset_property (asset_id,environment_id,property_id,property_value_id,property_rationale) values (tailId,envId,7,0,'Implicit');
   end if;
 
 end
@@ -24259,6 +24269,8 @@ begin
   call criticalPrivacyRisks(environmentId);
   call newRiskContexts();
   call unrelatedExceptionCheck(environmentId);
+  call implicitAssetInclusionCheck(environmentId);
+  call implicitAssetVulnerabilityCheck(environmentId);
 
   select label,message from temp_vout;
 
@@ -25213,7 +25225,6 @@ begin
   end loop uc_loop;
   close ucCursor;
   set done = 0;
-
 end
 //
 
@@ -25313,5 +25324,151 @@ begin
 end
 //
 
+create procedure implicitAssetInclusionCheck(in environmentId int)
+begin
+  declare done int default 0;
+  declare cProp int;
+  declare iProp int;
+  declare avProp int;
+  declare acProp int;
+  declare anProp int;
+  declare panProp int;
+  declare unoProp int;
+  declare unlProp int;
+  declare cRationale varchar(4000);
+  declare iRationale varchar(4000);
+  declare avRationale varchar(4000);
+  declare acRationale varchar(4000);
+  declare anRationale varchar(4000);
+  declare panRationale varchar(4000);
+  declare unlRationale varchar(4000);
+  declare unoRationale varchar(4000);
+  declare assetName varchar(200);
+  declare depAsset varchar(200);
+  declare envName varchar(200);
+  declare assocAssets varchar(5000);
+  declare assetId int;
+  declare assetCursor cursor for select ea.asset_id,a.name from environment_asset ea, asset a where ea.environment_id = environmentId and ea.asset_id = a.id;
+  declare depCursor cursor for 
+    select a.name from classassociation ca, asset a where ca.tail_id = assetId and ca.environment_id = environmentId and ca.head_id = a.id 
+    union 
+    select a.name from classassociation ca, asset a where ca.head_id = assetId and ca.environment_id = environmentId and ca.tail_id = a.id;
+  declare continue handler for not found set done = 1;
+
+  select name into envName from environment where id = environmentId limit 1;
+
+  open assetCursor;
+  asset_loop: loop
+    fetch assetCursor into assetId,assetName;
+    if done = 1
+    then
+      leave asset_loop;
+    end if;
+
+    select property_value_id into cProp from asset_property where asset_id = assetId and environment_id = environmentId and property_id = 0;
+    select property_value_id into iProp from asset_property where asset_id = assetId and environment_id = environmentId and property_id = 1;
+    select property_value_id into avProp from asset_property where asset_id = assetId and environment_id = environmentId and property_id = 2;
+    select property_value_id into acProp from asset_property where asset_id = assetId and environment_id = environmentId and property_id = 3;
+    select property_value_id into anProp from asset_property where asset_id = assetId and environment_id = environmentId and property_id = 4;
+    select property_value_id into panProp from asset_property where asset_id = assetId and environment_id = environmentId and property_id = 5;
+    select property_value_id into unlProp from asset_property where asset_id = assetId and environment_id = environmentId and property_id = 6;
+    select property_value_id into unoProp from asset_property where asset_id = assetId and environment_id = environmentId and property_id = 7;
+
+    select property_rationale into cRationale from asset_property where asset_id = assetId and environment_id = environmentId and property_id = 0;
+    select property_rationale into iRationale from asset_property where asset_id = assetId and environment_id = environmentId and property_id = 1;
+    select property_rationale into avRationale from asset_property where asset_id = assetId and environment_id = environmentId and property_id = 2;
+    select property_rationale into acRationale from asset_property where asset_id = assetId and environment_id = environmentId and property_id = 3;
+    select property_rationale into anRationale from asset_property where asset_id = assetId and environment_id = environmentId and property_id = 4;
+    select property_rationale into panRationale from asset_property where asset_id = assetId and environment_id = environmentId and property_id = 5;
+    select property_rationale into unlRationale from asset_property where asset_id = assetId and environment_id = environmentId and property_id = 6;
+    select property_rationale into unoRationale from asset_property where asset_id = assetId and environment_id = environmentId and property_id = 7;
+
+    if (cProp = 0 and iProp = 0 and avProp = 0 and acProp = 0 and anProp = 0 and panProp = 0 and unlProp = 0 and unoProp = 0 and cRationale = 'Implicit' and iRationale = 'Implicit' and avRationale = 'Implicit' and acRationale = 'Implicit' and anRationale = 'Implicit' and panRationale = 'Implicit' and unlRationale = 'Implicit' and unoRationale = 'Implicit')
+    then
+      set assocAssets = '';
+      open depCursor;
+      dep_loop: loop
+        fetch depCursor into depAsset;
+        if done = 1
+        then
+          leave dep_loop;
+        end if;
+        set assocAssets = concat(assocAssets,"'",depAsset,"',");
+      end loop dep_loop;
+      close depCursor;
+      set done = 0;
+      insert into temp_vout(label,message) values('Implicit asset inclusion',concat("Asset '",assetName,"' is implicitly present in environment '",envName,"' because it is associated with ",assocAssets," but no security or privacy properties are associated with it"));
+    end if;
+    set done = 0;
+  end loop asset_loop;
+  close assetCursor;
+  set done = 0;
+end
+//
+
+create procedure implicitAssetVulnerabilityCheck(in environmentId int)
+begin
+  declare done int default 0;
+  declare cProp int;
+  declare iProp int;
+  declare avProp int;
+  declare acProp int;
+  declare anProp int;
+  declare panProp int;
+  declare unoProp int;
+  declare unlProp int;
+  declare assetName varchar(200);
+  declare vulName varchar(200);
+  declare envName varchar(200);
+  declare assetVuls varchar(5000);
+  declare assetId int;
+  declare assetCursor cursor for select ea.asset_id,a.name from environment_asset ea, asset a where ea.environment_id = environmentId and ea.asset_id = a.id;
+  declare vulCursor cursor for select distinct v.name from asset_vulnerability av, vulnerability v where av.asset_id = assetId and av.environment_id = environmentId and av.vulnerability_id = v.id order by 1;
+  declare continue handler for not found set done = 1;
+
+  select name into envName from environment where id = environmentId limit 1;
+
+  open assetCursor;
+  asset_loop: loop
+    fetch assetCursor into assetId,assetName;
+    if done = 1
+    then
+      leave asset_loop;
+    end if;
+
+    select property_value_id into cProp from asset_property where asset_id = assetId and environment_id = environmentId and property_id = 0;
+    select property_value_id into iProp from asset_property where asset_id = assetId and environment_id = environmentId and property_id = 1;
+    select property_value_id into avProp from asset_property where asset_id = assetId and environment_id = environmentId and property_id = 2;
+    select property_value_id into acProp from asset_property where asset_id = assetId and environment_id = environmentId and property_id = 3;
+    select property_value_id into anProp from asset_property where asset_id = assetId and environment_id = environmentId and property_id = 4;
+    select property_value_id into panProp from asset_property where asset_id = assetId and environment_id = environmentId and property_id = 5;
+    select property_value_id into unlProp from asset_property where asset_id = assetId and environment_id = environmentId and property_id = 6;
+    select property_value_id into unoProp from asset_property where asset_id = assetId and environment_id = environmentId and property_id = 7;
+    if (cProp = 0 and iProp = 0 and avProp = 0 and acProp = 0 and anProp = 0 and panProp = 0 and unlProp = 0 and unoProp = 0)
+    then
+      set assetVuls = '';
+      open vulCursor;
+      vul_loop: loop
+        fetch vulCursor into vulName;
+        if done = 1
+        then
+          leave vul_loop;
+        end if;
+        set assetVuls = concat(assetVuls,"'",vulName,"',");
+      end loop vul_loop;
+      close vulCursor;
+      set done = 0;
+      if (assetVuls != '')
+      then
+        insert into temp_vout(label,message) values("Vulnerable non-valued asset",concat("Asset '",assetName,"' is vulnerable to ",assetVuls," but no security or privacy properties are associated with it"));
+        set assetVuls = '';
+      end if;
+    end if;
+    set done = 0;
+  end loop asset_loop;
+  close assetCursor;
+  set done = 0;
+end
+//
 
 delimiter ;

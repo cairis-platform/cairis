@@ -124,6 +124,8 @@ Adding an asset association
   From this form, you can add details about the nature of the association between the asset you're working on and another [tail] asset.
   Once you click on Update, the association will be added to your working object, but won't be committed to the model until you click on the Update/Create button.
 
+Although not possible from the GUI, it *is* possible to add associations between assets directly in a CAIRIS model file without first defining security or privacy properties for the asset in the model file.  If you do this, all the security and privacy properties for the asset are set to None and the rationale of ``Implicit`` is set for each property.
+
 Viewing Asset models
 ~~~~~~~~~~~~~~~~~~~~
 
