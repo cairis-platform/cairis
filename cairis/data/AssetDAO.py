@@ -427,7 +427,9 @@ class AssetDAO(CairisDAO):
             prop_dict[asset_value.theId] = asset_value.theName
 
           for idx in range(0, len(real_prop.theAssociations)):
-            real_prop.theAssociations[idx] = list(real_prop.theAssociations[idx])
+            realAssoc = real_prop.theAssociations[idx]
+            fakeAssoc = {'theHeadNav':realAssoc[0],'theHeadType':realAssoc[1],'theHeadMultiplicity':realAssoc[2],'theHeadRole':realAssoc[3],'theTailRole':realAssoc[4],'theTailMultiplicity':realAssoc[5],'theTailType':realAssoc[6],'theTailNav':realAssoc[7],'theTailName':realAssoc[8]}
+            real_prop.theAssociations[idx] = fakeAssoc
           sec_props = real_prop.theProperties
           rationales = real_prop.theRationale
 
@@ -455,7 +457,8 @@ class AssetDAO(CairisDAO):
 
           assert isinstance(fake_prop['theAssociations'], list)
           for idx in range(0, len(fake_prop['theAssociations'])):
-            fake_prop['theAssociations'][idx] = tuple(fake_prop['theAssociations'][idx])
+            fakeAssoc = fake_prop['theAssociations'][idx] 
+            fake_prop['theAssociations'][idx] = (fakeAssoc['theHeadNav'],fakeAssoc['theHeadType'],fakeAssoc['theHeadMultiplicity'],fakeAssoc['theHeadRole'],fakeAssoc['theTailRole'],fakeAssoc['theTailMultiplicity'],fakeAssoc['theTailType'],fakeAssoc['theTailNav'],fakeAssoc['theTailName'])
           sec_attrs = fake_prop['theProperties']
           new_syProps = array(8 * [0]).astype(numpy.int32)
           new_rationale = ['None'] * 8

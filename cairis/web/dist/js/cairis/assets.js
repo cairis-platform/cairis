@@ -327,16 +327,16 @@ mainContent.on("click", "#updateButtonAsset", function(){
 
   if($("#editAssociationsWindow").hasClass("newAssociation")){
     $("#editAssociationsWindow").removeClass("newAssociation");
-    var assoc = [];
-    assoc.push( $("#headNav").val());
-    assoc.push( $("#headAdorn").val());
-    assoc.push( $("#headNry").val());
-    assoc.push( $("#headRole").val());
-    assoc.push( $("#tailRole").val());
-    assoc.push( $("#tailNry").val());
-    assoc.push( $("#tailAdorn").val());
-    assoc.push( $("#tailNav").val());
-    assoc.push( $("#tailAsset").val());
+    var assoc = {};
+    assoc['theHeadNav'] = $("#headNav").val();
+    assoc['theHeadType'] = $("#headAdorn").val();
+    assoc['theHeadMultiplicity'] = $("#headNry").val();
+    assoc['theHeadRole'] = $("#headRole").val();
+    assoc['theTailRole'] = $("#tailRole").val();
+    assoc['theTailMultiplicity'] = $("#tailNry").val();
+    assoc['theTailType'] = $("#tailAdorn").val();
+    assoc['theTailNav'] = $("#tailNav").val();
+    assoc['theTailName'] = $("#tailAsset").val();
     var arrIndex = $.session.get('Arrayindex');
     allprops[arrIndex].theAssociations.push(assoc);
     appendAssetAssociation(assoc);
@@ -345,16 +345,16 @@ mainContent.on("click", "#updateButtonAsset", function(){
   }
   else {
     var row = $.session.get("associationRow");	
-    var assoc = [];
-    assoc.push( $("#headNav").val());
-    assoc.push( $("#headAdorn").val());
-    assoc.push( $("#headNry").val());
-    assoc.push( $("#headRole").val());
-    assoc.push( $("#tailRole").val());
-    assoc.push( $("#tailNry").val());
-    assoc.push( $("#tailAdorn").val());
-    assoc.push( $("#tailNav").val());
-    assoc.push( $("#tailAsset").val());
+    var assoc = {};
+    assoc['theHeadNav'] = $("#headNav").val();
+    assoc['theHeadType'] = $("#headAdorn").val();
+    assoc['theHeadMultiplicity'] = $("#headNry").val();
+    assoc['theHeadRole'] = $("#headRole").val();
+    assoc['theTailRole'] = $("#tailRole").val();
+    assoc['theTailMultiplicity'] = $("#tailNry").val();
+    assoc['theTailType'] = $("#tailAdorn").val();
+    assoc['theTailNav'] = $("#tailNav").val();
+    assoc['theTailName'] = $("#tailAsset").val();
     var arrIndex = $.session.get("Arrayindex");
 
     var associationIdx = $.session.get("AssociationIndex");
@@ -377,7 +377,7 @@ function appendAssetAssociation(assoc) {
 }
 
 function assocToTr(assoc) {
-  return "<tr><td class='removeAssetAssociation'><i class='fa fa-minus'></i></td><td class='assetAssociation' id='hNav'>" + assoc[0] + "</td><td class='clickable-association' id='hAdorn'>" + assoc[1] + "</td><td class='clickable-association' id='hNry'>" + assoc[2] + "</td><td class='clickable-association' id='hRole'>" + assoc[3] + "</td><td class='clickable-association' id='tRole'>" + assoc[4] + "</td><td class='clickable-association' id='tNry'>" + assoc[5] + "</td><td class='clickable-association' id='tAdorn'>" + assoc[6] + "</td><td class='clickable-association' id='tNav'>" + assoc[7] + "</td><td class='clickable-association' id='tAsset'>" + assoc[8] + "</td></tr>";
+  return "<tr><td class='removeAssetAssociation'><i class='fa fa-minus'></i></td><td class='assetAssociation' id='hNav'>" + assoc['theHeadNav'] + "</td><td class='clickable-association' id='hAdorn'>" + assoc['theHeadType'] + "</td><td class='clickable-association' id='hNry'>" + assoc['theHeadMultiplicity'] + "</td><td class='clickable-association' id='hRole'>" + assoc['theHeadRole'] + "</td><td class='clickable-association' id='tRole'>" + assoc['theTailRole'] + "</td><td class='clickable-association' id='tNry'>" + assoc['theTailMultiplicity'] + "</td><td class='clickable-association' id='tAdorn'>" + assoc['theTailType'] + "</td><td class='clickable-association' id='tNav'>" + assoc['theTailNav'] + "</td><td class='clickable-association' id='tAsset'>" + assoc['theTailName'] + "</td></tr>";
 }
 
 mainContent.on('click', '.removeEnvironment', function () {
