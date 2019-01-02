@@ -120,6 +120,7 @@ def initialise(user='cairis_test',db='cairis_test_default'):
   dbPasswd = ''
   if (user == 'cairis_test'):
     dbPasswd = 'cairis_test'
+    db='cairis_test_default'
   else:
     b.dbUser = user
     b.dbPasswd = ''
