@@ -167,8 +167,8 @@ class AssetDAO(CairisDAO):
       cProperties=asset.theEnvironmentProperties
     )
 
-    asset_id = self.db_proxy.addAsset(assetParams)
-    return asset_id
+    self.db_proxy.addAsset(assetParams)
+    return asset.theName
 
   def update_asset(self, asset, name):
     params = AssetParameters(
@@ -188,6 +188,7 @@ class AssetDAO(CairisDAO):
       assetId = self.db_proxy.getDimensionId(name,'asset')
       params.setId(assetId)
       self.db_proxy.updateAsset(params)
+      return asset.theName
     except ObjectNotFound as ex:
       self.close()
       raise ObjectNotFoundHTTPError(ex)

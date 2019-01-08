@@ -52,10 +52,10 @@ class AssetsAPI(Resource):
 
     dao = AssetDAO(session_id)
     asset = dao.from_json(request)
-    new_id = dao.add_asset(asset)
+    assetName = dao.add_asset(asset)
     dao.close()
 
-    resp_dict = {'message': 'Create successful'}
+    resp_dict = {'message': assetName + ' created'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp
@@ -93,10 +93,10 @@ class AssetByNameAPI(Resource):
 
     dao = AssetDAO(session_id)
     asset = dao.from_json(request)
-    dao.update_asset(asset, name=name)
+    assetName = dao.update_asset(asset, name=name)
     dao.close()
 
-    resp_dict = {'message': 'Update successful'}
+    resp_dict = {'message': assetName + ' updated'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp
@@ -108,7 +108,7 @@ class AssetByNameAPI(Resource):
     dao.delete_asset(name=name)
     dao.close()
 
-    resp_dict = {'message': 'Asset successfully deleted'}
+    resp_dict = {'message': name + ' deleted'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp
