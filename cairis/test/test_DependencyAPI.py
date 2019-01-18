@@ -54,12 +54,11 @@ class DependencyAPITests(CairisDaemonTestCase):
       responseData = rv.data.decode('utf-8')
     else:
       responseData = rv.data
-    json_dict = jsonpickle.decode(responseData)
-    self.assertIsInstance(json_dict, dict, 'The response is not a valid JSON dictionary')
-    self.assertGreater(len(json_dict), 0, 'No dependencies found')
-    assert isinstance(json_dict, dict)
-    item = list(json_dict.items())[0]
-    self.logger.info('[%s] First dependency: %s\n', method, item[1]['theDependency'])
+    deps = jsonpickle.decode(responseData)
+    self.assertIsInstance(deps, list, 'The response is not a valid JSON list')
+    self.assertGreater(len(deps), 0, 'No dependencies found')
+    item = deps[0]
+    self.logger.info('[%s] First dependency: %s\n', method, item['theDependency'])
 
   def test_dependencies_name_get(self):
     method = 'test_dependencies_name_get'

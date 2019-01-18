@@ -32,7 +32,7 @@ class DependencyDAO(CairisDAO):
   def __init__(self, session_id):
     CairisDAO.__init__(self, session_id)
 
-  def get_dependencies(self, constraint_id=''):
+  def get_dependencies(self, constraint_id='',simplify=True):
     try:
       dependencies = self.db_proxy.getDependencies(constraint_id)
     except DatabaseProxyException as ex:
@@ -42,17 +42,27 @@ class DependencyDAO(CairisDAO):
       self.close()
       raise ARMHTTPError
 
-    for key, value in list(dependencies.items()):
-      del value.theId
-      dependencies[key] = value
-    return dependencies
+    if (simplify):
+      depKeys = sorted(dependencies.keys())
+      depList = []
+      for key in depKeys:
+        value = dependencies[key]
+        del value.theId
+        depList.append(value)
+      return depList
+    else:
+      for key, value in list(dependencies.items()):
+        del value.theId
+        dependencies[key] = value
+      return dependencies
+      
 
   def get_dependency(self, environment, depender, dependee, dependency):
     args = [environment, depender, dependee, dependency]
     if not 'all' in args:
       return [self.get_dependency_by_name('/'.join(args))]
     else:
-      dependencies = self.get_dependencies()
+      dependencies = self.get_dependencies(simplify = False)
       found_dependencies = []
 
       for key in dependencies:
