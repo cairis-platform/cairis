@@ -15,7 +15,6 @@ addons:
     - python-pip
     - python-numpy
     - git
-    - python-mysqldb
     - libmysqlclient-dev
     - docbook
     - python-apt
