@@ -71,6 +71,20 @@ class GoalAssociationAPITests(CairisDaemonTestCase):
     self.assertEqual(assoc['theGoal'],'Upload clinical data to NeuroGrid')
     self.assertEqual(assoc['theSubGoal'],'Anonymise data')
 
+  def test_get_all(self):
+    method = 'test_goal_associations'
+    url = '/api/goals/association?environment_name=Core%20Technology&session_id=test'
+    self.logger.info('[%s] URL: %s', method, url)
+    rv = self.app.get(url)
+    self.assertIsNotNone(rv.data, 'No response')
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    assocs = jsonpickle.decode(responseData)
+    self.assertIsNotNone(assocs, 'No results after deserialization')
+    self.assertEqual(len(assocs), 6)
+
   def test_post(self):
     method = 'test_post_new'
     rv = self.app.post('/api/goals/association', content_type='application/json', data=jsonpickle.encode(self.new_assoc_dict))

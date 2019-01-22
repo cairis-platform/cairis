@@ -197,6 +197,16 @@ class GoalAssociationByNameAPI(Resource):
 
 class GoalAssociationAPI(Resource):
 
+  def get(self):
+    session_id = get_session_id(session, request)
+    environment_name = request.args.get('environment_name', '')
+    dao = GoalAssociationDAO(session_id)
+    assocs = dao.get_goal_associations(environment_name)
+    dao.close()
+    resp = make_response(json_serialize(assocs, session_id=session_id))
+    resp.headers['Content-Type'] = "application/json"
+    return resp
+
   def post(self):
     session_id = get_session_id(session, request)
 
@@ -209,7 +219,6 @@ class GoalAssociationAPI(Resource):
     resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp
-
 
 class GoalsSummaryAPI(Resource):
 

@@ -32,6 +32,16 @@ class GoalAssociationDAO(CairisDAO):
   def __init__(self, session_id):
     CairisDAO.__init__(self, session_id)
 
+  def get_goal_associations(self, environment_name):
+    assocs = self.db_proxy.getGoalAssociations(environment_name)
+    assocKeys = assocs.keys()
+    assocList = []
+    for key in assocKeys:
+      assoc = assocs[key]
+      del assoc.theId
+      assocList.append(assoc)
+    return assocList
+
   def get_goal_association(self, environment_name, goal_name, subgoal_name, deleteId=True):
     assocs = self.db_proxy.goalModel(environment_name)
     if assocs is None or len(assocs) < 1:
