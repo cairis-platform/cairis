@@ -103,7 +103,7 @@ class RequirementDAO(CairisDAO):
         handle_exception(ex)
     else:
       self.close()
-      raise MissingParameterHTTPError(param_names=['requirement', 'environment'])
+      raise MissingParameterHTTPError(param_names=['asset or environment'])
 
     return new_id
 

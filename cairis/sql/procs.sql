@@ -949,6 +949,7 @@ drop procedure if exists reassociateRequirement;
 drop procedure if exists locationsToXml;
 drop procedure if exists implicitAssetInclusionCheck;
 drop procedure if exists implicitAssetVulnerabilityCheck;
+drop function if exists lastNumericRequirementLabel;
 
 
 delimiter //
@@ -8023,13 +8024,27 @@ begin
   declare reqTypeId int;
   declare modId int;
   select id into reqTypeId from requirement_type where name = reqTypeName;
-  insert into requirement(label,id,version,name,description,rationale,originator,fit_criterion,priority,type,update_date) values (reqLabel,reqId,reqVersion,ifnull(reqName,''),ifnull(reqDesc,''),ifnull(reqRationale,''),ifnull(reqOriginator,''),ifnull(reqFc,''),reqPriority,reqTypeId,now());
+
+
   if isAsset = 1
   then
     select id into modId from asset where name = modName;
-    insert into asset_requirement(asset_id,requirement_id) values (modId,reqId);
   else
     select id into modId from environment where name = modName;
+  end if;
+
+  if reqLabel = -1
+  then
+    select lastNumericRequirementLabel(modId,isAsset) into reqLabel;
+    set reqLabel = reqLabel + 1;
+  end if;
+
+  insert into requirement(label,id,version,name,description,rationale,originator,fit_criterion,priority,type,update_date) values (reqLabel,reqId,reqVersion,ifnull(reqName,''),ifnull(reqDesc,''),ifnull(reqRationale,''),ifnull(reqOriginator,''),ifnull(reqFc,''),reqPriority,reqTypeId,now());
+
+  if isAsset = 1
+  then
+    insert into asset_requirement(asset_id,requirement_id) values (modId,reqId);
+  else
     insert into environment_requirement(environment_id,requirement_id) values (modId,reqId);
   end if;
 end
@@ -25468,6 +25483,22 @@ begin
   end loop asset_loop;
   close assetCursor;
   set done = 0;
+end
+//
+
+create function lastNumericRequirementLabel(modId int,isAsset bool) 
+returns int
+deterministic 
+begin
+  declare reqLabel int;
+
+  if isAsset is True
+  then
+    select ifnull(max(r.label),0) into reqLabel from requirement r, asset_requirement ar where ar.asset_id = modId and r.id = ar.requirement_id and r.version = (select max(i.version) from requirement i where i.id = r.id);
+  else
+    select ifnull(max(r.label),0) into reqLabel from requirement r, environment_requirement er where er.environment_id = modId and r.id = er.requirement_id and r.version = (select max(i.version) from requirement i where i.id = r.id);
+  end if;
+  return reqLabel;
 end
 //
 
