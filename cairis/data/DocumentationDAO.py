@@ -28,11 +28,10 @@ class DocumentationDAO(CairisDAO):
   def __init__(self, session_id):
     CairisDAO.__init__(self, session_id)
 
-  def generate_documentation(self,docType,sectionFlags,typeFlags):
+  def generate_documentation(self,fileName,docType,sectionFlags,typeFlags):
     try:
       b = Borg()
       docDir = b.tmpDir
-      fileName = 'report'
       cairis.misc.DocumentBuilder.build(self.db_proxy,docType,sectionFlags,typeFlags,fileName,docDir)
     except ARMException as ex:
       self.close()

@@ -54,7 +54,7 @@ class DocumentationAPI(Resource):
     b = Borg()
     reportName = b.tmpDir + '/' + fileName + '.' + filePostfix
 
-    dao.generate_documentation(doc_type,sectionFlags,doc_format)
+    dao.generate_documentation(fileName,doc_type,sectionFlags,doc_format)
     dao.close()
 
     if os.path.isfile(reportName):
