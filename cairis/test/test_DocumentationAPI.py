@@ -42,7 +42,7 @@ class DocumentationAPITests(CairisDaemonTestCase):
   def test_generate_documentation(self):
     method = 'test_generate_documentation'
 
-    url = '/api/documentation/type/Requirements/format/PDF?session_id=test'
+    url = '/api/documentation/type/Requirements/format/PDF?session_id=test&filename=test'
     self.logger.info('[%s] URL: %s', method, url)
     rv = self.app.get(url, content_type='application/pdf')
     self.assertIsNotNone(rv.data, 'No response')

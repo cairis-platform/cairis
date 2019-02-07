@@ -42,6 +42,7 @@ class DocumentationAPI(Resource):
 
   def get(self,doc_type,doc_format):
     session_id = get_session_id(session, request)
+    fileName = request.args.get('filename', 'report')
     dao = DocumentationDAO(session_id)
     sectionFlags = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
     if (doc_format == 'PDF'):
@@ -51,7 +52,7 @@ class DocumentationAPI(Resource):
       filePostfix = 'rtf'
       doc_format = [0,1,0]
     b = Borg()
-    reportName = b.tmpDir + '/report.' + filePostfix
+    reportName = b.tmpDir + '/' + fileName + '.' + filePostfix
 
     dao.generate_documentation(doc_type,sectionFlags,doc_format)
     dao.close()
@@ -60,7 +61,7 @@ class DocumentationAPI(Resource):
       binary_pdf = open(reportName).read()
       resp = make_response(binary_pdf)
       resp.headers['Content-Type'] = 'application/' + filePostfix
-      resp.headers['Content-Disposition'] = 'Attachment; filename=report.' + filePostfix
+      resp.headers['Content-Disposition'] = 'Attachment; filename=' + fileName + '.' + filePostfix
       return resp
     else:
       raise CairisHTTPError(status_code=500,message='report file not found',status='Unknown error')
