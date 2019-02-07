@@ -44,7 +44,7 @@ class CExportTests(CairisDaemonTestCase):
 
   def test_cexport_data_get(self):
     method = 'test_cexport_file_get?session_id=test'
-    url = '/api/export/file?session_id=test'
+    url = '/api/export/file?session_id=test&filename=test.xml'
     self.logger.info('[%s] URL: %s', method, url)
     rv = self.app.get(url)
     self.assertIsNotNone(rv.data, 'No response')
