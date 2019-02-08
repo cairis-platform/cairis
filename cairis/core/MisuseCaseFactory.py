@@ -54,7 +54,7 @@ def build(threatName,vulnerabilityName,dbProxy = None):
   for envName in envNames:
     mcEnv = MisuseCaseEnvironmentProperties(envName)
 
-    mcEnv.theRiskRating = RiskRating(threatName,vulnerabilityName,envName,dbProxy.riskRating(threatName,vulnerabilityName,envName))
+    mcEnv.theRiskRating = RiskRating(threatName,vulnerabilityName,envName,dbProxy.riskRating(-1,threatName,vulnerabilityName,envName))
     envId = dbProxy.getDimensionId(envName,'environment')
     mcEnv.theLikelihood = dbProxy.threatLikelihood(threatId,envId)
     mcEnv.theSeverity = dbProxy.vulnerabilitySeverity(vulId,envId)

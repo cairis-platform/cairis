@@ -330,6 +330,7 @@ drop procedure if exists getUseCases;
 drop procedure if exists getUseCasesSummary;
 drop procedure if exists getMisuseCases;
 drop procedure if exists riskMisuseCase;
+drop procedure if exists riskMisuseCaseByTV;
 drop procedure if exists traceDimensionList;
 drop procedure if exists addRisk;
 drop procedure if exists updateRisk;
@@ -2704,7 +2705,7 @@ begin
 end
 //
 
-create procedure riskRating(in threatName text, in vulName text, in environmentName text)
+create procedure riskRating(in riskId int, in threatName text, in vulName text, in environmentName text)
 begin
   declare compositeCount int;
   declare duplicatePolicy varchar(50);
@@ -2716,6 +2717,12 @@ begin
   declare environmentId int;
   declare environmentCursor cursor for select environment_id from composite_environment where composite_environment_id = environmentId;  
   declare continue handler for not found set done = 1;
+
+  if riskId != -1
+  then
+    select t.name into threatName from threat t, risk r where r.id = riskId and r.threat_id = t.id limit 1;
+    select v.name into vulName from vulnerability v, risk r where r.id = riskId and r.vulnerability_id = v.id limit 1;
+  end if;
 
   select id into environmentId from environment where name = environmentName;
   select count(environment_id) into compositeCount from composite_environment where composite_environment_id = environmentId limit 1;
@@ -25499,6 +25506,19 @@ begin
     select ifnull(max(r.label),0) into reqLabel from requirement r, environment_requirement er where er.environment_id = modId and r.id = er.requirement_id and r.version = (select max(i.version) from requirement i where i.id = r.id);
   end if;
   return reqLabel;
+end
+//
+
+create procedure riskMisuseCaseByTV(in threatName text, in vulName text)
+begin
+  declare threatId int;
+  declare vulId int;
+  declare riskId int;
+
+  select id into threatId from threat where name = threatName limit 1;
+  select id into vulId from vulnerability where name = vulName limit 1;
+
+  select mc.id, mc.name from misusecase mc, misusecase_risk mr, risk r where mr.risk_id = r.id and r.threat_id = threatId and r.vulnerability_id = vulId and mr.misusecase_id = mc.id;
 end
 //
 

@@ -252,7 +252,11 @@ class RiskDAO(CairisDAO):
 
   def get_misuse_case_by_threat_vulnerability(self, threat_name,vulnerability_name):
     try:
-      return self.simplify(cairis.core.MisuseCaseFactory.build(threat_name,vulnerability_name,self.db_proxy))
+      misuse_case = self.db_proxy.riskMisuseCase(-1,threat_name,vulnerability_name)
+      if misuse_case != None:
+        return self.simplify(misuse_case)
+      else:
+        return self.simplify(cairis.core.MisuseCaseFactory.build(threat_name,vulnerability_name,self.db_proxy))
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)
@@ -428,7 +432,7 @@ class RiskDAO(CairisDAO):
     :rtype: RiskRating
     """
     try:
-      rating = self.db_proxy.riskRating(threat_name, vulnerability_name, environment_name)
+      rating = self.db_proxy.riskRating(-1,threat_name, vulnerability_name, environment_name)
       risk_rating = RiskRating(threat_name, vulnerability_name, environment_name, rating)
       return risk_rating
     except DatabaseProxyException as ex:

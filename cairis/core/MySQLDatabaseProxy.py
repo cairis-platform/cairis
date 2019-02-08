@@ -106,6 +106,7 @@ from .DataFlow import DataFlow
 from .DataFlowParameters import DataFlowParameters
 from .TrustBoundary import TrustBoundary
 from .ValidationResult import ValidationResult
+from cairis.tools.PseudoClasses import RiskRating
 import string
 import os
 from numpy import *
@@ -1037,27 +1038,60 @@ class MySQLDatabaseProxy:
       risk = self.misuseCaseRisk(mcId)
       environmentProperties = []
       for environmentId,environmentName in self.dimensionEnvironments(mcId,'misusecase'):
-        narrative = self.misuseCaseNarrative(mcId,environmentId)
-        properties = MisuseCaseEnvironmentProperties(environmentName,narrative)
-        environmentProperties.append(properties)
+        riskId = self.getDimensionId(risk,'risk')
+        mcEnv = self.misuseCaseEnvironment(environmentName,mcId,riskId,environmentId)
+        environmentProperties.append(mcEnv)
       parameters = MisuseCaseParameters(mcName,environmentProperties,risk)
       mc = ObjectFactory.build(mcId,parameters)
       mcs[mcName] = mc
     return mcs
 
-  def riskMisuseCase(self,riskId):
-    rows = self.responseList('call riskMisuseCase(:id)',{'id':riskId},'MySQL error getting risk misuse case')
+  def misuseCaseEnvironment(self,envName,mcId,riskId,envId,thrName = '',vulName = ''):
+    narrative = self.misuseCaseNarrative(mcId,envId)
+    mcEnv = MisuseCaseEnvironmentProperties(envName,narrative)
+    if (thrName != '' and vulName != ''):
+      mcEnv.theRiskRating = RiskRating(thrName,vulName,envName,self.riskRating(riskId,thrName,vulName,envName))
+      threatId = self.getDimensionId(thrName,'threat')
+      vulId = self.getDimensionId(vulName,'vulnerability')
+      mcEnv.theLikelihood = self.threatLikelihood(threatId,envId)
+      mcEnv.theSeverity = self.vulnerabilitySeverity(vulId,envId)
+      mcEnv.theAttackers = self.threatAttackers(threatId,envId)
+      threatenedAssets = self.threatenedAssets(threatId,envId)
+      vulnerableAssets = self.vulnerableAssets(vulId,envId)
+
+      mcEnv.theObjective = 'Exploit vulnerabilities in '
+      for idx,vulAsset in enumerate(vulnerableAssets):
+        mcEnv.theObjective += vulAsset
+        if (idx != (len(vulnerableAssets) -1)):
+          mcEnv.theObjective += ','
+      mcEnv.theObjective += ' to threaten '
+      for idx,thrAsset in enumerate(threatenedAssets):
+        mcEnv.theObjective += thrAsset
+        if (idx != (len(threatenedAssets) -1)):
+          mcEnv.theObjective += ','
+      mcEnv.theObjective += '.'
+      mcEnv.theAssets = set(threatenedAssets + vulnerableAssets)
+    return mcEnv
+
+
+  def riskMisuseCase(self,riskId,thrName = '',vulName = ''):
+    rows = []
+    if (thrName != '' and vulName != ''):
+      rows = self.responseList('call riskMisuseCaseByTV(:threat,:vulnerability)',{'threat':thrName,'vulnerability':vulName},'MySQL error getting risk misuse case')
+    else:
+      rows = self.responseList('call riskMisuseCase(:id)',{'id':riskId},'MySQL error getting risk misuse case')
     if (len(rows) == 0): return None
     else:
       row = rows[0]
       mcId = row[0]
       mcName = row[1]
       risk = self.misuseCaseRisk(mcId)
+      if (riskId == -1):
+        riskId = self.getDimensionId(risk,'risk')
       environmentProperties = []
       for environmentId,environmentName in self.dimensionEnvironments(riskId,'risk'):
-        narrative = self.misuseCaseNarrative(mcId,environmentId)
-        properties = MisuseCaseEnvironmentProperties(environmentName,narrative)
-        environmentProperties.append(properties)
+        mcEnv = self.misuseCaseEnvironment(environmentName,mcId,riskId,environmentId,thrName,vulName)
+        environmentProperties.append(mcEnv)
       parameters = MisuseCaseParameters(mcName,environmentProperties,risk)
       mc = ObjectFactory.build(mcId,parameters)
       return mc
@@ -1450,8 +1484,8 @@ class MySQLDatabaseProxy:
       exceptionText = 'MySQL error deleting environments (' + str(e) + ')'
       raise DatabaseProxyException(exceptionText)  
 
-  def riskRating(self,thrName,vulName,environmentName):
-    return self.responseList('call riskRating(:thr,:vuln,:env)',{'thr':thrName,'vuln':vulName,'env':environmentName},'MySQL error rating risk associated with threat/vulnerability/environment ' + thrName + '/' + vulName + '/' + environmentName)[0]
+  def riskRating(self,riskId,thrName,vulName,environmentName):
+    return self.responseList('call riskRating(:riskId,:thr,:vuln,:env)',{'riskId':riskId,'thr':thrName,'vuln':vulName,'env':environmentName},'MySQL error rating risk associated with threat/vulnerability/environment ' + thrName + '/' + vulName + '/' + environmentName)[0]
 
 
   def riskScore(self,threatName,vulName,environmentName,riskName = ''):
