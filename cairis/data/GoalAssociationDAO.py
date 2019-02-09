@@ -98,7 +98,7 @@ class GoalAssociationDAO(CairisDAO):
   def delete_goal_association(self, environment_name, goal_name, subgoal_name):
     assoc = self.get_goal_association(environment_name,goal_name,subgoal_name,False)
     try:
-      self.db_proxy.deleteGoalAssociation(assoc.theId,goal_name,subgoal_name)
+      self.db_proxy.deleteGoalAssociation(assoc.theId,assoc.theGoalDimension,assoc.theSubGoalDimension)
     except ARMException as ex:
       self.close()
       raise ARMHTTPError(ex)
