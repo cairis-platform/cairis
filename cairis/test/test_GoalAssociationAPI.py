@@ -58,7 +58,7 @@ class GoalAssociationAPITests(CairisDaemonTestCase):
 
   def test_get(self):
     method = 'test_goal_association'
-    url = '/api/goals/association/environment/Psychosis/goal/Upload%20clinical%20data%20to%20NeuroGrid/subgoal/Anonymise%20data?session_id=test'
+    url = '/api/goals/association/environment/Psychosis/goal/Upload%20clinical%20data%20to%20NeuroGrid/subgoal/Secure%20data%20transmission?session_id=test'
     self.logger.info('[%s] URL: %s', method, url)
     rv = self.app.get(url)
     self.assertIsNotNone(rv.data, 'No response')
@@ -69,7 +69,7 @@ class GoalAssociationAPITests(CairisDaemonTestCase):
     assoc = jsonpickle.decode(responseData)
     self.assertIsNotNone(assoc, 'No results after deserialization')
     self.assertEqual(assoc['theGoal'],'Upload clinical data to NeuroGrid')
-    self.assertEqual(assoc['theSubGoal'],'Anonymise data')
+    self.assertEqual(assoc['theSubGoal'],'Secure data transmission')
 
   def test_get_all(self):
     method = 'test_goal_associations'
@@ -102,7 +102,7 @@ class GoalAssociationAPITests(CairisDaemonTestCase):
     method = 'test_put'
 
     self.new_assoc_dict['object'].theAlternativeId = '1'
-    url = '/api/goals/association/environment/Psychosis/goal/Upload%20clinical%20data%20to%20NeuroGrid/subgoal/Anonymise%20data?session_id=test'
+    url = '/api/goals/association/environment/Psychosis/goal/Upload%20clinical%20data%20to%20NeuroGrid/subgoal/Secure%20data%20transmission?session_id=test'
 
     rv = self.app.put(url, content_type='application/json', data=jsonpickle.encode(self.new_assoc_dict))
     if (sys.version_info > (3,)):
