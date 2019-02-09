@@ -1409,7 +1409,7 @@ def buildRisks(p,docDir,chapterTxt,isPia = False):
       chapterTxt += """
         <section id=\"""" + (objtName + environmentName).replace(" ","_") + "RiskProperties\"><title>" + environmentName + "</title>" + """
           <section id=\"""" + (objtName + environmentName).replace(" ","_") + "RiskPropertiesRating\"><title>Severity</title>" + """
-            <para>""" + p.riskRating(threatName,vulName,environmentName) + "</para>" + """
+            <para>""" + p.riskRating(-1,threatName,vulName,environmentName) + "</para>" + """
           </section>
           <section id=\"""" + (objtName + environmentName).replace(" ","_") + "RiskPropertiesResponses\"><title>Mitigation Scores</title>" 
       riskScoreList = p.riskScore(threatName,vulName,environmentName,riskName)
