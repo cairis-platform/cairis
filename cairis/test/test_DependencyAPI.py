@@ -35,8 +35,7 @@ class DependencyAPITests(CairisDaemonTestCase):
 
   def setUp(self):
     self.logger = logging.getLogger(__name__)
-    self.working_name_1 = ('Stroke', 'all', 'all', 'all')
-    self.working_name_2 = ('Stroke', 'Data%20Consumer', 'Certificate%20Authority', 'Personal%20certificate')
+    self.working_name = ('Stroke', 'Data%20Consumer', 'Certificate%20Authority', 'Personal%20certificate')
     self.existing_environment_1 = 'Stroke'
     self.existing_environment_2 = 'Psychosis'
     self.existing_role_1 = 'Data Consumer'
@@ -60,28 +59,9 @@ class DependencyAPITests(CairisDaemonTestCase):
     item = deps[0]
     self.logger.info('[%s] First dependency: %s\n', method, item['theDependency'])
 
-  def test_dependencies_name_get(self):
-    method = 'test_dependencies_name_get'
-    url = '/api/dependencies/environment/%s/depender/%s/dependee/%s/dependency/%s?session_id=test' % self.working_name_1
-
-    rv = self.app.get(url)
-    self.assertIsNotNone(rv.data, 'No response')
-    if (sys.version_info > (3,)):
-      responseData = rv.data.decode('utf-8')
-    else:
-      responseData = rv.data
-    json_dict = jsonpickle.decode(responseData)
-    self.assertIsInstance(json_dict, list, 'The response is not a valid JSON dictionary')
-    self.assertGreater(len(json_dict), 0, 'No dependencies found')
-    assert isinstance(json_dict, list)
-    deps = []
-    for dep in json_dict:
-      deps.append(str(dep['theDependency']))
-    self.logger.info('[%s] Dependency IDs: %s\n', method, ', '.join(deps))
-
   def test_dependency_name_get(self):
     method = 'test_dependency_name_get'
-    url = '/api/dependencies/environment/%s/depender/%s/dependee/%s/dependency/%s?session_id=test' % self.working_name_2
+    url = '/api/dependencies/environment/%s/depender/%s/dependee/%s/dependency/%s?session_id=test' % self.working_name
 
     rv = self.app.get(url)
     self.assertIsNotNone(rv.data, 'No response')
@@ -89,15 +69,12 @@ class DependencyAPITests(CairisDaemonTestCase):
       responseData = rv.data.decode('utf-8')
     else:
       responseData = rv.data
-    json_dict = jsonpickle.decode(responseData)
-    self.assertIsInstance(json_dict, list, 'The response is not a valid JSON dictionary')
-    self.assertEqual(len(json_dict), 1, 'Result is not unique')
-    assert isinstance(json_dict, list)
-    item = json_dict[0]
-    has_keys = all (k in item for k in DependencyModel.required)
-    self.assertTrue(has_keys, 'Result is not a dependency')
-    dep_name = '/'.join([item['theEnvironmentName'], item['theDepender'], item['theDependee'], item['theDependency']])
-    self.logger.info('[%s] Dependency: %s\n', method, dep_name)
+    item = jsonpickle.decode(responseData)
+    self.assertIsInstance(item, dict, 'The response is not a valid JSON dictionary')
+    self.assertEqual(item['theEnvironmentName'],'Stroke')
+    self.assertEqual(item['theDepender'],'Data Consumer')
+    self.assertEqual(item['theDependee'], 'Certificate Authority')
+    self.assertEqual(item['theDependency'],'Personal certificate')
 
   def test_dependency_post(self):
     method = 'test_dependency_post'

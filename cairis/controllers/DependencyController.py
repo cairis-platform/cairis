@@ -64,7 +64,7 @@ class DependencyByNameAPI(Resource):
   def get(self, environment, depender, dependee, dependency):
     session_id = get_session_id(session, request)
     dao = DependencyDAO(session_id)
-    found_dependency = dao.get_dependency(
+    found_dependency = dao.get_dependency_by_name(
       environment=environment,
       depender=depender,
       dependee=dependee,
@@ -77,10 +77,9 @@ class DependencyByNameAPI(Resource):
 
   def put(self, environment, depender, dependee, dependency):
     session_id = get_session_id(session, request)
-    dep_name = '/'.join([environment, depender, dependee, dependency])
     dao = DependencyDAO(session_id)
     new_dependency = dao.from_json(request)
-    dao.update_dependency(dep_name, new_dependency)
+    dao.update_dependency(environment,depender,dependee,dependency, new_dependency)
     dao.close()
     resp_dict = {'message': 'Dependency successfully updated'}
     resp = make_response(json_serialize(resp_dict), OK)

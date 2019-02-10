@@ -951,6 +951,7 @@ drop procedure if exists locationsToXml;
 drop procedure if exists implicitAssetInclusionCheck;
 drop procedure if exists implicitAssetVulnerabilityCheck;
 drop function if exists lastNumericRequirementLabel;
+drop procedure if exists getDependency;
 
 
 delimiter //
@@ -25519,6 +25520,36 @@ begin
   select id into vulId from vulnerability where name = vulName limit 1;
 
   select mc.id, mc.name from misusecase mc, misusecase_risk mr, risk r where mr.risk_id = r.id and r.threat_id = threatId and r.vulnerability_id = vulId and mr.misusecase_id = mc.id;
+end
+//
+
+create procedure getDependency(in environmentName text, in dependerName text, in dependeeName text, in dependencyName text)
+begin
+  declare envId int;
+  declare dependerId int;
+  declare dependeeId int;
+  declare goalDependencyId int;
+  declare taskDependencyId int;
+  declare assetDependencyId int;
+
+  select id into envId from environment where name = environmentName limit 1;
+  select id into dependerId from role where name = dependerName limit 1;
+  select id into dependeeId from role where name = dependeeName limit 1;
+
+  select id into goalDependencyId from goal where name = dependencyName;
+  select id into taskDependencyId from task where name = dependencyName;
+  select id into assetDependencyId from asset where name = dependencyName;
+
+  if goalDependencyId is not null
+  then
+    select rgr.id id,e.name environment,dr.name depender,de.name dependee,'goal' dependencyType,g.name dependency,rgr.rationale from rolegoalrole_dependency rgr, role dr, role de, environment e, goal g where rgr.environment_id = envId and rgr.depender_id = dependerId and rgr.dependee_id = dependeeId and rgr.dependency_id = goalDependencyId and rgr.environment_id = e.id and rgr.depender_id = dr.id and rgr.dependee_id = de.id and rgr.dependency_id = g.id;
+  elseif taskDependencyId is not null
+  then
+    select rtr.id id,e.name environment,dr.name depender,de.name dependee,'task' dependencyType,t.name dependency,rtr.rationale from roletaskrole_dependency rtr, role dr, role de, environment e, task t where rtr.environment_id = envId and rtr.depender_id = dependerId and rtr.dependee_id = dependeeId and rtr.dependency_id = taskDependencyId and rtr.environment_id = e.id and rtr.depender_id = dr.id and rtr.dependee_id = de.id and rtr.dependency_id = t.id;
+  elseif assetDependencyId is not null
+  then
+    select rar.id id,e.name environment,dr.name depender,de.name dependee,'asset' dependencyType,a.name dependency,rar.rationale from roleassetrole_dependency rar, role dr, role de, environment e, asset a where rar.environment_id = envId and rar.depender_id = dependerId and rar.dependee_id = dependeeId and rar.dependency_id = assetDependencyId and rar.environment_id = e.id and rar.depender_id = dr.id and rar.dependee_id = de.id and rar.dependency_id = a.id;
+  end if;
 end
 //
 

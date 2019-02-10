@@ -60,7 +60,7 @@ class DependencyDAO(CairisDAO):
   def get_dependency(self, environment, depender, dependee, dependency):
     args = [environment, depender, dependee, dependency]
     if not 'all' in args:
-      return [self.get_dependency_by_name('/'.join(args))]
+      return self.get_dependency_by_name(environment,depender,dependee,dependency)
     else:
       dependencies = self.get_dependencies(simplify = False)
       found_dependencies = []
@@ -75,21 +75,26 @@ class DependencyDAO(CairisDAO):
           continue
         if dependency != 'all' and parts[3] != dependency:
           continue
-        found_dependencies.append(dependencies[key])
-
+        dep = dependencies[key]
+        found_dependencies.append(dep)
       return found_dependencies
 
 
-  def get_dependency_by_name(self, dep_name):
-    dependencies = self.db_proxy.getDependencies()
-
-    found_dependency = dependencies.get(dep_name, None)
-
-    if not found_dependency:
+  def get_dependency_by_name(self, environment, depender, dependee, dependency):
+    try:
+      dep = self.db_proxy.getDependency(environment, depender, dependee, dependency)
+      del dep.theId
+      return dep
+    except ObjectNotFound as ex:
+      self.close()
       raise ObjectNotFoundHTTPError('The provided dependency name')
-
-    return found_dependency
-
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+    except ARMException as ex:
+      self.close()
+      raise ARMHTTPError
+    
   def add_dependency(self, dependency):
     params = DependencyParameters(
       envName=dependency.theEnvironmentName,
@@ -110,15 +115,13 @@ class DependencyDAO(CairisDAO):
       raise ARMHTTPError(ex)
 
   def delete_dependencies(self, environment, depender, dependee, dependency):
-    found_dependencies = self.get_dependency(environment, depender, dependee, dependency)
-
     try:
-      for found_dependency in found_dependencies:
-        self.db_proxy.deleteDependency(
-          found_dependency.theId,
-          found_dependency.theDependencyType
-        )
-      return len(found_dependencies)
+      dep = self.db_proxy.getDependency(environment, depender, dependee, dependency)
+      self.db_proxy.deleteDependency(dep.theId,dep.theDependencyType)
+      return 1
+    except ObjectNotFound as ex:
+      self.close()
+      raise ObjectNotFoundHTTPError('The provided dependency name')
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)
@@ -126,20 +129,22 @@ class DependencyDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def update_dependency(self, dep_name, dependency):
-    found_dependency = self.get_dependency_by_name(dep_name)
-    params = DependencyParameters(
-      envName=dependency.theEnvironmentName,
-      depender=dependency.theDepender,
-      dependee=dependency.theDependee,
-      dependencyType=dependency.theDependencyType,
-      dependency=dependency.theDependency,
-      rationale=dependency.theRationale
-    )
-    params.setId(found_dependency.theId)
-
+  def update_dependency(self, environment, depender, dependee, dependency, new_dependency):
     try:
+      found_dependency = self.db_proxy.getDependency(environment, depender, dependee, dependency)
+      params = DependencyParameters(
+        envName=new_dependency.theEnvironmentName,
+        depender=new_dependency.theDepender,
+        dependee=new_dependency.theDependee,
+        dependencyType=new_dependency.theDependencyType,
+        dependency=new_dependency.theDependency,
+        rationale=new_dependency.theRationale
+      )
+      params.setId(found_dependency.theId)
       self.db_proxy.updateDependency(params)
+    except ObjectNotFound as ex:
+      self.close()
+      raise ObjectNotFoundHTTPError('The provided dependency name')
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)

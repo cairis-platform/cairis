@@ -4725,3 +4725,10 @@ class MySQLDatabaseProxy:
 
   def reassociateRequirement(self,reqName,domName):
     self.updateDatabase('call reassociateRequirement(:reqName,:domName)',{'reqName':reqName,'domName':domName},'MySQL error associating requirement ' + reqName + ' with domain ' + domName)
+
+  def getDependency(self,envName,dependerName,dependeeName,dependencyName):
+    deps = self.responseList('call getDependency(:env,:dep,:dee,:dpy)',{'env':envName,'dep':dependerName,'dee':dependeeName,'dpy':dependencyName},'MySQL error getting dependency')
+    if (len(deps) == 0):
+      raise ObjectNotFound(envName + ' / ' + dependerName + ' / ' + dependeeName + ' / ' + dependencyName)
+    parameters = DependencyParameters(deps[0][1],deps[0][2],deps[0][3],deps[0][4],deps[0][5],deps[0][6])
+    return ObjectFactory.build(deps[0][0],parameters)
