@@ -20,7 +20,7 @@ from cairis.daemon.CairisHTTPError import ARMHTTPError, MalformedJSONHTTPError, 
 from cairis.data.CairisDAO import CairisDAO
 from cairis.core.Borg import Borg
 from cairis.tools.JsonConverter import json_deserialize
-from cairis.tools.PseudoClasses import ProjectSettings, Contributor, Revision
+from cairis.tools.PseudoClasses import ProjectSettings, Contributor, Revision, Definition
 from cairis.tools.SessionValidator import check_required_keys
 
 __author__ = 'Robin Quetin, Shamal Faily'
@@ -133,7 +133,6 @@ class ProjectDAO(CairisDAO):
     contrs = json_dict['contributions'] or []
     if not isinstance(contrs, list):
       contrs = []
-
     for idx in range(0, len(contrs)):
       try:
         check_required_keys(contrs[idx], Contributor.required)
@@ -151,9 +150,6 @@ class ProjectDAO(CairisDAO):
         json_dict['revisions'][idx] = (revisions[idx]['id'], revisions[idx]['date'], revisions[idx]['description'])
       except MissingParameterHTTPError:
         SilentHTTPError('A revision did not contain all required fields. Skipping this one.')
-
-    json_dict['definitions'] = json_dict.get('definitions', None) or {}
-    json_dict['definitions'] = list(json_dict['definitions'].items())
 
     settings = json_deserialize(json_dict)
     return settings

@@ -96,6 +96,15 @@ class CharacteristicReference(object):
     self.theReferenceSynopsis = rSyn
     self.theReferenceContribution = rCont
 
+class Definition(object):
+  resource_fields = {
+    obj_id_field: fields.String,
+    'name': fields.String,
+    'value': fields.String
+  }
+  required = list(resource_fields.keys())
+  required.remove(obj_id_field)
+
 class Contributor(object):
   resource_fields = {
     obj_id_field: fields.String,
@@ -208,7 +217,7 @@ class ProjectSettings(object):
     'projectName': fields.String,
     'richPicture': fields.String,
     'projectScope': fields.String,
-    'definitions': fields.String,
+    'definitions': fields.List(fields.Nested(Definition.resource_fields)),
     'projectGoals': fields.String,
     'contributions': fields.List(fields.Nested(Contributor.resource_fields)),
     'projectBackground': fields.String,

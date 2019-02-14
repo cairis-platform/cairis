@@ -2331,7 +2331,7 @@ class MySQLDatabaseProxy:
     session = self.updateDatabase('call updateProjectSettings(:proj,:bg,:goals,:scope,:picture,:fontSize,:font)',{'proj':projName,'bg':background.encode('utf-8'),'goals':goals.encode('utf-8'),'scope':scope.encode('utf-8'),'picture':richPicture,'fontSize':fontSize,'font':fontName},'MySQL error updating project settings',None,False)
     self.updateDatabase('call deleteDictionary()',{},'MySQL error deleting directory',session,False)
     for entry in definitions:
-      self.updateDatabase('call addDictionaryEntry(:e0,:e1)',{'e0':entry[0],'e1':entry[1].encode('utf-8')},'MySQL error adding dictionary entry',session,False)
+      self.updateDatabase('call addDictionaryEntry(:e0,:e1)',{'e0':entry['name'],'e1':entry['value'].encode('utf-8')},'MySQL error adding dictionary entry',session,False)
     self.updateDatabase('call deleteContributors()',{},'MySQL error deleting contributions',session,False)
     for entry in contributors:
       self.updateDatabase('call addContributorEntry(:e0,:e1,:e2,:e3)',{'e0':entry[0],'e1':entry[1],'e2':entry[2],'e3':entry[3]},'MySQL error adding contribution entry',session,False)
@@ -2349,9 +2349,9 @@ class MySQLDatabaseProxy:
   
   def getDictionary(self):
     rows = self.responseList('call getDictionary()',{},'MySQL error getting dictionary')
-    pDict = {}
+    pDict = []
     for key,value in rows:
-      pDict[key] = value
+      pDict.append({'name' : key, 'value' : value})
     return pDict
 
   def getContributors(self):

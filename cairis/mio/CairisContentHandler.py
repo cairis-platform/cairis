@@ -159,7 +159,7 @@ class CairisContentHandler(ContentHandler,EntityResolver):
 
   def endElement(self,name):
     if name == 'entry':
-      self.theNamingConventions.append((unescape(self.theCurrentNameEntry),unescape(self.theDefinition)))
+      self.theNamingConventions.append({'name' : unescape(self.theCurrentNameEntry), 'value' : unescape(self.theDefinition)})
     elif name == 'revision':
       self.theRevisions.append((self.theCurrentRevNo,unescape(self.theCurrentRevDate),unescape(self.theRemarks)))
     elif name == 'project_settings':

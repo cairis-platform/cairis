@@ -36,8 +36,8 @@ function showProjectSettingsForm() {
       rescaleImage(image,700);
       $("#projectBackground").height( $("#projectBackground")[0].scrollHeight );
       //definitions
-      $.each(data.definitions, function (key, def) {
-        appendNamingConvention(key,def);
+      $.each(data.definitions, function (idx,def) {
+        appendNamingConvention(def);
       });
       $.each(data.contributions, function (index, contributor) {
         appendContributor(contributor);
@@ -123,17 +123,18 @@ mainContent.on('click', "#updateNamingConventions", function () {
     $('#editNamingConvention').removeClass("new");
     var key = $("#conventionName").val();
     var value = $("#conventionDefinition").val();
-    settings.definitions[key] = value;
+    settings.definitions.push({'name' : key, 'value' : value});
   }
   else {
     var key = $("#conventionName").val();
     var value = $("#conventionDefinition").val();
-    delete settings.definitions[$.session.get("namingConvName")];
-    settings.definitions[key] = value;
+    var defn = {'name' : key, 'value' : value};
+    settings.definitions = settings.definitions.filter(def => (def.name != key));
+    settings.definitions.push(defn);
   }
   tableBody.empty();
-  $.each(settings.definitions, function (key, val) {
-    appendNamingConvention(key, val);
+  $.each(settings.definitions, function (idx,val) {
+    appendNamingConvention(val);
   });
   projectSettingsToggler();
   $.session.set("ProjectSettings", JSON.stringify(settings));
@@ -330,8 +331,8 @@ function postProjectImage(imagedir, actualDir) {
   $.session.set("ProjectSettings", JSON.stringify(settings));
 }
 
-function appendNamingConvention(name,def){
-  $("#editNamingConventionsTable").find("tbody").append("<tr class='editNamingConvention'><td class='removeProjectNamingConvertion addRemove' ><i class='fa fa-minus'></i></td><td class='namingConvention'>" + name + "</td><td class='theNameingDef'>"+ def + "</td></tr>");
+function appendNamingConvention(def){
+  $("#editNamingConventionsTable").find("tbody").append("<tr class='editNamingConvention'><td class='removeProjectNamingConvertion addRemove' ><i class='fa fa-minus'></i></td><td class='namingConvention'>" + def.name + "</td><td class='theNameingDef'>"+ def.value + "</td></tr>");
 }
 function appendContributor(con){
   $("#editContributorTable").find("tbody").append("<tr class='editContributor'><td class='removeContributor addRemove' ><i class='fa fa-minus'></i></td><td class='projectContributor'>" + con.firstName + "</td><td class='conSurname'>"+ con.surname + "</td><td class='conAffliation'>"+ con.affiliation + "</td><td class='conRole'>"+ con.role +"</td></tr>");

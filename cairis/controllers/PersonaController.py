@@ -105,8 +105,8 @@ class PersonaModelByNameAPI(Resource):
     model_generator = get_model_generator()
 
     dao = PersonaDAO(session_id)
-    if variable == 'All':  variable = ''
-    if characteristic == 'All': characteristic = ''
+    if (variable == 'All' or variable == 'all'):  variable = ''
+    if (characteristic == 'All' or characteristic == 'all'): characteristic = ''
     dot_code = dao.get_persona_model(persona,variable,characteristic)
     dao.close()
 
@@ -126,8 +126,8 @@ class PersonaCharacteristicsByNameAPI(Resource):
     model_generator = get_model_generator()
 
     dao = PersonaDAO(session_id)
-    if variable == 'All':  variable = ''
-    if characteristic == 'All': characteristic = ''
+    if (variable == 'All' or variable == 'all'):  variable = ''
+    if (characteristic == 'All' or characteristic == 'all'): characteristic = ''
     char_names = dao.get_persona_characteristics(persona,variable,characteristic)
     dao.close()
     resp = make_response(json_serialize(char_names, session_id=session_id), OK)
