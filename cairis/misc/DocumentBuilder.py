@@ -587,8 +587,8 @@ def namingConventions(p):
   if (objts == None):
     return ""
 
-  for name,defn in objts.items():
-    entryRows.append((name,defn)) 
+  for defn in objts:
+    entryRows.append((defn['name'],defn['value'])) 
   chapterTxt += buildTable('projectNamingConventions','Naming Conventions',['Name','Definition'],entryRows,0)
   chapterTxt += """
   </chapter>
