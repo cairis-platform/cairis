@@ -1822,7 +1822,7 @@ def dataflows(p,docDir):
   chapterTxt += modelSection(p,'DataFlow',docDir)
   dfs = p.getDataFlows()
   envDict = {}
-  for idx,d in dfs.items():
+  for d in dfs:
     if d.environment() not in envDict:
       envDict[d.environment()] = [(d.name(),d.fromName(),d.fromType(),d.toName(),d.toType(),listToItems(d.assets()))]
     else:

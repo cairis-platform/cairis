@@ -48,7 +48,8 @@ function createDataflowsTable(){
       var i = 0;
       var di = 0;
 
-      $.each(data, function(count, item) {
+      for (var r = 0; r < data.length; r++) {
+        var item = data[r];
         dataflows[di] = item;
         textToInsert[i++] = "<tr>";
         var itemKey = item.theName + '/' + item.theEnvironmentName;
@@ -79,7 +80,7 @@ function createDataflowsTable(){
         textToInsert[i++] = '</td>';
         textToInsert[i++] = '</tr>';
         di += 1;
-      });
+      }
       $.session.set("Dataflows",JSON.stringify(dataflows));
       theTable.append(textToInsert.join(''));
 

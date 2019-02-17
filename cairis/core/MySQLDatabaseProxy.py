@@ -4582,12 +4582,12 @@ class MySQLDatabaseProxy:
 
   def getDataFlows(self,dfName='',envName=''):
     dfRows = self.responseList('call getDataFlows(:df,:env)',{'df':dfName,'env':envName},'MySQL error getting data flows')
-    dataFlows = {}
+    dataFlows = []
     for dfName,envName,fromName,fromType,toName,toType in dfRows:
       dfAssets = self.getDataFlowAssets(dfName,envName)
       parameters = DataFlowParameters(dfName,envName,fromName,fromType,toName,toType,dfAssets)
       df = ObjectFactory.build(-1,parameters)
-      dataFlows[dfName + '/' + envName] = df
+      dataFlows.append(df)
     return dataFlows
 
   def getDataFlowAssets(self,dfName,envName):

@@ -88,7 +88,7 @@ class DataFlowTest(unittest.TestCase):
     b = Borg()
     b.dbProxy.addDataFlow(idfp)
     odfs = b.dbProxy.getDataFlows()
-    odf = odfs[self.dfJson['theName'] + '/' + self.dfJson['theEnvironmentName']]
+    odf = odfs[0]
     self.assertEqual(idfp.name(),odf.name())
     self.assertEqual(idfp.environment(),odf.environment())
     self.assertEqual(idfp.fromName(),odf.fromName())
@@ -104,7 +104,7 @@ class DataFlowTest(unittest.TestCase):
     idfp.theName = 'Authenticate'
     b.dbProxy.updateDataFlow('authenticate','Psychosis',idfp)
     odfs = b.dbProxy.getDataFlows()
-    odf = odfs['Authenticate/' + self.dfJson['theEnvironmentName']]
+    odf = odfs[0]
     self.assertEqual(idfp.name(),odf.name())
     self.assertEqual(idfp.environment(),odf.environment())
     self.assertEqual(idfp.fromName(),odf.fromName())
