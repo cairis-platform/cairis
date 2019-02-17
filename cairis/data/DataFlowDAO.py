@@ -53,7 +53,7 @@ class DataFlowDAO(CairisDAO):
     if len(dfs) == 0:
       self.close()
       raise ObjectNotFoundHTTPError('The provided dataflow name')
-    return dfs[dataflow_name + '/' + environment_name]
+    return dfs[0]
 
   def add_dataflow(self, dataflow):
     df_params = DataFlowParameters(

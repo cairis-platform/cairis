@@ -74,10 +74,10 @@ class TrustBoundaryAPITests(CairisDaemonTestCase):
       responseData = rv.data
     tbs = jsonpickle.decode(responseData)
     self.assertIsNotNone(tbs, 'No results after deserialization')
-    self.assertIsInstance(tbs, dict, 'The result is not a dictionary as expected')
+    self.assertIsInstance(tbs, list, 'The result is not a list as expected')
     self.assertGreater(len(tbs), 0, 'No trust_boundaries in the dictionary')
     self.logger.info('[%s] TrustBoundaries found: %d', method, len(tbs))
-    tb = list(tbs.values())[0]
+    tb = tbs[0]
     self.assertEqual(len(tbs),1)
 
   def test_get_by_name(self):

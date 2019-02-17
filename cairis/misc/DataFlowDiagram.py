@@ -75,13 +75,14 @@ class DataFlowDiagram:
       nodeNameSet = set([])
       edgeSet = set([])
 
-      tbs = self.dbProxy.getTrustBoundaries()
-      for tbName in tbs:
+      tbses = self.dbProxy.getTrustBoundaries()
+      for tbs in tbses:
+        tbName = tbs.theName
         c = pydot.Cluster(tbName,label=str(tbName),style='dashed',fontname=self.fontName,fontsize=self.fontSize)
         self.theClusters[tbName] = c
         self.theGraph.add_subgraph(c)
         try:
-          for tbType,tbComponent in tbs[tbName].components()[self.theEnvironmentName]:
+          for tbType,tbComponent in tbs.components()[self.theEnvironmentName]:
             self.tbDict[tbComponent] = tbName
         except KeyError:
           pass

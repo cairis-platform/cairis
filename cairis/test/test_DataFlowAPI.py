@@ -63,7 +63,7 @@ class DataFlowAPITests(CairisDaemonTestCase):
       responseData = rv.data
     dataflows = jsonpickle.decode(responseData)
     self.assertIsNotNone(dataflows, 'No results after deserialization')
-    self.assertIsInstance(dataflows, dict, 'The result is not a dictionary as expected')
+    self.assertIsInstance(dataflows, list, 'The result is not a dictionary as expected')
     self.assertGreater(len(dataflows), 0, 'No dataflows in the dictionary')
     self.logger.info('[%s] DataFlows found: %d', method, len(dataflows))
     self.assertEqual(len(dataflows),2)

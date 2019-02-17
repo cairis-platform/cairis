@@ -36,9 +36,10 @@ class TrustBoundaryDAO(CairisDAO):
   def get_trust_boundaries(self, constraint_id = -1):
     try:
       tbs = self.db_proxy.getTrustBoundaries(constraint_id)
-      for key, value in list(tbs.items()):
-        tbs[key] = self.simplify(value)
-      return tbs
+      values = []
+      for value in tbs:
+        values.append(self.simplify(value))
+      return values
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)
@@ -53,7 +54,7 @@ class TrustBoundaryDAO(CairisDAO):
     if len(tbs) == 0:
       self.close()
       raise ObjectNotFoundHTTPError('The provided trust boundary name')
-    return tbs[trust_boundary_name]
+    return tbs[0]
 
   def add_trust_boundary(self, tb):
     try:

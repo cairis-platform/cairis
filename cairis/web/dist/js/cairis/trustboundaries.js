@@ -48,7 +48,8 @@ function createTrustBoundariesTable(){
       var i = 0;
       var tbi = 0;
 
-      $.each(data, function(count, item) {
+      for (var r = 0; r < data.length; r++) {
+        var item = data[r];
         tbs[tbi] = item;
         textToInsert[i++] = "<tr>";
         var itemKey = item.theName;
@@ -63,7 +64,7 @@ function createTrustBoundariesTable(){
         textToInsert[i++] = '</td>';
         textToInsert[i++] = '</tr>';
         tbi += 1;
-      });
+      };
       $.session.set("TrustBoundaries",JSON.stringify(tbs));
       theTable.append(textToInsert.join(''));
 

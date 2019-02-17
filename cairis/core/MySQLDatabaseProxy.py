@@ -4634,14 +4634,14 @@ class MySQLDatabaseProxy:
 
   def getTrustBoundaries(self,constraintId = -1):
     tbRows = self.responseList('call getTrustBoundaries(:id)',{'id':constraintId},'MySQL error getting trust boundaries')
-    tbs = {} 
+    tbs = [] 
     for tbId,tbName,tbDesc in tbRows:
       components = {}
       privileges = {}
       for environmentId,environmentName in self.dimensionEnvironments(tbId,'trust_boundary'):
         components[environmentName] = self.trustBoundaryComponents(tbId,environmentId)
         privileges[environmentName] = self.trustBoundaryPrivilege(tbId,environmentId)
-      tbs[tbName] = TrustBoundary(tbId,tbName,tbDesc,components,privileges)
+      tbs.append(TrustBoundary(tbId,tbName,tbDesc,components,privileges))
     return tbs
 
   def trustBoundaryComponents(self,tbId, envId):
