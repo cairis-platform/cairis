@@ -3,7 +3,7 @@
     {"theName" : "Shibboleth",
      "theDescription" : "Identity Provider",
      "theEnvironmentProperties" : [
-       {"theName" : "Psychosis",
+       {"theEnvironmentName" : "Psychosis",
         "thePrivilege" : "None",
         "theComponents" :[{"theName": "Authenticate Researcher","theType" : "process"}]
        }

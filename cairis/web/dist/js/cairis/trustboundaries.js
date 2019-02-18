@@ -101,7 +101,7 @@ $(document).on('click', "td.trustboundary-rows", function(){
       $('#editTrustBoundaryOptionsForm').validator('update');
 
       $.each(tb.theEnvironmentProperties, function (index, envprop) {
-        appendTrustBoundaryEnvironment(envprop.theName);
+        appendTrustBoundaryEnvironment(envprop.theEnvironmentName);
       });
       $("#theTrustBoundaryEnvironments").find(".trustBoundaryEnvironmentProperties:first").trigger('click');
       var envName = $("#theTrustBoundaryEnvironments").find(".trustBoundaryEnvironmentProperties:first").text();
@@ -277,7 +277,7 @@ mainContent.on('click', '.deleteTrustBoundaryEnvironment', function () {
   var tb = JSON.parse($.session.get("TrustBoundary"));
 
   $.each(tb.theEnvironmentProperties, function (index, prop) {
-    if(prop.theName == envName){
+    if(prop.theEnvironmentName == envName){
       tb.theEnvironmentProperties.splice(index,1);
     }
   });
@@ -298,7 +298,7 @@ mainContent.on("click", ".trustBoundaryEnvironmentProperties", function () {
   $("#theTrustBoundaryComponents").find("tbody").empty();
   var tb = JSON.parse($.session.get("TrustBoundary"));
   $.each(tb.theEnvironmentProperties, function (index, prop) {
-    if(prop.theName == name){
+    if(prop.theEnvironmentName == name){
       $.each(prop.theComponents, function (index, tbComponent) {
         appendTrustBoundaryComponent(tbComponent);
       });
@@ -337,7 +337,7 @@ mainContent.on('click',"#AddTrustBoundaryComponentButton", function(e) {
   var envName = $.session.get("TrustBoundaryEnvironmentName");
 
   $.each(tb.theEnvironmentProperties, function (index, env) {
-    if(env.theName == envName){
+    if(env.theEnvironmentName == envName){
       var selectedIdx = $('#trustBoundaryComponentDialog').attr('data-selectedIndex');
       if (selectedIdx == undefined) {
         tb.theEnvironmentProperties[index].theComponents.push(updComp);
@@ -394,7 +394,7 @@ mainContent.on('click', ".removeTrustBoundaryComponent", function () {
   var envName = $.session.get("TrustBoundaryEnvironmentName");
 
   $.each(tb.theEnvironmentProperties, function (index, env) {
-    if(env.theName == envName){
+    if(env.theEnvironmentName == envName){
       $.each(env.theComponents, function (index2, comp) {
         if(comp.theName == compTxt){
           env.theComponents.splice( index2 ,1 );
@@ -423,7 +423,7 @@ mainContent.on("click", "#addTrustBoundaryEnvironment", function () {
 function addTrustBoundaryEnvironment() {
   var text = $("#chooseEnvironmentSelect").val();
   appendTrustBoundaryEnvironment(text);
-  var environment =  jQuery.extend(true, {},{"theName" : text, "theComponents" : []} );
+  var environment =  jQuery.extend(true, {},{"theEnvironmentName" : text, "theComponents" : []} );
   var tb = JSON.parse($.session.get("TrustBoundary"));
   tb.theEnvironmentProperties.push(environment);
   $.session.set("TrustBoundary", JSON.stringify(tb));
@@ -440,7 +440,7 @@ mainContent.on('change', '#thePrivilege', function () {
   var tb = JSON.parse($.session.get("TrustBoundary"));
   var envName = $.session.get("TrustBoundaryEnvironmentName");
   $.each(tb.theEnvironmentProperties, function (index, env) {
-    if(env.theName == envName){
+    if(env.theEnvironmentName == envName){
       env.thePrivilege = $("#thePrivilege option:selected").text();
       $.session.set("TrustBoundary", JSON.stringify(tb));
     }

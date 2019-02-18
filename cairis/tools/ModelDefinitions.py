@@ -1183,7 +1183,7 @@ class TrustBoundaryComponent(object):
 class TrustBoundaryEnvironmentModel(object):
   resource_fields = {
     obj_id_field: fields.String,
-    'theName': fields.String,
+    'theEnvironmentName': fields.String,
     'theComponents': fields.List(fields.Nested(TrustBoundaryComponent.resource_fields)),
     'thePrivilege' : fields.String
   }
@@ -1191,7 +1191,7 @@ class TrustBoundaryEnvironmentModel(object):
   required.remove(obj_id_field)
 
   def __init__(self,n,c,p):
-    self.theName = n
+    self.theEnvironmentName = n
     self.theComponents = c
     self.thePrivilege = p
 

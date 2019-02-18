@@ -157,7 +157,7 @@ class TrustBoundaryDAO(CairisDAO):
       new_pls = {}
      
       for fake_prop in fake_props:
-        envName = fake_prop['theName']
+        envName = fake_prop['theEnvironmentName']
         pLevel = fake_prop['thePrivilege']
         compList = []
         for comp in fake_prop['theComponents']:

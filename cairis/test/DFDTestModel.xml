@@ -221,7 +221,7 @@ The development of a structure for trial image metadata, based on a careful desc
 <role name="Sysadmin" type="Stakeholder" short_code="SYSADMIN" >
   <description>Responsible for day-to-day administration of NeuroGrid, including authorisation of access requests.</description>
 </role>
-<asset name="Credentials Store" short_code="DAS" type="Systems" is_critical="0">
+<asset name="Credentials Store" short_code="DAS" type="Information" is_critical="0">
   <description>TBC</description>
   <significance>TBC</significance>
   <critical_rationale></critical_rationale>

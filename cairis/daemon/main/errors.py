@@ -44,13 +44,13 @@ def handle_error(error):
 
 @main.errorhandler(AssertionError)
 def handle_asserterror(error):
-  err = CairisHTTPError(CONFLICT, str(error.message), 'Unmet requirement')
+  err = CairisHTTPError(CONFLICT, str(error), 'Unmet requirement')
   return handle_error(err)
 
 
 @main.errorhandler(KeyError)
 def handle_keyerror(error):
-  err = CairisHTTPError(BAD_REQUEST, str(error.message), 'Missing attribute')
+  err = CairisHTTPError(BAD_REQUEST, str(error), 'Missing attribute')
   return handle_error(err)
 
 
