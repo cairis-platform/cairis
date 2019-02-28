@@ -3601,9 +3601,9 @@ CREATE VIEW concept_reference as
   union
   select pr.id,pr.name,'persona' dimension_name,p.name object_name,pr.description from persona_reference pr, persona p where pr.persona_id = p.id
   union
-  select rr.id,rr.name,'requirement' dimension_name,concat(a.short_code,'-',r.label) object_name,rr.description from requirement_reference rr, requirement r, asset a, asset_requirement ar where rr.requirement_id = r.id and r.id = ar.requirement_id and ar.asset_id = a.id and r.version = (select max(i.version) from requirement i where i.id = r.id)
+  select rr.id,rr.name,'requirement' dimension_name,r.name object_name,rr.description from requirement_reference rr, requirement r, asset a, asset_requirement ar where rr.requirement_id = r.id and r.id = ar.requirement_id and ar.asset_id = a.id and r.version = (select max(i.version) from requirement i where i.id = r.id)
   union
-  select rr.id,rr.name,'requirement' dimension_name,concat(e.short_code,'-',r.label) object_name,rr.description from requirement_reference rr, requirement r, environment e, environment_requirement er where rr.requirement_id = r.id and r.id = er.requirement_id and er.environment_id = e.id and r.version = (select max(i.version) from requirement i where i.id = r.id)
+  select rr.id,rr.name,'requirement' dimension_name,r.name object_name,rr.description from requirement_reference rr, requirement r, environment e, environment_requirement er where rr.requirement_id = r.id and r.id = er.requirement_id and er.environment_id = e.id and r.version = (select max(i.version) from requirement i where i.id = r.id)
   union
   select rr.id,rr.name,'risk' dimension_name,r.name object_name,rr.description from risk_reference rr, risk r where rr.risk_id = r.id
   union

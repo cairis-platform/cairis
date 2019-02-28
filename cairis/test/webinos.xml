@@ -11301,28 +11301,28 @@ Jimmy’s mistake was to assume that his ZenSearch client application cannot be 
 </associations>
 
 <misusability>
-<concept_reference name="API throw errors when access control request denied" concept="requirement" object="PS-42" >
+<concept_reference name="API throw errors when access control request denied" concept="requirement" object="Request denial error" >
   <description></description>
 </concept_reference>
-<concept_reference name="Autostart programmatically controlled" concept="requirement" object="CAP-2" >
+<concept_reference name="Autostart programmatically controlled" concept="requirement" object="Automatic background start-up" >
   <description></description>
 </concept_reference>
-<concept_reference name="Editors support fine and coarse grained policy editing" concept="requirement" object="PS-39" >
+<concept_reference name="Editors support fine and coarse grained policy editing" concept="requirement" object="Policy view/edit level" >
   <description></description>
 </concept_reference>
-<concept_reference name="Policies contain fine-grained rules" concept="requirement" object="ID-5" >
+<concept_reference name="Policies contain fine-grained rules" concept="requirement" object="Application identity" >
   <description></description>
 </concept_reference>
-<concept_reference name="Sophisticated policy editing tools" concept="requirement" object="PS-9" >
+<concept_reference name="Sophisticated policy editing tools" concept="requirement" object="Asset-based policy" >
   <description></description>
 </concept_reference>
-<concept_reference name="Policy impact is described textually" concept="requirement" object="PS-32" >
+<concept_reference name="Policy impact is described textually" concept="requirement" object="Policy impact" >
   <description></description>
 </concept_reference>
-<concept_reference name="webinos explains policy setting refusals" concept="requirement" object="PS-36" >
+<concept_reference name="webinos explains policy setting refusals" concept="requirement" object="Policy refusal reason" >
   <description></description>
 </concept_reference>
-<concept_reference name="User alerted on policy warning" concept="requirement" object="PS-36" >
+<concept_reference name="User alerted on policy warning" concept="requirement" object="Policy refusal reason" >
   <description></description>
 </concept_reference>
 <concept_reference name="Acknowledge target device" concept="usecase" object="Installation and update of webinos applications" >
