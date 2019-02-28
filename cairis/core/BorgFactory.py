@@ -155,6 +155,11 @@ def dInitialise(withTest = True):
     b.logLevel = logging.WARNING
 
   b.staticDir = cfgDict['web_static_dir']
+
+  if ('web_asset_dir' not in cfgDict):
+    b.assetDir = b.staticDir
+  else: 
+    b.assetDir = cfgDict['web_asset_dir']
   b.templateDir = os.path.join(b.cairisRoot,'templates')
   if not hasattr(b, 'uploadDir'): b.uploadDir = os.path.join(b.cairisRoot,'cairis/static')
 

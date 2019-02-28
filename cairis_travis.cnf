@@ -9,6 +9,7 @@ default_image_dir = .
 web_port = 7071
 log_level = warning
 web_static_dir = /home/travis/build/failys/cairis/cairis/web
+web_asset_dir = /home/travis/build/failys/cairis/cairis/web/assets
 upload_dir = /tmp
 secret_key = super-secret
 password_hash = sha512_crypt

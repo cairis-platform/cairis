@@ -85,9 +85,9 @@ class EnvironmentModel:
 
   def buildNode(self,dimName,objtName):
     b = Borg()
-    actorFile = b.staticDir + '/assets/modelActor.png'
-    attackerFile = b.staticDir + '/assets/modelAttacker.png'
-    roleFile = b.staticDir + '/assets/modelRole.png'
+    actorFile = b.assetDir + '/modelActor.png'
+    attackerFile = b.assetDir + '/modelAttacker.png'
+    roleFile = b.assetDir + '/modelRole.png'
     objtUrl = dimName + '#' + str(objtName)
     if (dimName == 'persona'):
       self.theGraph.add_node(pydot.Node(objtName,shapefile=actorFile,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl,peripheries='0'))

@@ -1,26 +1,26 @@
 {% from "security/_macros.html" import render_field_with_errors, render_field %}
-<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" />
-<link href="dist/css/login.css" rel="stylesheet" />
-<link href="dist/css/font-awesome.css" rel="stylesheet" />
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<link href="login.css" rel="stylesheet" /> 
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous"> 
 <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
-<div class="container">
-  <div class="row">
-    <div class="loginac is-Responsive">
+<div class="container-fluid">
+  <div class="row align-items-center">
+    <div class="login is-Responsive">
       <div id="logo-container"></div>
       <div><strong class="col-sm-12 col-md-10 col-md-offset-1">CAIRIS Login</strong></div>
       <div class="col-sm-12 col-md-10 col-md-offset-1">
         <form action="{{ url_for_security('login') }}" method="POST" name="login_user_for" class="form-horizontal" role="form">
           {{ login_user_form.hidden_tag() }}
-          <div class="form-group input-group">
-            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+          <div class="form-group input-group-prepend">
+            <span class="input-group-text"><i class="fa fa-user"></i></span>
             <input class="form-control" type="text" id='email' name='email' placeholder="username"/>          
           </div>
-          <div class="form-group input-group">
-            <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+          <div class="form-group input-group-prepend">
+            <span class="input-group-text"><i class="fa fa-lock"></i></span>
             <input class="form-control" type="password" id='password' name='password' placeholder="password"/>     
           </div>
           <div class="form-group">
-            <button type="submit" class="btn btn-def btn-block" id="submit" name="submit">Login</button>
+            <button type="submit" class="btn btn-def btn-block btn-primary" id="submit" name="submit">Login</button>
           </div>
         </form>        
       </div>  

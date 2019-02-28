@@ -28,7 +28,7 @@ from cairis.core.MySQLDatabaseProxy import createDatabaseAccount, createDatabase
 __author__ = 'Shamal Faily'
 
 
-def quick_setup(dbHost,dbPort,dbRootPassword,tmpDir,rootDir,imageDir,configFile,webPort,logLevel,staticDir,uploadDir,userName,passWd):
+def quick_setup(dbHost,dbPort,dbRootPassword,tmpDir,rootDir,imageDir,configFile,webPort,logLevel,staticDir,assetDir,uploadDir,userName,passWd):
   if (len(userName) > 255):
     raise ARMException("Username cannot be longer than 255 characters")
   if (userName == "root"):
@@ -42,7 +42,7 @@ def quick_setup(dbHost,dbPort,dbRootPassword,tmpDir,rootDir,imageDir,configFile,
   f.write("export CAIRIS_CFG="+ configFile +"\n")
   f.write("export PYTHONPATH=${PYTHONPATH}:" + pathName +"\n")
   f.close()
-  createCairisCnf(configFile,dbRootPassword,dbHost,dbPort,tmpDir,rootDir,imageDir,webPort,logLevel,staticDir,uploadDir)
+  createCairisCnf(configFile,dbRootPassword,dbHost,dbPort,tmpDir,rootDir,imageDir,webPort,logLevel,staticDir,assetDir,uploadDir)
 
   from cairis.bin.add_cairis_user import user_datastore, db
 
@@ -102,7 +102,7 @@ def createUserDatabase(dbHost,dbPort,dbRootPassword,rootDir):
   rootCursor.close()
   rootConn.close()
 
-def createCairisCnf(configFile,dbRootPassword,dbHost,dbPort,tmpDir,rootDir,imageDir,webPort,logLevel,staticDir,uploadDir):
+def createCairisCnf(configFile,dbRootPassword,dbHost,dbPort,tmpDir,rootDir,imageDir,webPort,logLevel,staticDir,assetDir,uploadDir):
   f = open(configFile,'w')
   f.write("rpasswd = " + dbRootPassword + "\n")
   f.write("dbhost = " + dbHost + "\n")
@@ -113,6 +113,7 @@ def createCairisCnf(configFile,dbRootPassword,dbHost,dbPort,tmpDir,rootDir,image
   f.write("web_port = " + str(webPort) + "\n")
   f.write("log_level = " + logLevel + "\n")
   f.write("web_static_dir = " + staticDir + "\n")
+  f.write("web_asset_dir = " + assetDir + "\n")
   f.write("upload_dir = " + uploadDir + "\n")
 
   f.write("\n")
