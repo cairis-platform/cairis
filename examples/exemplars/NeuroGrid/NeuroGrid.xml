@@ -844,6 +844,8 @@ Because obtaining data is an expensive business, Claire also tries to reuse data
   <contextual>None</contextual>
   <persona_environment name="Psychosis" is_direct="FALSE" >
     <persona_role name="Researcher" />
+    <persona_role name="Data Provider" />
+    <persona_role name="Data Consumer" />
     <narrative>Nothing stipulated</narrative>
   </persona_environment>
 </persona>
@@ -863,6 +865,7 @@ Tom also wants security to be practical.  Tom shares the infrastructure team's v
   <contextual>None</contextual>
   <persona_environment name="Stroke" is_direct="FALSE" >
     <persona_role name="Developer" />
+    <persona_role name="Data Consumer" />
     <narrative>Nothing stipulated</narrative>
   </persona_environment>
 </persona>
