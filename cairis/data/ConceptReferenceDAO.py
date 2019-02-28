@@ -58,6 +58,7 @@ class ConceptReferenceDAO(CairisDAO):
       if found_cr is None:
         self.close()
         raise ObjectNotFoundHTTPError('The provided concept reference name')
+      del found_cr.theId
       return found_cr
     except ObjectNotFound as ex:
       self.close()
