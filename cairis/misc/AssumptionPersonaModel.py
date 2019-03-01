@@ -50,7 +50,7 @@ class AssumptionPersonaModel:
     if (dimName == 'persona'):
       self.theGraph.add_node(pydot.Node(objtName,shapefile=actorFile,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl,peripheries='0'))
     elif (dimName == 'persona_characteristic'):
-      self.theGraph.add_node(pydot.Node(objtName,shape='record',margin=0,fontname=self.fontName,style='filled',fillcolor='green',fontcolor='white',fontsize=self.fontSize,URL=objtUrl))
+      self.theGraph.add_node(pydot.Node(objtName,shape='record',margin=0,fontname=self.fontName,style='filled',fillcolor='green',fontcolor='black',fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'implied_characteristic'):
       self.theGraph.add_node(pydot.Node(objtName,shape='record',margin=0,fontname=self.fontName,style='filled',fillcolor='green',fontcolor='white',fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'rebuttal'):
