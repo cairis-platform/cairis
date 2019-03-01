@@ -31,7 +31,7 @@ class FindDAO(CairisDAO):
       objts = self.db_proxy.searchModel(search_string,[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1])
       new_props = []
       for objt in objts:
-        new_props.append(list(objt)) 
+        new_props.append({'theEnvironment' : objt[0], 'theDimension' : objt[1], 'theObject' : objt[2]}) 
       return new_props
     except ARMException as ex:
       self.close()

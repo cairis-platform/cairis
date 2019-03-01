@@ -51,7 +51,7 @@ $("#FindButton").click(function(e){
 });
 
 function appendSearchResults(searchResults){
-  $("#theResults").find('tbody').append('<tr class="' + searchResults[1].replace(" ","").toLowerCase() + '-rows"><td>' + searchResults[0] +'</td><td>' + searchResults[1] + '</td><td>' + searchResults[2] + '</td></tr>');
+  $("#theResults").find('tbody').append('<tr class="' + searchResults['theDimension'].replace(" ","").toLowerCase() + '-rows"><td>' + searchResults['theEnvironment'] +'</td><td>' + searchResults[1] + '</td><td>' + searchResults['theObject'] + '</td></tr>');
 }
 
 $(document).on('click', "tr.domainproperty-rows", function () {

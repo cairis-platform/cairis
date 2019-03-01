@@ -51,6 +51,6 @@ class FindAPITests(CairisDaemonTestCase):
       responseData = rv.data
     objts = jsonpickle.decode(responseData)
     self.assertIsNotNone(objts, 'No results after deserialization')
-    self.assertEqual(objts[0][0],'Psychosis')
-    self.assertEqual(objts[0][1],'Persona')
-    self.assertEqual(objts[0][2],'Claire')
+    self.assertEqual(objts[0]['theEnvironment'],'Psychosis')
+    self.assertEqual(objts[0]['theDimension'],'Persona')
+    self.assertEqual(objts[0]['theObject'],'Claire')
