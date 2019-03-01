@@ -133,7 +133,8 @@ class ArchitecturalPatternDAO(CairisDAO):
       fConn['theProtocol'] = cn[8]
       fConn['theAccessRight'] = cn[9]
       ap['theConnectors'].append(fConn)
-    ap['theAttackSurfaceMetric'] = list(cv.attackSurfaceMetric())
+    asm = cv.attackSurfaceMetric()
+    ap['theAttackSurfaceMetric'] = {'theInterfacesDER' : asm[0], 'theChannelsDER' : asm[1], 'theUntrustedSurfaceDER' : asm[2]}
     return ap
 
   def add_architectural_pattern(self,ap):

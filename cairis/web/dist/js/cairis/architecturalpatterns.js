@@ -55,15 +55,15 @@ function createArchitecturalPatternsTable(){
         textToInsert[i++] = '</td>';
 
         textToInsert[i++] = '<td class="architecturalpattern-rows" name="theInterfacesDER">';
-        textToInsert[i++] = item.theAttackSurfaceMetric[0];
+        textToInsert[i++] = item.theAttackSurfaceMetric['theInterfacesDER'];
         textToInsert[i++] = '</td>';
 
         textToInsert[i++] = '<td class="architecturalpattern-rows" name="theChannelsDER">';
-        textToInsert[i++] = item.theAttackSurfaceMetric[1];
+        textToInsert[i++] = item.theAttackSurfaceMetric['theChannelsDER'];
         textToInsert[i++] = '</td>';
 
         textToInsert[i++] = '<td class="architecturalpattern-rows" name="theUntrustedSurfaceDER">';
-        textToInsert[i++] = item.theAttackSurfaceMetric[2];
+        textToInsert[i++] = item.theAttackSurfaceMetric['theUntrustedSurfaceDER'];
         textToInsert[i++] = '</td>';
 
         textToInsert[i++] = '</tr>';
