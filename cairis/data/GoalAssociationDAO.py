@@ -43,7 +43,7 @@ class GoalAssociationDAO(CairisDAO):
     return assocList
 
   def get_goal_association(self, environment_name, goal_name, subgoal_name, deleteId=True):
-    assocs = self.db_proxy.goalModel(environment_name)
+    assocs = self.db_proxy.getGoalAssociations(environment_name)
     if assocs is None or len(assocs) < 1:
       self.close()
       raise ObjectNotFoundHTTPError('Goal Associations')
