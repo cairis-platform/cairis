@@ -1,0 +1,58 @@
+/*  Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+    Authors: Shamal Faily 
+    Based on Tony Galati's Absolute Centre Login Page with Bootstrap: https://codepen.io/OldManJava/pen/bwupj
+*/
+
+body{
+  background: #00589F;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00589F', endColorstr='#0073CF', GradientType=0);
+  background: -webkit-linear-gradient(to bottom, #00589F 50%, #0073CF) !important;
+  background: -moz-linear-gradient(to bottom, #00589F 50%, #0073CF) !important;
+  background: -ms-linear-gradient(to bottom, #00589F 50%, #0073CF) !important;
+  background: -o-linear-gradient(to bottom, #00589F 50%, #0073CF) !important;
+  background: linear-gradient(to bottom, #00589F 50%, #0073CF) !important;
+  color: white;
+}
+
+div.well{
+  height: 250px;
+} 
+
+.login {
+  margin: auto;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+}
+
+.login.is-Responsive {
+  width: 50%; 
+  height: 50%;
+  min-width: 200px;
+  max-width: 400px;
+  padding: 40px;
+}
+
+#logo-container{
+  margin: auto;
+  margin-bottom: 10px;
+  width: 100px; 
+  height: 100px;
+  background-size: contain;
+  background-image:url('../../assets/logo.svg');
+}
