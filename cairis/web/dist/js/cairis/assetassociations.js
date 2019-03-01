@@ -46,10 +46,9 @@ function createAssetAssociationsTable(){
       $(".theTable tr").not(function(){if ($(this).has('th').length){return true}}).remove();
       var textToInsert = [];
       var i = 0;
-      var di = 0;
 
-      $.each(data, function(count, item) {
-        assocs[di] = item;
+      for (var r = 0; r < data.length; r++) {
+        var item = data[r];
         textToInsert[i++] = "<tr>";
         var itemKey = item.theEnvironmentName + '/' + item.theHeadAsset + '/' + item.theTailAsset;
         textToInsert[i++] = '<td class="deleteAssetAssociationButton"><i class="fa fa-minus" value="' + itemKey + '"></i></td>';
@@ -71,7 +70,7 @@ function createAssetAssociationsTable(){
         textToInsert[i++] = '</td>';
 
         textToInsert[i++] = '<td class="assetassociation-rows" name="theHeadMultiplicity" value="' + itemKey + '">';
-        textToInsert[i++] = item.theHeadMultiplcity;
+        textToInsert[i++] = item.theHeadMultiplicity;
         textToInsert[i++] = '</td>';
 
         textToInsert[i++] = '<td class="assetassociation-rows" name="theHeadRole" value="' + itemKey + '">';
@@ -98,8 +97,7 @@ function createAssetAssociationsTable(){
         textToInsert[i++] = item.theTailAsset;
         textToInsert[i++] = '</td>';
         textToInsert[i++] = '</tr>';
-        di += 1;
-      });
+      }
       $.session.set("AssetAssociations",JSON.stringify(assocs));
       theTable.append(textToInsert.join(''));
 

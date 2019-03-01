@@ -60,7 +60,7 @@ class AssetAssociationDAO(CairisDAO):
       del ca.theTailDim
       cas[key] = ca
 
-    return cas
+    return cas.values()
 
   def add_asset_association(self, assoc):
     assocParams = ClassAssociationParameters(
