@@ -53,14 +53,15 @@ class AssetAssociationDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
+    assocs = []
     for key in cas:
       ca = cas[key]
       del ca.theId
       del ca.theHeadDim
       del ca.theTailDim
-      cas[key] = ca
+      assocs.append(ca)
 
-    return cas.values()
+    return assocs
 
   def add_asset_association(self, assoc):
     assocParams = ClassAssociationParameters(
