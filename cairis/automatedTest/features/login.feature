@@ -38,7 +38,7 @@ Feature: Login and Logout
     | incorrect | test      |  
     | incorrect | incorrect |  
 
-  Scenario: Logout
-    Given I have successfully authenticated with CAIRIS
-    When I click logout
-    Then I am returned to the landing page
+#  Scenario: Logout
+#    Given I have successfully authenticated with CAIRIS
+#    When I click logout
+#    Then I am returned to the landing page
