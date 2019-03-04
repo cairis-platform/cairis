@@ -50,7 +50,7 @@ def step_impl(context):
 
 @when('I click logout')
 def step_impl(context):
-  logout = context.browser.find_element_by_id('logoutClick')
+  logout = context.browser.find_element_by_xpath('//a[@href="/logout"]')
   logout.click()
 
 @then('I am returned to the landing page')
@@ -59,7 +59,7 @@ def step_impl(context):
 
 def LoggedIn(context):
   WaitForSpinningWheelOfDoom(context)
-  ClickButtonWithId(context, 'homeClick')
+  ClickButtonWithHref(context, '#')
 
 def OnLandingPage(context):
   WaitForVisibleById(context, 'email')

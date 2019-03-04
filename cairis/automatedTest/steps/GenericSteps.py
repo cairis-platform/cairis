@@ -37,12 +37,19 @@ def EnterCredentials(context, username, password):
   EnterText(usernameEl, username)
   EnterText(passwordEl, password)
 
+def ClickButtonWithHref(context, href):
+  button = FindElementByHref(context, href)
+  button.click()
+
 def ClickButtonWithId(context, id):
   button = FindElementById(context, id)
   button.click()
 
 def FindElementById(context, id):
   return context.browser.find_element_by_id(id)
+
+def FindElementByHref(context, href):
+  return context.browser.find_element_by_xpath('//a[@href="' + href + '"]')
 
 def EnterText(element, text):
   element.send_keys(text)
