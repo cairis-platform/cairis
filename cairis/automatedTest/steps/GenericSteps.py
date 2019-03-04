@@ -70,9 +70,9 @@ def WaitForInvisibleByClass(context, className):
 
 def WaitForVisibleStateByClass(context, className, displayState):
   if(displayState == True):
-    element = WebDriverWait(context.browser, 30, 0.5, (ElementNotVisibleException)).until(lambda x: x.find_element_by_class_name(className).is_displayed())
+    element = WebDriverWait(context.browser, 45, 0.5, (ElementNotVisibleException)).until(lambda x: x.find_element_by_class_name(className).is_displayed())
   else:
-    element = WebDriverWait(context.browser, 30, 0.5, (ElementNotVisibleException)).until_not(lambda x: x.find_element_by_class_name(className).is_displayed())
+    element = WebDriverWait(context.browser, 45, 0.5, (ElementNotVisibleException)).until_not(lambda x: x.find_element_by_class_name(className).is_displayed())
   return element
 
 def WaitForVisibleById(context, id):
@@ -83,7 +83,7 @@ def WaitForInvisibleById(context, id):
 
 def WaitForVisibleStateById(context, id, displayState):
   if(displayState == True):
-    element = WebDriverWait(context.browser, 30, 0.5, (ElementNotVisibleException)).until(lambda x: x.find_element_by_id(id).is_displayed())
+    element = WebDriverWait(context.browser, 45, 0.5, (ElementNotVisibleException)).until(lambda x: x.find_element_by_id(id).is_displayed())
   else:
-    element = WebDriverWait(context.browser, 30, 0.5, (ElementNotVisibleException)).until_not(lambda x: x.find_element_by_id(id).is_displayed())
+    element = WebDriverWait(context.browser, 45, 0.5, (ElementNotVisibleException)).until_not(lambda x: x.find_element_by_id(id).is_displayed())
   return element
