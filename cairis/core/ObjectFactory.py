@@ -119,7 +119,7 @@ def build(objtId,p):
   if (p.__class__.__name__ == 'ComponentViewParameters'):
     return ComponentView(objtId,p.name(),p.synopsis(),p.components(),p.connectors(),p.attackSurfaceMetric())
   if (p.__class__.__name__ == 'ValueTypeParameters'):
-    return ValueType(objtId,p.name(),p.description(),p.type(),p.score(),p.rationale())
+    return ValueType(objtId,p.name(),p.description(),p.type(),p.environment(),p.score(),p.rationale())
   if (p.__class__.__name__ == 'ClassAssociationParameters'):
     return ClassAssociation(objtId,p.environment(),p.headAsset(),p.headDimension(),p.headNavigation(),p.headType(),p.headMultiplicity(),p.headRole(),p.tailRole(),p.tailMultiplicity(),p.tailType(),p.tailNavigation(),p.tailDimension(),p.tailAsset(),p.rationale())
   if (p.__class__.__name__ == 'GoalAssociationParameters'):

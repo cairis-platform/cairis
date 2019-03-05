@@ -37,8 +37,8 @@ class ValueTypeTest(unittest.TestCase):
     self.iVtypes = d['vulnerability_type'] + d['threat_type']
     
   def testValueType(self):
-    ivt1 = ValueTypeParameters(self.iVtypes[0]["theName"], self.iVtypes[0]["theDescription"], self.iVtypes[0]["theType"])
-    ivt2 = ValueTypeParameters(self.iVtypes[1]["theName"], self.iVtypes[1]["theDescription"], self.iVtypes[1]["theType"])
+    ivt1 = ValueTypeParameters(self.iVtypes[0]["theName"], self.iVtypes[0]["theDescription"], self.iVtypes[0]["theType"],self.iVtypes[0]['theEnvironmentName'])
+    ivt2 = ValueTypeParameters(self.iVtypes[1]["theName"], self.iVtypes[1]["theDescription"], self.iVtypes[1]["theType"],self.iVtypes[1]['theEnvironmentName'])
     b = Borg()
     b.dbProxy.addValueType(ivt1)
     b.dbProxy.addValueType(ivt2)
