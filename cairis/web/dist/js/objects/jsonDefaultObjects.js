@@ -122,10 +122,10 @@ var environmentDefault = {
   "theOverridingEnvironment": ""
 };
 var vulnerabilityDefault = {
-  "theVulnerabilityName": "",
-  "theVulnerabilityType": "",
+  "theName": "",
+  "theType": "",
   "theTags": [],
-  "theVulnerabilityDescription": "",
+  "theDescription": "",
   "theEnvironmentProperties": []
 };
 var vulEnvironmentsDefault = {

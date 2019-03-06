@@ -50,13 +50,13 @@ function createVulnerabilityTable(){
 
         textToInsert[i++] = "<tr>"
 
-        textToInsert[i++] = '<td class="deleteVulnerabilityButton"><i class="fa fa-minus" value="' + item.theVulnerabilityName + '"></i></td>';
+        textToInsert[i++] = '<td class="deleteVulnerabilityButton"><i class="fa fa-minus" value="' + item.theName + '"></i></td>';
         textToInsert[i++] = '<td class="vulnerability-rows" name="theName">';
-        textToInsert[i++] = item.theVulnerabilityName;
+        textToInsert[i++] = item.theName;
         textToInsert[i++] = '</td>';
 
-        textToInsert[i++] = '<td class="vulnerability-rows" name="theVulnerabilityType">';
-        textToInsert[i++] = item.theVulnerabilityType;
+        textToInsert[i++] = '<td class="vulnerability-rows" name="theType">';
+        textToInsert[i++] = item.theType;
         textToInsert[i++] = '</td>';
 
 
@@ -100,12 +100,12 @@ function viewVulnerability(vulName) {
     url: serverIP + "/api/vulnerabilities/name/" + encodeURIComponent(vulName),
     success: function (newdata) {
       fillOptionMenu("fastTemplates/editVulnerabilityOptions.html", "#objectViewer", null, true, true, function () {
-        refreshDimensionSelector($('#theVulnerabilityType'),'vulnerability_type',undefined,function() {
-          $('#theVulnerabilityType').val(newdata.theVulnerabilityType);
+        refreshDimensionSelector($('#theType'),'vulnerability_type',undefined,function() {
+          $('#theType').val(newdata.theType);
         });
         $("#UpdateVulnerability").text("Update");
         $.session.set("Vulnerability", JSON.stringify(newdata));
-        $.session.set("VulnerabilityName", newdata.theVulnerabilityName);
+        $.session.set("VulnerabilityName", newdata.theName);
         $('#theTags').val(newdata.theTags.join(', '));
         newdata.theTags = [];
         $('#editVulnerabilityOptionsform').loadJSON(newdata, null);
@@ -137,7 +137,7 @@ $("#mainTable").on("click", "#addNewVulnerability", function () {
   var vul = jQuery.extend(true, {}, vulnerabilityDefault);
   $.session.set("Vulnerability", JSON.stringify(vul));
   fillOptionMenu("fastTemplates/editVulnerabilityOptions.html", "#objectViewer", null, true, true, function () {
-    refreshDimensionSelector($('#theVulnerabilityType'),'vulnerability_type');
+    refreshDimensionSelector($('#theType'),'vulnerability_type');
     $("#editVulnerabilityOptionsform").validator();
     $("#UpdateVulnerability").text("Create");
     $("#UpdateVulnerability").addClass("newVulnerability");
@@ -155,13 +155,13 @@ function viewIntroducedVulnerability(dirEntry) {
   var vul = jQuery.extend(true, {}, vulnerabilityDefault);
   $.session.set("Vulnerability", JSON.stringify(vul));
   fillOptionMenu("fastTemplates/editVulnerabilityOptions.html", "#objectViewer", null, true, true, function () {
-    refreshDimensionSelector($('#theVulnerabilityType'),'vulnerability_type');
+    refreshDimensionSelector($('#theType'),'vulnerability_type');
     $("#UpdateVulnerability").text("Create");
     $("#UpdateVulnerability").addClass("newVulnerability");
     $("#vulnerabilitiestabsID").hide();
-    $('#theVulnerabilityName').val(dirEntry.theLabel);
-    $('#theVulnerabilityType').val(dirEntry.theType);
-    $('#theVulnerabilityDescription').val(dirEntry.theName + ': ' + dirEntry.theDescription + "\nReference: " + dirEntry.theReference);
+    $('#theName').val(dirEntry.theLabel);
+    $('#theType').val(dirEntry.theType);
+    $('#theDescription').val(dirEntry.theName + ': ' + dirEntry.theDescription + "\nReference: " + dirEntry.theReference);
     $("#editVulnerabilityOptionsform").validator('update');
   });
 }
@@ -259,15 +259,15 @@ function commitVulnerability() {
     alert("Environments not defined");
   }
   else {
-    theVul.theVulnerabilityName = $("#theVulnerabilityName").val();
+    theVul.theName = $("#theName").val();
     if ($('#theTags').val() != '') {
       theVul.theTags = $('#theTags').val().split(',').map(function(t){return t.trim();});
     }
     else {
       theVul.theTags = [];
     }
-    theVul.theVulnerabilityDescription = $("#theVulnerabilityDescription").val();
-    theVul.theVulnerabilityType = $("#theVulnerabilityType").val();
+    theVul.theDescription = $("#theDescription").val();
+    theVul.theType = $("#theType").val();
 
     if($("#UpdateVulnerability").hasClass("newVulnerability")) {
       postVulnerability(theVul, function () {

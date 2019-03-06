@@ -548,10 +548,10 @@ class VulnerabilityEnvironmentPropertiesModel(object):
 class VulnerabilityModel(object):
   resource_fields = {
     obj_id_field: fields.String,
-    'theVulnerabilityName': fields.String,
-    'theVulnerabilityType': fields.String,
+    'theName': fields.String,
+    'theType': fields.String,
     'theTags': fields.List(fields.String),
-    'theVulnerabilityDescription': fields.String,
+    'theDescription': fields.String,
     'theEnvironmentProperties': fields.List(fields.Nested(VulnerabilityEnvironmentPropertiesModel.resource_fields))
   }
   required = list(resource_fields.keys())
