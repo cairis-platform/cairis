@@ -366,7 +366,8 @@ class ThreatAPITests(CairisDaemonTestCase):
       valueTypeId=-1,
       valueTypeName='Test threat type',
       valueTypeDescription='This is a test threat type',
-      vType='threat-type'
+      vType='threat-type',
+      vEnv='all'
     )
     new_type.theEnvironmentName = 'all'
     return new_type

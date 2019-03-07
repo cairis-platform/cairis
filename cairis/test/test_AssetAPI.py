@@ -319,7 +319,8 @@ class AssetAPITests(CairisDaemonTestCase):
                  valueTypeId=-1,
                  valueTypeName='Test asset type',
                  valueTypeDescription='This is a test asset type',
-                 vType='asset-type'
+                 vType='asset-type',
+                 vEnv='all'
                )
     new_type.theEnvironmentName = 'all'
     return new_type
