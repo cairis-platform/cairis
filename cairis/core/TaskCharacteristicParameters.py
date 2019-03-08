@@ -24,7 +24,7 @@ class TaskCharacteristicParameters(ObjectCreationParameters):
     ObjectCreationParameters.__init__(self)
     self.theTaskName = pName
     self.theModQual = modQual
-    self.theCharacteristic = cDesc
+    self.theName = cDesc
     self.theGrounds = pcGrounds
     self.theWarrant = pcWarrant
     self.theBacking = pcBacking
@@ -32,7 +32,7 @@ class TaskCharacteristicParameters(ObjectCreationParameters):
 
   def task(self): return self.theTaskName
   def qualifier(self): return self.theModQual
-  def characteristic(self): return self.theCharacteristic
+  def characteristic(self): return self.theName
   def grounds(self): return self.theGrounds
   def warrant(self): return self.theWarrant
   def backing(self): return self.theBacking

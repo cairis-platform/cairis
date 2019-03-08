@@ -80,7 +80,7 @@ class PersonaCharacteristicDAO(CairisDAO):
 
   def add_persona_characteristic(self, pc):
     try:
-      self.db_proxy.nameCheck(pc.theCharacteristic, 'persona_characteristic')
+      self.db_proxy.nameCheck(pc.theName, 'persona_characteristic')
     except ARMException as ex:
       self.close()
       raise ARMHTTPError(ex)
@@ -89,7 +89,7 @@ class PersonaCharacteristicDAO(CairisDAO):
       pName=pc.thePersonaName,
       modQual=pc.theModQual,
       vName=pc.theVariable,
-      cDesc=pc.theCharacteristic,
+      cDesc=pc.theName,
       pcGrounds=pc.theGrounds,
       pcWarrant=pc.theWarrant,
       pcBacking=[],
@@ -106,7 +106,7 @@ class PersonaCharacteristicDAO(CairisDAO):
       pName=pc.thePersonaName,
       modQual=pc.theModQual,
       vName=pc.theVariable,
-      cDesc=pc.theCharacteristic,
+      cDesc=pc.theName,
       pcGrounds=pc.theGrounds,
       pcWarrant=pc.theWarrant,
       pcBacking=[],
@@ -154,7 +154,7 @@ class PersonaCharacteristicDAO(CairisDAO):
         for real_pcr in real_pc.theGrounds:
           rs = self.db_proxy.getReferenceSynopsis(real_pcr[0])
           crs = CharacteristicReferenceSynopsis(rs.synopsis(),rs.dimension(),rs.actorType(),rs.actor())
-          rc = self.db_proxy.getReferenceContribution(real_pc.theCharacteristic,rs.reference())
+          rc = self.db_proxy.getReferenceContribution(real_pc.theName,rs.reference())
           frc = CharacteristicReferenceContribution(rc.meansEnd(),rc.contribution())
           pcr_list.append(CharacteristicReference(real_pcr[0],'grounds',real_pcr[1],real_pcr[2],crs,frc))
         real_pc.theGrounds = pcr_list
@@ -163,7 +163,7 @@ class PersonaCharacteristicDAO(CairisDAO):
         for real_pcr in real_pc.theWarrant:
           rs = self.db_proxy.getReferenceSynopsis(real_pcr[0])
           crs = CharacteristicReferenceSynopsis(rs.synopsis(),rs.dimension(),rs.actorType(),rs.actor())
-          rc = self.db_proxy.getReferenceContribution(real_pc.theCharacteristic,rs.reference())
+          rc = self.db_proxy.getReferenceContribution(real_pc.theName,rs.reference())
           frc = CharacteristicReferenceContribution(rc.meansEnd(),rc.contribution())
           pcr_list.append(CharacteristicReference(real_pcr[0],'warrant',real_pcr[1],real_pcr[2],crs,frc))
         real_pc.theWarrant = pcr_list
@@ -172,7 +172,7 @@ class PersonaCharacteristicDAO(CairisDAO):
         for real_pcr in real_pc.theRebuttal:
           rs = self.db_proxy.getReferenceSynopsis(real_pcr[0])
           crs = CharacteristicReferenceSynopsis(rs.synopsis(),rs.dimension(),rs.actorType(),rs.actor())
-          rc = self.db_proxy.getReferenceContribution(real_pc.theCharacteristic,rs.reference())
+          rc = self.db_proxy.getReferenceContribution(real_pc.theName,rs.reference())
           frc = CharacteristicReferenceContribution(rc.meansEnd(),rc.contribution())
           pcr_list.append(CharacteristicReference(real_pcr[0],'rebuttal',real_pcr[1],real_pcr[2],crs,frc))
         real_pc.theRebuttal = pcr_list
@@ -182,7 +182,7 @@ class PersonaCharacteristicDAO(CairisDAO):
       ps = None
       fcs = fake_pc.theCharacteristicSynopsis
       if (fcs['theSynopsis'] != ""):
-        ps = ReferenceSynopsis(-1,fake_pc.theCharacteristic,fcs['theSynopsis'],fcs['theDimension'],fcs['theActorType'],fcs['theActor'])
+        ps = ReferenceSynopsis(-1,fake_pc.theName,fcs['theSynopsis'],fcs['theDimension'],fcs['theActorType'],fcs['theActor'])
       rss = []
       rcs = []
       

@@ -26,7 +26,7 @@ class PersonaCharacteristicParameters(ObjectCreationParameters):
     self.thePersonaName = pName
     self.theModQual = modQual
     self.theVariable = vName
-    self.theCharacteristic = cDesc
+    self.theName = cDesc
     self.theGrounds = pcGrounds
     self.theWarrant = pcWarrant
     self.theBacking = pcBacking
@@ -35,7 +35,7 @@ class PersonaCharacteristicParameters(ObjectCreationParameters):
   def persona(self): return self.thePersonaName
   def qualifier(self): return self.theModQual
   def behaviouralVariable(self): return self.theVariable
-  def characteristic(self): return self.theCharacteristic
+  def characteristic(self): return self.theName
   def grounds(self): return self.theGrounds
   def warrant(self): return self.theWarrant
   def backing(self): return self.theBacking

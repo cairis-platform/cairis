@@ -1047,10 +1047,10 @@ function setTableHeader(activeTable){
       thead = "<th width='50px' id='addNewConceptReference'><i class='fa fa-plus floatCenter'></i></th><th>Concept Reference</th><th>Dimension</th>";
       break;
     case "PersonaCharacteristics":
-      thead = "<th width='50px' id='addNewPersonaCharacteristic'><i class='fa fa-plus floatCenter'></i></th><th>Persona</th><th>Variable</th><th>Characteristic</th>";
+      thead = "<th width='50px' id='addNewPersonaCharacteristic'><i class='fa fa-plus floatCenter'></i></th><th>Characteristic</th><th>Persona</th><th>Variable</th>";
       break;
     case "TaskCharacteristics":
-      thead = "<th width='50px' id='addNewTaskCharacteristic'><i class='fa fa-plus floatCenter'></i></th><th>Task</th><th>Characteristic</th>";
+      thead = "<th width='50px' id='addNewTaskCharacteristic'><i class='fa fa-plus floatCenter'></i></th><th>Characteristic</th><th>Task</th>";
       break;
     case "ArchitecturalPatterns":
       thead = "<th width='50px' id='addNewArchitecturalPattern'><i class='fa fa-plus floatCenter'></i></th><th>Model</th><th>Interfaces DER</th><th>Channels DER</th><th>Untrusted Surface DES</th>";

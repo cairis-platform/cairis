@@ -382,7 +382,7 @@ var personaCharacteristicDefault = {
   "thePersonaName" : "",
   "theModQual" : "",
   "theVariable" : "",
-  "theCharacteristic" : "",
+  "theName" : "",
   "theCharacteristicSynopsis" : referenceSynopsisDefault,
   "theGrounds" : [],
   "theWarrant" : [],
@@ -392,7 +392,7 @@ var personaCharacteristicDefault = {
 var taskCharacteristicDefault = {
   "theTaskName" : "",
   "theModQual" : "",
-  "theCharacteristic" : "",
+  "theName" : "",
   "theGrounds" : [],
   "theWarrant" : [],
   "theRebuttal" : [],

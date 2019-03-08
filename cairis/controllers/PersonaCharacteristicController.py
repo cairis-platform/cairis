@@ -66,7 +66,6 @@ class PersonaCharacteristicByNameAPI(Resource):
 
   def get(self, name):
     session_id = get_session_id(session, request)
-
     dao = PersonaCharacteristicDAO(session_id)
     found_pc = dao.get_persona_characteristic(name)
     dao.close()

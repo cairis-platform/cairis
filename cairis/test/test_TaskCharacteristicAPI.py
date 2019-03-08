@@ -47,7 +47,7 @@ class TaskCharacteristicAPITests(CairisDaemonTestCase):
       pName = 'Smart Device Integration',
       modQual = 'Maybe',
       cDesc = 'This is a test characteristic',
-      pcGrounds = [{"theReferenceName": "Acknowledge target device", "theDimensionName": "usecase", "theCharacteristicType": "grounds", "__python_obj__": "cairis.tools.PseudoClasses.CharacteristicReference", "theReferenceDescription": "A test grounds description"}],
+      pcGrounds = [{"theReferenceName": "Acknowledge target device", "theDimensionName": "usecase", "theCharacteristicType": "grounds", "theReferenceDescription": "A test grounds description"}],
       pcWarrant = [],
       pcRebuttal = [],
       pcBacking = [])
@@ -72,7 +72,7 @@ class TaskCharacteristicAPITests(CairisDaemonTestCase):
     self.assertGreater(len(tcs), 0, 'No task characteristics in the dictionary')
     self.logger.info('[%s] Task characteristics found: %d', method, len(tcs))
     tc = tcs[0]
-    self.logger.info('[%s] First task characteristic: %s\n', method, tc['theCharacteristic'])
+    self.logger.info('[%s] First task characteristic: %s\n', method, tc['theName'])
 
   def test_get_by_name(self):
     method = 'test_get_by_name'
@@ -86,7 +86,7 @@ class TaskCharacteristicAPITests(CairisDaemonTestCase):
     self.logger.debug('[%s] Response data: %s', method, responseData)
     tc = jsonpickle.decode(responseData)
     self.assertIsNotNone(tc, 'No results after deserialization')
-    self.logger.info('[%s] Task characteristic: %s\n', method, tc['theCharacteristic'])
+    self.logger.info('[%s] Task characteristic: %s\n', method, tc['theName'])
 
   def test_post(self):
     method = 'test_post_new'
@@ -105,7 +105,7 @@ class TaskCharacteristicAPITests(CairisDaemonTestCase):
   def test_put(self):
     method = 'test_put'
     self.new_tc_dict['object'].theExcerpt = 'Updated text segment'
-    url = '/api/task_characteristics/name/%s?session_id=test' % quote(self.new_tc.theCharacteristic)
+    url = '/api/task_characteristics/name/%s?session_id=test' % quote(self.new_tc.theName)
     rv = self.app.put(url, content_type='application/json', data=jsonpickle.encode(self.new_tc_dict))
     if (sys.version_info > (3,)):
       responseData = rv.data.decode('utf-8')
@@ -128,7 +128,7 @@ class TaskCharacteristicAPITests(CairisDaemonTestCase):
     self.logger.debug('[%s] Response data: %s', method, responseData)
     json_resp = json_deserialize(responseData)
 
-    url = '/api/task_characteristics/name/%s?session_id=test' % quote(self.new_tc.theCharacteristic)
+    url = '/api/task_characteristics/name/%s?session_id=test' % quote(self.new_tc.theName)
     rv = self.app.delete(url)
     if (sys.version_info > (3,)):
       responseData = rv.data.decode('utf-8')

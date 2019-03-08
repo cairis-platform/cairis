@@ -167,7 +167,7 @@ $('#fromTrelloModal').on('click','#ExportLists',function(){
           "thePersonaName" : pName,
           "theModQual" : "Perhaps",
           "theVariable" : variableName,
-          "theCharacteristic" : itemArray[0].trim(),
+          "theName" : itemArray[0].trim(),
           "theCharacteristicSynopsis" : referenceSynopsisDefault,
           "theGrounds" : [],
           "theWarrant" : [],

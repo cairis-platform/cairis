@@ -816,7 +816,7 @@ class PersonaCharacteristicModel(object):
     "thePersonaName": fields.String,
     "theModQual": fields.String,
     "theVariable": fields.String,
-    "theCharacteristic": fields.String,
+    "theName": fields.String,
     "theCharacteristicSynopsis": fields.Nested(CharacteristicReferenceSynopsis.resource_fields),
     "theGrounds": fields.List(fields.Nested(CharacteristicReference.resource_fields)),
     "theWarrant": fields.List(fields.Nested(CharacteristicReference.resource_fields)),
@@ -830,7 +830,7 @@ class TaskCharacteristicModel(object):
     obj_id_field: fields.String,
     "theTaskName": fields.String,
     "theModQual": fields.String,
-    "theCharacteristic": fields.String,
+    "theName": fields.String,
     "theGrounds": fields.List(fields.Nested(CharacteristicReference.resource_fields)),
     "theWarrant": fields.List(fields.Nested(CharacteristicReference.resource_fields)),
     "theRebuttal": fields.List(fields.Nested(CharacteristicReference.resource_fields))

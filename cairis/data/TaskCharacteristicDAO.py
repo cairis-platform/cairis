@@ -66,7 +66,7 @@ class TaskCharacteristicDAO(CairisDAO):
     tcParams = TaskCharacteristicParameters(
       pName=tc.theTaskName,
       modQual=tc.theModQual,
-      cDesc=tc.theCharacteristic,
+      cDesc=tc.theName,
       pcGrounds=tc.theGrounds,
       pcWarrant=tc.theWarrant,
       pcBacking=[],
@@ -82,7 +82,7 @@ class TaskCharacteristicDAO(CairisDAO):
     tcParams = TaskCharacteristicParameters(
       pName=tc.theTaskName,
       modQual=tc.theModQual,
-      cDesc=tc.theCharacteristic,
+      cDesc=tc.theName,
       pcGrounds=tc.theGrounds,
       pcWarrant=tc.theWarrant,
       pcBacking=[],
@@ -147,16 +147,16 @@ class TaskCharacteristicDAO(CairisDAO):
       tcr_list = []
       if len(fake_tc.theGrounds) > 0:
         for tcr in fake_tc.theGrounds:
-          tcr_list.append((tcr.theReferenceName,tcr.theReferenceDescription,tcr.theDimensionName))
+          tcr_list.append((tcr['theReferenceName'],tcr['theReferenceDescription'],tcr['theDimensionName']))
         fake_tc.theGrounds = tcr_list
       if len(fake_tc.theWarrant) > 0:
         tcr_list = []
         for tcr in fake_tc.theWarrant:
-          tcr_list.append((tcr.theReferenceName,tcr.theReferenceDescription,tcr.theDimensionName))
+          tcr_list.append((tcr['theReferenceName'],tcr['theReferenceDescription'],tcr['theDimensionName']))
         fake_tc.theWarrant = tcr_list
       if len(fake_tc.theRebuttal) > 0:
         tcr_list = []
         for tcr in fake_tc.theRebuttal:
-          tcr_list.append((tcr.theReferenceName,tcr.theReferenceDescription,tcr.theDimensionName))
+          tcr_list.append((tcr['theReferenceName'],tcr['theReferenceDescription'],tcr['theDimensionName']))
         fake_tc.theRebuttal = tcr_list
       return fake_tc

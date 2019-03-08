@@ -53,8 +53,8 @@ function createTaskCharacteristicsTable(){
         textToInsert[i++] = item.theTaskName;
         textToInsert[i++] = '</td>';
 
-        textToInsert[i++] = '<td class="taskcharacteristic-rows" name="theCharacteristic">';
-        textToInsert[i++] = item.theCharacteristic;
+        textToInsert[i++] = '<td class="taskcharacteristic-rows" name="theName">';
+        textToInsert[i++] = item.theName;
         textToInsert[i++] = '</td>';
 
         textToInsert[i++] = '</tr>';
@@ -110,7 +110,7 @@ $(document).on('click', "td.taskcharacteristic-rows", function () {
             $.session.set("TaskCharacteristic", JSON.stringify(data));
             taskSelect.val(data.theTaskName);
             $("#theModQual").val(data.theModQual);
-            $("#theCharacteristic").val(data.theCharacteristic);
+            $("#theName").val(data.theName);
      
             $("#theGrounds").find("tbody").empty();
             $.each(data.theGrounds,function(idx,item) {
@@ -152,10 +152,10 @@ $(document).on('click', "td.taskcharacteristic-rows", function () {
 var mainContent = $("#objectViewer");
 function commitTaskCharacteristic() {
   var tc = JSON.parse($.session.get("TaskCharacteristic"));
-  var oldName = tc.theCharacteristic;
+  var oldName = tc.theName;
   tc.theTaskName = $("#theTaskName").val();
   tc.theModQual = $("#theModQual").val();
-  tc.theCharacteristic = $("#theCharacteristic").val();
+  tc.theName = $("#theName").val();
 
   if($("#editTaskCharacteristicOptionsForm").hasClass("new")){
     postTaskCharacteristic(tc, function () {

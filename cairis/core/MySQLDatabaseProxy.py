@@ -688,7 +688,7 @@ class MySQLDatabaseProxy:
     objtRows = self.responseList('call getPersonaCharacteristicsSummary()',{},'MySQL error getting persona characteristics summary')
     rows = []
     for objtName, objtVar, objtChar in objtRows:
-      rows.append(ObjectSummary(objtName,variable=objtVar,characteristic=objtChar))
+      rows.append(ObjectSummary(objtChar,variable=objtVar,characteristic=objtName))
     return rows
 
 

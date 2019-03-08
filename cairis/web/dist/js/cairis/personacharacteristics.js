@@ -54,12 +54,12 @@ function createPersonaCharacteristicsTable(){
         textToInsert[i++] = item.theName;
         textToInsert[i++] = '</td>';
 
-        textToInsert[i++] = '<td class="personacharacteristic-rows" name="theVariable">';
-        textToInsert[i++] = item.theVariable;
-        textToInsert[i++] = '</td>';
-
         textToInsert[i++] = '<td class="personacharacteristic-rows" name="theCharacteristic">';
         textToInsert[i++] = item.theCharacteristic;
+        textToInsert[i++] = '</td>';
+
+        textToInsert[i++] = '<td class="personacharacteristic-rows" name="theVariable">';
+        textToInsert[i++] = item.theVariable;
         textToInsert[i++] = '</td>';
 
         textToInsert[i++] = '</tr>';
@@ -84,7 +84,7 @@ function createPersonaCharacteristicsTable(){
 
 $(document).on('click', "td.personacharacteristic-rows", function () {
   activeElement("objectViewer");
-  var name = $(this).closest("tr").find("td:eq(3)").text();
+  var name = $(this).closest("tr").find("td:eq(1)").text();
   refreshObjectBreadCrumb(name);
   $.ajax({
     type: "GET",
@@ -116,7 +116,7 @@ $(document).on('click', "td.personacharacteristic-rows", function () {
             personaSelect.val(data.thePersonaName);
             $("#theVariable").val(data.theVariable);
             $("#theModQual").val(data.theModQual);
-            $("#theCharacteristic").val(data.theCharacteristic);
+            $("#theName").val(data.theName);
      
             $("#theGrounds").find("tbody").empty();
             $.each(data.theGrounds,function(idx,item) {
@@ -161,11 +161,11 @@ $(document).on('click', "td.personacharacteristic-rows", function () {
 var mainContent = $("#objectViewer");
 function commitPersonaCharacteristic() {
   var pc = JSON.parse($.session.get("PersonaCharacteristic"));
-  var oldName = pc.theCharacteristic;
+  var oldName = pc.theName;
   pc.thePersonaName = $("#thePersonaName").val();
   pc.theVariable = $("#theVariable").val();
   pc.theModQual = $("#theModQual").val();
-  pc.theCharacteristic = $("#theCharacteristic").val();
+  pc.theName = $("#theName").val();
   pc.theCharacteristicSynopsis.theSynopsis = $('#theCharacteristicSynopsis').val();
   pc.theCharacteristicSynopsis.theDimension = $('#theCharacteristicSynopsisElementType').val();
 
@@ -188,7 +188,7 @@ function commitPersonaCharacteristic() {
 
 $(document).on('click', 'td.deletePersonaCharacteristicButton', function (e) {
   e.preventDefault();
-  var pName = $(this).closest('tr').find('td:eq(3)').text();
+  var pName = $(this).closest('tr').find('td:eq(1)').text();
   deletePersonaCharacteristic(pName, function () {
     $('#menuBCClick').attr('dimension','persona_characteristic');
     refreshMenuBreadCrumb('persona_characteristic');

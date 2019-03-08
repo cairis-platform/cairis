@@ -48,7 +48,7 @@ class PersonaCharacteristicAPITests(CairisDaemonTestCase):
       "thePersonaName" : "Rick",
       "theModQual" : "Maybe",
       "theVariable" : "Activities",
-      "theCharacteristic" : "This is a test characteristic",
+      "theName" : "This is a test characteristic",
       "theGrounds" : [{"theReferenceName": "Line manager site authorisation", "theDimensionName": "document", "theCharacteristicType": "grounds" , "theReferenceDescription": "Can only access sites they have been authorised to; permission for authorisation changes need to be sought from the line manager.","theReferenceSynopsis":{"theActor" : "Rick", "theActorType" : "persona", "theSynopsis" : "Holds authorisation", "theDimension" : "goal"}, "theReferenceContribution" : {"theMeansEnd" : "means", "theContribution" : "SomePositive"}}],
       "theWarrant" : [{"theReferenceDescription": "Work reports are filed and sent to ACME monthly.", "theDimensionName": "document", "theCharacteristicType": "warrant", "theReferenceName": "Work reports are filed","theReferenceSynopsis":{"theActor" : "Rick", "theActorType" : "persona", "theSynopsis" : "Reports filed", "theDimension" : "goal"}, "theReferenceContribution" : {"theMeansEnd" : "means", "theContribution" : "SomePositive"}}],
       "theRebuttal" : [{"theReferenceDescription": "Everything that happens is logged.", "theDimensionName": "document", "theCharacteristicType": "rebuttal", "theReferenceName": "Everything is logged","theReferenceSynopsis":{"theActor" : "Risk", "theActorType" : "persona", "theSynopsis" : "Event logged", "theDimension" : "goal"}, "theReferenceContribution" : {"theMeansEnd" : "means", "theContribution" : "SomePositive"}}],
@@ -76,7 +76,7 @@ class PersonaCharacteristicAPITests(CairisDaemonTestCase):
     self.assertGreater(len(pcs), 0, 'No persona characteristics in the dictionary')
     self.logger.info('[%s] Persona characteristics found: %d', method, len(pcs))
     pc = list(pcs.values())[0]
-    self.logger.info('[%s] First persona characteristic: %s', method, pc['theCharacteristic'])
+    self.logger.info('[%s] First persona characteristic: %s', method, pc['theName'])
 
   def test_get_all_summary(self):
     method = 'test_get_all_summary'
@@ -103,7 +103,7 @@ class PersonaCharacteristicAPITests(CairisDaemonTestCase):
     self.logger.debug('[%s] Response data: %s', method, responseData)
     pc = jsonpickle.decode(responseData)
     self.assertIsNotNone(pc, 'No results after deserialization')
-    self.logger.info('[%s] Persona characteristic: %s \n', method, pc['theCharacteristic'])
+    self.logger.info('[%s] Persona characteristic: %s \n', method, pc['theName'])
 
   def test_post(self):
     method = 'test_post_new'
@@ -121,7 +121,7 @@ class PersonaCharacteristicAPITests(CairisDaemonTestCase):
 
   def test_put(self):
     method = 'test_put'
-    self.new_pc_dict['object']['theCharacteristic'] = 'Updated text segment'
+    self.new_pc_dict['object']['theName'] = 'Updated text segment'
     url = '/api/persona_characteristics/name/%s?session_id=test' % quote('This is a test characteristic')
     rv = self.app.put(url, content_type='application/json', data=json.dumps(self.new_pc_dict))
     if (sys.version_info > (3,)):
