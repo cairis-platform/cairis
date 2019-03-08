@@ -73,8 +73,7 @@ class TemplateAssetDAO(CairisDAO):
       if found_ta is None:
         self.close()
         raise ObjectNotFoundHTTPError('The provided template asset')
-      del found_ta.theId
-      return found_ta
+      return self.simplify(found_ta)
     except ObjectNotFound as ex:
       self.close()
       raise ObjectNotFoundHTTPError('The provided template asset')
