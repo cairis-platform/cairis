@@ -41,24 +41,35 @@ class TemplateGoalDAO(CairisDAO):
     except ARMException as ex:
       self.close()
       raise ARMHTTPError(ex)
+    tgList = []
 
     for key in tgs:
       tg = tgs[key]
       del tg.theId
-      tgs[key] = tg
-    return tgs
+      tgList.append(tg)
+    return tgList
 
   def get_template_goal(self, template_goal_name):
-    tgs = self.get_template_goals()
-    if tgs is None or len(tgs) < 1:
+    try:
+      found_tg = None
+      tgId = self.db_proxy.getDimensionId(template_goal_name,'template_goal')
+      tgs = self.db_proxy.getTemplateGoals(tgId)
+      if tgs is not None:
+        found_tg = tgs.get(template_goal_name)
+      if found_tg is None:
+        self.close()
+        raise ObjectNotFoundHTTPError('The provided template goal')
+      del found_tg.theId
+      return found_tg
+    except ObjectNotFound as ex:
       self.close()
-      raise ObjectNotFoundHTTPError('Template Goals')
-    for key in tgs:
-      if (key == template_goal_name):
-        tg = tgs[key]
-        return tg
-    self.close()
-    raise ObjectNotFoundHTTPError('The provided template goal parameters')
+      raise ObjectNotFoundHTTPError('The provided template goal')
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+    except ARMException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
 
   def add_template_goal(self, tg):
     tgParams = TemplateGoalParameters(

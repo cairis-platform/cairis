@@ -91,10 +91,10 @@ class TemplateGoalAPITests(CairisDaemonTestCase):
       responseData = rv.data
     tgs = jsonpickle.decode(responseData)
     self.assertIsNotNone(tgs, 'No results after deserialization')
-    self.assertIsInstance(tgs, dict, 'The result is not a dictionary as expected')
-    self.assertGreater(len(tgs), 0, 'No template goals in the dictionary')
+    self.assertIsInstance(tgs, list, 'The result is not a list as expected')
+    self.assertGreater(len(tgs), 0, 'No template goals in the list')
     self.logger.info('[%s] Template goals found: %d', method, len(tgs))
-    tg = list(tgs.values())[0]
+    tg = tgs[0]
     self.logger.info('[%s] First template goal: %s \n', method, tg['theName'])
 
   def test_get_by_name(self):

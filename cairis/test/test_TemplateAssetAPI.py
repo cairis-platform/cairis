@@ -98,10 +98,10 @@ class TemplateAssetAPITests(CairisDaemonTestCase):
       responseData = rv.data
     tas = jsonpickle.decode(responseData)
     self.assertIsNotNone(tas, 'No results after deserialization')
-    self.assertIsInstance(tas, dict, 'The result is not a dictionary as expected')
-    self.assertGreater(len(tas), 0, 'No template assets in the dictionary')
+    self.assertIsInstance(tas, list, 'The result is not a list as expected')
+    self.assertGreater(len(tas), 0, 'No template assets in the list')
     self.logger.info('[%s] Template assets found: %d', method, len(tas))
-    ta = list(tas.values())[0]
+    ta = tas[0]
     self.logger.info('[%s] First template asset: %s \n', method, ta['theName'])
 
   def test_get_by_name(self):

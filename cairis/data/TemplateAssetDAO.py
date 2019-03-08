@@ -58,20 +58,32 @@ class TemplateAssetDAO(CairisDAO):
     except ARMException as ex:
       self.close()
       raise ARMHTTPError(ex)
+    tasList = []
     for key, value in list(tas.items()):
-      tas[key] = self.simplify(value)
-    return tas
+      tasList.append(self.simplify(value))
+    return tasList
 
   def get_template_asset(self, template_asset_name):
-    tas = self.get_template_assets()
-    if tas is None or len(tas) < 1:
+    try:
+      found_ta = None
+      taId = self.db_proxy.getDimensionId(template_asset_name,'template_asset')
+      tas = self.db_proxy.getTemplateAssets(taId)
+      if tas is not None:
+        found_ta = tas.get(template_asset_name)
+      if found_ta is None:
+        self.close()
+        raise ObjectNotFoundHTTPError('The provided template asset')
+      del found_ta.theId
+      return found_ta
+    except ObjectNotFound as ex:
       self.close()
-      raise ObjectNotFoundHTTPError('Template Assets')
-    for key in tas:
-      if (key == template_asset_name):
-        return tas[key]
-    self.close()
-    raise ObjectNotFoundHTTPError('The provided template asset parameters')
+      raise ObjectNotFoundHTTPError('The provided template asset')
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+    except ARMException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
 
   def add_template_asset(self, ta):
     taParams = TemplateAssetParameters(

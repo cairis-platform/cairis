@@ -92,10 +92,10 @@ class TemplateRequirementAPITests(CairisDaemonTestCase):
       responseData = rv.data
     trs = jsonpickle.decode(responseData)
     self.assertIsNotNone(trs, 'No results after deserialization')
-    self.assertIsInstance(trs, dict, 'The result is not a dictionary as expected')
-    self.assertGreater(len(trs), 0, 'No template requirements in the dictionary')
+    self.assertIsInstance(trs, list, 'The result is not a list as expected')
+    self.assertGreater(len(trs), 0, 'No template requirements in the list')
     self.logger.info('[%s] Template requirements found: %d', method, len(trs))
-    tr = list(trs.values())[0]
+    tr = trs[0]
     self.logger.info('[%s] First template requirement: %s \n', method, tr['theName'])
 
   def test_get_by_name(self):

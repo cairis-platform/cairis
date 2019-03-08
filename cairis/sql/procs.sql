@@ -19297,7 +19297,7 @@ begin
   then
     select tr.id, tr.name, ta.name, rt.name, tr.description, tr.rationale, tr.fit_criterion from template_requirement tr, template_asset ta, requirement_type rt where tr.type_id = rt.id and tr.asset_id = ta.id;
   else
-    select tr.id, tr.name, ta.name, rt.name, r.description, tr.rationale, tr.fit_criterion from template_requirement tr, template_asset ta, requirement_type rt where tr.id = constraintId and tr.type_id = rt.id and tr.asset_id = ta.id;
+    select tr.id, tr.name, ta.name, rt.name, tr.description, tr.rationale, tr.fit_criterion from template_requirement tr, template_asset ta, requirement_type rt where tr.id = constraintId and tr.type_id = rt.id and tr.asset_id = ta.id;
   end if;
 end
 //

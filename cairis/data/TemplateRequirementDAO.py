@@ -41,23 +41,35 @@ class TemplateRequirementDAO(CairisDAO):
     except ARMException as ex:
       self.close()
       raise ARMHTTPError(ex)
+    trsList = []
     for key in trs:
       tr = trs[key]
       del tr.theId
-      trs[key] = tr
-    return trs
+      trsList.append(tr)
+    return trsList
 
   def get_template_requirement(self, template_requirement_name):
-    trs = self.get_template_requirements()
-    if trs is None or len(trs) < 1:
+    try:
+      found_tr = None
+      trId = self.db_proxy.getDimensionId(template_requirement_name,'template_requirement')
+      trs = self.db_proxy.getTemplateRequirements(trId)
+      if trs is not None:
+        found_tr = trs.get(template_requirement_name)
+      if found_tr is None:
+        self.close()
+        raise ObjectNotFoundHTTPError('The provided template requirement')
+      del found_tr.theId
+      return found_tr
+    except ObjectNotFound as ex:
       self.close()
-      raise ObjectNotFoundHTTPError('Template Requirements')
-    for key in trs:
-      if (key == template_requirement_name):
-        tr = trs[key]
-        return tr
-    self.close()
-    raise ObjectNotFoundHTTPError('The provided template requirement parameters')
+      raise ObjectNotFoundHTTPError('The provided template requirement')
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+    except ARMException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+
 
   def add_template_requirement(self, tr):
     trParams = TemplateRequirementParameters(
