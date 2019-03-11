@@ -40,12 +40,12 @@ class CAIRISDatabaseConfigurationForm(np.ActionForm):
     self.theRootPassword = self.add(np.TitlePassword, name = "Database root password:", value = "")
     self.theTmpDir = self.add(np.TitleText, name = "Temp directory:", value = "/tmp")
     self.theRootDir = self.add(np.TitleText, name = "Root directory:", value = pathName + "cairis")
-    self.theImageDir = self.add(np.TitleText, name = "Default image directory:", value = ".")
+    self.theImageDir = self.add(np.TitleText, name = "Default image directory:", value = "/tmp")
     self.theFileName = self.add(np.TitleText, name = "CAIRIS configuration file name:", value = os.environ.get("HOME") + "/cairis.cnf")
     self.theWebPort = self.add(np.TitleText,name = "Web port:", value = "7071")
-    self.theLogLevel = self.add(np.TitleText,name = "Log level:", value = "warning");
-    self.theStaticDir = self.add(np.TitleText,name = "Static directory:", value = pathName + "cairis/web")
-    self.theAssetDir = self.add(np.TitleText,name = "Asset directory:", value = pathName + "cairis/web/assets")
+    self.theLogLevel = self.add(np.TitleText,name = "Log level:", value = "debug");
+    self.theStaticDir = self.add(np.TitleText,name = "Static directory:", value = pathName + "cairis/dist")
+    self.theAssetDir = self.add(np.TitleText,name = "Asset directory:", value = pathName + "cairis/dist")
     self.theUploadDir = self.add(np.TitleText,name = "Upload directory:", value = "/tmp")
     self.theUsername = self.add(np.TitleText, name = "Initial Username:", value = "")
     self.thePassword = self.add(np.TitlePassword, name = "Initial Password:", value = "")

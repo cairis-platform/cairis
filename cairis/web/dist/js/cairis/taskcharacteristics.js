@@ -50,11 +50,11 @@ function createTaskCharacteristicsTable(){
 
         textToInsert[i++] = '<td class="deleteTaskCharacteristicButton"><i class="fa fa-minus" value="' + item.theTaskName + '"></i></td>';
         textToInsert[i++] = '<td class="taskcharacteristic-rows" name="theName">';
-        textToInsert[i++] = item.theTaskName;
+        textToInsert[i++] = item.theName;
         textToInsert[i++] = '</td>';
 
-        textToInsert[i++] = '<td class="taskcharacteristic-rows" name="theName">';
-        textToInsert[i++] = item.theName;
+        textToInsert[i++] = '<td class="taskcharacteristic-rows" name="theTaskName">';
+        textToInsert[i++] = item.theTaskName;
         textToInsert[i++] = '</td>';
 
         textToInsert[i++] = '</tr>';
@@ -79,7 +79,7 @@ function createTaskCharacteristicsTable(){
 
 $(document).on('click', "td.taskcharacteristic-rows", function () {
   activeElement("objectViewer");
-  var name = $(this).closest("tr").find("td:eq(2)").text();
+  var name = $(this).closest("tr").find("td:eq(1)").text();
   refreshObjectBreadCrumb(name);
   $.ajax({
     type: "GET",
@@ -176,7 +176,7 @@ function commitTaskCharacteristic() {
 
 $(document).on('click', 'td.deleteTaskCharacteristicButton', function (e) {
   e.preventDefault();
-  var tName = $(this).closest('tr').find('td:eq(2)').text();
+  var tName = $(this).closest('tr').find('td:eq(1)').text();
   deleteTaskCharacteristic(tName, function () {
     $('#menuBCClick').attr('dimension','task_characteristic');
     refreshMenuBreadCrumb('task_characteristic');
