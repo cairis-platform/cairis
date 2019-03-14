@@ -18885,7 +18885,7 @@ end
 
 create procedure getComponentRequirements(in componentId int)
 begin
-  select tr.name,ctr.label from component_template_requirement ctr, template_requirement tr where ctr.component_id = componentId and ctr.template_requirement_id = tr.id order by 2;
+  select tr.name from component_template_requirement ctr, template_requirement tr where ctr.component_id = componentId and ctr.template_requirement_id = tr.id order by 1;
 end
 //
 

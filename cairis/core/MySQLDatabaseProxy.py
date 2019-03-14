@@ -720,6 +720,8 @@ class MySQLDatabaseProxy:
       return self.theDimNameLookup[dimensionName]
     if dimensionTable == 'linkand':
       dimensionTable = 'goalassociation'
+    if dimensionTable == 'security_pattern':
+      dimensionTable = 'securitypattern'
     try:
       session = self.conn()
       sqlText = ''

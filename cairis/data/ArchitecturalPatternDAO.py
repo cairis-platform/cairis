@@ -194,6 +194,8 @@ class ArchitecturalPatternDAO(CairisDAO):
       for cs in c["theStructure"]:
         cStructs.append((cs["theHeadAsset"],cs["theHeadAdornment"],cs["theHeadNav"],cs["theHeadNry"],cs["theHeadRole"],cs["theTailRole"],cs["theTailNry"],cs["theTailNav"],cs["theTailAdornment"],cs["theTailAsset"]))
       cReqs = []
+      for i in c['theRequirements']:
+        cReqs.append(i)
       cGoals = []
       for i in c["theGoals"]:
         cGoals.append(i)

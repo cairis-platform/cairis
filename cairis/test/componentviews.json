@@ -106,6 +106,7 @@
             "theTailAdornment" : "Association",
             "theTailAsset" : "Access Request"} 
          ],
+         "theRequirements" : [],
          "theGoals" : ["Qualified data use","Usage Request"],
          "theGoalAssociations" : [
            {"theGoalName" : "Qualified data use",
@@ -135,6 +136,7 @@
             "theTailAdornment" : "Association",
             "theTailAsset" : "Access Request"} 
          ],
+         "theRequirements" : [],
          "theGoals" : [],
          "theGoalAssociations" : []
        }
