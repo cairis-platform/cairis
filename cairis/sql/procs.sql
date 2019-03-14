@@ -20434,11 +20434,7 @@ end
 
 create procedure componentGoalAssociations(in cId int)
 begin
-  select hg.name,rt.name,tg.name,ga.rationale from template_goal hg, template_goal tg, reference_type rt, component_goalgoal_goalassociation ga where ga.component_id = cId and ga.goal_id = hg.id and ga.subgoal_id = tg.id and ga.ref_type_id = rt.id
-  union
-  select hg.name,'responsible',tg.name,'None' from template_goal hg, role tg, component_goalgoal_goalassociation ga, template_goal_responsibility tgr where ga.component_id = cId and tgr.template_goal_id = hg.id and tgr.role_id = tg.id and tgr.template_goal_id = ga.goal_id
-  union
-  select hg.name,'responsible',tg.name,'None' from template_goal hg, role tg, component_goalgoal_goalassociation ga, template_goal_responsibility tgr where ga.component_id = cId and tgr.template_goal_id = hg.id and tgr.role_id = tg.id and tgr.template_goal_id = ga.subgoal_id;
+  select hg.name,rt.name,tg.name,ga.rationale from template_goal hg, template_goal tg, reference_type rt, component_goalgoal_goalassociation ga where ga.component_id = cId and ga.goal_id = hg.id and ga.subgoal_id = tg.id and ga.ref_type_id = rt.id;
 end
 //
 
@@ -20486,7 +20482,7 @@ end
 create procedure add_template_goal_responsibility(goalId int, roleName text)
 begin
   declare roleId int;
-  select id into roleId from role where name = roleName;
+  select id into roleId from role where name = roleName limit 1;
   insert into template_goal_responsibility(template_goal_id,role_id) values (goalId,roleId);
 end
 //

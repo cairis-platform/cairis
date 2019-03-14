@@ -79,7 +79,7 @@
        "theDefinition" : "Access requestors shall specify how they will use the data they are requesting.",
        "theRationale" : "Application data",
        "theConcerns" : [],
-       "theResponsibilities" : []}
+       "theResponsibilities" : ["Developer of webinos Apps"]}
   ],
   "architectural_patterns" : [
      {"theName" : "Context Policy Management",
