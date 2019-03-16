@@ -23,17 +23,9 @@ Adding a new environment
    The short-code is used to prefix requirement ids associated with an
    environment.
 
-.. raw:: html
-
-    <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; height: auto;">
-        <iframe src="https://www.youtube.com/embed/3okEga7dVyQ" frameborder="0" allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
-    </div>
-
 -  If this environment is to be a composite environment, i.e. encompass
-   artifacts of other environments, then right click on the environment
-   list, select Add from the speed menu, and select the environment/s to
-   add.
-
+   artifacts of other environments, then click on the Add button the environment table, and select the environment to add.
+   
 -  It is possible an artifact may appear in multiple environments within a
    composite environment. It is, therefore, necessary to set duplication
    properties for composite environments. If the maximise radio button

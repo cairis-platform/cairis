@@ -45,10 +45,15 @@ If you run cimport.py with the --help argument, you will see more detailed impor
 Exporting models
 ----------------
 
-To export a model, select the System / Export Model option.  This will render the current CAIRIS database you are working with as a CAIRIS XML model (conforming to cairis_model.dtd).
+.. figure:: ExportModel.jpg
+   :alt: export model form
+
+To export a model, select the System / Export Model option.  Exporting the current model renders the current CAIRIS database you are working with as a CAIRIS XML model (conforming to cairis_model.dtd).
+You can also export a selected architectural pattern, or a GRL model for a selected environment and task; this GRL can be imported into jUCMNav.
 
 Like cimport.py, there is also a command line export script - cexport.py
  
 .. code-block:: bash
 
-   ./cexport.py --user=test --database=test_default --type all /tmp/acme.xml
+   ./cexport.py --user=test --database=test_default --type all /tmp/model.xml
+   
