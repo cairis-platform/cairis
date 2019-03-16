@@ -45,18 +45,13 @@ Adding, updating, and deleting a goal
 -  Click on the Add button to open the Goal form, and enter the
    name of the goal.
 
--  Click on the Add button in the environment table, and select an environment to situate the goal in. This will add the new environment to the environment list.
+-  Click on the Add button in the environment card, and select an environment to situate the goal in. This will add the new environment to the environment tab.
 
--  In the Definition page, enter the goal definition, and select the
+-  In the Definition folder, enter the goal definition, and select the
    goal category and priority. Possible goal categories are: Achieve,
    Maintain, Avoid, Improve, Increase, Maximise, and Minimise. Possible
-   priority values are Low, Medium, and High.
-
--  Click on the Fit Criterion folder, and enter the criteria which must
-   hold for the goal to be satisfied.
-
--  Click on the Issue tab and enter any issues or comments relating to
-   this goal.
+   priority values are Low, Medium, and High.  Enter the fit criteria which must hold
+   for this goal to be satisfied, and any issues or comments relating to this goal.
 
 .. figure:: AddGoalRefinement.jpg
    :alt: Add Goal Refinement form
@@ -81,7 +76,7 @@ Adding, updating, and deleting a goal
    specifically tasks, requirements, obstacles, and domain properties.
 
 -  Goal refinements can also be specified independently of goal creation
-   or modification via the Goal Associations tool-bar button.
+   or modification via the Requirements / KAOS Associations menu.
 
 -  If any aspect of the goal concerns one or more assets, then these can
    be added by clicking on the Concerns folder and adding the asset/s to
@@ -149,7 +144,7 @@ Adding, updating, and deleting an obstacle
 -  Click on the Requirements/Obstacle menu to open the Obstacles table
    box, and click on the Add button to open the Obstacle dform.
 
--  Enter the name of the obstacle, and click on the Add button in the environment table, and select an environment to situate the obstacle in. This will add the new environment to the environment list.
+-  Enter the name of the obstacle, and click on the Add button in the environment card, and select an environment to situate the obstacle in. This will add the new environment to the environment list.
 
 -  In the Definition page, enter the obstacle definition, and select the
    obstacle category. Possible obstacle categories are: Confidentiality
