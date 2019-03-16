@@ -47,8 +47,8 @@ Adding, updating, and deleting an asset
    maximised until the mitigations render the likelihood of the threat
    or the severity of the vulnerability inert.
 
--  Click on the Add button in the asset table, and select an environment to situate the asset in. This will add
-   the new environment to the environment list.
+-  Click on the Add button in the environment card, and select an environment to situate the asset in. This will add
+   the new environment to the environment tab.
 
 -  After ensuring the environment is selected in the environment table,
    add the security properties to this asset for this environment.
@@ -58,20 +58,13 @@ Adding, updating, and deleting an asset
 
 -  Click on the Create button to add the new asset.
 
-.. raw:: html
-
-    <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; height: auto;">
-        <iframe src="https://www.youtube.com/embed/h5uQaMnuLbI" frameborder="0" allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
-    </div>
-
-
 -  Existing assets can be modified by double clicking on the asset in
-   the Assets dialog box, making the necessary changes, and clicking on
+   the Risks/Assets table, making the necessary changes, and clicking on
    the Update button.
 
 -  To delete an asset, select the asset to delete in the assets table
-   box, and select the Delete button. If any artifacts are dependent on
-   this asset then a dialog box stating these dependencies are
+   , and select the Delete button. If any artifacts are dependent on
+   this asset then a modal dialog stating these dependencies are
    displayed. The user has the option of selecting Yes to remove the
    asset dependencies and the asset itself, or No to cancel the
    deletion.
@@ -124,7 +117,7 @@ Adding an asset association
   From this form, you can add details about the nature of the association between the asset you're working on and another [tail] asset.
   Once you click on Update, the association will be added to your working object, but won't be committed to the model until you click on the Update/Create button.
 
-Although not possible from the GUI, it *is* possible to add associations between assets directly in a CAIRIS model file without first defining security or privacy properties for the asset in the model file.  If you do this, all the security and privacy properties for the asset are set to None and the rationale of ``Implicit`` is set for each property.
+Although not possible from the UI, it *is* possible to add associations between assets directly in a CAIRIS model file without first defining security or privacy properties for the asset in the model file.  If you do this, all the security and privacy properties for the asset are set to None and the rationale of ``Implicit`` is set for each property.
 
 Viewing Asset models
 ~~~~~~~~~~~~~~~~~~~~
@@ -141,13 +134,6 @@ By default, concern associations are hidden.  These are UML comment nodes that i
 These concerns can be shown by changing the Hide Concerns combo box value to Yes.
 
 By clicking on a model element, information about that artifact can be viewed.
-
-
-.. raw:: html
-
-    <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; height: auto;">
-        <iframe src="https://www.youtube.com/embed/zSo4RNUXCmw" frameborder="0" allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
-    </div>
 
 For details on how to print asset models as SVG files, see :doc:`Generating Documentation </gendoc>`.
 

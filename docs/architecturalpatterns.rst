@@ -20,10 +20,7 @@ Editing Architectural Patterns
 
 -  Enter the name for the architectural pattern and provided a synopsis for the pattern.
 
--  Select the Components folder, and click on the Add button to open the Component form.
-
-.. figure:: ComponentForm.jpg
-   :alt: Component form
+-  Select the Component tab, lick on the Add button to add a new Component folder for the component being created.
 
 -  Enter a name for component.
 
@@ -85,7 +82,7 @@ Components in this model are shaded red based on the component attack surface,  
 .. figure:: ComponentAssetModel.jpg
    :alt: Component Asset Model
 
-It is also possible to view asset and goal models associated with a component in an architectural pattern by right clicking on the component in the architectural patterns component table, and select the *View Assets* or *View Goals* respectively.
+It is also possible to view asset and goal models associated with a component in an architectural pattern by clicking on the Models/Component Asset and Models/Component Goal respectively.
 
 Situating a pattern
 --------------------------
@@ -93,4 +90,4 @@ Situating a pattern
 .. figure:: WeaknessAnalysis.jpg
    :alt: weakness analysis
 
--  To introduce an architectural pattern into the working project, Right click on the architectural pattern in the architectural patterns table, select *Weakness Analysis*, followed by the environment to situate the pattern in.  A weakness analysis dialog is displayed, which summarises the threats and vulnerabilities that will become associated with the pattern, the impact to persona task scores, and obstacles mitigated by goals introduced by the pattern.  Clicking on the Situate button introduces the patterns template goals, requirements, and assets as standard goals, requirements, and assets respectively.
+-  To introduce an architectural pattern into the working project, click on the situate button next to the desired architectural pattern in the architectural patterns table, followed by the environment to situate the pattern in.  A weakness analysis dialog is displayed, which summarises the threats and vulnerabilities that will become associated with the pattern, the impact to persona task scores, and obstacles mitigated by goals introduced by the pattern.  Clicking on the Ok button introduces the patterns template goals, requirements, and assets as standard goals, requirements, and assets respectively.
