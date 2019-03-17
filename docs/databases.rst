@@ -12,10 +12,10 @@ Using other databases
 
 There might be times when it might be helpful to setup multiple databases.  For example, the live demo on https//demo.cairis.org has two exemplar databases that people can interact with to see different examples of CAIRIS projects.
 
-To create a new database, select the System/New Database menu, and enter the name for a new database.  After a few moments, a new database will be created and your CAIRIS application will point to this database.  Any databases you create will be visible only to your account.
+To create a new database, select the System/Databases menu, click on the Add button in the databases table, and enter the name for a new database.  After a few moments, a new database will be created and your CAIRIS application will point to this database.  Any databases you create will be visible only to your account.
 
-To open another database, select the System/Open Database menu, and select the name of an existing database.  After a few moments, your CAIRIS application will point to the chosen database.
+To open another database, select the System/Databases menu, and click on the table row corresponding with the name an existing database.   After a few moments, your CAIRIS application will point to the chosen database.
 
-You can delete a database by selecting the System/Delete Database option, and selecting the name of the database you want to remove.  You cannot delete the database you currently have open.
+You can delete a database by selecting the System/Databases menu, and clicking on the Delete button next to the database you want to remove.  You cannot delete the database you currently have open.
 
-To empty the contents of any database, select the System/Clear Database menu.
+To empty the contents of a currently open database, select the Systems/Databases menu and click on the Clear Current button.

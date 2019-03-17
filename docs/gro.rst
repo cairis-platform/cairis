@@ -45,18 +45,13 @@ Adding, updating, and deleting a goal
 -  Click on the Add button to open the Goal form, and enter the
    name of the goal.
 
--  Click on the Add button in the environment table, and select an environment to situate the goal in. This will add the new environment to the environment list.
+-  Click on the Add button in the environment card, and select an environment to situate the goal in. This will add the new environment to the environment tab.
 
--  In the Definition page, enter the goal definition, and select the
+-  In the Definition folder, enter the goal definition, and select the
    goal category and priority. Possible goal categories are: Achieve,
    Maintain, Avoid, Improve, Increase, Maximise, and Minimise. Possible
-   priority values are Low, Medium, and High.
-
--  Click on the Fit Criterion folder, and enter the criteria which must
-   hold for the goal to be satisfied.
-
--  Click on the Issue tab and enter any issues or comments relating to
-   this goal.
+   priority values are Low, Medium, and High.  Enter the fit criteria which must hold
+   for this goal to be satisfied, and any issues or comments relating to this goal.
 
 .. figure:: AddGoalRefinement.jpg
    :alt: Add Goal Refinement form
@@ -81,7 +76,7 @@ Adding, updating, and deleting a goal
    specifically tasks, requirements, obstacles, and domain properties.
 
 -  Goal refinements can also be specified independently of goal creation
-   or modification via the Goal Associations tool-bar button.
+   or modification via the Requirements / KAOS Associations menu.
 
 -  If any aspect of the goal concerns one or more assets, then these can
    be added by clicking on the Concerns folder and adding the asset/s to
@@ -149,14 +144,14 @@ Adding, updating, and deleting an obstacle
 -  Click on the Requirements/Obstacle menu to open the Obstacles table
    box, and click on the Add button to open the Obstacle dform.
 
--  Enter the name of the obstacle, and click on the Add button in the environment table, and select an environment to situate the obstacle in. This will add the new environment to the environment list.
+-  Enter the name of the obstacle, and click on the Add button in the environment card, and select an environment to situate the obstacle in. This will add the new environment to the environment list.
 
 -  In the Definition page, enter the obstacle definition, and select the
    obstacle category. Possible obstacle categories are: Confidentiality
    Threat, Integrity Threat, Availability Threat, Accountability Threat,
    Vulnerability, Duration, Frequency, Demands, and Goal Support.
 
--  In the Probability page, enter a double-precision probability value (if known), together with a rationale statement justifying the value.
+-  Enter a double-precision probability value (if known), together with a rationale statement justifying the value.
 
 -  Like goals, obstacle refinements can be added via the Goals and
    Sub-Goals tabs.
@@ -206,17 +201,17 @@ For details on how to print obstacle models as SVG files, see :doc:`Generating D
 Adding, updating, and deleting requirements
 -------------------------------------------
 
-.. figure:: RequirementsTable.jpg
-   :alt: Requirements table
+.. figure:: RequirementForm.jpg
+   :alt: Requirements form 
 
-Requirements are added and edited using the Requirements Editor, which is accessible by selecting the Requirements/Requirements menu option. Each requirement is associated with an asset, or an
+Requirements are accessible by selecting the Requirements/Requirements menu option. Each requirement is associated with an asset, or an
 environment. Requirements associated with assets may specify the asset,
 constrain the asset, or reference it in some way. Requirements
 associated with an environment are considered transient, and remain
 associated with an environment only until appropriate assets are
 identified.
 
--  To add a requirement, select the asset or environment to associate the requirement with, and click on the Add button.  A new requirement will appear at the foot of the requirements table.
+-  To add a requirement, click on the Add button in the requirements table.
 
 -  Enter the requirement description, rationale, fit criterion, and
    originator in the appropriate cells, select the priority (1,2, 3),
@@ -224,15 +219,9 @@ identified.
    Performance, Operational, Maintainability, Portability, Security,
    Cultural and Political, and Legal).
 
--  When the attributes have been entered, press Enter to commit the requirement to the database.
+-  When the attributes have been entered, click on the Create button to add the requirement.
 
--  By changing the asset in the Assets combo box, or the Environment in
-   the Environments combo box, the editor will be reloaded with the
-   requirement associated with the selected asset or environment.
-
--  A requirement can be deleting by right clicking on any cell in the row to be removed, and selecting Remove from the speed menu. Deleting a requirement also has the effect of re-ordering the requirement labels.
-
--  A requirement can be reassociated with another asset or environment by right clicking on any cell in the requirement to be updated, and selecting Move from the speed menu.  In the modal dialog, select whether the requirement is to be moved to an asset or environment, and the name of the asset or environment.  Moving a requirement also has the effect of re-ordering the requirement labels.
+-  In the requirements table, a requirement can be deleting by clicking on the delete button.
 
 
 Visualising Requirements Quality using Chernoff Faces

@@ -32,16 +32,6 @@ Adding, updating, and deleting a role
 -  Click on the Create button to Add the new role to the CAIRIS
    database.
 
-.. raw:: html
-
-    <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; height: auto;">
-        <iframe src="https://www.youtube.com/embed/eEqr2X_mvGM" frameborder="0" allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
-    </div>
-
--  As responses and countermeasures are assigned to roles, the Role
-   form is automatically updated to reflect these new dependencies.
-   These dependencies can not be modified from the Role dialog.
-
 -  Existing roles can be modified by clicking on the role in the
    roles table, making the necessary changes, and clicking on the
    Update button.
@@ -92,11 +82,6 @@ Adding, updating, or deleting a persona
    description, and selecting a image to represent the persona. Please note that the image itself is NOT
    imported into the database, only the file path to the picture.  The image will be uploaded to the directory corresponding with the upload_dir value in cairis.cnf.  Persona images are loaded from the directory stipulated by the default_image_dir value in cairis.cnf.
 
--  If the persona is not derived from empirical data, then select the
-   Asssumption Persona check-box. Ticking this box has the effect of
-   pre-fixing the persona name with the << assumption >> stereotype in
-   any models where the persona is present.
-
 -  Click on the Activities tab and enter the activities carried out by
    the personas.
 
@@ -123,12 +108,12 @@ Adding, updating, or deleting a persona
    can be added by clicking on avatar box next to the persona
    properties notebook, to select an image to associated with the persona.
 
--  Click on the Environment table, and choose and environment to situate the persona in.
-   This will add the new environment to the environment list, and open up a new folder for
+-  Click on the Environment card, and click on the Add button to situate the persona in an environment.
+   Selecting an environment from the modal will open up a new folder for
    information about persona roles, and an environment specific narrative.
 
 -  After ensuring the environment is selected in the environment window,
-   click on the Roles tab. Select the Direct Persona
+   click on the Roles tab. Select the Direct User 
    check-box if the persona is a direct stakeholder with respect to the
    system being defined, and add roles fulfilled by the persona in the
    Roles list-box. These roles can be added by clicking on the add button in the role table,
@@ -141,16 +126,8 @@ Adding, updating, or deleting a persona
 
 -  Click on the Create button to add the new persona.
 
-.. raw:: html
-
-    <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; height: auto;">
-        <iframe src="https://www.youtube.com/embed/2FKE2rXoF4A" frameborder="0" allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
-    </div>
-
-
-
 -  Existing personas can be modified by clicking on the persona
-   in the Personas table, making the necessary changes, and
+   in the UX/Personas table, making the necessary changes, and
    clicking on the Update button.
 
 -  To delete a persona, click on the delete button next to persona to be removed
@@ -178,20 +155,20 @@ Recording persona assumptions
    Enter a name that summarises the assumption made, and select
    Select the external document from the Document combobox box to indicate the document that the assumption is taken from, and enter details of the person who elicited the assumption in the Contributor text box.  Finally, in the Excerpt box, enter the extract of text from the external document from which the assumption is based.
 
--  From the Persona Characteristics dialog box, click on Add to add a new characteristic.
+-  Select the UX/Persona Characteristics menu, and click on the Add button.
 
+.. figure:: PersonaCharacteristicForm.jpg
+   :alt: Persona characteristic form
 
--  From the General folder, click on the Characteristic tab, and select the Persona and behavioural variable that this characteristic will be associated with.  Enter a description of the characteristic and a *Model Qualifier*; this word describes your confidence in the validity of the characteristic. Possible qualifiers might include *always*, *usually*, or *perhaps*.
+-  From the Characteristic folder, enter a definition that summarises the characteristic, and select the Persona and behavioural variable that this characteristic will be associated with.  Enter a *Model Qualifier*; this word describes your confidence in the validity of the characteristic. Possible qualifiers might include *always*, *usually*, or *perhaps*.
 
--  Click on the Grounds tab to open the list of Grounds for this
-   characteristic. The grounds are evidence which support the validity
-   of the characteristic. Click on the Add button to add a new Document Reference. Select the document reference, and a short description of the grounds proposition. Clicking Save will add the new document reference to the grounds list.
+-  In the Grounds table, click on the Add button to add a grounds for the characteristic.
+   The grounds are evidence which support the validity
+   of the characteristic. Click on the Add button to add a new Document Reference. Select the document reference; a read-only description of this document reference will also be shown. Clicking Ok will add the new document reference to the grounds list.
 
--  Click on the Warrant tab to open the list of Warrants for this
-   characteristic. The warrants are inference rules which links the
-   grounds to the characteristic. The procedure for adding warrants is
-   identical to the process for adding grounds. After adding a warrant,
-   however, a Backing entry for the warrant is automatically added.
+-  Repeat the above procedure for *Warrants* and * Rebuttals*.
+   Warrants are inference rules which link the grounds to the characteristic.
+   Rebuttals are counterarguments for the characteristic.
 
 -  If you wish to add a Rebuttal -- a counterargument for the
    characteristic -- then click on the Rebuttals tab and add a rebuttal
@@ -200,7 +177,7 @@ Recording persona assumptions
 -  Click on the Create button to create the new characteristic.
 
 -  Existing characteristics can be modified by double clicking on the
-   characteristics in the Persona Characteristic dialog box, making the
+   characteristics in the persona characteristics table, making the
    necessary changes, and clicking on the Update button.
 
 Automating persona creation

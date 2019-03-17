@@ -13,7 +13,7 @@ Adding, updating, or deleting a use cases
 
 -  Enter a use case name, a short code, details of the author, and -- in the Description folder -- the objective of carrying out the use case.  In the Actors folder, you should also add one or more roles that constitute the actors for this use case.
 
--  Click on the Add button in the environment table, and select an environment to situate the use case in. This will add the new environment to the environment list.
+-  Click on the Add button in the environment card, and select an environment to situate the use case in. This will add the new environment to the environment list.
 
 -  In the Preconditions folder, enter any pre-conditions that need to hold in this context of use before the use case begins.
 

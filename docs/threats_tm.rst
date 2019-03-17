@@ -25,7 +25,7 @@ created by selecting the Options/Threat Types menu option.
 -  Enter the threat name, the method taken by an attacker to release the
    threat, and select the threat type.
 
--  Click on the Add button in the environment table, and select an environment to situate the threat in. This will add the new environment to the environment list.
+-  Click on the Add button in the environment card, and select an environment to situate the threat in. This will add the new environment to the environment list.
 
 -  Select the threat's likelihood for this environment
 
@@ -95,7 +95,7 @@ Adding, updating, or deleting trust boundaries
 
 -   Enter the name and a description for the trust boundary.
 
--   Click on the Add button in the environment table, and select an environment to situate the trust boundary in. This will add the new environment to the environment list.
+-   Click on the Add button in the environment card, and select an environment to situate the trust boundary in. This will add the new environment to the environment list.
 
 -   Click the Add button in the Components table to situate a process or data store within this environment specific trust boundary.
 

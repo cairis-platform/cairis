@@ -33,7 +33,7 @@ Adding, updating, and deleting a countermeasure
 
 -  Enter the countermeasure name and description, and select the countermeasure type. A countermeasure may be one of the following type: Information, Systems, Software, Hardware, or People.
 
--  Click on the Add button in the environment table, and select an environment to situate the countermeasure in. This will add the new environment to the environment list.
+-  Click on the Add button in the environment card, and select an environment to situate the countermeasure in. This will add the new environment to the environment list.
 
 -  Select the countermeasure cost to indicate the general cost of implementing the countermeasure within the selected environment.
 

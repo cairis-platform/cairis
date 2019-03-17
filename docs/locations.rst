@@ -16,7 +16,7 @@ Adding, updating, and deleting a locations object
 -  Click on the Add button to open the Locations form, and enter the
    name of the Locations object.
 
--  To add a location to this object, click on the Add button in the table of locations.
+-  To add a location to this object, click on the Add button in the locations card.
 
 .. figure:: LocationForm.jpg
    :alt: Location table

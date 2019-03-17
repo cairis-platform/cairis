@@ -14,13 +14,13 @@ Adding, updating, or deleting a task
 
 -  Click on the UX/Tasks menu to open the Tasks table, and click on the Add button to open the Task form.
 
--  Enter a task name, and the objective of carrying out the task.
+-  Enter a task name, short code, author, and the objective of carrying out the task.
 
--  Click on the Add button in the environment table, and select an environment to situate the task in. This will add the new environment to the environment list.
-
--  In the Dependencies folder, enter any dependencies needing to hold before this task can take place.
+-  Click on the Add button in the environment card, and select an environment to situate the task in. This will add the new environment to the environment list.
 
 -  In the Narrative folder, enter the task scenario. This narrative should describe how the persona (or personas) carry out the task to achieve the pre-defined objective.
+
+-  In the Dependencies folder, enter any dependencies needing to hold before this task can take place.
 
 -  In the Consequences folder, enter any consequences (positive or negative) associated with this task.
 
@@ -47,7 +47,7 @@ Task traceability
    :alt: Traceability Editor
 
 Tasks can be manually traced to certain artifacts via the Tasks table.
-A task may contribute to a vulnerability, or be supported by a requirement or use case. To add a traceability link, right click on the task name, and select Supported By or Contributes to. This opens the Traceability Editor. From this editor, select the object on the right hand side of the editor to trace to and click the Add button to add this link.
+A task may contribute to a vulnerability, or be supported by a requirement or use case. To add a traceability link, right click on the task name, click on the left or right arrows next to the task name to open a Support or Contribution traceability modal respectively. From this editor, select the object on the right hand side of the editor to trace to and click the Add button to add this link.
 
 Manual traceability links can be removed by selecting the Options/Traceability menu option, to open the Traceability Relations form. In this form, manual traceability relations be removed from specific environments.
 

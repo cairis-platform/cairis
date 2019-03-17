@@ -53,8 +53,7 @@ almost identical to the processes uses for normal assets. The only
 difference is the lack of environment-specific properties. Security
 properties are only defined once for the asset.
 
-To situate an asset in an environment, right click on the template asset
-name in the Template Assets dialog box, select the Situate option, and
+To situate an asset in an environment, click on the situate button in the template assets list, and
 specify the environments to situate the template asset in. After a
 template asset is situated within an environment, these properties
 should be revised in the assets generated on the basis of these. This is
@@ -73,35 +72,29 @@ Create a security pattern
    Patterns table, and click on the Add button to open the Security
    Pattern dialog form.
 
--  Enter the security pattern name, and, in the Context page, type in a
-   description the security pattern is relevant for.
-
--  Click on the Problem page, and type in a problem description
-   motivating the security pattern.
-
--  Click on the solution page, and type in the intrinsics of how the
-   security pattern solves the pre-defined problem.
+-  Enter the security pattern name, and description of the context the security pattern is relevant for, 
+-  a problem description motivationg the security pattern, and the intrinsics of how the security pattern
+   solves the pre-defined problem.
 
 -  Click on the Structure page, and the Add button in the associations table to add associations between template assets; these associations form the collaborative structure for the pattern. The procedure for entering associations is based on that used for associating assets.
 
 -  Click on the Requirements page, and the Add button in the requirements
-   table to add requirements needing to be satisfied to realise
-   the pattern. The cells in the Add Pattern Requirement dialog are a
-   sub-set of those found in the CAIRIS requirements editor.
-
+   table to add names of requirements needing to be satisfied to realise
+   the pattern.
+   
 -  Click on the Create button to add the new security pattern.
 
 -  Existing security patterns can be modified by double clicking on the
-   security pattern in the Security Patterns dialog box, making the
+   security pattern in the security patterns table, making the
    necessary changes, and clicking on the Update button.
 
 -  To delete a security pattern, click on the Delete button besides pattern to delete in the
-   Security Patterns table.
+   security patterns table.
 
 Situate a security pattern
 --------------------------
 
--  To introduce a security pattern into the working project, select the Risks/Security Patterns menu, right-click on the pattern to be situated, and select the Situate Pattern option from the speed menu.
+-  To introduce a security pattern into the working project, select the Risks/Security Patterns menu, click on the situate button for the pattern to be situated.
 
 -  Select the environment to situate the environment in, and click on Ok to situate the pattern.
 
