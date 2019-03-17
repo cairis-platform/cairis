@@ -26,7 +26,7 @@ Adding, updating, and deleting an attacker
    description, and selecting a image to represent the attacker. Please note that the image itself is NOT
    imported into the database, only the file path to the picture.  The image will be uploaded to the directory corresponding with the upload_dir value in cairis.cnf.  Attacker images are loaded from the directory stipulated by the default_image_dir value in cairis.cnf.
 
--  Click on the Add button in the environment table, and select an environment to situate the attacker in. This will add the new environment to the environment list.
+-  Click on the Add button in the environment card, and select an environment to situate the attacker in. This will add the new environment to the environment list.
 
 -  Click on the Add button on the Roles table to associate one or more roles to the attacker.
 

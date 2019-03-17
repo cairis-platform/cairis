@@ -28,12 +28,10 @@ Adding, updating, and deleting a risk
 
 -  Highlighting the environment name in the environment box displays a
    qualitative risk rating, and the mitigated and un-mitigated risk
-   score associated with each risk response. To see how this score is
-   calculated, click on the Show Details button.
+   score associated with each risk response. 
 
 -  Before a risk can be created, an associated Misuse Case needs to be
-   defined. To do this, click on the Create Misuse Case button to open
-   the Misuse Case Dialog.
+   defined. To do this, click on the Misuse Case folder.
 
 .. figure:: MisuseCaseForm.jpg
    :alt: Misuse Case form

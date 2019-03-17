@@ -53,8 +53,7 @@ Adding, updating, and deleting a response
 Generating goals
 ----------------
 
-A goal can be generated from a response by right clicking on the
-response name in the Responses table, and selecting Generate Goal
-from the speed menu. This causes a goal to be generated in each of the
+A goal can be generated from a response by clicking on the Goal
+button in the responses table. This causes a goal to be generated in each of the
 environments the response is situated in. The goal name corresponds to
 the name of the response.

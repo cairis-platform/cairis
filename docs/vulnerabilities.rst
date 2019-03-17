@@ -18,7 +18,7 @@ Create a vulnerability
 -  Enter the vulnerability name and description, and select the
    vulnerability type from the combo box.
 
--  Click on the Add button in the environment table, and select an environment to situate the vulnerability in. This will add the new environment to the environment list.
+-  Click on the Add button in the environment card, and select an environment to situate the vulnerability in. This will add the new environment to the environment list.
 
 -  Select the vulnerability's severity for this environment, and add exposed assets by clicking on the Add button in the assets table, and selecting one or more assets from the selected environment.
 
