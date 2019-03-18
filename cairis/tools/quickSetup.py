@@ -47,7 +47,7 @@ def quick_setup(dbHost,dbPort,dbRootPassword,tmpDir,rootDir,imageDir,configFile,
   from cairis.bin.add_cairis_user import user_datastore, db
 
   db.create_all()
-  user_datastore.create_user(email=userName, password=passWd)
+  user_datastore.create_user(email=userName, password=passWd,name = 'Default user')
   db.session.commit()
   createDatabaseAccount(dbRootPassword,dbHost,dbPort,userName,'')
   createDatabaseAndPrivileges(dbRootPassword,dbHost,dbPort,userName,'',userName + '_default')

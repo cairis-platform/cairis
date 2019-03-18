@@ -39,10 +39,12 @@ from cairis.controllers import AssetController, AttackerController, CImportContr
     DependencyController, DocumentationController, FindController, ExternalDocumentController, DocumentReferenceController, \
     PersonaCharacteristicController, TaskCharacteristicController, ObjectDependencyController, ArchitecturalPatternController, SecurityPatternController, ValueTypeController, TemplateGoalController, TemplateAssetController,TemplateRequirementController, LocationsController, RiskLevelController, TraceController, SummaryController, ConceptReferenceController, DataFlowController, DirectoryController,TrustBoundaryController, VersionController, ValidationController
 from cairis.daemon.main import main, api
+from cairis.tools.SessionValidator import get_session_id
+
 
 __author__ = 'Robin Quetin, Shamal Faily'
 
-def set_dbproxy(dbUser):
+def set_dbproxy(dbUser,userName):
   b = Borg()
   dbName = dbUser + '_default'
   dbPasswd = ''
@@ -55,6 +57,7 @@ def set_dbproxy(dbUser):
   session['session_id'] = id
   b.settings[id]['dbProxy'] = db_proxy
   b.settings[id]['dbUser'] = dbUser
+  b.settings[id]['userName'] = userName
   b.settings[id]['dbPasswd'] =dbPasswd
   b.settings[id]['dbHost'] = b.dbHost
   b.settings[id]['dbPort'] = b.dbPort
@@ -67,7 +70,7 @@ def set_dbproxy(dbUser):
   return b.settings[id]
 
 def make_session():
-  s = set_dbproxy(current_user.email)
+  s = set_dbproxy(current_user.email,current_user.name)
   resp_dict = {'session_id': s['session_id'], 'message': 'Session created'}
   resp = make_response(encode(resp_dict), OK)
   resp.headers['Content-type'] = 'application/json'
@@ -172,6 +175,18 @@ def get_image(path):
     except AttributeError:
       return send_from_directory('static/images', path)
   return handle_error(err)
+
+@main.route('/api/user')
+def get_user_details():
+  session_id = get_session_id(session, request)
+  b = Borg()
+  emailName = b.settings[session_id]['dbUser'] 
+  userName = b.settings[session_id]['userName']
+  user_dict = {'name' : userName, 'email' : emailName}
+  resp = make_response(encode(user_dict), OK)
+  resp.headers['Content-type'] = 'application/json'
+  return resp
+
 
 # Architectural Pattern routes
 api.add_resource(ArchitecturalPatternController.ArchitecturalPatternsAPI, '/api/architectural_patterns', endpoint = 'architecturalpatterns')

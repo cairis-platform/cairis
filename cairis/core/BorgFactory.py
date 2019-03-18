@@ -191,6 +191,7 @@ def dInitialise(withTest = True):
     'jsonPrettyPrint': True,
     'apFontSize': '7.5',
     'dbUser': 'cairis_test',
+    'userName' : 'CAIRIS test user account',
     'dbPasswd' : 'cairis_test',
     'dbName' : 'cairis_test_default',
     'dbHost': b.dbHost,
