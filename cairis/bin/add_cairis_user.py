@@ -64,6 +64,7 @@ def main():
   parser = argparse.ArgumentParser(description='Computer Aided Integration of Requirements and Information Security - Add CAIRIS user')
   parser.add_argument('user',help='Email address')
   parser.add_argument('password',help='password')
+  parser.add_argument('name',help='Full name')
   args = parser.parse_args()
 
   createDatabaseAccount(b.rPasswd,b.dbHost,b.dbPort,args.user,'')
