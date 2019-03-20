@@ -15,6 +15,8 @@ RUN apt-get install -y libxslt1-dev
 RUN apt-get install -y apache2
 RUN apt-get install -y apache2-dev
 RUN apt-get install -y poppler-utils
+RUN apt-get install -y apt-transport-https 
+RUN apt-get install -y ca-certificates
 
 COPY requirements.txt /
 COPY wsgi_requirements.txt /
