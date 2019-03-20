@@ -38,6 +38,9 @@ COPY cairis.cnf /
 COPY setupDb.sh /
 COPY createdb.sql /
 COPY addAccount.sh /
+
+RUN /cairis/cairis/bin/installUI.sh
+
 EXPOSE 8000
 
 RUN apt-get remove --purge -y git

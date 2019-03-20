@@ -55,13 +55,27 @@ Run the CAIRIS quick setup initialisation script (which can be found in cairis/)
 .. figure:: quick_setup_db.jpg
    :alt: Quick setup script
 
-You can accept many of these defaults, except for the database root password, an initial username and password which need to be supplied.  Please note that the username *root* is reserved, so you should not use this.  If you want more diagnostic information logged, you find it useful to change the Log Level from *warning* to *debug*.  When you select `Ok`, the script will create a new CAIRIS database, and accompanying CAIRIS configuration file; this file will ensure that CAIRIS knows what database it needs to refer to when you start up the tool and setup the necessary environment variables.
+You can accept many of these defaults, except for the database root password, an initial username and password which need to be supplied.  Please note that the username *root* is reserved, so you should not use this.  
+
+If you want more diagnostic information logged, you find it useful to change the Log Level from *warning* to *debug*.  
+
+The static and directory and asset directory will point to the location of UI code, but these directories will not be created during this step. If you don't plan to customise your web server setup, you should retain these default values.
+
+When you select `Ok`, the script will create a new CAIRIS database, and accompanying CAIRIS configuration file; this file will ensure that CAIRIS knows what database it needs to refer to when you start up the tool and setup the necessary environment variables.
 
 Logout of your current account or, alternatively, reload your .bashrc file i.e.
 
 .. code-block:: bash
 
    source .bashrc
+
+The final step entails installing the UI code by running the below script in cairis/cairis/bin
+
+.. code-block:: bash
+
+   ./installUI.sh
+
+The CAIRIS UI code is managed in the `cairis-ui github repository <https://github.com/failys/cairis-ui>`_.  Running this script will setup `node <https://nodejs.org>`_ and `yarn <https://yarnpkg>`_, download the github repo, create a production version of the latest UI code and deploy to cairis/cairis/dist.
 
 You should now start up your CAIRIS server.  Create the following *cairis.service* file, substituting *cairisuser* for the name of your account.  Using sudo or root, copy this file to /etc/systemd/system.
 
