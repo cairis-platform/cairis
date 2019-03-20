@@ -73,7 +73,7 @@ The final step entails installing the UI code by running the below script in cai
 
 .. code-block:: bash
 
-   ./installUI.sh
+   sudo ./installUI.sh
 
 The CAIRIS UI code is managed in the `cairis-ui github repository <https://github.com/failys/cairis-ui>`_.  Running this script will setup `node <https://nodejs.org>`_ and `yarn <https://yarnpkg>`_, download the github repo, create a production version of the latest UI code and deploy to cairis/cairis/dist.
 
