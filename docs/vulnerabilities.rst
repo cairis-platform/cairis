@@ -37,7 +37,7 @@ Introducing template threats and vulnerabilities
    :alt: Import Vulnerability
 
 Libraries of template vulnerabilities can be imported into the CAIRIS database and introduced to the current CAIRIS model.  Examples of such libraries in cairis/examples/directories. To import one of these,
-select Introduce from the top of Vulnerabilities or Threats table to open the Introduce from vulnerability directory dialog. When a vulnerability is selected, the Vulnerability form is opened, and pre-populated with information from the directory entry.
+click on the blue Add button at from the top of Vulnerabilities or Threats table to open the Introduce from vulnerability directory dialog. When a vulnerability is selected, the Vulnerability form is opened, and pre-populated with information from the directory entry.
 
 .. figure:: ImportedVulnerabilityForm.jpg
    :alt: Imported Vulnerability
