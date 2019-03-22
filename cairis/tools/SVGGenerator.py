@@ -148,6 +148,9 @@ def correctHref(line, model_type):
         new_link = '/api/{0}s/shortcode/{1}'.format(type, object)
       elif (model_type == 'dataflow' and type == 'dataflow'):
         new_link = '/api/{0}s/name/{1}/environment/{2}'.format(type,object,quote(environment))
+      elif (type == 'goalassociation'):
+        assocParams = parts[1].split('/')
+        new_link = '/api/goalassociations/environment/' + quote(assocParams[0]) + '/goal/' + quote(assocParams[1]) + '/subgoal/' + quote(assocParams[2])
       else:
         if type == 'grounds': 
           new_link = '/api/{0}/name/{1}'.format(type, object)
