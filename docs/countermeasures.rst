@@ -50,7 +50,7 @@ Adding, updating, and deleting a countermeasure
 Generating countermeasure assets and security patterns
 ------------------------------------------------------
 
-By right clicking on a countermeasure in the Countermeasures window, an
+By clicking on the situate button in the countermeasures list, an
 associated asset can be generated. If defined, this will retain the same
 security properties associated with the countermeasure. The asset will
 be situated in whatever environments the countermeasure was situated in.
@@ -61,19 +61,15 @@ the countermeasure helps mitigate.
 Assets can be generated directly based on the countermeasure properties,
 or on the basis of a pre-existing template asset. It is also possible to
 situate security patterns based on a countermeasure, rather than an
-asset. To do this, select Situate Pattern from the speed menu, select
-the security patten, followed by the countermeasure environments to
-situate the pattern assets in.
+asset. 
 
 Security Patterns can be imported into the tool by selecting the System/Import Model menu option and, when selecting the XML model file to be imported, selecting Security Pattern option. An example catalogue file, schumacher_patterns.xml, which incorporates a number of patterns from the Security Patterns text book by Schumacher et al is included in the cairis/examples/architecture directory.
 
 Associating countermeasures with pre-existing patterns
 ------------------------------------------------------
 
-By right clicking on a countermeasure in the Countermeasures window, you
-can also associate a countermeasure with a pre-existing security pattern
-by selecting the 'Associate with situated Countermeasure Pattern'
-option. However, a list of possible security patterns to choose from
+In the situate dialog, you can also associate a countermeasure with a pre-existing security pattern.
+However, a list of possible security patterns to choose from
 will only be displayed if the components of the security pattern are
 present in ALL of the environments the countermeasure is situated for.
 
