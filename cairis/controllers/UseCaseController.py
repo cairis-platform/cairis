@@ -82,11 +82,10 @@ class UseCaseByNameAPI(Resource):
     dao = UseCaseDAO(session_id)
     uc,ucContribs = dao.from_json(request)
     dao.update_usecase(uc, name=name)
+    dao.remove_usecase_contributions(uc)
     if (len(ucContribs) > 0):
       for rc in ucContribs:
         dao.assign_usecase_contribution(rc)
-    else:
-      dao.remove_usecase_contributions(uc)
     dao.close()
 
 
