@@ -229,6 +229,7 @@ DROP TABLE IF EXISTS task_task;
 DROP TABLE IF EXISTS task_asset;
 DROP TABLE IF EXISTS usecase_asset;
 DROP TABLE IF EXISTS task_vulnerability;
+DROP TABLE IF EXISTS risk_vulnerability;
 DROP TABLE IF EXISTS misusecase_risk;
 DROP TABLE IF EXISTS environment_task;
 DROP TABLE IF EXISTS environment_misusecase;
@@ -3383,6 +3384,14 @@ create TABLE trust_boundary_privilege (
   FOREIGN KEY(environment_id) REFERENCES environment(id)
 ) ENGINE=INNODB;
 
+CREATE TABLE risk_vulnerability (
+  risk_id INT NOT NULL,
+  vulnerability_id INT NOT NULL,
+  PRIMARY KEY(risk_id,vulnerability_id),
+  FOREIGN KEY(risk_id) REFERENCES risk(id),
+  FOREIGN KEY(vulnerability_id) REFERENCES vulnerability(id)
+) ENGINE=INNODB;
+
 
 delimiter //
 
@@ -4100,6 +4109,7 @@ INSERT INTO allowable_trace values(0,0);
 INSERT INTO allowable_trace values(0,20);
 INSERT INTO allowable_trace values(21,18);
 INSERT INTO allowable_trace values(16,2);
+INSERT INTO allowable_trace values(7,6);
 INSERT INTO requirement_type values(0,'Functional');
 INSERT INTO requirement_type values(1,'Data');
 INSERT INTO requirement_type values(2,'Look and Feel');

@@ -171,7 +171,10 @@ class EnvironmentModel:
         self.buildNode(toDimName,toName)
         self.nodeNameSet.add(toName)
         self.theNodeLookup[toName] = toDimName + ' ' + dotLink.toName()
-      edge = pydot.Edge(str(fromName),str(toName),dir='none')
+      dirType = 'none'
+      if (fromDimName == 'risk' and toDimName == 'vulnerability'):
+        dirType = 'forward'
+      edge = pydot.Edge(str(fromName),str(toName),dir=dirType)
       self.theGraph.add_edge(edge)
     return self.layout()
 
