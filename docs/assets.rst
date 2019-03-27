@@ -127,8 +127,11 @@ Asset models can be viewed by selecting the Models/Asset menu, and selecting the
 .. figure:: AssetModel.jpg
    :alt: Asset Model
 
-By changing the environment name in the environment combo box, the asset
-model for a different environment can be viewed.  The model can be filtered by selecting an asset.
+By changing the environment name in the environment combo box, the asset model for a different environment can be viewed.
+
+Each asset node is shaded red based on its *attack surface*.  This is based on the highest severity value of the vulnerabilities associated with the asset; the higher the value, the darker the shade of red.
+
+The model can be filtered by selecting an asset.
 This will display on the asset, and the other asset model elements immediately associated with it.
 By default, concern associations are hidden.  These are UML comment nodes that indicate elements from other CAIRIS models associated with asset.
 These concerns can be shown by changing the Hide Concerns combo box value to Yes.

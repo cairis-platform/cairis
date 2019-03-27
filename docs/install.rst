@@ -73,9 +73,10 @@ The final step entails installing the UI code by running the below script in cai
 
 .. code-block:: bash
 
-   sudo ./installUI.sh
+   sudo -E ./installUI.sh
 
 The CAIRIS UI code is managed in the `cairis-ui github repository <https://github.com/failys/cairis-ui>`_.  Running this script will setup `node <https://nodejs.org>`_ and `yarn <https://yarnpkg>`_, download the github repo, create a production version of the latest UI code and deploy to cairis/cairis/dist.
+The -E flag is required, as the CAIRIS_SRC environment variable needs to be visible to root.
 
 You should now start up your CAIRIS server.  Create the following *cairis.service* file, substituting *cairisuser* for the name of your account.  Using sudo or root, copy this file to /etc/systemd/system.
 
