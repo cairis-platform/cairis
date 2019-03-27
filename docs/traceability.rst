@@ -21,13 +21,14 @@ Requirement  Use Case
 Use Case     Task
 Requirement  Requirement
 Requirement  Document Reference
+Risk         Vulnerability
 Component    Use Case
 ============ ===================
 
 Editing manual traceability links
 -----------------------------------
 
-To add manual traceability links, right click on an element with a model table, and select the *Supported by* (pre-traceability link) or *Contributes to* (post-traceability link).  This will open a dialog box for adding the forward or backwards traceability link.
+To add manual traceability links, right click on the left arrow for a *Supported by* (pre-traceability) link, or the right arrow for a *Contributes to* (post-traceability link).  This will open a modal box for adding the forward or backwards traceability link.
 
 .. figure:: contributesTo.jpg
    :alt: contribute to form
