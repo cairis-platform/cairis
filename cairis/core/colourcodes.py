@@ -46,6 +46,10 @@ def vulnerabilitySeverityColourCode(vsValue):
   elif vsValue == 'Critical': return '3'
   else: return '4'
 
+def vulnerabilitySeverityTextColourCode(vsValue):
+  if (vsValue == 'Catastrophic'): return 'white'
+  else: return 'black'
+
 def usabilityColourCode(valueId):
   if (valueId <= 1): return '#F7FBFF'
   elif (valueId == 2): return '#DEEBF7'

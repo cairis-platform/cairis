@@ -952,6 +952,7 @@ drop procedure if exists implicitAssetInclusionCheck;
 drop procedure if exists implicitAssetVulnerabilityCheck;
 drop function if exists lastNumericRequirementLabel;
 drop procedure if exists getDependency;
+drop function if exists assetAttackSurface;
 
 
 delimiter //
@@ -25566,6 +25567,24 @@ begin
   then
     select rar.id id,e.name environment,dr.name depender,de.name dependee,'asset' dependencyType,a.name dependency,rar.rationale from roleassetrole_dependency rar, role dr, role de, environment e, asset a where rar.environment_id = envId and rar.depender_id = dependerId and rar.dependee_id = dependeeId and rar.dependency_id = assetDependencyId and rar.environment_id = e.id and rar.depender_id = dr.id and rar.dependee_id = de.id and rar.dependency_id = a.id;
   end if;
+end
+//
+
+create function assetAttackSurface(assetName text, envName text) 
+returns text
+deterministic 
+begin
+  declare assetId int;
+  declare envId int;
+  declare asScore int;
+  declare sevValue varchar(50);
+
+  select id into assetId from asset where name = assetName limit 1;
+  select id into envId from environment where name = envName limit 1;
+
+  select ifnull(max(vs.severity_id),0) into asScore from vulnerability_severity vs, asset_vulnerability av where av.environment_id = envId and av.asset_id = assetId and av.environment_id = vs.environment_id and av.vulnerability_id = vs.vulnerability_id;
+  select name into sevValue from severity where id = asScore;
+  return sevValue;
 end
 //
 

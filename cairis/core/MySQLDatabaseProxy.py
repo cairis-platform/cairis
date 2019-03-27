@@ -4734,3 +4734,6 @@ class MySQLDatabaseProxy:
       raise ObjectNotFound(envName + ' / ' + dependerName + ' / ' + dependeeName + ' / ' + dependencyName)
     parameters = DependencyParameters(deps[0][1],deps[0][2],deps[0][3],deps[0][4],deps[0][5],deps[0][6])
     return ObjectFactory.build(deps[0][0],parameters)
+
+  def assetAttackSurface(self,assetName,envName):
+    return self.responseList('select assetAttackSurface(:asset,:environment)',{'asset':assetName,'environment':envName},'MySQL error getting asset attack surface')[0]

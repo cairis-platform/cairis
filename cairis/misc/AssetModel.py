@@ -19,6 +19,7 @@
 from cairis.core.Borg import Borg
 import pydot
 from cairis.core.colourcodes import surfaceTypeColourCode,surfaceTypeTextColourCode
+from cairis.core.colourcodes import vulnerabilitySeverityColourCode,vulnerabilitySeverityTextColourCode
 import os
 
 __author__ = 'Shamal Faily, Robin Quetin'
@@ -73,7 +74,9 @@ class AssetModel:
         stValue,arValue = self.dbProxy.templateAssetMetrics(objtName)
         assetNode = pydot.Node(objtName,shape='record',style='filled',margin=0,fillcolor=surfaceTypeColourCode(stValue / arValue),fontcolor=surfaceTypeTextColourCode(stValue / arValue),fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl)
       else:
-        assetNode = pydot.Node(objtName,shape='record',margin=0,color=borderColour,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl)
+        asMetric = self.dbProxy.assetAttackSurface(objtName,self.theEnvironmentName)
+        assetNode = pydot.Node(objtName,shape='record',style='filled',margin=0,colorscheme='orrd4',color='black',fillcolor=vulnerabilitySeverityColourCode(asMetric),fontcolor=vulnerabilitySeverityTextColourCode(asMetric),fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl)
+#        assetNode = pydot.Node(objtName,shape='record',margin=0,color=borderColour,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl)
       self.theGraph.add_node(assetNode)
     self.nodeList.add(objtName)
 
