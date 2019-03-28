@@ -24,8 +24,9 @@ Adding GRL elements to persona characteristics
 
 GRL goals, soft goals, or tasks can be associated with persona characteristics, and their supporting grounds, warrants, or rebuttals.
 
-- To add these GRL elements, open the persona characteristic you want to update and, in the General folder, click on the GRL Elements folder.
-- Enter a synopsis for the persona characteristic that expresses the characteristic in intentional terms.
+- To add these GRL elements, open the persona characteristic you want to update, and click on the GRL Elements folder.
+
+- Enter an intention that persona characteristic that expresses the characteristic in intentional terms.
 
 - Select the GRL element type for this synopsis; this can be either a goal, soft goal, or task.
 
@@ -39,7 +40,7 @@ GRL goals, soft goals, or tasks can be associated with persona characteristics, 
 .. figure:: crGrl.jpg
    :alt: Associating GRL with characteristic reference
 
-- Enter a synopsis that expresses the ground, warrrant, or rebuttal reference in intentional terms.
+- Expresses the ground, warrrant, or rebuttal reference in intentional terms.
 
 - Select the GRL element type for this synopsis this can be either a goal or soft goal.
 
