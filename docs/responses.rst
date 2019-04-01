@@ -54,6 +54,6 @@ Generating goals
 ----------------
 
 A goal can be generated from a response by clicking on the Goal
-button in the responses table. This causes a goal to be generated in each of the
+button in the responses table. This generates a goal in each of the
 environments the response is situated in. The goal name corresponds to
 the name of the response.
