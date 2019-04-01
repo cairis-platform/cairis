@@ -25,7 +25,7 @@ If you are modelling a System of Systems, you may also benefit from using the as
 Other Types
 -----------
 
-You can add a selection of types associated with risk and architectural models appropriate sub-menu in the Options, and clicking on the Add button.  You should then enter a name, score, description, and score rationale before clicking on the Create button.
+You can add a selection of types associated with risk and architectural models from the appropriate Options sub-menu by clicking on the Add button.  You should then enter a name, score, description, and -- where appropriate -- score and rationale before clicking on the Create button.
 
 Existing values can be modified by clicking on the to be updated, making the required changes, and clicking the Update button.
 
