@@ -32,5 +32,5 @@ Adding a new environment
    is selected, then the maximal values associated with that artifact
    will be adopted. This may be the highest likelihood value for a
    threat, or the highest security property values for an asset. If the
-   override radio button is selected, then CAIRIS will ensure that the
+   override radio button is selected then CAIRIS will ensure that the
    artifact properties are used for the overriding environment.
