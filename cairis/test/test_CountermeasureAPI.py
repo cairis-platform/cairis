@@ -49,7 +49,7 @@ class CountermeasureAPITests(CairisDaemonTestCase):
     self.existing_countermeasure_type = 'Information'
     self.existing_countermeasure_description = 'X.509 certificates extended to tie client workstations so NeuroGrid tasks can only be carried out on these.'
     self.existing_environment_name = 'Psychosis'
-    self.existing_requirements = ['User certificate']
+    self.existing_requirements = ['User certificate addressability']
     self.existing_targets = [CountermeasureTarget('Certificate Ubiquity','High','Discourages certificate sharing')]
     self.existing_properties = []
     self.existing_rationale =  ['None','None','None','None','None','None','None','None']
@@ -133,7 +133,7 @@ class CountermeasureAPITests(CairisDaemonTestCase):
 
   def test_target_names(self):
     method = 'test_countermeasure-targets-by-requirement-get'
-    url = '/api/countermeasures/targets/environment/Psychosis?requirement=User%20certificate&session_id=test'
+    url = '/api/countermeasures/targets/environment/Psychosis?requirement=User%20certificate%20addressability&session_id=test'
     self.logger.info('[%s] URL: %s', method, url)
     rv = self.app.get(url)
     if (sys.version_info > (3,)):
