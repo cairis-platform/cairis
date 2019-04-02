@@ -85,7 +85,7 @@ Generating a GRL model
 
 - To generate a GRL model, select the System/Export GRL menu to open the Export GRL modal dialog.
 
-- Select the Environment, Task, and Persona to create the GRL model for.  Persona GRL elements will be present in the exported model only GRL elements have been associated with persona cases.  Task GRL elements will be present only if (i) a traceability link has been added between the use cases where GRL elements are elements.
+- Select the Environment, Task, and Persona to create the GRL model for, together with the name of the output GRL file.  Persona GRL elements will be present in the exported model only GRL elements have been associated with persona cases.  Task GRL elements will be present only if (i) a traceability link has been added between the use cases where GRL elements are elements.
 
 - Click on the Export button to generate a GRL file.
 
