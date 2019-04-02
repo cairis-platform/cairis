@@ -2334,7 +2334,7 @@ Matt is also the designated NeuroGrid Certificate Authority and, as such, is oft
   <fit_criterion>None</fit_criterion>
   <originator>Interview data</originator>
 </requirement>
-<requirement name="User certificate" reference="User certificate" reference_type="asset" label="4" type="Functional" priority="1" >
+<requirement name="User certificate addressability" reference="User certificate" reference_type="asset" label="4" type="Functional" priority="1" >
   <description>User certificates shall be extended such that these are only usable from designated network addresses.</description>
   <rationale>Provide defence in depth if a root certificate is compromised.</rationale>
   <fit_criterion>Attempts to login to the NeuroGrid portal with credentials not possible from any other machine beyond that the user certificate was installed for.</fit_criterion>
@@ -2457,7 +2457,7 @@ Matt is also the designated NeuroGrid Certificate Authority and, as such, is oft
 <countermeasure name="Location-based X.509 extension" type="Information" >
   <description>X.509 certificates extended to tie client workstations so NeuroGrid tasks can only be carried out on these.</description>
   <countermeasure_environment name="Psychosis" cost="Medium" >
-    <countermeasure_requirement name="User certificate" />
+    <countermeasure_requirement name="User certificate addressability" />
     <target name="Certificate ubiquity" effectiveness="High" >
       <target_response name="Prevent Unauthorised Certificate Access" />
       <rationale>Discourages certificate sharing</rationale>
@@ -2468,7 +2468,7 @@ Matt is also the designated NeuroGrid Certificate Authority and, as such, is oft
     <responsible_persona task="Download data" persona="Claire" duration="None" frequency="None" demands="None" goals="Low_Hindrance" />
   </countermeasure_environment>
   <countermeasure_environment name="Stroke" cost="Medium" >
-    <countermeasure_requirement name="User certificate" />
+    <countermeasure_requirement name="User certificate addressability" />
     <target name="Certificate ubiquity" effectiveness="High" >
       <target_response name="Prevent Unauthorised Certificate Access" />
       <rationale>Discourages certificate sharing</rationale>
@@ -2623,7 +2623,7 @@ Matt is also the designated NeuroGrid Certificate Authority and, as such, is oft
 <goal_association environment="Psychosis"  goal_name="Anonymise data" goal_dim="goal" ref_type="and" subgoal_name="Anonymised data" subgoal_dim="requirement" alternative_id="0" >
   <rationale>None</rationale>
 </goal_association>
-<goal_association environment="Psychosis"  goal_name="Location-based Authentication" goal_dim="goal" ref_type="and" subgoal_name="User certificate" subgoal_dim="requirement" alternative_id="0" >
+<goal_association environment="Psychosis"  goal_name="Location-based Authentication" goal_dim="goal" ref_type="and" subgoal_name="User certificate addressability" subgoal_dim="requirement" alternative_id="0" >
   <rationale>None</rationale>
 </goal_association>
 <goal_association environment="Psychosis"  goal_name="NeuroGrid user authorisation" goal_dim="goal" ref_type="and" subgoal_name="Truststores" subgoal_dim="requirement" alternative_id="0" >
@@ -2686,7 +2686,7 @@ Matt is also the designated NeuroGrid Certificate Authority and, as such, is oft
 <goal_association environment="Stroke"  goal_name="Anonymise data" goal_dim="goal" ref_type="and" subgoal_name="Anonymised data" subgoal_dim="requirement" alternative_id="0" >
   <rationale>None</rationale>
 </goal_association>
-<goal_association environment="Stroke"  goal_name="Location-based Authentication" goal_dim="goal" ref_type="and" subgoal_name="User certificate" subgoal_dim="requirement" alternative_id="0" >
+<goal_association environment="Stroke"  goal_name="Location-based Authentication" goal_dim="goal" ref_type="and" subgoal_name="User certificate addressability" subgoal_dim="requirement" alternative_id="0" >
   <rationale>None</rationale>
 </goal_association>
 <goal_association environment="Stroke"  goal_name="NeuroGrid user authorisation" goal_dim="goal" ref_type="and" subgoal_name="Truststores" subgoal_dim="requirement" alternative_id="0" >
