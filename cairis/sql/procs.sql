@@ -956,6 +956,8 @@ drop function if exists assetAttackSurface;
 drop procedure if exists obstructedGoals;
 drop procedure if exists goalRoot;
 drop procedure if exists obstructedTasks;
+drop procedure if exists isGoalObstructed;
+drop procedure if exists isObstacleObstructed;
 
 
 delimiter //
@@ -25596,7 +25598,7 @@ create procedure obstructedGoals(in taskId int, in envId int)
 begin
   declare goalId int;
   declare goalCount int default 0;
-  declare obsCount int default 0;
+  declare isObstructed bool;
   declare done int default 0;
   declare opGoalCursor cursor for select goal_id from goaltask_goalassociation where subgoal_id = taskId and environment_id = envId; 
   declare continue handler for not found set done = 1;
@@ -25612,8 +25614,8 @@ begin
       leave og_loop;
     end if;
 
-    select count(subgoal_id) into obsCount from goalobstacle_goalassociation where goal_id = goalId and environment_id = envId;
-    if obsCount > 0
+    call isGoalObstructed(goalId,envId,isObstructed);
+    if isObstructed = true
     then
       select count(goal_id) into goalCount from goalgoal_goalassociation where subgoal_id = goalId and environment_id = envId;
       if goalCount = 0
@@ -25666,7 +25668,6 @@ begin
   declare taskName varchar(200);
   declare taskCursor cursor for select t.name,t.id from task t, environment_task et where et.environment_id = environmentId and et.task_id = t.id order by 1;
   declare obsRootGoalCursor cursor for select name from temp_goal order by 1;
-  
   declare continue handler for not found set done = 1;
 
 
@@ -25686,15 +25687,99 @@ begin
       then
         leave org_loop;
       end if;
-      insert into temp_vout(label,message) values ('Obstructed task',concat('Task ',taskName,' is needed to be satisfy goal ',goalName,', but one or more operationalising goals is obstructed'));
+      insert into temp_vout(label,message) values ('Obstructed task',concat('Task ',taskName,' is needed to satisfy goal ',goalName,', but one or more operationalising goals is obstructed'));
     end loop org_loop;
     close obsRootGoalCursor;
     set done = 0;
   end loop task_loop;
   close taskCursor;
-
 end
 //
 
+create procedure isGoalObstructed(in goalId int,in environmentId int, out isObstructed bool) 
+begin
+  declare done int default 0;
+  declare obsCount int;
+  declare obsId int;
+  declare roCount int default 0;
+  declare obsCursor cursor for select subgoal_id from goalobstacle_goalassociation where environment_id = environmentId and goal_id = goalId;
+  declare continue handler for not found set done = 1;
+
+  select count(subgoal_id) into obsCount from goalobstacle_goalassociation where goal_id = goalId and environment_id = environmentId;
+  if (obsCount > 0)
+  then
+    select count(og.subgoal_id) into roCount from goalobstacle_goalassociation go, obstaclegoal_goalassociation og where go.goal_id = goalId and go.subgoal_id = og.goal_id and og.environment_id = environmentId and og.environment_id = go.environment_id;
+    if (roCount > 0)
+    then
+      set isObstructed = false;
+    else
+      set isObstructed = true;
+      open obsCursor;
+      obs_loop: loop
+        fetch obsCursor into obsId;
+        if done = 1
+        then
+          leave obs_loop;
+        end if;
+        call isObstacleObstructed(obsId,environmentId,isObstructed);
+      end loop obs_loop;
+      close obsCursor;
+      set done = 0;
+    end if;
+  else
+    set isObstructed = false;
+  end if;
+end
+//
+
+create procedure isObstacleObstructed(in obstacleId int,in environmentId int, out isObstructed bool) 
+begin
+  declare done int default 0;
+  declare loId int;
+  declare roCount int default 0;
+  declare andObsCursor cursor for select subgoal_id from obstacleobstacle_goalassociation where environment_id = environmentId and goal_id = obstacleId and ref_type_id = 0;
+  declare orObsCursor cursor for select subgoal_id from obstacleobstacle_goalassociation where environment_id = environmentId and goal_id = obstacleId and ref_type_id = 1;
+  declare continue handler for not found set done = 1;
+
+  select count(subgoal_id) into roCount from obstaclegoal_goalassociation og where goal_id = obstacleId and environment_id = environmentId;
+  if (roCount > 0)
+  then
+    set isObstructed = false;
+  else
+    set isObstructed = true;
+    open orObsCursor;
+    orobs_loop: loop
+      fetch orObsCursor into loId;
+      if done = 1
+      then
+        leave orobs_loop;
+      end if;
+      call isObstacleObstructed(loId,environmentId,isObstructed);
+      if (isObstructed = true)
+      then
+        leave orobs_loop;
+      end if;
+    end loop orobs_loop;
+    close orObsCursor;
+   
+    set done = 0;
+
+    open andObsCursor;
+    andobs_loop: loop
+      fetch andObsCursor into loId;
+      if done = 1
+      then
+        leave andobs_loop;
+      end if;
+      call isObstacleObstructed(loId,environmentId,isObstructed);
+      if (isObstructed = false)
+      then
+        leave andobs_loop;
+      end if;
+    end loop andobs_loop;
+    close andObsCursor;
+  end if;
+end
+//
 
 delimiter ;
