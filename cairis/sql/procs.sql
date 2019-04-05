@@ -24627,7 +24627,7 @@ end
 
 create procedure criticalPrivacyRisks(in environmentId int)
 begin
-  declare riskName varchar(50);
+  declare riskName varchar(200);
   declare threatId int;
   declare vulId int;
   declare assetName varchar(200);
@@ -25172,7 +25172,7 @@ end
 create procedure newRiskContexts()
 begin
   declare riskId int;
-  declare riskName varchar(100);
+  declare riskName varchar(200);
   declare envName varchar(100);
   declare done int default 0;
   declare riskCursor cursor for select id,name from risk; 
