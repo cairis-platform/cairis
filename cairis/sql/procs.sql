@@ -25701,9 +25701,13 @@ begin
   declare done int default 0;
   declare obsCount int;
   declare obsId int;
+  declare tgId int;
   declare roCount int default 0;
+  declare goalCursor cursor for select subgoal_id from goalgoal_goalassociation where environment_id = environmentId and goal_id = goalId;
   declare obsCursor cursor for select subgoal_id from goalobstacle_goalassociation where environment_id = environmentId and goal_id = goalId;
   declare continue handler for not found set done = 1;
+
+
 
   select count(subgoal_id) into obsCount from goalobstacle_goalassociation where goal_id = goalId and environment_id = environmentId;
   if (obsCount > 0)
@@ -25727,7 +25731,20 @@ begin
       set done = 0;
     end if;
   else
-    set isObstructed = false;
+    open goalCursor;
+    goal_loop: loop
+      fetch goalCursor into tgId;
+      if done = 1
+      then
+        leave goal_loop;
+      end if;
+      call isGoalObstructed(tgId,environmentId,isObstructed);
+      if (isObstructed = true)
+      then
+        leave goal_loop;
+      end if;
+    end loop goal_loop;
+    close goalCursor;
   end if;
 end
 //
