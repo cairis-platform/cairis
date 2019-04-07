@@ -141,7 +141,7 @@ class GoalDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def get_goal_model(self, environment_name,goal_name,usecase_name):
+  def get_goal_model(self, environment_name,goal_name,usecase_name,is_top_level):
     fontName, fontSize, apFontName = get_fonts(session_id=self.session_id)
     try:
       associationDictionary = {}
@@ -149,7 +149,7 @@ class GoalDAO(CairisDAO):
       ucFilter = 0
       if goal_name != '': goalFilter = 1
       if usecase_name != '': ucFilter = 1
-      associationDictionary = self.db_proxy.goalModel(environment_name,goal_name,0,ucFilter)
+      associationDictionary = self.db_proxy.goalModel(environment_name,goal_name,is_top_level,ucFilter)
       associations = KaosModel(list(associationDictionary.values()), environment_name, 'goal',goal_name,db_proxy=self.db_proxy, font_name=fontName,font_size=fontSize)
       dot_code = associations.graph()
       return dot_code

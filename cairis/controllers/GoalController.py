@@ -110,12 +110,14 @@ class GoalModelAPI(Resource):
 
   def get(self, environment, goal, usecase):
     session_id = get_session_id(session, request)
+    isTopLevel = request.args.get('top', 0)
+
     model_generator = get_model_generator()
 
     dao = GoalDAO(session_id)
     if goal == 'all':  goal = ''
     if usecase == 'all': usecase = ''
-    dot_code = dao.get_goal_model(environment,goal,usecase)
+    dot_code = dao.get_goal_model(environment,goal,usecase,isTopLevel)
     dao.close()
 
     resp = make_response(model_generator.generate(dot_code, model_type='goal',renderer='dot'), OK)
