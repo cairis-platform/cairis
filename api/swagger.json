@@ -12283,7 +12283,7 @@
             },
             "description" : "Environment specific asset properties",
             "example" : [ {
-              "theName" : "Psychosis",
+              "theEnvironmentName" : "Psychosis",
               "theAssociations" : [ [ "0", "Association", "*", "", "", "*", 0, "Workflow" ] ],
               "theProperties" : [ {
                 "name" : "Confidentiality",
