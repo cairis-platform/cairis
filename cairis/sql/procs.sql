@@ -87,6 +87,7 @@ drop procedure if exists getRisks;
 drop procedure if exists getRisksSummary;
 drop function if exists threat_likelihood;
 drop function if exists vulnerability_severity;
+drop function if exists vulnerability_severity_rating;
 drop procedure if exists threat_asset;
 drop procedure if exists threat_attacker;
 drop procedure if exists delete_asset;
@@ -2356,13 +2357,23 @@ create function vulnerability_severity(vulId int,environmentId int)
 returns varchar(200)
 deterministic
 begin
+  declare severityName varchar(200);
+  select name into severityName from severity where id = vulnerability_severity_rating(vulId,environmentId);
+  return (severityName);
+end
+//
+
+create function vulnerability_severity_rating(vulId int,environmentId int)
+returns int
+deterministic
+begin
   declare compositeCount int;
   declare duplicatePolicy varchar(200);
   declare overridingEnvironmentId int;
   declare workingSeverityId int;
   declare currentEnvironmentId int;
   declare currentSeverityId int;
-  declare severityName varchar(200);
+  declare severityRating int;
   declare done int default 0;
   declare sevCursor cursor for select environment_id,severity_id from vulnerability_severity where vulnerability_id = vulId and environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId);
   declare continue handler for not found set done = 1;
@@ -2399,12 +2410,12 @@ begin
       end if;
     end loop sev_loop;
     close sevCursor;
-    select name into severityName from severity where id = workingSeverityId;
+    set severityRating = workingSeverityId;
   else
     select mitigated_severity(vulId,environmentId) into currentSeverityId;
-    select s.name into severityName from severity s where s.id = currentSeverityId;
+    set severityRating = currentSeverityId;
   end if;
-  return (severityName);
+  return severityRating;
 end
 //
 
@@ -25582,13 +25593,60 @@ deterministic
 begin
   declare assetId int;
   declare envId int;
-  declare asScore int;
+  declare vulId int;
+  declare obsId int;
+  declare asScore int default 0;
+  declare ratingId int;
+  declare mitigatingRatingId int;
+  declare isObstructed bool;
   declare sevValue varchar(50);
+  declare done int default 0;
+  declare vulCursor cursor for select distinct vulnerability_id from asset_vulnerability where asset_id = assetId and environment_id = envId; 
+  declare continue handler for not found set done = 1;
 
   select id into assetId from asset where name = assetName limit 1;
   select id into envId from environment where name = envName limit 1;
 
-  select ifnull(max(vs.severity_id),0) into asScore from vulnerability_severity vs, asset_vulnerability av where av.environment_id = envId and av.asset_id = assetId and av.environment_id = vs.environment_id and av.vulnerability_id = vs.vulnerability_id;
+  open vulCursor;
+  vul_loop: loop
+    fetch vulCursor into vulId;
+    if done = 1
+    then
+      leave vul_loop;
+    end if;
+    select vulnerability_severity_rating(vulId,envId) into ratingId;
+
+    select max(cvt.effectiveness_id) into mitigatingRatingId from countermeasure_vulnerability_target cvt, risk r, response re where cvt.vulnerability_id = vulId and cvt.environment_id = envId and cvt.vulnerability_id = r.vulnerability_id and r.id = re.risk_id;
+
+    if mitigatingRatingId is null
+    then
+      set mitigatingRatingId = 0;
+
+      /* If we find an obstacle associated with the vulnerability and it isn't obstructed then set the mitigatingRatingId to ratingId to render it negligible */
+      select goal_id into obsId from obstaclevulnerability_goalassociation where subgoal_id = vulId and environment_id = envId;
+      if obsId is not null
+      then
+        call isObstacleObstructed(obsId,envId,isObstructed);
+        if isObstructed != true
+        then
+          set mitigatingRatingId = ratingId;
+        end if;
+      end if;
+    end if;
+
+    set ratingId = ratingId - mitigatingRatingId;
+    if ratingId < 0
+    then
+      set ratingId = 0;
+    end if;
+
+    if ratingId > asScore
+    then
+      set asScore = ratingId;
+    end if;
+  end loop vul_loop;
+  close vulCursor;
+
   select name into sevValue from severity where id = asScore;
   return sevValue;
 end
