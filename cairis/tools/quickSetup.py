@@ -47,6 +47,7 @@ def quick_setup(dbHost,dbPort,dbRootPassword,tmpDir,rootDir,imageDir,configFile,
   from cairis.bin.add_cairis_user import user_datastore, db
 
   db.create_all()
+
   user_datastore.create_user(email=userName, password=passWd,name = 'Default user')
   db.session.commit()
   createDatabaseAccount(dbRootPassword,dbHost,dbPort,userName,'')
@@ -118,6 +119,4 @@ def createCairisCnf(configFile,dbRootPassword,dbHost,dbPort,tmpDir,rootDir,image
 
   f.write("\n")
   f.write("secret_key = " + os.urandom(16).encode('hex') + "\n")
-  f.write("password_hash = sha512_crypt\n")
-  f.write("password_salt = " + os.urandom(16).encode('hex') + "\n")
   f.close()

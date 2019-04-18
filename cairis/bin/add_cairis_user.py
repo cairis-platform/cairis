@@ -32,8 +32,6 @@ app = Flask(__name__)
 app.config['DEBUG'] = True
 b = Borg()
 app.config['SECRET_KEY'] = b.secretKey
-app.config['SECURITY_PASSWORD_HASH'] = b.passwordHash
-app.config['SECURITY_PASSWORD_SALT'] = b.passwordSalt
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:' + b.rPasswd + '@' + b.dbHost + '/cairis_user'
 
 db = SQLAlchemy(app)

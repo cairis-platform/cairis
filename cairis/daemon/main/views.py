@@ -58,7 +58,7 @@ def set_dbproxy(dbUser,userName):
   b.settings[id]['dbProxy'] = db_proxy
   b.settings[id]['dbUser'] = dbUser
   b.settings[id]['userName'] = userName
-  b.settings[id]['dbPasswd'] =dbPasswd
+  b.settings[id]['dbPasswd'] = dbPasswd
   b.settings[id]['dbHost'] = b.dbHost
   b.settings[id]['dbPort'] = b.dbPort
   b.settings[id]['dbName'] = dbName
