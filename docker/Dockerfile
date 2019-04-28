@@ -17,6 +17,8 @@ RUN apt-get install -y apache2-dev
 RUN apt-get install -y poppler-utils
 RUN apt-get install -y apt-transport-https 
 RUN apt-get install -y ca-certificates
+RUN apt-get install -y python-dbus
+RUN apt-get install -y gnome-keyring
 
 COPY requirements.txt /
 COPY wsgi_requirements.txt /

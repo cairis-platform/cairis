@@ -40,6 +40,7 @@ from cairis.controllers import AssetController, AttackerController, CImportContr
     PersonaCharacteristicController, TaskCharacteristicController, ObjectDependencyController, ArchitecturalPatternController, SecurityPatternController, ValueTypeController, TemplateGoalController, TemplateAssetController,TemplateRequirementController, LocationsController, RiskLevelController, TraceController, SummaryController, ConceptReferenceController, DataFlowController, DirectoryController,TrustBoundaryController, VersionController, ValidationController
 from cairis.daemon.main import main, api
 from cairis.tools.SessionValidator import get_session_id
+from cairis.core.PasswordManager import getDatabasePassword
 
 
 __author__ = 'Robin Quetin, Shamal Faily'
@@ -47,7 +48,7 @@ __author__ = 'Robin Quetin, Shamal Faily'
 def set_dbproxy(dbUser,userName):
   b = Borg()
   dbName = dbUser + '_default'
-  dbPasswd = ''
+  dbPasswd = getDatabasePassword(dbUser)
 
   db_proxy = MySQLDatabaseProxy(user=dbUser,passwd=dbPasswd,db=dbName)
   pSettings = db_proxy.getProjectSettings()

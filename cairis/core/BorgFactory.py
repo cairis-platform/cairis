@@ -24,6 +24,7 @@ import json
 from cairis.tools.GraphicsGenerator import GraphicsGenerator
 from .MySQLDatabaseProxy import MySQLDatabaseProxy
 from .ARM import ARMException
+from .PasswordManager import getDatabasePassword
 
 def testUploadDirectory(uploadDir,logger):
   
@@ -123,9 +124,10 @@ def initialise(user='cairis_test',db='cairis_test_default'):
     db='cairis_test_default'
   else:
     b.dbUser = user
-    b.dbPasswd = ''
+    dbPasswd = getDatabasePassword(user)
+    b.dbPasswd = dbPasswd
     b.dbName = db
-  b.dbProxy = GUIDatabaseProxy(user=user,passwd=dbPasswd,db=db)
+  b.dbProxy = GUIDatabaseProxy(user=user,passwd=b.dbPasswd,db=db)
   initialiseDesktopSettings()
 
 def dInitialise(withTest = True):
