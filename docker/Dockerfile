@@ -1,4 +1,4 @@
-FROM ubuntu:xenial
+FROM ubuntu:bionic
 MAINTAINER Shamal Faily <sfaily@bournemouth.ac.uk>
 RUN apt-get update 
 RUN apt-get install -y python3-dev
@@ -21,6 +21,7 @@ RUN apt-get install -y python-dbus
 RUN apt-get install -y gnome-keyring
 RUN apt-get install -y libffi-dev
 RUN apt-get install -y libssl-dev
+RUN apt-get install -y python3-keyring
 
 COPY requirements.txt /
 COPY wsgi_requirements.txt /
