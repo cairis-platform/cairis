@@ -22,6 +22,7 @@ addons:
     - docbook-utils
     - libxml2-dev
     - libxslt1-dev
+    - python-dbus
 
 env:
 - PYTHONPATH=. CAIRIS_SRC=$PYTHONPATH/cairis CAIRIS_CFG=cairis_travis.cnf XML_CATALOG_FILES=$CAIRIS_SRC/config/catalog
