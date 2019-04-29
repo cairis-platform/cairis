@@ -25,6 +25,7 @@ import MySQLdb
 import _mysql_exceptions
 from cairis.core.MySQLDatabaseProxy import createDatabaseAccount, createDatabaseAndPrivileges, createDatabaseSchema
 from cairis.core.PasswordManager import setDatabasePassword
+import binascii
 
 __author__ = 'Shamal Faily'
 
@@ -121,5 +122,5 @@ def createCairisCnf(configFile,dbRootPassword,dbHost,dbPort,tmpDir,rootDir,image
   f.write("upload_dir = " + uploadDir + "\n")
 
   f.write("\n")
-  f.write("secret_key = " + os.urandom(16).encode('hex') + "\n")
+  f.write("secret_key = " + str(binascii.hexlify(os.urandom(16))) + "\n")
   f.close()

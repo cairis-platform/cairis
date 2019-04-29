@@ -1,12 +1,12 @@
 FROM ubuntu:xenial
 MAINTAINER Shamal Faily <sfaily@bournemouth.ac.uk>
 RUN apt-get update 
-RUN apt-get install -y python-dev
+RUN apt-get install -y python3-dev
 RUN apt-get install -y build-essential
 RUN apt-get install -y mysql-client
 RUN apt-get install -y graphviz
-RUN apt-get install -y python-pip
-RUN apt-get install -y python-numpy
+RUN apt-get install -y python3-pip
+RUN apt-get install -y python3-numpy
 RUN apt-get install -y git
 RUN apt-get install -y libmysqlclient-dev
 RUN apt-get install -y python-apt
@@ -22,8 +22,8 @@ RUN apt-get install -y gnome-keyring
 
 COPY requirements.txt /
 COPY wsgi_requirements.txt /
-RUN pip install -r requirements.txt
-RUN pip install -r wsgi_requirements.txt
+RUN pip3 install -r requirements.txt
+RUN pip3 install -r wsgi_requirements.txt
 ENV CAIRIS_SRC=/cairis/cairis
 ENV CAIRIS_CFG_DIR=/cairis/docker
 ENV CAIRIS_CFG=cairis.cnf
