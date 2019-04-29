@@ -11,18 +11,18 @@ addons:
     - python-dev
     - build-essential
     - graphviz
-    - python-pip
-    - python-numpy
+    - python3-pip
+    - python3-numpy
     - git
     - libmysqlclient-dev
     - docbook
-    - python-apt
+    - python3-apt
     - dblatex
     - texlive-latex-extra
     - docbook-utils
     - libxml2-dev
     - libxslt1-dev
-    - python-dbus
+    - python3-dbus
 
 env:
 - PYTHONPATH=. CAIRIS_SRC=$PYTHONPATH/cairis CAIRIS_CFG=cairis_travis.cnf XML_CATALOG_FILES=$CAIRIS_SRC/config/catalog
