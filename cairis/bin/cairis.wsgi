@@ -35,6 +35,6 @@ def apply_caching(response):
 if __name__ == '__main__':
   try:
     application.run() 
-  except CairisHTTPError, e:
-    print 'Fatal CAIRIS error: ' + str(e)
+  except CairisHTTPError as e:
+    print('Fatal CAIRIS error: ' + str(e))
     sys.exit(-1)
