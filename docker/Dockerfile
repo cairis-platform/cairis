@@ -5,11 +5,11 @@ RUN apt-get install -y python-dev
 RUN apt-get install -y build-essential
 RUN apt-get install -y mysql-client
 RUN apt-get install -y graphviz
-RUN apt-get install -y python3-pip
-RUN apt-get install -y python3-numpy
+RUN apt-get install -y python-pip
+RUN apt-get install -y python-numpy
 RUN apt-get install -y git
 RUN apt-get install -y libmysqlclient-dev
-RUN apt-get install -y python3-apt
+RUN apt-get install -y python-apt
 RUN apt-get install -y libxml2-dev
 RUN apt-get install -y libxslt1-dev 
 RUN apt-get install -y apache2
@@ -17,7 +17,7 @@ RUN apt-get install -y apache2-dev
 RUN apt-get install -y poppler-utils
 RUN apt-get install -y apt-transport-https 
 RUN apt-get install -y ca-certificates
-RUN apt-get install -y python3-dbus
+RUN apt-get install -y python-dbus
 RUN apt-get install -y gnome-keyring
 
 COPY requirements.txt /
