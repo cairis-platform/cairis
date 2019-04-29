@@ -19,6 +19,8 @@ RUN apt-get install -y apt-transport-https
 RUN apt-get install -y ca-certificates
 RUN apt-get install -y python-dbus
 RUN apt-get install -y gnome-keyring
+RUN apt-get install -y libffi-dev
+RUN apt-get install -y libssl-dev
 
 COPY requirements.txt /
 COPY wsgi_requirements.txt /
