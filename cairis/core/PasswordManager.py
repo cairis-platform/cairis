@@ -24,9 +24,11 @@ from keyring import set_password, get_password
 __author__ = 'Shamal Faily'
 
 def setDatabasePassword(dbUser):
-  rp = ''.join(choice(ascii_letters + digits) for i in range(32))
-  set_password('cairisdb',dbUser,rp)
-  return rp
+#  rp = ''.join(choice(ascii_letters + digits) for i in range(32))
+#  set_password('cairisdb',dbUser,rp)
+#  return rp
+  return ''
 
 def getDatabasePassword(dbUser):
-  return get_password('cairisdb',dbUser)
+#  return get_password('cairisdb',dbUser)
+  return ''
