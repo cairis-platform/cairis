@@ -18,17 +18,17 @@
 from random import choice
 from string import ascii_letters, digits
 import secretstorage
-from keyring import set_password, get_password
+from keyring import set_keyring, set_password, get_password
+import keyring_jeepney
 
 
 __author__ = 'Shamal Faily'
 
 def setDatabasePassword(dbUser):
-#  rp = ''.join(choice(ascii_letters + digits) for i in range(32))
-#  set_password('cairisdb',dbUser,rp)
-#  return rp
-  return ''
+  set_keyring(keyring_jeepney.Keyring())
+  rp = ''.join(choice(ascii_letters + digits) for i in range(32))
+  set_password('cairisdb',dbUser,rp)
+  return rp
 
 def getDatabasePassword(dbUser):
-#  return get_password('cairisdb',dbUser)
-  return ''
+  return get_password('cairisdb',dbUser)
