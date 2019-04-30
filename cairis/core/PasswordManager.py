@@ -25,10 +25,12 @@ import keyring_jeepney
 __author__ = 'Shamal Faily'
 
 def setDatabasePassword(dbUser):
-  set_keyring(keyring_jeepney.Keyring())
-  rp = ''.join(choice(ascii_letters + digits) for i in range(32))
-  set_password('cairisdb',dbUser,rp)
-  return rp
+#  set_keyring(keyring_jeepney.Keyring())
+#  rp = ''.join(choice(ascii_letters + digits) for i in range(32))
+#  set_password('cairisdb',dbUser,rp)
+#  return rp
+  return ''
 
 def getDatabasePassword(dbUser):
-  return get_password('cairisdb',dbUser)
+#  return get_password('cairisdb',dbUser)
+  return ''
