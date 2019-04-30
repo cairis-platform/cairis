@@ -25,3 +25,4 @@ openpyxl>=2.4.0
 bcrypt>=3.1.6
 secretstorage>=2.3.1
 keyring>=3.7.4
+keyring_jeepney>=2.3.1
