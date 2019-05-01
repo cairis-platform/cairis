@@ -23,7 +23,6 @@ from flask_security import Security, SQLAlchemyUserDatastore, UserMixin, RoleMix
 from flask_cors import CORS
 from cairis.core.Borg import Borg
 from cairis.core.MySQLDatabaseProxy import createDatabaseAccount,createDatabaseAndPrivileges,createDatabaseSchema
-from cairis.core.PasswordManager import setDatabasePassword
 import cairis.core.BorgFactory
 
 __author__ = 'Shamal Faily'
@@ -51,6 +50,7 @@ class User(db.Model, UserMixin):
   id = db.Column(db.Integer, primary_key=True)
   email = db.Column(db.String(255), unique=True)
   password = db.Column(db.String(255))
+  dbtoken = db.Column(db.String(255))
   name = db.Column(db.String(255))
   active = db.Column(db.Boolean())
   confirmed_at = db.Column(db.DateTime())
@@ -66,13 +66,14 @@ def main():
   parser.add_argument('name',help='Full name')
   args = parser.parse_args()
 
-  rp = setDatabasePassword(args.user)
+  rp = ''.join(choice(ascii_letters + digits) for i in range(255))
+
   createDatabaseAccount(b.rPasswd,b.dbHost,b.dbPort,args.user,rp)
   createDatabaseAndPrivileges(b.rPasswd,b.dbHost,b.dbPort,args.user,rp,args.user + '_default')
   createDatabaseSchema(b.cairisRoot,b.dbHost,b.dbPort,args.user,rp,args.user + '_default')
 
   db.create_all()
-  user_datastore.create_user(email=args.user, password=args.password, name=args.name) 
+  user_datastore.create_user(email=userName, password=passWd,dbtoken=rp,name = 'Default user')
   db.session.commit()
 
 if __name__ == '__main__':

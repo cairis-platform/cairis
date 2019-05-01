@@ -24,8 +24,10 @@ import sys
 import MySQLdb
 import _mysql_exceptions
 from cairis.core.MySQLDatabaseProxy import createDatabaseAccount, createDatabaseAndPrivileges, createDatabaseSchema
-from cairis.core.PasswordManager import setDatabasePassword
 import binascii
+from random import choice
+from string import ascii_letters, digits
+
 
 __author__ = 'Shamal Faily'
 
@@ -49,11 +51,10 @@ def quick_setup(dbHost,dbPort,dbRootPassword,tmpDir,rootDir,imageDir,configFile,
   from cairis.bin.add_cairis_user import user_datastore, db
 
   db.create_all()
-
-  user_datastore.create_user(email=userName, password=passWd,name = 'Default user')
+  rp = ''.join(choice(ascii_letters + digits) for i in range(255))
+  user_datastore.create_user(email=userName, password=passWd,dbtoken=rp,name = 'Default user')
   db.session.commit()
 
-  rp = setDatabasePassword(userName)
   createDatabaseAccount(dbRootPassword,dbHost,dbPort,userName,rp)
   createDatabaseAndPrivileges(dbRootPassword,dbHost,dbPort,userName,rp,userName + '_default')
   createDatabaseSchema(rootDir,dbHost,dbPort,userName,rp,userName + '_default')

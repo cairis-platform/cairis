@@ -116,6 +116,28 @@ import sys
 
 __author__ = 'Shamal Faily, Robin Quetin, Nathan Jenkins'
 
+def dbtoken(rPasswd,dbHost,dbPort,dbUser):
+  try:
+    rootConn = MySQLdb.connect(host=dbHost,port=int(dbPort),user='root',passwd=rPasswd)
+    rootCursor = rootConn.cursor()
+    sqlTxt = 'select dbtoken from cairis_user.auth_user where email="' + dbUser + '"'
+    rs = rootCursor.execute(sqlTxt)
+    if (rs != 1):
+      exceptionText = 'MySQL error getting token for ' + dbUser 
+      raise DatabaseProxyException(exceptionText) 
+    else:
+      t = rootCursor.fetchone()
+    rootCursor.close()
+    rootConn.close()
+    return t[0]
+  except OperationalError as e:
+    exceptionText = 'MySQL error getting token for ' + dbUser + ' (message:' + format(e) + ')'
+    raise DatabaseProxyException(exceptionText) 
+  except _mysql_exceptions.DatabaseError as e:
+    id,msg = e
+    exceptionText = 'MySQL error getting token for ' + dbUser + ' (id:' + str(id) + ',message:' + msg
+    raise DatabaseProxyException(exceptionText) 
+
 def createDatabaseSchema(rootDir,dbHost,dbPort,dbUser,dbPasswd,dbName):
   srcDir = rootDir + '/sql'
   initSql = srcDir + '/init.sql'
