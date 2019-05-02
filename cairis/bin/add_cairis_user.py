@@ -75,7 +75,7 @@ def main():
   createDatabaseSchema(b.cairisRoot,b.dbHost,b.dbPort,args.user,rp,args.user + '_default')
 
   db.create_all()
-  user_datastore.create_user(email=userName, password=passWd,dbtoken=rp,name = 'Default user')
+  user_datastore.create_user(email=args.user, password=args.password,dbtoken=rp,name = 'Default user')
   db.session.commit()
 
 if __name__ == '__main__':
