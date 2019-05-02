@@ -25,6 +25,7 @@ from cairis.core.Borg import Borg
 from cairis.core.MySQLDatabaseProxy import createDatabaseAccount,createDatabaseAndPrivileges,createDatabaseSchema
 import cairis.core.BorgFactory
 from random import choice
+import string
 
 __author__ = 'Shamal Faily'
 
@@ -67,7 +68,7 @@ def main():
   parser.add_argument('name',help='Full name')
   args = parser.parse_args()
 
-  rp = ''.join(choice(ascii_letters + digits) for i in range(255))
+  rp = ''.join(choice(string.ascii_letters + string.digits) for i in range(255))
 
   createDatabaseAccount(b.rPasswd,b.dbHost,b.dbPort,args.user,rp)
   createDatabaseAndPrivileges(b.rPasswd,b.dbHost,b.dbPort,args.user,rp,args.user + '_default')
