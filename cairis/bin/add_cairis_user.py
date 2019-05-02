@@ -24,6 +24,7 @@ from flask_cors import CORS
 from cairis.core.Borg import Borg
 from cairis.core.MySQLDatabaseProxy import createDatabaseAccount,createDatabaseAndPrivileges,createDatabaseSchema
 import cairis.core.BorgFactory
+from random import choice
 
 __author__ = 'Shamal Faily'
 
