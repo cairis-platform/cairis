@@ -24,7 +24,7 @@ else:
   import httplib
   from httplib import OK
 import MySQLdb
-from flask import send_from_directory, make_response, session, request
+from flask import send_from_directory, send_file, make_response, session, request
 from flask_restful import Api
 from flask_security import login_required, http_auth_required
 from flask_security.utils import logout_user
@@ -40,7 +40,8 @@ from cairis.controllers import AssetController, AttackerController, CImportContr
     PersonaCharacteristicController, TaskCharacteristicController, ObjectDependencyController, ArchitecturalPatternController, SecurityPatternController, ValueTypeController, TemplateGoalController, TemplateAssetController,TemplateRequirementController, LocationsController, RiskLevelController, TraceController, SummaryController, ConceptReferenceController, DataFlowController, DirectoryController,TrustBoundaryController, VersionController, ValidationController
 from cairis.daemon.main import main, api
 from cairis.tools.SessionValidator import get_session_id
-
+from base64 import b64decode
+import io
 
 __author__ = 'Robin Quetin, Shamal Faily'
 
@@ -156,25 +157,16 @@ def get_asset(path):
 
 @main.route('/images/<path:path>')
 def get_image(path):
-  try:
-    b = Borg()
-    fixed_img_path = b.imageDir
-    upload_img_path = b.uploadDir
-  except AttributeError:
-    image_dir = 'images'
-
-  if os.path.exists(fixed_img_path):
-    return send_from_directory(fixed_img_path, path)
-  elif os.path.exists(upload_img_path):
-    return send_from_directory(upload_img_path, path)
+  b = Borg()
+  session_id = get_session_id(session, request)
+  db_proxy = b.settings[session_id]['dbProxy']
+  imgDetails = db_proxy.getImage(path)
+  if (imgDetails != None):
+    fp = io.BytesIO(b64decode(imgDetails[0]))
+    return send_file(fp,mimetype=imgDetails[1])
   else:
-    try:
-      b = Borg()
-      web_img_dir = os.path.join(b.staticDir, 'images')
-      return send_from_directory(web_img_dir, path)
-    except AttributeError:
-      return send_from_directory('static/images', path)
-  return handle_error(err)
+    distDir = b.staticDir
+    return send_from_directory(distDir, 'default-avatar.png')
 
 @main.route('/api/user')
 def get_user_details():
@@ -305,6 +297,7 @@ api.add_resource(CExportController.CExportGRLAPI, '/api/export/file/grl/task/<st
 api.add_resource(FindController.FindAPI, '/api/find/<string:search_string>',endpoint='find')
 
 # Import routes
+api.add_resource(CImportController.CImportPackageAPI, '/api/import/package',endpoint='import_package')
 api.add_resource(CImportController.CImportTextAPI, '/api/import/text',endpoint='import_text')
 api.add_resource(CImportController.CImportFileAPI, '/api/import/file/type/<string:type>',endpoint='import_file')
 

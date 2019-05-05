@@ -123,7 +123,7 @@
 
 * Rapid changes face ACME in the use and dependence of computers and network technologies.  It is necessary and reasonable to expect everyone to apply the proper methods of handling and safeguarding information, and managing computer and network resources.</background>
   <strategic_goals>To provide a secure operating environment for SCADA, Telemetry and Control Systems associated with assets owned and operated by ACME</strategic_goals>
-  <rich_picture image="stcsContext.jpg" />
+  <rich_picture image="" />
   <scope>All ICT infrastructure in support of Enterprise SCADA, Telemetry and Control Systems indicated in the rich picture.</scope>
   <naming_conventions>
     <entry name="ACME" >
@@ -696,7 +696,7 @@
     <vulnerable_asset name="STCS Application" />
   </vulnerability_environment>
 </vulnerability>
-<attacker name="Ben" image="Ben.jpg">
+<attacker name="Ben" image="">
   <description>Ben is a security engineer for RedTeam LLC.  He is working with a junior tester (Alex) to conduct a red team test on ACME Water; they are evaluating ACME's security posture to ensure their security policies on te use of IT are being followed.
 
 Ben has a first degree in Computer Science, and Masters degree in Information Security.  Ben is also holds CREST accreditations.
@@ -729,7 +729,7 @@ As an industrial control systems penetration tester, Ben carries out limited eng
     <capability name="Knowledge/Books and Manuals" value="High" />
   </attacker_environment>
 </attacker>
-<attacker name="Victor" image="Victor.jpg">
+<attacker name="Victor" image="">
   <description>Victor is a contractor and expert in the SCADA systems used by ACME, having helped develop them over 15 years ago.
 
 Due to the recent economic downtime, Victor has been forced to take a recent pay-cut.</description>
@@ -740,7 +740,7 @@ Due to the recent economic downtime, Victor has been forced to take a recent pay
     <capability name="Software" value="Low" />
   </attacker_environment>
 </attacker>
-<attacker name="Gareth" image="b853cd3d-b066-41dd-90bf-2934a41685ee.jpg">
+<attacker name="Gareth" image="">
   <description>Gareth is 35, lives in Stepford and is unemployed.
 
 Gareth has friends who work as building labourers as part of some capital project at Rick's water treatment works.  They tell him that computer hardware and surplus piping and copper can be found around the site.</description>
@@ -755,7 +755,7 @@ Gareth has friends who work as building labourers as part of some capital projec
     <capability name="Resources/Personnel and Time" value="High" />
   </attacker_environment>
 </attacker>
-<attacker name="Unintentional Rick" image="Rick.jpg">
+<attacker name="Unintentional Rick" image="">
   <description>Rick has a basic operating knowledge of Windows; enough to carry out his day-to-day routines, check his email, and navigate the main sections of InfoPortal.
 
 Rick isn't a power-user; he acknowledges that younger "whizz kids" are much more adept at using PCs than he is.  Consequently, he only uses a sub-set of the desktop icons currently on his desktop.  "I don't know what these other applications do", Rick says,"I've tried clicking on one and it just gives me a Data Protection Warning.  I guess this means I'm not authorised to use it."</description>
@@ -1148,7 +1148,7 @@ Ben promptly installs a keylogger onto this PC before logging out.</narrative>
 </riskanalysis>
 
 <usability>
-<persona name="Rick" type="Primary" assumption_persona="FALSE" image="c9133520-05bd-483d-8591-9a10ea699d0f.jpg" >
+<persona name="Rick" type="Primary" assumption_persona="FALSE" image="" >
   <activities>Rick is a clean-water plant operator, responsible for ensuring that water processed through the plant is in line with specified set-points.  Rick's area of responsibility extend outside of the confines of the plant to include checking on pumping stations, which feed water into the plant's nearby reservoir.
 
  During his working shifts (he works a 5 + 1 continental shift), Rick frequently checks readings on his SCADA workstation, takes water samples at various locations around the plant, and responds to alarms raised by the SCADA system; if necessary this involves investigating problems, and -- if no remedial tasks are possible -- calling someone out to investigate further.
@@ -1181,7 +1181,7 @@ Ben promptly installs a keylogger onto this PC before logging out.</narrative>
     <narrative>Certain plant operations are carried out at night because the cost of electricity is cheaper.  However, much of Rick's night shifts are spent in-doors, and the control room doors are locked to keep out possible intruders.</narrative>
   </persona_environment>
 </persona>
-<persona name="Barry" type="Secondary" assumption_persona="FALSE" image="Barry.jpg" >
+<persona name="Barry" type="Secondary" assumption_persona="FALSE" image="" >
   <activities>Much of Barry's work involves equipment modification and instrument calibration; this work arises from requests from Process, or activities as part of on-going projects to improve plant efficiency.  As part of these changes, Barry may need to modify alarms on outstations, and make minor changes to PLCs and HMIs.
 
 Barry is often called out to troubleshoot problems at sites and kiosks within his area of operations in Dorset, which can also involve software changes ranging from simply downloading software to a device to clean up its memory, through to re-generating the software from configuration sheets if no software backup is available.</activities>

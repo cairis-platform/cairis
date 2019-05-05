@@ -22,13 +22,14 @@ if (sys.version_info > (3,)):
 else:
   import httplib
   from httplib import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
-from flask import session, make_response
+from flask import session, make_response, send_file
 from flask import request
 from flask_restful import Resource
 from cairis.daemon.CairisHTTPError import MissingParameterHTTPError, CairisHTTPError
 from cairis.data.UploadDAO import UploadDAO
 from cairis.tools.JsonConverter import json_serialize
 from cairis.tools.SessionValidator import get_session_id
+from cairis.core.Borg import Borg
 
 __author__ = 'Robin Quetin, Shamal Faily'
 
@@ -61,9 +62,8 @@ class UploadImageAPI(Resource):
       )
 
     dao = UploadDAO(session_id)
-    filename = dao.upload_image(file)
-
-    resp_dict = {'message': 'File successfully uploaded', 'filename': filename}
+    dao.set_image(file.filename,file.stream.read(),file.mimetype)
+    resp_dict = {'message': 'File successfully uploaded', 'filename': file.filename}
     resp = make_response(json_serialize(resp_dict, session_id=session_id), OK)
     resp.contenttype = 'application/json'
     return resp

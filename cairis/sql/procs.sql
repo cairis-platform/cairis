@@ -959,6 +959,9 @@ drop procedure if exists goalRoot;
 drop procedure if exists obstructedTasks;
 drop procedure if exists isGoalObstructed;
 drop procedure if exists isObstacleObstructed;
+drop procedure if exists setImage;
+drop procedure if exists getImage;
+drop procedure if exists getImages;
 
 
 delimiter //
@@ -25854,6 +25857,25 @@ begin
     end loop andobs_loop;
     close andObsCursor;
   end if;
+end
+//
+
+create procedure getImage(in imageName text)
+begin
+  select content,mimetype from image where name = imageName limit 1;
+end
+//
+
+create procedure setImage(in imageName text, in imageContent longblob, in mimeType text)
+begin
+  delete from image where name = imageName;
+  insert into image(name,content,mimetype) values (imageName,imageContent, mimeType);
+end
+//
+
+create procedure getImages()
+begin
+  select name,content from image;
 end
 //
 

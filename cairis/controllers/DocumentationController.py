@@ -58,7 +58,7 @@ class DocumentationAPI(Resource):
     dao.close()
 
     if os.path.isfile(reportName):
-      binary_pdf = open(reportName).read()
+      binary_pdf = open(reportName,'rb').read()
       resp = make_response(binary_pdf)
       resp.headers['Content-Type'] = 'application/' + filePostfix
       resp.headers['Content-Disposition'] = 'Attachment; filename=' + fileName + '.' + filePostfix

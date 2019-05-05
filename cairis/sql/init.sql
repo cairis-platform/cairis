@@ -386,6 +386,7 @@ DROP TABLE IF EXISTS countermeasure_value;
 DROP TABLE IF EXISTS threat_value;
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS version;
+DROP TABLE IF EXISTS image;
 
 CREATE TABLE version(
   major INT NOT NULL,
@@ -3390,6 +3391,13 @@ CREATE TABLE risk_vulnerability (
   PRIMARY KEY(risk_id,vulnerability_id),
   FOREIGN KEY(risk_id) REFERENCES risk(id),
   FOREIGN KEY(vulnerability_id) REFERENCES vulnerability(id)
+) ENGINE=INNODB;
+
+CREATE TABLE image (
+  name VARCHAR(255) NOT NULL,
+  content LONGBLOB NOT NULL,
+  mimetype VARCHAR(100),
+  PRIMARY KEY(name)
 ) ENGINE=INNODB;
 
 

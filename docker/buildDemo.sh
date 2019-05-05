@@ -20,9 +20,9 @@ sudo docker run --name CAIRIS -d --link cairis-mysql:mysql --link cairis-docs:do
 sleep 60
 
 # Make sure the requests and argparse packages are installed before running model_import_web.py or web_cimport.py.
-$CAIRIS_REPO/cairis/bin/model_import_web.py --url http://localhost --database NeuroGrid --image_dir $CAIRIS_REPO/examples/exemplars/NeuroGrid --rich_pic NeuroGridContext.jpg $CAIRIS_REPO/examples/exemplars/NeuroGrid/NeuroGrid.xml
+$CAIRIS_REPO/cairis/bin/model_import_web.py --url http://localhost --database NeuroGrid $CAIRIS_REPO/examples/exemplars/NeuroGrid.cairis
 $CAIRIS_REPO/cairis/bin/web_cimport.py --url http://localhost --database NeuroGrid --type locations $CAIRIS_REPO/examples/exemplars/NeuroGrid/ComLab.xml
-$CAIRIS_REPO/cairis/bin/model_import_web.py --url http://localhost --database ACME_Water --image_dir $CAIRIS_REPO/examples/exemplars/ACME_Water --rich_pic stcsContext.jpg $CAIRIS_REPO/examples/exemplars/ACME_Water/ACME_Water.xml
+$CAIRIS_REPO/cairis/bin/model_import_web.py --url http://localhost --database ACME_Water $CAIRIS_REPO/examples/exemplars/ACME_Water/ACME_Water.cairis
 $CAIRIS_REPO/cairis/bin/web_cimport.py --url http://localhost --database ACME_Water --type locations $CAIRIS_REPO/examples/exemplars/ACME_Water/PooleWWTW.xml
 
 # Uncomment below lines if you want to add webinos to the live demo

@@ -42,6 +42,37 @@ import codecs
 
 __author__ = 'Robin Quetin, Shamal Faily'
 
+class CImportPackageAPI(Resource):
+  def post(self):
+    session_id = get_session_id(session, request)
+
+    content_length = request.content_length
+    max_length = 30*1024*1024
+    if content_length > max_length:
+      raise MissingParameterHTTPError(exception=RuntimeError('File exceeded maximum size (30MB)'))
+
+    try:
+      package = request.files['file']
+    except LookupError as ex:
+      raise MissingParameterHTTPError(param_names=['file'])
+    except Exception as ex:
+      raise CairisHTTPError(status_code=CONFLICT, message=str(ex.message), status='Unknown error')
+
+    try:
+      dao = ImportDAO(session_id)
+      dao.package_import(package.stream.read())
+      dao.close()
+    except DatabaseProxyException as ex:
+      raise ARMHTTPError(ex)
+    except ARMException as ex:
+      raise ARMHTTPError(ex)
+    except Exception as ex:
+      raise CairisHTTPError(status_code=500,message=str(ex.message),status='Unknown error')
+
+    resp_dict = {'message': 'Package successfully imported'}
+    resp = make_response(json_serialize(resp_dict, session_id=session_id), OK)
+    resp.contenttype = 'application/json'
+    return resp
 
 class CImportTextAPI(Resource):
 

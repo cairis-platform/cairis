@@ -22,15 +22,14 @@ else:
   import httplib
 import imghdr
 import os
-import uuid
-
+import io
+from cairis.core.ARM import *
 from werkzeug.datastructures import FileStorage
-
 from cairis.core.Borg import Borg
 from cairis.daemon.CairisHTTPError import CairisHTTPError
 from cairis.data.CairisDAO import CairisDAO
 
-__author__ = 'Robin Quetin'
+__author__ = 'Robin Quetin, Shamal Faily'
 
 
 class UploadDAO(CairisDAO):
@@ -39,39 +38,20 @@ class UploadDAO(CairisDAO):
   def __init__(self, session_id):
     CairisDAO.__init__(self, session_id)
     b = Borg()
-    self.image_dir = b.uploadDir
 
-  def upload_image(self, file):
-    """
-    :type file: FileStorage
-    """
-    extension = os.path.splitext(file.filename)[1]
-    f_name = str(uuid.uuid4()) + extension
-    f_path = os.path.join(self.image_dir, f_name)
+  def set_image(self,name,content,mimeType):
 
-    try:
-      file.save(f_path)
-    except IOError:
-      raise CairisHTTPError(
-        status_code=http.client.CONFLICT,
-        status='Unable to save image',
-        message='Please check if the static web directory exists ' +
-                'and if the application has permission to write in the directory',
-      )
-
-    if not os.path.exists(f_path):
-      raise CairisHTTPError(
-                status_code=http.client.CONFLICT,
-                status='Image not found',
-                message='The image could not be saved on the server. \
-Please check the server configuration to fix this problem.'
-       )
-    img_format = imghdr.what(f_path)
+    extension = os.path.splitext(name)
+    img_format = imghdr.what(io.BytesIO(content))
     if not img_format or img_format not in self.accepted_image_types:
-      os.remove(f_name)
       raise CairisHTTPError(
               status_code=http.client.CONFLICT,
               status='Unsupported file type',
               message='The provided image file is not supported by CAIRIS'
       )
-    return f_name
+
+    try:
+      self.db_proxy.setImage(name,content,mimeType)
+    except ARMException as ex:
+      self.close()
+      raise ARMHTTPError(ex)

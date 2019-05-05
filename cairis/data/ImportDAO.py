@@ -22,6 +22,11 @@ from cairis.data.CairisDAO import CairisDAO
 from cairis.bin.cimport import file_import
 from cairis.bin.at2om import dotToObstacleModel
 from cairis.mio.ModelImport import importAttackTreeString
+from cairis.core.Borg import Borg
+from zipfile import ZipFile
+import magic
+import io
+import os
 
 __author__ = 'Shamal Faily'
 
@@ -30,6 +35,29 @@ class ImportDAO(CairisDAO):
 
   def __init__(self, session_id):
     CairisDAO.__init__(self, session_id)
+
+  def package_import(self,pkgStr):
+    try:
+      b = Borg()
+      buf = io.BytesIO(pkgStr)
+      zf = ZipFile(buf)
+      fileList = zf.namelist()
+      modelName = 'model.xml'
+      if (modelName not in fileList):
+        raise ARMHTTPError('model.xml not found')
+      zf.extract(modelName,b.tmpDir)
+      self.file_import(b.tmpDir + '/' + modelName,'all',1) 
+      os.remove(b.tmpDir + '/' + modelName)
+      
+      for fileName in fileList:
+        if (fileName != 'model.xml'):
+          buf = zf.read(fileName)
+          mimeType = magic.from_buffer(buf,mime=True)
+          self.db_proxy.setImage(fileName,buf,mimeType)
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+
 
   def file_import(self,importFile,mFormat,overwriteFlag):
     try:

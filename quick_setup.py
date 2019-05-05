@@ -40,13 +40,11 @@ class CAIRISDatabaseConfigurationForm(np.ActionForm):
     self.theRootPassword = self.add(np.TitlePassword, name = "Database root password:", value = "")
     self.theTmpDir = self.add(np.TitleText, name = "Temp directory:", value = "/tmp")
     self.theRootDir = self.add(np.TitleText, name = "Root directory:", value = pathName + "cairis")
-    self.theImageDir = self.add(np.TitleText, name = "Default image directory:", value = "/tmp")
     self.theFileName = self.add(np.TitleText, name = "CAIRIS configuration file name:", value = os.environ.get("HOME") + "/cairis.cnf")
     self.theWebPort = self.add(np.TitleText,name = "Web port:", value = "7071")
     self.theLogLevel = self.add(np.TitleText,name = "Log level:", value = "debug");
     self.theStaticDir = self.add(np.TitleText,name = "Static directory:", value = pathName + "cairis/dist")
     self.theAssetDir = self.add(np.TitleText,name = "Asset directory:", value = pathName + "cairis/dist")
-    self.theUploadDir = self.add(np.TitleText,name = "Upload directory:", value = "/tmp")
     self.theUsername = self.add(np.TitleText, name = "Initial Username:", value = "")
     self.thePassword = self.add(np.TitlePassword, name = "Initial Password:", value = "")
 
@@ -59,7 +57,7 @@ class CAIRISDatabaseConfigurationForm(np.ActionForm):
 
   def on_ok(self):
     try:
-      quick_setup(self.theHost.value,int(self.thePort.value),self.theRootPassword.value,self.theTmpDir.value,self.theRootDir.value,self.theImageDir.value,self.theFileName.value,int(self.theWebPort.value),self.theLogLevel.value,self.theStaticDir.value,self.theAssetDir.value,self.theUploadDir.value,self.theUsername.value,self.thePassword.value)
+      quick_setup(self.theHost.value,int(self.thePort.value),self.theRootPassword.value,self.theTmpDir.value,self.theRootDir.value,self.theFileName.value,int(self.theWebPort.value),self.theLogLevel.value,self.theStaticDir.value,self.theAssetDir.value,self.theUsername.value,self.thePassword.value)
       self.parentApp.setNextForm(None)
     except ARMException as e:
       np.notify_confirm(str(e), title = 'Error')

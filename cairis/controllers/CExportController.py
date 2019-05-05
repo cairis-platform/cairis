@@ -42,14 +42,18 @@ class CExportFileAPI(Resource):
 
   def get(self):
     session_id = get_session_id(session, request)
-    fileName = request.args.get('filename', 'model.xml')
+    fileName = request.args.get('filename', 'model')
+    fileType = request.args.get('fileType','xml')
 
     dao = ExportDAO(session_id)
-    modelBuf = dao.file_export()
+    modelBuf = dao.file_export(fileName,fileType)
     dao.close()
     resp = make_response(modelBuf)
-    resp.headers["Content-Type"] = 'application/xml'
-    resp.headers["Content-Disposition"] = 'Attachment; filename=' + fileName
+    if (fileType == 'cairis'):
+      resp.headers["Content-Type"] = 'application/octet-stream'
+    else:
+      resp.headers["Content-Type"] = 'application/xml'
+    resp.headers["Content-Disposition"] = 'Attachment; filename=' + fileName + '.' + fileType
     return resp
 
 class CExportArchitecturalPatternAPI(Resource):

@@ -18,6 +18,10 @@
 from cairis.core.ARM import *
 from cairis.daemon.CairisHTTPError import CairisHTTPError, ARMHTTPError
 from cairis.data.CairisDAO import CairisDAO
+import zipfile
+from cairis.core.Borg import Borg
+import io
+from base64 import b64decode
 __author__ = 'Shamal Faily'
 
 
@@ -26,7 +30,7 @@ class ExportDAO(CairisDAO):
   def __init__(self, session_id):
     CairisDAO.__init__(self, session_id)
 
-  def file_export(self):
+  def file_export(self,fileName='',fileType='xml'):
     try:
       xmlBuf = '<?xml version="1.0"?>\n<!DOCTYPE cairis_model PUBLIC "-//CAIRIS//DTD MODEL 1.0//EN" "http://cairis.org/dtd/cairis_model.dtd">\n<cairis_model>\n\n\n'
       xmlBuf+= self.db_proxy.tvTypesToXml(0)[0] + '\n\n'
@@ -40,10 +44,25 @@ class ExportDAO(CairisDAO):
       xmlBuf+= self.db_proxy.misusabilityToXml(0)[0] + '\n\n'
       xmlBuf+= self.db_proxy.dataflowsToXml(0)[0] + '\n\n'
       xmlBuf+= self.db_proxy.locationsToXml()[0] + '\n\n</cairis_model>'
-      return xmlBuf
+     
+      if (fileType == 'xml'):
+        return xmlBuf
+      else:
+        return self.modelPackage(fileName,xmlBuf)
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)
+
+  def modelPackage(self,fileName,xmlBuf):
+    b = Borg()
+    buf = io.BytesIO()
+    zf = zipfile.ZipFile(buf,'w',zipfile.ZIP_DEFLATED)
+    zf.writestr('model.xml',xmlBuf)
+    for imgName,imgContent in self.db_proxy.getImages():
+      zf.writestr(imgName,b64decode(imgContent))
+    zf.close()
+    return buf.getvalue()
+
 
   def architectural_pattern_export(self,apName):
     try:

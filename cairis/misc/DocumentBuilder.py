@@ -33,6 +33,8 @@ from .LocationModel import LocationModel
 from .AssumptionPersonaModel import AssumptionPersonaModel
 from cairis.core.armid import *
 import requests
+from base64 import b64decode
+import io
 
 __author__ = 'Shamal Faily'
 
@@ -103,7 +105,20 @@ def tuplesToPara(ts):
     paraTxt += '<para>' + t[0] + ' : ' + t[1] + '</para>' 
   return paraTxt
 
-def buildImage(imageFile,caption):
+def extractImageFile(p,tmpDir,fileName):
+  buf,mimeType = p.getImage(fileName)
+  buf = b64decode(buf)
+  fp = io.BytesIO(buf)
+  b = Borg()
+  f = open(b.tmpDir + '/' + fileName,'wb')
+  f.write(fp.getvalue())
+  f.close()
+
+def buildImage(p,imageFile,caption,extract = True):
+  if ((os.path.isfile(imageFile) == False) and (extract == True)):
+    b = Borg()
+    extractImageFile(p,b.tmpDir,imageFile)
+    imageFile = b.tmpDir + '/' + imageFile
   components = imageFile.split('.')
   if (len(components) != 2):
     format = 'SVG'
@@ -113,7 +128,6 @@ def buildImage(imageFile,caption):
     imageFormat = 'JPG'
   else:
     imageFormat = 'SVG'
-  b = Borg()
   txt = """
     <mediaobject>
       <imageobject>
@@ -349,7 +363,7 @@ def dpiaNeed(p,pSettings):
   """
   rpFile = pSettings['Rich Picture']
   if (rpFile != ''):
-    chapterTxt += richPictureSection(rpFile)
+    chapterTxt += richPictureSection(p,rpFile)
 
   environments = p.getEnvironments()
   if (environments != None):
@@ -410,7 +424,7 @@ def dpiaProcessing(p,docDir):
     if (buildModel(p,environmentName,modelType,modelFile) == True):
       chapterTxt += """
         <section><title>""" + environmentName + "</title>" 
-      chapterTxt += buildImage(modelFile,environmentName + ' ' + 'Data Flow Diagram')
+      chapterTxt += buildImage(p,modelFile,environmentName + ' ' + 'Data Flow Diagram',False)
       chapterTxt += """
         </section>"""
   chapterTxt += """
@@ -554,7 +568,7 @@ def projectScope(pSettings,p,docDir):
   """
   rpFile = pSettings['Rich Picture']
   if (rpFile != ''):
-    chapterTxt += richPictureSection(rpFile)
+    chapterTxt += richPictureSection(p,rpFile)
   chapterTxt += """
   </chapter>
 """
@@ -821,7 +835,8 @@ def buildPersonas(p,docDir,chapterTxt,isDpia = False):
     personaName = persona.name()
     chapterTxt += """
       <section id=\"""" + personaName.replace(" ","_") + "\"><title>" + personaName + "</title>"
-    chapterTxt += buildImage(b.imageDir + "/" + persona.image(),persona.name())
+    if (persona.image() != ''):
+      chapterTxt += buildImage(p,persona.image(),persona.name())
     chapterTxt += """
         <section><title>Type</title>
           """ + "<para>" + paraText(persona.type()) + "</para>" + """
@@ -942,7 +957,8 @@ def buildAttackers(p,chapterTxt,isPia = False):
     attackerName = attacker.name()
     chapterTxt += """
     <section id=\"""" + attackerName.replace(" ","_") + "\"><title>" + attackerName + "</title>"
-    chapterTxt += buildImage(b.imageDir + "/" + attacker.image(),attacker.name())
+    if (attacker.image() != ''):
+      chapterTxt += buildImage(p,attacker.image(),attacker.name())
     chapterTxt += "<para>" + paraText(attacker.description()) + "</para>"
 
     aaRows = []
@@ -1210,7 +1226,7 @@ def modelSection(p,modelType,docDir):
       validModels = True
       txt += """
         <section><title>""" + environmentName + "</title>" 
-      txt += buildImage(modelFile,environmentName + ' ' + modelType + ' Model')
+      txt += buildImage(p,modelFile,environmentName + ' ' + modelType + ' Model',False)
       txt += """
         </section>"""
   txt += """
@@ -1232,7 +1248,7 @@ def locationModelSection(p,locsName,docDir):
       validModels = True
       txt += """
         <section><title>""" + environmentName + "</title>" 
-      txt += buildImage(modelFile,environmentName + ' ' + 'Locations Model')
+      txt += buildImage(p,modelFile,environmentName + ' ' + 'Locations Model',False)
       txt += """
         </section>"""
   txt += """
@@ -1255,7 +1271,7 @@ def personaModelSection(p,pName,docDir):
       validModels = True
       txt += """
         <section><title>""" + bv + "</title>"
-      txt += buildImage(modelFile + ".svg",pName + ' ' + bv + ' Assumptions Model')
+      txt += buildImage(p,modelFile + ".svg",pName + ' ' + bv + ' Assumptions Model',False)
       txt += """
         </section>"""
   txt += """
@@ -1265,12 +1281,13 @@ def personaModelSection(p,pName,docDir):
   else: 
     return txt
 
-def richPictureSection(rpFile):
+def richPictureSection(p,rpFile):
   b = Borg()
   txt = """
     <section><title>Scope of work</title>
       <para>The following rich picture illustrates the scope of this document.</para>"""
-  txt += buildImage(b.imageDir + "/" + rpFile,'Rich picture of the problem domain')
+  if (rpFile != ''):
+    txt += buildImage(p,rpFile,'Rich picture of the problem domain')
    
   txt += """
     </section>"""

@@ -25,27 +25,6 @@ from cairis.tools.GraphicsGenerator import GraphicsGenerator
 from .MySQLDatabaseProxy import MySQLDatabaseProxy,dbtoken
 from .ARM import ARMException
 
-def testUploadDirectory(uploadDir,logger):
-  
-  image_upload_dir = os.path.join(uploadDir, 'images')
-  if os.path.exists(image_upload_dir):
-    try:
-      test_file = os.path.join(image_upload_dir, 'test.txt')
-      fs_test = open(test_file, 'wb')
-      fs_test.write('test'.encode('utf-8'))
-      fs_test.close()
-      os.remove(test_file)
-    except IOError:
-      err_msg = 'The upload directory for images is not writeable. Image uploading will propably not work.'
-      logger.warning(err_msg)
-  else:
-    try:
-      os.mkdir(image_upload_dir, 0o775)
-    except IOError:
-      err_msg = 'Unable to create directory to store images into. Image uploading will probably not work.'
-      logger.warning(err_msg)
-
-
 def parseConfigFile():
   b = Borg()
   cfgFileName = ''
@@ -76,7 +55,6 @@ def initialiseCairisDbSettings(cfgDict):
   b.dbName = 'cairis_test_default'
   b.tmpDir = cfgDict['tmp_dir']
   b.cairisRoot = cfgDict['root']
-  b.imageDir = os.path.abspath(cfgDict['default_image_dir'])
   b.rPasswd = ''
   b.docker = True if 'docker' in cfgDict else False
   
@@ -138,7 +116,6 @@ def dInitialise(withTest = True):
   logging.basicConfig()
   b.logger = logging.getLogger('cairisd')
   b.configDir = os.path.join(b.cairisRoot,'config')
-  b.uploadDir = cfgDict['upload_dir']
   b.secretKey = cfgDict['secret_key']
 
   try:
@@ -160,14 +137,11 @@ def dInitialise(withTest = True):
   else: 
     b.assetDir = cfgDict['web_asset_dir']
   b.templateDir = os.path.join(b.cairisRoot,'templates')
-  if not hasattr(b, 'uploadDir'): b.uploadDir = os.path.join(b.cairisRoot,'cairis/static')
 
   paths = {
     'root': b.cairisRoot,
-    'image': b.imageDir,
     'configuration files': b.configDir,
-    'template files': b.templateDir,
-    'upload': b.uploadDir
+    'template files': b.templateDir
   }
 
   for key, path in list(paths.items()):
@@ -175,8 +149,6 @@ def dInitialise(withTest = True):
       err_msg = 'The {0} directory of CAIRIS is inaccessible or not existing.{1}Path: {2}'.format(key, os.linesep, path)
       b.logger.error(err_msg)
       exit(6)
-
-  testUploadDirectory(b.uploadDir,b.logger)
 
   b.model_generator = GraphicsGenerator('svg')
 

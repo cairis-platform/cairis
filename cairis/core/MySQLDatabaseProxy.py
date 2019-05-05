@@ -113,6 +113,7 @@ from numpy import *
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 import sys
+from base64 import b64encode
 
 __author__ = 'Shamal Faily, Robin Quetin, Nathan Jenkins'
 
@@ -4759,3 +4760,16 @@ class MySQLDatabaseProxy:
 
   def assetAttackSurface(self,assetName,envName):
     return self.responseList('select assetAttackSurface(:asset,:environment)',{'asset':assetName,'environment':envName},'MySQL error getting asset attack surface')[0]
+
+  def setImage(self,imageName,imageContent,mimeType):
+    self.updateDatabase('call setImage(:name,:content,:type)',{'name':imageName,'content': b64encode(imageContent),'type':mimeType},'MySQL error setting image')
+
+  def getImage(self,imageName):
+    imgResponse = self.responseList('call getImage(:name)',{'name': imageName},'MySQL error getting image')
+    if (len(imgResponse) == 0):
+      return None
+    else:
+      return imgResponse[0]
+
+  def getImages(self):
+    return self.responseList('call getImages()',{},'MySQL error getting images')

@@ -32,65 +32,81 @@ __author__ = 'Robin Quetin, Shamal Faily'
 
 class CImportTests(CairisDaemonTestCase):
 
-    xmlfile = os.environ['CAIRIS_SRC'] + '/../examples/exemplars/NeuroGrid/NeuroGrid.xml'
-    logger = logging.getLogger(__name__)
+  xmlfile = os.environ['CAIRIS_SRC'] + '/../examples/exemplars/NeuroGrid/NeuroGrid.xml'
+  logger = logging.getLogger(__name__)
 
-    def test_cimport_data_post(self):
-        method = 'test_cimport_text_post'
-        url = '/api/import/text'
-        fs_xmlfile = open(self.xmlfile, 'rb')
-        file_contents = fs_xmlfile.read()
-        self.logger.info('[%s] URL: %s', method, url)
-        self.logger.debug('[%s] XML file:\n%s', method, file_contents)
+  def test_cimport_package_post(self):
+    method = 'test_cimport_package_post'
+    url = '/api/import/package'
+    package = BytesIO(open(os.environ['CAIRIS_SRC'] + '/test/test.cairis','rb').read())
+    rv = self.app.post('/api/import/package?session_id=test', data={
+      'file': (package, 'test.cairis'),
+    })
+    responseData = rv.data.decode('utf-8')
+    self.assertIsNotNone(responseData, 'No response')
+    json_dict = jsonpickle.decode(responseData)
+    self.assertIsInstance(json_dict, dict, 'The response is not a valid JSON dictionary')
+    assert isinstance(json_dict, dict)
+    message = json_dict.get('message')
+    self.assertIsNotNone(message, 'Response does not contain a message')
+    self.logger.info('[%s] Message: %s', method, message)
 
-        urlenc_file_contents = quote(file_contents)
-        json_dict = {
-            'session_id': 'test',
-            'object': {
-                'urlenc_file_contents': urlenc_file_contents,
-                'overwrite' : 1,
-                'type': 'all'
-            }
-        }
-        json_body = jsonpickle.encode(json_dict)
-        rv = self.app.post(url, data=json_body, content_type='application/json')
-        if (sys.version_info > (3,)):
-          responseData = rv.data.decode('utf-8')
-        else:
-          responseData = rv.data
-        self.assertIsNotNone(responseData, 'No response')
-        json_dict = jsonpickle.decode(responseData)
-        self.assertIsInstance(json_dict, dict, 'The response is not a valid JSON dictionary')
-        assert isinstance(json_dict, dict)
-        message = json_dict.get('message')
-        self.assertIsNotNone(message, 'Response does not contain a message')
-        self.logger.info('[%s] Message: %s', method, message)
+  def test_cimport_data_post(self):
+    method = 'test_cimport_text_post'
+    url = '/api/import/text'
+    fs_xmlfile = open(self.xmlfile, 'rb')
+    file_contents = fs_xmlfile.read()
+    self.logger.info('[%s] URL: %s', method, url)
+    self.logger.debug('[%s] XML file:\n%s', method, file_contents)
 
-    def test_cimport_file_post(self):
-        method = 'test_cimport_file_post'
-        url = '/api/import/file/type/all?session_id=test'
-        fs_xmlfile = open(self.xmlfile, 'rb')
-        file_contents = fs_xmlfile.read()
-        self.logger.info('[%s] URL: %s', method, url)
-        self.logger.debug('[%s] XML file:\n%s', method, file_contents)
-        if (sys.version_info > (3,)):
-          buf = BytesIO(file_contents)
-        else:
-          buf = StringIO(file_contents)
-        data = {
-            'file': (buf, 'import.xml'),
-            'session_id': 'test'
-        }
-        rv = self.app.post(url, data=data, content_type='multipart/form-data')
-        if (sys.version_info > (3,)):
-          responseData = rv.data.decode('utf-8')
-        else:
-          responseData = rv.data
-        self.assertIsNotNone(responseData, 'No response')
-        json_dict = jsonpickle.decode(responseData)
-        self.assertIsInstance(json_dict, dict, 'The response is not a valid JSON dictionary')
-        assert isinstance(json_dict, dict)
-        message = json_dict.get('message')
-        self.assertIsNotNone(message, 'Response does not contain a message')
-        self.logger.info('[%s] Message: %s', method, message)
-        self.assertEquals(message,'0')
+    urlenc_file_contents = quote(file_contents)
+    json_dict = {
+      'session_id': 'test',
+      'object': {
+        'urlenc_file_contents': urlenc_file_contents,
+        'overwrite' : 1,
+        'type': 'all'
+      }
+    }
+    json_body = jsonpickle.encode(json_dict)
+    rv = self.app.post(url, data=json_body, content_type='application/json')
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.assertIsNotNone(responseData, 'No response')
+    json_dict = jsonpickle.decode(responseData)
+    self.assertIsInstance(json_dict, dict, 'The response is not a valid JSON dictionary')
+    assert isinstance(json_dict, dict)
+    message = json_dict.get('message')
+    self.assertIsNotNone(message, 'Response does not contain a message')
+    self.logger.info('[%s] Message: %s', method, message)
+
+  def test_cimport_file_post(self):
+    method = 'test_cimport_file_post'
+    url = '/api/import/file/type/all?session_id=test'
+    fs_xmlfile = open(self.xmlfile, 'rb')
+    file_contents = fs_xmlfile.read()
+    self.logger.info('[%s] URL: %s', method, url)
+    self.logger.debug('[%s] XML file:\n%s', method, file_contents)
+    if (sys.version_info > (3,)):
+      buf = BytesIO(file_contents)
+    else:
+      buf = StringIO(file_contents)
+    data = {
+      'file': (buf, 'import.xml'),
+      'session_id': 'test'
+    }
+    rv = self.app.post(url, data=data, content_type='multipart/form-data')
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.assertIsNotNone(responseData, 'No response')
+    json_dict = jsonpickle.decode(responseData)
+    self.assertIsInstance(json_dict, dict, 'The response is not a valid JSON dictionary')
+    assert isinstance(json_dict, dict)
+    message = json_dict.get('message')
+    self.assertIsNotNone(message, 'Response does not contain a message')
+    self.logger.info('[%s] Message: %s', method, message)
+    self.assertEquals(message,'0')
