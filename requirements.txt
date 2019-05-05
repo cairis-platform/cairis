@@ -23,4 +23,4 @@ lxml>=3.6.4
 openpyxl>=2.4.0
 SQLAlchemy>=1.2.0b3
 bcrypt>=3.1.6
-magic>=0.4.15
+python-magic>=0.4.15
