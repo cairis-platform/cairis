@@ -301,3 +301,21 @@ def exportModel(outFile = None,session_id = None):
     f.write(xmlBuf)
     f.close()
     return 'Exported model'
+
+def exportJSON(outFile = None, session_id = None):
+  b = Borg()
+  jsonBuf = '{"version" : "2",\n'
+  jsonBuf += b.get_dbproxy(session_id).tvTypesToJSON()[0] + ',\n'
+  jsonBuf += b.get_dbproxy(session_id).domainValuesToJSON()[0] + ',\n'
+  jsonBuf += b.get_dbproxy(session_id).projectToJSON() + ',\n'
+  jsonBuf += b.get_dbproxy(session_id).riskAnalysisToJSON()[0] + ',\n'
+  jsonBuf += b.get_dbproxy(session_id).usabilityToJSON()[0] + ',\n'
+  jsonBuf += b.get_dbproxy(session_id).goalsToJSON()[0] + '\n\n'
+  jsonBuf += '}'
+  if outFile == None:
+    return jsonBuf
+  else:
+    f = codecs.open(outFile,'w','utf-8')
+    f.write(jsonBuf)
+    f.close()
+    return 'Exported JSON'

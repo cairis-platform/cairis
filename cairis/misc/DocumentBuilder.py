@@ -55,13 +55,23 @@ def listToString(l):
       s += ', '
   return s
 
+def escapeText(txt):
+  eTxt = ''
+  for c in txt:
+    if c == '&':
+      eTxt += '&amp;'
+    else:
+      eTxt += c
+  return eTxt
+
+
 def paraText(txt):
   paraTxt = ''
   for c in txt:
     if (c == '\n') and (txt != '\n'):
       paraTxt += '</para><para>'
     elif c == '&':
-      c = '\&'
+      paraTxt += '&amp;'
     else:
       paraTxt += c 
   return paraTxt
@@ -236,7 +246,7 @@ def buildTable(tableId, tableTitle, colNames,colData,linkInd = 1):
         txt += """
           <entry>"""
         txt += """
-            <para><link linkend=\"""" + (str(col)).replace(" ","_") + "\">" + str(col) + "</link></para>"""
+            <para><link linkend=\"""" + (str(col)).replace(" ","_") + "\">" + escapeText(str(col)) + "</link></para>"""
         txt += """
           </entry>"""
       else:
@@ -248,12 +258,12 @@ def buildTable(tableId, tableTitle, colNames,colData,linkInd = 1):
           txt += """
           <entry>"""
           txt += """
-            <para><link linkend=\"""" + (str(col[idx])).replace(" ","_") + "\">" + str(col[idx]) + "</link></para>"""
+            <para><link linkend=\"""" + (str(col[idx])).replace(" ","_") + "\">" + escapeText(str(col[idx])) + "</link></para>"""
           txt += """
           </entry>"""
         else:
           txt += """
-          <entry>""" + str(col[idx]) + "</entry>"
+          <entry>""" + escapeText(str(col[idx])) + "</entry>"
     txt += """
         </row>
     """
@@ -285,10 +295,10 @@ def bookHeader(specName,contributors,revisions,logoFile = 'logo.jpg',logoFormat 
     for firstName,surname,affiliation,role in contributors:
       headerText += """
       <author role=\"""" + role + "\">" + """
-        <firstname>""" + firstName + "</firstname>" + """
-        <surname>""" + surname + "</surname>" + """
+        <firstname>""" + escapeText(firstName) + "</firstname>" + """
+        <surname>""" + escapeText(surname) + "</surname>" + """
         <affiliation>
-          <orgname>""" + affiliation + "</orgname>" + """
+          <orgname>""" + escapeText(affiliation) + "</orgname>" + """
         </affiliation>
       </author>"""
     headerText += """
@@ -300,8 +310,8 @@ def bookHeader(specName,contributors,revisions,logoFile = 'logo.jpg',logoFormat 
       headerText += """
       <revision>
         <revnumber>""" + str(revNo) + "</revnumber>" + """
-        <date>""" + revDate + "</date>" + """
-        <revremark>""" + revDesc + "</revremark>" + """
+        <date>""" + escapeText(revDate) + "</date>" + """
+        <revremark>""" + escapeText(revDesc) + "</revremark>" + """
       </revision>"""
     headerText += """ 
     </revhistory>
@@ -1195,7 +1205,7 @@ def buildVulnerabilities(p,chapterTxt,isPia = False):
         <para>""" + objt.type() + "</para>" + """
       </section>
       <section><title>Description</title>
-        <para>""" + objt.description() + "</para>" + """
+        <para>""" + escapeText(objt.description()) + "</para>" + """
       </section>
       <section id=\"""" + objtName.replace(" ","_") + "Environments\"><title>Environments</title>"
     for eProps in objt.environmentProperties():

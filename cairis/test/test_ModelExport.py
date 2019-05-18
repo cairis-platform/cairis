@@ -19,7 +19,7 @@ import unittest
 import os
 import logging
 from cairis.mio.ModelImport import importTVTypeFile,importModelFile,importAttackPattern,importComponentViewFile,importDirectoryFile
-from cairis.mio.ModelExport import exportModel,exportRedmineScenarios,exportRedmineUseCases,exportGRL
+from cairis.mio.ModelExport import exportModel,exportJSON,exportRedmineScenarios,exportRedmineUseCases,exportGRL
 import cairis.core.BorgFactory
 from cairis.core.Borg import Borg
 
@@ -31,6 +31,7 @@ class ModelExportTests(unittest.TestCase):
   @classmethod
   def setUpClass(cls):
     cairis.core.BorgFactory.initialise()
+#    importModelFile(os.environ['CAIRIS_SRC'] + '/../examples/exemplars/NeuroGrid/NeuroGrid.xml',1)
     importModelFile(os.environ['CAIRIS_SRC'] + '/test/webinos_incomplete.xml',1)
     importTVTypeFile(os.environ['CAIRIS_SRC'] + '/test/OWASPTypes.xml',0)
     importTVTypeFile(os.environ['CAIRIS_SRC'] + '/../examples/threat_vulnerability_types/cwecapec_tv_types.xml',0)
@@ -50,6 +51,11 @@ class ModelExportTests(unittest.TestCase):
   def testExportModel(self):
     outFile = '/tmp/exportedModel.xml'
     self.assertEqual(exportModel(outFile),'Exported model')
+    self.assertEqual(os.path.isfile(outFile),True)
+
+  def testExportJSON(self):
+    outFile = '/tmp/export.json'
+    self.assertEqual(exportJSON(outFile),'Exported JSON')
     self.assertEqual(os.path.isfile(outFile),True)
 
   def testExportRedmineScenarios(self):

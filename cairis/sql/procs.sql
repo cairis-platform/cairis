@@ -962,6 +962,13 @@ drop procedure if exists isObstacleObstructed;
 drop procedure if exists setImage;
 drop procedure if exists getImage;
 drop procedure if exists getImages;
+drop procedure if exists tvTypesToJSON;
+drop function if exists jsonEscaped;
+drop procedure if exists domainValuesToJSON;
+drop procedure if exists projectToJSON;
+drop procedure if exists riskAnalysisToJSON;
+drop procedure if exists usabilityToJSON;
+drop procedure if exists goalsToJSON;
 
 
 delimiter //
@@ -10997,7 +11004,7 @@ begin
   declare pId int;
 
   select id into pId from persona where name = pName;
-  select distinct dr.name,ed.name,dr.excerpt from document_reference dr, external_document ed, persona_characteristic_document pcd, persona_characteristic pc where dr.document_id = ed.id and dr.id = pcd.reference_id and pcd.characteristic_id = pc.id and pc.persona_id = pId order by 1;
+  select distinct dr.name,ed.name,xmlEscaped(dr.excerpt) from document_reference dr, external_document ed, persona_characteristic_document pcd, persona_characteristic pc where dr.document_id = ed.id and dr.id = pcd.reference_id and pcd.characteristic_id = pc.id and pc.persona_id = pId order by 1;
 end
 //
 
@@ -12625,18 +12632,18 @@ begin
   declare attackerEnvCursor cursor for select ea.environment_id,e.name from environment_attacker ea, environment e where ea.attacker_id = attackerId and ea.environment_id = e.id;
   declare threatEnvCursor cursor for select et.environment_id,e.name from environment_threat et, environment e where et.threat_id = threatId and et.environment_id = e.id;
   declare responseEnvCursor cursor for select er.environment_id,e.name from environment_response er, environment e where er.response_id = responseId and er.environment_id = e.id;
-  declare assetCursor cursor for select a.id,a.name,a.short_code,a.description,a.significance,at.name,a.is_critical,ifnull(a.critical_rationale,'None') from asset a,asset_type at where a.asset_type_id = at.id;
-  declare vulCursor cursor for select v.id,v.name,v.description,vt.name from vulnerability v,vulnerability_type vt where v.vulnerability_type_id = vt.id;
-  declare attackerCursor cursor for select id,name,description,image from attacker;
+  declare assetCursor cursor for select a.id,a.name,xmlEscaped(a.short_code),xmlEscaped(a.description),xmlEscaped(a.significance),at.name,a.is_critical,ifnull(xmlEscaped(a.critical_rationale),'None') from asset a,asset_type at where a.asset_type_id = at.id;
+  declare vulCursor cursor for select v.id,v.name,xmlEscaped(v.description),vt.name from vulnerability v,vulnerability_type vt where v.vulnerability_type_id = vt.id;
+  declare attackerCursor cursor for select id,name,xmlEscaped(description),image from attacker;
   declare attackerRolesCursor cursor for select r.name from attacker_role ar, role r where ar.attacker_id = attackerId and ar.environment_id = envId and ar.role_id = r.id;
   declare motivCursor cursor for select m.name from attacker_motivation am, motivation m where am.attacker_id = attackerId and am.environment_id = envId and am.motivation_id = m.id;
   declare capabilityCursor cursor for select c.name,cv.name from attacker_capability ac, capability c, capability_value cv where ac.attacker_id = attackerId and ac.environment_id = envId and ac.capability_id = c.id and ac.capability_value_id = cv.id;
   declare vulAssetsCursor cursor for select a.name from asset a, asset_vulnerability av where av.vulnerability_id = vulId and av.environment_id = envId and av.asset_id = a.id;
-  declare threatCursor cursor for select t.id, t.name, tt.name, t.method from threat t, threat_type tt where t.threat_type_id = tt.id;
+  declare threatCursor cursor for select t.id, t.name, tt.name, xmlEscaped(t.method) from threat t, threat_type tt where t.threat_type_id = tt.id;
   declare threatAttackerCursor cursor for select a.name from threat_attacker ta, attacker a where ta.threat_id = threatId and ta.environment_id = envId and ta.attacker_id = a.id;
   declare threatAssetCursor cursor for select a.name from asset a, asset_threat at where at.threat_id = threatId and at.asset_id = a.id and at.environment_id = envId;
   declare riskCursor cursor for select r.id, r.name,t.name,v.name from risk r, threat t, vulnerability v where r.threat_id = t.id and r.vulnerability_id = v.id;
-  declare mcCursor cursor for select e.name,mn.narrative from misusecase_risk mr, misusecase_narrative mn, environment e where mr.risk_id = riskId and mr.misusecase_id = mn.misusecase_id and mn.environment_id = e.id;
+  declare mcCursor cursor for select e.name,xmlEscaped(mn.narrative) from misusecase_risk mr, misusecase_narrative mn, environment e where mr.risk_id = riskId and mr.misusecase_id = mn.misusecase_id and mn.environment_id = e.id;
   declare responseCursor cursor for select re.id,re.name,rt.name,r.name from response re,goal_category_type rt, risk r where re.goal_category_type_id = rt.id and re.risk_id = r.id;
   declare responseRoleCursor cursor for select r.name,c.name from responserole_goalassociation rr, role r, cost c where rr.goal_id = responseId and rr.environment_id = envId and rr.subgoal_id = r.id and rr.cost_id = c.id;
   declare detMechCursor cursor for select a.name from asset a, reaction_detection_mechanism rdm where rdm.response_id = responseId and rdm.environment_id = envId and rdm.asset_id = a.id;
@@ -13236,8 +13243,8 @@ begin
   declare tagName varchar(255);
   declare buf LONGTEXT default '<?xml version="1.0"?>\n<!DOCTYPE goals PUBLIC "-//CAIRIS//DTD REQUIREMENTS 1.0//EN" "http://cairis.org/dtd/goals.dtd">\n\n<goals>\n';
   declare done int default 0;
-  declare dpCursor cursor for select dp.name,dp.description,dpt.name,dp.originator from domainproperty dp, domainproperty_type dpt where dp.domainproperty_type_id = dpt.id;
-  declare goalCursor cursor for select id,name,originator from goal;
+  declare dpCursor cursor for select dp.name,xmlEscaped(dp.description),dpt.name,dp.originator from domainproperty dp, domainproperty_type dpt where dp.domainproperty_type_id = dpt.id;
+  declare goalCursor cursor for select id,name,xmlEscaped(originator) from goal;
   declare goalEnvCursor cursor for select eg.environment_id,e.name from environment_goal eg, environment e where eg.goal_id = goalId and eg.environment_id = e.id;
   declare goalConcernCursor cursor for select a.name from goal_concern gc, asset a where gc.goal_id = goalId and gc.environment_id = envId and gc.asset_id = a.id;
   declare goalConcernAssocCursor cursor for select sa.name,smt.name,ca.link,ta.name,tmt.name from goal_concernassociation ca, asset sa, asset ta, multiplicity_type smt, multiplicity_type tmt where ca.goal_id = goalId and ca.environment_id = envId and ca.source_id = sa.id and ca.source_multiplicity_id = smt.id and ca.target_id = ta.id and ca.target_multiplicity_id = tmt.id;
@@ -13245,23 +13252,23 @@ begin
   declare obsEnvCursor cursor for select eo.environment_id,e.name from environment_obstacle eo, environment e where eo.obstacle_id = obsId and eo.environment_id = e.id;
   declare obsConcernCursor cursor for select a.name from obstacle_concern oc, asset a where oc.obstacle_id = obsId and oc.environment_id = envId and oc.asset_id = a.id;
   declare reqCursor cursor for
-    select a.name,'asset',o.label,rt.name,o.priority,o.name,o.description,o.rationale,o.fit_criterion,o.originator from requirement o, asset_requirement ar, asset a, requirement_type rt where o.version = (select max(i.version) from requirement i where i.id = o.id) and o.type = rt.id and o.id = ar.requirement_id and ar.asset_id = a.id 
+    select a.name,'asset',o.label,rt.name,o.priority,o.name,xmlEscaped(o.description),xmlEscaped(o.rationale),xmlEscaped(o.fit_criterion),xmlEscaped(o.originator) from requirement o, asset_requirement ar, asset a, requirement_type rt where o.version = (select max(i.version) from requirement i where i.id = o.id) and o.type = rt.id and o.id = ar.requirement_id and ar.asset_id = a.id 
     union
-    select e.name,'environment',o.label,rt.name,o.priority,o.name,o.description,o.rationale,o.fit_criterion,o.originator from requirement o, environment_requirement er, environment e, requirement_type rt where o.version = (select max(i.version) from requirement i where i.id = o.id) and o.type = rt.id and o.id = er.requirement_id and er.environment_id = e.id; 
-  declare ucCursor cursor for select id,name,author,short_code,description from usecase;
+    select e.name,'environment',o.label,rt.name,o.priority,o.name,xmlEscaped(o.description),xmlEscaped(o.rationale),xmlEscaped(o.fit_criterion),xmlEscaped(o.originator) from requirement o, environment_requirement er, environment e, requirement_type rt where o.version = (select max(i.version) from requirement i where i.id = o.id) and o.type = rt.id and o.id = er.requirement_id and er.environment_id = e.id; 
+  declare ucCursor cursor for select id,name,xmlEscaped(author),xmlEscaped(short_code),xmlEscaped(description) from usecase;
   declare ucEnvCursor cursor for select eu.environment_id,e.name from environment_usecase eu, environment e where eu.usecase_id = ucId and eu.environment_id = e.id;
   declare ucActorCursor cursor for select r.name from usecase_role ur, role r where ur.usecase_id = ucId and ur.role_id = r.id;
-  declare ucStepCursor cursor for select step_no,description from usecase_step where usecase_id = ucId and environment_id = envId order by 1;
+  declare ucStepCursor cursor for select step_no,xmlEscaped(description) from usecase_step where usecase_id = ucId and environment_id = envId order by 1;
   declare ucStepExceptionCursor cursor for
-    select usne.name, 'None', 'None', 'None', usne.description from usecase_step_none_exception usne where usne.usecase_id = ucId and usne.environment_id = envId and usne.step_no = stepNo
+    select usne.name, 'None', 'None', 'None', xmlEscaped(usne.description) from usecase_step_none_exception usne where usne.usecase_id = ucId and usne.environment_id = envId and usne.step_no = stepNo
     union
-    select usge.name, 'Goal', g.name, oct.name, usge.description from usecase_step_goal_exception usge, goal g, obstacle_category_type oct where usge.usecase_id = ucId and usge.environment_id = envId and usge.step_no = stepNo and usge.goal_id = g.id and usge.category_type_id = oct.id
+    select usge.name, 'Goal', g.name, oct.name, xmlEscaped(usge.description) from usecase_step_goal_exception usge, goal g, obstacle_category_type oct where usge.usecase_id = ucId and usge.environment_id = envId and usge.step_no = stepNo and usge.goal_id = g.id and usge.category_type_id = oct.id
     union
-    select usge.name, 'Requirement', concat(a.short_code,'-',r.label), oct.name, usge.description from usecase_step_requirement_exception usge, requirement r, asset_requirement ar, asset a, obstacle_category_type oct where usge.usecase_id = ucId and usge.environment_id = envId and usge.step_no = stepNo and usge.goal_id = r.id and r.id = ar.requirement_id and ar.asset_id = a.id and r.version = (select max(i.version) from requirement i where i.id = r.id) and usge.category_type_id = oct.id
+    select usge.name, 'Requirement', concat(a.short_code,'-',r.label), oct.name, xmlEscaped(usge.description) from usecase_step_requirement_exception usge, requirement r, asset_requirement ar, asset a, obstacle_category_type oct where usge.usecase_id = ucId and usge.environment_id = envId and usge.step_no = stepNo and usge.goal_id = r.id and r.id = ar.requirement_id and ar.asset_id = a.id and r.version = (select max(i.version) from requirement i where i.id = r.id) and usge.category_type_id = oct.id
     union
-    select usge.name, 'Requirement', concat(e.short_code,'-',r.label), oct.name, usge.description from usecase_step_requirement_exception usge, requirement r, environment_requirement er, environment e, obstacle_category_type oct where usge.usecase_id = ucId and usge.environment_id = envId and usge.step_no = stepNo and usge.goal_id = r.id and r.id = er.requirement_id and er.environment_id = e.id and r.version = (select max(i.version) from requirement i where i.id = r.id) and usge.category_type_id = oct.id;
+    select usge.name, 'Requirement', concat(e.short_code,'-',r.label), oct.name, xmlEscaped(usge.description) from usecase_step_requirement_exception usge, requirement r, environment_requirement er, environment e, obstacle_category_type oct where usge.usecase_id = ucId and usge.environment_id = envId and usge.step_no = stepNo and usge.goal_id = r.id and r.id = er.requirement_id and er.environment_id = e.id and r.version = (select max(i.version) from requirement i where i.id = r.id) and usge.category_type_id = oct.id;
   declare ucStepTagCursor cursor for select t.name from usecase_step_tag ust, tag t where ust.usecase_id = ucId and ust.environment_id = envId and ust.step_no = stepNo and ust.tag_id = t.id order by 1;
-  declare cmCursor cursor for select c.id,c.name,c.description,at.name from countermeasure c,asset_type at where c.countermeasure_type_id = at.id;
+  declare cmCursor cursor for select c.id,c.name,xmlEscaped(c.description),at.name from countermeasure c,asset_type at where c.countermeasure_type_id = at.id;
   declare cmEnvCursor cursor for select ec.environment_id,e.name from environment_countermeasure ec, environment e where ec.countermeasure_id = cmId and ec.environment_id = e.id;
   declare cmReqsCursor cursor for
     select distinct r.name from requirement_countermeasure rc, requirement r where rc.countermeasure_id = cmId and rc.requirement_id = r.id and r.version = (select max(i.version) from requirement i where i.id = r.id) and rc.environment_id = envId;
@@ -13316,7 +13323,7 @@ begin
       then
         leave goalEnv_loop;
       end if;
-      set buf = concat(buf,'  <goal_environment name=\"',envName,'\" category=\"',goal_category(goalId,envId),'\" priority=\"',goal_priority(goalId,envId),'\" >\n    <definition>',goal_definition(goalId,envId),'</definition>\n    <fit_criterion>',goal_fitcriterion(goalId,envId),'</fit_criterion>\n    <issue>',goal_issue(goalId,envId),'</issue>\n');
+      set buf = concat(buf,'  <goal_environment name=\"',envName,'\" category=\"',goal_category(goalId,envId),'\" priority=\"',goal_priority(goalId,envId),'\" >\n    <definition>',xmlEscaped(goal_definition(goalId,envId)),'</definition>\n    <fit_criterion>',xmlEscaped(goal_fitcriterion(goalId,envId)),'</fit_criterion>\n    <issue>',goal_issue(goalId,envId),'</issue>\n');
 
       open goalConcernCursor;
       goalConcern_loop: loop
@@ -13370,7 +13377,7 @@ begin
       then
         leave obsEnv_loop;
       end if;
-      set buf = concat(buf,'  <obstacle_environment name=\"',envName,'\" category=\"',replace(obstacle_category(obsId,envId),' ','_'),'\" >\n    <definition>',obstacle_definition(obsId,envId),'</definition>\n');
+      set buf = concat(buf,'  <obstacle_environment name=\"',envName,'\" category=\"',replace(obstacle_category(obsId,envId),' ','_'),'\" >\n    <definition>',xmlEscaped(obstacle_definition(obsId,envId)),'</definition>\n');
 
       open obsConcernCursor;
       obsConcern_loop: loop
@@ -25878,5 +25885,2453 @@ begin
   select name,content from image;
 end
 //
+
+create procedure tvTypesToJSON()
+begin
+  declare typeName varchar(100);
+  declare typeDesc varchar(5000);
+  declare ttCount int default 0;
+  declare vtCount int default 0;
+  declare buf longtext default '';
+  declare done int default 0;
+  declare headElement int default 1;
+  declare vtCursor cursor for select jsonEscaped(name),jsonEscaped(description) from vulnerability_type order by 1;
+  declare ttCursor cursor for select jsonEscaped(name),jsonEscaped(description) from threat_type order by 1;
+  declare continue handler for not found set done = 1;
+
+  set buf = '"vulnerability_types" : [\n';
+  open vtCursor;
+  vt_loop: loop
+    fetch vtCursor into typeName, typeDesc;
+    if done = 1
+    then
+      set buf = concat(buf,"],\n\n");
+      leave vt_loop;
+      set headElement = 1;
+    else
+      if headElement = 1
+      then
+        set headElement = 0;
+      else
+        set buf = concat(buf,",\n");
+      end if;
+    end if;
+    set buf = concat(buf,'  {"name" : "',typeName,'", "description" : "',typeDesc,'"}');
+
+    set vtCount = vtCount + 1;
+  end loop vt_loop;
+  close vtCursor;
+
+
+  set done = 0;
+  set headElement = 1;
+  set buf = concat(buf,'"threat_types" : [\n');
+  open ttCursor;
+  tt_loop: loop
+    fetch ttCursor into typeName, typeDesc;
+    if done = 1
+    then
+      set buf = concat(buf,"]\n\n");
+      leave tt_loop;
+      set headElement = 1;
+    else
+      if headElement = 1
+      then
+        set headElement = 0;
+      else
+        set buf = concat(buf,",\n");
+      end if;
+    end if;
+    set buf = concat(buf,'  {"name" : "',typeName,'", "description" : "',typeDesc,'"}');
+
+    set ttCount = ttCount + 1;
+  end loop tt_loop;
+  close ttCursor;
+
+  select buf,ttCount,vtCount;
+end
+//
+
+create function jsonEscaped(buf text) 
+returns text
+deterministic 
+begin
+  return replace(replace(replace(buf,'\n','\\n'),'\t','\\t'),'"','\\"');
+end
+//
+
+
+create procedure domainValuesToJSON()
+begin
+  declare typeName varchar(100);
+  declare typeDesc varchar(5000);
+  declare tvCount int default 0;
+  declare rvCount int default 0;
+  declare cvCount int default 0;
+  declare svCount int default 0;
+  declare lvCount int default 0;
+  declare done int default 0;
+  declare headElement int default 1;
+  declare buf LONGTEXT default '';
+  declare tvCursor cursor for select jsonEscaped(name),jsonEscaped(description) from threat_value order by id;
+  declare rvCursor cursor for select jsonEscaped(name),jsonEscaped(description) from risk_class order by id;
+  declare cvCursor cursor for select jsonEscaped(name),jsonEscaped(description) from countermeasure_value order by id;
+  declare svCursor cursor for select jsonEscaped(name),jsonEscaped(description) from severity order by id;
+  declare lvCursor cursor for select jsonEscaped(name),jsonEscaped(description) from likelihood order by id;
+  declare continue handler for not found set done = 1;
+
+  set buf = '"threat_values" : [\n';
+  open tvCursor;
+  tv_loop: loop
+    fetch tvCursor into typeName,typeDesc;
+    if done = 1
+    then
+      set buf = concat(buf,"],\n\n");
+      leave tv_loop;
+      set headElement = 1;
+    else
+      if headElement = 1
+      then
+        set headElement = 0;
+      else
+        set buf = concat(buf,",\n");
+      end if;
+    end if;
+    set buf = concat(buf,'  {"name" : "',typeName,'",  "description" : "',typeDesc,'"}');
+    set tvCount = tvCount + 1;
+  end loop tv_loop;
+  close tvCursor;
+
+  set done = 0;
+  set buf = concat(buf,'"risk_values" : [\n');
+  set headElement = 1;
+  open rvCursor;
+  rv_loop: loop
+    fetch rvCursor into typeName,typeDesc;
+    if done = 1
+    then
+      set buf = concat(buf,"],\n\n");
+      leave rv_loop;
+      set headElement = 1;
+    else
+      if headElement = 1
+      then
+        set headElement = 0;
+      else
+        set buf = concat(buf,",\n");
+      end if;
+    end if;
+    set buf = concat(buf,'  {"name" : "',typeName,'", "description" : "',typeDesc,'"}');
+    set rvCount = rvCount + 1;
+  end loop rv_loop;
+  close rvCursor;
+
+  set done = 0;
+  set buf = concat(buf,'"countermeasure_values" : [\n');
+  set headElement = 1;
+  open cvCursor;
+  cv_loop: loop
+    fetch cvCursor into typeName,typeDesc;
+    if done = 1
+    then
+      set buf = concat(buf,"],\n\n");
+      leave cv_loop;
+      set headElement = 1;
+    else
+      if headElement = 1
+      then
+        set headElement = 0;
+      else
+        set buf = concat(buf,",\n");
+      end if;
+    end if;
+    set buf = concat(buf,'  {"name" : "',typeName,'", "description" : "',typeDesc,'"}');
+    set cvCount = cvCount + 1;
+  end loop cv_loop;
+
+  set done = 0;
+  set buf = concat(buf,'"severity_values" : [\n');
+  set headElement = 1;
+  open svCursor;
+  set headElement = 1;
+  sv_loop: loop
+    fetch svCursor into typeName,typeDesc;
+    if done = 1
+    then
+      set buf = concat(buf,"],\n\n");
+      leave sv_loop;
+      set headElement = 1;
+    else
+      if headElement = 1
+      then
+        set headElement = 0;
+      else
+        set buf = concat(buf,",\n");
+      end if;
+    end if;
+    set buf = concat(buf,'  {"name" : "',typeName,'", "description" : "',typeDesc,'"}');
+    set svCount = svCount + 1;
+  end loop sv_loop;
+
+  set done = 0;
+  set buf = concat(buf,'"likelihood_values" : [\n');
+  set headElement = 1;
+  open lvCursor;
+  set headElement = 1;
+  lv_loop: loop
+    fetch lvCursor into typeName,typeDesc;
+    if done = 1
+    then
+      set buf = concat(buf,"]\n\n");
+      leave lv_loop;
+      set headElement = 1;
+    else
+      if headElement = 1
+      then
+        set headElement = 0;
+      else
+        set buf = concat(buf,",\n");
+      end if;
+    end if;
+    set buf = concat(buf,'  {"name" : "',typeName,'", "description" : "',typeDesc,'"}');
+    set lvCount = lvCount + 1;
+  end loop lv_loop;
+
+  select buf,tvCount,rvCount,cvCount,svCount,lvCount;
+end
+//
+
+create procedure projectToJSON()
+begin
+  declare buf LONGTEXT default '';
+  declare projName varchar(4000) default 'None';
+  declare background varchar(4000) default '';
+  declare strategicGoals varchar(4000) default '';
+  declare richPic varchar(1000) default '';
+  declare scope varchar(4000) default '';
+  declare ncName varchar(100);
+  declare ncEntry varchar(4000);
+  declare firstName varchar(100) default '';
+  declare surName varchar(100) default '';
+  declare affil varchar(100) default '';
+  declare projRole varchar(50) default '';
+  declare revNo int;
+  declare revDate varchar(50) default '';
+  declare revRemarks varchar(1000) default 'None';
+  declare envId int;
+  declare envName varchar(50);
+  declare envShortCode varchar(100);
+  declare envDesc varchar(4000);
+  declare duplicatePolicy varchar(50);
+  declare overridingEnvName varchar(50);
+  declare subEnvName varchar(50);
+  declare noneValue varchar(4000) default '';
+  declare lowValue varchar(4000) default '';
+  declare medValue varchar(4000) default '';
+  declare highValue varchar(4000) default '';
+  declare ncCount int default 0;
+  declare contributorCount int default 0;
+  declare revCount int default 0;
+  declare compositeCount int default 0;
+  declare headElement int default 1;
+  declare done int default 0;
+  declare ncCursor cursor for select name,jsonEscaped(description) from project_dictionary order by name;
+  declare contribCursor cursor for select * from project_contributor order by 2;
+  declare revCursor cursor for select revision_no,revision_date,jsonEscaped(revision_remarks) from project_revision order by 1;
+  declare envCursor cursor for select id,name,jsonEscaped(short_code),jsonEscaped(description) from environment;
+  declare ceCursor cursor for select e.name from composite_environment ce, environment e where ce.composite_environment_id = envId and ce.environment_id = e.id;
+  declare continue handler for not found set done = 1;
+
+  select jsonEscaped(ifnull(description,'')) into projName from project_setting where name = 'Project Name';
+  select jsonEscaped(ifnull(description,'')) into background from project_setting where name = 'Project Background';
+  select jsonEscaped(ifnull(description,'')) into strategicGoals from project_setting where name = 'Project Goals';
+  select description into richPic from project_setting where name = 'Rich Picture';
+  select jsonEscaped(ifnull(description,'')) into scope from project_setting where name = 'Project Scope';
+
+  set buf = concat(buf,'"project_settings" : {\n  "name" : "',projName,'",\n  "background" : "',background,'",\n  "strategic_goals" : "',strategicGoals,'",\n  "rich_picture" : "', richPic,'",\n  "scope" : "',scope,'",\n');
+
+  select count(name) into ncCount from project_dictionary limit 1;
+  if ncCount > 0
+  then
+    set buf = concat(buf,'  "naming_conventions" : [\n');
+    open ncCursor;
+    nc_loop: loop
+      fetch ncCursor into ncName,ncEntry;
+      if done = 1
+      then
+        set buf = concat(buf,"],\n");
+        leave nc_loop;
+        set headElement = 1;
+      else
+        if headElement = 1
+        then
+          set headElement = 0;
+        else
+          set buf = concat(buf,",\n");
+        end if;
+      end if;
+      set buf = concat(buf,'    {"name" : "',ncName,'", "definition" : "',ncEntry,'"}');
+    end loop nc_loop;
+    close ncCursor;
+  end if;
+  set done = 0;
+
+  
+  set headElement = 1;
+  select count(affiliation) into contributorCount from project_contributor limit 1;
+  if contributorCount > 0
+  then 
+    set buf = concat(buf,'  "contributors" : [\n'); 
+    open contribCursor;
+    contrib_loop: loop
+      fetch contribCursor into firstName,surName,affil,projRole;
+      if done = 1
+      then
+        set buf = concat(buf,"],\n");
+        leave contrib_loop;
+        set headElement = 1;
+      else
+        if headElement = 1
+        then
+          set headElement = 0;
+        else
+          set buf = concat(buf,",\n");
+        end if;
+      end if;
+
+      set buf = concat(buf,'    {"first_name" : "',firstName,'", "surname" : "',surName,'", "affiliation" : "',affil,'", "role" : "',projRole,'"}');
+    end loop contrib_loop;
+    close contribCursor;
+  end if; 
+  set done = 0;
+
+  set headElement = 1;
+  set buf = concat(buf,'  "revisions" : [\n');
+  select count(revision_no) into revCount from project_revision limit 1;
+  if revCount > 0
+  then
+    open revCursor;
+    rev_loop: loop
+      fetch revCursor into revNo,revDate,revRemarks;
+      if done = 1
+      then
+        set buf = concat(buf,"]\n");
+        leave rev_loop;
+        set headElement = 1;
+      else
+        if headElement = 1
+        then
+          set headElement = 0;
+        else
+          set buf = concat(buf,",\n");
+        end if;
+      end if;
+      set buf = concat(buf,'    {"number" : "',revNo,'", "date" : "',revDate,'", "remarks" : "',revRemarks,'"}');
+    end loop rev_loop;
+    close revCursor;
+  else
+    set buf = concat(buf,"]\n");
+  end if;
+  set done = 0;
+  set buf = concat(buf,'},\n');
+
+  set buf = concat(buf,'"environments" : [\n');
+  set headElement = 1;
+  open envCursor;
+  env_loop: loop
+    fetch envCursor into envId,envName,envShortCode,envDesc;
+    if done = 1
+    then
+      set buf = concat(buf,"]\n");
+      leave env_loop;
+      set headElement = 1;
+    else
+      if headElement = 1
+      then
+        set headElement = 0;
+      else
+        set buf = concat(buf,",\n");
+      end if;
+    end if;
+    set buf = concat(buf,'  {"name" : "',envName,'",\n  "short_code" : "',envShortCode,'",\n  "definition" : "',envDesc,'",\n');
+
+    select jsonEscaped(description) into noneValue from asset_value where id = 0 and environment_id = envId;
+    if isnull(noneValue)
+    then
+      set noneValue = 'None';
+    end if;
+    select jsonEscaped(description) into lowValue from asset_value where id = 1 and environment_id = envId;
+    if isnull(lowValue)
+    then
+      set lowValue = 'None';
+    end if;
+    select jsonEscaped(description) into medValue from asset_value where id = 2 and environment_id = envId;
+    if isnull(medValue)
+    then
+      set medValue = 'None';
+    end if;
+    select jsonEscaped(description) into highValue from asset_value where id = 3 and environment_id = envId;
+    if isnull(highValue)
+    then
+      set highValue = 'None';
+    end if;
+    set buf = concat(buf,'  "asset_values" : {"none" : "',noneValue,'", "low" : "',lowValue,'", "medium" : "',medValue,'", "high" : "',highValue,'"}\n');
+
+    select count(environment_id) into compositeCount from composite_environment where composite_environment_id = envId limit 1;
+    if compositeCount > 0
+    then
+      select dp.name into duplicatePolicy from duplicate_property dp, composite_environment_property ccp where ccp.composite_environment_id = envId and ccp.duplicate_property_id = dp.id limit 1;
+      set buf = concat(buf,'  "composite_properties" : {"duplication" : "',duplicatePolicy,'"');
+      if duplicatePolicy = 'Override'
+      then
+        select e.name into overridingEnvName from composite_environment_override ceo, environment e where ceo.composite_environment_id = envId and ceo.overriding_environment_id = e.id limit 1;
+        set buf = concat(buf,', "overriding_environment" : "',overridingEnvName,'" ');
+      end if;
+      set buf = concat(buf,',\n');
+      set headElement = 1;
+      open ceCursor;
+      ce_loop: loop
+        fetch ceCursor into subEnvName;
+        if done = 1
+        then
+          set buf = concat(buf,"  }\n");
+          leave ce_loop;
+          set headElement = 1;
+        else
+          if headElement = 1
+          then
+            set headElement = 0;
+          else
+            set buf = concat(buf,",\n");
+          end if;
+        end if;
+        set buf = concat(buf,'    "sub_environment" : "',subEnvName,'"');
+      end loop ce_loop;
+      close ceCursor;
+      set done = 0;
+    end if;
+
+    set buf = concat(buf,'  }');
+  end loop env_loop; 
+  close envCursor;
+  set done = 0;
+  set headElement = 1;
+  select buf;
+end
+//
+
+create procedure riskAnalysisToJSON()
+begin
+  declare tagName varchar(255);
+  declare roleName varchar(255);
+  declare roleType varchar(50);
+  declare roleShortCode varchar(100);
+  declare roleDesc varchar(1000);
+  declare roleCount int default 0;
+  declare assetCount int default 0;
+  declare rshipCount int default 0;
+  declare headElement int default 1;
+  declare assetId int;
+  declare envId int;
+  declare envName varchar(50);
+  declare assetName varchar(200);
+  declare assetShortCode varchar(20);
+  declare assetDesc varchar(1000);
+  declare assetSignif varchar(1000);
+  declare assetType varchar(50);
+  declare isCritical int;
+  declare ifName varchar(255);
+  declare reqId int;
+  declare ifType varchar(50);
+  declare assetCr varchar(1000);
+  declare cProperty varchar(50);
+  declare iProperty varchar(50);
+  declare avProperty varchar(50);
+  declare acProperty varchar(50);
+  declare anProperty varchar(50);
+  declare panProperty varchar(50);
+  declare unlProperty varchar(50);
+  declare unoProperty varchar(50);
+  declare cRationale varchar(4000);
+  declare iRationale varchar(4000);
+  declare avRationale varchar(4000);
+  declare acRationale varchar(4000);
+  declare anRationale varchar(4000);
+  declare panRationale varchar(4000);
+  declare unlRationale varchar(4000);
+  declare unoRationale varchar(4000);
+  declare vulId int;
+  declare vulName varchar(200);
+  declare vulDesc varchar(500);
+  declare vulType varchar(100);
+  declare vulCount int default 0;
+  declare attackerId int;
+  declare attackerName varchar(50);
+  declare attackerDesc varchar(4000);
+  declare attackerImage varchar(1000);
+  declare attackerCount int default 0; 
+  declare motivName varchar(50);
+  declare capabilityName varchar(50);
+  declare capabilityValue varchar(50);
+  declare threatId int;
+  declare threatName varchar(200);
+  declare threatType varchar(100);
+  declare threatMethod text;
+  declare threatCount int default 0;
+  declare riskId int;
+  declare riskName varchar(200);
+  declare riskCount int default 0;
+  declare mcNarrative varchar(5000);
+  declare responseId int;
+  declare responseName varchar(100);
+  declare responseType varchar(50);
+  declare responseCount int default 0;
+  declare roleCost varchar(50);
+  declare mitType varchar(50);
+  declare headName varchar(100);
+  declare headAdornment varchar(50);
+  declare headNry varchar(10);
+  declare headRole varchar(50);
+  declare tailRole varchar(50);
+  declare tailNry varchar(10);
+  declare tailAdornment varchar(50);
+  declare tailName varchar(100);
+  declare headNav int;
+  declare tailNav int;
+  declare assocRationale longtext default '';
+  declare buf LONGTEXT default '';
+  declare done int default 0;
+  declare assetIFCursor cursor for select i.name,ai.required_id from asset_interface ai, interface i where ai.asset_id = assetId and ai.interface_id = i.id;
+  declare assetTagCursor cursor for select t.name from asset_tag at, tag t where at.asset_id = assetId and at.tag_id = t.id;
+  declare attackerTagCursor cursor for select t.name from attacker_tag at, tag t where at.attacker_id = attackerId and at.tag_id = t.id;
+  declare vulTagCursor cursor for select t.name from vulnerability_tag vt, tag t where vt.vulnerability_id = vulId and vt.tag_id = t.id;
+  declare threatTagCursor cursor for select t.name from threat_tag tt, tag t where tt.threat_id = threatId and tt.tag_id = t.id;
+  declare riskTagCursor cursor for select t.name from risk_tag rt, tag t where rt.risk_id = riskId and rt.tag_id = t.id;
+  declare roleCursor cursor for  select r.name,rt.name,r.short_code,jsonEscaped(r.description) from role r, role_type rt where r.role_type_id = rt.id;
+  declare assetEnvCursor cursor for select ea.environment_id,e.name from environment_asset ea, environment e where ea.asset_id = assetId and ea.environment_id = e.id;
+  declare vulEnvCursor cursor for select ev.environment_id,e.name from environment_vulnerability ev, environment e where ev.vulnerability_id = vulId and ev.environment_id = e.id;
+  declare attackerEnvCursor cursor for select ea.environment_id,e.name from environment_attacker ea, environment e where ea.attacker_id = attackerId and ea.environment_id = e.id;
+  declare threatEnvCursor cursor for select et.environment_id,e.name from environment_threat et, environment e where et.threat_id = threatId and et.environment_id = e.id;
+  declare responseEnvCursor cursor for select er.environment_id,e.name from environment_response er, environment e where er.response_id = responseId and er.environment_id = e.id;
+  declare assetCursor cursor for select a.id,a.name,a.short_code,jsonEscaped(a.description),jsonEscaped(a.significance),at.name,a.is_critical,ifnull(a.critical_rationale,'None') from asset a,asset_type at where a.asset_type_id = at.id;
+  declare vulCursor cursor for select v.id,v.name,jsonEscaped(v.description),vt.name from vulnerability v,vulnerability_type vt where v.vulnerability_type_id = vt.id;
+  declare attackerCursor cursor for select id,name,jsonEscaped(description),image from attacker;
+  declare attackerRolesCursor cursor for select r.name from attacker_role ar, role r where ar.attacker_id = attackerId and ar.environment_id = envId and ar.role_id = r.id;
+  declare motivCursor cursor for select m.name from attacker_motivation am, motivation m where am.attacker_id = attackerId and am.environment_id = envId and am.motivation_id = m.id;
+  declare capabilityCursor cursor for select c.name,cv.name from attacker_capability ac, capability c, capability_value cv where ac.attacker_id = attackerId and ac.environment_id = envId and ac.capability_id = c.id and ac.capability_value_id = cv.id;
+  declare vulAssetsCursor cursor for select a.name from asset a, asset_vulnerability av where av.vulnerability_id = vulId and av.environment_id = envId and av.asset_id = a.id;
+  declare threatCursor cursor for select t.id, t.name, tt.name, t.method from threat t, threat_type tt where t.threat_type_id = tt.id;
+  declare threatAttackerCursor cursor for select a.name from threat_attacker ta, attacker a where ta.threat_id = threatId and ta.environment_id = envId and ta.attacker_id = a.id;
+  declare threatAssetCursor cursor for select a.name from asset a, asset_threat at where at.threat_id = threatId and at.asset_id = a.id and at.environment_id = envId;
+  declare riskCursor cursor for select r.id, r.name,t.name,v.name from risk r, threat t, vulnerability v where r.threat_id = t.id and r.vulnerability_id = v.id;
+  declare mcCursor cursor for select e.name,jsonEscaped(mn.narrative) from misusecase_risk mr, misusecase_narrative mn, environment e where mr.risk_id = riskId and mr.misusecase_id = mn.misusecase_id and mn.environment_id = e.id;
+  declare responseCursor cursor for select re.id,re.name,rt.name,r.name from response re,goal_category_type rt, risk r where re.goal_category_type_id = rt.id and re.risk_id = r.id;
+  declare responseRoleCursor cursor for select r.name,c.name from responserole_goalassociation rr, role r, cost c where rr.goal_id = responseId and rr.environment_id = envId and rr.subgoal_id = r.id and rr.cost_id = c.id;
+  declare detMechCursor cursor for select a.name from asset a, reaction_detection_mechanism rdm where rdm.response_id = responseId and rdm.environment_id = envId and rdm.asset_id = a.id;
+  declare assocCursor cursor for select e.name, ha.name,a.head_navigation,hat.name,hm.name,a.head_role_name,a.tail_role_name,tm.name,tat.name,a.tail_navigation,ta.name,jsonEscaped(a.rationale) from classassociation a, environment e, asset ha, multiplicity_type hm, association_type hat, association_type tat, multiplicity_type tm, asset ta where a.environment_id = e.id and a.head_id = ha.id and a.head_multiplicity_id = hm.id and a.head_association_type_id = hat.id and a.tail_association_type_id = tat.id and a.tail_multiplicity_id = tm.id and a.tail_id = ta.id;
+  declare continue handler for not found set done = 1;
+
+  set buf = concat(buf,'"roles" : [\n');
+  open roleCursor;
+  role_loop: loop
+    fetch roleCursor into roleName, roleType, roleShortCode,roleDesc;
+    if done = 1
+    then
+      set buf = concat(buf,"],\n");
+      leave role_loop;
+      set headElement = 1;
+    else
+      if headElement = 1
+      then
+        set headElement = 0;
+      else
+        set buf = concat(buf,",\n");
+      end if;
+    end if;
+    set buf = concat(buf,'  {"name" : "',roleName,'", "type" : "',roleType,'", "short_code" : "',roleShortCode,'",  "description" : "',roleDesc,'"}');
+    set roleCount = roleCount + 1;
+  end loop role_loop;
+  close roleCursor;
+  set done = 0;
+
+  set headElement = 1;
+  set buf = concat(buf,'"assets" : [\n');
+  open assetCursor;
+  asset_loop: loop
+    fetch assetCursor into assetId, assetName, assetShortCode, assetDesc, assetSignif, assetType, isCritical, assetCr;
+    if done = 1
+    then
+      set buf = concat(buf,"  }\n],\n");
+      leave asset_loop;
+      set headElement = 1;
+    else
+      if headElement = 1
+      then
+        set headElement = 0;
+      else
+        set buf = concat(buf,"  },\n");
+      end if;
+    end if;
+    set buf = concat(buf,'  {"name" : "',assetName,'", "short_code" : "',assetShortCode,'", "type" : "',assetType,'", "is_critical" : "',isCritical,'", "description" : "',assetDesc,'", "significance" : "',assetSignif,'", "critical_rationale" : "',assetCr,'",\n');
+    set buf = concat(buf,'    "tags" : [');
+
+    set headElement = 1;
+    open assetTagCursor;
+    assetTag_loop: loop
+      fetch assetTagCursor into tagName;
+      if done = 1
+      then
+        set buf = concat(buf,'], "interfaces" : [');
+        leave assetTag_loop;
+        set headElement = 1;
+      else
+        if headElement = 1
+        then
+          set headElement = 0;
+        else
+          set buf = concat(buf,",");
+        end if;
+      end if;
+      set buf = concat(buf,'"',tagName,'"'); 
+    end loop assetTag_loop;
+    close assetTagCursor;
+    set done = 0;
+
+    set headElement = 1;
+    open assetIFCursor;
+    assetIF_loop: loop
+      fetch assetIFCursor into ifName,reqId;
+      if done = 1
+      then
+        set buf = concat(buf,'],\n    "environments" : [\n');
+        leave assetIF_loop;
+        set headElement = 1;
+      else
+        if headElement = 1
+        then
+          set headElement = 0;
+        else
+          set buf = concat(buf,",\n");
+        end if;
+      end if;
+      if reqId = 1
+      then
+        set ifType = 'required';
+      else
+        set ifType = 'provided';
+      end if;
+      set buf = concat(buf,'      {"name" : "',ifName,'", "type" : "',ifType,'"}');
+    end loop assetIF_loop;
+    close assetIFCursor;
+    set done = 0;
+
+    set headElement = 1;
+    open assetEnvCursor;
+    assetEnv_loop: loop
+      fetch assetEnvCursor into envId, envName;
+      if done = 1
+      then
+        set buf = concat(buf,'    ]\n');
+        leave assetEnv_loop;
+        set headElement = 1;
+      else
+        if headElement = 1
+        then
+          set headElement = 0;
+        else
+          set buf = concat(buf,",\n");
+        end if;
+      end if;
+      select spv.name,ap.property_rationale into cProperty,cRationale from asset_property ap, security_property_value spv where ap.asset_id = assetId and ap.property_id = 0 and ap.environment_id = envId and ap.property_value_id = spv.id;
+      select spv.name,ap.property_rationale into iProperty,iRationale from asset_property ap, security_property_value spv where ap.asset_id = assetId and ap.property_id = 1 and ap.environment_id = envId and ap.property_value_id = spv.id;
+      select spv.name,ap.property_rationale into avProperty,avRationale from asset_property ap, security_property_value spv where ap.asset_id = assetId and ap.property_id = 2 and ap.environment_id = envId and ap.property_value_id = spv.id;
+      select spv.name,ap.property_rationale into acProperty,acRationale from asset_property ap, security_property_value spv where ap.asset_id = assetId and ap.property_id = 3 and ap.environment_id = envId and ap.property_value_id = spv.id;
+      select spv.name,ap.property_rationale into anProperty,anRationale from asset_property ap, security_property_value spv where ap.asset_id = assetId and ap.property_id = 4 and ap.environment_id = envId and ap.property_value_id = spv.id;
+      select spv.name,ap.property_rationale into panProperty,panRationale from asset_property ap, security_property_value spv where ap.asset_id = assetId and ap.property_id = 5 and ap.environment_id = envId and ap.property_value_id = spv.id;
+      select spv.name,ap.property_rationale into unlProperty,unlRationale from asset_property ap, security_property_value spv where ap.asset_id = assetId and ap.property_id = 6 and ap.environment_id = envId and ap.property_value_id = spv.id;
+      select spv.name,ap.property_rationale into unoProperty,unoRationale from asset_property ap, security_property_value spv where ap.asset_id = assetId and ap.property_id = 7 and ap.environment_id = envId and ap.property_value_id = spv.id;
+
+      if cProperty != 'None'
+      then
+        set buf = concat(buf,'      {"name" : "',envName,'", "property" : "confidentiality", "value" : "',cProperty,'", "rationale" : "',cRationale,'"}');
+        if iProperty != 'None' or avProperty != 'None' or acProperty != 'None' or anProperty != 'None' or panProperty != 'None' or unlProperty != 'None' or unoProperty != 'None'
+        then
+          set buf = concat(buf,",\n");
+        else
+          set buf = concat(buf,"\n");
+        end if;
+      end if;
+      if iProperty != 'None'
+      then
+        set buf = concat(buf,'      {"name" : "',envName,'", "property" : "integrity", "value" : "',iProperty,'", "rationale" : "',iRationale,'"}');
+        if avProperty != 'None' or acProperty != 'None' or anProperty != 'None' or panProperty != 'None' or unlProperty != 'None' or unoProperty != 'None'
+        then
+          set buf = concat(buf,",\n");
+        else
+          set buf = concat(buf,"\n");
+        end if;
+      end if;
+      if avProperty != 'None'
+      then
+        set buf = concat(buf,'      {"name" : "',envName,'", "property" : "availability", "value" : "',avProperty,'", "rationale" : "',avRationale,'"}');
+        if acProperty != 'None' or anProperty != 'None' or panProperty != 'None' or unlProperty != 'None' or unoProperty != 'None'
+        then
+          set buf = concat(buf,",\n");
+        else
+          set buf = concat(buf,"\n");
+        end if;
+      end if;
+      if acProperty != 'None'
+      then
+        set buf = concat(buf,'      {"name" : "',envName,'", "property" : "accountability", "value" : "',acProperty,'", "rationale" : "',acRationale,'"}');
+        if anProperty != 'None' or panProperty != 'None' or unlProperty != 'None' or unoProperty != 'None'
+        then
+          set buf = concat(buf,",\n");
+        else
+          set buf = concat(buf,"\n");
+        end if;
+      end if;
+      if anProperty != 'None'
+      then
+        set buf = concat(buf,'      {"name" : "',envName,'", "property" : "anonymity", "value" : "',anProperty,'", "rationale" : "',anRationale,'"}');
+        if panProperty != 'None' or unlProperty != 'None' or unoProperty != 'None'
+        then
+          set buf = concat(buf,",\n");
+        else
+          set buf = concat(buf,"\n");
+        end if;
+      end if;
+      if panProperty != 'None'
+      then
+        set buf = concat(buf,'      {"name" : "',envName,'", "property" : "pseudonymity", "value" : "',panProperty,'", "rationale" : "',panRationale,'"}');
+        if unlProperty != 'None' or unoProperty != 'None'
+        then
+          set buf = concat(buf,",\n");
+        else
+          set buf = concat(buf,"\n");
+        end if;
+      end if;
+      if unlProperty != 'None'
+      then
+        set buf = concat(buf,'      {"name" : "',envName,'", "property" : "unlinkability", "value" : "',unlProperty,'", "rationale" : "',unlRationale,'"}');
+        if unoProperty != 'None'
+        then
+          set buf = concat(buf,",\n");
+        else
+          set buf = concat(buf,"\n");
+        end if;
+      end if;
+      if unoProperty != 'None'
+      then
+        set buf = concat(buf,'      {"name" : "',envName,'", "property" : "unobservability", "value" : "',unoProperty,'", "rationale" : "',unoRationale,'"}\n');
+      end if;
+    end loop assetEnv_loop;
+    close assetEnvCursor;
+    set done = 0;
+    set assetCount = assetCount + 1;
+  end loop asset_loop;
+  close assetCursor;
+
+  set done = 0;
+  set headElement = 1;
+  set buf = concat(buf,'"vulnerabilities" : [\n');
+  open vulCursor;
+  vul_loop: loop
+    fetch vulCursor into vulId, vulName, vulDesc, vulType;
+    if done = 1
+    then
+      set buf = concat(buf,"  }\n],\n");
+      leave vul_loop;
+      set headElement = 1;
+    else
+      if headElement = 1
+      then
+        set headElement = 0;
+      else
+        set buf = concat(buf,"  },\n");
+      end if;
+    end if;
+    set buf = concat(buf,'  {"name" : "',vulName,'", "type" : "',vulType,'", "description" : "',vulDesc,'",\n    "tags" : [');
+    set vulCount = vulCount + 1;
+
+    set headElement = 1;
+    open vulTagCursor;
+    vulTag_loop: loop
+      fetch vulTagCursor into tagName;
+      if done = 1
+      then
+        set buf = concat(buf,'],\n    "environments" : [\n');
+        leave vulTag_loop;
+        set headElement = 1;
+      else
+        if headElement = 1
+        then
+          set headElement = 0;
+        else
+          set buf = concat(buf,",\n");
+        end if;
+      end if;
+      if done = 1
+      then
+        leave vulTag_loop;
+      end if;
+      set buf = concat(buf,'"',tagName,'"'); 
+    end loop vulTag_loop;
+    close vulTagCursor;
+    set done = 0;
+
+    set headElement = 1;
+    open vulEnvCursor;
+    vulEnv_loop: loop
+      fetch vulEnvCursor into envId, envName;
+      if done = 1
+      then
+        set buf = concat(buf,'\n    ]\n');
+        leave vulEnv_loop;
+        set headElement = 1;
+      else
+        if headElement = 1
+        then
+          set headElement = 0;
+        else
+          set buf = concat(buf,",\n");
+        end if;
+      end if;
+      set buf = concat(buf,'      {"name" : "',envName,'", "severity" : "',vulnerability_severity(vulId,envId),'", "assets" : [');
+
+      set headElement = 1;
+      open vulAssetsCursor;
+      vulAssets_loop: loop
+        fetch vulAssetsCursor into assetName;
+        if done = 1
+        then
+          set buf = concat(buf,']}');
+          leave vulAssets_loop;
+          set headElement = 1;
+        else
+          if headElement = 1
+          then
+            set headElement = 0;
+          else
+            set buf = concat(buf,",");
+          end if;
+        end if;
+        set buf = concat(buf,'"',assetName,'"');
+      end loop vulAssets_loop;
+      close vulAssetsCursor;
+      set done = 0;
+    end loop vulEnv_loop;
+    close vulEnvCursor;
+    set done = 0;
+
+  end loop vul_loop;
+  close vulCursor;
+
+  set done = 0;
+  set headElement = 1;
+  set buf = concat(buf,'"attackers" : [\n');
+  open attackerCursor;
+  attacker_loop: loop
+    fetch attackerCursor into attackerId, attackerName, attackerDesc, attackerImage;
+    if done = 1
+    then
+      set buf = concat(buf,"  }\n],\n");
+      leave attacker_loop;
+      set headElement = 1;
+    else
+      if headElement = 1
+      then
+        set headElement = 0;
+      else
+        set buf = concat(buf,"  },\n");
+      end if;
+    end if;
+    set buf = concat(buf,'  {"name" : "',attackerName,'", "image" : "',attackerImage,'", "description" : "',attackerDesc,'", "tags" : [');
+    set attackerCount = attackerCount + 1;
+
+    set headElement = 1;
+    open attackerTagCursor;
+    attackerTag_loop: loop
+      fetch attackerTagCursor into tagName;
+      if done = 1
+      then
+        set buf = concat(buf,'],\n    "environments" : [\n');
+        leave attackerTag_loop;
+        set headElement = 1;
+      else
+        if headElement = 1
+        then
+          set headElement = 0;
+        else
+          set buf = concat(buf,",\n");
+        end if;
+      end if;
+      set buf = concat(buf,'"',tagName,'"'); 
+    end loop attackerTag_loop;
+    close attackerTagCursor;
+    set done = 0;
+
+    set headElement = 1;
+    open attackerEnvCursor;
+    attackerEnv_loop: loop
+      fetch attackerEnvCursor into envId, envName;
+      if done = 1
+      then
+        set buf = concat(buf,'\n    ]\n');
+        leave attackerEnv_loop;
+        set headElement = 1;
+      else
+        if headElement = 1
+        then
+          set headElement = 0;
+        else
+          set buf = concat(buf,",\n");
+        end if;
+      end if;
+      set buf = concat(buf,'      {"name" : "',envName,'", "roles" : [');
+
+      set headElement = 1;
+      open attackerRolesCursor;
+      attackerRoles_loop: loop
+        fetch attackerRolesCursor into roleName;
+        if done = 1
+        then
+          set buf = concat(buf,'], "motivations" : [');
+          leave attackerRoles_loop;
+          set headElement = 1;
+        else
+          if headElement = 1
+          then
+            set headElement = 0;
+          else
+            set buf = concat(buf,",");
+          end if;
+        end if;
+        set buf = concat(buf,'"',roleName,'"');
+      end loop attackerRoles_loop;
+      close attackerRolesCursor;
+      set done = 0;
+
+      set headElement = 1;
+      open motivCursor;
+      motiv_loop: loop
+        fetch motivCursor into motivName;
+        if done = 1
+        then
+          set buf = concat(buf,'], "capabilities" : [');
+          leave motiv_loop;
+          set headElement = 1;
+        else
+          if headElement = 1
+          then
+            set headElement = 0;
+          else
+            set buf = concat(buf,",");
+          end if;
+        end if;
+        set buf = concat(buf,'"',motivName,'"');
+      end loop motiv_loop;
+      close motivCursor;
+      set done = 0;
+
+      set headElement = 1;
+      open capabilityCursor;
+      capability_loop: loop
+        fetch capabilityCursor into capabilityName,capabilityValue;
+        if done = 1
+        then
+          set buf = concat(buf,']\n      }');
+          leave capability_loop;
+          set headElement = 1;
+        else
+          if headElement = 1
+          then
+            set headElement = 0;
+          else
+            set buf = concat(buf,",");
+          end if;
+        end if;
+        if done = 1
+        then
+          leave capability_loop;
+        end if;
+        set buf = concat(buf,'{"name" : "',capabilityName,'", "value" : "',capabilityValue,'"}');
+      end loop capability_loop;
+      close capabilityCursor;
+      set done = 0;
+    end loop attackerEnv_loop;
+    close attackerEnvCursor;
+    set done = 0;
+  end loop attacker_loop;
+  close attackerCursor;
+
+  set done = 0;
+  set headElement = 1;
+  set buf = concat(buf,'"threats" : [\n');
+  open threatCursor;
+  threat_loop: loop
+    fetch threatCursor into threatId, threatName, threatType, threatMethod;
+    if done = 1
+    then
+      set buf = concat(buf,"  }\n],\n");
+      leave threat_loop;
+      set headElement = 1;
+    else
+      if headElement = 1
+      then
+        set headElement = 0;
+      else
+        set buf = concat(buf,"  },\n");
+      end if;
+    end if;
+    set buf = concat(buf,'  {"name" : "',threatName,'", "type" : "',threatType,'", "method" : "',threatMethod,'", "tags" : [');
+    set threatCount = threatCount + 1;
+
+    set headElement = 1;
+    open threatTagCursor;
+    threatTag_loop: loop
+      fetch threatTagCursor into tagName;
+      if done = 1
+      then
+        set buf = concat(buf,'],\n    "environments" : [\n');
+        leave threatTag_loop;
+        set headElement = 1;
+      else
+        if headElement = 1
+        then
+          set headElement = 0;
+        else
+          set buf = concat(buf,",\n");
+        end if;
+      end if;
+      set buf = concat(buf,'"',tagName,'"'); 
+    end loop threatTag_loop;
+    close threatTagCursor;
+    set done = 0;
+
+    set headElement = 1;
+    open threatEnvCursor;
+    threatEnv_loop: loop
+      fetch threatEnvCursor into envId, envName;
+      if done = 1
+      then
+        set buf = concat(buf,'      }\n    ]\n');
+        leave threatEnv_loop;
+        set headElement = 1;
+      else
+        if headElement = 1
+        then
+          set headElement = 0;
+        else
+          set buf = concat(buf,"      },\n");
+        end if;
+      end if;
+      set buf = concat(buf,'      {"name=" : "',envName,'", "likelihood" : "',threat_likelihood(threatId,envId),'", "attackers" : [');
+
+      set headElement = 1;
+      open threatAttackerCursor;
+      threatAttacker_loop: loop
+        fetch threatAttackerCursor into attackerName;
+        if done = 1
+        then
+          set buf = concat(buf,'], "assets" : [');
+          leave threatAttacker_loop;
+          set headElement = 1;
+        else
+          if headElement = 1
+          then
+            set headElement = 0;
+          else
+            set buf = concat(buf,",");
+          end if;
+        end if;
+        set buf = concat(buf,'"',attackerName,'"');
+      end loop threatAttacker_loop;
+      close threatAttackerCursor;
+      set done = 0;
+
+      set headElement = 1;
+      open threatAssetCursor;
+      threatAsset_loop: loop
+        fetch threatAssetCursor into assetName;
+        if done = 1
+        then
+          set buf = concat(buf,'], "properties" : [');
+          leave threatAsset_loop;
+          set headElement = 1;
+        else
+          if headElement = 1
+          then
+            set headElement = 0;
+          else
+            set buf = concat(buf,",");
+          end if;
+        end if;
+        set buf = concat(buf,'"',assetName,'"');
+      end loop threatAsset_loop;
+      close threatAssetCursor;
+      set done = 0;
+
+      select spv.name,tp.property_rationale into cProperty,cRationale from threat_property tp, security_property_value spv where tp.threat_id = threatId and tp.property_id = 0 and tp.environment_id = envId and tp.property_value_id = spv.id;
+      select spv.name,tp.property_rationale into iProperty,iRationale from threat_property tp, security_property_value spv where tp.threat_id = threatId and tp.property_id = 1 and tp.environment_id = envId and tp.property_value_id = spv.id;
+      select spv.name,tp.property_rationale into avProperty,avRationale from threat_property tp, security_property_value spv where tp.threat_id = threatId and tp.property_id = 2 and tp.environment_id = envId and tp.property_value_id = spv.id;
+      select spv.name,tp.property_rationale into acProperty,acRationale from threat_property tp, security_property_value spv where tp.threat_id = threatId and tp.property_id = 3 and tp.environment_id = envId and tp.property_value_id = spv.id;
+      select spv.name,tp.property_rationale into anProperty,anRationale from threat_property tp, security_property_value spv where tp.threat_id = threatId and tp.property_id = 4 and tp.environment_id = envId and tp.property_value_id = spv.id;
+      select spv.name,tp.property_rationale into panProperty,panRationale from threat_property tp, security_property_value spv where tp.threat_id = threatId and tp.property_id = 5 and tp.environment_id = envId and tp.property_value_id = spv.id;
+      select spv.name,tp.property_rationale into unlProperty,unlRationale from threat_property tp, security_property_value spv where tp.threat_id = threatId and tp.property_id = 6 and tp.environment_id = envId and tp.property_value_id = spv.id;
+      select spv.name,tp.property_rationale into unoProperty,unoRationale from threat_property tp, security_property_value spv where tp.threat_id = threatId and tp.property_id = 7 and tp.environment_id = envId and tp.property_value_id = spv.id;
+
+      if cProperty != 'None'
+      then
+        set buf = concat(buf,'{"property" : "confidentiality", "value" : "',cProperty,'", "rationale" : "',cRationale,'"}');
+        if iProperty != 'None' or avProperty != 'None' or acProperty != 'None' or anProperty != 'None' or panProperty != 'None' or unlProperty != 'None' or unoProperty != 'None'
+        then
+          set buf = concat(buf,",");
+        end if;
+      end if;
+      if iProperty != 'None'
+      then
+        set buf = concat(buf,'{"property" : "integrity", "value" : "',iProperty,'", "rationale" : "',iRationale,'"}');
+        if avProperty != 'None' or acProperty != 'None' or anProperty != 'None' or panProperty != 'None' or unlProperty != 'None' or unoProperty != 'None'
+        then
+          set buf = concat(buf,",");
+        end if;
+      end if;
+      if avProperty != 'None'
+      then
+        set buf = concat(buf,'{"property" : "availability", "value" : "',avProperty,'", "rationale" : "',avRationale,'"}');
+        if acProperty != 'None' or anProperty != 'None' or panProperty != 'None' or unlProperty != 'None' or unoProperty != 'None'
+        then
+          set buf = concat(buf,",");
+        end if;
+      end if;
+      if acProperty != 'None'
+      then
+        set buf = concat(buf,'{"property" : "accountability", "value" : "',acProperty,'", "rationale" : "',acRationale,'"}');
+        if anProperty != 'None' or panProperty != 'None' or unlProperty != 'None' or unoProperty != 'None'
+        then
+          set buf = concat(buf,",");
+        end if;
+      end if;
+      if anProperty != 'None'
+      then
+        set buf = concat(buf,'{"property" : "anonymity", "value" : "',anProperty,'", "rationale" : "',anRationale,'"}');
+        if panProperty != 'None' or unlProperty != 'None' or unoProperty != 'None'
+        then
+          set buf = concat(buf,",");
+        end if;
+      end if;
+      if panProperty != 'None'
+      then
+        set buf = concat(buf,'{"property" : "pseudonymity", "value" : "',panProperty,'", "rationale" : "',panRationale,'"}');
+        if unlProperty != 'None' or unoProperty != 'None'
+        then
+          set buf = concat(buf,",");
+        end if;
+      end if;
+      if unlProperty != 'None'
+      then
+        set buf = concat(buf,'{"property" : "unlinkability", "value" : "',unlProperty,'", "rationale" : "',unlRationale,'"}');
+        if unoProperty != 'None'
+        then
+          set buf = concat(buf,",");
+        end if;
+      end if;
+      if unoProperty != 'None'
+      then
+        set buf = concat(buf,'{"property" : "unobservability", "value" : "',unoProperty,'", "rationale" : "',unoRationale,'"}');
+      end if;
+      set buf = concat(buf,']\n');
+    end loop threatEnv_loop;
+    close threatEnvCursor;
+    set done = 0;
+  end loop threat_loop;
+  close threatCursor;
+
+  set done = 0;
+  set headElement = 1;
+  set buf = concat(buf,'"risks" : [\n');
+  open riskCursor;
+  risk_loop: loop
+    fetch riskCursor into riskId, riskName, threatName, vulName;
+    if done = 1
+    then
+      set buf = concat(buf,"  }\n],\n");
+      leave risk_loop;
+      set headElement = 1;
+    else
+      if headElement = 1
+      then
+        set headElement = 0;
+      else
+        set buf = concat(buf,"  },\n");
+      end if;
+    end if;
+    set buf = concat(buf,'  {"name" : "',riskName,'", "vulnerability" : "',vulName,'", "threat" : "',threatName,'", "tags" : [');
+    set riskCount = riskCount + 1;
+
+    set headElement = 1;
+    open riskTagCursor;
+    riskTag_loop: loop
+      fetch riskTagCursor into tagName;
+      if done = 1
+      then
+        set buf = concat(buf,'],\n    "misusecases" : [\n');
+        leave riskTag_loop;
+        set headElement = 1;
+      else
+        if headElement = 1
+        then
+          set headElement = 0;
+        else
+          set buf = concat(buf,",");
+        end if;
+      end if;
+      set buf = concat(buf,'"',tagName,'"'); 
+    end loop riskTag_loop;
+    close riskTagCursor;
+    set done = 0;
+  
+    set headElement = 1;
+    open mcCursor;
+    mc_loop: loop
+      fetch mcCursor into envName, mcNarrative;
+      if done = 1
+      then
+        set buf = concat(buf,'\n    ]\n');
+        leave mc_loop;
+        set headElement = 1;
+      else
+        if headElement = 1
+        then
+          set headElement = 0;
+        else
+          set buf = concat(buf,",\n");
+        end if;
+      end if;
+      set buf = concat(buf,'      {"environment" : "',envName,'", "narrative" : "',mcNarrative,'"}');
+    end loop mc_loop;
+    close mcCursor;
+    set done = 0;
+  end loop risk_loop;
+  close riskCursor;
+
+  set buf = concat(buf,'"responses" : [\n');
+  set done = 0;
+  set headElement = 1;
+  open responseCursor;
+  response_loop: loop
+    fetch responseCursor into responseId, responseName, responseType, riskName;
+    if done = 1
+    then
+      set buf = concat(buf,"  }\n],\n");
+      leave response_loop;
+      set headElement = 1;
+    else
+      if headElement = 1
+      then
+        set headElement = 0;
+      else
+        set buf = concat(buf,"  },\n");
+      end if;
+    end if;
+    set buf = concat(buf,'  {"risk" : "',riskName,'", "type" : "',responseType,'",\n    "environments" : [\n');
+    set responseCount = responseCount + 1;
+
+    set done = 0;
+    set headElement = 1;
+    open responseEnvCursor;
+    responseEnv_loop: loop
+      fetch responseEnvCursor into envId, envName;
+      if done = 1
+      then
+        set buf = concat(buf,'\n    ]\n');
+        leave responseEnv_loop;
+        set headElement = 1;
+      else
+        if headElement = 1
+        then
+          set headElement = 0;
+        else
+          set buf = concat(buf,",\n");
+        end if;
+      end if;
+      if responseType = 'Accept'
+      then
+        set buf = concat(buf,'      {"name" : "',envName,'", "type" : "accept", "cost" : "',responseCost(responseId,envId),'", "rationale" : "',responseDescription(responseId,envId),'"}');
+      elseif responseType = 'Transfer'
+      then
+        set buf = concat(buf,'      {"name" : "',envName,'", "type" : "transfer", "rationale" : "',responseDescription(responseId,envId),'", "roles" : [');
+
+        set done = 0;
+        set headElement = 1;
+        open responseRoleCursor;
+        responseRole_loop: loop
+          fetch responseRoleCursor into roleName,roleCost;
+          if done = 1
+          then
+            set buf = concat(buf,']}\n');
+            leave responseRole_loop;
+            set headElement = 1;
+          else
+            if headElement = 1
+            then
+              set headElement = 0;
+            else
+              set buf = concat(buf,",");
+            end if;
+          end if;
+          set buf = concat(buf,'{"name" : "',roleName,'", "cost" : "',roleCost,'"}');
+
+        end loop responseRole_loop;
+        close responseRoleCursor;
+        set done = 0;
+      else
+        set mitType = mitigationType(responseId,envId);
+        if mitType = 'Deter'
+        then
+          set buf = concat(buf,'      {"name" : "',envName,'", "type" : "deter"}\n');
+        elseif mitType = 'Prevent'
+        then
+          set buf = concat(buf,'      {"name" : "',envName,'", "type" : "prevent"}\n');
+        elseif mitType = 'Detect'
+        then
+          set buf = concat(buf,'      {"name" : "',envName,'", "type" : "detect", "point" : "',mitigatePoint(responseId,envId),'"}\n');
+        else
+          set buf = concat(buf,'      {"name" : "',envName,'", "type" : "react", "detection_mechanisms" : [');
+
+          set done = 0;
+          set headElement = 1;
+          open detMechCursor;
+          detMech_loop: loop
+            fetch detMechCursor into assetName;
+            if done = 1
+            then
+              set buf = concat(buf,']}\n');
+              leave detMech_loop;
+              set headElement = 1;
+            else
+              if headElement = 1
+              then
+                set headElement = 0;
+              else
+                set buf = concat(buf,",");
+              end if;
+            end if;
+            set buf = concat(buf,'"',assetName,'"');
+          end loop detMech_loop;
+          close detMechCursor;
+          set done = 0;
+        end if;
+      end if;
+    end loop responseEnv_loop;
+    close responseEnvCursor;
+    set done = 0;
+  end loop response_loop;
+  close responseCursor;
+
+  set buf = concat(buf,'"asset_associations" : [\n');
+  set done = 0;
+  set headElement = 1;
+  open assocCursor;
+  assoc_loop: loop
+    fetch assocCursor into envName, headName, headNav, headAdornment, headNry, headRole, tailRole, tailNry, tailAdornment, tailNav, tailName,assocRationale;
+    if done = 1
+    then
+      set buf = concat(buf,"\n]\n");
+      leave assoc_loop;
+      set headElement = 1;
+    else
+      if headElement = 1
+      then
+        set headElement = 0;
+      else
+        set buf = concat(buf,",\n");
+      end if;
+    end if;
+    set buf = concat(buf,'  {"environment" : "',envName,'",  "head_name" : "',headName,'", "head_nav" : "',headNav,'", "head_adornment" : "',headAdornment,'", "head_nry" : "',s2a(headNry),'", "head_role" : "',headRole,'", "tail_role" : "',tailRole,'", "tail_nry" : "',s2a(tailNry),'", "tail_adornment" : "',tailAdornment,'", "tail_nav" : "',tailNav,'", "tail_name" : "',tailName,'", "rationale" : "',assocRationale,'"}');
+    set rshipCount = rshipCount + 1;
+  end loop assoc_loop;
+  close assocCursor;
+  select buf,roleCount,assetCount,vulCount,attackerCount,threatCount,riskCount,responseCount,rshipCount;
+end
+//
+
+create procedure usabilityToJSON()
+begin
+  declare envId int;
+  declare headElement int default 1;
+  declare envName varchar(50);
+  declare personaId int;
+  declare personaName varchar(50);
+  declare pActivities varchar(4000);
+  declare pAttitudes varchar(4000);
+  declare pAptitudes varchar(4000);
+  declare pMotivations varchar(4000);
+  declare pSkills varchar(4000);
+  declare pIntrinsic varchar(4000);
+  declare pContextual varchar(4000);
+  declare pImage varchar(2000);
+  declare isAssumption int;
+  declare pType varchar(50);
+  declare roleName varchar(50);
+  declare personaCount int default 0;
+  declare edName varchar(2000);
+  declare edVersion varchar(20);
+  declare edDate varchar(100);
+  declare edAuthors varchar(200);
+  declare edDesc varchar(2000);
+  declare edCount int default 0;
+  declare drName varchar(200);
+  declare drCount int default 0;
+  declare drCont varchar(200);
+  declare drExcerpt varchar(2000);
+  declare pcId int;
+  declare bvName varchar(50);
+  declare modQual varchar(50);
+  declare pcDesc varchar(2000);
+  declare pcCount int default 0;
+  declare gwrType varchar(20);
+  declare gwrRef varchar(200);
+  declare gwrConcept varchar(50);
+  declare taskId int;
+  declare taskName varchar(200);
+  declare taskCode varchar(100);
+  declare taskAuthor varchar(255);
+  declare taskObjective varchar(255);
+  declare isTaskAssumption int;
+  declare taskCount int default 0;
+  declare durationValue varchar(50);
+  declare frequencyValue varchar(50);
+  declare demandsValue varchar(50);
+  declare gcValue varchar(50);
+  declare concernName varchar(50);
+  declare sourceName varchar(50);
+  declare sourceNry varchar(10);
+  declare concernLink varchar(50);
+  declare targetNry varchar(10);
+  declare targetName varchar(50);
+  declare buf LONGTEXT default '';
+  declare done int default 0;
+  declare personaCursor cursor for select p.id,p.name,jsonEscaped(p.activities),jsonEscaped(p.attitudes),jsonEscaped(p.aptitudes),jsonEscaped(p.motivations),jsonEscaped(p.skills),jsonEscaped(p.intrinsic),jsonEscaped(p.contextual),p.image,p.assumption_id,pt.name from persona p, persona_type pt where p.persona_type_id = pt.id;
+  declare personaEnvCursor cursor for select ep.environment_id,e.name from environment_persona ep, environment e where ep.persona_id = personaId and ep.environment_id = e.id;
+  declare personaRolesCursor cursor for select r.name from persona_role sr, role r where sr.persona_id = personaId and sr.environment_id = envId and sr.role_id = r.id;
+  declare edCursor cursor for select name,version,publication_date,authors,jsonEscaped(description) from external_document;
+  declare drCursor cursor for select distinct dr.name,ed.name,dr.contributor,jsonEscaped(dr.excerpt) from document_reference dr, external_document ed where dr.document_id = ed.id;
+  declare pcCursor cursor for select pc.id,p.name,bv.name,pc.qualifier,jsonEscaped(pc.description) from persona_characteristic pc, persona p, behavioural_variable bv where pc.persona_id = p.id and pc.variable_id = bv.id order by 2,3;
+
+  declare groundsCursor cursor for
+    select 'document',dr.name,'' from persona_characteristic_document pc, document_reference dr where pc.characteristic_id = pcId and pc.reference_id = dr.id and pc.characteristic_reference_type_id = 0
+    union
+    select 'asset',cr.name,c.name from persona_characteristic_asset pc, asset_reference cr, asset c where pc.characteristic_id = pcId and pc.reference_id = cr.id and cr.asset_id = c.id and pc.characteristic_reference_type_id = 0
+    union
+    select 'attacker',cr.name,c.name from persona_characteristic_attacker pc, attacker_reference cr, attacker c where pc.characteristic_id = pcId and pc.reference_id = cr.id and cr.attacker_id = c.id and pc.characteristic_reference_type_id = 0
+    union
+    select 'countermeasure',cr.name,c.name from persona_characteristic_countermeasure pc, countermeasure_reference cr, countermeasure c where pc.characteristic_id = pcId and pc.reference_id = cr.id and cr.countermeasure_id = c.id and pc.characteristic_reference_type_id = 0
+    union
+    select 'domainproperty',cr.name,c.name from persona_characteristic_domainproperty pc, domainproperty_reference cr, domainproperty c where pc.characteristic_id = pcId and pc.reference_id = cr.id and cr.domainproperty_id = c.id and pc.characteristic_reference_type_id = 0
+    union
+    select 'environment',cr.name,c.name from persona_characteristic_environment pc, environment_reference cr, environment c where pc.characteristic_id = pcId and pc.reference_id = cr.id and cr.environment_id = c.id and pc.characteristic_reference_type_id = 0
+    union
+    select 'goal',cr.name,c.name from persona_characteristic_goal pc, goal_reference cr, goal c where pc.characteristic_id = pcId and pc.reference_id = cr.id and cr.goal_id = c.id and pc.characteristic_reference_type_id = 0
+    union
+    select 'misusecase',cr.name,c.name from persona_characteristic_misusecase pc, misusecase_reference cr, misusecase c where pc.characteristic_id = pcId and pc.reference_id = cr.id and cr.misusecase_id = c.id and pc.characteristic_reference_type_id = 0
+    union
+    select 'obstacle',cr.name,c.name from persona_characteristic_obstacle pc, obstacle_reference cr, obstacle c where pc.characteristic_id = pcId and pc.reference_id = cr.id and cr.obstacle_id = c.id and pc.characteristic_reference_type_id = 0
+    union
+    select 'persona',cr.name,c.name from persona_characteristic_persona pc, persona_reference cr, persona c where pc.characteristic_id = pcId and pc.reference_id = cr.id and cr.persona_id = c.id and pc.characteristic_reference_type_id = 0
+    union
+    select 'requirement',cr.name,c.name from persona_characteristic_requirement pc, requirement_reference cr, requirement c, asset_requirement ar, asset a where pc.characteristic_id = pcId and pc.reference_id = cr.id and cr.requirement_id = c.id and pc.characteristic_reference_type_id = 0 and c.id = ar.requirement_id and ar.asset_id = a.id and c.version = (select max(i.version) from requirement i where i.id = c.id) 
+    union
+    select 'requirement',cr.name,c.name from persona_characteristic_requirement pc, requirement_reference cr, requirement c, environment_requirement er, environment e where pc.characteristic_id = pcId and pc.reference_id = cr.id and cr.requirement_id = c.id and pc.characteristic_reference_type_id = 0 and c.id = er.requirement_id and er.environment_id = e.id and c.version = (select max(i.version) from requirement i where i.id = c.id) 
+    union
+    select 'response',cr.name,c.name from persona_characteristic_response pc, response_reference cr, response c where pc.characteristic_id = pcId and pc.reference_id = cr.id and cr.response_id = c.id and pc.characteristic_reference_type_id = 0
+    union
+    select 'risk',cr.name,c.name from persona_characteristic_risk pc, risk_reference cr, risk c where pc.characteristic_id = pcId and pc.reference_id = cr.id and cr.risk_id = c.id and pc.characteristic_reference_type_id = 0
+    union
+    select 'role',cr.name,c.name from persona_characteristic_role pc, role_reference cr, role c where pc.characteristic_id = pcId and pc.reference_id = cr.id and cr.role_id = c.id and pc.characteristic_reference_type_id = 0
+    union
+    select 'task',cr.name,c.name from persona_characteristic_task pc, task_reference cr, task c where pc.characteristic_id = pcId and pc.reference_id = cr.id and cr.task_id = c.id and pc.characteristic_reference_type_id = 0
+    union
+    select 'threat',cr.name,c.name from persona_characteristic_threat pc, threat_reference cr, threat c where pc.characteristic_id = pcId and pc.reference_id = cr.id and cr.threat_id = c.id and pc.characteristic_reference_type_id = 0
+    union
+    select 'vulnerability',cr.name,c.name from persona_characteristic_vulnerability pc, vulnerability_reference cr, vulnerability c where pc.characteristic_id = pcId and pc.reference_id = cr.id and cr.vulnerability_id = c.id and pc.characteristic_reference_type_id = 0;
+  declare warrantCursor cursor for
+    select 'document',dr.name,'' from persona_characteristic_document pc, document_reference dr where pc.characteristic_id = pcId and pc.reference_id = dr.id and pc.characteristic_reference_type_id = 1
+    union
+    select 'asset',cr.name,c.name from persona_characteristic_asset pc, asset_reference cr, asset c where pc.characteristic_id = pcId and pc.reference_id = cr.id and cr.asset_id = c.id and pc.characteristic_reference_type_id = 1
+    union
+    select 'attacker',cr.name,c.name from persona_characteristic_attacker pc, attacker_reference cr, attacker c where pc.characteristic_id = pcId and pc.reference_id = cr.id and cr.attacker_id = c.id and pc.characteristic_reference_type_id = 1
+    union
+    select 'countermeasure',cr.name,c.name from persona_characteristic_countermeasure pc, countermeasure_reference cr, countermeasure c where pc.characteristic_id = pcId and pc.reference_id = cr.id and cr.countermeasure_id = c.id and pc.characteristic_reference_type_id = 1
+    union
+    select 'domainproperty',cr.name,c.name from persona_characteristic_domainproperty pc, domainproperty_reference cr, domainproperty c where pc.characteristic_id = pcId and pc.reference_id = cr.id and cr.domainproperty_id = c.id and pc.characteristic_reference_type_id = 1
+    union
+    select 'environment',cr.name,c.name from persona_characteristic_environment pc, environment_reference cr, environment c where pc.characteristic_id = pcId and pc.reference_id = cr.id and cr.environment_id = c.id and pc.characteristic_reference_type_id = 1
+    union
+    select 'goal',cr.name,c.name from persona_characteristic_goal pc, goal_reference cr, goal c where pc.characteristic_id = pcId and pc.reference_id = cr.id and cr.goal_id = c.id and pc.characteristic_reference_type_id = 1
+    union
+    select 'misusecase',cr.name,c.name from persona_characteristic_misusecase pc, misusecase_reference cr, misusecase c where pc.characteristic_id = pcId and pc.reference_id = cr.id and cr.misusecase_id = c.id and pc.characteristic_reference_type_id = 1
+    union
+    select 'obstacle',cr.name,c.name from persona_characteristic_obstacle pc, obstacle_reference cr, obstacle c where pc.characteristic_id = pcId and pc.reference_id = cr.id and cr.obstacle_id = c.id and pc.characteristic_reference_type_id = 1
+    union
+    select 'persona',cr.name,c.name from persona_characteristic_persona pc, persona_reference cr, persona c where pc.characteristic_id = pcId and pc.reference_id = cr.id and cr.persona_id = c.id and pc.characteristic_reference_type_id = 1
+    union
+    select 'requirement',cr.name,c.name from persona_characteristic_requirement pc, requirement_reference cr, requirement c, asset_requirement ar, asset a where pc.characteristic_id = pcId and pc.reference_id = cr.id and cr.requirement_id = c.id and pc.characteristic_reference_type_id = 1 and c.id = ar.requirement_id and ar.asset_id = a.id and c.version = (select max(i.version) from requirement i where i.id = c.id) 
+    union
+    select 'requirement',cr.name,c.name from persona_characteristic_requirement pc, requirement_reference cr, requirement c, environment_requirement er, environment e where pc.characteristic_id = pcId and pc.reference_id = cr.id and cr.requirement_id = c.id and pc.characteristic_reference_type_id = 1 and c.id = er.requirement_id and er.environment_id = e.id and c.version = (select max(i.version) from requirement i where i.id = c.id) 
+    union
+    select 'response',cr.name,c.name from persona_characteristic_response pc, response_reference cr, response c where pc.characteristic_id = pcId and pc.reference_id = cr.id and cr.response_id = c.id and pc.characteristic_reference_type_id = 1
+    union
+    select 'risk',cr.name,c.name from persona_characteristic_risk pc, risk_reference cr, risk c where pc.characteristic_id = pcId and pc.reference_id = cr.id and cr.risk_id = c.id and pc.characteristic_reference_type_id = 1
+    union
+    select 'role',cr.name,c.name from persona_characteristic_role pc, role_reference cr, role c where pc.characteristic_id = pcId and pc.reference_id = cr.id and cr.role_id = c.id and pc.characteristic_reference_type_id = 1
+    union
+    select 'task',cr.name,c.name from persona_characteristic_task pc, task_reference cr, task c where pc.characteristic_id = pcId and pc.reference_id = cr.id and cr.task_id = c.id and pc.characteristic_reference_type_id = 1
+    union
+    select 'threat',cr.name,c.name from persona_characteristic_threat pc, threat_reference cr, threat c where pc.characteristic_id = pcId and pc.reference_id = cr.id and cr.threat_id = c.id and pc.characteristic_reference_type_id = 1
+    union
+    select 'vulnerability',cr.name,c.name from persona_characteristic_vulnerability pc, vulnerability_reference cr, vulnerability c where pc.characteristic_id = pcId and pc.reference_id = cr.id and cr.vulnerability_id = c.id and pc.characteristic_reference_type_id = 1;
+  declare rebuttalCursor cursor for
+    select 'document',dr.name,'' from persona_characteristic_document pc, document_reference dr where pc.characteristic_id = pcId and pc.reference_id = dr.id and pc.characteristic_reference_type_id = 2
+    union
+    select 'asset',cr.name,c.name from persona_characteristic_asset pc, asset_reference cr, asset c where pc.characteristic_id = pcId and pc.reference_id = cr.id and cr.asset_id = c.id and pc.characteristic_reference_type_id = 2
+    union
+    select 'attacker',cr.name,c.name from persona_characteristic_attacker pc, attacker_reference cr, attacker c where pc.characteristic_id = pcId and pc.reference_id = cr.id and cr.attacker_id = c.id and pc.characteristic_reference_type_id = 2
+    union
+    select 'countermeasure',cr.name,c.name from persona_characteristic_countermeasure pc, countermeasure_reference cr, countermeasure c where pc.characteristic_id = pcId and pc.reference_id = cr.id and cr.countermeasure_id = c.id and pc.characteristic_reference_type_id = 2
+    union
+    select 'domainproperty',cr.name,c.name from persona_characteristic_domainproperty pc, domainproperty_reference cr, domainproperty c where pc.characteristic_id = pcId and pc.reference_id = cr.id and cr.domainproperty_id = c.id and pc.characteristic_reference_type_id = 2
+    union
+    select 'environment',cr.name,c.name from persona_characteristic_environment pc, environment_reference cr, environment c where pc.characteristic_id = pcId and pc.reference_id = cr.id and cr.environment_id = c.id and pc.characteristic_reference_type_id = 2
+    union
+    select 'goal',cr.name,c.name from persona_characteristic_goal pc, goal_reference cr, goal c where pc.characteristic_id = pcId and pc.reference_id = cr.id and cr.goal_id = c.id and pc.characteristic_reference_type_id = 2
+    union
+    select 'misusecase',cr.name,c.name from persona_characteristic_misusecase pc, misusecase_reference cr, misusecase c where pc.characteristic_id = pcId and pc.reference_id = cr.id and cr.misusecase_id = c.id and pc.characteristic_reference_type_id = 2
+    union
+    select 'obstacle',cr.name,c.name from persona_characteristic_obstacle pc, obstacle_reference cr, obstacle c where pc.characteristic_id = pcId and pc.reference_id = cr.id and cr.obstacle_id = c.id and pc.characteristic_reference_type_id = 2
+    union
+    select 'persona',cr.name,c.name from persona_characteristic_persona pc, persona_reference cr, persona c where pc.characteristic_id = pcId and pc.reference_id = cr.id and cr.persona_id = c.id and pc.characteristic_reference_type_id = 2
+    union
+    select 'requirement',cr.name,c.name from persona_characteristic_requirement pc, requirement_reference cr, requirement c, asset_requirement ar, asset a where pc.characteristic_id = pcId and pc.reference_id = cr.id and cr.requirement_id = c.id and pc.characteristic_reference_type_id = 2 and c.id = ar.requirement_id and ar.asset_id = a.id and c.version = (select max(i.version) from requirement i where i.id = c.id) 
+    union
+    select 'requirement',cr.name,c.name from persona_characteristic_requirement pc, requirement_reference cr, requirement c, environment_requirement er, environment e where pc.characteristic_id = pcId and pc.reference_id = cr.id and cr.requirement_id = c.id and pc.characteristic_reference_type_id = 2 and c.id = er.requirement_id and er.environment_id = e.id and c.version = (select max(i.version) from requirement i where i.id = c.id) 
+    union
+    select 'response',cr.name,c.name from persona_characteristic_response pc, response_reference cr, response c where pc.characteristic_id = pcId and pc.reference_id = cr.id and cr.response_id = c.id and pc.characteristic_reference_type_id = 2
+    union
+    select 'risk',cr.name,c.name from persona_characteristic_risk pc, risk_reference cr, risk c where pc.characteristic_id = pcId and pc.reference_id = cr.id and cr.risk_id = c.id and pc.characteristic_reference_type_id = 2
+    union
+    select 'role',cr.name,c.name from persona_characteristic_role pc, role_reference cr, role c where pc.characteristic_id = pcId and pc.reference_id = cr.id and cr.role_id = c.id and pc.characteristic_reference_type_id = 2
+    union
+    select 'task',cr.name,c.name from persona_characteristic_task pc, task_reference cr, task c where pc.characteristic_id = pcId and pc.reference_id = cr.id and cr.task_id = c.id and pc.characteristic_reference_type_id = 2
+    union
+    select 'threat',cr.name,c.name from persona_characteristic_threat pc, threat_reference cr, threat c where pc.characteristic_id = pcId and pc.reference_id = cr.id and cr.threat_id = c.id and pc.characteristic_reference_type_id = 2
+    union
+    select 'vulnerability',cr.name,c.name from persona_characteristic_vulnerability pc, vulnerability_reference cr, vulnerability c where pc.characteristic_id = pcId and pc.reference_id = cr.id and cr.vulnerability_id = c.id and pc.characteristic_reference_type_id = 2;
+  declare taskCursor cursor for select id,name,jsonEscaped(short_code),jsonEscaped(author),jsonEscaped(objective),assumption_id from task;
+  declare taskEnvCursor cursor for select et.environment_id,e.name from environment_task et, environment e where et.task_id = taskId and et.environment_id = e.id;  
+  declare taskPersonaCursor cursor for select p.name,duv.name,fv.name,dev.name,gv.name from persona p, task_persona tp, security_property_value duv, security_property_value fv, security_property_value dev, security_property_value gv where tp.task_id = taskId and tp.environment_id = envId and tp.persona_id = p.id and tp.duration_id = duv.id and tp.frequency_id = fv.id and tp.demands_id = dev.id and tp.goalsupport_id = gv.id;
+  declare taskConcernCursor cursor for select a.name from task_asset tc, asset a where tc.task_id = taskId and tc.environment_id = envId and tc.asset_id = a.id;
+  declare taskConcernAssocCursor cursor for select sa.name,smt.name,ca.link,ta.name,tmt.name from task_concernassociation ca, asset sa, asset ta, multiplicity_type smt, multiplicity_type tmt where ca.task_id = taskId and ca.environment_id = envId and ca.source_id = sa.id and ca.source_multiplicity_id = smt.id and ca.target_id = ta.id and ca.target_multiplicity_id = tmt.id;
+
+  declare continue handler for not found set done = 1;
+
+
+  set buf = concat(buf,'"personas" : [\n');
+  set headElement = 1;
+  open personaCursor;
+  persona_loop: loop
+    fetch personaCursor into personaId,personaName,pActivities,pAttitudes,pAptitudes,pMotivations,pSkills,pIntrinsic,pContextual,pImage,isAssumption,pType;
+    if done = 1
+    then
+      set buf = concat(buf,"  }\n],\n");
+      leave persona_loop;
+      set headElement = 1;
+    else
+      if headElement = 1
+      then
+        set headElement = 0;
+      else
+        set buf = concat(buf,"  },\n");
+      end if;
+    end if;
+    set buf = concat(buf,'  {"name" : "',personaName,'", "type" : "',pType,'\", "assumption_persona" : "',b2a(isAssumption),'", "image" : "',pImage,'", "activities" : "',pActivities,'", "attitudes" : "',pAttitudes,'", "aptitudes" : "',pAptitudes,'", "motivations" : "',pMotivations,'", "skills" : "',pSkills,'", "intrinsic" : "',pIntrinsic,'", "contextual" : "',pContextual,'",\n    "environments" : [');
+    set personaCount = personaCount + 1;
+
+    set headElement = 1;
+    open personaEnvCursor;
+    personaEnv_loop: loop
+      fetch personaEnvCursor into envId, envName;
+      if done = 1
+      then
+        set buf = concat(buf,'\n      }\n    ]\n');
+        leave personaEnv_loop;
+        set headElement = 1;
+      else
+        if headElement = 1
+        then
+          set headElement = 0;
+        else
+          set buf = concat(buf,"\n      },\n");
+        end if;
+      end if;
+      set buf = concat(buf,'      {"name" : "',envName,'", "is_direct" : "',b2a(personaDirect(personaId,envId)),'", "narrative" : "',personaNarrative(personaId,envId),'", "roles" : [');
+
+      set done = 0;
+      set headElement = 1;
+      open personaRolesCursor;
+      personaRoles_loop: loop
+        fetch personaRolesCursor into roleName;
+        if done = 1
+        then
+          set buf = concat(buf,']');
+          leave personaRoles_loop;
+          set headElement = 1;
+        else
+          if headElement = 1
+          then
+            set headElement = 0;
+          else
+            set buf = concat(buf,",");
+          end if;
+        end if;
+        set buf = concat(buf,'"',roleName,'"');
+      end loop personaRoles_loop;
+      close personaRolesCursor;
+      set done = 0;
+    end loop personaEnv_loop;
+    close personaEnvCursor;
+    set done = 0;
+  end loop persona_loop;
+  close personaCursor;
+
+  set buf = concat(buf,'"external_documents" : [\n');
+  set headElement = 1;
+  set done = 0;
+  open edCursor;
+  ed_loop : loop
+    fetch edCursor into edName,edVersion,edDate,edAuthors,edDesc;
+    if done = 1
+    then
+      set buf = concat(buf,"\n],\n");
+      leave ed_loop;
+      set headElement = 1;
+    else
+      if headElement = 1
+      then
+        set headElement = 0;
+      else
+        set buf = concat(buf,",\n");
+      end if;
+    end if;
+    set buf = concat(buf,'  {"name" : "',edName,'", "version" : "',edVersion,'", "date" : "',edDate,'", "authors" : "',edAuthors,'", "description" : "',edDesc,'"}');
+    set edCount = edCount + 1; 
+  end loop ed_loop;
+  close edCursor;
+
+  set buf = concat(buf,'"document_references" : [\n');
+  set headElement = 1;
+  set done = 0;
+  open drCursor;
+  dr_loop : loop
+    fetch drCursor into drName,edName,drCont,drExcerpt;
+    if done = 1
+    then
+      set buf = concat(buf,"\n],\n");
+      leave dr_loop;
+      set headElement = 1;
+    else
+      if headElement = 1
+      then
+        set headElement = 0;
+      else
+        set buf = concat(buf,",\n");
+      end if;
+    end if;
+    set buf = concat(buf,'  {"name" : "',drName,'", "contributor" : "',drCont,'", "document" : "',edName,'", "excerpt" : "',drExcerpt,'"}');
+
+    set drCount = drCount + 1; 
+  end loop dr_loop;
+  close drCursor;
+
+
+  set done = 0;
+  set buf = concat(buf,'"persona_characteristics" : [\n');
+  set headElement = 1;
+  open pcCursor;
+  pc_loop : loop
+    fetch pcCursor into pcId, personaName, bvName, modQual, pcDesc;
+    if done = 1
+    then
+      set buf = concat(buf,"\n  }\n],\n");
+      leave pc_loop;
+      set headElement = 1;
+    else
+      if headElement = 1
+      then
+        set headElement = 0;
+      else
+        set buf = concat(buf,"\n  },\n");
+      end if;
+    end if;
+    set buf = concat(buf,'  {"persona" : "',personaName,'", "behavioural_variable" : "',replace(bvName,' ','_'),'", "modal_qualifier" : "',modQual,'" ,"definition" : "',pcDesc,'",\n    "grounds" : [');
+    set pcCount = pcCount + 1;
+    set headElement = 1;
+    open groundsCursor;
+    grounds_loop: loop
+      fetch groundsCursor into gwrType, gwrRef, gwrConcept;
+      if done = 1
+      then
+        set buf = concat(buf,'],\n    "warrant" : [');
+        leave grounds_loop;
+        set headElement = 1;
+      else
+        if headElement = 1
+        then
+          set headElement = 0;
+        else
+          set buf = concat(buf,",");
+        end if;
+      end if;
+      if gwrType = 'document'
+      then
+        set buf = concat(buf,'{"type" : "',gwrType,'", "reference" : "',gwrRef,'"}');
+      else
+        set buf = concat(buf,'{"type" : "',gwrType,'", "artifact" : "',gwrConcept,'", "reference=" : "',gwrRef,'"}');
+      end if;
+    end loop grounds_loop;
+    close groundsCursor;
+    set done = 0;
+
+    set headElement = 1;
+    open warrantCursor;
+    warrant_loop: loop
+      fetch warrantCursor into gwrType, gwrRef, gwrConcept;
+      if done = 1
+      then
+        set buf = concat(buf,'],\n    "rebuttal" : [');
+        leave warrant_loop;
+        set headElement = 1;
+      else
+        if headElement = 1
+        then
+          set headElement = 0;
+        else
+          set buf = concat(buf,",");
+        end if;
+      end if;
+      if gwrType = 'document'
+      then
+        set buf = concat(buf,'{"type" : "',gwrType,'", "reference" : "',gwrRef,'"}');
+      else
+        set buf = concat(buf,'{"type" : "',gwrType,'", "artifact" : "',gwrConcept,'", "reference=" : "',gwrRef,'"}');
+      end if;
+    end loop warrant_loop;
+    close warrantCursor;
+    set done = 0;
+
+    set headElement = 1;
+    open rebuttalCursor;
+    rebuttal_loop: loop
+      fetch rebuttalCursor into gwrType, gwrRef, gwrConcept;
+      if done = 1
+      then
+        set buf = concat(buf,']');
+        leave rebuttal_loop;
+      else
+        if headElement = 1
+        then
+          set headElement = 0;
+        else
+          set buf = concat(buf,",");
+        end if;
+      end if;
+      if gwrType = 'document'
+      then
+        set buf = concat(buf,'{"type" : "',gwrType,'", "reference" : "',gwrRef,'"}');
+      else
+        set buf = concat(buf,'{"type" : "',gwrType,'", "artifact" : "',gwrConcept,'", "reference=" : "',gwrRef,'"}');
+      end if;
+    end loop rebuttal_loop;
+    close rebuttalCursor;
+    set done = 0; 
+    set headElement = 0;
+  end loop pc_loop;
+  close pcCursor;
+
+  set done = 0;
+  set headElement = 1;
+  set buf = concat(buf,'"tasks" : [\n');
+  open taskCursor;
+  task_loop : loop
+    fetch taskCursor into taskId,taskName,taskCode,taskAuthor,taskObjective,isTaskAssumption;
+    if done = 1
+    then
+      set buf = concat(buf,"}\n]\n");
+      leave task_loop;
+      set headElement = 1;
+    else
+      if headElement = 1
+      then
+        set headElement = 0;
+      else
+        set buf = concat(buf,"},\n");
+      end if;
+    end if;
+    set buf = concat(buf,'  {"name" : "',taskName,'", "code" : "',taskCode,'", "author" : "',taskAuthor,'", "assumption_task" : "',b2a(isTaskAssumption),'", "objective" : "',taskObjective,'", "environments": [\n');
+    set taskCount = taskCount + 1; 
+
+    set done = 0;
+    set headElement = 1;
+    open taskEnvCursor;
+    taskEnv_loop: loop
+      fetch taskEnvCursor into envId,envName;
+      if done = 1
+      then
+        set buf = concat(buf,'\n  ]');
+        leave taskEnv_loop;
+        set headElement = 1;
+      else
+        if headElement = 1
+        then
+          set headElement = 0;
+        else
+          set buf = concat(buf,",\n");
+        end if;
+      end if;
+      set buf = concat(buf,'    {"name" : "',envName,'", "dependencies" : "',jsonEscaped(taskDependencies(taskId,envId)),'",');
+      set buf = concat(buf,'"narrative" : "',jsonEscaped(taskNarrative(taskId,envId)),'",');
+      set buf = concat(buf,'"consequences" : "',jsonEscaped(taskConsequences(taskId,envId)),'",');
+      set buf = concat(buf,'"benefits" : "',jsonEscaped(taskBenefits(taskId,envId)),'",');
+      set buf = concat(buf,'"participants" : [');
+
+      set headElement = 1;
+      open taskPersonaCursor;
+      taskPersona_loop: loop
+        fetch taskPersonaCursor into personaName,durationValue,frequencyValue,demandsValue,gcValue;
+        if done = 1
+        then
+          set buf = concat(buf,'], "assets" : [');
+          leave taskPersona_loop;
+          set headElement = 1;
+        else
+          if headElement = 1
+          then
+            set headElement = 0;
+          else
+            set buf = concat(buf,",");
+          end if;
+        end if;
+        set buf = concat(buf,'{"persona" : "',personaName,'", "duration" : "',durationLabel(durationValue),'", "frequency" : "',frequencyLabel(frequencyValue),'", "demands" : "',demandsValue,'", "goal_conflict" : "',gcValue,'"}');
+      end loop taskPersona_loop;
+      close taskPersonaCursor;
+      set done = 0;
+
+      set headElement = 1;
+      open taskConcernCursor;
+      taskConcern_loop: loop
+        fetch taskConcernCursor into concernName;
+        if done = 1
+        then
+          set buf = concat(buf,'], "associations" : [');
+          leave taskConcern_loop;
+          set headElement = 1;
+        else
+          if headElement = 1
+          then
+            set headElement = 0;
+          else
+            set buf = concat(buf,",");
+          end if;
+        end if;
+        set buf = concat(buf,'"',concernName,'"');
+      end loop taskConcern_loop;
+      close taskConcernCursor;
+      set done = 0;
+
+
+      set headElement = 1;
+      open taskConcernAssocCursor;
+      taskConcernAssoc_loop: loop
+        fetch taskConcernAssocCursor into sourceName,sourceNry,concernLink,targetName,targetNry;
+        if done = 1
+        then
+          set buf = concat(buf,']}');
+          leave taskConcernAssoc_loop;
+        else
+          if headElement = 1
+          then
+            set headElement = 0;
+          else
+            set buf = concat(buf,",");
+          end if;
+        end if;
+        if done = 1
+        then
+          leave taskConcernAssoc_loop;
+        end if;
+        set buf = concat(buf,'{"source_name" : "',sourceName,'", "source_nry" : "',s2a(sourceNry),'", "link_name" : "',concernLink,'", "target_nry" : "',s2a(targetNry),'", "target_name" : "',targetName,'"}');
+      end loop taskConcernAssoc_loop;
+      close taskConcernAssocCursor;
+      set done = 0;
+      set headElement = 0;
+    end loop taskEnv_loop;
+    close taskEnvCursor;
+    set done = 0;
+  end loop task_loop;
+  close taskCursor;
+  select buf,personaCount,edCount,drCount,pcCount,taskCount;
+end
+//
+
+create procedure goalsToJSON()
+begin
+  declare headElement int default 1;
+  declare dpName varchar(255);
+  declare dpDesc varchar(1000);
+  declare dpType varchar(50);
+  declare dpOrig varchar(100);
+  declare dpCount int default 0;
+  declare goalId int;
+  declare goalName varchar(100);
+  declare goalOrig varchar(50);
+  declare obsId int;
+  declare obsName varchar(100);
+  declare obsOrig varchar(50);
+  declare envId int;
+  declare envName varchar(50);
+  declare concernName varchar(50);
+  declare sourceName varchar(50);
+  declare sourceNry varchar(10);
+  declare concernLink varchar(50);
+  declare targetNry varchar(10);
+  declare targetName varchar(50);
+  declare refName varchar(50);
+  declare refType varchar(50);
+  declare reqLabel int;
+  declare reqType varchar(255);
+  declare reqPriority int;
+  declare reqName longtext;
+  declare reqDesc longtext;
+  declare reqRat longtext;
+  declare reqFc longtext;
+  declare reqOrig longtext;
+  declare ucId int;
+  declare ucName varchar(50);
+  declare ucAuthor varchar(255);
+  declare ucShortCode varchar(100);
+  declare ucDesc varchar(2000);
+  declare ucPreCond varchar(2000);
+  declare ucPostCond varchar(2000);
+  declare stepNo int;
+  declare stepDesc varchar(2000);
+  declare ucExcName varchar(200);
+  declare excDim varchar(20);
+  declare ucExcRelValue varchar(50);
+  declare ucExcCategory varchar(50);
+  declare ucExcDesc varchar(2000);
+  declare ucCount int default 0;
+  declare cmId int;
+  declare cmName varchar(100);
+  declare cmDesc varchar(4000);
+  declare cmType varchar(50);
+  declare effValue varchar(50);
+  declare roleName varchar(50);
+  declare taskName varchar(50);
+  declare personaName varchar(50);
+  declare durValue varchar(50);
+  declare freqValue varchar(50);
+  declare demValue varchar(50);
+  declare gcValue varchar(50);
+  declare cProperty varchar(50);
+  declare iProperty varchar(50);
+  declare avProperty varchar(50);
+  declare acProperty varchar(50);
+  declare anProperty varchar(50);
+  declare panProperty varchar(50);
+  declare unlProperty varchar(50);
+  declare unoProperty varchar(50);
+  declare cRationale varchar(4000);
+  declare iRationale varchar(4000);
+  declare avRationale varchar(4000);
+  declare acRationale varchar(4000);
+  declare anRationale varchar(4000);
+  declare panRationale varchar(4000);
+  declare unlRationale varchar(4000);
+  declare unoRationale varchar(4000);
+  declare cmRationale varchar(4000);
+  declare probRationale varchar(4000);
+  declare obsProb float;
+  declare trName varchar(50);
+  declare goalCount int default 0;
+  declare obsCount int default 0;
+  declare reqCount int default 0;
+  declare cmCount int default 0;
+  declare tagName varchar(255);
+  declare buf LONGTEXT default '';
+  declare done int default 0;
+  declare dpCursor cursor for select dp.name,dp.description,dpt.name,dp.originator from domainproperty dp, domainproperty_type dpt where dp.domainproperty_type_id = dpt.id;
+  declare goalCursor cursor for select id,name,originator from goal;
+  declare goalEnvCursor cursor for select eg.environment_id,e.name from environment_goal eg, environment e where eg.goal_id = goalId and eg.environment_id = e.id;
+  declare goalConcernCursor cursor for select a.name from goal_concern gc, asset a where gc.goal_id = goalId and gc.environment_id = envId and gc.asset_id = a.id;
+  declare goalConcernAssocCursor cursor for select sa.name,smt.name,ca.link,ta.name,tmt.name from goal_concernassociation ca, asset sa, asset ta, multiplicity_type smt, multiplicity_type tmt where ca.goal_id = goalId and ca.environment_id = envId and ca.source_id = sa.id and ca.source_multiplicity_id = smt.id and ca.target_id = ta.id and ca.target_multiplicity_id = tmt.id;
+  declare obsCursor cursor for select id,name,originator from obstacle;
+  declare obsEnvCursor cursor for select eo.environment_id,e.name from environment_obstacle eo, environment e where eo.obstacle_id = obsId and eo.environment_id = e.id;
+  declare obsConcernCursor cursor for select a.name from obstacle_concern oc, asset a where oc.obstacle_id = obsId and oc.environment_id = envId and oc.asset_id = a.id;
+  declare reqCursor cursor for
+    select a.name,'asset',o.label,rt.name,o.priority,o.name,o.description,o.rationale,o.fit_criterion,o.originator from requirement o, asset_requirement ar, asset a, requirement_type rt where o.version = (select max(i.version) from requirement i where i.id = o.id) and o.type = rt.id and o.id = ar.requirement_id and ar.asset_id = a.id 
+    union
+    select e.name,'environment',o.label,rt.name,o.priority,o.name,o.description,o.rationale,o.fit_criterion,o.originator from requirement o, environment_requirement er, environment e, requirement_type rt where o.version = (select max(i.version) from requirement i where i.id = o.id) and o.type = rt.id and o.id = er.requirement_id and er.environment_id = e.id; 
+  declare ucCursor cursor for select id,name,author,short_code,description from usecase;
+  declare ucEnvCursor cursor for select eu.environment_id,e.name from environment_usecase eu, environment e where eu.usecase_id = ucId and eu.environment_id = e.id;
+  declare ucActorCursor cursor for select r.name from usecase_role ur, role r where ur.usecase_id = ucId and ur.role_id = r.id;
+  declare ucStepCursor cursor for select step_no,description from usecase_step where usecase_id = ucId and environment_id = envId order by 1;
+  declare ucStepExceptionCursor cursor for
+    select usne.name, 'None', 'None', 'None', usne.description from usecase_step_none_exception usne where usne.usecase_id = ucId and usne.environment_id = envId and usne.step_no = stepNo
+    union
+    select usge.name, 'Goal', g.name, oct.name, usge.description from usecase_step_goal_exception usge, goal g, obstacle_category_type oct where usge.usecase_id = ucId and usge.environment_id = envId and usge.step_no = stepNo and usge.goal_id = g.id and usge.category_type_id = oct.id
+    union
+    select usge.name, 'Requirement', concat(a.short_code,'-',r.label), oct.name, usge.description from usecase_step_requirement_exception usge, requirement r, asset_requirement ar, asset a, obstacle_category_type oct where usge.usecase_id = ucId and usge.environment_id = envId and usge.step_no = stepNo and usge.goal_id = r.id and r.id = ar.requirement_id and ar.asset_id = a.id and r.version = (select max(i.version) from requirement i where i.id = r.id) and usge.category_type_id = oct.id
+    union
+    select usge.name, 'Requirement', concat(e.short_code,'-',r.label), oct.name, usge.description from usecase_step_requirement_exception usge, requirement r, environment_requirement er, environment e, obstacle_category_type oct where usge.usecase_id = ucId and usge.environment_id = envId and usge.step_no = stepNo and usge.goal_id = r.id and r.id = er.requirement_id and er.environment_id = e.id and r.version = (select max(i.version) from requirement i where i.id = r.id) and usge.category_type_id = oct.id;
+  declare ucStepTagCursor cursor for select t.name from usecase_step_tag ust, tag t where ust.usecase_id = ucId and ust.environment_id = envId and ust.step_no = stepNo and ust.tag_id = t.id order by 1;
+  declare cmCursor cursor for select c.id,c.name,c.description,at.name from countermeasure c,asset_type at where c.countermeasure_type_id = at.id;
+  declare cmEnvCursor cursor for select ec.environment_id,e.name from environment_countermeasure ec, environment e where ec.countermeasure_id = cmId and ec.environment_id = e.id;
+  declare cmReqsCursor cursor for
+    select distinct r.name from requirement_countermeasure rc, requirement r where rc.countermeasure_id = cmId and rc.requirement_id = r.id and r.version = (select max(i.version) from requirement i where i.id = r.id) and rc.environment_id = envId;
+
+  declare cmTargetsCursor cursor for
+    select t.name,te.name,ctt.effectiveness_rationale from countermeasure_threat_target ctt, countermeasure_threat_response_target ctrt, threat t, target_effectiveness te,response r where ctt.countermeasure_id = cmId and ctt.environment_id = envId and ctt.threat_id = t.id and ctt.countermeasure_id = ctrt.countermeasure_id and ctt.environment_id = ctrt.environment_id and ctt.threat_id = ctrt.threat_id and ctrt.response_id = r.id and ctt.effectiveness_id = te.id
+    union
+    select v.name,ve.name,cvt.effectiveness_rationale from countermeasure_vulnerability_target cvt, countermeasure_vulnerability_response_target cvrt, vulnerability v, target_effectiveness ve,response r where cvt.countermeasure_id = cmId and cvt.environment_id = envId and cvt.vulnerability_id = v.id and cvt.countermeasure_id = cvrt.countermeasure_id and cvt.environment_id = cvrt.environment_id and cvt.vulnerability_id = cvrt.vulnerability_id and cvrt.response_id = r.id and cvt.effectiveness_id = ve.id;
+
+  declare cmRolesCursor cursor for select r.name from countermeasure_role cr, role r where cr.countermeasure_id = cmId and cr.environment_id = envId and cr.role_id = r.id;
+
+  declare cmPersonasCursor cursor for select t.name,p.name,duv.name,fv.name,dev.name,gv.name from countermeasure_task_persona ctp, task t, persona p,securityusability_property_value duv, securityusability_property_value fv, securityusability_property_value dev, securityusability_property_value gv where ctp.countermeasure_id = cmId and ctp.environment_id = envId and ctp.task_id = t.id and ctp.persona_id = p.id and ctp.duration_id = duv.id and ctp.frequency_id = fv.id and ctp.demands_id = dev.id and ctp.goalsupport_id = gv.id;
+  declare targetResponseCursor cursor for 
+     select r.name from response r, countermeasure_vulnerability_response_target cvrt, environment_response er, vulnerability v where cvrt.countermeasure_id = cmId and cvrt.environment_id = envId and cvrt.response_id = er.response_id and cvrt.environment_id = er.environment_id and er.response_id = r.id and cvrt.vulnerability_id = v.id and v.name = targetName
+     union
+     select r.name from response r, countermeasure_threat_response_target ctrt, environment_response er, threat t where ctrt.countermeasure_id = cmId and ctrt.environment_id = envId and ctrt.response_id = er.response_id and ctrt.environment_id = er.environment_id and er.response_id = r.id and ctrt.threat_id = t.id and t.name = targetName;
+
+  declare continue handler for not found set done = 1;
+
+  set buf = concat(buf,'"domain_properties" : [\n');
+  set headElement = 1;
+  open dpCursor;
+  dp_loop: loop
+    fetch dpCursor into dpName, dpDesc, dpType,dpOrig;
+    if done = 1
+    then
+      set buf = concat(buf,"\n],\n");
+      leave dp_loop;
+      set headElement = 1;
+    else
+      if headElement = 1
+      then
+        set headElement = 0;
+      else
+        set buf = concat(buf,",\n");
+      end if;
+    end if;
+    set buf = concat(buf,'  {"name" : "',dpName,'", "type" : "',dpType,'", "originator" : "',dpOrig,'", "definition" : "',dpDesc,'"}');
+    set dpCount = dpCount + 1;
+  end loop dp_loop;
+  close dpCursor;
+
+  set done = 0;
+  set headElement = 1;
+  set buf = concat(buf,'"goals" : [\n');
+  open goalCursor;
+  goal_loop: loop
+    fetch goalCursor into goalId, goalName, goalOrig;
+    if done = 1
+    then
+      set buf = concat(buf,"}\n]\n");
+      leave goal_loop;
+      set headElement = 1;
+    else
+      if headElement = 1
+      then
+        set headElement = 0;
+      else
+        set buf = concat(buf,"},\n");
+      end if;
+    end if;
+    set buf = concat(buf,'  {"name" : "',goalName,'", "originator" : "',goalOrig,'", "environments" : [\n');
+    set goalCount = goalCount + 1;
+
+    open goalEnvCursor;
+    goalEnv_loop: loop
+      fetch goalEnvCursor into envId, envName;
+      if done = 1
+      then
+        set buf = concat(buf,'\n  ]');
+        leave goalEnv_loop;
+        set headElement = 1;
+      else
+        if headElement = 1
+        then
+          set headElement = 0;
+        else
+          set buf = concat(buf,",\n");
+        end if;
+      end if;
+      set buf = concat(buf,'    {"name" : "',envName,'", "category" : "',goal_category(goalId,envId),'", "priority" : "',goal_priority(goalId,envId),'", "definition" : "',goal_definition(goalId,envId),'", "fit_criterion" : "',goal_fitcriterion(goalId,envId),'", "issue" : "',goal_issue(goalId,envId),'", "concerns" : [');
+
+      open goalConcernCursor;
+      goalConcern_loop: loop
+        fetch goalConcernCursor into concernName;
+        if done = 1
+        then
+          set buf = concat(buf,'], "associations" : [');
+          leave goalConcern_loop;
+          set headElement = 1;
+        else
+          if headElement = 1
+          then
+            set headElement = 0;
+          else
+            set buf = concat(buf,",");
+          end if;
+        end if;
+        set buf = concat(buf,'"',concernName,'"');
+      end loop goalConcern_loop;
+      close goalConcernCursor;
+      set done = 0;
+
+      open goalConcernAssocCursor;
+      goalConcernAssoc_loop: loop
+        fetch goalConcernAssocCursor into sourceName,sourceNry,concernLink,targetName,targetNry;
+        if done = 1
+        then
+          set buf = concat(buf,']}');
+          leave goalConcernAssoc_loop;
+        else
+          if headElement = 1
+          then
+            set headElement = 0;
+          else
+            set buf = concat(buf,",");
+          end if;
+        end if;
+        set buf = concat(buf,'{"source_name" : "',sourceName,'", "source_nry" : "',s2a(sourceNry),'", "link_name" : "',concernLink,'", "target_nry" : "',s2a(targetNry),'", "target_name" : "',targetName,'"}');
+      end loop goalConcernAssoc_loop;
+      close goalConcernAssocCursor;
+      set done = 0;
+    end loop goalEnv_loop;
+    close goalEnvCursor;
+    set done = 0;
+  end loop goal_loop;
+  close goalCursor;
+
+  set done = 0;
+  set headElement = 1;
+  set buf = concat(buf,'"obstacles" : [\n');
+
+  open obsCursor;
+  obs_loop: loop
+    fetch obsCursor into obsId, obsName,obsOrig;
+    if done = 1
+    then
+      set buf = concat(buf,"}\n]\n");
+      leave obs_loop;
+      set headElement = 1;
+    else
+      if headElement = 1
+      then
+        set headElement = 0;
+      else
+        set buf = concat(buf,"},\n");
+      end if;
+    end if;
+    set buf = concat(buf,'  {"name" : "',obsName,'", "originator" : "',obsOrig,'", "environments" : [\n');
+    set obsCount = obsCount + 1;
+
+    set done = 0;
+    set headElement = 1;
+    open obsEnvCursor;
+    obsEnv_loop: loop
+      fetch obsEnvCursor into envId, envName;
+      if done = 1
+      then
+        set buf = concat(buf,'\n  ]');
+        leave obsEnv_loop;
+        set headElement = 1;
+      else
+        if headElement = 1
+        then
+          set headElement = 0;
+        else
+          set buf = concat(buf,",\n");
+        end if;
+      end if;
+      set buf = concat(buf,'    {"name" : "',envName,'", "category" : "',replace(obstacle_category(obsId,envId),' ','_'),'", "definition" : "',obstacle_definition(obsId,envId),'", "concerns" : [');
+
+      set done = 0;
+      set headElement = 1;
+      open obsConcernCursor;
+      obsConcern_loop: loop
+        fetch obsConcernCursor into concernName;
+        if done = 1
+        then
+          set buf = concat(buf,'],');
+          leave obsConcern_loop;
+          set headElement = 1;
+        else
+          if headElement = 1
+          then
+            set headElement = 0;
+          else
+            set buf = concat(buf,",");
+          end if;
+        end if;
+        set buf = concat(buf,'"',concernName,'"');
+      end loop obsConcern_loop;
+      close obsConcernCursor;
+      set done = 0;
+
+      select probability into obsProb from obstacle_definition where obstacle_id = obsId and environment_id = envId;
+      select ifnull(rationale,'None') into probRationale from obstacle_definition where obstacle_id = obsId and environment_id = envId;
+      set buf = concat(buf,'"probability" : "',obsProb,'", "probability_rationale" : "',probRationale,'"}');
+    end loop obsEnv_loop;
+    close obsEnvCursor;
+    set done = 0;
+  end loop obs_loop;
+  close obsCursor;
+  set done = 0;
+
+  open reqCursor;
+  req_loop: loop
+    fetch reqCursor into refName,refType,reqLabel,reqType,reqPriority,reqName,reqDesc,reqRat,reqFc,reqOrig;
+    if done = 1
+    then
+      leave req_loop;
+    end if;
+    set buf = concat(buf,'<requirement name=\"',reqName,'\" reference=\"',refName,'\" reference_type=\"',refType,'\" label=\"',reqLabel,'\" type=\"',replace(reqType,' ','_'),'\" priority=\"',reqPriority,'\" >\n  <description>',reqDesc,'</description>\n  <rationale>',reqRat,'</rationale>\n  <fit_criterion>',reqFc,'</fit_criterion>\n  <originator>',reqOrig,'</originator>\n</requirement>\n');
+    set reqCount = reqCount + 1;
+  end loop req_loop;
+  close reqCursor;
+  set done = 0;
+
+  set done = 0;
+  open ucCursor;
+  uc_loop: loop
+    fetch ucCursor into ucId,ucName,ucAuthor,ucShortCode,ucDesc;
+    if done = 1
+    then
+      leave uc_loop;
+    end if;
+    set buf = concat(buf,'<usecase name=\"',ucName,'\" author=\"',ucAuthor,'\" code=\"',ucShortCode,'\" >\n  <description>',ucDesc,'</description>\n');
+    set ucCount = ucCount + 1;
+
+    open ucActorCursor;
+    ucActor_loop: loop
+      fetch ucActorCursor into roleName;
+      if done = 1
+      then
+        leave ucActor_loop;
+      end if;
+      set buf = concat(buf,'  <actor name=\"',roleName,'\" />\n');
+    end loop ucActor_loop;
+    close ucActorCursor;
+    set done = 0;
+
+    open ucEnvCursor;
+    ucEnv_loop: loop
+      fetch ucEnvCursor into envId,envName;
+      if done = 1
+      then
+        leave ucEnv_loop;
+      end if;
+      select preconditions into ucPreCond from usecase_conditions where usecase_id = ucId and environment_id = envId;
+      set buf = concat(buf,'  <usecase_environment name=\"',envName,'\" >\n    <preconditions>',ucPreCond,'</preconditions>\n    <flow>\n');
+
+      open ucStepCursor;
+      ucStep_loop: loop
+        fetch ucStepCursor into stepNo, stepDesc;
+        if done = 1
+        then
+          leave ucStep_loop;
+        end if; 
+        set buf = concat(buf,'      <step number=\"',stepNo,'\" description=\"',stepDesc,'\" >\n');
+
+
+        open ucStepTagCursor;
+        ucStepTag_loop: loop
+          fetch ucStepTagCursor into tagName;
+          if done = 1
+          then
+            leave ucStepTag_loop;
+          end if;
+          set buf = concat(buf,'        <tag name=\"',tagName,'\" />\n'); 
+        end loop ucStepTag_loop;
+        close ucStepTagCursor;
+        set done = 0;
+
+        open ucStepExceptionCursor;
+        ucStepException_loop: loop
+          fetch ucStepExceptionCursor into ucExcName,excDim,ucExcRelValue,ucExcCategory,ucExcDesc;
+          if done = 1
+          then
+            leave ucStepException_loop;
+          end if;
+          set buf = concat(buf,'        <exception name=\"',ucExcName,'\" type=\"',excDim,'\" value=\"',ucExcRelValue,'\" category=\"',replace(ucExcCategory,' ','_'),'\" >\n          <definition>',ucExcDesc,'</definition>\n        </exception>\n');
+        end loop ucStepException_loop;
+        close ucStepExceptionCursor;
+        set done = 0;
+
+        set buf = concat(buf,'      </step>\n');
+      end loop ucStep_loop;
+      close ucStepCursor;
+      set done = 0;
+   
+      set buf = concat(buf,'    </flow>\n');
+      select postconditions into ucPostCond from usecase_conditions where usecase_id = ucId and environment_id = envId;
+      set buf = concat(buf,'    <postconditions>',ucPostCond,'</postconditions>\n');
+      set buf = concat(buf,'  </usecase_environment>\n');
+    end loop ucEnv_loop;
+    close ucEnvCursor;
+    set done = 0;
+
+    set buf = concat(buf,'</usecase>\n');
+  end loop uc_loop;
+  close ucCursor;
+
+  open cmCursor;
+  cm_loop: loop
+    fetch cmCursor into cmId, cmName, cmDesc, cmType;
+    if done = 1
+    then
+      leave cm_loop;
+    end if;
+    set buf = concat(buf,'<countermeasure name=\"',cmName,'\" type=\"',cmType,'\" >\n  <description>',cmDesc,'</description>\n');
+    set cmCount = cmCount + 1;
+
+    open cmEnvCursor;
+    cmEnv_loop: loop
+      fetch cmEnvCursor into envId, envName;
+      if done = 1
+      then
+        leave cmEnv_loop;
+      end if;
+      set buf = concat(buf,'  <countermeasure_environment name=\"',envName,'\" cost=\"',countermeasureCost(cmId,envId),'\" >\n');
+
+      open cmReqsCursor;
+      cmReqs_loop: loop
+        fetch cmReqsCursor into reqName;
+        if done = 1
+        then
+          leave cmReqs_loop;
+        end if;
+        set buf = concat(buf,'    <countermeasure_requirement name=\"',reqName,'\" />\n');
+      end loop cmReqs_loop;
+      close cmReqsCursor;
+      set done = 0;
+
+      open cmTargetsCursor;
+      cmTargets_loop: loop
+        fetch cmTargetsCursor into targetName,effValue,cmRationale;
+        if done = 1
+        then
+          leave cmTargets_loop;
+        end if;
+        set buf = concat(buf,'    <target name=\"',targetName,'\" effectiveness=\"',effValue,'\" >\n');
+
+        open targetResponseCursor;
+        tr_loop: loop
+          fetch targetResponseCursor into trName;
+          if done = 1
+          then
+            leave tr_loop;
+          end if;
+          set buf = concat(buf,'      <target_response name=\"',trName,'\" />\n');
+        end loop tr_loop;
+        close targetResponseCursor;
+        set done = 0;        
+
+        set buf = concat(buf,'      <rationale>',cmRationale,'</rationale>\n    </target>\n');
+      end loop cmTargets_loop;
+      close cmTargetsCursor;
+      set done = 0;
+
+      select spv.name,cp.property_rationale into cProperty,cRationale from countermeasure_property cp, security_property_value spv where cp.countermeasure_id = cmId and cp.property_id = 0 and cp.environment_id = envId and cp.property_value_id = spv.id;
+      select spv.name,cp.property_rationale into iProperty,iRationale from countermeasure_property cp, security_property_value spv where cp.countermeasure_id = cmId and cp.property_id = 1 and cp.environment_id = envId and cp.property_value_id = spv.id;
+      select spv.name,cp.property_rationale into avProperty,avRationale from countermeasure_property cp, security_property_value spv where cp.countermeasure_id = cmId and cp.property_id = 2 and cp.environment_id = envId and cp.property_value_id = spv.id;
+      select spv.name,cp.property_rationale into acProperty,acRationale from countermeasure_property cp, security_property_value spv where cp.countermeasure_id = cmId and cp.property_id = 3 and cp.environment_id = envId and cp.property_value_id = spv.id;
+      select spv.name,cp.property_rationale into anProperty,anRationale from countermeasure_property cp, security_property_value spv where cp.countermeasure_id = cmId and cp.property_id = 4 and cp.environment_id = envId and cp.property_value_id = spv.id;
+      select spv.name,cp.property_rationale into panProperty,panRationale from countermeasure_property cp, security_property_value spv where cp.countermeasure_id = cmId and cp.property_id = 5 and cp.environment_id = envId and cp.property_value_id = spv.id;
+      select spv.name,cp.property_rationale into unlProperty,unlRationale from countermeasure_property cp, security_property_value spv where cp.countermeasure_id = cmId and cp.property_id = 6 and cp.environment_id = envId and cp.property_value_id = spv.id;
+      select spv.name,cp.property_rationale into unoProperty,unoRationale from countermeasure_property cp, security_property_value spv where cp.countermeasure_id = cmId and cp.property_id = 7 and cp.environment_id = envId and cp.property_value_id = spv.id;
+      if cProperty != 'None'
+      then
+        set buf = concat(buf,'    <mitigating_property name="confidentiality" value=\"',cProperty,'\">\n      <rationale>',cRationale,'</rationale>\n    </mitigating_property>\n');
+      end if;
+      if iProperty != 'None'
+      then
+        set buf = concat(buf,'    <mitigating_property name="integrity" value=\"',iProperty,'\">\n      <rationale>',iRationale,'</rationale>\n    </mitigating_property>\n');
+      end if;
+      if avProperty != 'None'
+      then
+        set buf = concat(buf,'    <mitigating_property name="availability" value=\"',avProperty,'\">\n      <rationale>',avRationale,'</rationale>\n    </mitigating_property>\n');
+      end if;
+      if acProperty != 'None'
+      then
+        set buf = concat(buf,'    <mitigating_property name="accountability" value=\"',acProperty,'\">\n      <rationale>',acRationale,'</rationale>\n    </mitigating_property>\n');
+      end if;
+      if anProperty != 'None'
+      then
+        set buf = concat(buf,'    <mitigating_property name="anonymity" value=\"',anProperty,'\">\n      <rationale>',anRationale,'</rationale>\n    </mitigating_property>\n');
+      end if;
+      if panProperty != 'None'
+      then
+        set buf = concat(buf,'    <mitigating_property name="pseudonymity" value=\"',panProperty,'\">\n      <rationale>',panRationale,'</rationale>\n    </mitigating_property>\n');
+      end if;
+      if unlProperty != 'None'
+      then
+        set buf = concat(buf,'    <mitigating_property name="unlinkability" value=\"',unlProperty,'\">\n      <rationale>',unlRationale,'</rationale>\n    </mitigating_property>\n');
+      end if;
+      if unoProperty != 'None'
+      then
+        set buf = concat(buf,'    <mitigating_property name="unobservability" value=\"',unoProperty,'\">\n      <rationale>',unoRationale,'</rationale>\n    </mitigating_property>\n');
+      end if;
+   
+      open cmRolesCursor;
+      cmRoles_loop: loop
+        fetch cmRolesCursor into roleName;
+        if done = 1
+        then
+          leave cmRoles_loop;
+        end if;
+        set buf = concat(buf,'    <responsible_role name=\"',roleName,'\" />\n');
+      end loop cmRoles_loop;
+      close cmRolesCursor;
+      set done = 0;
+
+      open cmPersonasCursor;
+      cmPersonas_loop: loop
+        fetch cmPersonasCursor into taskName,personaName,durValue,freqValue,demValue,gcValue;
+        if done = 1
+        then
+          leave cmPersonas_loop;
+        end if;
+        set buf = concat(buf,'    <responsible_persona task=\"',taskName,'\" persona=\"',personaName,'\" duration=\"',replace(durValue,' ','_'),'\" frequency=\"',replace(freqValue,' ','_'),'\" demands=\"',replace(demValue,' ','_'),'\" goals=\"',replace(gcValue,' ','_'),'\" />\n');
+      end loop cmPersonas_loop;
+      close cmPersonasCursor;
+      set done = 0;
+
+      set buf = concat(buf,'  </countermeasure_environment>\n');
+    end loop cmEnv_loop;
+    close cmEnvCursor;
+    set done = 0;
+
+    set buf = concat(buf,'</countermeasure>\n');
+  end loop cm_loop;
+  close cmCursor;
+
+  set buf = concat(buf,'</goals>');
+  select buf,dpCount,goalCount,obsCount,reqCount,ucCount,cmCount;
+end
+//
+
 
 delimiter ;

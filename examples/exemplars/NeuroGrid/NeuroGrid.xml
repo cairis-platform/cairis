@@ -1162,70 +1162,128 @@ Matt is also the designated NeuroGrid Certificate Authority and, as such, is oft
   <excerpt>and the application developer has made it easy for him</excerpt>
 </document_reference>
 <document_reference name="Application developers are a liason between the exemplars and the central technical group." contributor="SF" document="Application developer GT concept" >
-  <excerpt>We\\\'re different from being a software end-user in that NeuroGrid provides an API so my personal role is a programmer against the API, as well essentially being a liaison for our exemplar to the Oxford group.</excerpt>
+  <excerpt>We're different from being a software end-user in that NeuroGrid provides an API so my personal role is a programmer against the API, as well essentially being a liaison for our exemplar to the Oxford group.</excerpt>
 </document_reference>
 <document_reference name="Many data owners do not care about security." contributor="SF" document="Asset responsibility GT concept" >
-  <excerpt>The third thing I\\\'ve come to realise is that actually a lot of people who own their own data, don\\\'t care about security.  \\n    In NeuroGrid, there is a means of tying individuals down and we can say \\\"X can only see this data\\\".  \\n    In NeuroGrid, we have dementia patients, stroke patients and patients with psychosis, so they are all quite vulnerable, so worrying about who can see what is quite important from our point of view.</excerpt>
+  <excerpt>The third thing I've come to realise is that actually a lot of people who own their own data, don't care about security.
+
+In NeuroGrid, there is a means of tying individuals down and we can say "X can only see this data".
+
+In NeuroGrid, we have dementia patients, stroke patients and patients with psychosis, so they are all quite vulnerable, so worrying about who can see what is quite important from our point of view.</excerpt>
 </document_reference>
 <document_reference name="User responsibility to not put upload unwanted data." contributor="SF" document="Asset responsibility GT concept" >
   <excerpt>It is our responsibility not to put data we do not want into NeuroGrid if we do not want it to be there.</excerpt>
 </document_reference>
 <document_reference name="Users responsible for anonymisation." contributor="SF" document="Asset responsibility GT concept" >
-  <excerpt>I supposed if it\\\'s the DICOM images then it\\\'s me.  \\n    It\\\'s my responsibility for anonymising them as a first stage.</excerpt>
+  <excerpt>I supposed if it's the DICOM images then it's me.
+
+It's my responsibility for anonymising them as a first stage.</excerpt>
 </document_reference>
 <document_reference name="Asset security an exemplar responsibility." contributor="SF" document="Asset responsibility GT concept" >
-  <excerpt>In terms of keeping their assets secure, that is the individual exemplars.  \\n    They have to define the policies for their data.</excerpt>
+  <excerpt>In terms of keeping their assets secure, that is the individual exemplars.
+
+They have to define the policies for their data.</excerpt>
 </document_reference>
 <document_reference name="Everyone should know that patient data is sensitive." contributor="SF" document="Asset sensitivity GT concept" >
-  <excerpt>If the people are within the NeuroGrid project, then they know this as this concept is known by everyone in the community.  \\nI don\\\'t know if they follow this rule, but everyone knows that patient data is sensitive.</excerpt>
+  <excerpt>If the people are within the NeuroGrid project, then they know this as this concept is known by everyone in the community.
+
+I don't know if they follow this rule, but everyone knows that patient data is sensitive.</excerpt>
 </document_reference>
 <document_reference name="Disclosure of medical data causes an outcry." contributor="SF" document="Asset sensitivity GT concept" >
-  <excerpt>When you are working with medical data, if you have a security issue with medical data and it gets to the press, it can cause some major problems.  \\nJust from looking at historical cases, where members of the public have found things out they didn\\\'t like about themselves, their friends or their family, or even in just the way the data was used, or just the fact that somebody got access to the data.  \\nIt wouldn\\\'t even matter if they could do anything with the data, the fact that it can happen can cause the media to have an outcry, as this can sell papers.  \\nThat sort of thing can shut down projects fairly rapidly.  </excerpt>
+  <excerpt>When you are working with medical data, if you have a security issue with medical data and it gets to the press, it can cause some major problems.
+
+Just from looking at historical cases, where members of the public have found things out they didn't like about themselves, their friends or their family, or even in just the way the data was used, or just the fact that somebody got access to the data.
+
+It wouldn't even matter if they could do anything with the data, the fact that it can happen can cause the media to have an outcry, as this can sell papers.
+
+That sort of thing can shut down projects fairly rapidly.</excerpt>
 </document_reference>
 <document_reference name="Data access locked down if security concerns." contributor="SF" document="Asset sensitivity GT concept" >
-  <excerpt>They obviously wanted their data to be secure and it was fairly high up in the list of priorities of people I spoke to.  \\nThis was particularly the case for psychosis, but that was understandable given that a lot of their patients had criminal records and other likely secondary problems.  \\nThere was a police involvement usually in their cases and there is a delicate area for funding.  \\nThey said at one point that if there was any problem with security, we could be quite sure that we wouldn\\\'t get access.  \\nEspecially as the legislation at the time involved sectioning of schizophrenics and things like this.  \\nThis was a serious concern for them.  </excerpt>
+  <excerpt>They obviously wanted their data to be secure and it was fairly high up in the list of priorities of people I spoke to.
+
+This was particularly the case for psychosis, but that was understandable given that a lot of their patients had criminal records and other likely secondary problems.
+
+There was a police involvement usually in their cases and there is a delicate area for funding.
+
+They said at one point that if there was any problem with security, we could be quite sure that we wouldn't get access.
+
+Especially as the legislation at the time involved sectioning of schizophrenics and things like this.
+
+This was a serious concern for them.</excerpt>
 </document_reference>
 <document_reference name="Patient data should not get into NeuroGrid" contributor="SF" document="Asset sensitivity GT concept" >
-  <excerpt>For us, being involved in clinical trials, the principle concern is simply that no patient data gets out.  \\nBy getting out, this means into NeuroGrid. \\nA lot of what we have to do to protect patient data has nothing to do with NeuroGrid per se, it\\\'s all things we have to do up-front before it ever goes out.</excerpt>
+  <excerpt>For us, being involved in clinical trials, the principle concern is simply that no patient data gets out.
+
+By getting out, this means into NeuroGrid.
+
+A lot of what we have to do to protect patient data has nothing to do with NeuroGrid per se, it's all things we have to do up-front before it ever goes out.</excerpt>
 </document_reference>
 <document_reference name="Group is motivated without the profit and law suit motive." contributor="SF" document="Asset sensitivity GT concept" >
-  <excerpt>Yes, we have to be motivated without the profit motive and the law suit motive I suppose.  \\nThe whole group that manages clinical trials here, these are all things they are conscious of.</excerpt>
+  <excerpt>Yes, we have to be motivated without the profit motive and the law suit motive I suppose.
+
+The whole group that manages clinical trials here, these are all things they are conscious of.</excerpt>
 </document_reference>
 <document_reference name="Clinical trial security issues affect NeuroGrid." contributor="SF" document="Asset sensitivity GT concept" >
   <excerpt>You have all the normal security issues that you face with any clinical trial, such as dealing with health records. </excerpt>
 </document_reference>
 <document_reference name="NeuroGrid data needs to be anonymised but still useful." contributor="SF" document="Asset sensitivity GT concept" >
-  <excerpt>The data that is available in NeuroGrid needs to be anonymised as best you can.  \\nYou need to have a certain amount of information, otherwise the information would be useless if you don\\\'t know who has got Alzheimer\\\'s disease and who is a healthy control.  </excerpt>
+  <excerpt>The data that is available in NeuroGrid needs to be anonymised as best you can.
+
+You need to have a certain amount of information, otherwise the information would be useless if you don't know who has got Alzheimer's disease and who is a healthy control.</excerpt>
 </document_reference>
 <document_reference name="Changing data leads to dangerous results" contributor="SF" document="Asset sensitivity GT concept" >
   <excerpt>For local trials, when you publish data which contributes to scientific knowledge, if the data has been changed in some way then you get results which may be dangerous.</excerpt>
 </document_reference>
 <document_reference name="Software and data needs to be secure" contributor="SF" document="Asset sensitivity GT concept" >
-  <excerpt>What wasn\\\'t really raised was the need to keep the software secure either.  \\nWhen you talk about assets, people tend to just think about data.  </excerpt>
+  <excerpt>What wasn't really raised was the need to keep the software secure either.
+
+When you talk about assets, people tend to just think about data.</excerpt>
 </document_reference>
 <document_reference name="Middleware security is taken seriously" contributor="SF" document="Control sensitivity GT concept" >
-  <excerpt>in terms of our middleware - data transport, facilitating secure access, managing user credentials and that kind of stuff, we take this really seriously.  \\nThis has been the one great driver for us as a lot of grid middleware started out as being about computational grids, and managing workflows and jobs for physicists.  \\nIn e-DiaMoND, we came to the conclusion that the middleware wasn\\\'t fit for purpose and our focus has always been data and about data.  \\nThat is why we abandoned GT3 and did our own thing, as we have very clear requirements with respect to security and interoperability and all these other things.  </excerpt>
+  <excerpt>in terms of our middleware - data transport, facilitating secure access, managing user credentials and that kind of stuff, we take this really seriously.
+
+This has been the one great driver for us as a lot of grid middleware started out as being about computational grids, and managing workflows and jobs for physicists.
+
+In SOMEPROJECT, we came to the conclusion that the middleware wasn't fit for purpose and our focus has always been data and about data.  
+
+That is why we abandoned GT3 and did our own thing, as we have very clear requirements with respect to security and interoperability and all these other things.</excerpt>
 </document_reference>
 <document_reference name="Security designed in line with functionality" contributor="SF" document="Control sensitivity GT concept" >
-  <excerpt> It was designed literally from the first as it was all web service base.  \\nBecause of this, literally from the first web service that was written, security was put in.  \\nWe worried about how to make it secure first and we built the system second.\\nSF: How was security put in in that sense?\\nI4: That was using user certificate and encryption to sign all the messages.</excerpt>
+  <excerpt> It was designed literally from the first as it was all web service base.
+
+Because of this, literally from the first web service that was written, security was put in.
+
+We worried about how to make it secure first and we built the system second.
+
+SF: How was security put in in that sense?
+
+I4: That was using user certificate and encryption to sign all the messages.</excerpt>
 </document_reference>
 <document_reference name="Certificate based security hard to change." contributor="SF" document="Control sensitivity GT concept" >
   <excerpt>Because everything was designed based on certificate based security, there was no way they could actually change it unless there was another project following this project, as it could not be done within this time frame.</excerpt>
 </document_reference>
 <document_reference name="Technology and institutions constrain data transfers between universities." contributor="SF" document="Control sensitivity GT concept" >
-  <excerpt>One of the problems with universities is trying to transfer data between universities can be pretty difficult.  \\nSo, you\\\'ve got large amount of information, scans which take up gigabytes of information, and you have to try and transfer that.  \\nYou\\\'ve got the restrictions of what may or may not be suitable and then you\\\'ve got, in terms of technical limitations, how you can transfer data.  \\nYou then need to come up with methods that are secure, so if the data fell into someone else\\\'s hands then it wouldn\\\'t be useful for them.</excerpt>
+  <excerpt>One of the problems with universities is trying to transfer data between universities can be pretty difficult.
+
+So, you've got large amount of information, scans which take up gigabytes of information, and you have to try and transfer that.  
+
+You've got the restrictions of what may or may not be suitable and then you've got, in terms of technical limitations, how you can transfer data.  
+
+You then need to come up with methods that are secure, so if the data fell into someone else's hands then it wouldn't be useful for them.</excerpt>
 </document_reference>
 <document_reference name="Data should be moved around only by those with access to it." contributor="SF" document="Control sensitivity GT concept" >
   <excerpt>If you are moving data around, that can only be done by people who should be doing that and the data is accessible by people who we are happy to access the data, and the data is not modifiable in a way that you can either maliciously modify the data or accidentally, which impacts on the usability of the data. </excerpt>
 </document_reference>
 <document_reference name="People think of data rather than software security." contributor="SF" document="Control sensitivity GT concept" >
-  <excerpt>What wasn\\\'t really raised was the need to keep the software secure either.  \\nWhen you talk about assets, people tend to just think about data.  </excerpt>
+  <excerpt>What wasn't really raised was the need to keep the software secure either.
+
+When you talk about assets, people tend to just think about data.</excerpt>
 </document_reference>
 <document_reference name="Infrastructure components are separated by associative." contributor="SF" document="Control sensitivity GT concept" >
   <excerpt>The infrastructure, which has two main components ; these are separated but they talk to either other. </excerpt>
 </document_reference>
 <document_reference name="Data owners question controls" contributor="SF" document="Control usability GT concept" >
-  <excerpt>Often Data Owners will say things like: Why do I need this certificate?, these certificates just get in the way and complicate the process, and I don\\\'t like these certificates.</excerpt>
+  <excerpt>Often Data Owners will say things like: Why do I need this certificate?, these certificates just get in the way and complicate the process, and I don't like these certificates.</excerpt>
 </document_reference>
 <document_reference name="Expressive approach for access control important" contributor="SF" document="Control usability GT concept" >
   <excerpt>It was very important to us to have a more expressive and more flexible approach to who can see what.</excerpt>
@@ -1237,103 +1295,233 @@ Matt is also the designated NeuroGrid Certificate Authority and, as such, is oft
   <excerpt>When you are asked for a password, you need to know which password is being asked for.  When you have more than one password and a certificate, you begin to wonder whether they are asking for the certificate or do they ask for the password ; what is it they want to know?  </excerpt>
 </document_reference>
 <document_reference name="Important to know if error is user or system" contributor="SF" document="Control usability GT concept" >
-  <excerpt>If they do, then it is important to let me know.  \\nThe worse thing is when you try something out and it doesn\\\'t work, you ask yourself: did I do something wrong or is the system not working?\\nIn the beginning, it was an issue that lots of things didn\\\'t work, as the system was still in the process of being built up, so it couldn\\\'t work straight away.</excerpt>
+  <excerpt>If they do, then it is important to let me know.
+
+The worse thing is when you try something out and it doesn't work, you ask yourself: did I do something wrong or is the system not working?
+
+In the beginning, it was an issue that lots of things didn't work, as the system was still in the process of being built up, so it couldn't work straight away.</excerpt>
 </document_reference>
 <document_reference name="Support team provide error feedback." contributor="SF" document="Control usability GT concept" >
-  <excerpt>When you get an error message, you want that error message explained.  \\nWhen I first used the network I didn\\\'t know whether I was doing something wrong, or if the system was not working yet.  \\nWithout any feedback there was nothing I could do.  \\nThis is why I said earlier that the easiest solution was to try things out and then go on the phone and ask [A] to get feedback straight away.  \\nFor example, the data in Oxford is used in a compressed form, i.e. nii.gz format.  \\nWhen I uploaded my data and it didn\\\'t work, I was told that I must use an uncompressed version.  \\nWithout asking anyone, how was I supposed to know this?</excerpt>
+  <excerpt>When you get an error message, you want that error message explained.
+
+When I first used the network I didn't know whether I was doing something wrong, or if the system was not working yet.
+
+Without any feedback there was nothing I could do.  
+
+This is why I said earlier that the easiest solution was to try things out and then go on the phone and ask [A] to get feedback straight away.  
+
+For example, the data in Oxford is used in a compressed form, i.e. nii.gz format.  
+
+When I uploaded my data and it didn't work, I was told that I must use an uncompressed version.  
+
+Without asking anyone, how was I supposed to know this?</excerpt>
 </document_reference>
 <document_reference name="Policies are too complicated for users to write." contributor="SF" document="Control usability GT concept" >
-  <excerpt>There are the access control policies, which say what they can and can\\\'t see.  \\nWe write those, or more precisely I write those, as they are too complicated for the users to write. </excerpt>
+  <excerpt>There are the access control policies, which say what they can and can't see.  
+
+We write those, or more precisely I write those, as they are too complicated for the users to write. </excerpt>
 </document_reference>
 <document_reference name="Truststores are complicated and often the source of problems." contributor="SF" document="Control usability GT concept" >
-  <excerpt>The complication for security would be the truststores.  \\nThese Java truststores (or keystores) are strange beasts.  \\nThat is what we use in the server to decide whether we like a certificate or not.  \\nWe see if it is trusted by the truststore.  \\nThe users also have truststores to talk to.  \\nIf it\\\'s going to go wrong, that is usually where the problems are.</excerpt>
+  <excerpt>The complication for security would be the truststores.
+
+These Java truststores (or keystores) are strange beasts.
+
+That is what we use in the server to decide whether we like a certificate or not.
+
+We see if it is trusted by the truststore.
+
+The users also have truststores to talk to.
+
+If it's going to go wrong, that is usually where the problems are.</excerpt>
 </document_reference>
 <document_reference name="Users appreciate getting data without waiting weeks." contributor="SF" document="Control usability GT concept" >
-  <excerpt>They know that if they want this data from any other sources, it takes days and days.  \\nFor example, someone within another project asked us to send them some anonymised data they could find within the NeuroGrid project if they had access to.  \\nAt the time they didn\\\'t have that access, so it took weeks and weeks to get the data on a DVD, encode it, post it to them, when it arrived, they had to call us for the password, so they know that having access to this kind of data is a big issue.  \\nThey appreciate it even if it takes an hour to get the data, but as a general rule if it takes more than one minute for a query, then something is wrong.</excerpt>
+  <excerpt>They know that if they want this data from any other sources, it takes days and days.
+
+For example, someone within another project asked us to send them some anonymised data they could find within the NeuroGrid project if they had access to.i
+
+At the time they didn't have that access, so it took weeks and weeks to get the data on a DVD, encode it, post it to them, when it arrived, they had to call us for the password, so they know that having access to this kind of data is a big issue.
+
+They appreciate it even if it takes an hour to get the data, but as a general rule if it takes more than one minute for a query, then something is wrong.</excerpt>
 </document_reference>
 <document_reference name="Users unaccustomed to installing certificates." contributor="SF" document="Control usability GT concept" >
-  <excerpt>The problem is that people are not accustomed to installing certificates inside their browser.  \\nUsually, we see some people who are very eager to use the portal and after a while, when you ask them \\\"what happened, I don\\\'t see you using the portal\\\", as you can\\\'t see their usage from the log files, they say \\\"well, I tried it but it didn\\\'t allow me to access it\\\".  \\nSome people who go to the support page and see the screenshots explaining things step-by-step, showing how you have to download a file, upload it into your browser, etc - it seems a bit unfamiliar to people.  </excerpt>
+  <excerpt>The problem is that people are not accustomed to installing certificates inside their browser.
+
+Usually, we see some people who are very eager to use the portal and after a while, when you ask them "what happened, I don't see you using the portal", as you can't see their usage from the log files, they say "well, I tried it but it didn't allow me to access it".  
+
+Some people who go to the support page and see the screenshots explaining things step-by-step, showing how you have to download a file, upload it into your browser, etc - it seems a bit unfamiliar to people.</excerpt>
 </document_reference>
 <document_reference name="Users surprised at how easy certificate installation turns out to be." contributor="SF" document="Control usability GT concept" >
-  <excerpt>It is unfamiliar territory to install a certificate.  \\nWhen they manage to do this, they say - well that was quite easily actually - , then it\\\'s done.</excerpt>
+  <excerpt>It is unfamiliar territory to install a certificate.
+
+When they manage to do this, they say - well that was quite easily actually - , then it's done.</excerpt>
 </document_reference>
 <document_reference name="Usernames and passwords more familiar to users than certificates." contributor="SF" document="Control usability GT concept" >
   <excerpt>At the beginning, we were thinking that as an API user, username and password is much more common so maybe it would have been more automated if the people could use username and password on the portal and, based on that username and password, when we could recognise them, we could use a certificate for them internally.  </excerpt>
 </document_reference>
 <document_reference name="Certificates are frightening users away from the portal." contributor="SF" document="Control usability GT concept" >
-  <excerpt>We could have a bank of certificates automatically generated for every user and we could do this behind the scene so every transaction over the net is still secured, but users are not hassled by the certificate.  \\nMaybe \\\"hassled\\\" isn\\\'t the right word, but that actually is frightening many users from using the portal.  \\nWhen we explain the benefits of using certificates and when they install it, it is easy for them to use it.  </excerpt>
+  <excerpt>We could have a bank of certificates automatically generated for every user and we could do this behind the scene so every transaction over the net is still secured, but users are not hassled by the certificate.
+
+Maybe "hassled" isn't the right word, but that actually is frightening many users from using the portal.
+
+When we explain the benefits of using certificates and when they install it, it is easy for them to use it.</excerpt>
 </document_reference>
 <document_reference name="Users keep non temporary data in temp folders." contributor="SF" document="Control usability GT concept" >
-  <excerpt>When we came to usability, we recognised that people who use the system tend to keep the files as on the temp folder more than 24 hours.  \\nThey download files, they put them on the temp folder, they use them as an input to workflows and keep the output from the workflows there.  \\nThey tend to use it as one of their folders.  </excerpt>
+  <excerpt>When we came to usability, we recognised that people who use the system tend to keep the files as on the temp folder more than 24 hours.
+
+They download files, they put them on the temp folder, they use them as an input to workflows and keep the output from the workflows there.
+
+They tend to use it as one of their folders.</excerpt>
 </document_reference>
 <document_reference name="Certificates are a mental barrier to users." contributor="SF" document="Control usability GT concept" >
-  <excerpt>To them, it always seemed to them really easy to install the certificate, as \\\"it\\\'s easy - just install the certificate and you\\\'re there\\\".  \\nThe mental barrier to end-users, so instead of coming here and typing in a username and password.... Even a username and password is ... </excerpt>
+  <excerpt>To them, it always seemed to them really easy to install the certificate, as "it's easy - just install the certificate and you're there".
+
+The mental barrier to end-users, so instead of coming here and typing in a username and password.... Even a username and password is ... </excerpt>
 </document_reference>
 <document_reference name="Control is usable and secure." contributor="SF" document="Control usability GT concept" >
-  <excerpt>From what I have used, it does everything I want it to do and it doesn\\\'t do anything I don\\\'t want it to do, i.e. give my data to the wrong people.  </excerpt>
+  <excerpt>From what I have used, it does everything I want it to do and it doesn't do anything I don't want it to do, i.e. give my data to the wrong people.  </excerpt>
 </document_reference>
 <document_reference name="Certificate issues have been browser issues." contributor="SF" document="Control usability GT concept" >
   <excerpt>From the point of view of access, I have had problems, but the only problems have been getting certificates to work on occasion, but these have been browser issues.</excerpt>
 </document_reference>
 <document_reference name="Clinician perception that security is too strict." contributor="SF" document="Control usability GT concept" >
-  <excerpt>The biggest problem on NeuroGrid testing the portal was that it was security was too strict. \\nPeople didn\\\'t access it.  \\nClinicians weren\\\'t going to download a certificate and email for a password.  \\nSo, they didn\\\'t access the portal, so the requirements came quite late for that.</excerpt>
+  <excerpt>The biggest problem on NeuroGrid testing the portal was that it was security was too strict.
+
+People didn't access it.
+
+Clinicians weren't going to download a certificate and email for a password.
+
+So, they didn't access the portal, so the requirements came quite late for that.</excerpt>
 </document_reference>
 <document_reference name="Clinician perception that security took too much time." contributor="SF" document="Control usability GT concept" >
-  <excerpt>To have clinicians, whose input was very important, they weren\\\'t wildly keen on spending time working out how to download a certificate and put it into their browsers, then email for a password and then get that.  </excerpt>
+  <excerpt>To have clinicians, whose input was very important, they weren't wildly keen on spending time working out how to download a certificate and put it into their browsers, then email for a password and then get that.</excerpt>
 </document_reference>
 <document_reference name="A desire for a twospeed API" contributor="SF" document="Control usability GT concept" >
-  <excerpt>In our case, the ideal system would be two-speed.  \\nIf you wanted the confidential data, then that would be available.  \\nIf you didn\\\'t need it, it would be good to have an API which didn\\\'t require it because, as a developer, it is harder to work with. </excerpt>
+  <excerpt>In our case, the ideal system would be two-speed.
+
+If you wanted the confidential data, then that would be available.
+
+If you didn't need it, it would be good to have an API which didn't require it because, as a developer, it is harder to work with. </excerpt>
 </document_reference>
 <document_reference name="Compared to lots of passwords" contributor="SF" document="Control usability GT concept" >
   <excerpt>For a clinician who has a zillion passwords and certificates for other purposes, to have a certificate that has to be managed by NeuroGrid itself and propagated then I think that is at least a small barrier.</excerpt>
 </document_reference>
 <document_reference name="Certificates are not always easy to use." contributor="SF" document="Control usability GT concept" >
-  <excerpt>The security side can get in the way as you need to have a certificate, which hasn\\\'t always been easy to use.  </excerpt>
+  <excerpt>The security side can get in the way as you need to have a certificate, which hasn't always been easy to use.</excerpt>
 </document_reference>
 <document_reference name="Certificate problems get in the way of portal access." contributor="SF" document="Control usability GT concept" >
-  <excerpt>At times I haven\\\'t been able to logon to the portal as the certificates have expired or there has been some problem with the computer, or it just isn\\\'t recognising me.  \\nThere are definitely some usability factors there.</excerpt>
+  <excerpt>At times I haven't been able to logon to the portal as the certificates have expired or there has been some problem with the computer, or it just isn't recognising me.
+
+There are definitely some usability factors there.</excerpt>
 </document_reference>
 <document_reference name="Developers may potentially publish confidential information." contributor="SF" document="Delegated control responsibility GT concept" >
-  <excerpt>The real reason that would be useful is that it would extend the ability of the NeuroGrid system to be used by other programming languages and other web services frameworks.\\nIt doesn\\\'t have any ramifications re: security per se.  \\nIn fact, you could argue that a two-speed setup like that might open the way for someone in my position, who wasn\\\'t paying attention to what he was doing, to potentially publish confidential information on the wire. </excerpt>
+  <excerpt>The real reason that would be useful is that it would extend the ability of the NeuroGrid system to be used by other programming languages and other web services frameworks.
+
+It doesn't have any ramifications re: security per se.
+
+In fact, you could argue that a two-speed setup like that might open the way for someone in my position, who wasn't paying attention to what he was doing, to potentially publish confidential information on the wire. </excerpt>
 </document_reference>
 <document_reference name="API hides details from users." contributor="SF" document="Delegated control responsibility GT concept" >
-  <excerpt>As there is a full API to the system, you can write your own thing and hide all of that from end users.  \\nThis was our initial idea.</excerpt>
+  <excerpt>As there is a full API to the system, you can write your own thing and hide all of that from end users.
+
+This was our initial idea.</excerpt>
 </document_reference>
 <document_reference name="NeuroGrid was needed long before it was usable." contributor="SF" document="Delivery speed GT concept" >
-  <excerpt>One of the big problems I\\\'ve had with NeuroGrid is that I needed to use it 2 years ago but it has only been in the past few months that it has come to the stage where it is getting very usable.  </excerpt>
+  <excerpt>One of the big problems I've had with NeuroGrid is that I needed to use it 2 years ago but it has only been in the past few months that it has come to the stage where it is getting very usable.  </excerpt>
 </document_reference>
 <document_reference name="Security can affect result times" contributor="SF" document="Emergent consequences GT concept" >
   <excerpt>We have problems with times and sometimes security is so high it takes much longer than a user expects to get results back</excerpt>
 </document_reference>
 <document_reference name="Logging and certificates slows result times." contributor="SF" document="Emergent consequences GT concept" >
-  <excerpt>They are working on it to make it faster.  \\nOne of the probable causes is the logging of everything and everywhere.  \\nInternally, I suspect that certificates are tested for each step.  </excerpt>
+  <excerpt>They are working on it to make it faster.
+
+One of the probable causes is the logging of everything and everywhere.
+
+Internally, I suspect that certificates are tested for each step.</excerpt>
 </document_reference>
 <document_reference name="More emphasis on security than usability" contributor="SF" document="Emergent consequences GT concept" >
-  <excerpt>I think the emphasis was on making it secure, with less emphasis on the realisation that that means it would be difficult to access for certain people.  \\nIt certainly is an issue for other health grids.  \\nI\\\'ve got 6 of them together for a workshop.  \\nGetting them to use it is a big issue, now people are saying: how sustainable is it?, how many people are actually using it?.</excerpt>
+  <excerpt>I think the emphasis was on making it secure, with less emphasis on the realisation that that means it would be difficult to access for certain people.
+
+It certainly is an issue for other health grids.
+
+I've got 6 of them together for a workshop.
+
+Getting them to use it is a big issue, now people are saying: how sustainable is it?, how many people are actually using it?.</excerpt>
 </document_reference>
 <document_reference name="Technical terms confuse users." contributor="SF" document="Engagement artifact GT concept" >
-  <excerpt>In the beginning, we had a problem with the web folder, which was called WebDAV folder ; what is meant by _WebDAV_ folder?  \\nWhen you explain that it is just a directory on the web, they go ah.  \\nIt\\\'s just a name, but if you aren\\\'t an expert, you don\\\'t know if it is a technical term which means something you need to know about or not.</excerpt>
+  <excerpt>In the beginning, we had a problem with the web folder, which was called WebDAV folder ; what is meant by _WebDAV_ folder?  
+
+When you explain that it is just a directory on the web, they go ah.
+
+It's just a name, but if you aren't an expert, you don't know if it is a technical term which means something you need to know about or not.</excerpt>
 </document_reference>
 <document_reference name="Portal is a frame of reference" contributor="SF" document="Engagement artifact GT concept" >
-  <excerpt>It isn\\\'t until you get the actual basic portal... I like what [E] said, in that you\\\'ve got to give them something to hate - something real and tangible, a vehicle for engagement.  As soon as you have something, people won\\\'t say what they did want.  \\nThey will automatically say what they didn\\\'t want like you can\\\'t have this and you shouldn\\\'t have the other.  \\nThe requirements then became very obvious and there was a common frame of reference.  \\nHaving an early form of portal as a vehicle was terrifically useful.  </excerpt>
+  <excerpt>It isn't until you get the actual basic portal... I like what [E] said, in that you've got to give them something to hate - something real and tangible, a vehicle for engagement.  As soon as you have something, people won't say what they did want.
+
+They will automatically say what they didn't want like you can't have this and you shouldn't have the other.
+
+The requirements then became very obvious and there was a common frame of reference.
+
+Having an early form of portal as a vehicle was terrifically useful.</excerpt>
 </document_reference>
 <document_reference name="Metaphors helped people express ideas." contributor="SF" document="Engagement artifact GT concept" >
-  <excerpt>There were lots of issues where people couldn\\\'t express it before as they didn\\\'t know what things were called.  \\nFor example, the WebDAV folder kept cropping up and confusing people, so when they saw the prototype they said: Oh that! That\\\'s just an ordinary folder.  \\nThe security discussions came up because people couldn\\\'t access it really.  \\nIn a sense, the security was too good.</excerpt>
+  <excerpt>There were lots of issues where people couldn't express it before as they didn't know what things were called.
+
+For example, the WebDAV folder kept cropping up and confusing people, so when they saw the prototype they said: Oh that! That's just an ordinary folder.
+
+The security discussions came up because people couldn't access it really.
+
+In a sense, the security was too good.</excerpt>
 </document_reference>
 <document_reference name="Sometimes a perception that internet is safe when it is not" contributor="SF" document="Environmental perception GT concept" >
-  <excerpt>SF: So, there aren\\\'t any restrictions set when you install certificates via the browser?  \\nIs there any guidance which says that you can\\\'t use this system in an internet cafe, or is it safe to say you wouldn\\\'t want to do it, but there is nothing in the rules you have which says that you can\\\'t?\\nI2: I\\\'m not entirely sure, but I don\\\'t think it says anywhere.  \\nThis needs to be pointed out.  \\nIt is difficult from a technical point of view, as the internet itself is safe and when I, with my own laptop, go to an insecure web-page, then I still have access as it all goes via my laptop.  </excerpt>
+  <excerpt>SF: So, there aren't any restrictions set when you install certificates via the browser?
+
+Is there any guidance which says that you can't use this system in an internet cafe, or is it safe to say you wouldn't want to do it, but there is nothing in the rules you have which says that you can't?
+
+I2: I'm not entirely sure, but I don't think it says anywhere.
+
+This needs to be pointed out.  It is difficult from a technical point of view, as the internet itself is safe and when I, with my own laptop, go to an insecure web-page, then I still have access as it all goes via my laptop.  </excerpt>
 </document_reference>
 <document_reference name="FLOSS versions checked to ensure system remains secure." contributor="SF" document="Environmental perception GT concept" >
-  <excerpt>That certificate is used by some software.  \\nIf there is a bug in security, this will be of concern.  \\nWe need to use the most update version of, for example, web services.  \\nIf you are connecting to my service which is using Apache Tomcat.  \\nIf Apache Tomcat has a bug, then obviously we have a problem.  \\nEvery week, I am checking to make sure I am using the latest version.  \\nOn the security side at Oxford, I\\\'m sure they are doing the same thing.</excerpt>
+  <excerpt>That certificate is used by some software.
+
+If there is a bug in security, this will be of concern.  
+
+We need to use the most update version of, for example, web services.
+
+If you are connecting to my service which is using Apache Tomcat.
+
+If Apache Tomcat has a bug, then obviously we have a problem.
+
+Every week, I am checking to make sure I am using the latest version.
+
+On the security side at Oxford, I'm sure they are doing the same thing.</excerpt>
 </document_reference>
 <document_reference name="Time gets in the way of data harmonisation" contributor="SF" document="Environmental perception GT concept" >
-  <excerpt>It is the hidden time requirements that can come and bite you, especially when it comes to installing operating systems and then installing Matlab and compilers, find the bugs, test it, try and work out what is going wrong.  \\nNone of that is helping you get any data harmonisation done. </excerpt>
+  <excerpt>It is the hidden time requirements that can come and bite you, especially when it comes to installing operating systems and then installing Matlab and compilers, find the bugs, test it, try and work out what is going wrong.
+
+None of that is helping you get any data harmonisation done.</excerpt>
 </document_reference>
 <document_reference name="Machines storing confidential data need to be locked down." contributor="SF" document="Environmental perception GT concept" >
-  <excerpt>If any of NeuroGrid\\\'s nodes stored confidential information, then you get into the same set of issues any financial house or anyplace else has.  \\nYou have the physical security of the servers.  \\nThere is one here our images are stored on that can be accessed by NeuroGrid from any points on the grid.  \\nThe others are doing the same.  \\nIn our case, we would never have confidential information on that machine.  \\nThe machine itself would have to be protected if it were.  \\nPhysical security - how good is your firewall and all the other things you have to think about when locking down the machine. \\nAll the peculiarities of the software that you happen to use. </excerpt>
+  <excerpt>If any of NeuroGrid's nodes stored confidential information, then you get into the same set of issues any financial house or anyplace else has.
+
+You have the physical security of the servers.
+
+There is one here our images are stored on that can be accessed by NeuroGrid from any points on the grid.
+
+The others are doing the same.
+
+In our case, we would never have confidential information on that machine.
+
+The machine itself would have to be protected if it were.
+
+Physical security - how good is your firewall and all the other things you have to think about when locking down the machine.
+
+All the peculiarities of the software that you happen to use.</excerpt>
 </document_reference>
 <document_reference name="Concern that some foreign patient data is not kept securely." contributor="SF" document="Environmental perception GT concept" >
-  <excerpt>A raised this as a concern with [F] and said I\\\'m really alarmed that you don\\\'t have this data on a machine which is kept secure, surely you are covered by the ethics and the law for this and [F] said this is from the Far East.  \\nI said it doesn\\\'t matter, why is this at home and why is this not on a machine. </excerpt>
+  <excerpt>A raised this as a concern with [F] and said I'm really alarmed that you don't have this data on a machine which is kept secure, surely you are covered by the ethics and the law for this and [F] said this is from the Far East.
+
+I said it doesn't matter, why is this at home and why is this not on a machine. </excerpt>
 </document_reference>
 <document_reference name="Ideal to identify potential users from the entire project." contributor="SF" document="End-user GT concept" >
   <excerpt>it would be easier to see the entire project and know how many potential users you have</excerpt>
@@ -1360,73 +1548,159 @@ Matt is also the designated NeuroGrid Certificate Authority and, as such, is oft
   <excerpt>All of the sites would have a database in place, which would fall within the local clinical research governance frameworks for those sites.  The main thing has been collecting data and transferring data from site to site.  </excerpt>
 </document_reference>
 <document_reference name="Unit specific operating procedures describes patient data handling" contributor="SF" document="Institutional procedures GT concept" >
-  <excerpt>This is an SOP document for handling patient data within the trials unit.  \\nThis organisation, [B], there are any number of trials which have nothing to do with NeuroGrid/the stroke exemplar, that are going on.  \\nSo, there is an SOP for handling patient data.  \\nIt touches on a lot of areas which are irrelevant for NeuroGrid, as we are focusing purely on the imaging data.  \\nThere is a much larger set of data on the patients themselves, the hospitals they were treated at, the treatment they got, basic demographics, outcomes.  \\nAll these things are kept completely separately in separate databases out of our control.  \\nMostly the SOPs are oriented around that.  </excerpt>
+  <excerpt>This is an SOP document for handling patient data within the trials unit.
+
+This organisation, [B], there are any number of trials which have nothing to do with NeuroGrid/the stroke exemplar, that are going on.
+
+So, there is an SOP for handling patient data.  
+
+It touches on a lot of areas which are irrelevant for NeuroGrid, as we are focusing purely on the imaging data.
+
+There is a much larger set of data on the patients themselves, the hospitals they were treated at, the treatment they got, basic demographics, outcomes.
+
+All these things are kept completely separately in separate databases out of our control.
+
+Mostly the SOPs are oriented around that.</excerpt>
 </document_reference>
 <document_reference name="Local technical support provide security guidelines." contributor="SF" document="Institutional procedures GT concept" >
   <excerpt>Information Services, in a general form, have a dedicated team called Systems and Security.  \\nThey issue guidelines for good computing practice.  \\nThey detail what general staff should do.</excerpt>
 </document_reference>
 <document_reference name="Users know where their operating procedures are" contributor="SF" document="Institutional procedures GT concept" >
-  <excerpt>There is an SOP which deals with that.  \\nI haven\\\'t read the SOP, but I know that there is, for everyone in this department, there is an SOP, which says what we should do if someone is not available.</excerpt>
+  <excerpt>There is an SOP which deals with that.
+
+I haven't read the SOP, but I know that there is, for everyone in this department, there is an SOP, which says what we should do if someone is not available.</excerpt>
 </document_reference>
 <document_reference name="Line manager responsible for user behaviour." contributor="SF" document="Institutional responsibility GT concept" >
   <excerpt>[A] may see that because as myself and I3 are employees, that would be his problem to deal with</excerpt>
 </document_reference>
 <document_reference name="Managers do not deal with security" contributor="SF" document="Institutional responsibility GT concept" >
-  <excerpt>To be honest, I don\\\'t think they deal with the security aspect.  \\nFor example, my supervisor here is very keen to test the portal and he has a certificate install and is using a master password, so there is no concern if someone else is using his computer or laptop as they will have their password anyway.  </excerpt>
+  <excerpt>To be honest, I don't think they deal with the security aspect.
+
+For example, my supervisor here is very keen to test the portal and he has a certificate install and is using a master password, so there is no concern if someone else is using his computer or laptop as they will have their password anyway.  </excerpt>
 </document_reference>
 <document_reference name="Institutions have some responsibility for server security." contributor="SF" document="Institutional responsibility GT concept" >
-  <excerpt>There is a small amount of responsibility with the institutions participating because NeuroGrid is secured over a set of nodes, just a set of servers, in different physical locations.  \\nWe have one here.  \\nSo, there is some small responsibility we have.  \\nThe servers themselves are configured and managed centrally, that\\\'s why 95% of responsibility lies at Oxford.  \\nThe responsibility locally is don\\\'t mess that up.  </excerpt>
+  <excerpt>There is a small amount of responsibility with the institutions participating because NeuroGrid is secured over a set of nodes, just a set of servers, in different physical locations.
+
+We have one here.
+
+So, there is some small responsibility we have.
+
+The servers themselves are configured and managed centrally, that's why 95% of responsibility lies at Oxford.
+
+The responsibility locally is don't mess that up.</excerpt>
 </document_reference>
 <document_reference name="IS department handed server responsibility to infrastructure team." contributor="SF" document="Institutional responsibility GT concept" >
-  <excerpt>If you think about the server itself, the server is physically housed in our Information Services (IS) department.  \\nThey have been responsible for housing it in their secure computer room.  \\nThey initially took receipt of the server when it came, did some initial set-up and then informed Oxford when it was at the initial stage</excerpt>
+  <excerpt>If you think about the server itself, the server is physically housed in our Information Services (IS) department.
+
+They have been responsible for housing it in their secure computer room.
+
+They initially took receipt of the server when it came, did some initial set-up and then informed Oxford when it was at the initial stage</excerpt>
 </document_reference>
 <document_reference name="Users sign an institutional code of practice." contributor="SF" document="Institutional responsibility GT concept" >
-  <excerpt>The security after that, in terms of what I\\\'ve just described, I would expect Information Services to be responsible.  \\nThat is housing the server, doing its backups,  doing disaster recovery if anything went wrong.  \\nThe backups are stored off-site but we just leave all that...\\nThey also, all users, are responsible for signing a code of practice.  \\nThis is basically computer use or computer misuse.  \\nYou are sacked if you are a member of staff and have abused the network.  \\nStudents can be asked to leave effectively if they have hacked the network.  \\nWe just leave everything like that to them [IS].  </excerpt>
+  <excerpt>The security after that, in terms of what I've just described, I would expect Information Services to be responsible.
+
+That is housing the server, doing its backups,  doing disaster recovery if anything went wrong.
+
+The backups are stored off-site but we just leave all that...
+
+They also, all users, are responsible for signing a code of practice.
+
+This is basically computer use or computer misuse.
+
+You are sacked if you are a member of staff and have abused the network.
+
+Students can be asked to leave effectively if they have hacked the network.
+
+We just leave everything like that to them [IS].</excerpt>
 </document_reference>
 <document_reference name="Some managerial responsibility for data delegated." contributor="SF" document="Institutional responsibility GT concept" >
-  <excerpt>I think [B] is ultimately responsible for security.  \\nSome of that responsibility is designated to others on a day-to-day basis, but ultimately he assumes the complete responsibility for that.</excerpt>
+  <excerpt>I think [B] is ultimately responsible for security.
+
+Some of that responsibility is designated to others on a day-to-day basis, but ultimately he assumes the complete responsibility for that.</excerpt>
 </document_reference>
 <document_reference name="Managers responsible for own data." contributor="SF" document="Institutional responsibility GT concept" >
-  <excerpt>\\\"He would have responsibility for all the XXX data.  \\\"</excerpt>
+  <excerpt>"He would have responsibility for all the XXX data."</excerpt>
 </document_reference>
 <document_reference name="Exemplar PI assumes overall responsibility" contributor="SF" document="Institutional responsibility GT concept" >
   <excerpt>I guess that as PI of the exemplar as a whole, he would assume the responsibility even though there would be someone with responsibility for that site as well.  </excerpt>
 </document_reference>
 <document_reference name="Uploaders legally obliged to ensure data does not fall into wrong hands." contributor="SF" document="Legal responsibility GT concept" >
-  <excerpt>So, once you are on the grid, the main thing is that, because it\\\'s medical data, you are obliged to make sure it doesn\\\'t fall into anyone else\\\'s hands.\\nSF:  When you say \\\'you\\\'re obliged to make sure the data doesn\\\'t fall into people\\\'s hands\\\', how are those obligations made explicit.\\nI7: They are given to us.  \\nThere is the data protection act, which is the obvious thing. </excerpt>
+  <excerpt>So, once you are on the grid, the main thing is that, because it's medical data, you are obliged to make sure it doesn't fall into anyone else's hands.
+
+SF:  When you say "you're obliged to make sure the data doesn't fall into people's hands", how are those obligations made explicit.
+
+I7: They are given to us.
+
+There is the data protection act, which is the obvious thing. </excerpt>
 </document_reference>
 <document_reference name="Medics get broad sweep of who can access data." contributor="SF" document="Moral perception GT concept" >
-  <excerpt>So, medics making ethical approvals tend to get a fairly broad sweep of who can access the data ; they get quite a lot of latitude on who they allow to access the data.  \\nIf you are a researcher from other areas, you tend to get a very tight control on who can and can\\\'t access the data.  </excerpt>
+  <excerpt>So, medics making ethical approvals tend to get a fairly broad sweep of who can access the data ; they get quite a lot of latitude on who they allow to access the data.
+
+If you are a researcher from other areas, you tend to get a very tight control on who can and can't access the data.</excerpt>
 </document_reference>
 <document_reference name="Principles and ethics committee responsible for approval." contributor="SF" document="Moral responsibility GT concept" >
-  <excerpt>A lot of it is down to ethics committees.  \\nThere are the Caldicott Guardian principles as well.</excerpt>
+  <excerpt>A lot of it is down to ethics committees.
+
+There are the Caldicott Guardian principles as well.</excerpt>
 </document_reference>
 <document_reference name="Ethics ensure user does not allow data to leave server." contributor="SF" document="Moral responsibility GT concept" >
-  <excerpt>That is bad information to get out into the field because of insurance issues or because people won\\\'t employ them.  \\nSo, his ethics are very strict to the extent that he never wanted his data to leave the server.  He would only allow processed results to leave. </excerpt>
+  <excerpt>That is bad information to get out into the field because of insurance issues or because people won't employ them.
+
+So, his ethics are very strict to the extent that he never wanted his data to leave the server.  He would only allow processed results to leave. </excerpt>
 </document_reference>
 <document_reference name="Users agree not to misuse data." contributor="SF" document="Moral responsibility GT concept" >
   <excerpt>For the data nodes, if you are a NeuroGrid person, when you get your certificate, you agree not to misuse the data.  \\nIf you query the data, you technically not use the data other than what you agree to.</excerpt>
 </document_reference>
 <document_reference name="Everyone responsible for security" contributor="SF" document="Moral responsibility GT concept" >
-  <excerpt>SF:  When it comes to NeuroGrid, who would you say is responsible for security?\\nI7:  Everybody really.  </excerpt>
+  <excerpt>SF:  When it comes to NeuroGrid, who would you say is responsible for security?
+
+I7:  Everybody really.</excerpt>
 </document_reference>
 <document_reference name="Users responsible for reminding medics of their responsibility" contributor="SF" document="Moral responsibility GT concept" >
-  <excerpt>The bottom line is that with the medical data we remind them that it\\\'s their problem because  they are the PI and, obviously, a psychiatrist is not going to know the ins and outs of firewalls and things like IP tables and you wouldn\\\'t expect them to.  \\nWe see it as our job to tell them what the problem is and to remind them that they are the PI so if something goes wrong it is definitely on their hands.  \\nIt\\\'s a bit of an odd thing that they rely on us to do it in that case.</excerpt>
+  <excerpt>The bottom line is that with the medical data we remind them that it's their problem because  they are the PI and, obviously, a psychiatrist is not going to know the ins and outs of firewalls and things like IP tables and you wouldn't expect them to.
+
+We see it as our job to tell them what the problem is and to remind them that they are the PI so if something goes wrong it is definitely on their hands.
+
+It's a bit of an odd thing that they rely on us to do it in that case.</excerpt>
 </document_reference>
 <document_reference name="Background contributes likelihood of ethical approval." contributor="SF" document="Operational context GT concept" >
-  <excerpt>I would assume that within the ethical approval for a particular problem or study, there will be some sense of who is involved in the study and who is allowed to use the data.  \\nIt depends on what your background is when you make an application for ethical approval.  \\nIt tends to depend on how broad and general the ethical approval is.  \\nSo, medics making ethical approvals tend to get a fairly broad sweep of who can access the data ; they get quite a lot of latitude on who they allow to access the data.  \\nIf you are a researcher from other areas, you tend to get a very tight control on who can and can\\\'t access the data.  \\nA lot of it is down to ethics committees.  </excerpt>
+  <excerpt>I would assume that within the ethical approval for a particular problem or study, there will be some sense of who is involved in the study and who is allowed to use the data.
+
+It depends on what your background is when you make an application for ethical approval.
+
+It tends to depend on how broad and general the ethical approval is.
+
+So, medics making ethical approvals tend to get a fairly broad sweep of who can access the data ; they get quite a lot of latitude on who they allow to access the data.
+
+If you are a researcher from other areas, you tend to get a very tight control on who can and can't access the data.
+
+A lot of it is down to ethics committees.</excerpt>
 </document_reference>
 <document_reference name="Users unaware of security until it gets in the way." contributor="SF" document="Operational peer perception GT concept" >
-  <excerpt>I think the users are very unaware of it, unless they come up against something which doesn\\\'t let them access something they shouldn\\\'t be able to access.  </excerpt>
+  <excerpt>I think the users are very unaware of it, unless they come up against something which doesn't let them access something they shouldn't be able to access.</excerpt>
 </document_reference>
 <document_reference name="Developers perceive security issues." contributor="SF" document="Operational peer perception GT concept" >
-  <excerpt>Some people who are developing applications based on our system notice a lot.  \\nWe recently had a data site they were able to access, but they didn\\\'t think they should be able to access it, so that\\\'s quite a high level of knowledge for someone who is developing an application.</excerpt>
+  <excerpt>Some people who are developing applications based on our system notice a lot.
+
+We recently had a data site they were able to access, but they didn't think they should be able to access it, so that's quite a high level of knowledge for someone who is developing an application.</excerpt>
 </document_reference>
 <document_reference name="Infrastructure team have complete security expertise." contributor="SF" document="Operational peer perception GT concept" >
-  <excerpt>We have every security aspect in the Oxford team.  \\nWhat they have is access control and they are the only people who issue certificates and they check access control.  \\nEverything is within one group.  </excerpt>
+  <excerpt>We have every security aspect in the Oxford team.
+
+What they have is access control and they are the only people who issue certificates and they check access control.
+
+Everything is within one group.</excerpt>
 </document_reference>
 <document_reference name="System security is reasonable" contributor="SF" document="Operational peer perception GT concept" >
-  <excerpt>Generally it is pretty good, but it is not completely without its problems.  \\nGenerally, as far as projects go, it has been pretty reasonable.  \\nAs we work quite closely with the toolkit team based over in XX, they use the portal on a day-to-day basis.  \\nAs we have been collecting data, it has only really been the last couple of months that we\\\'ve really engaged with the portal.  \\nI think, generally speaking, it has been reasonable. </excerpt>
+  <excerpt>Generally it is pretty good, but it is not completely without its problems.
+
+Generally, as far as projects go, it has been pretty reasonable.
+
+As we work quite closely with the toolkit team based over in XX, they use the portal on a day-to-day basis.
+
+As we have been collecting data, it has only really been the last couple of months that we've really engaged with the portal.
+
+I think, generally speaking, it has been reasonable. </excerpt>
 </document_reference>
 <document_reference name="Preferable to offer clear guidelines to users" contributor="SF" document="Procedural control GT concept" >
   <excerpt>The best thing to do is just make things clear and give people clear guidance about what they need to do.</excerpt>
@@ -1435,91 +1709,163 @@ Matt is also the designated NeuroGrid Certificate Authority and, as such, is oft
   <excerpt>The best way is to provide lots and lots of information, telling them what it is you want to achieve and what needs to be done to achieve it.  </excerpt>
 </document_reference>
 <document_reference name="The system cannot be designed faster than the project." contributor="SF" document="Requirements perception GT concept" >
-  <excerpt>You can\\\'t really design it faster than it has.  \\nI think there were a few problems with the project as it was setup in the first place.  </excerpt>
+  <excerpt>You can't really design it faster than it has.
+
+I think there were a few problems with the project as it was setup in the first place.</excerpt>
 </document_reference>
 <document_reference name="Portal security design was a compromise." contributor="SF" document="Requirements perception GT concept" >
-  <excerpt>That was the one specifically on NeuroGrid, as the portal design really didn\\\'t take into account of his requirements for security, so they came to some compromise.  </excerpt>
+  <excerpt>That was the one specifically on NeuroGrid, as the portal design really didn't take into account of his requirements for security, so they came to some compromise.  </excerpt>
 </document_reference>
 <document_reference name="Disparity between requirements and prototype arose during meetings on different themes." contributor="SF" document="Requirements perception GT concept" >
-  <excerpt>We would have regular meetings on different themes.  \\nThere were some on security specifically, which was where the disparity between the requirements in psychosis and the initial version of the prototype came up.  </excerpt>
+  <excerpt>We would have regular meetings on different themes.
+
+There were some on security specifically, which was where the disparity between the requirements in psychosis and the initial version of the prototype came up.  </excerpt>
 </document_reference>
 <document_reference name="Requirements were complete before the ticketing system was examined." contributor="SF" document="Requirements perception GT concept" >
-  <excerpt>There were regular meeting for technologists and I wasn\\\'t always present but, we had completed the requirements phase before they started looking at the ticketing system [C] was working on.  </excerpt>
+  <excerpt>There were regular meeting for technologists and I wasn't always present but, we had completed the requirements phase before they started looking at the ticketing system [C] was working on.  </excerpt>
 </document_reference>
 <document_reference name="Many ideas came from another project which resolving issues in a different way." contributor="SF" document="Requirements perception GT concept" >
-  <excerpt>Most of what I\\\'ve got came from other project which had the same issues, but they had gone further in resolving them in different ways.  \\nIn NeuroGrid, in a sense, did the standard thing in most respects.</excerpt>
+  <excerpt>Most of what I've got came from other project which had the same issues, but they had gone further in resolving them in different ways.
+
+In NeuroGrid, in a sense, did the standard thing in most respects.</excerpt>
 </document_reference>
 <document_reference name="Agreeing by predicting was wrong." contributor="SF" document="Requirements perception GT concept" >
-  <excerpt>It was just a case of getting people to agree on what they want in this database, to try to predict what kind of research they would try to be doing in the next year, or the next several years.  \\nIt was just the wrong way to do things.</excerpt>
+  <excerpt>It was just a case of getting people to agree on what they want in this database, to try to predict what kind of research they would try to be doing in the next year, or the next several years.
+
+It was just the wrong way to do things.</excerpt>
 </document_reference>
 <document_reference name="Infrastructure concerns are straightforward." contributor="SF" document="Requirements perception GT concept" >
-  <excerpt>\\\"As far as we\\\'re concerned, at our level it is relatively straightforward ; \\\"\\\"we have some data, let\\\'s move it around\\\"\\\".  Higher up, the more interesting stuff about what people do with that data, that was going to be taken care of by a workflow toolkit.\\\"</excerpt>
+  <excerpt>As far as we're concerned, at our level it is relatively straightforward; "we have some data, let's move it around".  Higher up, the more interesting stuff about what people do with that data, that was going to be taken care of by a workflow toolkit.</excerpt>
 </document_reference>
 <document_reference name="Teams do not know what they wanted." contributor="SF" document="Requirements perception GT concept" >
-  <excerpt>It is slightly difficult for the computing team at Oxford as they are trying to get us what we want, and we don\\\'t exactly know what it is we want.  \\nSometimes that geographical distance and sometimes just working in different teams means that it takes time for them to get an understanding of what we want, and for us to get an understanding of what we want and be able to communicate that effectively. </excerpt>
+  <excerpt>It is slightly difficult for the computing team at Oxford as they are trying to get us what we want, and we don't exactly know what it is we want.
+
+Sometimes that geographical distance and sometimes just working in different teams means that it takes time for them to get an understanding of what we want, and for us to get an understanding of what we want and be able to communicate that effectively. </excerpt>
 </document_reference>
 <document_reference name="Projects initially asked what assets they had." contributor="SF" document="Requirements perception GT concept" >
-  <excerpt>We asked the questions in the early days about security, which we\\\'ve asked on all projects.  \\nThese are \\\"what assets have you got?\\\" and \\\"what constraints do you want to put on those assets?\\\"  </excerpt>
+  <excerpt>We asked the questions in the early days about security, which we've asked on all projects.
+
+These are "what assets have you got?" and "what constraints do you want to put on those assets?"</excerpt>
 </document_reference>
 <document_reference name="Perceived workflows of what the system could provide varied." contributor="SF" document="Requirements perception GT concept" >
-  <excerpt>We got them to draw up workflow and document what they thought the system could provide for them.  \\nThis varied from somewhere just to run your image analysis techniques to \\\"we want it to be our data archive\\\", which came as a bit of a shock when we responded with \\\"that\\\'s now possible, we can\\\'t be available 24-7 and hold your primary source of data for clinical trials - that\\\'s not what the grid is about\\\".</excerpt>
+  <excerpt>We got them to draw up workflow and document what they thought the system could provide for them.
+
+This varied from somewhere just to run your image analysis techniques to "we want it to be our data archive", which came as a bit of a shock when we responded with "that's now possible, we can't be available 24-7 and hold your primary source of data for clinical trials - that's not what the grid is about".</excerpt>
 </document_reference>
 <document_reference name="No guarantee that users are not doing things they should not." contributor="SF" document="Responsibility GT concept" >
-  <excerpt>because we don\\\'t capture the data, we have no guarantee that the people who are doing all the things that they should.  \\nWe don\\\'t want to be responsible for this.</excerpt>
+  <excerpt>because we don't capture the data, we have no guarantee that the people who are doing all the things that they should.
+
+We don't want to be responsible for this.</excerpt>
 </document_reference>
 <document_reference name="Experts in different fields do what is normal to them." contributor="SF" document="Sub-cultures GT concept" >
-  <excerpt>Experts from different areas work in that field together and they do stuff which is normal for them.  \\nWhen you come from a different background, you don\\\'t know what to do with it.  \\nThat has to be overcome.  </excerpt>
+  <excerpt>Experts from different areas work in that field together and they do stuff which is normal for them.
+
+When you come from a different background, you don't know what to do with it.
+
+That has to be overcome.</excerpt>
 </document_reference>
 <document_reference name="Cross over between fields is a need for something like NeuroGrid." contributor="SF" document="Sub-cultures GT concept" >
   <excerpt>There are 3 exemplars and the cross-over between them is that they all need something like NeuroGrid.  \\nThe actually things they are doing are quite different.  </excerpt>
 </document_reference>
 <document_reference name="Each exemplar has their own processes and standards." contributor="SF" document="Sub-culture norms GT concept" >
-  <excerpt>Every exemplar had to come up with their own way of getting imaging in.  \\nEvery exemplar has different standards they need to apply and different sources.  </excerpt>
+  <excerpt>Every exemplar had to come up with their own way of getting imaging in.
+
+Every exemplar has different standards they need to apply and different sources.</excerpt>
 </document_reference>
 <document_reference name="Specific steps are followed for anonymising data." contributor="SF" document="Sub-culture norms GT concept" >
-  <excerpt>The first part is can any data be exported at all.  \\nBehind the scene, all this imaging data is kept in a local archive and the people who manage the archive carry out preliminary steps to limit the amount of patient data that can be correlated to the images themselves.  \\nIt is hard to say what the DICOM files might contain, so you have to be fairly strict about getting rid of stuff, as there are all kinds of variation about format.  \\nOne file might contain a patient\\\'s name, or the physician\\\'s name, or the radiographer\\\'s name.  \\nSo, there is a preliminary step, which is done by the people who manage the archive.  \\nWhen it becomes time to actually export it from outside, to go outside our firewall, that is where I come in and that is where NeuroGrid is affected.  </excerpt>
+  <excerpt>The first part is can any data be exported at all.
+
+Behind the scene, all this imaging data is kept in a local archive and the people who manage the archive carry out preliminary steps to limit the amount of patient data that can be correlated to the images themselves.
+
+It is hard to say what the DICOM files might contain, so you have to be fairly strict about getting rid of stuff, as there are all kinds of variation about format.
+
+One file might contain a patient's name, or the physician's name, or the radiographer's name.
+
+So, there is a preliminary step, which is done by the people who manage the archive.
+
+When it becomes time to actually export it from outside, to go outside our firewall, that is where I come in and that is where NeuroGrid is affected.  </excerpt>
 </document_reference>
 <document_reference name="All exemplar sites have agreed anonymisation rules." contributor="SF" document="Sub-culture norms GT concept" >
-  <excerpt>we came up with a set of rules of our own.  \\nThe stroke exemplar covers two institutions ; there is this group here in Edinburgh and there is another group at the University of Nottingham.  \\nIt all comes down to anonymising the files, so we have agreed what our anonymisation rules will be and everybody signed off.</excerpt>
+  <excerpt>we came up with a set of rules of our own.
+
+The stroke exemplar covers two institutions ; there is this group here in Edinburgh and there is another group at the University of Nottingham.
+
+It all comes down to anonymising the files, so we have agreed what our anonymisation rules will be and everybody signed off.</excerpt>
 </document_reference>
 <document_reference name="Security conscious users craft solid policies." contributor="SF" document="Sub-culture perception GT concept" >
-  <excerpt>I know some people on the project who definitely think about it and if they craft the policy it will be rock solid.  But there are other people on the project who wouldn\\\'t.</excerpt>
+  <excerpt>I know some people on the project who definitely think about it and if they craft the policy it will be rock solid.  But there are other people on the project who wouldn't.</excerpt>
 </document_reference>
 <document_reference name="Data sensitive users refuse algorithmic workflow access." contributor="SF" document="Sub-culture perception GT concept" >
-  <excerpt>In NeuroGrid, they brought together three groups of people who had radically different views on security and different types of data.  \\nWe have one person whose data is all about potential schizophrenics.  \\nThat is very sensitive data as a lot of these people aren\\\'t schizophrenics but have a very high probability of becoming one.  \\nThat is bad information to get out into the field because of insurance issues or because people won\\\'t employ them.  \\nSo, his ethics are very strict to the extent that he never wanted his data to leave the server.  He would only allow processed results to leave.  \\nAs it turned out, the whole workflow side of the project never happened as you can\\\'t run an algorithm across his data, but he was really pushing for ultra-strict security where you would have to process the data to such an extent that it was useless for identification, whereas other people put data on the system and don\\\'t care who sees it.  \\nThe fact that it was a closed group of only 40 people, who would be happy to turn all the access control off if they could.</excerpt>
+  <excerpt>In NeuroGrid, they brought together three groups of people who had radically different views on security and different types of data.
+
+We have one person whose data is all about potential schizophrenics.
+
+That is very sensitive data as a lot of these people aren't schizophrenics but have a very high probability of becoming one.
+
+That is bad information to get out into the field because of insurance issues or because people won't employ them.
+
+So, his ethics are very strict to the extent that he never wanted his data to leave the server.  He would only allow processed results to leave.
+
+As it turned out, the whole workflow side of the project never happened as you can't run an algorithm across his data, but he was really pushing for ultra-strict security where you would have to process the data to such an extent that it was useless for identification, whereas other people put data on the system and don't care who sees it.
+
+The fact that it was a closed group of only 40 people, who would be happy to turn all the access control off if they could.</excerpt>
 </document_reference>
 <document_reference name="Security conscious users reluctant to provide access." contributor="SF" document="Sub-culture perception GT concept" >
-  <excerpt>For example, because of the nature of the images owned by psychosis exemplar, they are very reluctant, correctly, to release their images.  \\nSo, getting access to their node is very difficult, as they don\\\'t want to release their images.  </excerpt>
+  <excerpt>For example, because of the nature of the images owned by psychosis exemplar, they are very reluctant, correctly, to release their images.
+
+So, getting access to their node is very difficult, as they don't want to release their images.</excerpt>
 </document_reference>
 <document_reference name="Some users focus only on secure data transfer." contributor="SF" document="Sub-culture perception GT concept" >
-  <excerpt>Some of them are very tight, others say \\\"well, as long as the data is securely transferred and it comes back, we\\\'re fine with it\\\"</excerpt>
+  <excerpt>Some of them are very tight, others say "well, as long as the data is securely transferred and it comes back, we're fine with it"</excerpt>
 </document_reference>
 <document_reference name="Some users will reuse study data for another." contributor="SF" document="Sub-culture values GT concept" >
-  <excerpt>I was once at a meeting where it was apparent that once the data is collected, people decide they want to use it for another study.  \\nThis could go beyond what the patient signed for.</excerpt>
+  <excerpt>I was once at a meeting where it was apparent that once the data is collected, people decide they want to use it for another study.
+
+This could go beyond what the patient signed for.</excerpt>
 </document_reference>
 <document_reference name="Remit of data sometimes go further than originally agreed." contributor="SF" document="Sub-culture values GT concept" >
-  <excerpt>I went to one of these meetings and there was a problem, which had nothing to do with MRI imaging, where some data was given that may have been used for something like an abortion.  \\nThe person who gave that data might be a Christian who certainly doesn\\\'t want this.  \\nThis is an example of an instance where the remit has gone further than that originally specified and people who gave their consent might have said they wouldn\\\'t give their consent. </excerpt>
+  <excerpt>I went to one of these meetings and there was a problem, which had nothing to do with MRI imaging, where some data was given that may have been used for something like an abortion.
+
+The person who gave that data might be a Christian who certainly doesn't want this.
+
+This is an example of an instance where the remit has gone further than that originally specified and people who gave their consent might have said they wouldn't give their consent. </excerpt>
 </document_reference>
 <document_reference name="People fight their own project corners" contributor="SF" document="Sub-culture values GT concept" >
-  <excerpt>That means you 3 different projects stuck onto the same project.  \\nThe effort is in different places so that people are fighting their own corner.</excerpt>
+  <excerpt>That means you 3 different projects stuck onto the same project.
+
+The effort is in different places so that people are fighting their own corner.</excerpt>
 </document_reference>
 <document_reference name="Obligations made before data uploaded to NeuroGrid." contributor="SF" document="Sub-culture values GT concept" >
-  <excerpt>we have to meet our obligations before the data ever goes to NeuroGrid.  \\nSo, I would fall down in my obligations if I let any patient data go out to NeuroGrid.</excerpt>
+  <excerpt>we have to meet our obligations before the data ever goes to NeuroGrid.
+
+So, I would fall down in my obligations if I let any patient data go out to NeuroGrid.</excerpt>
 </document_reference>
 <document_reference name="Doctors want scans and data in an easily accessible way." contributor="SF" document="Sub-culture values GT concept" >
-  <excerpt>From an NHS side, as a doctor, it would be great to have scans and data in an easily accessible way, as that\\\'s the best for the patients.  \\nWe are stopped from doing this for the patients as there are people who would like to get hold of this data.  \\nThere is that conflict.</excerpt>
+  <excerpt>From an NHS side, as a doctor, it would be great to have scans and data in an easily accessible way, as that's the best for the patients.
+
+We are stopped from doing this for the patients as there are people who would like to get hold of this data.
+
+There is that conflict.</excerpt>
 </document_reference>
 <document_reference name="infrastructure not funded by clinical trials" contributor="SF" document="Sub-culture values GT concept" >
-  <excerpt>That is what they are paid to do.  \\nWhen you fund a clinical trial, it is very rare that you have anything built into the grant to fund any IT infrastructure.  </excerpt>
+  <excerpt>That is what they are paid to do.
+
+When you fund a clinical trial, it is very rare that you have anything built into the grant to fund any IT infrastructure.  </excerpt>
 </document_reference>
 <document_reference name="Users funded to do science not IT." contributor="SF" document="Sub-culture values GT concept" >
-  <excerpt>These are not IT specialists, they are scientists and not experts in computing.  \\nThe mistake we are making, from a research funding perspective, is that we are not funding them to do the IT and infrastructure, we are funding them to do good science and get papers out.  \\nThis is a side issue, but the consequences of things going wrong are huge.  </excerpt>
+  <excerpt>These are not IT specialists, they are scientists and not experts in computing.
+
+The mistake we are making, from a research funding perspective, is that we are not funding them to do the IT and infrastructure, we are funding them to do good science and get papers out.
+
+This is a side issue, but the consequences of things going wrong are huge.  </excerpt>
 </document_reference>
 <document_reference name="Data schemas would be both across exemplars and exemplar specific" contributor="SF" document="Sub-cultural design artifacts GT concept" >
   <excerpt>The idea was there would be a core data schema which would go across the 3 exemplars, and there would also be exemplar specific schemas. </excerpt>
 </document_reference>
 <document_reference name="NeuroGrid never handles potentially identifiable data." contributor="SF" document="Security context GT concept" >
-  <excerpt>Even though the NeuroGrid system was designed to handle potentially identifiable patient data in a secure way, we would never do it because of the context we work in.  \\nConcerns about security are fairly minimal, our main concern about security was that we had a framework and it worked. </excerpt>
+  <excerpt>Even though the NeuroGrid system was designed to handle potentially identifiable patient data in a secure way, we would never do it because of the context we work in.
+
+Concerns about security are fairly minimal, our main concern about security was that we had a framework and it worked. </excerpt>
 </document_reference>
 <document_reference name="Focus on middleware rather than data and apps." contributor="SF" document="Security diffusion GT concept" >
   <excerpt>Our focus here is purely middleware and people elsewhere worry about the data and the applications.  </excerpt>
@@ -1528,28 +1874,55 @@ Matt is also the designated NeuroGrid Certificate Authority and, as such, is oft
   <excerpt>Firstly, we genuinely believe it is up to the data providers to determine what the access control policy should be.  </excerpt>
 </document_reference>
 <document_reference name="Users duplicate credentials as they move around." contributor="SF" document="Security erosion GT concept" >
-  <excerpt>I4: Certificates have their problems.  \\nIt is pretty well known that people end up duplicating their certificate everywhere as they move around...\\nI3: Writing down their password...\\nI4: Leaving them on other peoples computers.\\nI5: But this is the same with any mechanism.  \\nPeople leave their passwords lying around, people have the same passwords and use their dogs name for a password.  It is a common problem.</excerpt>
+  <excerpt>I4: Certificates have their problems.  \\nIt is pretty well known that people end up duplicating their certificate everywhere as they move around...
+I3: Writing down their password...
+I4: Leaving them on other peoples computers.
+I5: But this is the same with any mechanism.
+People leave their passwords lying around, people have the same passwords and use their dogs name for a password.  It is a common problem.</excerpt>
 </document_reference>
 <document_reference name="Users share credentials with trusted colleagues." contributor="SF" document="Security erosion GT concept" >
-  <excerpt>They would keep it so that there were the certificates, so only people from NeuroGrid could access it, but they would happily give certificates out willy-nilly.  \\nAnyone they thought would be alright, they would say \\\"alright\\\".</excerpt>
+  <excerpt>They would keep it so that there were the certificates, so only people from NeuroGrid could access it, but they would happily give certificates out willy-nilly.
+Anyone they thought would be alright, they would say "alright".</excerpt>
 </document_reference>
 <document_reference name="Users do not care if browser session shared." contributor="SF" document="Security erosion GT concept" >
-  <excerpt>They don\\\'t care if someone else is using the browser, although you can\\\'t protect them if they save their password and automatically come up to a page like amazon and their username and password is already filled in.  </excerpt>
+  <excerpt>They don't care if someone else is using the browser, although you can't protect them if they save their password and automatically come up to a page like amazon and their username and password is already filled in.  </excerpt>
 </document_reference>
 <document_reference name="Shortcuts taken to move data quicker." contributor="SF" document="Security erosion GT concept" >
-  <excerpt> I think one of the problems when you\\\'ve got lots of universities and different institutions is that they all have their own frameworks and guidelines in place for managing data securely.  \\nI think that sometimes it would be much easier if there was a broad consensus if people did things in a similar way and there was an appreciation that data needs to be transferred between sites and this needs to be enabled more easily.  \\nI think one of the dangers is that short-cuts are taken as things are so difficult that people say well it\\\'s going to be too difficult to go through this entire process, we need the data more quickly.  \\nI don\\\'t think we\\\'ve had that, but I foresee that happening if there was real pressure.  \\nFor example, at one of the sites we did have a delay in getting started and it did get completed very quickly.  \\nHad it not then we could have run into problems trying to cut through red-tape in order to transfer data securely.  \\nYou can imagine a situation where someone says look we just need the data to do this so let\\\'s just take a short cut.  \\nI guess that sort of idea of collaboration given more consideration, so data can be transferred around more easily, with the necessary safeguards in place. </excerpt>
+  <excerpt> I think one of the problems when you've got lots of universities and different institutions is that they all have their own frameworks and guidelines in place for managing data securely.
+
+I think that sometimes it would be much easier if there was a broad consensus if people did things in a similar way and there was an appreciation that data needs to be transferred between sites and this needs to be enabled more easily.
+
+I think one of the dangers is that short-cuts are taken as things are so difficult that people say well it's going to be too difficult to go through this entire process, we need the data more quickly.
+
+I don't think we've had that, but I foresee that happening if there was real pressure.
+
+For example, at one of the sites we did have a delay in getting started and it did get completed very quickly.
+
+Had it not then we could have run into problems trying to cut through red-tape in order to transfer data securely.
+
+You can imagine a situation where someone says look we just need the data to do this so let's just take a short cut.
+
+I guess that sort of idea of collaboration given more consideration, so data can be transferred around more easily, with the necessary safeguards in place. </excerpt>
 </document_reference>
 <document_reference name="Getting work done is more important than security." contributor="SF" document="Security erosion GT concept" >
-  <excerpt>When their workloads are so huge, the first thing they\\\'ve got to do is make sure those patients get their results back.  \\nIf there is anything standing in their way, they will try and by-pass it.  \\nIt\\\'s not unknown for clinics, hospitals and GP practices for people to share user ids and get onto systems, as the first concern is to get things done.  \\nThey can\\\'t wait for people like system administrators to do things like change access rights.  </excerpt>
+  <excerpt>When their workloads are so huge, the first thing they've got to do is make sure those patients get their results back.
+
+If there is anything standing in their way, they will try and by-pass it.  
+
+It's not unknown for clinics, hospitals and GP practices for people to share user ids and get onto systems, as the first concern is to get things done.
+
+They can't wait for people like system administrators to do things like change access rights.  </excerpt>
 </document_reference>
 <document_reference name="Some users have a particular interest in patient confidentiality." contributor="SF" document="Security knowledge GT concept" >
   <excerpt>[A] based in [D], and also had a particular interest in patient confidentiality and had an understanding of how it could routinely be abused, suggested that it might be an alternative model.  </excerpt>
 </document_reference>
 <document_reference name="Some users provide guidance in data anonymisation." contributor="SF" document="Security knowledge GT concept" >
-  <excerpt>He has guided us in what we should be anonymising in the DICOM header.  \\nHe is directly involved and has experience of clinical trials before as well.  \\nI take the DICOM side / eNos data side from [B].</excerpt>
+  <excerpt>He has guided us in what we should be anonymising in the DICOM header.  \\nHe is directly involved and has experience of clinical trials before as well.
+I take the DICOM side / eNos data side from [B].</excerpt>
 </document_reference>
 <document_reference name="Security controls are a necessary evil." contributor="SF" document="Security perception GT concept" >
-  <excerpt>I think they are a necessary evil.  \\nIt would be great to be able to send data around willy-nilly without giving it any thought, but given the world we are living in ....</excerpt>
+  <excerpt>I think they are a necessary evil.
+It would be great to be able to send data around willy-nilly without giving it any thought, but given the world we are living in ....</excerpt>
 </document_reference>
 <document_reference name="Security is not bad; it just needs to be clear." contributor="SF" document="Security perception GT concept" >
   <excerpt>It is an issue which slows you down. The important thing is that it is not critical or bad to have security; it just needs to be clear.</excerpt>
@@ -1558,34 +1931,65 @@ Matt is also the designated NeuroGrid Certificate Authority and, as such, is oft
   <excerpt>These roles are all defined by Infrastructure so, in a way, they are in charge of making sure the data is not in the wrong hands, by the certificates. </excerpt>
 </document_reference>
 <document_reference name="Users speak to colleagues for technical support." contributor="SF" document="Social-network support GT concept" >
-  <excerpt>I probably would use [C] as my first port of call.  \\nWe both deal with the same area, Stroke, and I do respect his technical knowledge and ability.  \\nI probably would check with him to see if he has the same issues, or any comments or guidance.  I haven\\\'t really had any issues.</excerpt>
+  <excerpt>I probably would use [C] as my first port of call.  \\nWe both deal with the same area, Stroke, and I do respect his technical knowledge and ability.
+I probably would check with him to see if he has the same issues, or any comments or guidance.  I haven't really had any issues.</excerpt>
 </document_reference>
 <document_reference name="One user has responsibility for examining what is permissable and providing guidance." contributor="SF" document="Social-network support GT concept" >
-  <excerpt>We have [A] and one of this person\\\'s specific roles is to look into what is permissible and what\\\'s not permissible and to really give us guidance on that.  \\nWe are really quite fortunate as other centres, not necessarily within this project have not had this.</excerpt>
+  <excerpt>We have [A] and one of this person's specific roles is to look into what is permissible and what's not permissible and to really give us guidance on that.
+
+We are really quite fortunate as other centres, not necessarily within this project have not had this.</excerpt>
 </document_reference>
 <document_reference name="Preferrable to try things out first and get feedback later." contributor="SF" document="Social-network support GT concept" >
-  <excerpt>Without any feedback there was nothing I could do.  \\nThis is why I said earlier that the easiest solution was to try things out and then go on the phone and ask [A] to get feedback straight away.  </excerpt>
+  <excerpt>Without any feedback there was nothing I could do.
+
+This is why I said earlier that the easiest solution was to try things out and then go on the phone and ask [A] to get feedback straight away.  </excerpt>
 </document_reference>
 <document_reference name="Users are supplied with a certificate" contributor="SF" document="Socialisation GT concept" >
-  <excerpt>A lot of users access NeuroGrid through the portal, which helps as all the instructions are on it.  \\nBasically, I give them a certificate and they go to the portal and off they go ; this leads them through everything they need. </excerpt>
+  <excerpt>A lot of users access NeuroGrid through the portal, which helps as all the instructions are on it.
+
+Basically, I give them a certificate and they go to the portal and off they go ; this leads them through everything they need. </excerpt>
 </document_reference>
 <document_reference name="Users email for a certificate when data owners grant access to the data." contributor="SF" document="Socialisation GT concept" >
-  <excerpt>I think they would have to send an email to [C] to get a certificate for themselves, after us saying it\\\'s ok for them to have access to our data.  \\nThey literally give them a certificate to give them access to NeuroGrid and then they should get access to our data.  \\nIt should be that simple I think.</excerpt>
+  <excerpt>I think they would have to send an email to [C] to get a certificate for themselves, after us saying it's ok for them to have access to our data.
+
+They literally give them a certificate to give them access to NeuroGrid and then they should get access to our data.
+
+It should be that simple I think.</excerpt>
 </document_reference>
 <document_reference name="Users are authorised by an exemplar sponsor." contributor="SF" document="Socialisation GT concept" >
-  <excerpt>Normally, they will need sponsorship from one of the exemplars, there is Dementia, Stroke and Psychosis ; there is an investigator for each exemplar.  \\nSo, to begin with, they will need to be authorised by that person.  \\nAt that point, we can give them a certificate to access the system and we will probably discuss with the data owner any ramifications about what access they should have and that kind of thing.  \\nWe then give them a certificate and some instructions and they are on their way.</excerpt>
+  <excerpt>Normally, they will need sponsorship from one of the exemplars, there is Dementia, Stroke and Psychosis ; there is an investigator for each exemplar.
+
+So, to begin with, they will need to be authorised by that person.
+
+At that point, we can give them a certificate to access the system and we will probably discuss with the data owner any ramifications about what access they should have and that kind of thing.
+
+We then give them a certificate and some instructions and they are on their way.</excerpt>
 </document_reference>
 <document_reference name="Users need to have technical ability to use the applications." contributor="SF" document="Socialisation GT concept" >
-  <excerpt>Most of what we develop is designed to be used by technical people developing end-user applications.  \\nIt is not designed for end-users to use.  \\nSo, it is reasonable to expect that the people we are developing for has a certain amount of technical ability and to be able to understand how to use the APIs we provide and the sample code we gave them.</excerpt>
+  <excerpt>Most of what we develop is designed to be used by technical people developing end-user applications.
+
+It is not designed for end-users to use.
+
+So, it is reasonable to expect that the people we are developing for has a certain amount of technical ability and to be able to understand how to use the APIs we provide and the sample code we gave them.</excerpt>
 </document_reference>
 <document_reference name="Guest certificates provided as obtaining personal certificates is too cumbersome." contributor="SF" document="Socialisation GT concept" >
-  <excerpt>The reason we have the guest certificate is that the process of obtaining the personal certificate was very difficult as it involved you calling people in Oxford.  \\nThey send a certificate over email, but they don\\\'t send the password.  \\nYou have to call them, or you have to setup a secure email account. \\nIn both cases this is difficult.  \\nWe had people on the NeuroGrid project where, after a year or so, said \\\"we never go around to calling Douglas to get the password, so we lost the password and we don\\\'t know what it is\\\".  </excerpt>
+  <excerpt>The reason we have the guest certificate is that the process of obtaining the personal certificate was very difficult as it involved you calling people in Oxford.
+
+They send a certificate over email, but they don't send the password.
+
+You have to call them, or you have to setup a secure email account.
+
+In both cases this is difficult.
+
+We had people on the NeuroGrid project where, after a year or so, said "we never go around to calling Douglas to get the password, so we lost the password and we don't know what it is".  </excerpt>
 </document_reference>
 <document_reference name="Users are provided an API and example code." contributor="SF" document="Socialisation GT concept" >
-  <excerpt>We give them API docs and some instructions and an example of how to create a client interface.  \\nThe people who have done that are quite technical and they have no trouble at all.</excerpt>
+  <excerpt>We give them API docs and some instructions and an example of how to create a client interface.
+
+The people who have done that are quite technical and they have no trouble at all.</excerpt>
 </document_reference>
 <document_reference name="General information about security would be useful." contributor="SF" document="Socio-technical measure GT concept" >
-  <excerpt>Some general information about why security is there would be useful, although the BBC is already doing some of the work explaining why it is necessary.  It is easier to convince people when they see the news, as they don\\\'t want their data to be on offer on e-Bay.</excerpt>
+  <excerpt>Some general information about why security is there would be useful, although the BBC is already doing some of the work explaining why it is necessary.  It is easier to convince people when they see the news, as they don't want their data to be on offer on e-Bay.</excerpt>
 </document_reference>
 <document_reference name="Certificates need to be uploaded to a web browser." contributor="SF" document="Technical control GT concept" >
   <excerpt>To do this, you have to have a certificate on your computer that you have to upload on your web browser</excerpt>
@@ -1594,13 +1998,19 @@ Matt is also the designated NeuroGrid Certificate Authority and, as such, is oft
   <excerpt>We have a single middleware and the portal is just one part.</excerpt>
 </document_reference>
 <document_reference name="Users have their own certificates" contributor="SF" document="Technical control GT concept" >
-  <excerpt>At the very top level, all the users have their own certificates, standard X.509 certificates.  \\nThere is a concept of a delegation token, called a ticket, which is passed through the system and lets us know who is making the request. </excerpt>
+  <excerpt>At the very top level, all the users have their own certificates, standard X.509 certificates.
+
+There is a concept of a delegation token, called a ticket, which is passed through the system and lets us know who is making the request. </excerpt>
 </document_reference>
 <document_reference name="Infrastructure team responsible for securing servers." contributor="SF" document="Technical control responsibility GT concept" >
   <excerpt> I take care of all that kind of thing, like making sure the servers themselves are actually secure and they are not going to get broken by someone logging in over ssh.  </excerpt>
 </document_reference>
 <document_reference name="Infrastructure team secure access control policies" contributor="SF" document="Technical control responsibility GT concept" >
-  <excerpt>I3: System security would be me.  \\nIf someone breached an access control policy, then I guess that would be I4.\\nI4: Yes, I guess that would be me.  </excerpt>
+  <excerpt>I3: System security would be me.
+
+If someone breached an access control policy, then I guess that would be I4.
+
+I4: Yes, I guess that would be me.  </excerpt>
 </document_reference>
 <document_reference name="Infrastructure team responsible for security." contributor="SF" document="Technical control responsibility GT concept" >
   <excerpt>Based on the definition in the project, the Infrastructure team are responsible for security.  If you need a certificate, then you go to the Oxford team and they are maintaining the data node servers, testing the security on them.</excerpt>
@@ -1609,7 +2019,9 @@ Matt is also the designated NeuroGrid Certificate Authority and, as such, is oft
   <excerpt>The primary responsibility is on the Infrastructure group as they developed the security framework.</excerpt>
 </document_reference>
 <document_reference name="System security responsibility of infrastructure team and app developers." contributor="SF" document="Technical control responsibility GT concept" >
-  <excerpt>For responsibility for the tools that enable security to be put in place ; that is the team here.  \\nFor making sure that security is implemented all the way through the system, that\\\'s both here and the people developing the toolkit, as they have to carry forward the principles to what they do.  </excerpt>
+  <excerpt>For responsibility for the tools that enable security to be put in place ; that is the team here.
+
+For making sure that security is implemented all the way through the system, that's both here and the people developing the toolkit, as they have to carry forward the principles to what they do.  </excerpt>
 </document_reference>
 <document_reference name="Certificates are visible security" contributor="SF" document="Tangible factors GT concept" >
   <excerpt>Certificates are a visible access as they have to try to get hold of it and figure out....</excerpt>
@@ -1621,7 +2033,7 @@ Matt is also the designated NeuroGrid Certificate Authority and, as such, is oft
   <excerpt>The best way to describe the role is testing and validating it and giving feedback to the web designer</excerpt>
 </document_reference>
 <document_reference name="Portal users are experts in their own field." contributor="SF" document="User proxy GT concept" >
-  <excerpt>To be honest I\\\'m not sure, because the people using the portal are computer experts within each project.</excerpt>
+  <excerpt>To be honest I'm not sure, because the people using the portal are computer experts within each project.</excerpt>
 </document_reference>
 <persona_characteristic persona="Claire" behavioural_variable="Activities" modal_qualifier="Sometimes" >
   <definition>Managers delegate security decisions</definition>
