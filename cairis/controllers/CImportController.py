@@ -58,8 +58,6 @@ class CImportPackageAPI(Resource):
     except Exception as ex:
       raise CairisHTTPError(status_code=CONFLICT, message=str(ex), status='Unknown error')
 
-    import pytest
-    pytest.set_trace()
     try:
       dao = ImportDAO(session_id)
       dao.package_import(package.stream.read())
