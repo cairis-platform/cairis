@@ -56,8 +56,10 @@ class CImportPackageAPI(Resource):
     except LookupError as ex:
       raise MissingParameterHTTPError(param_names=['file'])
     except Exception as ex:
-      raise CairisHTTPError(status_code=CONFLICT, message=str(ex.message), status='Unknown error')
+      raise CairisHTTPError(status_code=CONFLICT, message=str(ex), status='Unknown error')
 
+    import pytest
+    pytest.set_trace()
     try:
       dao = ImportDAO(session_id)
       dao.package_import(package.stream.read())
@@ -67,7 +69,9 @@ class CImportPackageAPI(Resource):
     except ARMException as ex:
       raise ARMHTTPError(ex)
     except Exception as ex:
-      raise CairisHTTPError(status_code=500,message=str(ex.message),status='Unknown error')
+      import pytest
+      pytest.set_trace()
+      raise CairisHTTPError(status_code=500,message=str(ex),status='Unknown error')
 
     resp_dict = {'message': 'Package successfully imported'}
     resp = make_response(json_serialize(resp_dict, session_id=session_id), OK)
@@ -106,7 +110,7 @@ class CImportTextAPI(Resource):
       except ARMException as ex:
         raise ARMHTTPError(ex)
       except Exception as ex:
-        raise CairisHTTPError(status_code=500,message=str(ex.message),status='Unknown error')
+        raise CairisHTTPError(status_code=500,message=str(ex),status='Unknown error')
 
       remove_file(abs_path)
 
@@ -126,7 +130,7 @@ class CImportTextAPI(Resource):
       except ARMException as ex:
         raise ARMHTTPError(ex)
       except Exception as ex:
-        raise CairisHTTPError(status_code=500,message=str(ex.message),status='Unknown error')
+        raise CairisHTTPError(status_code=500,message=str(ex),status='Unknown error')
     else:
       raise CairisHTTPError(status_code=BAD_REQUEST,message='The provided file is not a valid XML file',status='Invalid XML input')
 
@@ -161,7 +165,7 @@ class CImportFileAPI(Resource):
     except ARMException as ex:
       raise ARMHTTPError(ex)
     except Exception as ex:
-      raise CairisHTTPError(status_code=500,message=str(ex.message),status='Unknown error')
+      raise CairisHTTPError(status_code=500,message=str(ex),status='Unknown error')
 
     remove_file(abs_path)
 
