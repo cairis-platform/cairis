@@ -63,6 +63,13 @@ The static and directory and asset directory will point to the location of UI co
 
 When you select `Ok`, the script will create a new CAIRIS database, and accompanying CAIRIS configuration file; this file will ensure that CAIRIS knows what database it needs to refer to when you start up the tool and setup the necessary environment variables.
 
+You should also set the `CAIRIS_SRC` and `CAIRIS_CFG_DIR` environment variables in your .bashrc file.
+
+.. code-block:: bash
+
+   export CAIRIS_SRC=/home/cairisuser/cairis/cairis
+   export CAIRIS_CFG_DIR=${CAIRIS_SRC}/config
+
 Logout of your current account or, alternatively, reload your .bashrc file i.e.
 
 .. code-block:: bash
@@ -132,10 +139,3 @@ If you plan to customise CAIRIS, development extensions or fixes, you should ins
 .. code-block:: bash
 
    sudo pip3 install -r test_requirements.txt
-
-You should also set the `CAIRIS_SRC` and `CAIRIS_CFG_DIR` environment variables in your .bashrc file.
-
-.. code-block:: bash
-
-   export CAIRIS_SRC=/home/cairisuser/cairis/cairis
-   export CAIRIS_CFG_DIR=${CAIRIS_SRC}/config
