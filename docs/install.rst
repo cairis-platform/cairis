@@ -44,7 +44,7 @@ Clone the latest version of the CAIRIS github repository, and use pip to install
 
    git clone https://github.com/failys/cairis
    cd cairis
-   sudo pip install -r requirements.txt
+   sudo pip3 install -r requirements.txt
 
 Run the CAIRIS quick setup initialisation script (which can be found in cairis/).  When you run this script, you should get the below form.
 
@@ -115,7 +115,7 @@ You will then need to use pip to install the requisite dependencies.
 
 .. code-block:: bash
 
-   sudo pip install -r wsgi_requirements.txt
+   sudo pip3 install -r wsgi_requirements.txt
 
 You should then use mod_wsgi-express to run cairis.wsgi (also in cairis/cairis/bin):
 
@@ -131,7 +131,7 @@ If you plan to customise CAIRIS, development extensions or fixes, you should ins
 
 .. code-block:: bash
 
-   sudo pip install -r test_requirements.txt
+   sudo pip3 install -r test_requirements.txt
 
 You should also set the `CAIRIS_SRC` and `CAIRIS_CFG_DIR` environment variables in your .bashrc file.
 
