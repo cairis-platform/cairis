@@ -79,7 +79,7 @@ The final step entails installing the UI code by running the below script in cai
 The CAIRIS UI code is managed in the `cairis-ui github repository <https://github.com/failys/cairis-ui>`_.  Running this script will setup `node <https://nodejs.org>`_ and `yarn <https://yarnpkg>`_, download the github repo, create a production version of the latest UI code and deploy to cairis/cairis/dist.
 The -E flag is required, as the CAIRIS_SRC environment variable needs to be visible to root.
 
-You should now start up your CAIRIS server.  If you plan to develop with CAIRIS, you should skip this step as you'll find it more useful to manually start the development cairisd.y server.  For everyone else, create the following *cairis.service* file, substituting *cairisuser* for the name of your account.  Using sudo or root, copy this file to /etc/systemd/system.
+You should now start up your CAIRIS server.  If you plan to develop with CAIRIS, you should skip this step as you'll find it more useful to manually start the development cairisd server.  For everyone else, create the following *cairis.service* file, substituting *cairisuser* for the name of your account.  Using sudo or root, copy this file to /etc/systemd/system.
 
 .. code-block:: bash
 
