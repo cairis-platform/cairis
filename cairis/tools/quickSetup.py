@@ -27,6 +27,8 @@ from cairis.core.MySQLDatabaseProxy import createDatabaseAccount, createDatabase
 import binascii
 from random import choice
 from string import ascii_letters, digits
+from subprocess import Popen
+from shlex import split
 
 
 __author__ = 'Shamal Faily'
@@ -43,6 +45,8 @@ def quick_setup(dbHost,dbPort,dbRootPassword,tmpDir,rootDir,configFile,webPort,l
   sys.path.insert(0, pathName)
   fileName = os.environ.get("HOME") + "/.bashrc"
   f = open(fileName,'a')
+  f.write("export CAIRIS_SRC="+ rootDir + "\n")
+  f.write("export CAIRIS_CFG_DIR=${CAIRIS_SRC}/config\n")
   f.write("export CAIRIS_CFG="+ configFile +"\n")
   f.write("export PYTHONPATH=${PYTHONPATH}:" + pathName +"\n")
   f.close()

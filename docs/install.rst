@@ -63,12 +63,6 @@ The static and directory and asset directory will point to the location of UI co
 
 When you select `Ok`, the script will create a new CAIRIS database, and accompanying CAIRIS configuration file; this file will ensure that CAIRIS knows what database it needs to refer to when you start up the tool and setup the necessary environment variables.
 
-You should also set the `CAIRIS_SRC` and `CAIRIS_CFG_DIR` environment variables in your .bashrc file.
-
-.. code-block:: bash
-
-   export CAIRIS_SRC=/home/cairisuser/cairis/cairis
-   export CAIRIS_CFG_DIR=${CAIRIS_SRC}/config
 
 Logout of your current account or, alternatively, reload your .bashrc file i.e.
 
@@ -85,7 +79,7 @@ The final step entails installing the UI code by running the below script in cai
 The CAIRIS UI code is managed in the `cairis-ui github repository <https://github.com/failys/cairis-ui>`_.  Running this script will setup `node <https://nodejs.org>`_ and `yarn <https://yarnpkg>`_, download the github repo, create a production version of the latest UI code and deploy to cairis/cairis/dist.
 The -E flag is required, as the CAIRIS_SRC environment variable needs to be visible to root.
 
-You should now start up your CAIRIS server.  Create the following *cairis.service* file, substituting *cairisuser* for the name of your account.  Using sudo or root, copy this file to /etc/systemd/system.
+You should now start up your CAIRIS server.  If you plan to develop with CAIRIS, you should skip this step as you'll find it more useful to manually start the development cairisd.y server.  For everyone else, create the following *cairis.service* file, substituting *cairisuser* for the name of your account.  Using sudo or root, copy this file to /etc/systemd/system.
 
 .. code-block:: bash
 
@@ -139,3 +133,11 @@ If you plan to customise CAIRIS, development extensions or fixes, you should ins
 .. code-block:: bash
 
    sudo pip3 install -r test_requirements.txt
+
+To start the CAIRIS development server, run the cairisd.py script, i.e. from the cairis/cairis/bin directory
+
+.. code-block:: bash
+
+   ./cairisd.py runserver
+
+All logged output is sent to the console where you started cairisd.py, which is useful when it come to diagnosing any problems.  Also, if you plan to use pytest to debug any CAIRIS server code (i.e. by adding import pytest and pytest.set_trace() before any code you want to debug), the debug prompt will appear in the console.
