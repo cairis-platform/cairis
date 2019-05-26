@@ -21,6 +21,10 @@ A selected asset type can be deleted by clicking on its delete button.  Although
 
 If you are modelling a System of Systems, you may also benefit from using the asset type of *Systems - General*, used to reperesent organisations, groups, or social systems, and asset type *System of Systems* representing the combination of Independent Systems (collaborating to achieve a new combined purpose and goal).
 
+Vulnerability and Threat Types
+------------------------------
+
+By default, CAIRIS models are pre-configured with vulnerability and threat types in the `ICS Protection Profile <https://cairis.readthedocs.io/en/latest/examples.html#ics-protection-profile>`_.  These can be updated or overwritten, e.g. using one of the other threat and vulnerability type XML models.
 
 Other Types
 -----------

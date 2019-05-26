@@ -16,7 +16,7 @@ The live demo comes with two example models: `NeuroGrid <http://cairis.readthedo
 Define your contexts of use
 ---------------------------
 
-How you use CAIRIS depends on how you approach the early stages of your design.  You will, however, need to create  :doc:`environments </environments>` to represent your contexts of use.  If you haven't thought about what these are yet, just create a single environment to begin with.  You can add more later.
+How you use CAIRIS depends on how you approach the early stages of your design.  You will, however, need to work with  :doc:`environments </environments>` to represent your contexts of use.  Each model comes with a *Default* environment, but you may wish to add more later as you learn more about different contexts.
 
 Save early and often
 ----------------------
