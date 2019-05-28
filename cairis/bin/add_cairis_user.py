@@ -22,7 +22,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_security import Security, SQLAlchemyUserDatastore, UserMixin, RoleMixin, login_required
 from flask_cors import CORS
 from cairis.core.Borg import Borg
-from cairis.core.MySQLDatabaseProxy import createDatabaseAccount,createDatabaseAndPrivileges,createDatabaseSchema
+from cairis.core.MySQLDatabaseProxy import createDatabaseAccount,createDatabaseAndPrivileges,createDatabaseSchema, createDefaults
 import cairis.core.BorgFactory
 from random import choice
 import string
@@ -77,6 +77,9 @@ def main():
   db.create_all()
   user_datastore.create_user(email=args.user, password=args.password,dbtoken=rp,name = 'Default user')
   db.session.commit()
+
+  createDefaults(b.cairisRoot,b.dbHost,b.dbPort,args.user,rp,args.user + '_default')
+
 
 if __name__ == '__main__':
   main()
