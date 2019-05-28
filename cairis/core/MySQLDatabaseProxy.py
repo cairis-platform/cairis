@@ -148,6 +148,12 @@ def createDatabaseSchema(rootDir,dbHost,dbPort,dbUser,dbPasswd,dbName):
   cmd = '/usr/bin/mysql -h ' + dbHost + ' --port=' + str(dbPort) + ' --user ' + dbUser + ' --password=\'' + dbPasswd + '\'' + ' --database ' + dbName + ' < ' + procsSql
   os.system(cmd)
 
+def createDefaults(rootDir,dbHost,dbPort,dbUser,dbPasswd,dbName):
+  srcDir = rootDir + '/sql'
+  defaultSql = srcDir + '/default.sql'
+  cmd = '/usr/bin/mysql -h ' + dbHost + ' --port=' + str(dbPort) + ' --user ' + dbUser + ' --password=\'' + dbPasswd + '\'' + ' --database ' + dbName + ' < ' + defaultSql
+  os.system(cmd)
+
 def createDatabaseAccount(rPasswd,dbHost,dbPort,dbUser,dbPasswd):
   try:
     rootConn = MySQLdb.connect(host=dbHost,port=int(dbPort),user='root',passwd=rPasswd)

@@ -23,7 +23,7 @@ import os
 import sys
 import MySQLdb
 import _mysql_exceptions
-from cairis.core.MySQLDatabaseProxy import createDatabaseAccount, createDatabaseAndPrivileges, createDatabaseSchema
+from cairis.core.MySQLDatabaseProxy import createDatabaseAccount, createDatabaseAndPrivileges, createDatabaseSchema, createDefaults
 import binascii
 from random import choice
 from string import ascii_letters, digits
@@ -62,6 +62,7 @@ def quick_setup(dbHost,dbPort,dbRootPassword,tmpDir,rootDir,configFile,webPort,l
   createDatabaseAccount(dbRootPassword,dbHost,dbPort,userName,rp)
   createDatabaseAndPrivileges(dbRootPassword,dbHost,dbPort,userName,rp,userName + '_default')
   createDatabaseSchema(rootDir,dbHost,dbPort,userName,rp,userName + '_default')
+  createDefaults(rootDir,dbHost,dbPort,userName,rp,userName + '_default')
 
 
 def createUserDatabase(dbHost,dbPort,dbRootPassword,rootDir):

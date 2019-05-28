@@ -19,6 +19,7 @@ from cairis.core.ARM import *
 from cairis.daemon.CairisHTTPError import ARMHTTPError, MalformedJSONHTTPError, MissingParameterHTTPError, SilentHTTPError, ObjectNotFoundHTTPError
 from cairis.data.CairisDAO import CairisDAO
 from cairis.core.Borg import Borg
+from cairis.core.MySQLDatabaseProxy import createDefaults
 from cairis.tools.JsonConverter import json_deserialize
 from cairis.tools.PseudoClasses import ProjectSettings, Contributor, Revision, Definition
 from cairis.tools.SessionValidator import check_required_keys
@@ -33,6 +34,14 @@ class ProjectDAO(CairisDAO):
   def clear_project(self):
     try:
       self.db_proxy.clearDatabase(session_id=self.session_id)
+      b = Borg()
+      ses_settings = b.get_settings(self.session_id)
+      dbHost = ses_settings['dbHost']
+      dbPort = ses_settings['dbPort']
+      dbUser = ses_settings['dbUser']
+      dbPasswd = ses_settings['dbPasswd']
+      dbName = ses_settings['dbName']
+      createDefaults(b.cairisRoot,dbHost,dbPort,dbUser,dbPasswd,dbName)
     except DatabaseProxyException as ex:
       raise ARMHTTPError(ex)
     except ARMException as ex:
