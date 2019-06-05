@@ -25327,6 +25327,7 @@ begin
   declare assetName varchar(200);
   declare piName varchar(1000);
   declare personaName varchar(50);
+  declare linkName varchar(1000);
 
   declare done int default 0;
   declare buf LONGTEXT default '';
@@ -25334,6 +25335,11 @@ begin
   declare locCursor cursor for select id,name from location where locations_id = locsId order by 2;
   declare aiCursor cursor for select ai.name,a.name from asset_instance ai, asset a where location_id = locId and ai.asset_id = a.id order by 1;
   declare piCursor cursor for select pi.name,p.name from persona_instance pi, persona p where location_id = locId and pi.persona_id = p.id order by 1;
+  declare linkCursor cursor for 
+    select l.name from location l, location_link ll where ll.locations_id = locsId and ll.head_location_id != locId and ll.head_location_id = l.id
+    union
+    select l.name from location l, location_link ll where ll.locations_id = locsId and ll.tail_location_id != locId and ll.tail_location_id = l.id;
+
   declare continue handler for not found set done = 1;
 
   open locsCursor;
@@ -25377,6 +25383,18 @@ begin
         set buf = concat(buf,'    <persona_instance name=\"',piName,'\" persona=\"',personaName,'\" />\n');
       end loop pi_loop;
       close piCursor;
+      set done = 0;
+
+      open linkCursor;
+      link_loop: loop
+        fetch linkCursor into linkName;
+        if done = 1
+        then
+          leave link_loop;
+        end if;
+        set buf = concat(buf,'    <link name=\"',linkName,'\" />\n');
+      end loop link_loop;
+      close linkCursor;
       set done = 0;
     
       set buf = concat(buf,'  </location>\n');
