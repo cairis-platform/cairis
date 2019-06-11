@@ -2256,6 +2256,8 @@ class MySQLDatabaseProxy:
     tags = parameters.tags()
     self.updateDatabase('call addDomainProperty(:id,:name,:desc,:type,:orig)',{'id':dpId,'name':dpName,'desc':dpDesc,'type':dpType,'orig':dpOrig},'MySQL error adding domain property')
     self.addTags(dpName,'domainproperty',tags)
+    session = self.conn()
+    session.commit()
     return dpId
 
   def updateDomainProperty(self,parameters):
@@ -2268,6 +2270,8 @@ class MySQLDatabaseProxy:
     tags = parameters.tags()
     self.updateDatabase('call updateDomainProperty(:id,:name,:desc,:type,:orig)',{'id':dpId,'name':dpName,'desc':dpDesc,'type':dpType,'orig':dpOrig},'MySQL error updating domain property')
     self.addTags(dpName,'domainproperty',tags)
+    session = self.conn()
+    session.commit()
     return dpId
 
   def deleteDomainProperty(self,dpId):

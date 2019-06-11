@@ -13160,6 +13160,7 @@ end
 
 create procedure goalsToXml(in includeHeader int)
 begin
+  declare dpId int;
   declare dpName varchar(255);
   declare dpDesc varchar(1000);
   declare dpType varchar(50);
@@ -13243,7 +13244,8 @@ begin
   declare tagName varchar(255);
   declare buf LONGTEXT default '<?xml version="1.0"?>\n<!DOCTYPE goals PUBLIC "-//CAIRIS//DTD REQUIREMENTS 1.0//EN" "http://cairis.org/dtd/goals.dtd">\n\n<goals>\n';
   declare done int default 0;
-  declare dpCursor cursor for select dp.name,xmlEscaped(dp.description),dpt.name,dp.originator from domainproperty dp, domainproperty_type dpt where dp.domainproperty_type_id = dpt.id;
+  declare dpCursor cursor for select dp.id, dp.name,xmlEscaped(dp.description),dpt.name,dp.originator from domainproperty dp, domainproperty_type dpt where dp.domainproperty_type_id = dpt.id;
+  declare dpTagCursor cursor for select t.name from domainproperty_tag dt, tag t where dt.domainproperty_id = dpId and dt.tag_id = t.id;
   declare goalCursor cursor for select id,name,xmlEscaped(originator) from goal;
   declare goalTagCursor cursor for select t.name from goal_tag gt, tag t where gt.goal_id = goalId and gt.tag_id = t.id;
   declare goalEnvCursor cursor for select eg.environment_id,e.name from environment_goal eg, environment e where eg.goal_id = goalId and eg.environment_id = e.id;
@@ -13298,12 +13300,27 @@ begin
 
   open dpCursor;
   dp_loop: loop
-    fetch dpCursor into dpName, dpDesc, dpType,dpOrig;
+    fetch dpCursor into dpId,dpName, dpDesc, dpType,dpOrig;
     if done = 1
     then
       leave dp_loop;
     end if;
-    set buf = concat(buf,'<domainproperty name=\"',dpName,'\" type=\"',dpType,'\" originator=\"',dpOrig,'\" >\n  <definition>',dpDesc,'</definition>\n</domainproperty>\n');
+    set buf = concat(buf,'<domainproperty name=\"',dpName,'\" type=\"',dpType,'\" originator=\"',dpOrig,'\" >\n');
+
+    open dpTagCursor;
+    dpTag_loop: loop
+      fetch dpTagCursor into tagName;
+      if done = 1
+      then
+        leave dpTag_loop;
+      end if;
+      set buf = concat(buf,'  <tag name=\"',tagName,'\" />\n'); 
+    end loop dpTag_loop;
+    close dpTagCursor;
+    set done = 0;
+
+    set buf = concat(buf,'  <definition>',dpDesc,'</definition>\n</domainproperty>\n');
+
     set dpCount = dpCount + 1;
   end loop dp_loop;
   close dpCursor;
