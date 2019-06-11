@@ -13245,6 +13245,7 @@ begin
   declare done int default 0;
   declare dpCursor cursor for select dp.name,xmlEscaped(dp.description),dpt.name,dp.originator from domainproperty dp, domainproperty_type dpt where dp.domainproperty_type_id = dpt.id;
   declare goalCursor cursor for select id,name,xmlEscaped(originator) from goal;
+  declare goalTagCursor cursor for select t.name from goal_tag gt, tag t where gt.goal_id = goalId and gt.tag_id = t.id;
   declare goalEnvCursor cursor for select eg.environment_id,e.name from environment_goal eg, environment e where eg.goal_id = goalId and eg.environment_id = e.id;
   declare goalConcernCursor cursor for select a.name from goal_concern gc, asset a where gc.goal_id = goalId and gc.environment_id = envId and gc.asset_id = a.id;
   declare goalConcernAssocCursor cursor for select sa.name,smt.name,ca.link,ta.name,tmt.name from goal_concernassociation ca, asset sa, asset ta, multiplicity_type smt, multiplicity_type tmt where ca.goal_id = goalId and ca.environment_id = envId and ca.source_id = sa.id and ca.source_multiplicity_id = smt.id and ca.target_id = ta.id and ca.target_multiplicity_id = tmt.id;
@@ -13256,6 +13257,7 @@ begin
     union
     select e.name,'environment',o.label,rt.name,o.priority,o.name,xmlEscaped(o.description),xmlEscaped(o.rationale),xmlEscaped(o.fit_criterion),xmlEscaped(o.originator) from requirement o, environment_requirement er, environment e, requirement_type rt where o.version = (select max(i.version) from requirement i where i.id = o.id) and o.type = rt.id and o.id = er.requirement_id and er.environment_id = e.id; 
   declare ucCursor cursor for select id,name,xmlEscaped(author),xmlEscaped(short_code),xmlEscaped(description) from usecase;
+  declare ucTagCursor cursor for select t.name from usecase_tag ut, tag t where ut.usecase_id = ucId and ut.tag_id = t.id;
   declare ucEnvCursor cursor for select eu.environment_id,e.name from environment_usecase eu, environment e where eu.usecase_id = ucId and eu.environment_id = e.id;
   declare ucActorCursor cursor for select r.name from usecase_role ur, role r where ur.usecase_id = ucId and ur.role_id = r.id;
   declare ucStepCursor cursor for select step_no,xmlEscaped(description) from usecase_step where usecase_id = ucId and environment_id = envId order by 1;
@@ -13315,6 +13317,18 @@ begin
     end if;
     set buf = concat(buf,'<goal name=\"',goalName,'\" originator=\"',goalOrig,'\">\n');
     set goalCount = goalCount + 1;
+
+    open goalTagCursor;
+    goalTag_loop: loop
+      fetch goalTagCursor into tagName;
+      if done = 1
+      then
+        leave goalTag_loop;
+      end if;
+      set buf = concat(buf,'  <tag name=\"',tagName,'\" />\n'); 
+    end loop goalTag_loop;
+    close goalTagCursor;
+    set done = 0;
 
     open goalEnvCursor;
     goalEnv_loop: loop
@@ -13427,6 +13441,18 @@ begin
     end if;
     set buf = concat(buf,'<usecase name=\"',ucName,'\" author=\"',ucAuthor,'\" code=\"',ucShortCode,'\" >\n  <description>',ucDesc,'</description>\n');
     set ucCount = ucCount + 1;
+
+    open ucTagCursor;
+    ucTag_loop: loop
+      fetch ucTagCursor into tagName;
+      if done = 1
+      then
+        leave ucTag_loop;
+      end if;
+      set buf = concat(buf,'  <tag name=\"',tagName,'\" />\n'); 
+    end loop ucTag_loop;
+    close ucTagCursor;
+    set done = 0;
 
     open ucActorCursor;
     ucActor_loop: loop
@@ -13861,6 +13887,7 @@ begin
   declare concernLink varchar(50);
   declare targetNry varchar(10);
   declare targetName varchar(50);
+  declare tagName varchar(255);
 
   declare buf LONGTEXT default '<?xml version="1.0"?>\n<!DOCTYPE usability PUBLIC "-//CAIRIS//DTD USABILITY 1.0//EN" "http://cairis.org/dtd/usability.dtd">\n\n<usability>\n';
   declare done int default 0;
@@ -13980,6 +14007,7 @@ begin
     union
     select 'vulnerability',cr.name,c.name from persona_characteristic_vulnerability pc, vulnerability_reference cr, vulnerability c where pc.characteristic_id = pcId and pc.reference_id = cr.id and cr.vulnerability_id = c.id and pc.characteristic_reference_type_id = 2;
   declare taskCursor cursor for select id,name,xmlEscaped(short_code),xmlEscaped(author),xmlEscaped(objective),assumption_id from task;
+  declare taskTagCursor cursor for select t.name from task_tag tt, tag t where tt.task_id = taskId and tt.tag_id = t.id;
   declare taskEnvCursor cursor for select et.environment_id,e.name from environment_task et, environment e where et.task_id = taskId and et.environment_id = e.id;  
   declare taskPersonaCursor cursor for select p.name,duv.name,fv.name,dev.name,gv.name from persona p, task_persona tp, security_property_value duv, security_property_value fv, security_property_value dev, security_property_value gv where tp.task_id = taskId and tp.environment_id = envId and tp.persona_id = p.id and tp.duration_id = duv.id and tp.frequency_id = fv.id and tp.demands_id = dev.id and tp.goalsupport_id = gv.id;
   declare taskConcernCursor cursor for select a.name from task_asset tc, asset a where tc.task_id = taskId and tc.environment_id = envId and tc.asset_id = a.id;
@@ -14135,6 +14163,18 @@ begin
     end if;
     set buf = concat(buf,'<task name=\"',taskName,'\" code=\"',taskCode,'\" author=\"',taskAuthor,'\" assumption_task=\"',b2a(isTaskAssumption),'\" >\n  <objective>',taskObjective,'</objective>\n');
     set taskCount = taskCount + 1; 
+
+    open taskTagCursor;
+    taskTag_loop: loop
+      fetch taskTagCursor into tagName;
+      if done = 1
+      then
+        leave taskTag_loop;
+      end if;
+      set buf = concat(buf,'  <tag name=\"',tagName,'\" />\n'); 
+    end loop taskTag_loop;
+    close taskTagCursor;
+    set done = 0;
 
     open taskEnvCursor;
     taskEnv_loop: loop
@@ -18617,7 +18657,6 @@ begin
   end if;
 
   set addTagSql = concat('insert into ',tagDim,'_tag (',tagDim,'_id, tag_id) values(',dimId,',',tagId,')');
-  select addTagSql;
   set @sql = addTagSql;
   prepare stmt from @sql;
   execute stmt;
