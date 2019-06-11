@@ -13250,6 +13250,7 @@ begin
   declare goalConcernCursor cursor for select a.name from goal_concern gc, asset a where gc.goal_id = goalId and gc.environment_id = envId and gc.asset_id = a.id;
   declare goalConcernAssocCursor cursor for select sa.name,smt.name,ca.link,ta.name,tmt.name from goal_concernassociation ca, asset sa, asset ta, multiplicity_type smt, multiplicity_type tmt where ca.goal_id = goalId and ca.environment_id = envId and ca.source_id = sa.id and ca.source_multiplicity_id = smt.id and ca.target_id = ta.id and ca.target_multiplicity_id = tmt.id;
   declare obsCursor cursor for select id,name,originator from obstacle;
+  declare obsTagCursor cursor for select t.name from obstacle_tag ot, tag t where ot.obstacle_id = obsId and ot.tag_id = t.id;
   declare obsEnvCursor cursor for select eo.environment_id,e.name from environment_obstacle eo, environment e where eo.obstacle_id = obsId and eo.environment_id = e.id;
   declare obsConcernCursor cursor for select a.name from obstacle_concern oc, asset a where oc.obstacle_id = obsId and oc.environment_id = envId and oc.asset_id = a.id;
   declare reqCursor cursor for
@@ -13383,6 +13384,18 @@ begin
     end if;
     set buf = concat(buf,'<obstacle name=\"',obsName,'\" originator=\"',obsOrig,'\" >\n');
     set obsCount = obsCount + 1;
+
+    open obsTagCursor;
+    obsTag_loop: loop
+      fetch obsTagCursor into tagName;
+      if done = 1
+      then
+        leave obsTag_loop;
+      end if;
+      set buf = concat(buf,'  <tag name=\"',tagName,'\" />\n'); 
+    end loop obsTag_loop;
+    close obsTagCursor;
+    set done = 0;
 
     open obsEnvCursor;
     obsEnv_loop: loop
