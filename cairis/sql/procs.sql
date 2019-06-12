@@ -5220,7 +5220,7 @@ begin
   union
   select 'risk' from_objt, r.name from_name, 'vulnerability' to_objt, v.name to_name from risk_vulnerability rv, environment_risk er, environment_vulnerability ev, risk r, vulnerability v where er.environment_id = environmentId and ev.environment_id = environmentId and er.id = rv.risk_id and rv.risk_id = r.id and ev.vulnerability_id = rv.vulnerability_id and rv.vulnerability_id = v.id
   union
-  select 'risk' from_objt, r.name from_name, 'threat' to_objt, t.name to_name from risk_threat rt, environment_risk er, environment_threat et, risk r, threat t where er.environment_id = environmentId and et.environment_id = environmentId and et.id = rt.risk_id and rt.risk_id = r.id and et.threat_id = rt.threat_id and rt.threat_id = t.id
+  select 'risk' from_objt, r.name from_name, 'threat' to_objt, t.name to_name from risk_threat rt, environment_risk er, environment_threat et, risk r, threat t where er.environment_id = environmentId and et.environment_id = environmentId and er.id = rt.risk_id and rt.risk_id = r.id and et.threat_id = rt.threat_id and rt.threat_id = t.id
   union
   select 'requirement' from_objt, r.name from_name, 'vulnerability' to_objt, v.name to_name from requirement r, asset_requirement ar, asset a, vulnerability v, environment_vulnerability cv, requirement_vulnerability rv where cv.environment_id = environmentId and rv.requirement_id = r.id and r.version = (select max(i.version) from requirement i where i.id = r.id) and rv.vulnerability_id = v.id and v.id = cv.vulnerability_id and r.id = ar.requirement_id and ar.asset_id = a.id
   union
