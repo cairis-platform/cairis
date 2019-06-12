@@ -21,6 +21,7 @@ Requirement  Use Case
 Use Case     Task
 Requirement  Requirement
 Requirement  Document Reference
+Risk         Threat
 Risk         Vulnerability
 Component    Use Case
 ============ ===================

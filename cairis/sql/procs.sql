@@ -1937,6 +1937,7 @@ create procedure delete_threat(in threatId int)
 begin
   call deleteThreatComponents(threatId);
   delete from component_threat_target where threat_id = threatId;
+  delete from risk_threat where threat_id = threatId;
   delete from countermeasure_threat_target where threat_id = threatId;
   delete from threat_tag where threat_id = threatId;
   delete from threat_reference where threat_id = threatId;
@@ -4655,9 +4656,12 @@ begin
   declare responseName varchar(100);
   declare vulId int;
   declare vulName varchar(200);
+  declare threatId int;
+  declare threatName varchar(200);
   declare done int default 0;
   declare responseCursor cursor for select distinct id,name from response where risk_id = riskId;  
   declare vulCursor cursor for select distinct v.id,v.name from vulnerability v, risk_vulnerability rv where rv.risk_id = riskId and rv.vulnerability_id = v.id;
+  declare thrCursor cursor for select distinct t.id,t.name from threat t, risk_threat rt where rt.risk_id = riskId and rt.threat_id = t.id;
   declare continue handler for not found set done = 1;
 
   open responseCursor;
@@ -4672,6 +4676,8 @@ begin
   end loop response_loop;
   close responseCursor;
 
+  set done = 0;
+
   open vulCursor;
   vul_loop: loop
     fetch vulCursor into vulId,vulName;
@@ -4683,6 +4689,20 @@ begin
     call vulnerabilityDependents(vulId);
   end loop vul_loop;
   close vulCursor;
+
+  set done = 0;
+
+  open thrCursor;
+  thr_loop: loop
+    fetch thrCursor into threatId,threatName;
+    if done = 1
+    then
+      leave thr_loop;
+    end if;
+    insert into temp_threat values(threatId,threatName);
+    call threatDependents(threatId);
+  end loop thr_loop;
+  close thrCursor;
 
 end
 //
@@ -5200,6 +5220,8 @@ begin
   union
   select 'risk' from_objt, r.name from_name, 'vulnerability' to_objt, v.name to_name from risk_vulnerability rv, environment_risk er, environment_vulnerability ev, risk r, vulnerability v where er.environment_id = environmentId and ev.environment_id = environmentId and er.id = rv.risk_id and rv.risk_id = r.id and ev.vulnerability_id = rv.vulnerability_id and rv.vulnerability_id = v.id
   union
+  select 'risk' from_objt, r.name from_name, 'threat' to_objt, t.name to_name from risk_threat rt, environment_risk er, environment_threat et, risk r, threat t where er.environment_id = environmentId and et.environment_id = environmentId and et.id = rt.risk_id and rt.risk_id = r.id and et.threat_id = rt.threat_id and rt.threat_id = t.id
+  union
   select 'requirement' from_objt, r.name from_name, 'vulnerability' to_objt, v.name to_name from requirement r, asset_requirement ar, asset a, vulnerability v, environment_vulnerability cv, requirement_vulnerability rv where cv.environment_id = environmentId and rv.requirement_id = r.id and r.version = (select max(i.version) from requirement i where i.id = r.id) and rv.vulnerability_id = v.id and v.id = cv.vulnerability_id and r.id = ar.requirement_id and ar.asset_id = a.id
   union
   select 'domainproperty' from_objt, dp.name from_name, 'asset' to_objt, a.name to_name from domainproperty dp, domainproperty_asset da, environment_asset ea, asset a where ea.environment_id = environmentId and ea.asset_id = a.id and a.id = da.asset_id and dp.id = da.domainproperty_id
@@ -5350,7 +5372,9 @@ begin
     union
     select 'asset' from_objt, a.name from_name, 'component' to_objt, c.name to_name from component c, component_threat_target ctt, asset a where ctt.environment_id = environmentId and ctt.component_id = c.id and ctt.asset_id = a.id
     union
-    select 'risk' from_objt, r.name from_name, 'vulnerability' to_objt, v.name to_name from risk r, vulnerability v, environment_risk er, environment_vulnerability ev, risk_vulnerability rv where er.environment_id = environmentId and er.id = rv.risk_id and rv.risk_id = r.id and ev.environment_id = environmentId and ev.vulnerability_id = rv.vulnerability_id and rv.vulnerability_id = v.id;
+    select 'risk' from_objt, r.name from_name, 'vulnerability' to_objt, v.name to_name from risk r, vulnerability v, environment_risk er, environment_vulnerability ev, risk_vulnerability rv where er.environment_id = environmentId and er.id = rv.risk_id and rv.risk_id = r.id and ev.environment_id = environmentId and ev.vulnerability_id = rv.vulnerability_id and rv.vulnerability_id = v.id
+    union
+    select 'risk' from_objt, r.name from_name, 'threat' to_objt, t.name to_name from risk_threat rt, environment_risk er, environment_threat et, risk r, threat t where er.environment_id = environmentId and et.environment_id = environmentId and er.id = rt.risk_id and rt.risk_id = r.id and et.threat_id = rt.threat_id and rt.threat_id = t.id;
   else
     select 'asset' from_objt,a.name from_name, 'threat' to_objt,t.name to_name from asset_threat at,asset a, threat t where at.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and at.asset_id = a.id and at.threat_id = t.id
     union
@@ -5424,7 +5448,9 @@ begin
     union
     select 'asset' from_objt, a.name from_name, 'component' to_objt, c.name to_name from component c, component_threat_target ctt, asset a where ctt.environment_id in (select environment_id from composite_environment_id where composite_environment_id = environmentId) and ctt.component_id = c.id and ctt.asset_id = a.id
     union
-    select 'risk' from_objt, r.name from_name, 'vulnerability' to_objt, v.name to_name from risk r, vulnerability v, environment_risk er, environment_vulnerability ev, risk_vulnerability rv where er.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and er.id = rv.risk_id and rv.risk_id = r.id and ev.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and ev.vulnerability_id = rv.vulnerability_id and rv.vulnerability_id = v.id;
+    select 'risk' from_objt, r.name from_name, 'vulnerability' to_objt, v.name to_name from risk r, vulnerability v, environment_risk er, environment_vulnerability ev, risk_vulnerability rv where er.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and er.id = rv.risk_id and rv.risk_id = r.id and ev.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and ev.vulnerability_id = rv.vulnerability_id and rv.vulnerability_id = v.id
+    union
+    select 'risk' from_objt, r.name from_name, 'threat' to_objt, t.name to_name from risk_threat rt, environment_risk er, environment_threat et, risk r, threat t where er.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and et.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and et.id = rt.risk_id and rt.risk_id = r.id and et.threat_id = rt.threat_id and rt.threat_id = t.id;
   end if;
 end
 //
@@ -12481,6 +12507,8 @@ begin
     select 'task' from_objt, t.name from_name, 'vulnerability' to_objt, v.name to_name from task_vulnerability tv, environment_vulnerability ev, environment_task et, vulnerability v, task t, risk r where ev.environment_id = environmentId and et.environment_id = environmentId and et.task_id = tv.task_id and tv.task_id = t.id and ev.vulnerability_id = tv.vulnerability_id and tv.vulnerability_id = v.id and v.id = r.vulnerability_id and r.id = riskId
     union
     select 'risk' from_objt, r.name from_name, 'vulnerability' to_objt, v.name to_name from risk_vulnerability rv, environment_vulnerability ev, environment_risk er, vulnerability v, risk r where ev.environment_id = environmentId and er.environment_id = environmentId and er.id = rv.risk_id and rv.risk_id = r.id and ev.vulnerability_id = rv.vulnerability_id and rv.vulnerability_id = v.id and v.id = r.vulnerability_id and r.id = riskId
+    union
+    select 'risk' from_objt, r.name from_name, 'threat' to_objt, t.name to_name from risk_threat rt, environment_threat et, environment_risk er, threat t, risk r where et.environment_id = environmentId and er.environment_id = environmentId and er.id = rt.risk_id and rt.risk_id = r.id and et.threat_id = rt.threat_id and rt.threat_id = t.id and t.id = r.threat_id and r.id = riskId
     union
     select 'role' from_objt, ro.name from_name, 'response' to_objt, re.name to_name from responserole_goalassociation rr, response re, role ro, risk r where rr.environment_id = environmentId and rr.goal_id = re.id and rr.subgoal_id = ro.id and re.risk_id = r.id and r.id = riskId
     union

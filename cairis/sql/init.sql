@@ -230,6 +230,7 @@ DROP TABLE IF EXISTS task_asset;
 DROP TABLE IF EXISTS usecase_asset;
 DROP TABLE IF EXISTS task_vulnerability;
 DROP TABLE IF EXISTS risk_vulnerability;
+DROP TABLE IF EXISTS risk_threat;
 DROP TABLE IF EXISTS misusecase_risk;
 DROP TABLE IF EXISTS environment_task;
 DROP TABLE IF EXISTS environment_misusecase;
@@ -3393,6 +3394,14 @@ CREATE TABLE risk_vulnerability (
   FOREIGN KEY(vulnerability_id) REFERENCES vulnerability(id)
 ) ENGINE=INNODB;
 
+CREATE TABLE risk_threat (
+  risk_id INT NOT NULL,
+  threat_id INT NOT NULL,
+  PRIMARY KEY(risk_id,threat_id),
+  FOREIGN KEY(risk_id) REFERENCES risk(id),
+  FOREIGN KEY(threat_id) REFERENCES threat(id)
+) ENGINE=INNODB;
+
 CREATE TABLE image (
   name VARCHAR(255) NOT NULL,
   content LONGBLOB NOT NULL,
@@ -4117,6 +4126,7 @@ INSERT INTO allowable_trace values(0,0);
 INSERT INTO allowable_trace values(0,20);
 INSERT INTO allowable_trace values(21,18);
 INSERT INTO allowable_trace values(16,2);
+INSERT INTO allowable_trace values(7,5);
 INSERT INTO allowable_trace values(7,6);
 INSERT INTO requirement_type values(0,'Functional');
 INSERT INTO requirement_type values(1,'Data');
