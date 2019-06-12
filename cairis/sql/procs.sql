@@ -14343,6 +14343,10 @@ begin
     union
     select 'countermeasure', c.name, 'asset', a.name, '' from countermeasure_asset ca, countermeasure c, asset a where ca.countermeasure_id = c.id and ca.asset_id = a.id
     union
+    select 'risk', r.name, 'vulnerability', v.name, '' from risk_vulnerability rv, vulnerability v, risk r where rv.risk_id = r.id and rv.vulnerability_id = v.id
+    union
+    select 'risk', r.name, 'threat', t.name, '' from risk_threat rt, threat t, risk r where rt.risk_id = r.id and rt.threat_id = t.id
+    union
     select 'response', r.name, 'goal', g.name, '' from response_goal rg, response r, goal g where rg.response_id = r.id and rg.goal_id = g.id;
 
   declare goalAssocCursor cursor for
