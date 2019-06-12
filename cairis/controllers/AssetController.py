@@ -49,7 +49,6 @@ class AssetsAPI(Resource):
 
   def post(self):
     session_id = get_session_id(session, request)
-
     dao = AssetDAO(session_id)
     asset = dao.from_json(request)
     assetName = dao.add_asset(asset)
