@@ -61,6 +61,18 @@ class User(db.Model, UserMixin):
 user_datastore = SQLAlchemyUserDatastore(db,User, Role)
 security = Security(app, user_datastore)
 
+def addAdditionalUserData(userName,passWd):
+  fUser = user_datastore.get_user(userName)
+  rp = ''.join(choice(string.ascii_letters + string.digits) for i in range(255))
+  fUser.dbtoken = rp
+  db.session.commit()
+  b = Borg()
+  createDatabaseAccount(b.rPasswd,b.dbHost,b.dbPort,userName,rp)
+  createDatabaseAndPrivileges(b.rPasswd,b.dbHost,b.dbPort,userName,rp,userName + '_default')
+  createDatabaseSchema(b.cairisRoot,b.dbHost,b.dbPort,userName,rp,userName + '_default')
+  createDefaults(b.cairisRoot,b.dbHost,b.dbPort,userName,rp,userName + '_default')
+  
+
 def main():
   parser = argparse.ArgumentParser(description='Computer Aided Integration of Requirements and Information Security - Add CAIRIS user')
   parser.add_argument('user',help='Email address')

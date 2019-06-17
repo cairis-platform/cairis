@@ -25,6 +25,7 @@ if (sys.version_info > (3,)):
 else:
   import httplib
 from flask import Flask
+from flask_mail import Mail
 from flask_security import Security, SQLAlchemyUserDatastore
 from flask_cors import CORS
 from cairis.core.Borg import Borg
@@ -45,6 +46,17 @@ def create_app():
   app.config['SECRET_KEY'] = b.secretKey
   app.config['SECURITY_PASSWORD_SALT'] = 'None'
   app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:' + b.rPasswd + '@' + b.dbHost + '/cairis_user'
+
+  if (b.mailServer != '' and b.mailPort != '' and b.mailUser != '' and b.mailPasswd != ''):
+    app.config['SECURITY_REGISTERABLE'] = True
+    app.config['SECURITY_RECOVERABLE'] = True
+    app.config['MAIL_SERVER'] = b.mailServer
+    app.config['MAIL_PORT'] = b.mailPort
+    app.config['MAIL_USE_SSL'] = True
+    app.config['MAIL_USERNAME'] = b.mailUser
+    app.config['MAIL_PASSWORD'] = b.mailPasswd
+    app.config['SECURITY_EMAIL_SENDER'] = b.mailUser
+
   b.logger.setLevel(b.logLevel)
   b.logger.debug('Error handlers: {0}'.format(app.error_handler_spec))
   app.secret_key = os.urandom(24)
@@ -52,6 +64,7 @@ def create_app():
   logger.setLevel(b.logLevel)
   enable_debug = b.logLevel = logging.DEBUG
 
+  mail = Mail(app)
   cors = CORS(app)
   db.init_app(app)
   user_datastore = SQLAlchemyUserDatastore(db,User, Role)

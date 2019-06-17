@@ -28,16 +28,20 @@ __author__ = 'Shamal Faily'
 
 class CAIRISDatabaseConfigurationForm(np.ActionForm):
 
-#  quick_setup_headless.py --dbHost self.theHost --dbport self.thePort --dbRootPassword self.theRootPassword --tmpdir self.theTmpDir --rootDir self.theRootDir --imageDir self.theImageDir --configFile self.theFileName --webPort self.theWebPort --logLevel self.theLogLevel --staticDir self.theStaticDir --uploadDir self.theUploadDir --user self.theUsername --password self.thePassword
-
   def create(self):
     self.findRootDir()
     pathName = os.path.realpath(__file__)
     pathName = pathName.replace("quick_setup.py", "")
-    self.name = "Configure CAIRIS database and initial account"
+    self.name = "Configure CAIRIS"
     self.theHost = self.add(np.TitleText, name = "Database host:", value = "localhost")
     self.thePort = self.add(np.TitleText, name = "Database port:", value = "3306")
-    self.theRootPassword = self.add(np.TitlePassword, name = "Database root password:", value = "")
+    self.theRootPassword = self.add(np.TitlePassword, name = "Database root password:", value = '')
+
+    self.theMailServer = self.add(np.TitleText, name = 'Mail server:', value = "")
+    self.theMailPort = self.add(np.TitleText, name = 'Mail port:', value = "")
+    self.theMailUser = self.add(np.TitleText, name = 'Mail user:', value = "")
+    self.theMailPasswd = self.add(np.TitleText, name = 'Mail password:', value = "")
+
     self.theTmpDir = self.add(np.TitleText, name = "Temp directory:", value = "/tmp")
     self.theRootDir = self.add(np.TitleText, name = "Root directory:", value = pathName + "cairis")
     self.theFileName = self.add(np.TitleText, name = "CAIRIS configuration file name:", value = os.environ.get("HOME") + "/cairis.cnf")
@@ -45,6 +49,7 @@ class CAIRISDatabaseConfigurationForm(np.ActionForm):
     self.theLogLevel = self.add(np.TitleText,name = "Log level:", value = "debug");
     self.theStaticDir = self.add(np.TitleText,name = "Static directory:", value = pathName + "cairis/dist")
     self.theAssetDir = self.add(np.TitleText,name = "Asset directory:", value = pathName + "cairis/dist")
+
     self.theUsername = self.add(np.TitleText, name = "Initial Username:", value = "")
     self.thePassword = self.add(np.TitlePassword, name = "Initial Password:", value = "")
 
@@ -57,7 +62,7 @@ class CAIRISDatabaseConfigurationForm(np.ActionForm):
 
   def on_ok(self):
     try:
-      quick_setup(self.theHost.value,int(self.thePort.value),self.theRootPassword.value,self.theTmpDir.value,self.theRootDir.value,self.theFileName.value,int(self.theWebPort.value),self.theLogLevel.value,self.theStaticDir.value,self.theAssetDir.value,self.theUsername.value,self.thePassword.value)
+      quick_setup(self.theHost.value,int(self.thePort.value),self.theRootPassword.value,self.theTmpDir.value,self.theRootDir.value,self.theFileName.value,int(self.theWebPort.value),self.theLogLevel.value,self.theStaticDir.value,self.theAssetDir.value,self.theUsername.value,self.thePassword.value,self.theMailServer.value,self.theMailPort.value,self.theMailUser.value,self.theMailPasswd.value)
       self.parentApp.setNextForm(None)
     except ARMException as e:
       np.notify_confirm(str(e), title = 'Error')

@@ -22,7 +22,7 @@ import os
 import logging
 import json
 from cairis.tools.GraphicsGenerator import GraphicsGenerator
-from .MySQLDatabaseProxy import MySQLDatabaseProxy,dbtoken
+from .MySQLDatabaseProxy import MySQLDatabaseProxy,dbtoken,canonicalDbUser,canonicalDbName
 from .ARM import ARMException
 
 def parseConfigFile():
@@ -100,9 +100,11 @@ def initialise(user='cairis_test',db='cairis_test_default'):
     dbPasswd = 'cairis_test'
     db='cairis_test_default'
   else:
-    b.dbUser = user
     dbPasswd = dbtoken(b.rPasswd,b.dbHost,b.dbPort,user)
+    user = canonicalDbUser(user)
+    b.dbUser = user
     b.dbPasswd = dbPasswd
+    db = canonicalDbName(db)
     b.dbName = db
   b.dbProxy = GUIDatabaseProxy(user=user,passwd=b.dbPasswd,db=db)
   initialiseDesktopSettings()
@@ -117,6 +119,10 @@ def dInitialise(withTest = True):
   b.logger = logging.getLogger('cairisd')
   b.configDir = os.path.join(b.cairisRoot,'config')
   b.secretKey = cfgDict['secret_key']
+  b.mailServer = cfgDict['mail_server']
+  b.mailPort = cfgDict['mail_port']
+  b.mailUser = cfgDict['mail_user']
+  b.mailPasswd = cfgDict['mail_passwd']
 
   try:
     b.webPort = int(cfgDict['web_port'])

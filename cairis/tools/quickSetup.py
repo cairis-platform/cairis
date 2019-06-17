@@ -34,7 +34,7 @@ from shlex import split
 __author__ = 'Shamal Faily'
 
 
-def quick_setup(dbHost,dbPort,dbRootPassword,tmpDir,rootDir,configFile,webPort,logLevel,staticDir,assetDir,userName,passWd):
+def quick_setup(dbHost,dbPort,dbRootPassword,tmpDir,rootDir,configFile,webPort,logLevel,staticDir,assetDir,userName,passWd,mailServer = '',mailPort = '',mailUser = '',mailPasswd = ''):
   if (len(userName) > 255):
     raise ARMException("Username cannot be longer than 255 characters")
   if (userName == "root"):
@@ -50,19 +50,18 @@ def quick_setup(dbHost,dbPort,dbRootPassword,tmpDir,rootDir,configFile,webPort,l
   f.write("export CAIRIS_CFG="+ configFile +"\n")
   f.write("export PYTHONPATH=${PYTHONPATH}:" + pathName +"\n")
   f.close()
-  createCairisCnf(configFile,dbRootPassword,dbHost,dbPort,tmpDir,rootDir,webPort,logLevel,staticDir,assetDir)
+  createCairisCnf(configFile,dbRootPassword,dbHost,dbPort,tmpDir,rootDir,webPort,logLevel,staticDir,assetDir,mailServer,mailPort,mailUser,mailPasswd)
 
-  from cairis.bin.add_cairis_user import user_datastore, db
-
-  db.create_all()
-  rp = ''.join(choice(ascii_letters + digits) for i in range(255))
-  user_datastore.create_user(email=userName, password=passWd,dbtoken=rp,name = 'Default user')
-  db.session.commit()
-
-  createDatabaseAccount(dbRootPassword,dbHost,dbPort,userName,rp)
-  createDatabaseAndPrivileges(dbRootPassword,dbHost,dbPort,userName,rp,userName + '_default')
-  createDatabaseSchema(rootDir,dbHost,dbPort,userName,rp,userName + '_default')
-  createDefaults(rootDir,dbHost,dbPort,userName,rp,userName + '_default')
+  if (userName != ''):
+    from cairis.bin.add_cairis_user import user_datastore, db
+    db.create_all()
+    rp = ''.join(choice(ascii_letters + digits) for i in range(255))
+    user_datastore.create_user(email=userName, password=passWd,dbtoken=rp,name = 'Default user')
+    db.session.commit()
+    createDatabaseAccount(dbRootPassword,dbHost,dbPort,userName,rp)
+    createDatabaseAndPrivileges(dbRootPassword,dbHost,dbPort,userName,rp,userName + '_default')
+    createDatabaseSchema(rootDir,dbHost,dbPort,userName,rp,userName + '_default')
+    createDefaults(rootDir,dbHost,dbPort,userName,rp,userName + '_default')
 
 
 def createUserDatabase(dbHost,dbPort,dbRootPassword,rootDir):
@@ -113,7 +112,7 @@ def createUserDatabase(dbHost,dbPort,dbRootPassword,rootDir):
   rootCursor.close()
   rootConn.close()
 
-def createCairisCnf(configFile,dbRootPassword,dbHost,dbPort,tmpDir,rootDir,webPort,logLevel,staticDir,assetDir):
+def createCairisCnf(configFile,dbRootPassword,dbHost,dbPort,tmpDir,rootDir,webPort,logLevel,staticDir,assetDir,mailServer,mailPort,mailUser,mailPasswd):
   f = open(configFile,'w')
   f.write("rpasswd = " + dbRootPassword + "\n")
   f.write("dbhost = " + dbHost + "\n")
@@ -124,6 +123,10 @@ def createCairisCnf(configFile,dbRootPassword,dbHost,dbPort,tmpDir,rootDir,webPo
   f.write("log_level = " + logLevel + "\n")
   f.write("web_static_dir = " + staticDir + "\n")
   f.write("web_asset_dir = " + assetDir + "\n")
+  f.write("mail_server = " + mailServer + "\n")
+  f.write("mail_port = " + mailPort + "\n")
+  f.write("mail_user = " + mailUser + "\n")
+  f.write("mail_passwd = " + mailPasswd + "\n")
 
   f.write("\n")
   f.write("secret_key = " + str(binascii.hexlify(os.urandom(16))) + "\n")

@@ -117,6 +117,13 @@ from base64 import b64encode
 
 __author__ = 'Shamal Faily, Robin Quetin, Nathan Jenkins'
 
+def canonicalDbUser(dbUser):
+  return dbUser.replace('@','_at_').replace('.','_dot_')[:32]
+
+def canonicalDbName(dbUser):
+  return dbUser.replace('@','_at_').replace('.','_dot_')
+
+
 def dbtoken(rPasswd,dbHost,dbPort,dbUser):
   try:
     rootConn = MySQLdb.connect(host=dbHost,port=int(dbPort),user='root',passwd=rPasswd)
@@ -143,12 +150,16 @@ def createDatabaseSchema(rootDir,dbHost,dbPort,dbUser,dbPasswd,dbName):
   srcDir = rootDir + '/sql'
   initSql = srcDir + '/init.sql'
   procsSql = srcDir + '/procs.sql'
+  dbUser = canonicalDbUser(dbUser)
+  dbName = canonicalDbName(dbName)
   cmd = '/usr/bin/mysql -h ' + dbHost + ' --port=' + str(dbPort) + ' --user ' + dbUser + ' --password=\'' + dbPasswd + '\'' + ' --database ' + dbName + ' < ' + initSql
   os.system(cmd)
   cmd = '/usr/bin/mysql -h ' + dbHost + ' --port=' + str(dbPort) + ' --user ' + dbUser + ' --password=\'' + dbPasswd + '\'' + ' --database ' + dbName + ' < ' + procsSql
   os.system(cmd)
 
 def createDefaults(rootDir,dbHost,dbPort,dbUser,dbPasswd,dbName):
+  dbUser = canonicalDbUser(dbUser)
+  dbName = canonicalDbName(dbName)
   srcDir = rootDir + '/sql'
   defaultSql = srcDir + '/default.sql'
   cmd = '/usr/bin/mysql -h ' + dbHost + ' --port=' + str(dbPort) + ' --user ' + dbUser + ' --password=\'' + dbPasswd + '\'' + ' --database ' + dbName + ' < ' + defaultSql
@@ -156,6 +167,7 @@ def createDefaults(rootDir,dbHost,dbPort,dbUser,dbPasswd,dbName):
 
 def createDatabaseAccount(rPasswd,dbHost,dbPort,dbUser,dbPasswd):
   try:
+    dbUser = canonicalDbUser(dbUser)
     rootConn = MySQLdb.connect(host=dbHost,port=int(dbPort),user='root',passwd=rPasswd)
     rootCursor = rootConn.cursor()
     stmts = ['drop user if exists ' + dbUser,
@@ -175,6 +187,8 @@ def createDatabaseAccount(rPasswd,dbHost,dbPort,dbUser,dbPasswd):
 
 def createDatabaseAndPrivileges(rPasswd,dbHost,dbPort,dbUser,dbPasswd,dbName):
   try:
+    dbUser = canonicalDbUser(dbUser)
+    dbName = canonicalDbName(dbName)
     rootConn = MySQLdb.connect(host=dbHost,port=int(dbPort),user='root',passwd=rPasswd)
     rootCursor = rootConn.cursor()
     stmts = ['drop database if exists `' + dbName + '`',

@@ -22,6 +22,8 @@ import os
 import sys
 from cairis.daemon import create_app
 from cairis.daemon.CairisHTTPError import CairisHTTPError
+from cairis.bin.add_cairis_user import addAdditionalUserData
+from flask_security import user_registered
 
 
 application = create_app()
@@ -31,6 +33,9 @@ def apply_caching(response):
   response.headers["X-Frame-Options"] = "SAMEORIGIN"
   return response
 
+@user_registered.connect_via(application)
+def enroll(sender, user, confirm_token):
+  addAdditionalUserData(user.email, user.password)
 
 if __name__ == '__main__':
   try:

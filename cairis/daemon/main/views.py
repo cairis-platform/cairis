@@ -31,7 +31,7 @@ from flask_security.utils import logout_user
 from flask_security.core import current_user
 from jsonpickle import encode
 from cairis.core.Borg import Borg
-from cairis.core.MySQLDatabaseProxy import MySQLDatabaseProxy
+from cairis.core.MySQLDatabaseProxy import MySQLDatabaseProxy,canonicalDbUser,canonicalDbName
 from cairis.controllers import AssetController, AttackerController, CImportController, CExportController, DependencyController, \
     DimensionController, EnvironmentController, GoalController, MisuseCaseController, PersonaController, ProjectController, \
     RequirementController, ResponseController, RiskController, RoleController, TaskController, ThreatController, \
@@ -50,6 +50,8 @@ def set_dbproxy(dbUser,userName):
   dbName = dbUser + '_default'
   dbPasswd = current_user.dbtoken
 
+  dbUser = canonicalDbUser(dbUser)
+  dbName = canonicalDbName(dbName)
   db_proxy = MySQLDatabaseProxy(user=dbUser,passwd=dbPasswd,db=dbName)
   pSettings = db_proxy.getProjectSettings()
 
@@ -72,7 +74,7 @@ def set_dbproxy(dbUser,userName):
 
 def make_session():
   s = set_dbproxy(current_user.email,current_user.name)
-  resp_dict = {'session_id': s['session_id'], 'message': 'Session created'}
+  resp_dict = {'session_id': s['session_id'], 'message': 'Session created','user' : current_user.email}
   resp = make_response(encode(resp_dict), OK)
   resp.headers['Content-type'] = 'application/json'
   return resp
@@ -178,7 +180,6 @@ def get_user_details():
   resp = make_response(encode(user_dict), OK)
   resp.headers['Content-type'] = 'application/json'
   return resp
-
 
 # Architectural Pattern routes
 api.add_resource(ArchitecturalPatternController.ArchitecturalPatternsAPI, '/api/architectural_patterns', endpoint = 'architecturalpatterns')
