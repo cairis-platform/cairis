@@ -57,6 +57,8 @@ Run the CAIRIS quick setup initialisation script (which can be found in cairis/)
 
 You can accept many of these defaults, except for the database root password, an initial username and password which need to be supplied.  Please note that the username *root* is reserved, so you should not use this.  
 
+Details for the mail server only need to be set if you intend to provide self-service registration and reset of accounts.  This is typically only necessary if you plan to install CAIRIS to a server for multiple users.  When these settings are set, the mail server and port should be for out-going SSL traffic.
+
 If you want more diagnostic information logged, you find it useful to change the Log Level from *warning* to *debug*.  
 
 The static and directory and asset directory will point to the location of UI code, but these directories will not be created during this step. If you don't plan to customise your web server setup, you should retain these default values.

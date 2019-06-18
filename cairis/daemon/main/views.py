@@ -24,7 +24,7 @@ else:
   import httplib
   from httplib import OK
 import MySQLdb
-from flask import send_from_directory, send_file, make_response, session, request
+from flask import send_from_directory, send_file, make_response, session, request, render_template
 from flask_restful import Api
 from flask_security import login_required, http_auth_required
 from flask_security.utils import logout_user
@@ -180,6 +180,23 @@ def get_user_details():
   resp = make_response(encode(user_dict), OK)
   resp.headers['Content-type'] = 'application/json'
   return resp
+
+@main.route('/register')
+def registerUser():
+  b = Borg()
+  if (b.mailServer != '' and b.mailPort != '' and b.mailUser != '' and b.mailPasswd != ''):
+    return render_template('register_user.html')
+  else:
+    return render_template('no_self_service.html')
+
+@main.route('/reset')
+def resetUser():
+  b = Borg()
+  if (b.mailServer != '' and b.mailPort != '' and b.mailUser != '' and b.mailPasswd != ''):
+    return render_template('forgot_password.html')
+  else:
+    return render_template('no_self_service.html')
+
 
 # Architectural Pattern routes
 api.add_resource(ArchitecturalPatternController.ArchitecturalPatternsAPI, '/api/architectural_patterns', endpoint = 'architecturalpatterns')
