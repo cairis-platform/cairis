@@ -4674,7 +4674,7 @@ class MySQLDatabaseProxy:
       dbEngine = create_engine('mysql+mysqldb://root'+':'+rPasswd+'@'+dbHost+':'+str(dbPort))
       tmpConn = scoped_session(sessionmaker(bind=dbEngine))
       stmts = ['drop database if exists `' + dbName + '`',
-              'delete from cairis_user.db_owner where db = "' + dbName + '" and owner = "' + dbUser + '"',
+              'delete from cairis_owner.db_owner where db = "' + dbName + '" and owner = "' + dbUser + '"',
               'delete from mysql.db where Db = "' + dbName + '"']
       session = tmpConn()
       for stmt in stmts:
