@@ -28,6 +28,8 @@ import jsonpickle
 from cairis.test.CairisDaemonTestCase import CairisDaemonTestCase
 from cairis.tools.PseudoClasses import ProjectSettings, Contributor, Revision
 from cairis.mio.ModelImport import importModelFile
+from cairis.core.MySQLDatabaseProxy import createDbOwnerDatabase, createDatabaseAccount, createDatabaseAndPrivileges, createDatabaseSchema
+from cairis.core.Borg import Borg
 import os
 
 __author__ = 'Robin Quetin, Shamal Faily'
@@ -39,6 +41,11 @@ class ProjectAPITests(CairisDaemonTestCase):
 
   @classmethod
   def setUpClass(cls):
+    b = Borg()
+    createDbOwnerDatabase(b.rPasswd,b.dbHost,b.dbPort)
+    createDatabaseAccount(b.rPasswd,b.dbHost,b.dbPort,'cairis_test','cairis_test')
+    createDatabaseAndPrivileges(b.rPasswd,b.dbHost,b.dbPort,'cairis_test','cairis_test','cairis_test_default')
+    createDatabaseSchema(b.cairisRoot,b.dbHost,b.dbPort,'cairis_test','cairis_test','cairis_test_default')
     importModelFile(os.environ['CAIRIS_SRC'] + '/../examples/exemplars/NeuroGrid/NeuroGrid.xml',1,'test')
 
 
