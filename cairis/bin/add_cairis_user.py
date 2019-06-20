@@ -22,7 +22,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_security import Security, SQLAlchemyUserDatastore, UserMixin, RoleMixin, login_required
 from flask_cors import CORS
 from cairis.core.Borg import Borg
-from cairis.core.MySQLDatabaseProxy import createDatabaseAccount,createDatabaseAndPrivileges,createDatabaseSchema, createDefaults
+from cairis.core.MySQLDatabaseProxy import createDatabaseAccount,createDatabaseAndPrivileges,createDatabaseSchema, createDefaults, canonicalDbUser
 import cairis.core.BorgFactory
 from random import choice
 import string
@@ -68,9 +68,9 @@ def addAdditionalUserData(userName,passWd):
   db.session.commit()
   b = Borg()
   createDatabaseAccount(b.rPasswd,b.dbHost,b.dbPort,userName,rp)
-  createDatabaseAndPrivileges(b.rPasswd,b.dbHost,b.dbPort,userName,rp,userName + '_default')
-  createDatabaseSchema(b.cairisRoot,b.dbHost,b.dbPort,userName,rp,userName + '_default')
-  createDefaults(b.cairisRoot,b.dbHost,b.dbPort,userName,rp,userName + '_default')
+  createDatabaseAndPrivileges(b.rPasswd,b.dbHost,b.dbPort,userName,rp,canonicalDbUser(userName) + '_default')
+  createDatabaseSchema(b.cairisRoot,b.dbHost,b.dbPort,userName,rp,canonicalDbUser(userName) + '_default')
+  createDefaults(b.cairisRoot,b.dbHost,b.dbPort,userName,rp,canonicalDbUser(userName) + '_default')
   
 
 def main():
@@ -82,15 +82,15 @@ def main():
 
   rp = ''.join(choice(string.ascii_letters + string.digits) for i in range(255))
 
-  createDatabaseAccount(b.rPasswd,b.dbHost,b.dbPort,args.user,rp)
-  createDatabaseAndPrivileges(b.rPasswd,b.dbHost,b.dbPort,args.user,rp,args.user + '_default')
-  createDatabaseSchema(b.cairisRoot,b.dbHost,b.dbPort,args.user,rp,args.user + '_default')
+  createDatabaseAccount(b.rPasswd,b.dbHost,b.dbPort,canonicalDbUser(args.user),rp)
+  createDatabaseAndPrivileges(b.rPasswd,b.dbHost,b.dbPort,canonicalDbUser(args.user),rp,canonicalDbUser(args.user) + '_default')
+  createDatabaseSchema(b.cairisRoot,b.dbHost,b.dbPort,args.user,rp,canonicalDbUser(args.user) + '_default')
 
   db.create_all()
   user_datastore.create_user(email=args.user, password=args.password,dbtoken=rp,name = 'Default user')
   db.session.commit()
 
-  createDefaults(b.cairisRoot,b.dbHost,b.dbPort,args.user,rp,args.user + '_default')
+  createDefaults(b.cairisRoot,b.dbHost,b.dbPort,args.user,rp,canonicalDbUser(args.user) + '_default')
 
 
 if __name__ == '__main__':

@@ -21,6 +21,8 @@ from .cdb import db
 __author__ = 'Robin Quetin, Shamal Faily'
 
 roles_users = db.Table('roles_users', db.Column('user_id', db.Integer(), db.ForeignKey('auth_user.id')), db.Column('role_id', db.Integer(), db.ForeignKey('auth_role.id')))
+db_owner = db.Table('db_owner', db.Column('db',db.String(64)), db.Column('owner', db.String(32)))
+
 
 class Role(db.Model, RoleMixin):
   __tablename__ = 'auth_role'

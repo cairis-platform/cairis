@@ -121,8 +121,7 @@ def canonicalDbUser(dbUser):
   return dbUser.replace('@','_at_').replace('.','_dot_')[:32]
 
 def canonicalDbName(dbUser):
-  return dbUser.replace('@','_at_').replace('.','_dot_')
-
+  return dbUser.replace('@','_at_').replace('.','_dot_')[:64]
 
 def dbtoken(rPasswd,dbHost,dbPort,dbUser):
   try:
@@ -142,8 +141,7 @@ def dbtoken(rPasswd,dbHost,dbPort,dbUser):
     exceptionText = 'MySQL error getting token for ' + dbUser + ' (message:' + format(e) + ')'
     raise DatabaseProxyException(exceptionText) 
   except _mysql_exceptions.DatabaseError as e:
-    id,msg = e
-    exceptionText = 'MySQL error getting token for ' + dbUser + ' (id:' + str(id) + ',message:' + msg
+    exceptionText = 'MySQL error getting token for ' + dbUser + ': ' + format(e)
     raise DatabaseProxyException(exceptionText) 
 
 def createDatabaseSchema(rootDir,dbHost,dbPort,dbUser,dbPasswd,dbName):
@@ -165,52 +163,102 @@ def createDefaults(rootDir,dbHost,dbPort,dbUser,dbPasswd,dbName):
   cmd = '/usr/bin/mysql -h ' + dbHost + ' --port=' + str(dbPort) + ' --user ' + dbUser + ' --password=\'' + dbPasswd + '\'' + ' --database ' + dbName + ' < ' + defaultSql
   os.system(cmd)
 
-def createDatabaseAccount(rPasswd,dbHost,dbPort,dbUser,dbPasswd):
+
+
+def runRootCommands(rPasswd,dbHost,dbPort,stmts):
   try:
-    dbUser = canonicalDbUser(dbUser)
     rootConn = MySQLdb.connect(host=dbHost,port=int(dbPort),user='root',passwd=rPasswd)
     rootCursor = rootConn.cursor()
-    stmts = ['drop user if exists ' + dbUser,
-             "create user if not exists '" + dbUser + "'@'" + "%' identified by '" + dbPasswd + "'",
-             'flush privileges']
     for stmt in stmts:
       rootCursor.execute(stmt)
     rootCursor.close()
     rootConn.close()
   except OperationalError as e:
-    exceptionText = 'MySQL error creating database account ' + dbUser + ' (message:' + format(e) + ')'
+    exceptionText = 'MySQL error running "' + ', '.join(stmts) + '": message:' + format(e) 
     raise DatabaseProxyException(exceptionText) 
   except _mysql_exceptions.DatabaseError as e:
-    id,msg = e
-    exceptionText = 'MySQL error creating database account ' + dbUser + ' (id:' + str(id) + ',message:' + msg
+    exceptionText = 'MySQL error running "' + ', '.join(stmts) + '": message:' + format(e) 
     raise DatabaseProxyException(exceptionText) 
 
+def createDatabaseAccount(rPasswd,dbHost,dbPort,dbUser,dbPasswd):
+  stmts = ['drop user if exists ' + dbUser,
+           "create user if not exists '" + dbUser + "'@'" + "%' identified by '" + dbPasswd + "'",
+           'flush privileges']
+  runRootCommands(rPasswd,dbHost,dbPort,stmts)
+
+def createDbOwnerDatabase(rPasswd,dbHost,dbPort):
+  stmts = ['drop database if exists `cairis_owner`',
+           'create database cairis_owner',
+           'create table cairis_owner.db_owner(db varchar(64), owner varchar(32), primary key(db,owner)) engine=innodb']
+  runRootCommands(rPasswd,dbHost,dbPort,stmts)
+
 def createDatabaseAndPrivileges(rPasswd,dbHost,dbPort,dbUser,dbPasswd,dbName):
+  dbUser = canonicalDbUser(dbUser)
+  dbName = canonicalDbName(dbName)
+  stmts = ['drop database if exists `' + dbName + '`',
+           'delete from cairis_owner.db_owner where db = "' + dbName + '"',
+           'create database ' + dbName,
+           "grant all privileges on `" + dbName + "`.* TO '" + dbUser + "'@'%'",
+           'alter database ' + dbName + ' default character set utf8mb4',
+           'alter database ' + dbName + ' default collate utf8mb4_general_ci',
+           'flush tables',
+           'flush privileges',
+           'insert into cairis_owner.db_owner(db,owner) values("' + dbName + '","' + dbUser + '")',
+           'commit']
+  runRootCommands(rPasswd,dbHost,dbPort,stmts)
+
+def dropCairisUserDatabase(rPasswd,dbHost,dbPort):
+  stmts = ['drop database if exists cairis_user']
+  runRootCommands(rPasswd,dbHost,dbPort,stmts)
+
+
+def createCairisUserDatabase(rPasswd,dbHost,dbPort):
+  stmts = ['create database if not exists cairis_user',
+           'set global max_sp_recursion_depth = 255',
+           'flush privileges']
+  runRootCommands(rPasswd,dbHost,dbPort,stmts)
+
+def grantDatabaseAccess(rPasswd,dbHost,dbPort,dbName,dbUser):
+  owner = dbOwner(dbName)
+  stmts = ["grant all privileges on " + owner + "_" + dbName + ".* to '" + canonicalDbUser(dbUser) + "'@'%'"]
+  runRootCommands(rPasswd,dbHost,dbPort,stmts)
+
+def revokeDatabaseAccess(rPasswd,dbHost,dbPort,dbName,dbUser):
+  owner = dbOwner(dbName)
+  stmts = ["revoke all privileges on " + owner + "_" + dbName + ".* from '" + canonicalDbUser(dbUser) + "'@'%'"]
+  runRootCommands(rPasswd,dbHost,dbPort,stmts)
+
+def rootResponseList(sqlTxt):
+  b = Borg()
   try:
-    dbUser = canonicalDbUser(dbUser)
-    dbName = canonicalDbName(dbName)
-    rootConn = MySQLdb.connect(host=dbHost,port=int(dbPort),user='root',passwd=rPasswd)
+    rootConn = MySQLdb.connect(host=b.dbHost,port=int(b.dbPort),user='root',passwd=b.rPasswd)
     rootCursor = rootConn.cursor()
-    stmts = ['drop database if exists `' + dbName + '`',
-             'create database ' + dbName,
-             "grant all privileges on `" + dbName + "`.* TO '" + dbUser + "'@'%'",
-             'alter database ' + dbName + ' default character set utf8mb4',
-             'alter database ' + dbName + ' default collate utf8mb4_general_ci',
-             'flush tables',
-             'flush privileges']
-    for stmt in stmts:
-      rootCursor.execute(stmt)
+    rs = rootCursor.execute(sqlTxt)
+    rows = []
+    for row in rootCursor.fetchall():
+      rows.append(tuple(list(row)))
     rootCursor.close()
     rootConn.close()
+    return rows
   except OperationalError as e:
-    exceptionText = 'MySQL error creating CAIRIS database ' + dbName + ' on host ' + dbHost + ' at port ' + str(dbPort) + ' with user ' + dbUser + ' (message:' + format(e) + ')'
-    id,msg = e
-    exceptionText = 'MySQL error creating CAIRIS database ' + dbName + ' on host ' + dbHost + ' at port ' + str(dbPort) + ' with user ' + dbUser + ' (id:' + str(id) + ',message:' + msg
+    exceptionText = 'MySQL error getting responses:' + format(e)
     raise DatabaseProxyException(exceptionText) 
   except _mysql_exceptions.DatabaseError as e:
-    id,msg = e
-    exceptionText = 'MySQL error creating CAIRIS database ' + dbName + ' on host ' + dbHost + ' at port ' + str(dbPort) + ' with user ' + dbUser + ' (id:' + str(id) + ',message:' + msg
+    exceptionText = 'MySQL error getting responses: ' + format(e)
     raise DatabaseProxyException(exceptionText) 
+
+def dbOwner(dbName):
+  sqlTxt = 'select owner from cairis_owner.db_owner where db like "%' + dbName + '"'
+  rows = rootResponseList(sqlTxt)
+  if (len(rows) == 0):
+    raise DatabaseProxyException(dbName + ' or its owner not found') 
+  else:
+    return rows[0][0]
+
+
+def databases(dbUser):
+  sqlTxt = 'select m.Db, co.owner from mysql.db m, cairis_owner.db_owner co where m.User = "' + dbUser + '" and m.Db = co.db'
+  return rootResponseList(sqlTxt)
 
 class MySQLDatabaseProxy:
   def __init__(self, host=None, port=None, user=None, passwd=None, db=None):
@@ -240,22 +288,32 @@ class MySQLDatabaseProxy:
     try:
       if (closeConn) and self.conn.connection().connection.open:
         self.conn.close()
-      if b.runmode == 'desktop':
-        dbEngine = create_engine('mysql+mysqldb://'+b.dbUser+':'+b.dbPasswd+'@'+b.dbHost+':'+str(b.dbPort)+'/'+b.dbName+'?charset=utf8mb4')
-        self.conn = scoped_session(sessionmaker(bind=dbEngine))
-        self.conn.execute("set session max_sp_recursion_depth = 255")
-      elif b.runmode == 'web':
+      
+      dbUser = b.dbUser
+      dbPasswd = b.dbPasswd
+      dbHost = b.dbHost
+      dbPort = b.dbPort
+      dbName = b.dbName
+
+      if b.runmode == 'web':
         ses_settings = b.get_settings(session_id)
-        dbEngine = create_engine('mysql+mysqldb://'+ses_settings['dbUser']+':'+ses_settings['dbPasswd']+'@'+ses_settings['dbHost']+':'+str(ses_settings['dbPort'])+'/'+ses_settings['dbName']+'?charset=utf8mb4')
-        self.conn = scoped_session(sessionmaker(bind=dbEngine))
-        self.conn.execute("set session max_sp_recursion_depth = 255")
-      else:
+        dbUser = ses_settings['dbUser']
+        dbPasswd = ses_settings['dbPasswd']
+        dbHost = ses_settings['dbHost']
+        dbPort = ses_settings['dbPort']
+        dbName = ses_settings['dbName']
+      elif b.runmode != 'desktop':
         raise RuntimeError('Run mode not recognized')
+
+      dbEngine = create_engine('mysql+mysqldb://' + dbUser+':' + dbPasswd+'@' + dbHost+':' + str(dbPort)+'/' + dbName + '?charset=utf8mb4')
+      self.conn = scoped_session(sessionmaker(bind=dbEngine))
+      self.conn.execute("set session max_sp_recursion_depth = 255")
+
     except OperationalError as e:
-      exceptionText = 'MySQL error re-connecting to the CAIRIS database ' + b.dbName + ' on host ' + b.dbHost + ' at port ' + str(b.dbPort) + ' with user ' + b.dbUser + ' (message:' + format(e) + ')'
+      exceptionText = 'MySQL error re-connecting to the CAIRIS database ' + dbName + ' on host ' + dbHost + ' at port ' + str(dbPort) + ' with user ' + dbUser + ' (message:' + format(e) + ')'
       raise DatabaseProxyException(exceptionText) 
     except _mysql_exceptions.IntegrityError as e:
-      exceptionText = 'MySQL error re-connecting to the CAIRIS database ' + b.dbName + ' on host ' + b.dbHost + ' at port ' + str(b.dbPort) + ' with user ' + b.dbUser + ' (id:' + str(id) + ',message:' + format(e)
+      exceptionText = 'MySQL error re-connecting to the CAIRIS database ' + dbName + ' on host ' + dbHost + ' at port ' + str(dbPort) + ' with user ' + dbUser + ' (message:' + format(e) + ')'
       raise DatabaseProxyException(exceptionText) 
     except _mysql_exceptions.DatabaseError as e:
       exceptionText = 'MySQL error re-connecting to the CAIRIS database ' + b.dbName + ' on host ' + b.dbHost + ' at port ' + str(b.dbPort) + ' with user ' + b.dbUser + ' (id:' + str(id) + ',message:' + format(e)
@@ -4562,24 +4620,25 @@ class MySQLDatabaseProxy:
     b.settings[session_id]['dbName'] = dbName
     self.clearDatabase(session_id)
     self.reconnect(True,session_id)
+    rootDir = b.cairisRoot
+    createDefaults(rootDir,dbHost,dbPort,dbUser,dbPasswd,dbName)
 
   def openDatabase(self,dbName,session_id):
     b = Borg()
-    dbUser = b.settings[session_id]['dbUser']
-    b.settings[session_id]['dbName'] = dbUser + '_' + dbName
+    b.settings[session_id]['dbName'] = dbName
     self.reconnect(True,session_id)
+
 
   def showDatabases(self,session_id):
     b = Borg()
     ses_settings = b.get_settings(session_id)
     dbUser = ses_settings['dbUser']
     dbName = ses_settings['dbName']
-    rows = self.responseList('show databases',{},'MySQL error showing databases')
-    restrictedDbs = ['information_schema','flaskdb','mysql','performance_schema',dbName]
+    rows = databases(dbUser)
     dbs = []
-    for dbn in rows:
-      if (dbn not in restrictedDbs):
-        dbs.append(dbn.split(dbUser + '_')[1])
+    for dbn,owner in rows:
+      if (dbn != dbName):
+        dbs.append(dbn.split(owner + '_')[1])
     return dbs
 
   def checkPermissions(self,reqDbName,session_id):
@@ -4589,10 +4648,10 @@ class MySQLDatabaseProxy:
     currentDbName = ses_settings['dbName']
     defaultDbName = dbUser + '_default'
     reqDbName = dbUser + '_' + reqDbName
-    restrictedDbs = ['information_schema','flaskdb','mysql','performance_schema',currentDbName,defaultDbName]
-    rows = self.responseList('show databases',{},'MySQL error showing databases')
+    restrictedDbs = [currentDbName,defaultDbName]
+    rows = databases(dbUser)
     dbs = []
-    for dbName in rows:
+    for dbName, owner in rows:
       if (dbName not in restrictedDbs):
         if (reqDbName == dbName):
           return True
@@ -4609,14 +4668,17 @@ class MySQLDatabaseProxy:
       exceptionText = 'You cannot remove this database.'
       raise DatabaseProxyException(exceptionText) 
 
-    dbUser = ses_settings['dbUser']
-    dbName = dbUser + '_' + dbName
+    dbUser = canonicalDbUser(ses_settings['dbUser'])
+    dbName = canonicalDbName(dbUser + '_' + dbName)
     try:
       dbEngine = create_engine('mysql+mysqldb://root'+':'+rPasswd+'@'+dbHost+':'+str(dbPort))
       tmpConn = scoped_session(sessionmaker(bind=dbEngine))
-      stmt = 'drop database if exists `' + dbName + '`'
+      stmts = ['drop database if exists `' + dbName + '`',
+              'delete from cairis_user.db_owner where db = "' + dbName + '" and owner = "' + dbUser + '"',
+              'delete from mysql.db where Db = "' + dbName + '"']
       session = tmpConn()
-      session.execute(stmt)
+      for stmt in stmts:
+        session.execute(stmt)
       session.close()
       tmpConn.remove()
     except OperationalError as e:

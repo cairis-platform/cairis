@@ -3409,7 +3409,6 @@ CREATE TABLE image (
   PRIMARY KEY(name)
 ) ENGINE=INNODB;
 
-
 delimiter //
 
 create function internalDocumentQuotationString(idName text, startIdx int, endIdx int) 

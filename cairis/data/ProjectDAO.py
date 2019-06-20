@@ -19,7 +19,7 @@ from cairis.core.ARM import *
 from cairis.daemon.CairisHTTPError import ARMHTTPError, MalformedJSONHTTPError, MissingParameterHTTPError, SilentHTTPError, ObjectNotFoundHTTPError
 from cairis.data.CairisDAO import CairisDAO
 from cairis.core.Borg import Borg
-from cairis.core.MySQLDatabaseProxy import createDefaults
+from cairis.core.MySQLDatabaseProxy import createDefaults, dbOwner
 from cairis.tools.JsonConverter import json_deserialize
 from cairis.tools.PseudoClasses import ProjectSettings, Contributor, Revision, Definition
 from cairis.tools.SessionValidator import check_required_keys
@@ -63,7 +63,8 @@ class ProjectDAO(CairisDAO):
         raise ARMException('No database name defined')
       if (db_name not in self.show_databases()):
         raise ObjectNotFound(db_name + " does not exist")
-      self.db_proxy.openDatabase(db_name,self.session_id)
+      database_owner = dbOwner(db_name)
+      self.db_proxy.openDatabase(database_owner + '_' + db_name,self.session_id)
     except ObjectNotFound as ex:
       self.close()
       raise ObjectNotFoundHTTPError(db_name + ' does not exist')

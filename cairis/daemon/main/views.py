@@ -47,11 +47,10 @@ __author__ = 'Robin Quetin, Shamal Faily'
 
 def set_dbproxy(dbUser,userName):
   b = Borg()
-  dbName = dbUser + '_default'
   dbPasswd = current_user.dbtoken
 
   dbUser = canonicalDbUser(dbUser)
-  dbName = canonicalDbName(dbName)
+  dbName = dbUser + '_default'
   db_proxy = MySQLDatabaseProxy(user=dbUser,passwd=dbPasswd,db=dbName)
   pSettings = db_proxy.getProjectSettings()
 

@@ -67,8 +67,6 @@ class CImportPackageAPI(Resource):
     except ARMException as ex:
       raise ARMHTTPError(ex)
     except Exception as ex:
-      import pytest
-      pytest.set_trace()
       raise CairisHTTPError(status_code=500,message=str(ex),status='Unknown error')
 
     resp_dict = {'message': 'Package successfully imported'}

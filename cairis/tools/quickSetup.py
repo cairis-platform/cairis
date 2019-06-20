@@ -23,7 +23,7 @@ import os
 import sys
 import MySQLdb
 import _mysql_exceptions
-from cairis.core.MySQLDatabaseProxy import createDatabaseAccount, createDatabaseAndPrivileges, createDatabaseSchema, createDefaults
+from cairis.core.MySQLDatabaseProxy import createDatabaseAccount, createDbOwnerDatabase, createDatabaseAndPrivileges, createDatabaseSchema, createDefaults, canonicalDbUser, dropCairisUserDatabase, createCairisUserDatabase
 import binascii
 from random import choice
 from string import ascii_letters, digits
@@ -39,6 +39,7 @@ def quick_setup(dbHost,dbPort,dbRootPassword,tmpDir,rootDir,configFile,webPort,l
     raise ARMException("Username cannot be longer than 255 characters")
   if (userName == "root"):
     raise ARMException("Username cannot be root")
+  createDbOwnerDatabase(dbRootPassword,dbHost,dbPort)
   createUserDatabase(dbHost,dbPort,dbRootPassword,rootDir)
   os.environ["CAIRIS_CFG"] = configFile
   pathName = os.path.split(os.path.split(os.path.realpath(os.path.dirname(__file__)))[0])[0]
@@ -59,58 +60,18 @@ def quick_setup(dbHost,dbPort,dbRootPassword,tmpDir,rootDir,configFile,webPort,l
     user_datastore.create_user(email=userName, password=passWd,dbtoken=rp,name = 'Default user')
     db.session.commit()
     createDatabaseAccount(dbRootPassword,dbHost,dbPort,userName,rp)
-    createDatabaseAndPrivileges(dbRootPassword,dbHost,dbPort,userName,rp,userName + '_default')
-    createDatabaseSchema(rootDir,dbHost,dbPort,userName,rp,userName + '_default')
-    createDefaults(rootDir,dbHost,dbPort,userName,rp,userName + '_default')
+    createDatabaseAndPrivileges(dbRootPassword,dbHost,dbPort,userName,rp,canonicalDbUser(userName) + '_default')
+    createDatabaseSchema(rootDir,dbHost,dbPort,userName,rp,canonicalDbUser(userName) + '_default')
+    createDefaults(rootDir,dbHost,dbPort,userName,rp,canonicalDbUser(userName) + '_default')
 
 
 def createUserDatabase(dbHost,dbPort,dbRootPassword,rootDir):
-  try:
-    rootConn = MySQLdb.connect(host=dbHost,port=int(dbPort),user='root',passwd=dbRootPassword)
-    rootCursor = rootConn.cursor()
-  except _mysql_exceptions.DatabaseError as e:
-    id,msg = e
-    exceptionText = 'Error connecting to MySQL (id:' + str(id) + ',message:' + msg + ')'
-    raise ARMException(exceptionText)
-
-  try:
-    dropUserDbSql = "drop database if exists cairis_user"
-    rootCursor.execute(dropUserDbSql)
-  except _mysql_exceptions.DatabaseError as e:
-    id,msg = e
-    exceptionText = 'MySQL error removing existing cairis_user database (id: ' + str(id) + ', message: ' + msg
-    raise ARMException(exceptionText)
-
+  dropCairisUserDatabase(dbRootPassword,dbHost,dbPort)
   createDatabaseAccount(dbRootPassword,dbHost,dbPort,'cairis_test','cairis_test')
   createDatabaseAndPrivileges(dbRootPassword,dbHost,dbPort,'cairis_test','cairis_test','cairis_test_default')
   createDatabaseSchema(rootDir,dbHost,dbPort,'cairis_test','cairis_test','cairis_test_default')
+  createCairisUserDatabase(dbRootPassword,dbHost,dbPort)
 
-  try:
-    createUserDbSql = "create database if not exists cairis_user"
-    rootCursor.execute(createUserDbSql)
-  except _mysql_exceptions.DatabaseError as e:
-    id,msg = e
-    exceptionText = 'MySQL error creating cairis_user database (id: ' + str(id) + ', message: ' + msg
-    raise ARMException(exceptionText)
-
-  try:
-    recursionDepthSql = "set global max_sp_recursion_depth = 255"
-    rootCursor.execute(recursionDepthSql)
-  except _mysql_exceptions.DatabaseError as e:
-    id,msg = e
-    exceptionText = 'MySQL error setting recursion depth (id: ' + str(id) + ', message: ' + msg
-    raise ARMException(exceptionText)
-
-  try:
-    flushPrivilegesSql = "flush privileges"
-    rootCursor.execute(flushPrivilegesSql)
-  except _mysql_exceptions.DatabaseError as e:
-    id,msg = e
-    exceptionText = 'MySQL error flushing privileges (id: ' + str(id) + ', message: ' + msg
-    raise ARMException(exceptionText)
-
-  rootCursor.close()
-  rootConn.close()
 
 def createCairisCnf(configFile,dbRootPassword,dbHost,dbPort,tmpDir,rootDir,webPort,logLevel,staticDir,assetDir,mailServer,mailPort,mailUser,mailPasswd):
   f = open(configFile,'w')
