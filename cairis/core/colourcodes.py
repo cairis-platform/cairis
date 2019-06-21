@@ -39,12 +39,24 @@ def threatLikelihoodColourCode(tlValue):
   elif tlValue == 'Occasional': return "#e34a33"
   else: return "#b30000"
 
+def threatTextColour(tlValue):
+  if tlValue in ['Probable','Frequent']:
+    return 'white'
+  else:
+    return 'black'
+
 def vulnerabilitySeverityColourCode(vsValue):
 # Based on orrd4 color scheme
   if vsValue == 'Negligible': return '1'
   elif vsValue == 'Marginal': return '2'
   elif vsValue == 'Critical': return '3'
   else: return '4'
+
+def vulnerabilityTextColour(vsValue):
+  if vsValue == 'Catastrophic':
+    return 'white'
+  else:
+    return 'black'
 
 def vulnerabilitySeverityTextColourCode(vsValue):
   if (vsValue == 'Catastrophic'): return 'white'

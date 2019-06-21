@@ -27,6 +27,8 @@ from cairis.core.colourcodes import usabilityTextColourCode
 from cairis.core.colourcodes import probabilityTextColourCode
 from cairis.core.colourcodes import obstacleColourCode
 from cairis.core.colourcodes import riskTextColourCode
+from cairis.core.colourcodes import threatTextColour
+from cairis.core.colourcodes import vulnerabilityTextColour
 
 USECASE_TYPE = 0
 MISUSECASE_TYPE = 1
@@ -104,11 +106,11 @@ class EnvironmentModel:
     elif (dimName == 'threat'):
       thrObjt = self.dbProxy.dimensionObject(objtName,'threat')
       thrLhood = thrObjt.likelihood(self.theEnvironmentName,self.theEnvironmentObject.duplicateProperty(),self.theEnvironmentObject.overridingEnvironment())
-      self.theGraph.add_node(pydot.Node(objtName,shape='record',style='filled',margin=0,color='black',fillcolor=threatLikelihoodColourCode(thrLhood),fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl,label=arrayToThreatSecurityPropertiesTable(thrObjt.securityProperties(self.theEnvironmentName),objtName)))
+      self.theGraph.add_node(pydot.Node(objtName,shape='record',style='filled',margin=0,color='black',fontcolor=threatTextColour(thrLhood),fillcolor=threatLikelihoodColourCode(thrLhood),fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl,label=arrayToThreatSecurityPropertiesTable(thrObjt.securityProperties(self.theEnvironmentName),objtName)))
     elif (dimName == 'vulnerability'):
       vulObjt = self.dbProxy.dimensionObject(objtName,'vulnerability')
       vulSev = vulObjt.severity(self.theEnvironmentName,self.theEnvironmentObject.duplicateProperty(),self.theEnvironmentObject.overridingEnvironment())
-      self.theGraph.add_node(pydot.Node(objtName,shape='record',style='filled',margin=0,colorscheme='orrd4',color='black',fillcolor=vulnerabilitySeverityColourCode(vulSev),fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
+      self.theGraph.add_node(pydot.Node(objtName,shape='record',style='filled',margin=0,colorscheme='orrd4',fontcolor=vulnerabilityTextColour(vulSev),fillcolor=vulnerabilitySeverityColourCode(vulSev),fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'risk'):
       riskObjt = self.dbProxy.dimensionObject(objtName,'risk')
       riskScores = self.dbProxy.riskScore(riskObjt.threat(),riskObjt.vulnerability(),self.theEnvironmentName,objtName)
