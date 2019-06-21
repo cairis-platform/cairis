@@ -47,9 +47,9 @@ def main(args=None):
   b = Borg()
   
   if (args.permission == 'grant'):
-     grantDatabaseAccess(b.rPasswd, b.dbHost, b.dbPort, args.db, args.userName) 
+    grantDatabaseAccess(b.rPasswd, b.dbHost, b.dbPort, args.db, args.userName) 
   else:
-     revokeDatabaseAccess(b.rPasswd, b.dbHost, b.dbPort, args.db, args.userName) 
+    revokeDatabaseAccess(b.rPasswd, b.dbHost, b.dbPort, args.db, args.userName) 
 
 if __name__ == '__main__':
   try:

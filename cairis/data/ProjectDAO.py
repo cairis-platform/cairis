@@ -63,7 +63,14 @@ class ProjectDAO(CairisDAO):
         raise ARMException('No database name defined')
       if (db_name not in self.show_databases()):
         raise ObjectNotFound(db_name + " does not exist")
-      database_owner = dbOwner(db_name)
+      
+      if (db_name == 'default'):
+        b = Borg()
+        ses_settings = b.get_settings(self.session_id)
+        database_owner = ses_settings['dbUser']
+      else:
+        database_owner = dbOwner(db_name)
+
       self.db_proxy.openDatabase(database_owner + '_' + db_name,self.session_id)
     except ObjectNotFound as ex:
       self.close()

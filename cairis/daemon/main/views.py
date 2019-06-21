@@ -32,12 +32,54 @@ from flask_security.core import current_user
 from jsonpickle import encode
 from cairis.core.Borg import Borg
 from cairis.core.MySQLDatabaseProxy import MySQLDatabaseProxy,canonicalDbUser,canonicalDbName
-from cairis.controllers import AssetController, AttackerController, CImportController, CExportController, DependencyController, \
-    DimensionController, EnvironmentController, GoalController, MisuseCaseController, PersonaController, ProjectController, \
-    RequirementController, ResponseController, RiskController, RoleController, TaskController, ThreatController, \
-    UploadController, VulnerabilityController, ObstacleController, CountermeasureController, DomainPropertyController, UseCaseController, \
-    DependencyController, DocumentationController, FindController, ExternalDocumentController, DocumentReferenceController, \
-    PersonaCharacteristicController, TaskCharacteristicController, ObjectDependencyController, ArchitecturalPatternController, SecurityPatternController, ValueTypeController, TemplateGoalController, TemplateAssetController,TemplateRequirementController, LocationsController, RiskLevelController, TraceController, SummaryController, ConceptReferenceController, DataFlowController, DirectoryController,TrustBoundaryController, VersionController, ValidationController
+from cairis.controllers import ArchitecturalPatternController
+from cairis.controllers import AssetController
+from cairis.controllers import AttackerController
+from cairis.controllers import CExportController
+from cairis.controllers import CImportController
+from cairis.controllers import ConceptReferenceController
+from cairis.controllers import CountermeasureController
+from cairis.controllers import DataFlowController
+from cairis.controllers import DependencyController
+from cairis.controllers import DimensionController
+from cairis.controllers import DirectoryController
+from cairis.controllers import DocumentationController
+from cairis.controllers import DocumentReferenceController
+from cairis.controllers import DomainPropertyController
+from cairis.controllers import EnvironmentController
+from cairis.controllers import ExternalDocumentController
+from cairis.controllers import FindController
+from cairis.controllers import GoalController
+from cairis.controllers import LocationsController
+from cairis.controllers import MisuseCaseController
+from cairis.controllers import ObjectDependencyController
+from cairis.controllers import ObstacleController
+from cairis.controllers import PermissionsController
+from cairis.controllers import PersonaController
+from cairis.controllers import PersonaCharacteristicController
+from cairis.controllers import ProjectController
+from cairis.controllers import RequirementController
+from cairis.controllers import ResponseController
+from cairis.controllers import RiskController
+from cairis.controllers import RiskLevelController
+from cairis.controllers import RoleController
+from cairis.controllers import SecurityPatternController
+from cairis.controllers import SummaryController
+from cairis.controllers import TaskController
+from cairis.controllers import TaskCharacteristicController
+from cairis.controllers import TemplateAssetController
+from cairis.controllers import TemplateGoalController
+from cairis.controllers import TemplateRequirementController
+from cairis.controllers import ThreatController
+from cairis.controllers import TraceController
+from cairis.controllers import TrustBoundaryController
+from cairis.controllers import UploadController
+from cairis.controllers import UseCaseController
+from cairis.controllers import ValidationController
+from cairis.controllers import ValueTypeController
+from cairis.controllers import VersionController
+from cairis.controllers import VulnerabilityController
+
 from cairis.daemon.main import main, api
 from cairis.tools.SessionValidator import get_session_id
 from base64 import b64decode
@@ -339,6 +381,9 @@ api.add_resource(ObstacleController.ObstacleByNameAPI, '/api/obstacles/name/<str
 api.add_resource(ObstacleController.GenerateVulnerabilityAPI, '/api/obstacles/name/<string:name>/generate_vulnerability',endpoint='generatevulnerability')
 api.add_resource(ObstacleController.ObstacleByEnvironmentNamesAPI, '/api/obstacles/environment/<string:environment>/names',endpoint='obstacle_environment')
 api.add_resource(ObstacleController.ObstacleModelAPI, '/api/obstacles/model/environment/<string:environment>/obstacle/<string:obstacle>',endpoint='obstacle_model')
+
+# Permissions routes
+api.add_resource(PermissionsController.PermissionsAPI, '/api/permissions/database/<string:db_name>/user/<string:user_id>/permission/<string:permission>',endpoint='permissions')
 
 # Persona routes
 api.add_resource(PersonaController.PersonasAPI, '/api/personas',endpoint='personas')

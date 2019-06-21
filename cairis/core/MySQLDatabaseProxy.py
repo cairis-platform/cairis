@@ -255,6 +255,12 @@ def dbOwner(dbName):
   else:
     return rows[0][0]
 
+def isOwner(dbUser, dbName):
+  db_owner = dbOwner(dbName)
+  if (dbUser == db_owner):
+    return True
+  else:
+    return False
 
 def databases(dbUser):
   sqlTxt = 'select m.Db, co.owner from mysql.db m, cairis_owner.db_owner co where m.User = "' + dbUser + '" and m.Db = co.db'
@@ -288,12 +294,6 @@ class MySQLDatabaseProxy:
     try:
       if (closeConn) and self.conn.connection().connection.open:
         self.conn.close()
-      
-      dbUser = b.dbUser
-      dbPasswd = b.dbPasswd
-      dbHost = b.dbHost
-      dbPort = b.dbPort
-      dbName = b.dbName
 
       if b.runmode == 'web':
         ses_settings = b.get_settings(session_id)
@@ -302,21 +302,23 @@ class MySQLDatabaseProxy:
         dbHost = ses_settings['dbHost']
         dbPort = ses_settings['dbPort']
         dbName = ses_settings['dbName']
-      elif b.runmode != 'desktop':
+        dbEngine = create_engine('mysql+mysqldb://' + dbUser+':' + dbPasswd+'@' + dbHost+':' + str(dbPort)+'/' + dbName + '?charset=utf8mb4')
+        self.conn = scoped_session(sessionmaker(bind=dbEngine))
+      elif b.runmode == 'desktop':
+        dbEngine = create_engine('mysql+mysqldb://' + b.dbUser+':' + b.dbPasswd+'@' + b.dbHost+':' + str(b.dbPort)+'/' + b.dbName + '?charset=utf8mb4')
+        self.conn = scoped_session(sessionmaker(bind=dbEngine))
+      else:
         raise RuntimeError('Run mode not recognized')
-
-      dbEngine = create_engine('mysql+mysqldb://' + dbUser+':' + dbPasswd+'@' + dbHost+':' + str(dbPort)+'/' + dbName + '?charset=utf8mb4')
-      self.conn = scoped_session(sessionmaker(bind=dbEngine))
       self.conn.execute("set session max_sp_recursion_depth = 255")
 
     except OperationalError as e:
-      exceptionText = 'MySQL error re-connecting to the CAIRIS database ' + dbName + ' on host ' + dbHost + ' at port ' + str(dbPort) + ' with user ' + dbUser + ' (message:' + format(e) + ')'
+      exceptionText = 'MySQL error re-connecting to the CAIRIS database: ' + format(e)
       raise DatabaseProxyException(exceptionText) 
     except _mysql_exceptions.IntegrityError as e:
-      exceptionText = 'MySQL error re-connecting to the CAIRIS database ' + dbName + ' on host ' + dbHost + ' at port ' + str(dbPort) + ' with user ' + dbUser + ' (message:' + format(e) + ')'
+      exceptionText = 'MySQL error re-connecting to the CAIRIS database: ' + format(e)
       raise DatabaseProxyException(exceptionText) 
     except _mysql_exceptions.DatabaseError as e:
-      exceptionText = 'MySQL error re-connecting to the CAIRIS database ' + b.dbName + ' on host ' + b.dbHost + ' at port ' + str(b.dbPort) + ' with user ' + b.dbUser + ' (id:' + str(id) + ',message:' + format(e)
+      exceptionText = 'MySQL error re-connecting to the CAIRIS database: ' + format(e)
       raise DatabaseProxyException(exceptionText) 
     self.theDimIdLookup, self.theDimNameLookup = self.buildDimensionLookup()
 
@@ -4656,6 +4658,7 @@ class MySQLDatabaseProxy:
         if (reqDbName == dbName):
           return True
     return False
+
 
   def deleteDatabase(self,dbName,session_id):
     b = Borg()
