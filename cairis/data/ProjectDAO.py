@@ -19,7 +19,7 @@ from cairis.core.ARM import *
 from cairis.daemon.CairisHTTPError import ARMHTTPError, MalformedJSONHTTPError, MissingParameterHTTPError, SilentHTTPError, ObjectNotFoundHTTPError
 from cairis.data.CairisDAO import CairisDAO
 from cairis.core.Borg import Borg
-from cairis.core.MySQLDatabaseProxy import createDefaults, dbOwner
+from cairis.core.dba import createDefaults, dbOwner
 from cairis.tools.JsonConverter import json_deserialize
 from cairis.tools.PseudoClasses import ProjectSettings, Contributor, Revision, Definition
 from cairis.tools.SessionValidator import check_required_keys

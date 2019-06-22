@@ -27,7 +27,7 @@ from cairis.core.ARM import *
 from cairis.core.Borg import Borg
 from cairis.daemon.CairisHTTPError import CairisHTTPError, ARMHTTPError
 from cairis.data.CairisDAO import CairisDAO
-from cairis.core.MySQLDatabaseProxy import isOwner,grantDatabaseAccess,revokeDatabaseAccess
+from cairis.core.dba import isOwner,grantDatabaseAccess,revokeDatabaseAccess
 
 __author__ = 'Shamal Faily'
 

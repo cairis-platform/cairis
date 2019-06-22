@@ -23,7 +23,7 @@ import os
 import sys
 import MySQLdb
 import _mysql_exceptions
-from cairis.core.MySQLDatabaseProxy import createDatabaseAccount, createDbOwnerDatabase, createDatabaseAndPrivileges, createDatabaseSchema, createDefaults, canonicalDbUser, dropCairisUserDatabase, createCairisUserDatabase
+from cairis.core.dba import createDatabaseAccount, createDbOwnerDatabase, createDatabaseAndPrivileges, createDatabaseSchema, createDefaults, canonicalDbUser, dropCairisUserDatabase, createCairisUserDatabase
 import binascii
 from random import choice
 from string import ascii_letters, digits

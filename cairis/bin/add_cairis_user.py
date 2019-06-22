@@ -22,10 +22,11 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_security import Security, SQLAlchemyUserDatastore, UserMixin, RoleMixin, login_required
 from flask_cors import CORS
 from cairis.core.Borg import Borg
-from cairis.core.MySQLDatabaseProxy import createDatabaseAccount,createDatabaseAndPrivileges,createDatabaseSchema, createDefaults, canonicalDbUser
+from cairis.core.dba import createDatabaseAccount,createDatabaseAndPrivileges,createDatabaseSchema, createDefaults, canonicalDbUser, existingAccount
 import cairis.core.BorgFactory
 from random import choice
 import string
+import sys
 
 __author__ = 'Shamal Faily'
 
@@ -82,6 +83,9 @@ def main():
 
   rp = ''.join(choice(string.ascii_letters + string.digits) for i in range(255))
 
+  if (existingAccount(args.user)):
+    raise Exception(args.user + ' already exists')
+
   createDatabaseAccount(b.rPasswd,b.dbHost,b.dbPort,canonicalDbUser(args.user),rp)
   createDatabaseAndPrivileges(b.rPasswd,b.dbHost,b.dbPort,canonicalDbUser(args.user),rp,canonicalDbUser(args.user) + '_default')
   createDatabaseSchema(b.cairisRoot,b.dbHost,b.dbPort,args.user,rp,canonicalDbUser(args.user) + '_default')
@@ -94,4 +98,9 @@ def main():
 
 
 if __name__ == '__main__':
-  main()
+  try:
+    main()
+  except Exception as e:
+    print('Fatal add_cairis_user error: ' + str(e))
+    sys.exit(-1)
+

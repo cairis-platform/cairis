@@ -22,7 +22,8 @@ import os
 import logging
 import json
 from cairis.tools.GraphicsGenerator import GraphicsGenerator
-from .MySQLDatabaseProxy import MySQLDatabaseProxy,dbtoken,canonicalDbUser,canonicalDbName
+from .MySQLDatabaseProxy import MySQLDatabaseProxy
+from .dba import dbtoken,canonicalDbUser,canonicalDbName
 from .ARM import ARMException
 
 def parseConfigFile():

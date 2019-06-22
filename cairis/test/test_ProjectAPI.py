@@ -28,7 +28,7 @@ import jsonpickle
 from cairis.test.CairisDaemonTestCase import CairisDaemonTestCase
 from cairis.tools.PseudoClasses import ProjectSettings, Contributor, Revision
 from cairis.mio.ModelImport import importModelFile
-from cairis.core.MySQLDatabaseProxy import createDbOwnerDatabase, createDatabaseAccount, createDatabaseAndPrivileges, createDatabaseSchema
+from cairis.core.dba import createDbOwnerDatabase, createDatabaseAccount, createDatabaseAndPrivileges, createDatabaseSchema
 from cairis.core.Borg import Borg
 import os
 
