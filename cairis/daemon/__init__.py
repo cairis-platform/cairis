@@ -45,6 +45,7 @@ def create_app():
   app.config['DEBUG'] = True
   app.config['SECRET_KEY'] = b.secretKey
   app.config['SECURITY_PASSWORD_SALT'] = 'None'
+  app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
   app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:' + b.rPasswd + '@' + b.dbHost + '/cairis_user'
 
   if (b.mailServer != '' and b.mailPort != '' and b.mailUser != '' and b.mailPasswd != ''):
