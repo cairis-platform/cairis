@@ -51,7 +51,12 @@ class ChangePermissionAPI(Resource):
     dao = PermissionsDAO(session_id)
     dao.set_permission(db_name, user_id, permission)
     dao.close()
-    resp_dict = {'message': 'Permissions successfully updated'}
+    msg = 'Permission successfully '
+    if (permission == 'grant'):
+      msg += 'granted'
+    else:
+      msg += 'revoked'
+    resp_dict = {'message': msg}
     resp = make_response(json_serialize(resp_dict, session_id=session_id), OK)
     resp.contenttype = 'application/json'
     return resp

@@ -19,3 +19,8 @@ To open another database, select the System/Databases menu, and click on the tab
 You can delete a database by selecting the System/Databases menu, and clicking on the Delete button next to the database you want to remove.  You cannot delete the database you currently have open.
 
 To empty the contents of a currently open database, select the Systems/Databases menu and click on the Clear Current button.
+
+Providing database access to other users
+----------------------------------------
+
+If you have a created a non *default* database, you can grant or revoke access to other users by clicking on the Permissions button.  Adding other users to the permissions list grants access, and removing them revokes access.
