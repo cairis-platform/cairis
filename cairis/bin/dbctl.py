@@ -20,7 +20,7 @@ import argparse
 import sys
 from cairis.core.Borg import Borg
 import cairis.core.BorgFactory
-from cairis.core.MySQLDatabaseProxy import grantDatabaseAccess, revokeDatabaseAccess
+from cairis.core.dba import grantDatabaseAccess, revokeDatabaseAccess
 
 __author__ = 'Shamal Faily'
 

@@ -4492,7 +4492,7 @@ class MySQLDatabaseProxy:
     dbs = []
     for dbn,owner in rows:
       if (dbn != dbName):
-        dbs.append(dbn.split(owner + '_')[1])
+        dbs.append((dbn.split(owner + '_')[1],owner))
     return dbs
 
   def checkPermissions(self,reqDbName,session_id):

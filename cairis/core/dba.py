@@ -134,12 +134,16 @@ def rootResponseList(sqlTxt):
     rootConn = MySQLdb.connect(host=b.dbHost,port=int(b.dbPort),user='root',passwd=b.rPasswd)
     rootCursor = rootConn.cursor()
     rs = rootCursor.execute(sqlTxt)
-    rows = []
-    for row in rootCursor.fetchall():
-      rows.append(tuple(list(row)))
+    responseList = []
+    if (rs > 0):
+      for row in rootCursor.fetchall():
+        if (len(row) > 1):
+          responseList.append(tuple(list(row)))
+        else:
+          responseList.append(list(row)[0])
     rootCursor.close()
     rootConn.close()
-    return rows
+    return responseList
   except _mysql_exceptions.DatabaseError as e:
     exceptionText = 'MySQL error getting responses: ' + format(e)
     raise DatabaseProxyException(exceptionText) 
@@ -150,7 +154,7 @@ def dbOwner(dbName):
   if (len(rows) == 0):
     raise DatabaseProxyException(dbName + ' or its owner not found') 
   else:
-    return rows[0][0]
+    return rows[0]
 
 def isOwner(dbUser, dbName):
   db_owner = dbOwner(dbName)
@@ -165,4 +169,16 @@ def databases(dbUser):
 
 def existingAccount(userId):
   sqlTxt = "select count(email) from cairis_user.auth_user where email = '" + userId + "'"
-  return rootResponseList(sqlTxt)[0][0]
+  return rootResponseList(sqlTxt)[0]
+
+def dbExists(dbName):
+  sqlTxt = "select count(db) from cairis_owner.db_owner where db= '" + dbName + "'"
+  return rootResponseList(sqlTxt)[0]
+
+def dbUsers(dbName):
+  sqlTxt = "select au.email from mysql.db db, cairis_user.auth_user au where db.Db = '" + dbName + "' and db.User = au.account and db.User not in (select owner from cairis_owner.db_owner where db ='" + dbName + "')"
+  rows = rootResponseList(sqlTxt)
+  if (len(rows) == 0):
+    return []
+  else:
+    return rows

@@ -287,7 +287,7 @@ class ProjectAPITests(CairisDaemonTestCase):
     self.assertIsNotNone(dbs, 'No results after deserialization')
     self.assertIsInstance(dbs, list, 'The result is not a list as expected')
     self.assertGreater(len(dbs), 0, 'No databases in the list')
-    self.assertEqual('testshowdb' in dbs, True)
+    self.assertEqual('testshowdb' in list(map(lambda x: x['database'],dbs)), True)
 
   def test_delete_database(self):
     method = 'test_delete_database'
@@ -335,4 +335,4 @@ class ProjectAPITests(CairisDaemonTestCase):
     dbs = jsonpickle.decode(responseData)
     self.assertIsNotNone(dbs, 'No results after deserialization')
     self.assertIsInstance(dbs, list, 'The result is not a list as expected')
-    self.assertEqual('testdeldb' not in dbs, True)
+    self.assertEqual('testdeldb' not in list(map(lambda x: x['database'],dbs)), True)

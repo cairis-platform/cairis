@@ -383,7 +383,8 @@ api.add_resource(ObstacleController.ObstacleByEnvironmentNamesAPI, '/api/obstacl
 api.add_resource(ObstacleController.ObstacleModelAPI, '/api/obstacles/model/environment/<string:environment>/obstacle/<string:obstacle>',endpoint='obstacle_model')
 
 # Permissions routes
-api.add_resource(PermissionsController.PermissionsAPI, '/api/permissions/database/<string:db_name>/user/<string:user_id>/permission/<string:permission>',endpoint='permissions')
+api.add_resource(PermissionsController.PermissionsAPI, '/api/permissions/database/<string:db_name>',endpoint='permissions')
+api.add_resource(PermissionsController.ChangePermissionAPI, '/api/permissions/database/<string:db_name>/user/<string:user_id>/permission/<string:permission>',endpoint='changepermission')
 
 # Persona routes
 api.add_resource(PersonaController.PersonasAPI, '/api/personas',endpoint='personas')

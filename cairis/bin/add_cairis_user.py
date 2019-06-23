@@ -53,6 +53,7 @@ class User(db.Model, UserMixin):
   __tablename__ = 'auth_user'
   id = db.Column(db.Integer, primary_key=True)
   email = db.Column(db.String(255), unique=True)
+  account = db.Column(db.String(32), unique=True)
   password = db.Column(db.String(255))
   dbtoken = db.Column(db.String(255))
   name = db.Column(db.String(255))
@@ -69,10 +70,11 @@ def addAdditionalUserData(userName,passWd):
   fUser.dbtoken = rp
   db.session.commit()
   b = Borg()
+  dbAccount = canonicalDbUser(userName)
   createDatabaseAccount(b.rPasswd,b.dbHost,b.dbPort,userName,rp)
-  createDatabaseAndPrivileges(b.rPasswd,b.dbHost,b.dbPort,userName,rp,canonicalDbUser(userName) + '_default')
-  createDatabaseSchema(b.cairisRoot,b.dbHost,b.dbPort,userName,rp,canonicalDbUser(userName) + '_default')
-  createDefaults(b.cairisRoot,b.dbHost,b.dbPort,userName,rp,canonicalDbUser(userName) + '_default')
+  createDatabaseAndPrivileges(b.rPasswd,b.dbHost,b.dbPort,userName,rp,dbAccount + '_default')
+  createDatabaseSchema(b.cairisRoot,b.dbHost,b.dbPort,userName,rp,dbAccount + '_default')
+  createDefaults(b.cairisRoot,b.dbHost,b.dbPort,userName,rp,dbAccount + '_default')
   
 
 def main():
@@ -87,15 +89,16 @@ def main():
   if (existingAccount(args.user)):
     raise Exception(args.user + ' already exists')
 
-  createDatabaseAccount(b.rPasswd,b.dbHost,b.dbPort,canonicalDbUser(args.user),rp)
-  createDatabaseAndPrivileges(b.rPasswd,b.dbHost,b.dbPort,canonicalDbUser(args.user),rp,canonicalDbUser(args.user) + '_default')
-  createDatabaseSchema(b.cairisRoot,b.dbHost,b.dbPort,args.user,rp,canonicalDbUser(args.user) + '_default')
+  dbAccount = canonicalDbUser(args.user)
+  createDatabaseAccount(b.rPasswd,b.dbHost,b.dbPort,dbAccount,rp)
+  createDatabaseAndPrivileges(b.rPasswd,b.dbHost,b.dbPort,dbAccount,rp,canonicalDbUser(args.user) + '_default')
+  createDatabaseSchema(b.cairisRoot,b.dbHost,b.dbPort,args.user,rp,dbAccount + '_default')
 
   db.create_all()
-  user_datastore.create_user(email=args.user, password=args.password,dbtoken=rp,name = 'Default user')
+  user_datastore.create_user(email=args.user, account=dbAccount, password=args.password,dbtoken=rp,name = 'Default user')
   db.session.commit()
 
-  createDefaults(b.cairisRoot,b.dbHost,b.dbPort,args.user,rp,canonicalDbUser(args.user) + '_default')
+  createDefaults(b.cairisRoot,b.dbHost,b.dbPort,args.user,rp,dbAccount + '_default')
 
 
 if __name__ == '__main__':

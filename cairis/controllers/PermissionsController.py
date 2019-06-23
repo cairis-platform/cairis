@@ -36,10 +36,21 @@ __author__ = 'Shamal Faily'
 
 class PermissionsAPI(Resource):
 
+  def get(self,db_name):
+    session_id = get_session_id(session, request)
+    dao = PermissionsDAO(session_id)
+    permissions = dao.get_permissions(db_name)
+    dao.close()
+    resp = make_response(json_serialize(permissions, session_id=session_id), OK)
+    resp.contenttype = 'application/json'
+    return resp
+
+class ChangePermissionAPI(Resource):
   def post(self,db_name,user_id,permission):
     session_id = get_session_id(session, request)
     dao = PermissionsDAO(session_id)
     dao.set_permission(db_name, user_id, permission)
+    dao.close()
     resp_dict = {'message': 'Permissions successfully updated'}
     resp = make_response(json_serialize(resp_dict, session_id=session_id), OK)
     resp.contenttype = 'application/json'

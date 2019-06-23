@@ -34,6 +34,7 @@ class User(db.Model, UserMixin):
   __tablename__ = 'auth_user'
   id = db.Column(db.Integer, primary_key=True)
   email = db.Column(db.String(255), unique=True) 
+  account = db.Column(db.String(32), unique=True) 
   password = db.Column(db.String(255))
   dbtoken = db.Column(db.String(255))
   name = db.Column(db.String(255)) 

@@ -19,7 +19,7 @@ from cairis.core.ARM import *
 from cairis.daemon.CairisHTTPError import ARMHTTPError, MalformedJSONHTTPError, MissingParameterHTTPError, SilentHTTPError, ObjectNotFoundHTTPError
 from cairis.data.CairisDAO import CairisDAO
 from cairis.core.Borg import Borg
-from cairis.core.dba import createDefaults, dbOwner
+from cairis.core.dba import createDefaults, dbOwner, dbExists, canonicalDbName
 from cairis.tools.JsonConverter import json_deserialize
 from cairis.tools.PseudoClasses import ProjectSettings, Contributor, Revision, Definition
 from cairis.tools.SessionValidator import check_required_keys
@@ -51,6 +51,16 @@ class ProjectDAO(CairisDAO):
     try:
       if (db_name in ['null','']):
         raise ARMException('No database name defined')
+      if (db_name == 'default'):
+        raise ARMException('Cannot create a new default database')
+
+      b = Borg()
+      ses_settings = b.get_settings(self.session_id)
+      dbUser = ses_settings['dbUser']
+      dbName = dbUser + '_' + canonicalDbName(db_name)
+      if (dbExists(dbName)):
+        raise ARMException(db_name + " already exists")
+ 
       self.db_proxy.createDatabase(db_name,self.session_id)
     except DatabaseProxyException as ex:
       raise ARMHTTPError(ex)
@@ -61,7 +71,7 @@ class ProjectDAO(CairisDAO):
     try:
       if (db_name in ['null','']):
         raise ARMException('No database name defined')
-      if (db_name not in self.show_databases()):
+      if (db_name not in list(map(lambda db: db['database'],self.show_databases()))):
         raise ObjectNotFound(db_name + " does not exist")
       
       if (db_name == 'default'):
@@ -84,7 +94,7 @@ class ProjectDAO(CairisDAO):
     try:
       if (db_name in ['null','']):
         raise ARMException('No database name defined')
-      if (db_name not in self.show_databases()):
+      if (db_name not in list(map(lambda db: db['database'],self.show_databases()))):
         raise ObjectNotFound(db_name + " does not exist")
       self.db_proxy.deleteDatabase(db_name,self.session_id)
     except ObjectNotFound as ex:
@@ -97,7 +107,19 @@ class ProjectDAO(CairisDAO):
 
   def show_databases(self):
     try:
-      return self.db_proxy.showDatabases(self.session_id)
+      b = Borg()
+      ses_settings = b.get_settings(self.session_id)
+      dbUser = ses_settings['dbUser']
+      rows = self.db_proxy.showDatabases(self.session_id)
+      dbs = []
+      for db,owner in rows:
+        permissioned = 'N'
+        if (dbUser == owner):
+          permissioned = 'Y'
+        if (db == 'default'):
+          permissioned = 'N'
+        dbs.append({"database" : db,"permissioned" : permissioned})
+      return dbs
     except DatabaseProxyException as ex:
       raise ARMHTTPError(ex)
     except ARMException as ex:
