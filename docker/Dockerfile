@@ -1,4 +1,4 @@
-FROM ubuntu:bionic
+FROM ubuntu:disco
 MAINTAINER Shamal Faily <sfaily@bournemouth.ac.uk>
 RUN apt-get update 
 RUN apt-get install -y python3-dev
