@@ -19,7 +19,7 @@ subsequent analysis. CAIRIS supports this exercise by using the Properties form.
    specified.
 
 -  If a rich picture or context diagram has been agreed, click on the
-   Rich Picture tab, and click on the image (or avatar if not not rich picture has been defined) to
+   Rich Picture tab, and click on the image (or avatar if no rich picture has been defined) to
    import.
 
 -  Names or terms that the readership of the specification may be
