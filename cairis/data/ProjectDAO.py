@@ -71,7 +71,16 @@ class ProjectDAO(CairisDAO):
     try:
       if (db_name in ['null','']):
         raise ARMException('No database name defined')
-      if (db_name not in list(map(lambda db: db['database'],self.show_databases()))):
+
+      dbList = list(map(lambda db: db['database'],self.show_databases()))
+
+      b = Borg()
+      ses_settings = b.get_settings(self.session_id)
+      dbUser = ses_settings['dbUser']
+      currentlyOpenDbName= ses_settings['dbName']
+      toOpenDbName = dbUser + '_' + canonicalDbName(db_name)
+
+      if ((db_name not in dbList) and (toOpenDbName != currentlyOpenDbName)):
         raise ObjectNotFound(db_name + " does not exist")
       
       if (db_name == 'default'):
