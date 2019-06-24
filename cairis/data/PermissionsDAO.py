@@ -27,7 +27,7 @@ from cairis.core.ARM import *
 from cairis.core.Borg import Borg
 from cairis.daemon.CairisHTTPError import CairisHTTPError, ARMHTTPError
 from cairis.data.CairisDAO import CairisDAO
-from cairis.core.dba import isOwner,grantDatabaseAccess,revokeDatabaseAccess,dbUsers, canonicalDbName
+from cairis.core.dba import isOwner,grantDatabaseAccess,revokeDatabaseAccess,dbUsers, canonicalDbName, existingAccount
 
 __author__ = 'Shamal Faily'
 
@@ -43,20 +43,24 @@ class PermissionsDAO(CairisDAO):
       b = Borg()
       dbUser = b.get_settings(self.session_id)['dbUser']
       if (isOwner(dbUser,db_name) == False):
-        raise CairisHTTPError(status_code=http.client.CONFLICT,status="Unauthorised request",message="Not authorised to get permissions for " + db_name)
+        raise CairisHTTPError(status_code=http.client.BAD_REQUEST,status="Unauthorised request",message="Not authorised to get permissions for " + db_name)
       return dbUsers(dbUser + '_' + canonicalDbName(db_name))
     except ARMException as ex:
       self.close()
       raise ARMHTTPError(ex)
 
   def set_permission(self,db_name, user_id, permission):
+
+    if (existingAccount(user_id) == False):
+      raise CairisHTTPError(status_code=http.client.NOT_FOUND,status="User not found",message=user_id + " was not found.")
+
     if (permission != 'grant' and permission != 'revoke'):
-      raise CairisHTTPError(status_code=http.client.CONFLICT,status="Invalid permission",message=permission + " is an invalid permission.")
+      raise CairisHTTPError(status_code=http.client.BAD_REQUEST,status="Invalid permission",message=permission + " is an invalid permission.")
     try:
       b = Borg()
       dbUser = b.get_settings(self.session_id)['dbUser']
       if (isOwner(dbUser,db_name) == False):
-        raise CairisHTTPError(status_code=http.client.CONFLICT,status="Unauthorised permission",message="Cannot change permissions as you are not the database owner.")
+        raise CairisHTTPError(status_code=http.client.BAD_REQUEST,status="Unauthorised permission",message="Cannot change permissions as you are not the database owner.")
       if (permission == 'grant'):
         grantDatabaseAccess(b.rPasswd, b.dbHost, b.dbPort, db_name, user_id)
       else:
