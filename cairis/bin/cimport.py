@@ -19,6 +19,7 @@
 import argparse
 import os
 import sys
+from cairis.core.ARM import ARMException
 
 __author__ = 'Shamal Faily'
 

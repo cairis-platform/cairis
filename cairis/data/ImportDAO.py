@@ -27,6 +27,7 @@ from zipfile import ZipFile
 import magic
 import io
 import os
+import xml.etree.ElementTree as ET
 
 __author__ = 'Shamal Faily'
 
@@ -42,22 +43,47 @@ class ImportDAO(CairisDAO):
       buf = io.BytesIO(pkgStr)
       zf = ZipFile(buf)
       fileList = zf.namelist()
-      modelName = 'model.xml'
-      if (modelName not in fileList):
-        raise ARMHTTPError('model.xml not found')
-      zf.extract(modelName,b.tmpDir)
-      self.file_import(b.tmpDir + '/' + modelName,'all',1) 
-      os.remove(b.tmpDir + '/' + modelName)
       
+      modelImages = []
+      models = {'cairis_model' : '', 'locations' : [], 'architectural_pattern' : []}
+
       for fileName in fileList:
-        if (fileName != 'model.xml'):
-          buf = zf.read(fileName)
-          mimeType = magic.from_buffer(buf,mime=True)
-          self.db_proxy.setImage(fileName,buf,mimeType)
+        fName,fType = fileName.split('.')
+        if (fType == 'xml'):
+          zf.extract(fileName,b.tmpDir)
+          modelType = ET.fromstring(open(b.tmpDir + '/' + fileName).read()).tag
+          os.remove(b.tmpDir + '/' + fileName)
+          if (modelType == 'cairis_model'):
+            if (models[modelType] != ''):
+              raise ARMHTTPError('Cannot have more than one CAIRIS model file in the package file')
+            models[modelType] = fileName
+          else:
+            models[modelType].append(fileName)
+        else:
+          modelImages.append(fileName)
+
+      cairisModel = models['cairis_model']
+      if (cairisModel == ''):
+        raise ARMHTTPError('No CAIRIS model file in the package file')
+      else:
+        zf.extract(cairisModel,b.tmpDir)
+        self.file_import(b.tmpDir + '/' + cairisModel,'all',1) 
+        os.remove(b.tmpDir + '/' + cairisModel)
+
+      for typeKey in ['locations','architectural_pattern']:
+        for modelFile in models[typeKey]:
+          zf.extract(modelFile,b.tmpDir)
+          if (typeKey == 'architectural_pattern'):
+            typeKey = 'architecturalpattern'
+          self.file_import(b.tmpDir + '/' + modelFile,typeKey,0) 
+          os.remove(b.tmpDir + '/' + modelFile)
+      for imageFile in modelImages:
+        buf = zf.read(imageFile)
+        mimeType = magic.from_buffer(buf,mime=True)
+        self.db_proxy.setImage(imageFile,buf,mimeType)
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)
-
 
   def file_import(self,importFile,mFormat,overwriteFlag):
     try:
