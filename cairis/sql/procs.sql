@@ -12609,7 +12609,7 @@ begin
   declare unoRationale varchar(4000);
   declare vulId int;
   declare vulName varchar(200);
-  declare vulDesc varchar(500);
+  declare vulDesc varchar(4000);
   declare vulType varchar(100);
   declare vulCount int default 0;
   declare attackerId int;
@@ -13219,7 +13219,7 @@ begin
   declare reqFc longtext;
   declare reqOrig longtext;
   declare ucId int;
-  declare ucName varchar(50);
+  declare ucName varchar(200);
   declare ucAuthor varchar(255);
   declare ucShortCode varchar(100);
   declare ucDesc varchar(2000);
@@ -13932,7 +13932,7 @@ begin
   declare taskName varchar(200);
   declare taskCode varchar(100);
   declare taskAuthor varchar(255);
-  declare taskObjective varchar(255);
+  declare taskObjective varchar(2000);
   declare isTaskAssumption int;
   declare taskCount int default 0;
   declare durationValue varchar(50);
@@ -14301,9 +14301,9 @@ create procedure associationsToXml(in includeHeader int)
 begin
   declare buf LONGTEXT default '<?xml version="1.0"?>\n<!DOCTYPE associations PUBLIC "-//CAIRIS//DTD ASSOCIATIONS 1.0//EN" "http://cairis.org/dtd/associations.dtd">\n\n<associations>\n';
   declare fromDim varchar(50);
-  declare fromName varchar(50);
+  declare fromName varchar(200);
   declare toDim varchar(50);
-  declare toName varchar(50);
+  declare toName varchar(200);
   declare refType varchar(50);
   declare envName varchar(50);
   declare goalName varchar(100);
@@ -27417,7 +27417,7 @@ begin
   declare taskName varchar(200);
   declare taskCode varchar(100);
   declare taskAuthor varchar(255);
-  declare taskObjective varchar(255);
+  declare taskObjective varchar(2000);
   declare isTaskAssumption int;
   declare taskCount int default 0;
   declare durationValue varchar(50);

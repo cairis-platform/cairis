@@ -35,12 +35,12 @@ def main(args=None):
   parser.add_argument('--configFile',dest='configFile',help='CAIRIS configuration file name (fully qualified path)',default=homeDir + '/cairis.cnf')
   parser.add_argument('--webPort',dest='webPort',help='Web port',default='7071')
   parser.add_argument('--logLevel',dest='logLevel',help='Log level',default='warning')
-  parser.add_argument('--staticDir',dest='staticDir',help='Static directory',default=defaultRootDir + '/cairis/web')
-  parser.add_argument('--assetDir',dest='assetDir',help='Asset directory',default=defaultRootDir + '/cairis/web/assets')
+  parser.add_argument('--staticDir',dest='staticDir',help='Static directory',default=defaultRootDir + '/cairis/dist')
+  parser.add_argument('--assetDir',dest='assetDir',help='Asset directory',default=defaultRootDir + '/cairis/dist')
   parser.add_argument('--user',dest='userName',help='Initial username',default='test')
   parser.add_argument('--password',dest='passWd',help='Initial password',default='test')
   args = parser.parse_args() 
-  quick_setup(args.dbHost,int(args.dbPort),args.dbRootPassword,args.tmpDir,args.rootDir,args.configFile,int(args.webPort),args.logLevel,args.staticDir,arg.assetDir,args.userName,args.passWd)
+  quick_setup(args.dbHost,int(args.dbPort),args.dbRootPassword,args.tmpDir,args.rootDir,args.configFile,int(args.webPort),args.logLevel,args.staticDir,args.assetDir,args.userName,args.passWd)
 
 if __name__ == '__main__':
   try:
