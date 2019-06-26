@@ -6,7 +6,7 @@ CAIRIS comes with a number of different example models.  These illustrate how CA
 Exemplars
 ---------
 
-CAIRIS comes with two complete system specifications.  These can be found in the cairis/examples/exemplars directory.
+CAIRIS comes with three complete system specifications.  These are .cairis files that can be found in the cairis/examples/exemplars directory, but their component model files and images can be found in sub-directories within that directory.
 
 NeuroGrid
 ~~~~~~~~~
@@ -22,7 +22,7 @@ ACME Water is a fictional water company concerned with the delivery of wastewate
 webinos
 ~~~~~~~
 
-Although this is not part of the CAIRIS repository, the design data used to build `webinos <https://en.wikipedia.org/wiki/Webinos>`_ is available on `webinos-design-data GitHub repository <https://github.com/webinos/webinos-design-data>`_ and is compatible with CAIRIS.  The webinos design data repository is a good example of a non-trivial specification, with input data in a variety of formats including spreadsheets, text files, CAIRIS models.  A script is used to convert these files into CAIRIS models, which is then imported.  See the README file on the webinos-design-data repository for more information.
+The `webinos <https://en.wikipedia.org/wiki/Webinos>`_ platform is a software runtime environment that allows the discovery of devices and services based on technical and contextual information.  It exposes a set of APIs that provide access to cross-user, cross-service, and cross-device functionality.  Unlike the other examples, the consistuent CAIRIS models were generated from a variety of formats including spreadsheets, text files, and multiple smaller CAIRIS model files.  You can find this design data and the scripts used to generate the model at `webinos-design-data GitHub repository <https://github.com/webinos/webinos-design-data>`_.  
 
 
 Threat and Vulnerability Directories
