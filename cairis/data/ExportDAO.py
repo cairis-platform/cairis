@@ -54,10 +54,15 @@ class ExportDAO(CairisDAO):
       raise ARMHTTPError(ex)
 
   def modelPackage(self,fileName,xmlBuf):
-    b = Borg()
     buf = io.BytesIO()
     zf = zipfile.ZipFile(buf,'w',zipfile.ZIP_DEFLATED)
     zf.writestr('model.xml',xmlBuf)
+
+    apNames = self.db_proxy.getDimensionNames('component_view','')
+    for apName in apNames:
+      apBuf = self.architectural_pattern_export(apName)
+      zf.writestr(apName + '.xml',apBuf)
+
     for imgName,imgContent in self.db_proxy.getImages():
       zf.writestr(imgName,b64decode(imgContent))
     zf.close()
