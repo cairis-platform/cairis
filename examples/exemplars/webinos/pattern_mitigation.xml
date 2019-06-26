@@ -1,0 +1,570 @@
+<?xml version="1.0"?>
+<!DOCTYPE cairis_model PUBLIC "-//CAIRIS//DTD MODEL 1.0//EN" "http://cairis.org/dtd/cairis_model.dtd">
+
+<cairis_model>
+
+<goals>
+<domainproperty name="Authorised account removal" type="Invariant" originator="WP 3 workshop - August 2012">
+  <definition>Deletion of OpenID account out of scope</definition>
+</domainproperty>
+<domainproperty name="OpenID lock-out recovery" type="Invariant" originator="WP 3 workshop - August 2012">
+  <definition>OpenID account recovery procedure is out of scope.</definition>
+</domainproperty>
+<domainproperty name="App running in widget renderer" type="Invariant" originator="WP 3 workshop - August 2012">
+  <definition>There are no approved widget renderers.</definition>
+</domainproperty>
+<domainproperty name="Application blacklist checks" type="Invariant" originator="WP 3 workshop - August 2012">
+  <definition>webinos supported app stores are out of scope.</definition>
+</domainproperty>
+<domainproperty name="Widget data authorisation" type="Invariant" originator="WP 3 workshop - August 2012">
+  <definition>Although applications shall only access data permitted by the underlying system, circumventing cross-origin resource sharing restrictions via native application access to application data is out of scope.</definition>
+</domainproperty>
+<domainproperty name="Application developer signing key storage" type="Invariant" originator="WP 3 workshop - August 2012">
+  <definition>Keys are currently saved in $HOME/.webinos. If we use the keyring, platform applications can access contained keys once keyring is unlocked</definition>
+</domainproperty>
+<domainproperty name="Application QoS" type="Invariant" originator="WP 3 workshop - August 2012">
+  <definition>We have no way of asserting how an application's quality of service expectations might be expressed or satisfied.</definition>
+</domainproperty>
+<domainproperty name="Usage data sharing restriction" type="Invariant" originator="WP 3 workshop - August 2012">
+  <definition>Because there are several ways applications can share data, including server-side out of band methods, usage sharing restrictions are out of scope.  However, privacy policies can explain what an application proposes to do with user supplied data, which may allow users to make informed choices at install time.</definition>
+</domainproperty>
+<domainproperty name="User password authorisation" type="Invariant" originator="WP 3 workshop - August 2012">
+  <definition>While we can recommend safe OpenID providers and make recommendations, controlling how OpenID providers are run is out of scope.  </definition>
+</domainproperty>
+<domainproperty name="OpenID authorisation" type="Invariant" originator="WP 3 workshop - August 2012">
+  <definition>webinos should use PAPE extension and set max_auth_age=0 in order to prevent authentication caching</definition>
+</domainproperty>
+<domainproperty name="Manual personal zone enrolment." type="Invariant" originator="WP 3 workshop - August 2012">
+  <definition>Manual personal zone enrolment is circumvented by the latest specification which allows in-band authentication.</definition>
+</domainproperty>
+<domainproperty name="Trust information." type="Invariant" originator="WP 3 workshop - August 2012">
+  <definition>Recommending what might be sufficient information to identify prospective malware is out of scope.</definition>
+</domainproperty>
+<domainproperty name="Best-practice policy" type="Invariant" originator="WP 3 workshop - August 2012">
+  <definition>The default policy is only a static template rather than anything specific to a device or personal zone.</definition>
+</domainproperty>
+<domainproperty name="Browser API unauthorised" type="Invariant" originator="WP 3 workshop - August 2012">
+  <definition>Forbidding access to browser-provided APIs is not possible without specifying a webinos specific browser.</definition>
+</domainproperty>
+<domainproperty name="Credentials change authorisation." type="Invariant" originator="WP 3 workshop - August 2012">
+  <definition>Changing OpenID credentials out of scope</definition>
+</domainproperty>
+<domainproperty name="Secret RPC Call Log" type="Invariant" originator="WP 3 workshop - August 2012">
+  <definition>Misusing the secrecy of the context database can be misused for this purpose.  However, context logging is turned off by default and must be requested with permissions.  </definition>
+</domainproperty>
+<domainproperty name="Pseudonymous API user identifier" type="Invariant" originator="WP 3 workshop - August 2012">
+  <definition>Pseudonymous identifiers are currently not supported.</definition>
+</domainproperty>
+<domainproperty name="Memorable credentials" type="Invariant" originator="WP 3 workshop - August 2012">
+  <definition>The creation of memorable credentials for managing PZHs is not mandated.</definition>
+</domainproperty>
+<domainproperty name="Installed app XHR non-repudiation" type="Invariant" originator="WP 3 workshop - August 2012">
+  <definition>While use of W3C WARP or Mozilla's Content Security Policy can achieve this non-repudiation, this is not explicitly supported by webinos. </definition>
+</domainproperty>
+<domainproperty name="Application use authenticy" type="Invariant" originator="WP 3 workshop - August 2012">
+  <definition>Verifying the authenticity of prospective malware is out of scope.</definition>
+</domainproperty>
+<domainproperty name="Personal data unauthorised to trusted apps" type="Invariant" originator="WP 3 workshop - August 2012">
+  <definition>Controlling whether or not webinos applications may be trusted with personal data is out of scope.</definition>
+</domainproperty>
+<domainproperty name="Installed application behaviour cannot be interfered with" type="Invariant" originator="WP 3 workshop - August 2012">
+  <definition>Protecting the integrity of the application packages and isolation / freedom from influence by other entities is not currently supported.</definition>
+</domainproperty>
+<domainproperty name="Installed app content injection tests" type="Invariant" originator="WP 3 workshop - August 2012">
+  <definition>Control over browser based widget renderers is out of scope.</definition>
+</domainproperty>
+<domainproperty name="Immutable webinos modules" type="Invariant" originator="WP 3 workshop - August 2012">
+  <definition>There are no File API restrictions for accessing webinos code modules</definition>
+</domainproperty>
+<domainproperty name="Verified webinos.js" type="Invariant" originator="WP 3 workshop - August 2012">
+  <definition>Verifying webinos.js is out of scope while webinos supports web browsers and web apps must include their own webinos.js file.  Having a common include path for webinos.js may be an improvement, or replacing this approach in a browser model.</definition>
+</domainproperty>
+<domainproperty name="Prevent javascript from other domains" type="Invariant" originator="WP 3 workshop - August 2012">
+  <definition>Preventing hosted applications from being vulnerable from JavaScript injection is out of scope.  Various approaches can protect against attacks on the client side, such as CSP restrictions, but these are not implemented.</definition>
+</domainproperty>
+<domainproperty name="Verified injected javascript" type="Invariant" originator="WP 3 workshop - August 2012">
+  <definition>Verification against code injection is not currently implemented for webinos.js and javascript from other domains.  </definition>
+</domainproperty>
+<domainproperty name="Verified background application" type="Invariant" originator="WP 3 workshop - August 2012">
+  <definition>While we can recommend the use of app stores with verified applications and suggest the setting of sensible default policies, satisfying this goal is out of scope.</definition>
+</domainproperty>
+<domainproperty name="Malicious code unevaluated" type="Invariant" originator="WP 3 workshop - August 2012">
+  <definition>There are no restrictions within event handlers for executing JSON.</definition>
+</domainproperty>
+<domainproperty name="Trusted NDEF message content" type="Invariant" originator="WP 3 workshop - August 2012">
+  <definition>There are no restrictions planned on how NDEF messages shall be processed within webinos.</definition>
+</domainproperty>
+<domainproperty name="Plugin verification" type="Invariant" originator="WP 3 workshop - August 2012">
+  <definition>Control over browser based widget renderers is out of scope.</definition>
+</domainproperty>
+<domainproperty name="Verification before installation" type="Invariant" originator="WP 3 workshop - August 2012">
+  <definition>While we can recommend the use of app stores with verified applications, satisfying this goal is out of scope.</definition>
+</domainproperty>
+<domainproperty name="Native malware not running" type="Invariant" originator="WP 3 workshop - August 2012">
+  <definition>webinos makes no assurances about a potentially compromised platform.</definition>
+</domainproperty>
+<domainproperty name="Password brute force resistance" type="Invariant" originator="WP 3 workshop - August 2012">
+  <definition>OpenID credentials' details, which are a secret shared between OpenID providers and users, are out of scope.</definition>
+</domainproperty>
+<domainproperty name="Password recovery resistance" type="Invariant" originator="WP 3 workshop - August 2012">
+  <definition>OpenID account recovery procedure is out of scope.</definition>
+</domainproperty>
+<domainproperty name="Policy validation" type="Invariant" originator="WP 3 workshop - August 2012">
+  <definition>Supporting the user validation of policy files is out of scope.</definition>
+</domainproperty>
+<domainproperty name="PZH admin URL displayed prominently" type="Invariant" originator="WP 3 workshop - August 2012">
+  <definition>While a customised browser could present additional GUIs which authenticate the PZH to the user in a more visible way, control over browser displays is out of scope.</definition>
+</domainproperty>
+<domainproperty name="PZH Admin URL well known" type="Invariant" originator="WP 3 workshop - August 2012">
+  <definition>While recommendations can be made for how admin URLs should be formatted, we cannot control the format of URLs, which users are bad at parsing.</definition>
+</domainproperty>
+<domainproperty name="Human-readable PZH admin URL" type="Invariant" originator="WP 3 workshop - August 2012">
+  <definition>We cannot control the format of URLs but the specifications should recommend their format.</definition>
+</domainproperty>
+<domainproperty name="Single personal zone proxy" type="Invariant" originator="WP 3 workshop - August 2012">
+  <definition>There are currently no explicit checks for instances of multiple PZP configuration data on a single device.</definition>
+</domainproperty>
+<domainproperty name="Test API disabled" type="Invariant" originator="WP 3 workshop - August 2012">
+  <definition>There are no supported means for distinguishing test APIs from those which are officially supported.  We do, however, intend to impose a naming scheme that will enable the disabling of test API's in installation environment, either when packaging/building webinos or on install time.</definition>
+</domainproperty>
+<domainproperty name="Test configuration disabled" type="Invariant" originator="WP 3 workshop - August 2012">
+  <definition>There are no supported means for distinguishing test and sample configuration data from valid platform or application data. But we intend to impose a naming scheme that will enable the disabling of test and sample configuration in installation environment, either when packaging/building webinos or on install time.</definition>
+</domainproperty>
+<domainproperty name="Unspoofable PZH admin URLs" type="Invariant" originator="WP 3 workshop - August 2012">
+  <definition>Control over URLs visited by browsers is out of scope.</definition>
+</domainproperty>
+<domainproperty name="Webinos backdoor tests" type="Invariant" originator="WP 3 workshop - August 2012">
+  <definition>Testing for the presence of backdoors is not currently within scope.  Gatekeeping processes are currently being considered for change requests which will consider the potential for such backdoors being introduced.</definition>
+</domainproperty>
+<domainproperty name="Widget processor verification" type="Invariant" originator="WP 3 workshop - August 2012">
+  <definition>Widget processors are not part of the webinos system specification.</definition>
+</domainproperty>
+<domainproperty name="Authorised widget renderer extensions" type="Invariant" originator="WP 3 workshop - August 2012">
+  <definition>Security of the widget renderers is out of scope.</definition>
+</domainproperty>
+<domainproperty name="Hosted app XSS resistance" type="Invariant" originator="WP 3 workshop - August 2012">
+  <definition>Security of hosted applications is out of scope.</definition>
+</domainproperty>
+<goal name="Canonical request specification" originator="WP 3 workshop - August 2012">
+  <goal_environment name="Complete" category="Maintain" priority="Medium">
+    <definition>The request specification shall be validated before use.</definition>
+    <fit_criterion>None</fit_criterion>
+    <issue>None</issue>
+  </goal_environment>
+</goal>
+<goal name="User identifier permission" originator="WP 3 workshop - August 2012">
+  <goal_environment name="Complete" category="Maintain" priority="Medium">
+    <definition>Application shall be authorised to access to user identifier.</definition>
+    <fit_criterion>None</fit_criterion>
+    <issue>None</issue>
+  </goal_environment>
+</goal>
+<goal name="Application signing key verified" originator="WP 3 workshop - August 2012">
+  <goal_environment name="Complete" category="Maintain" priority="Medium">
+    <definition>Update procedure shall verify that the update signing key matches the original signing key.</definition>
+    <fit_criterion>None</fit_criterion>
+    <issue>None</issue>
+  </goal_environment>
+</goal>
+<goal name="Permissive default policy" originator="WP 3 workshop - August 2012">
+  <goal_environment name="Complete" category="Maintain" priority="Medium">
+    <definition>The default webinos policy shall be permissive enough to require no modification for the majority of webinos applications.</definition>
+    <fit_criterion>None</fit_criterion>
+    <issue>None</issue>
+  </goal_environment>
+</goal>
+<goal name="Policy management secrecy" originator="WP 3 workshop - August 2012">
+  <goal_environment name="Complete" category="Maintain" priority="Medium">
+    <definition>Policy management requests shall be visible only to authorised users.</definition>
+    <fit_criterion>None</fit_criterion>
+    <issue>None</issue>
+  </goal_environment>
+</goal>
+<goal name="Secret request enforcement channel" originator="WP 3 workshop - August 2012">
+  <goal_environment name="Complete" category="Maintain" priority="Medium">
+    <definition>Request enforcement channels shall be visible only to authorised users.</definition>
+    <fit_criterion>None</fit_criterion>
+    <issue>None</issue>
+  </goal_environment>
+</goal>
+<goal name="Installed app postMessage non-repudiation" originator="WP 3 workshop - August 2012">
+  <goal_environment name="Complete" category="Maintain" priority="Medium">
+    <definition>Installed applications shall disallow postMessages from unrecognised origins</definition>
+    <fit_criterion>None</fit_criterion>
+    <issue>None</issue>
+  </goal_environment>
+</goal>
+<goal name="Installed app message non-repudiation" originator="WP 3 workshop - August 2012">
+  <goal_environment name="Complete" category="Maintain" priority="Medium">
+    <definition>Installed applications shall verifiy the authenticity of event message origin.</definition>
+    <fit_criterion>None</fit_criterion>
+    <issue>None</issue>
+  </goal_environment>
+</goal>
+<goal name="Verified application installation" originator="WP 3 workshop - August 2012">
+  <goal_environment name="Complete" category="Maintain" priority="Medium">
+    <definition>webinos applications shall be verified before installation.</definition>
+    <fit_criterion>None</fit_criterion>
+    <issue>None</issue>
+  </goal_environment>
+</goal>
+<goal name="Installed app communication verification" originator="WP 3 workshop - August 2012">
+  <goal_environment name="Complete" category="Maintain" priority="Medium">
+    <definition>Installed applications shall verify communication to webinos applications.</definition>
+    <fit_criterion>None</fit_criterion>
+    <issue>None</issue>
+  </goal_environment>
+</goal>
+<goal name="Access request validation" originator="WP 3 workshop - August 2012">
+  <goal_environment name="Complete" category="Maintain" priority="Medium">
+    <definition>Access requests shall contain a validating DTD or schema</definition>
+    <fit_criterion>None</fit_criterion>
+    <issue>None</issue>
+  </goal_environment>
+</goal>
+<goal name="Policy file validation" originator="WP 3 workshop - August 2012">
+  <goal_environment name="Complete" category="Maintain" priority="Medium">
+    <definition>Policy files shall contain a validating DTD or schema</definition>
+    <fit_criterion>None</fit_criterion>
+    <issue>None</issue>
+  </goal_environment>
+</goal>
+<goal name="Mandated request" originator="WP 3 workshop - August 2012">
+  <goal_environment name="Complete" category="Maintain" priority="Medium">
+    <definition>Access requests shall be non-repudiable.</definition>
+    <fit_criterion>None</fit_criterion>
+    <issue>None</issue>
+  </goal_environment>
+</goal>
+<goal name="OpenID provider online" originator="WP 3 workshop - August 2012">
+  <goal_environment name="Complete" category="Maintain" priority="Medium">
+    <definition>PZH administrative access shall be possible only if the OpenID provider is online.</definition>
+    <fit_criterion>None</fit_criterion>
+    <issue>None</issue>
+  </goal_environment>
+</goal>
+<goal name="Restricted resource" originator="WP 3 workshop - August 2012">
+  <goal_environment name="Complete" category="Maintain" priority="Medium">
+    <definition>Resource restrictions shall be commensurate with their specifications.</definition>
+    <fit_criterion>None</fit_criterion>
+    <issue>None</issue>
+  </goal_environment>
+</goal>
+<goal name="Authenticate authentication data changes" originator="WP 3 workshop - August 2012">
+  <goal_environment name="Complete" category="Maintain" priority="Medium">
+    <definition>Re-authentication shall be necessary to update authentication data.</definition>
+    <fit_criterion>None</fit_criterion>
+    <issue>None</issue>
+  </goal_environment>
+</goal>
+<goal name="Authenticate PZP changes" originator="WP 3 workshop - August 2012">
+  <goal_environment name="Complete" category="Maintain" priority="Medium">
+    <definition>Re-authentication shall be necessary to update PZP configuration data</definition>
+    <fit_criterion>None</fit_criterion>
+    <issue>None</issue>
+  </goal_environment>
+</goal>
+<goal name="Click-through controls" originator="WP 3 workshop - August 2012">
+  <goal_environment name="Complete" category="Maintain" priority="Medium">
+    <definition>Permission prompts shall prevent dialog click-through.</definition>
+    <fit_criterion>None</fit_criterion>
+    <issue>None</issue>
+  </goal_environment>
+</goal>
+<goal name="Message non-repudiation" originator="WP 3 workshop - August 2012">
+  <goal_environment name="Complete" category="Maintain" priority="Medium">
+    <definition>Event messages shall be non-repudiable.</definition>
+    <fit_criterion>None</fit_criterion>
+    <issue>None</issue>
+  </goal_environment>
+</goal>
+<goal name="PZP message authenticity" originator="WP 3 workshop - August 2012">
+  <goal_environment name="Complete" category="Maintain" priority="Medium">
+    <definition>PZP shall authenticate the origin of messages it sends.</definition>
+    <fit_criterion>None</fit_criterion>
+    <issue>None</issue>
+  </goal_environment>
+</goal>
+<goal name="Device revocation authentication" originator="WP 3 workshop - August 2012">
+  <goal_environment name="Complete" category="Maintain" priority="Medium">
+    <definition>Re-authentication shall be necessary to revoke devices from personal zone.</definition>
+    <fit_criterion>None</fit_criterion>
+    <issue>None</issue>
+  </goal_environment>
+</goal>
+<goal name="Messaging authentication" originator="WP 3 workshop - August 2012">
+  <goal_environment name="Complete" category="Maintain" priority="Medium">
+    <definition>Messaging API users shall be authenticated before API use.</definition>
+    <fit_criterion>None</fit_criterion>
+    <issue>None</issue>
+  </goal_environment>
+</goal>
+<goal name="Restricted request specifications" originator="WP 3 workshop - August 2012">
+  <goal_environment name="Complete" category="Maintain" priority="Medium">
+    <definition>User agent requests to network resources shall be restricted.</definition>
+    <fit_criterion>None</fit_criterion>
+    <issue>None</issue>
+  </goal_environment>
+</goal>
+<goal name="Specified resource" originator="WP 3 workshop - August 2012">
+  <goal_environment name="Complete" category="Maintain" priority="Medium">
+    <definition>Access requests shall specify the resources requiring authorisation.</definition>
+    <fit_criterion>None</fit_criterion>
+    <issue>None</issue>
+  </goal_environment>
+</goal>
+</goals>
+
+<associations>
+<goal_association environment="Complete" goal_name="Account deleted" goal_dim="obstacle" ref_type="resolve" subgoal_name="Authorised account removal" subgoal_dim="domainproperty" alternative_id="0">
+  <rationale>Deletion of OpenID account out of scope</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="Account lock-out" goal_dim="obstacle" ref_type="resolve" subgoal_name="OpenID lock-out recovery" subgoal_dim="domainproperty" alternative_id="0">
+  <rationale>OpenID account recovery procedure is out of scope.</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="Ambiguous request specification" goal_dim="obstacle" ref_type="resolve" subgoal_name="Canonical request specification" subgoal_dim="goal" alternative_id="0">
+  <rationale>Each request is enforced separately by definition. Hence, it's impossible to grant access to more resources than required.</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="Ambiguous resource spec" goal_dim="obstacle" ref_type="resolve" subgoal_name="Canonical request specification" subgoal_dim="goal" alternative_id="0">
+  <rationale>Each request is enforced separately by definition. Hence, it's impossible to grant access to more resources than required.</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="App running in browser" goal_dim="obstacle" ref_type="resolve" subgoal_name="App running in widget renderer" subgoal_dim="domainproperty" alternative_id="0">
+  <rationale>There are no approved widget renderers.</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="Application blacklisted after negative reviews" goal_dim="obstacle" ref_type="resolve" subgoal_name="Application blacklist checks" subgoal_dim="domainproperty" alternative_id="0">
+  <rationale>webinos supported app stores are out of scope.</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="Application data intercepted" goal_dim="obstacle" ref_type="resolve" subgoal_name="Widget data authorisation" subgoal_dim="domainproperty" alternative_id="0">
+  <rationale>Although applications shall only access data permitted by the underlying system, circumventing cross-origin resource sharing restrictions via native application access to application data is out of scope.</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="Application data readable" goal_dim="obstacle" ref_type="resolve" subgoal_name="Widget data authorisation" subgoal_dim="domainproperty" alternative_id="0">
+  <rationale>Although applications shall only access data permitted by the underlying system, circumventing cross-origin resource sharing restrictions via native application access to application data is out of scope.</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="Application developer signing key compromised" goal_dim="obstacle" ref_type="resolve" subgoal_name="Application developer signing key storage" subgoal_dim="domainproperty" alternative_id="0">
+  <rationale>Keys are currently saved in $HOME/.webinos. If we use the keyring, platform applications can access contained keys once keyring is unlocked</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="Application has user identifier without permission" goal_dim="obstacle" ref_type="resolve" subgoal_name="User identifier permission" subgoal_dim="goal" alternative_id="0">
+  <rationale>User identifier is a controllable resource.</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="Application impossible to use" goal_dim="obstacle" ref_type="resolve" subgoal_name="Application QoS" subgoal_dim="domainproperty" alternative_id="0">
+  <rationale>We have no way of asserting how an application's quality of service expectations might be expressed or satisfied.</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="Application signing key not checked" goal_dim="obstacle" ref_type="resolve" subgoal_name="Application signing key verified" subgoal_dim="goal" alternative_id="0">
+  <rationale>widgetmanager.js performs the author matching (calling matching code in comparisonresult.js)</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="Apps share usage data" goal_dim="obstacle" ref_type="resolve" subgoal_name="Usage data sharing restriction" subgoal_dim="domainproperty" alternative_id="0">
+  <rationale>Because there are several ways applications can share data, including server-side out of band methods, usage sharing restrictions are out of scope.  However, privacy policies can explain what an application proposes to do with user supplied data, which may allow users to make informed choices at install time.</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="Attacker obtains user password" goal_dim="obstacle" ref_type="resolve" subgoal_name="User password authorisation" subgoal_dim="domainproperty" alternative_id="0">
+  <rationale>While we can recommend safe OpenID providers and make recommendations, controlling how OpenID providers are run is out of scope.  </rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="Authentication failure" goal_dim="obstacle" ref_type="resolve" subgoal_name="OpenID authorisation" subgoal_dim="domainproperty" alternative_id="0">
+  <rationale>webinos should use PAPE extension and set max_auth_age=0 in order to prevent authentication caching</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="Automate personal zone enrolment" goal_dim="obstacle" ref_type="resolve" subgoal_name="Manual personal zone enrolment." subgoal_dim="domainproperty" alternative_id="0">
+  <rationale>Manual personal zone enrolment is circumvented by the latest specification which allows in-band authentication.</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="Bad default policy" goal_dim="obstacle" ref_type="resolve" subgoal_name="Permissive default policy" subgoal_dim="goal" alternative_id="0">
+  <rationale>The API default options are reasonable given the majority of expected applications.</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="Bad trust decisions" goal_dim="obstacle" ref_type="resolve" subgoal_name="Trust information." subgoal_dim="domainproperty" alternative_id="0">
+  <rationale>Recommending what might be sufficient information to identify prospective malware is out of scope.</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="Bad user-selected policy" goal_dim="obstacle" ref_type="resolve" subgoal_name="Best-practice policy" subgoal_dim="domainproperty" alternative_id="0">
+  <rationale>The default policy is only a static template rather than anything specific to a device or personal zone.</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="Badly configured policy" goal_dim="obstacle" ref_type="resolve" subgoal_name="Best-practice policy" subgoal_dim="domainproperty" alternative_id="0">
+  <rationale>The default policy is only a static template rather than anything specific to a device or personal zone.</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="Browser API authorised" goal_dim="obstacle" ref_type="resolve" subgoal_name="Browser API unauthorised" subgoal_dim="domainproperty" alternative_id="0">
+  <rationale>Forbidding access to browser-provided APIs is not possible without specifying a webinos specific browser.</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="Browser Geolocation API accessed" goal_dim="obstacle" ref_type="resolve" subgoal_name="Browser API unauthorised" subgoal_dim="domainproperty" alternative_id="0">
+  <rationale>Forbidding access to browser-provided APIs is not possible without specifying a webinos specific browser.</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="Credentials changed" goal_dim="obstacle" ref_type="resolve" subgoal_name="Credentials change authorisation." subgoal_dim="domainproperty" alternative_id="0">
+  <rationale>Changing OpenID credentials out of scope</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="Eavesdrop Context Database" goal_dim="obstacle" ref_type="resolve" subgoal_name="Policy management secrecy" subgoal_dim="goal" alternative_id="0">
+  <rationale>Policy management calls are sent over TLS</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="Eavesdrop Context Manager" goal_dim="obstacle" ref_type="resolve" subgoal_name="Policy management secrecy" subgoal_dim="goal" alternative_id="0">
+  <rationale>Policy management calls are sent over TLS</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="Eavesdrop Policy Manager" goal_dim="obstacle" ref_type="resolve" subgoal_name="Policy management secrecy" subgoal_dim="goal" alternative_id="0">
+  <rationale>Policy management calls are sent over TLS</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="Eavesdrop request enforcement channel" goal_dim="obstacle" ref_type="resolve" subgoal_name="Secret request enforcement channel" subgoal_dim="goal" alternative_id="0">
+  <rationale>Access requests come either over the overlay network (which is only served using TLS) or between the widget renderer and PZP using a secure websocket.  However, there is the potential for man-in-the-browser attacks.</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="Eavesdrop RPC Call Log" goal_dim="obstacle" ref_type="resolve" subgoal_name="Secret RPC Call Log" subgoal_dim="domainproperty" alternative_id="0">
+  <rationale>Misusing the secrecy of the context database can be misused for this purpose.  However, context logging is turned off by default and must be requested with permissions.  </rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="findService API reveals permanent user identifier" goal_dim="obstacle" ref_type="resolve" subgoal_name="Pseudonymous API user identifier" subgoal_dim="domainproperty" alternative_id="0">
+  <rationale>Pseudonymous identifiers are currently not supported.</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="Forgotten credentials" goal_dim="obstacle" ref_type="resolve" subgoal_name="Memorable credentials" subgoal_dim="domainproperty" alternative_id="0">
+  <rationale>The creation of memorable credentials for managing PZHs is not mandated.</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="Installed App allows unrestricted postMessage" goal_dim="obstacle" ref_type="resolve" subgoal_name="Installed app postMessage non-repudiation" subgoal_dim="goal" alternative_id="0">
+  <rationale>Origins can be verified on Messaging.</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="Installed App allows unrestricted XHR" goal_dim="obstacle" ref_type="resolve" subgoal_name="Installed app XHR non-repudiation" subgoal_dim="domainproperty" alternative_id="0">
+  <rationale>While use of W3C WARP or Mozilla's Content Security Policy can achieve this non-repudiation, this is not explicitly supported by webinos. </rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="Installed app exploited" goal_dim="obstacle" ref_type="resolve" subgoal_name="Application use authenticy" subgoal_dim="domainproperty" alternative_id="0">
+  <rationale>Verifying the authenticity of prospective malware is out of scope.</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="Installed App given API permissions" goal_dim="obstacle" ref_type="resolve" subgoal_name="Personal data unauthorised to trusted apps" subgoal_dim="domainproperty" alternative_id="0">
+  <rationale>Controlling whether or not webinos applications may be trusted with personal data is out of scope.</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="Installed app misbehaving" goal_dim="obstacle" ref_type="resolve" subgoal_name="Installed application behaviour cannot be interfered with" subgoal_dim="domainproperty" alternative_id="0">
+  <rationale>Protecting the integrity of the application packages and isolation / freedom from influence by other entities is not currently supported.</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="Installed App uses unauthenticated webinos event messages" goal_dim="obstacle" ref_type="resolve" subgoal_name="Installed app message non-repudiation" subgoal_dim="goal" alternative_id="0">
+  <rationale>We can rely on the Events API read-only "from" field that is written only by PZP.</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="Installed App vulnerable to content injection" goal_dim="obstacle" ref_type="resolve" subgoal_name="Installed app content injection tests" subgoal_dim="domainproperty" alternative_id="0">
+  <rationale>Control over browser based widget renderers is out of scope.</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="JavaScript injection overwrites webinos.js" goal_dim="obstacle" ref_type="resolve" subgoal_name="Immutable webinos modules" subgoal_dim="domainproperty" alternative_id="0">
+  <rationale>There are no File API restrictions for accessing webinos code modules</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="JavaScript injection overwrites webinos.js" goal_dim="obstacle" ref_type="resolve" subgoal_name="Verified webinos.js" subgoal_dim="domainproperty" alternative_id="0">
+  <rationale>Verifying webinos.js is out of scope while webinos supports web browsers and web apps must include their own webinos.js file.  Having a common include path for webinos.js may be an improvement, or replacing this approach in a browser model.</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="JavaScript injection triggers security violation" goal_dim="obstacle" ref_type="resolve" subgoal_name="Prevent javascript from other domains" subgoal_dim="domainproperty" alternative_id="0">
+  <rationale>Preventing hosted applications from being vulnerable from JavaScript injection is out of scope.  Various approaches can protect against attacks on the client side, such as CSP restrictions, but these are not implemented.</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="JavaScript injection triggers security violation" goal_dim="obstacle" ref_type="resolve" subgoal_name="Verified injected javascript" subgoal_dim="domainproperty" alternative_id="0">
+  <rationale>Verification against code injection is not currently implemented for webinos.js and javascript from other domains.  </rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="Malicious App installed" goal_dim="obstacle" ref_type="resolve" subgoal_name="Verified application installation" subgoal_dim="goal" alternative_id="0">
+  <rationale>widgetprocessor.js performs the signature validation (the called validation code is in widgetvalidator.js)</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="Malicious background application installed" goal_dim="obstacle" ref_type="resolve" subgoal_name="Verified application installation" subgoal_dim="goal" alternative_id="0">
+  <rationale>widgetprocessor.js performs the signature validation (the called validation code is in widgetvalidator.js)</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="Malicious App misuses communication interface" goal_dim="obstacle" ref_type="resolve" subgoal_name="Installed app communication verification" subgoal_dim="goal" alternative_id="0">
+  <rationale>Application could read the "from" field of the received event and attest it.</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="Malicious background application running" goal_dim="obstacle" ref_type="resolve" subgoal_name="Verified background application" subgoal_dim="domainproperty" alternative_id="0">
+  <rationale>While we can recommend the use of app stores with verified applications and suggest the setting of sensible default policies, satisfying this goal is out of scope.</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="Malicious code evaluated" goal_dim="obstacle" ref_type="resolve" subgoal_name="Malicious code unevaluated" subgoal_dim="domainproperty" alternative_id="0">
+  <rationale>There are no restrictions within event handlers for executing JSON.</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="Malicious NDEF tag" goal_dim="obstacle" ref_type="resolve" subgoal_name="Trusted NDEF message content" subgoal_dim="domainproperty" alternative_id="0">
+  <rationale>There are no restrictions planned on how NDEF messages shall be processed within webinos.</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="Malicious plugin not detected" goal_dim="obstacle" ref_type="resolve" subgoal_name="Plugin verification" subgoal_dim="domainproperty" alternative_id="0">
+  <rationale>Control over browser based widget renderers is out of scope.</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="Malware installed" goal_dim="obstacle" ref_type="resolve" subgoal_name="Verification before installation" subgoal_dim="domainproperty" alternative_id="0">
+  <rationale>While we can recommend the use of app stores with verified applications, satisfying this goal is out of scope.</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="Missing Access Request validation" goal_dim="obstacle" ref_type="resolve" subgoal_name="Access request validation" subgoal_dim="goal" alternative_id="0">
+  <rationale>Currently being implemented for the second phase.</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="Missing Policy file validation" goal_dim="obstacle" ref_type="resolve" subgoal_name="Policy file validation" subgoal_dim="goal" alternative_id="0">
+  <rationale>Currently being implemented for the second phase.</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="Native malware running" goal_dim="obstacle" ref_type="resolve" subgoal_name="Native malware not running" subgoal_dim="domainproperty" alternative_id="0">
+  <rationale>webinos makes no assurances about a potentially compromised platform.</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="Non-mandated request" goal_dim="obstacle" ref_type="resolve" subgoal_name="Mandated request" subgoal_dim="goal" alternative_id="0">
+  <rationale>All access requests are served between PZPs over TLS</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="OpenID provider offline" goal_dim="obstacle" ref_type="resolve" subgoal_name="OpenID provider online" subgoal_dim="goal" alternative_id="0">
+  <rationale>If the OpenID provider is offline it is not possible to carry out the OpenID authentication</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="Overrestricted resource" goal_dim="obstacle" ref_type="resolve" subgoal_name="Restricted resource" subgoal_dim="goal" alternative_id="0">
+  <rationale>Each request is enforced separately by definition. Hence, it's impossible to grant access to more resources than required.</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="Unrestricted resource" goal_dim="obstacle" ref_type="resolve" subgoal_name="Restricted resource" subgoal_dim="goal" alternative_id="0">
+  <rationale>Each request is enforced separately by definition. Hence, it's impossible to grant access to more resources than required.</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="Overwrite valid authentication data" goal_dim="obstacle" ref_type="resolve" subgoal_name="Authenticate authentication data changes" subgoal_dim="goal" alternative_id="0">
+  <rationale>Need to authenticate to the hub to change synchronised policies</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="Overwrite valid PZP Configuration" goal_dim="obstacle" ref_type="resolve" subgoal_name="Authenticate PZP changes" subgoal_dim="goal" alternative_id="0">
+  <rationale>Every time PZP has update configuration data, it will be treated as a new PZP to authenticate</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="Password guessed and reset" goal_dim="obstacle" ref_type="resolve" subgoal_name="Password brute force resistance" subgoal_dim="domainproperty" alternative_id="0">
+  <rationale>OpenID credentials' details, which are a secret shared between OpenID providers and users, are out of scope.</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="Password recovery process attacked" goal_dim="obstacle" ref_type="resolve" subgoal_name="Password recovery resistance" subgoal_dim="domainproperty" alternative_id="0">
+  <rationale>OpenID account recovery procedure is out of scope.</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="Permission prompt click-through" goal_dim="obstacle" ref_type="resolve" subgoal_name="Click-through controls" subgoal_dim="goal" alternative_id="0">
+  <rationale>Based on a proposed mock-up, click-throughs will not result in a default policy.</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="Policy misconfigured" goal_dim="obstacle" ref_type="resolve" subgoal_name="Policy validation" subgoal_dim="domainproperty" alternative_id="0">
+  <rationale>Supporting the user validation of policy files is out of scope.</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="Post spoofed message" goal_dim="obstacle" ref_type="resolve" subgoal_name="Message non-repudiation" subgoal_dim="goal" alternative_id="0">
+  <rationale>Message 'from' fields are filled in by the PZP, which is able to authenticate the source of each message.</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="Spoof message origin" goal_dim="obstacle" ref_type="resolve" subgoal_name="Message non-repudiation" subgoal_dim="goal" alternative_id="0">
+  <rationale>Message 'from' fields are filled in by the PZP, which is able to authenticate the source of each message.</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="Spoof network settings message origin" goal_dim="obstacle" ref_type="resolve" subgoal_name="Message non-repudiation" subgoal_dim="goal" alternative_id="0">
+  <rationale>Message 'from' fields are filled in by the PZP, which is able to authenticate the source of each message.</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="Post spoofed message" goal_dim="obstacle" ref_type="resolve" subgoal_name="PZP message authenticity" subgoal_dim="goal" alternative_id="0">
+  <rationale>PZPs add the 'from' field to messages based on the sender who has been authenticated through the webinos PKI </rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="Spoof message origin" goal_dim="obstacle" ref_type="resolve" subgoal_name="PZP message authenticity" subgoal_dim="goal" alternative_id="0">
+  <rationale>PZPs add the 'from' field to messages based on the sender who has been authenticated through the webinos PKI </rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="Spoof network settings message origin" goal_dim="obstacle" ref_type="resolve" subgoal_name="PZP message authenticity" subgoal_dim="goal" alternative_id="0">
+  <rationale>PZPs add the 'from' field to messages based on the sender who has been authenticated through the webinos PKI </rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="PZH Admin URL displayed without prominence" goal_dim="obstacle" ref_type="resolve" subgoal_name="PZH admin URL displayed prominently" subgoal_dim="domainproperty" alternative_id="0">
+  <rationale>While a customised browser could present additional GUIs which authenticate the PZH to the user in a more visible way, control over browser displays is out of scope.</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="PZH Admin URL not well known" goal_dim="obstacle" ref_type="resolve" subgoal_name="PZH Admin URL well known" subgoal_dim="domainproperty" alternative_id="0">
+  <rationale>While recommendations can be made for how admin URLs should be formatted, we cannot control the format of URLs, which users are bad at parsing.</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="PZH Admin URL too complicated" goal_dim="obstacle" ref_type="resolve" subgoal_name="Human-readable PZH admin URL" subgoal_dim="domainproperty" alternative_id="0">
+  <rationale>We cannot control the format of URLs but the specifications should recommend their format.</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="Revoke device from valid personal zone" goal_dim="obstacle" ref_type="resolve" subgoal_name="Device revocation authentication" subgoal_dim="goal" alternative_id="0">
+  <rationale>Authentication carried out via the PZH admin interface.</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="Run multiple personal zone proxies" goal_dim="obstacle" ref_type="resolve" subgoal_name="Single personal zone proxy" subgoal_dim="domainproperty" alternative_id="0">
+  <rationale>There are currently no explicit checks for instances of multiple PZP configuration data on a single device.</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="SMS intercepted and relayed" goal_dim="obstacle" ref_type="resolve" subgoal_name="Messaging authentication" subgoal_dim="goal" alternative_id="0">
+  <rationale>This can be configured using the policy framework, but this is not the default.</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="Test API enabled" goal_dim="obstacle" ref_type="resolve" subgoal_name="Test API disabled" subgoal_dim="domainproperty" alternative_id="0">
+  <rationale>There are no supported means for distinguishing test APIs from those which are officially supported.  We do, however, intend to impose a naming scheme that will enable the disabling of test API's in installation environment, either when packaging/building webinos or on install time.</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="Test configuration enabled" goal_dim="obstacle" ref_type="resolve" subgoal_name="Test configuration disabled" subgoal_dim="domainproperty" alternative_id="0">
+  <rationale>There are no supported means for distinguishing test and sample configuration data from valid platform or application data. But we intend to impose a naming scheme that will enable the disabling of test and sample configuration in installation environment, either when packaging/building webinos or on install time.</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="Unrestricted request specification" goal_dim="obstacle" ref_type="resolve" subgoal_name="Restricted request specifications" subgoal_dim="goal" alternative_id="0">
+  <rationale>Requests to access network resources are represented by the feature http://webinos.org/action/network-access</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="Unspecified resource" goal_dim="obstacle" ref_type="resolve" subgoal_name="Specified resource" subgoal_dim="goal" alternative_id="0">
+  <rationale>Policy manager permits or denies access to resources only after matching the requested feature list against policies. Therefore all required resources must be specified in the requests. However, resources that don't have associated resources cannot be directly controlled by the policy manager</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="User clicks on link within application" goal_dim="obstacle" ref_type="resolve" subgoal_name="Unspoofable PZH admin URLs" subgoal_dim="domainproperty" alternative_id="0">
+  <rationale>Control over URLs visited by browsers is out of scope.</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="Webinos backdoor" goal_dim="obstacle" ref_type="resolve" subgoal_name="Webinos backdoor tests" subgoal_dim="domainproperty" alternative_id="0">
+  <rationale>Testing for the presence of backdoors is not currently within scope.  Gatekeeping processes are currently being considered for change requests which will consider the potential for such backdoors being introduced.</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="Webinos widget processor bug" goal_dim="obstacle" ref_type="resolve" subgoal_name="Widget processor verification" subgoal_dim="domainproperty" alternative_id="0">
+  <rationale>Widget processors are not part of the webinos system specification.</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="Widget renderer supports extensions" goal_dim="obstacle" ref_type="resolve" subgoal_name="Authorised widget renderer extensions" subgoal_dim="domainproperty" alternative_id="0">
+  <rationale>Security of the widget renderers is out of scope.</rationale>
+</goal_association>
+<goal_association environment="Complete" goal_name="XSS attack on hosted app" goal_dim="obstacle" ref_type="resolve" subgoal_name="Hosted app XSS resistance" subgoal_dim="domainproperty" alternative_id="0">
+  <rationale>Security of hosted applications is out of scope.</rationale>
+</goal_association>
+</associations>
+
+</cairis_model>
