@@ -23,6 +23,30 @@ For the smaller install (without pdf export functionality) download and run the 
    sudo docker run --name cairis-mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql:5.7
    sudo docker run --name CAIRIS --link cairis-mysql:mysql -d -P -p 80:8000 --net=bridge shamalfaily/cairis
 
+The *docker run* commands will create and start-up CAIRIS, but you will need to create an account before you can use it.  To do this, run the below command - replacing test and test with your desired username and password. 
+
+.. code-block:: bash
+
+   docker exec -t `docker ps | grep shamalfaily/cairis | head -1 | cut -d ' ' -f 1` /addAccount.sh test test TestUser
+
+Once the containers have been installed then, in the future, you should use *docker start* rather than *docker run* to start up the already downloaded containers.
+
+.. code-block:: bash
+ 
+   sudo docker start cairis-mysql 
+   sudo docker start CAIRIS
+
+To update your docker containers, run the below commands to stop the running containers and remove any old containers and volume files. Following that, you can re-run the above *docker run* commands to install and run the container.  Don't forget to re-add your user account!
+
+.. code-block:: bash
+
+   sudo docker stop CAIRIS
+   sudo docker stop cairis-mysql
+   sudo docker rm $(sudo docker ps -aq)
+   sudo docker rmi $(sudo docker images -q)
+   sudo docker volume rm $(docker volume ls)
+
+
 Please feel free to use this container to evaluate CAIRIS, but do not use it for operational use without configuring the default credentials first.  The scripts used to build the container can be found on `GitHub <https://github.com/failys/cairis/tree/master/docker>`_, and provides a useful template for getting started.
 
 Installation and configuration via GitHub
