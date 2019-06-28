@@ -37,6 +37,7 @@ Once the containers have been installed then, in the future, you should use *doc
    sudo docker start CAIRIS
 
 The containers can be stopped using *docker stop*, i.e.
+
 .. code-block:: bash
 
    sudo docker stop CAIRIS
