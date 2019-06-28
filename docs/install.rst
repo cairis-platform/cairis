@@ -36,12 +36,16 @@ Once the containers have been installed then, in the future, you should use *doc
    sudo docker start cairis-mysql 
    sudo docker start CAIRIS
 
-To update your docker containers, run the below commands to stop the running containers and remove any old containers and volume files. Following that, you can re-run the above *docker run* commands to install and run the container.  Don't forget to re-add your user account!
-
+The containers can be stopped using *docker stop*, i.e.
 .. code-block:: bash
 
    sudo docker stop CAIRIS
    sudo docker stop cairis-mysql
+
+To update your docker containers, stop the docker containers and run the below commands to remove any old containers and volume files. Following that, you can re-run the above *docker run* commands to install and run the container.  Don't forget to re-add your user account!
+
+.. code-block:: bash
+
    sudo docker rm $(sudo docker ps -aq)
    sudo docker rmi $(sudo docker images -q)
    sudo docker volume rm $(docker volume ls)
