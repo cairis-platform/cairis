@@ -32,6 +32,8 @@ class ObjectDependencyDAO(CairisDAO):
 
   def report_dependencies(self,dimension_name,object_name):
     try:
+      if (dimension_name == 'architectural_pattern'):
+        dimension_name = 'component_view'
       objtId = self.db_proxy.getDimensionId(object_name,dimension_name)
       realDeps = self.db_proxy.reportDependencies(dimension_name,objtId)
       fakeDeps = ObjectDependencyModel()
@@ -47,6 +49,8 @@ class ObjectDependencyDAO(CairisDAO):
 
   def delete_dependencies(self,dimension_name,object_name):
     try:
+      if (dimension_name == 'architectural_pattern'):
+        dimension_name = 'component_view'
       objtId = self.db_proxy.getDimensionId(object_name,dimension_name)
       realDeps = self.db_proxy.reportDependencies(dimension_name,objtId)
       self.db_proxy.deleteDependencies(realDeps)

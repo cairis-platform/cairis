@@ -969,6 +969,8 @@ drop procedure if exists projectToJSON;
 drop procedure if exists riskAnalysisToJSON;
 drop procedure if exists usabilityToJSON;
 drop procedure if exists goalsToJSON;
+drop procedure if exists templateGoalDependents;
+drop procedure if exists componentViewDependents;
 
 
 delimiter //
@@ -5031,6 +5033,7 @@ begin
   drop table if exists temp_usecase;
   drop table if exists temp_misusecase;
   drop table if exists temp_persona;
+  drop table if exists temp_component_view;
   create temporary table temp_asset (id INT NOT NULL,name VARCHAR(200) NOT NULL);
   create temporary table temp_attacker (id INT NOT NULL,name VARCHAR(200) NOT NULL);
   create temporary table temp_domainproperty (id INT NOT NULL,name VARCHAR(200) NOT NULL);
@@ -5047,6 +5050,7 @@ begin
   create temporary table temp_usecase (id INT NOT NULL,name VARCHAR(200) NOT NULL);
   create temporary table temp_misusecase (id INT NOT NULL,name VARCHAR(200) NOT NULL);
   create temporary table temp_persona (id INT NOT NULL,name VARCHAR(200) NOT NULL);
+  create temporary table temp_component_view (id INT NOT NULL,name VARCHAR(255) NOT NULL);
 
   if (dimName = 'attacker')
   then
@@ -5133,6 +5137,16 @@ begin
     call securityPatternDependents(dimId);
   end if;
 
+  if (dimName = 'template_goal')
+  then
+    call templateGoalDependents(dimId);
+  end if;
+
+  if (dimName = 'component_view')
+  then
+    call componentViewDependents(dimId);
+  end if;
+
   select distinct 'countermeasure',id,name from temp_countermeasure
   union
   select distinct 'goal',id,name from temp_goal
@@ -5163,7 +5177,9 @@ begin
   union
   select distinct 'asset',id,name from temp_asset
   union
-  select distinct 'role',id,name from temp_role;
+  select distinct 'role',id,name from temp_role
+  union
+  select distinct 'architectural_pattern',id,name from temp_component_view;
 end
 //
 
@@ -28451,6 +28467,88 @@ begin
   select buf,dpCount,goalCount,obsCount,reqCount,ucCount,cmCount;
 end
 //
+
+create procedure templateGoalDependents(in tgId int)
+begin
+  declare cvId int;
+  declare cvName varchar(255);
+  declare done int default 0;
+  declare cvCursor cursor for select distinct cv.id, cv.name from component_view cv, component_view_component cvc, component_template_goal ctg where ctg.template_goal_id = tgId and ctg.component_id = cvc.component_id and cvc.component_view_id = cv.id;
+  declare continue handler for not found set done = 1;
+
+  open cvCursor;
+  cv_loop: loop
+    fetch cvCursor into cvId, cvName;
+    if done = 1
+    then
+      leave cv_loop;
+    end if;
+    insert into temp_component_view values(cvId,cvName);
+    call componentViewDependents(cvId);
+  end loop cv_loop;
+  close cvCursor;
+end
+//
+
+
+create procedure componentViewDependents(in cvId int)
+begin
+  declare assetId int;
+  declare assetName varchar(255);
+  declare goalId int;
+  declare goalName varchar(255);
+  declare reqId int;
+  declare reqName varchar(255);
+  declare done int default 0;
+  declare assetCursor cursor for select a.id,a.name from component_view_component cvc, component_asset_template_asset cata, asset a where cvc.component_view_id = cvId and cvc.component_id = cata.component_id and cata.asset_id = a.id;
+  declare goalCursor cursor for select g.id,g.name from component_view_component cvc, component_goal_template_goal cgtg, goal g where cvc.component_view_id = cvId and cvc.component_id = cgtg.component_id and cgtg.goal_id = g.id;
+  declare reqCursor cursor for select r.id,r.name from component_view_component cvc, component_requirement_template_requirement crtr, requirement r where cvc.component_view_id = cvId and cvc.component_id = crtr.component_id and crtr.requirement_id = r.id and r.version = (select max(i.version) from requirement i where i.id = r.id);
+
+  declare continue handler for not found set done = 1;
+
+  open assetCursor;
+  asset_loop: loop
+    fetch assetCursor into assetId, assetName;
+    if done = 1
+    then
+      leave asset_loop;
+    end if;
+    insert into temp_asset values(assetId,assetName);
+    call assetDependents(assetId);
+  end loop asset_loop;
+  close assetCursor;
+
+  set done = 0;
+
+  open goalCursor;
+  goal_loop: loop
+    fetch goalCursor into goalId, goalName;
+    if done = 1
+    then
+      leave goal_loop;
+    end if;
+    insert into temp_goal values(goalId,goalName);
+    call goalDependents(goalId);
+  end loop goal_loop;
+  close goalCursor;
+
+  set done = 0;
+
+  open reqCursor;
+  req_loop: loop
+    fetch reqCursor into reqId, reqName;
+    if done = 1
+    then
+      leave req_loop;
+    end if;
+    insert into temp_requirement values(reqId,reqName);
+    call requirementDependents(reqId);
+  end loop req_loop;
+  close reqCursor;
+
+end
+//
+
 
 
 delimiter ;

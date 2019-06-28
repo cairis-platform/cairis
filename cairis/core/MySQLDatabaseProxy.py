@@ -1404,6 +1404,8 @@ class MySQLDatabaseProxy:
   def deleteDependencies(self,deps):
     for dep in deps:
       dimName = dep[0]
+      if (dimName == 'architectural_pattern'):
+        dimName = 'component_view'
       objtId = dep[1]
       self.deleteObject(objtId,dimName)
     
