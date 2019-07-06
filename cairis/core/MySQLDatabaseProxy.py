@@ -18,7 +18,7 @@
 
 from .Borg import Borg
 import MySQLdb
-from sqlalchemy.exc import OperationalError
+from sqlalchemy.exc import OperationalError, ProgrammingError
 from . import RequirementFactory
 from .Environment import Environment
 from .ARM import *
@@ -164,6 +164,9 @@ class MySQLDatabaseProxy:
       self.conn.execute("set session max_sp_recursion_depth = 255")
 
     except OperationalError as e:
+      exceptionText = 'MySQL error re-connecting to the CAIRIS database: ' + format(e)
+      raise DatabaseProxyException(exceptionText) 
+    except ProgrammingError as e:
       exceptionText = 'MySQL error re-connecting to the CAIRIS database: ' + format(e)
       raise DatabaseProxyException(exceptionText) 
     except _mysql_exceptions.IntegrityError as e:
@@ -332,6 +335,8 @@ class MySQLDatabaseProxy:
       id,msg = e
       exceptionText = errorTxt + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
+    except ProgrammingError as e:
+      raise DatabaseProxyException(format(e)) 
 
   def getEnvironments(self,constraintId = -1):
     envRows = self.responseList('call getEnvironments(:id)',{'id':constraintId},'MySQL error getting environments')

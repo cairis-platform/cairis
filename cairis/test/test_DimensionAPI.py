@@ -24,6 +24,7 @@ else:
   from urllib import quote
 import jsonpickle
 from cairis.test.CairisDaemonTestCase import CairisDaemonTestCase
+from cairis.tools.JsonConverter import json_deserialize
 import os
 from cairis.mio.ModelImport import importModelFile
 
@@ -57,6 +58,12 @@ class DimensionAPITests(CairisDaemonTestCase):
     dimValue = dims[0]
     self.logger.info('[%s] First role: %s\n', method, dimValue)
 
+    rv = self.app.get('/api/dimensions/table/Foo?session_id=test')
+    msg = json_deserialize(rv.data)
+    self.assertEqual(msg['code'],400)
+
+
+
   def test_get_all_dimensions_by_environment(self):
     method = 'test_get_all_dimensions_by_environment'
     url = '/api/dimensions/table/asset/environment/Psychosis?session_id=test'
@@ -71,3 +78,12 @@ class DimensionAPITests(CairisDaemonTestCase):
     self.assertEqual(len(dims), 13, 'Incorrect number of asset names returned')
     dimValue = dims[0]
     self.logger.info('[%s] First asset: %s\n', method, dimValue)
+
+    rv = self.app.get('/api/dimensions/table/Foo/environment/Psychosis?session_id=test')
+    msg = json_deserialize(rv.data)
+    self.assertEqual(msg['code'],400)
+
+    rv = self.app.get('/api/dimensions/table/asset/environment/Foo?session_id=test')
+    msg = json_deserialize(rv.data)
+    self.assertEqual(msg['code'],404)
+

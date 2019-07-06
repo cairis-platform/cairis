@@ -19,6 +19,8 @@ from cairis.core.ARM import *
 from cairis.daemon.CairisHTTPError import CairisHTTPError, ARMHTTPError
 from cairis.data.CairisDAO import CairisDAO
 from cairis.core.MySQLDatabaseProxy import MySQLDatabaseProxy
+from http.client import BAD_REQUEST, NOT_FOUND
+
 
 __author__ = 'Shamal Faily'
 
@@ -30,6 +32,9 @@ class DimensionDAO(CairisDAO):
 
   def getDimensions(self,table,id):
     try:
+      permissableDimensions = ['access_right', 'architectural_pattern', 'asset', 'asset_reference', 'asset_type','attacker','attacker_reference', 'behavioural_variable', 'capability','characteristic_synopsis', 'component', 'concept_reference','connector', 'countermeasure' 'countermeasure_reference', 'countermeasure_value', 'datastore', 'detection_mechanism', 'dfd_filter', 'document_reference', 'domainproperty','domainproperty_reference', 'entity','environment', 'environment_reference','external_document', 'goal', 'goal_reference','goal_category_type','interface','likelihood','locations','misusability_case','misusecase','misusecase_reference','motivation','obstacle','obstacle_category_type','obstacle_reference','persona','persona_characteristic','persona_characteristic_synopsis','persona_implied_process','persona_reference','persona_type','priority_type', 'privilege', 'protocol', 'reference_synopsis','requirement', 'requirement_reference', 'requirement_type','response', 'response_reference', 'risk', 'risk_class','risk_reference','role', 'role_reference', 'role_type', 'securitypattern','severity', 'surface_type', 'task', 'task_characteristic', 'task_reference','template_asset', 'template_goal', 'template_requirement','trace_dimension','threat', 'threat_reference','threat_type', 'threat_value', 'usecase', 'vulnerability','vulnerability_reference', 'vulnerability_type']
+      if (table not in permissableDimensions):
+        raise CairisHTTPError(BAD_REQUEST,'Invalid dimension',table + ' is not a permissable dimension')
       if (table == 'persona_characteristic_synopsis'):
         return self.getDimensionNames(table,'')
       else: 
@@ -40,6 +45,11 @@ class DimensionDAO(CairisDAO):
 
   def getDimensionNames(self,table,environment):
     try:
+      permissableDimensions = ['asset','asset_value','attacker','countermeasure','datastore','detection_mechanism','dfd_filter','entity','goal','misusecase','obstacle','persona', 'requirement','response','risk','role','task','threat','usecase', 'vulnerability']
+      if (table not in permissableDimensions):
+        raise CairisHTTPError(BAD_REQUEST,'Invalid dimension',table + ' is not a permissable dimension when specifying environment')
+      if (self.db_proxy.nameExists(environment,'environment') == False):
+        raise CairisHTTPError(NOT_FOUND,'Unknown environment',environment + ' does not exist')
       return self.db_proxy.getDimensionNames(table,environment)
     except DatabaseProxyException as ex:
       self.close()
