@@ -149,8 +149,6 @@ class EnvironmentModel:
       taskScore = self.dbProxy.taskUsabilityScore(objtName,self.theEnvironmentName)
       self.theGraph.add_node(pydot.Node(objtName,shape='ellipse',margin=0,style='filled',color=usabilityColourCode(taskScore),pencolor='black',fontname=self.fontName,fontsize=self.fontSize,fontcolor=usabilityTextColourCode(taskScore),URL=objtUrl))
 
-    elif (dimName == 'misusecase'):
-      self.theGraph.add_node(pydot.Node(objtName,shape='ellipse',margin=0,fontname=self.fontName,fontsize=self.fontSize,style='filled',color='black',fontcolor='white',URL=objtUrl))
     else: 
       raise UnknownNodeType(dimName)
 
