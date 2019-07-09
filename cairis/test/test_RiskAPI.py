@@ -88,7 +88,7 @@ class RiskAPITests(CairisDaemonTestCase):
         else:
           responseData = rv.data
         elements = jsonpickle.decode(responseData)
-        self.assertEqual(len(elements),69)
+        self.assertEqual(len(elements),66)
 
     def test_get_by_name(self):
         method = 'test_get_by_name'
