@@ -4815,7 +4815,7 @@ begin
   declare assetCountermeasures int;
   declare taskCountermeasures int;
   declare taskId int;
-  declare taskName varchar(50);
+  declare taskName varchar(200);
   declare done int default 0;
   declare assetCursor cursor for select distinct ca.asset_id,a.name from countermeasure_asset ca, asset a where ca.countermeasure_id = cmId and ca.asset_id = a.id;  
   declare taskCursor cursor for select distinct ct.subgoal_id,t.name from countermeasuretask_goalassociation ct, task t where ct.subgoal_id = cmId and ct.goal_id = t.id;  
@@ -4888,7 +4888,7 @@ begin
   declare vulId int;
   declare vulName varchar(200);
   declare taskId int;
-  declare taskName varchar(50);
+  declare taskName varchar(200);
   declare reqAssets int;
   declare threatAssets int;
   declare vulnerabilityAssets int;
@@ -8712,7 +8712,7 @@ begin
   declare goalId int;
   declare goalName varchar(100);
   declare taskId int;
-  declare taskName varchar(50);
+  declare taskName varchar(200);
   declare ucId int;
   declare ucName varchar(50);
 
@@ -13253,7 +13253,7 @@ begin
   declare cmType varchar(50);
   declare effValue varchar(50);
   declare roleName varchar(50);
-  declare taskName varchar(50);
+  declare taskName varchar(200);
   declare personaName varchar(50);
   declare durValue varchar(50);
   declare freqValue varchar(50);
@@ -17542,7 +17542,7 @@ begin
   declare requirementId int;
   declare requirementLabel int;
   declare taskId int;
-  declare taskName varchar(50);
+  declare taskName varchar(200);
   declare usecaseId int;
   declare usecaseName varchar(50);
   declare roleId int;
@@ -24499,7 +24499,7 @@ end
 create procedure lawfulDataHandling_task(in environmentId int)
 begin
   declare taskId int;
-  declare taskName varchar(100);
+  declare taskName varchar(200);
   declare assetId int;
   declare prCount int;
   declare done int default 0;
@@ -27969,7 +27969,7 @@ begin
   declare cmType varchar(50);
   declare effValue varchar(50);
   declare roleName varchar(50);
-  declare taskName varchar(50);
+  declare taskName varchar(200);
   declare personaName varchar(50);
   declare durValue varchar(50);
   declare freqValue varchar(50);

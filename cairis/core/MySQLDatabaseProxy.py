@@ -18,7 +18,7 @@
 
 from .Borg import Borg
 import MySQLdb
-from sqlalchemy.exc import OperationalError, ProgrammingError
+from sqlalchemy.exc import OperationalError, ProgrammingError, DataError
 from . import RequirementFactory
 from .Environment import Environment
 from .ARM import *
@@ -329,6 +329,9 @@ class MySQLDatabaseProxy:
       session.close()
       return responseList
     except OperationalError as e:
+      exceptionText = 'MySQL error calling ' + callTxt + ' (message:' + format(e) + ')'
+      raise DatabaseProxyException(exceptionText) 
+    except DataError as e:
       exceptionText = 'MySQL error calling ' + callTxt + ' (message:' + format(e) + ')'
       raise DatabaseProxyException(exceptionText) 
     except _mysql_exceptions.DatabaseError as e:
