@@ -712,6 +712,9 @@ class MySQLDatabaseProxy:
       rs.close()
       session.close()
       return dimId
+    except ValueError as e:
+      exceptionText = 'Error splitting ' + dimensionName + ': ' + format(e)
+      raise DatabaseProxyException(exceptionText) 
     except OperationalError as e:
       exceptionText = 'MySQL error getting '
       exceptionText += dimensionTable + ' (message:' + format(e) + ')'
@@ -1973,6 +1976,16 @@ class MySQLDatabaseProxy:
 
   def getGoalAssociations(self,constraintId = ''):
     return self.goalAssociations('call goalAssociationNames(:id)',constraintId)
+
+  def getGoalAssociation(self,envName,goalName,subGoalName):
+    rows = self.responseList('call getGoalAssociation(:environment,:goal,:subgoal)',{'environment':envName,'goal':goalName,'subgoal':subGoalName},'MySQL error getting goal association')
+    if (len(rows) == 0):
+      raise DatabaseProxyException('Goal association ' + envName + '/' + goalName + '/' + subGoalName + ' not found')
+    associationId,envName,goalName,goalDimName,aType,subGoalName,subGoalDimName,alternativeId,rationale = rows[0]
+    parameters = GoalAssociationParameters(envName,goalName,goalDimName,aType,subGoalName,subGoalDimName,alternativeId,rationale)
+    association = ObjectFactory.build(associationId,parameters)
+    return association
+    
 
   def goalAssociations(self,procName,constraintId = ''):
     rows = self.responseList(procName,{'id':constraintId},'MySQL error getting goal associations')

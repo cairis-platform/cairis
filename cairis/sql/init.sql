@@ -57,6 +57,7 @@ DROP VIEW IF EXISTS process_personal_information;
 DROP VIEW IF EXISTS datastore_asset;
 DROP VIEW IF EXISTS datastore_personal_information;
 DROP VIEW IF EXISTS personal_risk;
+DROP VIEW IF EXISTS goal_associations;
 
 DROP TABLE IF EXISTS trust_boundary_usecase;
 DROP TABLE IF EXISTS trust_boundary_asset;
@@ -4006,7 +4007,56 @@ CREATE VIEW personal_risk as
   union
   select r.id,r.name,r.threat_id,r.vulnerability_id,r.intent from risk r, asset_vulnerability av, personal_information pi where r.vulnerability_id = av.vulnerability_id and av.asset_id = pi.asset_id and av.environment_id = pi.environment_id;
 
+CREATE VIEW goal_associations as
+  select ga.id, e.name environment, hg.name goal, 'goal' goal_dim, rt.name ref_type, tg.name subgoal, 'goal' subgoal_dim, ga.alternative_id, ga.rationale from goalgoal_goalassociation ga, environment e, goal hg, goal tg, reference_type rt where ga.environment_id = e.id and ga.goal_id = hg.id and ga.subgoal_id = tg.id and ga.ref_type_id = rt.id
+  union
+  select ga.id, e.name environment, hg.name goal, 'goal' goal_dim, rt.name ref_type, tg.name subgoal, 'requirement' subgoal_dim, ga.alternative_id, ga.rationale from goalrequirement_goalassociation ga, environment e, goal hg, requirement tg, reference_type rt where ga.environment_id = e.id and ga.goal_id = hg.id and ga.subgoal_id = tg.id and ga.ref_type_id = rt.id
+  union
+  select ga.id, e.name environment, hg.name goal, 'goal' goal_dim, rt.name ref_type, tg.name subgoal, 'task' subgoal_dim, ga.alternative_id, ga.rationale from goaltask_goalassociation ga, environment e, goal hg, task tg, reference_type rt where ga.environment_id = e.id and ga.goal_id = hg.id and ga.subgoal_id = tg.id and ga.ref_type_id = rt.id
+  union
+  select ga.id, e.name environment, hg.name goal, 'goal' goal_dim, rt.name ref_type, tg.name subgoal, 'usecase' subgoal_dim, ga.alternative_id, ga.rationale from goalusecase_goalassociation ga, environment e, goal hg, usecase tg, reference_type rt where ga.environment_id = e.id and ga.goal_id = hg.id and ga.subgoal_id = tg.id and ga.ref_type_id = rt.id
+  union
+  select ga.id, e.name environment, hg.name goal, 'obstacle' goal_dim, rt.name ref_type, tg.name subgoal, 'misusecase' subgoal_dim, ga.alternative_id, ga.rationale from obstaclemisusecase_goalassociation ga, environment e, obstacle hg, misusecase tg, reference_type rt where ga.environment_id = e.id and ga.goal_id = hg.id and ga.subgoal_id = tg.id and ga.ref_type_id = rt.id
+  union
+  select ga.id, e.name environment, hg.name goal, 'requirement' goal_dim, rt.name ref_type, tg.name subgoal, 'goal' subgoal_dim, ga.alternative_id, ga.rationale from requirementgoal_goalassociation ga, environment e, requirement hg, goal tg, reference_type rt where ga.environment_id = e.id and ga.goal_id = hg.id and ga.subgoal_id = tg.id and ga.ref_type_id = rt.id
+  union
+  select ga.id, e.name environment, hg.name goal, 'requirement' goal_dim, rt.name ref_type, tg.name subgoal, 'requirement' subgoal_dim, ga.alternative_id, ga.rationale from requirementrequirement_goalassociation ga, environment e, requirement hg, requirement tg, reference_type rt where ga.environment_id = e.id and ga.goal_id = hg.id and ga.subgoal_id = tg.id and ga.ref_type_id = rt.id
+  union
+  select ga.id, e.name environment, hg.name goal, 'goal' goal_dim, rt.name ref_type, tg.name subgoal, 'role' subgoal_dim, ga.alternative_id, ga.rationale from goalrole_goalassociation ga, environment e, goal hg, role tg, reference_type rt where ga.environment_id = e.id and ga.goal_id = hg.id and ga.subgoal_id = tg.id and ga.ref_type_id = rt.id
+  union
+  select ga.id, e.name environment, hg.name goal, 'requirement' goal_dim, rt.name ref_type, tg.name subgoal, 'role' subgoal_dim, ga.alternative_id, ga.rationale from requirementrole_goalassociation ga, environment e, requirement hg, role tg, reference_type rt where ga.environment_id = e.id and ga.goal_id = hg.id and ga.subgoal_id = tg.id and ga.ref_type_id = rt.id
+  union
+  select -1, e.name environment, hg.name goal, 'response' goal_dim, rt.name ref_type, tg.name subgoal, 'role' subgoal_dim, ga.alternative_id, ga.rationale from responserole_goalassociation ga, environment e, response hg, role tg, reference_type rt where ga.environment_id = e.id and ga.goal_id = hg.id and ga.subgoal_id = tg.id and ga.ref_type_id = rt.id
+  union
+  select ga.id, e.name environment, hg.name goal, 'countermeasure' goal_dim, rt.name ref_type, tg.name subgoal, 'task' subgoal_dim, ga.alternative_id, ga.rationale from countermeasuretask_goalassociation ga, environment e, countermeasure hg, task tg, reference_type rt where ga.environment_id = e.id and ga.goal_id = hg.id and ga.subgoal_id = tg.id and ga.ref_type_id = rt.id
+  union
+  select ga.id, e.name environment, hg.name goal, 'goal' goal_dim, rt.name ref_type, tg.name subgoal, 'domainproperty' subgoal_dim, ga.alternative_id, ga.rationale from goaldomainproperty_goalassociation ga, environment e, goal hg, domainproperty tg, reference_type rt where ga.environment_id = e.id and ga.goal_id = hg.id and ga.subgoal_id = tg.id and ga.ref_type_id = rt.id
+  union
+  select ga.id, e.name environment, hg.name goal, 'goal' goal_dim, rt.name ref_type, tg.name subgoal, 'obstacle' subgoal_dim, ga.alternative_id, ga.rationale from goalobstacle_goalassociation ga, environment e, goal hg, obstacle tg, reference_type rt where ga.environment_id = e.id and ga.goal_id = hg.id and ga.subgoal_id = tg.id and ga.ref_type_id = rt.id
+  union
+  select ga.id, e.name environment, hg.name goal, 'domainproperty' goal_dim, rt.name ref_type,  tg.name subgoal, 'obstacle' subgoal_dim, ga.alternative_id, ga.rationale from domainpropertyobstacle_goalassociation ga, environment e, domainproperty hg, obstacle tg, reference_type rt where ga.environment_id = e.id and ga.goal_id = hg.id and ga.subgoal_id = tg.id and ga.ref_type_id = rt.id
+  union
+  select ga.id, e.name environment, hg.name goal, 'obstacle' goal_dim, rt.name ref_type, tg.name subgoal, 'obstacle' subgoal_dim, ga.alternative_id, ga.rationale from obstacleobstacle_goalassociation ga, environment e, obstacle hg, obstacle tg, reference_type rt where ga.environment_id = e.id and ga.goal_id = hg.id and ga.subgoal_id = tg.id and ga.ref_type_id = rt.id
+  union
+  select ga.id, e.name environment, hg.name goal, 'obstacle' goal_dim, rt.name ref_type, tg.name subgoal, 'goal' subgoal_dim, ga.alternative_id, ga.rationale from obstaclegoal_goalassociation ga, environment e, obstacle hg, goal tg, reference_type rt where ga.environment_id = e.id and ga.goal_id = hg.id and ga.subgoal_id = tg.id and ga.ref_type_id = rt.id
+  union
+  select ga.id, e.name environment, hg.name goal, 'obstacle' goal_dim, rt.name ref_type, tg.name subgoal, 'domainproperty' subgoal_dim, ga.alternative_id, ga.rationale from obstacledomainproperty_goalassociation ga, environment e, obstacle hg, domainproperty tg, reference_type rt where ga.environment_id = e.id and ga.goal_id = hg.id and ga.subgoal_id = tg.id and ga.ref_type_id = rt.id
+  union
+  select ga.id, e.name environment, hg.name goal, 'obstacle' goal_dim, rt.name ref_type, tg.name subgoal, 'requirement' subgoal_dim, ga.alternative_id, ga.rationale from obstaclerequirement_goalassociation ga, environment e, obstacle hg, requirement tg, reference_type rt where ga.environment_id = e.id and ga.goal_id = hg.id and ga.subgoal_id = tg.id and ga.ref_type_id = rt.id
+  union
+  select ga.id, e.name environment, hg.name goal, 'requirement' goal_dim, rt.name ref_type, tg.name subgoal, 'obstacle' subgoal_dim, ga.alternative_id, ga.rationale from requirementobstacle_goalassociation ga, environment e, requirement hg, obstacle tg, reference_type rt where ga.environment_id = e.id and ga.goal_id = hg.id and ga.subgoal_id = tg.id and ga.ref_type_id = rt.id
+  union
+  select ga.id, e.name environment, hg.name goal, 'obstacle' goal_dim, rt.name ref_type, tg.name subgoal, 'threat' subgoal_dim, ga.alternative_id, ga.rationale from obstaclethreat_goalassociation ga, environment e, obstacle hg, threat tg, reference_type rt where ga.environment_id = e.id and ga.goal_id = hg.id and ga.subgoal_id = tg.id and ga.ref_type_id = rt.id
+  union
+  select ga.id, e.name environment, hg.name goal, 'obstacle' goal_dim, rt.name ref_type, tg.name subgoal, 'vulnerability' subgoal_dim, ga.alternative_id, ga.rationale from obstaclevulnerability_goalassociation ga, environment e, obstacle hg, vulnerability tg, reference_type rt where ga.environment_id = e.id and ga.goal_id = hg.id and ga.subgoal_id = tg.id and ga.ref_type_id = rt.id
+  union
+  select ga.id, e.name environment, hg.name goal, 'obstacle' goal_dim, rt.name ref_type, tg.name subgoal, 'task' subgoal_dim, ga.alternative_id, ga.rationale from obstacletask_goalassociation ga, environment e, obstacle hg, task tg, reference_type rt where ga.environment_id = e.id and ga.goal_id = hg.id and ga.subgoal_id = tg.id and ga.ref_type_id = rt.id
+  union
+  select ga.id, e.name environment, hg.name goal, 'obstacle' goal_dim, rt.name ref_type, tg.name subgoal, 'usecase' subgoal_dim, ga.alternative_id, ga.rationale from obstacleusecase_goalassociation ga, environment e, obstacle hg, usecase tg, reference_type rt where ga.environment_id = e.id and ga.goal_id = hg.id and ga.subgoal_id = tg.id and ga.ref_type_id = rt.id
+  union
+  select ga.id, e.name environment, hg.name goal, 'obstacle' goal_dim, rt.name ref_type, tg.name subgoal, 'role' subgoal_dim, ga.alternative_id, ga.rationale from obstaclerole_goalassociation ga, environment e, obstacle hg, role tg, reference_type rt where ga.environment_id = e.id and ga.goal_id = hg.id and ga.subgoal_id = tg.id and ga.ref_type_id = rt.id;
 
+  
 
 INSERT INTO version (major,minor,patch) VALUES (2,1,0);
 INSERT INTO attributes (id,name) VALUES (103,'did');

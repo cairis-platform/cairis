@@ -18,12 +18,13 @@
 from cairis.core.ARM import *
 from cairis.core.GoalAssociation import GoalAssociation
 from cairis.core.GoalAssociationParameters import GoalAssociationParameters
-from cairis.daemon.CairisHTTPError import ObjectNotFoundHTTPError, MalformedJSONHTTPError, ARMHTTPError, MissingParameterHTTPError, OverwriteNotAllowedHTTPError
+from cairis.daemon.CairisHTTPError import CairisHTTPError, ObjectNotFoundHTTPError, MalformedJSONHTTPError, ARMHTTPError, MissingParameterHTTPError, OverwriteNotAllowedHTTPError
 import cairis.core.armid
 from cairis.data.CairisDAO import CairisDAO
 from cairis.tools.ModelDefinitions import GoalAssociationModel
 from cairis.tools.SessionValidator import check_required_keys
 from cairis.tools.JsonConverter import json_serialize, json_deserialize
+import http.client 
 
 __author__ = 'Shamal Faily'
 
@@ -43,19 +44,20 @@ class GoalAssociationDAO(CairisDAO):
     return assocList
 
   def get_goal_association(self, environment_name, goal_name, subgoal_name, deleteId=True):
-    assocs = self.db_proxy.getGoalAssociations(environment_name)
-    if assocs is None or len(assocs) < 1:
+    try:
+      assoc = self.db_proxy.getGoalAssociation(environment_name,goal_name,subgoal_name)
+      if (deleteId == True):
+        del assoc.theId
+      return assoc 
+    except ARMException as ex:
       self.close()
-      raise ObjectNotFoundHTTPError('Goal Associations')
-    for key in assocs:
-      envName,goalName,subGoalName,aType = key.split('/')
-      if (envName == environment_name) and (((goalName == goal_name) and (subGoalName == subgoal_name)) or ((goalName == subgoal_name) and (subGoalName == goal_name))):
-        assoc = assocs[key]
-        if (deleteId == True):
-          del assoc.theId
-        return assoc 
-    self.close()
-    raise ObjectNotFoundHTTPError('The provided goal association parameters')
+      raise ARMHTTPError(ex)
+    except ValueError as ex:
+      self.close()
+      raise CairisHTTPError(status_code=http.client.BAD_REQUEST,status="Server error",message='Error unpacking ' + key + ': ' + format(ex))
+    except Exception as ex:
+      self.close()
+      raise CairisHTTPError(status_code=http.client.BAD_REQUEST,status="Server error",message=format(ex))
 
   def add_goal_association(self, assoc):
     assocParams = GoalAssociationParameters(

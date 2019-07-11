@@ -971,6 +971,7 @@ drop procedure if exists usabilityToJSON;
 drop procedure if exists goalsToJSON;
 drop procedure if exists templateGoalDependents;
 drop procedure if exists componentViewDependents;
+drop procedure if exists getGoalAssociation;
 
 
 delimiter //
@@ -28543,6 +28544,11 @@ begin
 end
 //
 
+create procedure getGoalAssociation(in envName text, in goalName text, in sgName text)
+begin
+  select id, environment,goal, goal_dim, ref_type, subgoal, subgoal_dim, alternative_id, rationale from goal_associations where environment = envName and goal = goalName and subgoal = sgName limit 1;
+end
+//
 
 
 delimiter ;
