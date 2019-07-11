@@ -12,7 +12,7 @@ For the full install (with pdf export functionality) download and run the contai
 
 .. code-block:: bash
  
-   sudo docker run --name cairis-mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql:5.7
+   sudo docker run --name cairis-mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql:5.7 --thread_stack=256K
    sudo docker run --name cairis-docs -d -v cairisDocumentation:/tmpDocker -v cairisImage:/images -t shamalfaily/cairis-docs
    sudo docker run --name CAIRIS -d --link cairis-mysql:mysql --link cairis-docs:docs -P -p 80:8000 --net=bridge -v cairisDocumentation:/tmpDocker -v cairisImage:/images shamalfaily/cairis
 
@@ -20,7 +20,7 @@ For the smaller install (without pdf export functionality) download and run the 
 
 .. code-block:: bash
  
-   sudo docker run --name cairis-mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql:5.7
+   sudo docker run --name cairis-mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql:5.7 --thread_stack=256K
    sudo docker run --name CAIRIS --link cairis-mysql:mysql -d -P -p 80:8000 --net=bridge shamalfaily/cairis
 
 The *docker run* commands will create and start-up CAIRIS, but you will need to create an account before you can use it.  To do this, run the below command - replacing test and test with your desired username and password. 
@@ -48,7 +48,7 @@ To update your docker containers, stop the docker containers and run the below c
 .. code-block:: bash
 
    sudo docker rm $(sudo docker ps -aq)
-   sudo docker rmi $(sudo docker images -q)
+   sudo docker rmi --force $(sudo docker images -q)
    sudo docker volume rm $(docker volume ls)
 
 
