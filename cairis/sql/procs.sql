@@ -12516,8 +12516,6 @@ begin
     union
     select 'risk' from_objt, ri.name from_name, 'response' to_objt, re.name to_name from response re, risk ri,environment_response er where er.environment_id = environmentId and er.response_id = re.id and re.risk_id = ri.id and ri.id = riskId
     union
-    select 'risk' from_objt, r.name from_name, 'misusecase' to_objt, m.name to_name from risk r, misusecase m, misusecase_risk mr, environment_misusecase em where em.environment_id = environmentId and em.misusecase_id = mr.misusecase_id and mr.misusecase_id = m.id and mr.risk_id = r.id and r.id = riskId
-    union
     select 'task' from_objt, t.name from_name, 'vulnerability' to_objt, v.name to_name from task_vulnerability tv, environment_vulnerability ev, environment_task et, vulnerability v, task t, risk r where ev.environment_id = environmentId and et.environment_id = environmentId and et.task_id = tv.task_id and tv.task_id = t.id and ev.vulnerability_id = tv.vulnerability_id and tv.vulnerability_id = v.id and v.id = r.vulnerability_id and r.id = riskId
     union
     select 'risk' from_objt, r.name from_name, 'vulnerability' to_objt, v.name to_name from risk_vulnerability rv, environment_vulnerability ev, environment_risk er, vulnerability v, risk r where ev.environment_id = environmentId and er.environment_id = environmentId and er.id = rv.risk_id and rv.risk_id = r.id and ev.vulnerability_id = rv.vulnerability_id and rv.vulnerability_id = v.id and v.id = r.vulnerability_id and r.id = riskId

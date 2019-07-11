@@ -27,6 +27,10 @@ env:
 - PYTHONPATH=. CAIRIS_SRC=$PYTHONPATH/cairis CAIRIS_CFG=cairis_travis.cnf XML_CATALOG_FILES=$CAIRIS_SRC/config/catalog
     $CAIRIS_CFG_DIR=./travisConfig
 
+before_install: 
+- sudo cp $CAIRIS_CFG_DIR/mysql.cnf /etc/mysql/conf.d/
+- sudo service mysql restart
+
 install:
 - pip install -r test_requirements.txt
 - pip install -r requirements.txt

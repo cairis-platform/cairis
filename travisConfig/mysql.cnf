@@ -1,0 +1,2 @@
+[mysqld]
+thread_stack = 256K
