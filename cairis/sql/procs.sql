@@ -972,6 +972,7 @@ drop procedure if exists goalsToJSON;
 drop procedure if exists templateGoalDependents;
 drop procedure if exists componentViewDependents;
 drop procedure if exists getGoalAssociation;
+drop procedure if exists obstructedRootGoals;
 
 
 delimiter //
@@ -24451,7 +24452,7 @@ begin
   call implicitAssetVulnerabilityCheck(environmentId);
   call obstructedTasks(environmentId);
 
-  select label,message from temp_vout;
+  select distinct label,message from temp_vout;
 
 end
 //
@@ -25823,6 +25824,8 @@ begin
       else
         call goalRoot(goalId,envId);
       end if;
+    else
+      call obstructedRootGoals(goalId, envId); 
     end if;
   end loop og_loop;
   close opGoalCursor;
@@ -25850,7 +25853,7 @@ begin
     then
       insert into temp_goal
       select name from goal where id = rgId;
-else
+    else
       call goalRoot(rgId,envId);
     end if;
   end loop rg_loop;
@@ -25868,7 +25871,6 @@ begin
   declare obsRootGoalCursor cursor for select name from temp_goal order by 1;
   declare continue handler for not found set done = 1;
 
-
   open taskCursor;
   task_loop: loop
     fetch taskCursor into taskName, taskId;
@@ -25877,7 +25879,7 @@ begin
       leave task_loop;
     end if;
     call obstructedGoals(taskId,environmentId);
-    
+
     open obsRootGoalCursor;
     org_loop: loop
       fetch obsRootGoalCursor into goalName;
@@ -25885,7 +25887,7 @@ begin
       then
         leave org_loop;
       end if;
-      insert into temp_vout(label,message) values ('Obstructed task',concat('Task ',taskName,' is needed to satisfy goal ',goalName,', but one or more operationalising goals is obstructed'));
+      insert into temp_vout(label,message) values ('Obstructed task',concat('Task ',taskName,' is needed to satisfy goal ',goalName,', but one or more refined goals are obstructed'));
     end loop org_loop;
     close obsRootGoalCursor;
     set done = 0;
@@ -28547,6 +28549,40 @@ end
 create procedure getGoalAssociation(in envName text, in goalName text, in sgName text)
 begin
   select id, environment,goal, goal_dim, ref_type, subgoal, subgoal_dim, alternative_id, rationale from goal_associations where environment = envName and goal = goalName and subgoal = sgName limit 1;
+end
+//
+
+create procedure obstructedRootGoals(in rgId int, in envId int)
+begin
+  declare goalId int;
+  declare goalCount int default 0;
+  declare isObstructed bool;
+  declare done int default 0;
+  declare opGoalCursor cursor for select goal_id from goalgoal_goalassociation where subgoal_id = rgId and environment_id = envId; 
+  declare continue handler for not found set done = 1;
+
+  open opGoalCursor;
+  og_loop: loop
+    fetch opGoalCursor into goalId;
+    if done = 1
+    then
+      leave og_loop;
+    end if;
+    call isGoalObstructed(goalId,envId,isObstructed);
+    if isObstructed = true
+    then
+      select count(goal_id) into goalCount from goalgoal_goalassociation where subgoal_id = goalId and environment_id = envId;
+      if goalCount = 0
+      then
+        insert into temp_goal
+        select name from goal where id = goalId;
+      else
+        call goalRoot(goalId,envId);
+      end if;
+    end if;
+    call obstructedRootGoals(goalId, envId);
+  end loop og_loop;
+  close opGoalCursor;
 end
 //
 

@@ -20,7 +20,7 @@ Check                             Description
 Composition/Aggregation Integrity For Hardware/Software/Information assets, checks head asset integrity isn't lower than the tail asset.
 Implicit asset inclusion          Asset implicitly included in an environment because of an asset association but no security or privacy properties have been set.
 New risk contexts                 Risks present in environments that haven't been accounted for.
-Obstructed tasks                  Where goals operationalise tasks, check root goals can be satisfied if operationalising goals are obstructed.
+Obstructed tasks                  Where goals operationalise tasks, check root goals can be satisfied if any of its refined goals are obstructed.
 Uncovered exception               Exception present in use case without a related obstacle.
 Vulnerable non-valued asset       Asset is vulnerable but no security or privacy properties have been set for it.
 ================================= ==================================================================================================================================
