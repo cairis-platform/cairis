@@ -92,11 +92,11 @@ class EnvironmentModel:
     roleFile = b.assetDir + '/modelRole.png'
     objtUrl = dimName + '#' + str(objtName)
     if (dimName == 'persona'):
-      self.theGraph.add_node(pydot.Node(objtName,shapefile=actorFile,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl,peripheries='0'))
+      self.theGraph.add_node(pydot.Node(objtName,label='',xlabel=objtName,shapefile=actorFile,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl,peripheries='0'))
     elif (dimName == 'tag'):
       self.theGraph.add_node(pydot.Node(objtName,shape='note',style='filled',margin=0,pencolor='black',color='yellow',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'attacker'):
-      self.theGraph.add_node(pydot.Node(objtName,shapefile=attackerFile,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl,peripheries='0'))
+      self.theGraph.add_node(pydot.Node(objtName,label='',xlabel=objtName,shapefile=attackerFile,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl,peripheries='0'))
     elif (dimName == 'asset'):
       assetObjt = self.dbProxy.dimensionObject(objtName,'asset')
       borderColour = 'black'
@@ -136,7 +136,7 @@ class EnvironmentModel:
       obsProb,obsRationale = self.dbProxy.obstacleProbability(obsId,envId)
       self.theGraph.add_node(pydot.Node(objtName,shape='polygon',margin=0,skew='-0.4',style='filled',pencolor='black',colorscheme='ylorrd9',fillcolor=obstacleColourCode(obsProb),fontname=self.fontName,fontsize=self.fontSize,fontcolor=probabilityTextColourCode(obsProb),URL=objtUrl))
     elif (dimName == 'role'):
-      self.theGraph.add_node(pydot.Node(objtName,shapefile=roleFile,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl,peripheries='0'))
+      self.theGraph.add_node(pydot.Node(objtName,label='',xlabel=objtName,shapefile=roleFile,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl,peripheries='0'))
     elif (dimName == 'responsibility'):
       self.theGraph.add_node(pydot.Node(objtName,shape='doubleoctagon',margin=0,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'environment'):

@@ -80,7 +80,7 @@ class KaosModel:
     elif ((dimName == 'role') and (self.theKaosModel != 'task')):
       self.theGraph.add_node(pydot.Node(objtName,shape='hexagon',margin=0,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif ((dimName == 'role') and (self.theKaosModel == 'task')):
-      self.theGraph.add_node(pydot.Node(objtName,shapefile=actorFile,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl,peripheries='0'))
+      self.theGraph.add_node(pydot.Node(objtName,label='',xlabel=objtName,shapefile=actorFile,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl,peripheries='0'))
     elif (dimName == 'usecase'):
       self.theGraph.add_node(pydot.Node(objtName,shape='ellipse',margin=0,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'task'):
@@ -108,11 +108,11 @@ class KaosModel:
       objt = self.dbProxy.dimensionObject(objtName,'persona')
       if (objt.assumption() == True):
         objtLabel = "&lt;&lt;Assumption&gt;&gt;" + objtName 
-        self.theGraph.add_node(pydot.Node(objtName,label=objtLabel,shapefile=actorFile,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl,peripheries='0'))
+        self.theGraph.add_node(pydot.Node(objtName,label='',xlabel=objtLabel,shapefile=actorFile,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl,peripheries='0'))
       else: 
-        self.theGraph.add_node(pydot.Node(objtName,shapefile=actorFile,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl,peripheries='0'))
+        self.theGraph.add_node(pydot.Node(objtName,label='',xlabel=objtName,shapefile=actorFile,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl,peripheries='0'))
     elif (dimName == 'attacker'):
-      self.theGraph.add_node(pydot.Node(objtName,shapefile=attackerFile,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl,peripheries='0'))
+      self.theGraph.add_node(pydot.Node(objtName,label='',xlabel=objtName,shapefile=attackerFile,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl,peripheries='0'))
     elif (dimName == 'response'):
       self.theGraph.add_node(pydot.Node(objtName,shape='note',margin=0,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'asset'):

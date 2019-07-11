@@ -48,7 +48,7 @@ class AssumptionPersonaModel:
     b = Borg()
     actorFile = b.assetDir + '/modelActor.png'
     if (dimName == 'persona'):
-      self.theGraph.add_node(pydot.Node(objtName,shapefile=actorFile,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl,peripheries='0'))
+      self.theGraph.add_node(pydot.Node(objtName,label='',xlabel=objtName,shapefile=actorFile,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl,peripheries='0'))
     elif (dimName == 'persona_characteristic'):
       self.theGraph.add_node(pydot.Node(objtName,shape='record',margin=0,fontname=self.fontName,style='filled',fillcolor='green',fontcolor='black',fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'implied_characteristic'):
