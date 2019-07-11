@@ -30,7 +30,7 @@ import os
 
 __author__ = 'Shamal Faily'
 
-class VersionAPITests(CairisDaemonTestCase):
+class ValidationAPITests(CairisDaemonTestCase):
 
   @classmethod
   def setUpClass(cls):
@@ -40,7 +40,7 @@ class VersionAPITests(CairisDaemonTestCase):
   def setUp(self):
     self.logger = logging.getLogger(__name__)
 
-  def test_version(self):
+  def test_validation(self):
     method = 'test_validation'
     url = '/api/validation/environment/Psychosis?session_id=test'
     self.logger.info('[%s] URL: %s', method, url)
