@@ -28,7 +28,7 @@ env:
     $CAIRIS_CFG_DIR=./travisConfig
 
 before_install: 
-- sudo cp $CAIRIS_CFG_DIR/mysql.cnf /etc/mysql/conf.d/
+- sudo cp $CAIRIS_CFG_DIR/mysqld.cnf /etc/mysql/mysql.conf.d/
 - sudo service mysql restart
 
 install:
