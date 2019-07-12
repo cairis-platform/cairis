@@ -45,7 +45,7 @@ class DimensionDAO(CairisDAO):
 
   def getDimensionNames(self,table,environment):
     try:
-      permissableDimensions = ['asset','asset_value','attacker','countermeasure','datastore','detection_mechanism','dfd_filter','entity','goal','misusecase','obstacle','persona', 'requirement','response','risk','role','task','threat','usecase', 'vulnerability']
+      permissableDimensions = ['asset','asset_value','attacker','countermeasure','datastore','detection_mechanism','domainproperty','dfd_filter','entity','goal','misusecase','obstacle','persona', 'requirement','response','risk','role','task','threat','usecase', 'vulnerability']
       if (table not in permissableDimensions):
         raise CairisHTTPError(BAD_REQUEST,'Invalid dimension',table + ' is not a permissable dimension when specifying environment')
       if (self.db_proxy.nameExists(environment,'environment') == False):
