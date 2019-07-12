@@ -84,6 +84,7 @@ from cairis.daemon.main import main, api
 from cairis.tools.SessionValidator import get_session_id
 from base64 import b64decode
 import io
+import datetime
 
 __author__ = 'Robin Quetin, Shamal Faily'
 
@@ -116,6 +117,8 @@ def set_dbproxy(dbUser,userName):
 def make_session():
   s = set_dbproxy(current_user.email,current_user.name)
   resp_dict = {'session_id': s['session_id'], 'message': 'Session created','user' : current_user.email}
+  b = Borg()
+  b.logger.info(str(datetime.datetime.now()) + ': ' + current_user.email + ' logged in.')
   resp = make_response(encode(resp_dict), OK)
   resp.headers['Content-type'] = 'application/json'
   return resp
