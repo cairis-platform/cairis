@@ -90,7 +90,7 @@ To overcome this problem, CAIRIS supports the creation of *persona characteristi
 
 Justifying each characteristic is a one or more *grounds* that provide evidence to support the persona's validity, *warrants* that act as inference rules connecting the grounds to the characteristic, and *rebuttals* that act as counterarguments for the characteristic.  A *model qualifier* is also used to describe the confidence in the validity of the persona characteristic.
 
-This approach for structuring persona characteristic elements is based on Toulmin's model of argumentation [#] and can be visualised in CAIRIS using the persona model, accessible from the Models/Persona menu.  As shown in the persona model below, a link can be seen between grounds element and their *backing*, the originating source of the grounds. 
+This approach for structuring persona characteristic elements is based on Toulmin's model of argumentation [#]_ and can be visualised in CAIRIS using the persona model, accessible from the Models/Persona menu.  As shown in the persona model below, a link can be seen between grounds element and their *backing*, the originating source of the grounds. 
 
 .. [#] Toulmin, S. The uses of argument, updated ed. Cambridge University Press, 2003.
 
@@ -141,7 +141,28 @@ In the ideal world, personas will be created by dedicated teams of research coll
 Persona Helper
 ~~~~~~~~~~~~~~
 
-The `Persona Helper <https://chrome.google.com/webstore/detail/persona-helper/mhojpjjecjmdbbooonpglohcedhnjkho>`_ Chrome Extension can be used to automatically create document references from highlighted text on a web page open in Chrome.  This might be useful when eliciting factoids from website.
+The `Persona Helper <https://chrome.google.com/webstore/detail/persona-helper/mhojpjjecjmdbbooonpglohcedhnjkho>`_ is a Chrome Extension that can be used to automatically create document references from highlighted text on a web page open in Chrome.  This might be useful when eliciting factoids from website.
+
+Once the extension has been installed, you need to connect to your CAIRIS server before use.  You can do this right clicking on the CAIRIS extension icon in Chrome and selecting 'Connect to CAIRIS'.  A dialog will open that will ask for the CAIRIS server URL, before a pop-up appears that allows you to login to your CAIRIS server.
+
+By default, any document references created will be added to the CAIRIS default database, but you can change this using the 'Change CAIRIS database' menu option.  
+
+From the extension menu, it also possible to set the *Author* and *Contributor* values.  Author is the author of the data source; this will become the author of the external document from which factoids from a website can be drawn.  Contributor is the person eliciting the factoid itself.  It is ok to set both author and contributor as the same person, but -- if different people are responsible for different data sources -- you might want to change the author value each time you draw from factoids from a different webpage.  If these values have not been previously defined, you will be prompted to provide them the first time you elicit a factoid.
+
+To elicit a factoid, you need to highlight text on a website and click on the CAIRIS extension icon.  This will open a dialog that will allow a factoid to be created for the associated text.  For example, let's consider we want to build a persona for a water treatment plant operator, and we find a 'day in the life' of a plant operator from which we want to draw factoids [#]_
+
+.. [#] https://kyocp.wordpress.com/2012/08/14/a-day-in-the-life-of-an-operator/
+
+.. figure:: PHExample.jpg
+   :alt: Persona helper example
+
+We find some text that indicates that operators live close to work, so we highlight the relevant text, create some text that describes the factoid (because just because one person in a blog post indicates that plant operators live close to work doesn't mean that most plant operators actually *do* live close to work), and click on Ok to add the factoid.
+
+.. figure:: DRExample.jpg
+   :alt: Generated document reference
+
+If we look in CAIRIS, we will see the corresponding document reference as indicated above.
+
 
 Trello Import / Export
 ~~~~~~~~~~~~~~~~~~~~~~~~
