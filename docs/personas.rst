@@ -149,9 +149,7 @@ By default, any document references created will be added to the CAIRIS default 
 
 From the extension menu, it also possible to set the *Author* and *Contributor* values.  Author is the author of the data source; this will become the author of the external document from which factoids from a website can be drawn.  Contributor is the person eliciting the factoid itself.  It is ok to set both author and contributor as the same person, but -- if different people are responsible for different data sources -- you might want to change the author value each time you draw from factoids from a different webpage.  If these values have not been previously defined, you will be prompted to provide them the first time you elicit a factoid.
 
-To elicit a factoid, you need to highlight text on a website and click on the CAIRIS extension icon.  This will open a dialog that will allow a factoid to be created for the associated text.  For example, let's consider we want to build a persona for a water treatment plant operator, and we find a 'day in the life' of a plant operator from which we want to draw factoids [#]_
-
-.. [#] https://kyocp.wordpress.com/2012/08/14/a-day-in-the-life-of-an-operator/
+To elicit a factoid, you need to highlight text on a website and click on the CAIRIS extension icon.  This will open a dialog that will allow a factoid to be created for the associated text.  For example, let's consider we want to build a persona for a water treatment plant operator, and we find a `day in the life of a plant operator <https://kyocp.wordpress.com/2012/08/14/a-day-in-the-life-of-an-operator>`_ from which we want to elicit factoids.
 
 .. figure:: PHExample.jpg
    :alt: Persona helper example
@@ -184,6 +182,9 @@ As you affinity diagram, each list will represent an affinity group.  From the s
 To turn each of these affinity groups into persona characteristics, we first need to indicate whether each factoid represents a groups, warrant or rebuttal.  To do this, we click on each card, click on the Label and select either a *grounds* , *warrant* or *rebuttal* label.  If you have not imported document references from CAIRIS, these labels won't be automatically created, but you can add them manually.
 
 The final step entails indicating the behavioural variable associated with the persona characteristic.  You can do this by postfixing the list name with a colon and the name of the variable.  Permissible variable names are: activities, aptitudes, attitudes, motivations, skills, intrinsic and contextual.  Please note, you can only associate a persona characteristic with a single behavioural variable.
+
+.. figure:: FinalAffinityGroups.jpg
+   :alt: Final affinity groups
 
 When you're ready, you can now import this Trello board back into CAIRIS.  However, before you can do you need to create a persona object for each board you import.  For example, an empty persona called Bob will be created to represent a water treatment plant operator.  
 
