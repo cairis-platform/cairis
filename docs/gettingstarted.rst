@@ -11,7 +11,7 @@ The live demo is rebuilt every night based on the latest updates to CAIRIS, so p
 Example models
 --------------
 
-The live demo comes with two example models: `NeuroGrid <http://cairis.readthedocs.io/en/latest/examples.html#neurogrid>`_ and `ACME Water <http://cairis.readthedocs.io/en/latest/examples.html#acme-water>`_.  To open these, select the System / Open Database menu, and choose the model to open. We would strongly suggest taking a look at these to quickly see how security, usability, and requirements concepts in CAIRIS fit together.
+The live demo comes with three example models: `NeuroGrid <https://cairis.readthedocs.io/en/latest/examples.html#neurogrid>`_ , `ACME Water <https://cairis.readthedocs.io/en/latest/examples.html#acme-water>`_, and `webinos <https://cairis.readthedocs.io/en/latest/examples.html#webinos>`_.  To open these, select the System / Open Database menu, and choose the model to open. We would strongly suggest taking a look at these to quickly see how security, usability, and requirements concepts in CAIRIS fit together.
 
 Define your contexts of use
 ---------------------------
