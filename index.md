@@ -61,6 +61,14 @@ description: Home Page of CAIRIS
 </section>
 
 <section class="spotlight">
+  <div class="image"><img src="/images/validation_frontpage.jpg" alt="" /></div>
+  <div class="content">
+    <h2>Find security and privacy problems early</h2>
+    <p>Quickly validate even the most basic design for known security design problems and potential GDPR compliance issues.</p>
+  </div>
+</section>
+
+<section class="spotlight">
   <div class="image"><img src="/images/SwaggerHub.jpg" alt="" /></div>
   <div class="content">
     <h2>Integrate into your ecosystem</h2>
