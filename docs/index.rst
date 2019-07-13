@@ -20,7 +20,8 @@ CAIRIS documentation
    projects
    environments
    assets
-   roles_personas
+   roles
+   personas
    tasks
    misusability
    domainproperties
