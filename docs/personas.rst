@@ -164,9 +164,36 @@ We find some text that indicates that operators live close to work, so we highli
 If we look in CAIRIS, we will see the corresponding document reference as indicated above.
 
 
-Trello Import / Export
-~~~~~~~~~~~~~~~~~~~~~~~~
+Online affinity diagramming with Trello
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-CAIRIS also supports the ability to export document references to Trello for online affinity diagramming, and import affinity diagrams from Trello into CAIRIS as argumentation models.
+`Trello <https://trello.com>`_ is a collaborative, web-based list manager.  It is a popular tool for sharing and collaboratative working on lists, where lists contain cards.  Because the relationship between cards and lists is analogous to the relationship between factoids and affinity groups, we can use Trello for online affinity diagramming too.  Moreover, becase factoids and affinity groups are also analogous with document referencs and persona characteristics then, using some simple annotations, we can also use lists and cards to represent persona characteristics and their grounds/warrants/rebuttals too.
 
-Both the Persona Helper and the Trello import/export facilities are illustrated in this `video <https://vimeo.com/208162116>`_.
+We can export all the document references in a currently open CAIRIS model by selecting the System/Export to Trello menu.  From here, you should enter a Trello board name.  This will be created for you once you click on Export, and the document references will be exported as cards to an *Uncategorised Factoids* list in your Trello account as indicated below.  If you have not already logged into Trello, you also be prompted to do this on clicking Export.
+
+
+.. figure:: TEExample.jpg
+   :alt: Trello Export example
+
+As you affinity diagram, each list will represent an affinity group.  From the sample of factoids elicited, there seems to be an affinity group around factoids indicating that the plant operator is protective of his community.  There is also another group indicating that the operators relies on cues and experience rather than traditional education and theory.
+
+
+.. figure:: InitialAffinityGroups.jpg
+   :alt: Initial affinity groups
+
+To turn each of these affinity groups into persona characteristics, we first need to indicate whether each factoid represents a groups, warrant or rebuttal.  To do this, we click on each card, click on the Label and select either a *grounds* , *warrant* or *rebuttal* label.  If you have not imported document references from CAIRIS, these labels won't be automatically created, but you can add them manually.
+
+The final step entails indicating the behavioural variable associated with the persona characteristic.  You can do this by postfixing the list name with a colon and the name of the variable.  Permissible variable names are: activities, aptitudes, attitudes, motivations, skills, intrinsic and contextual.  Please note, you can only associate a persona characteristic with a single behavioural variable.
+
+When you're ready, you can now import this Trello board back into CAIRIS.  However, before you can do you need to create a persona object for each board you import.  For example, an empty persona called Bob will be created to represent a water treatment plant operator.  
+
+To import the board, return to CAIRIS and select the System / Import from Trello menu.  From this form, you should select the Trello board you are exporting, select the persona associated with the persona characteristics that will be generated, and click on Import.
+
+.. figure:: GeneratedPC.jpg
+   :alt: Generated persona characteristic
+
+The persona characteristic generated will, as shown above, have a modal qualifier set to *Perhaps*.  This should be updated based on your confidence in the characteristic.
+
+If you have exported your document references from CAIRIS then each ground/warrant/rebuttal document reference will be associated with its apopriate external document.  However, if you have created the cards manually in Trello then CAIRIS will create new document references for each card, and an *Unknown* external document to indicates that, at the time of import, the factoids were of uncertin origin. If you know the origin of the factoids, you can create external documents to represent these origins, and re-associate the document references accordingly.
+
+Armed with your persona characteristics, you can now write narrative text in your persona corresponding with these characteristics.  In doing so, you may surface possible assumptions or ambiguity.  For example, the above persona characteristic seems to suggest a non-traditional education is the basis for managing by cues but this assumption might not be warranted.  As such, this could trigger a return to the affinity diagrams or the weakening of the modal qualifier to indicate reduced confidence.
