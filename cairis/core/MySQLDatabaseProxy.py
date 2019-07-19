@@ -4610,10 +4610,10 @@ class MySQLDatabaseProxy:
     dfAssets = parameters.assets()
     self.updateDatabase('call addDataFlow(:df,:env,:fName,:fType,:tName,:tType)',{'df':dfName,'env':envName,'fName':fromName,'fType':fromType,'tName':toName,'tType':toType},'MySQL error adding data flow')
     for dfAsset in dfAssets:
-      self.addDataFlowAsset(dfName,envName,dfAsset)
+      self.addDataFlowAsset(dfName,envName,fromType,fromName,toType,toName,dfAsset)
 
-  def addDataFlowAsset(self,dfName,envName,dfAsset):
-    self.updateDatabase('call addDataFlowAsset(:df,:env,:ass)',{'df':dfName,'env':envName,'ass':dfAsset},'MySQL error adding data flow asset')
+  def addDataFlowAsset(self,dfName,envName,fromType,fromName,toType,toName,dfAsset):
+    self.updateDatabase('call addDataFlowAsset(:df,:env,:fromType,:fromName,:toType,:toName,:ass)',{'df':dfName,'env':envName,'fromType':fromType,'fromName':fromName,'toType':toType,'toName':toName,'ass':dfAsset},'MySQL error adding data flow asset')
 
   def updateDataFlow(self,oldDfName,oldEnvName,parameters):
     dfName = parameters.name()
@@ -4626,7 +4626,7 @@ class MySQLDatabaseProxy:
     session = self.updateDatabase('call deleteDataFlowAssets(:df,:env)',{'df':oldDfName,'env':oldEnvName},'MySQL error deleting data flow assets',None,False)
     self.updateDatabase('call updateDataFlow(:oDf,:nDf,:oEnv,:nEnv,:fName,:fType,:tName,:tType)',{'oDf':oldDfName,'nDf':dfName,'oEnv':oldEnvName,'nEnv':envName,'fName':fromName,'fType':fromType,'tName':toName,'tType':toType},'MySQL error updating data flow',session)
     for dfAsset in dfAssets:
-      self.addDataFlowAsset(dfName,envName,dfAsset)
+      self.addDataFlowAsset(dfName,envName,fromType,fromName,toType,toName,dfAsset)
 
   def deleteDataFlow(self,dfName,envName):
     self.updateDatabase('call deleteDataFlow(:df,:env)',{'df':dfName,'env':envName},'MySQL Error deleting data flow')
@@ -4755,3 +4755,7 @@ class MySQLDatabaseProxy:
 
   def getImages(self):
     return self.responseList('call getImages()',{},'MySQL error getting images')
+
+  def checkDataFlowExists(self,dfName,fromType,fromName,toType,toName,envName):
+    objtCount = self.responseList('call checkDataFlowExists(:dfName,:fromType,:fromName,:toType,:toName,:env)',{'dfName':dfName,'fromType':fromType,'fromName':fromName,'toType':toType,'toName':toName,'env':envName},'MySQL error checking dataflow in environment')[0]
+    if (objtCount > 0): raise ARMException(dfName + ' between ' + fromType + ' ' + fromName + ' and ' + toType + ' ' + toName + ' in environment ' + envName + ' already exists.')

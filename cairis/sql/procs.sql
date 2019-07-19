@@ -973,6 +973,7 @@ drop procedure if exists templateGoalDependents;
 drop procedure if exists componentViewDependents;
 drop procedure if exists getGoalAssociation;
 drop procedure if exists obstructedRootGoals;
+drop procedure if exists checkDataFlowExists;
 
 
 delimiter //
@@ -24016,14 +24017,43 @@ begin
 end
 //
 
-create procedure addDataFlowAsset(in dfName text, in envName text, in assetName text)
+create procedure addDataFlowAsset(in dfName text, in envName text, in fromType text, in fromName text, in toType text, in toName text, in assetName text)
 begin
   declare dfId int;
+  declare fromId int;
+  declare toId int;
   declare envId int;
   declare assetId int;
 
   select id into envId from environment where name = envName limit 1;
-  select id into dfId from dataflow where name = dfName and environment_id = envId limit 1;
+
+  if fromType = 'process' and toType = 'process'
+  then
+    select id into fromId from usecase where name = fromName limit 1;
+    select id into toId from usecase where name = toName limit 1;
+    select dataflow_id into dfId from dataflow_process_process where from_id = fromId and to_id = toId limit 1;
+  elseif fromType = 'entity' and toType = 'process'
+  then
+    select id into fromId from asset where name = fromName limit 1;
+    select id into toId from usecase where name = toName limit 1;
+    select dataflow_id into dfId from dataflow_entity_process where from_id = fromId and to_id = toId limit 1;
+  elseif fromType = 'process' and toType = 'entity'
+  then
+    select id into fromId from usecase where name = fromName limit 1;
+    select id into toId from asset where name = toName limit 1;
+    select dataflow_id into dfId from dataflow_process_entity where from_id = fromId and to_id = toId limit 1;
+  elseif fromType = 'datastore' and toType = 'process'
+  then
+    select id into fromId from asset where name = fromName limit 1;
+    select id into toId from usecase where name = toName limit 1;
+    select dataflow_id into dfId from dataflow_datastore_process where from_id = fromId and to_id = toId limit 1;
+  elseif fromType = 'process' and toType = 'datastore'
+  then
+    select id into fromId from usecase where name = fromName limit 1;
+    select id into toId from asset where name = toName limit 1;
+    select dataflow_id into dfId from dataflow_process_datastore where from_id = fromId and to_id = toId limit 1;
+  end if; 
+
   select id into assetId from asset where name = assetName limit 1;
 
   insert into dataflow_asset(dataflow_id,asset_id) values (dfId,assetId);
@@ -28644,6 +28674,14 @@ begin
     call obstructedRootGoals(goalId, envId);
   end loop og_loop;
   close opGoalCursor;
+end
+//
+
+create procedure checkDataFlowExists(in dfName text, in fromType text, in fromName text, in toType text, in toName text, in envName text)
+begin
+  declare objtCount int;
+  select count(*) into objtCount from dataflows where dataflow = dfName and environment = envName and from_name = fromName and from_type = fromType and to_name = toName and to_type = toType;
+  select objtCount;
 end
 //
 

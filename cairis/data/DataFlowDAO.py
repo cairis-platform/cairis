@@ -67,7 +67,7 @@ class DataFlowDAO(CairisDAO):
     )
 
     try:
-      if not self.check_existing_dataflow(dataflow.name(),dataflow.environment()):
+      if not self.check_existing_dataflow(dataflow.name(),dataflow.fromType(), dataflow.fromName(), dataflow.toType(), dataflow.toName(), dataflow.environment()):
         self.db_proxy.addDataFlow(df_params)
       else:
         self.close()
@@ -92,7 +92,11 @@ class DataFlowDAO(CairisDAO):
     )
 
     try:
-      self.db_proxy.updateDataFlow(old_dataflow_name,old_environment_name,df_params)
+      if not self.check_existing_dataflow(dataflow.name(),dataflow.fromType(), dataflow.fromName(), dataflow.toType(), dataflow.toName(), dataflow.environment()):
+        self.db_proxy.updateDataFlow(old_dataflow_name,old_environment_name,df_params)
+      else:
+        self.close()
+        raise OverwriteNotAllowedHTTPError(obj_name=dataflow.name())
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)
@@ -110,9 +114,9 @@ class DataFlowDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def check_existing_dataflow(self, dataflow_name, environment_name):
+  def check_existing_dataflow(self, dataflow_name, from_type, from_name, to_type, to_name, environment_name):
     try:
-      self.db_proxy.nameCheckEnvironment(dataflow_name, environment_name, 'dataflow')
+      self.db_proxy.checkDataFlowExists(dataflow_name, from_type, from_name, to_type, to_name, environment_name)
       return False
     except DatabaseProxyException as ex:
       if str(ex.value).find('already exists') > -1:
