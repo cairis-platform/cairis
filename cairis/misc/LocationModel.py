@@ -69,7 +69,7 @@ class LocationModel:
         instName = persona[0]
         personaName = persona[1] 
         actorFile = b.assetDir + '/modelActor.png'
-        locCluster.add_node(pydot.Node(instName,label=instName,shapefile=actorFile,fontname=self.fontName,fontsize=self.fontSize,URL='persona#' + personaName,peripheries='0'))
+        locCluster.add_node(pydot.Node(instName,label='',xlabel=instName,shapefile=actorFile,fontname=self.fontName,fontsize=self.fontSize,URL='persona#' + personaName,peripheries='0'))
 
       self.theGraph.add_subgraph(locCluster)
 
