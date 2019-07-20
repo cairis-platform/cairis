@@ -5331,7 +5331,7 @@ begin
     union
     select 'vulnerability' from_objt, v.name from_name, 'risk' to_objt, r.name to_name from risk r, vulnerability v, vulnerability_severity vs, environment_threat et where r.vulnerability_id = v.id and v.id = vs.vulnerability_id and vs.environment_id = environmentId and r.threat_id = et.threat_id and et.environment_id = environmentId
     union
-    select 'risk' from_objt, ri.name from_name, 'response' to_objt, re.name to_name from response re, risk ri,environment_response er where er.environment_id = environmentId and er.response_id = re.id and re.risk_id = ri.id
+    select 'risk' from_objt, ri.name from_name, 'response' to_objt, re.name to_name from response re, risk ri,environment_response er, environment_risk eri where eri.environment_id = environmentId and eri.environment_id = er.environment_id and eri.id = re.risk_id and er.response_id = re.id and re.risk_id = ri.id
     union
     select 'countermeasure' from_objt, c.name from_name, 'role' from_objt, r.name to_name from countermeasure_role cr, countermeasure c, role r where cr.environment_id = environmentId and cr.countermeasure_id = c.id and cr.role_id = r.id
     union
@@ -5407,7 +5407,7 @@ begin
     union
     select 'vulnerability' from_objt, v.name from_name, 'risk' to_objt, r.name to_name from risk r, vulnerability v, vulnerability_severity vs, environment_threat et where r.vulnerability_id = v.id and v.id = vs.vulnerability_id and vs.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and r.threat_id = et.threat_id and et.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId)
     union
-    select 'risk' from_objt, ri.name from_name, 'response' to_objt, re.name to_name from response re, risk ri,environment_response er where er.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and er.response_id = re.id and re.risk_id = ri.id
+    select 'risk' from_objt, ri.name from_name, 'response' to_objt, re.name to_name from response re, risk ri,environment_response er, environment_risk eri where eri.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and eri.environment_id = er.environment_id and eri.id = re.risk_id and er.response_id = re.id and re.risk_id = ri.id
     union
     select 'countermeasure' from_objt, c.name from_name, 'role' from_objt, r.name to_name from countermeasure_role cr, countermeasure c, role r where cr.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and cr.countermeasure_id = c.id and cr.role_id = r.id
     union
@@ -12529,7 +12529,7 @@ begin
     union
     select 'vulnerability' from_objt, v.name from_name, 'risk' to_objt, r.name to_name from risk r, vulnerability v, vulnerability_severity vs, environment_threat et where r.vulnerability_id = v.id and v.id = vs.vulnerability_id and vs.environment_id = environmentId and r.threat_id = et.threat_id and et.environment_id = environmentId and r.id = riskId
     union
-    select 'risk' from_objt, ri.name from_name, 'response' to_objt, re.name to_name from response re, risk ri,environment_response er where er.environment_id = environmentId and er.response_id = re.id and re.risk_id = ri.id and ri.id = riskId
+    select 'risk' from_objt, ri.name from_name, 'response' to_objt, re.name to_name from response re, risk ri,environment_response er, environment_risk eri where eri.environment_id = environmentId and eri.environment_id = er.environment_id and eri.id = re.risk_id and er.response_id = re.id and re.risk_id = ri.id and ri.id = riskId
     union
     select 'task' from_objt, t.name from_name, 'vulnerability' to_objt, v.name to_name from task_vulnerability tv, environment_vulnerability ev, environment_task et, vulnerability v, task t, risk r where ev.environment_id = environmentId and et.environment_id = environmentId and et.task_id = tv.task_id and tv.task_id = t.id and ev.vulnerability_id = tv.vulnerability_id and tv.vulnerability_id = v.id and v.id = r.vulnerability_id and r.id = riskId
     union
