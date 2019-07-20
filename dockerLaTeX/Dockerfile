@@ -1,4 +1,4 @@
-FROM python:3.6-slim
+FROM python:2.7-slim
 
 RUN apt-get update 
 RUN apt-get install -y docbook
@@ -8,9 +8,8 @@ RUN apt-get install -y texlive-latex-extra
 RUN apt-get install -y inkscape
 RUN apt-get install -y pandoc
 RUN apt-get install -y git
-RUN apt-get install -y python3-pip
 
-RUN pip3 install Flask
+RUN pip install Flask
 RUN mkdir /latex
 COPY LaTeXApi.py /latex
 RUN touch __init__.py

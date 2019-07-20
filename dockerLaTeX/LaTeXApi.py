@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.6
+#!/usr/bin/env python
 from flask import Flask, request, abort
 from armid import *
 import os
