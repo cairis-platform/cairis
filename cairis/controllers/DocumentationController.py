@@ -47,10 +47,13 @@ class DocumentationAPI(Resource):
     sectionFlags = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
     if (doc_format == 'PDF'):
       filePostfix = 'pdf'
-      doc_format = [0,0,1]
-    else:
+      doc_format = [0,0,1,0]
+    elif (doc_format == 'RTF'):
       filePostfix = 'rtf'
-      doc_format = [0,1,0]
+      doc_format = [0,1,0,0]
+    else:
+      filePostfix = 'odt'
+      doc_format = [0,0,0,1]
     b = Borg()
     reportName = b.tmpDir + '/' + fileName + '.' + filePostfix
 

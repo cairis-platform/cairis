@@ -6,6 +6,7 @@ RUN apt-get install -y docbook-utils
 RUN apt-get install -y dblatex
 RUN apt-get install -y texlive-latex-extra
 RUN apt-get install -y inkscape
+RUN apt-get install -y pandoc
 RUN apt-get install -y git
 
 RUN pip install Flask

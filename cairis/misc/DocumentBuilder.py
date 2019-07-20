@@ -132,6 +132,7 @@ def buildImage(p,imageFile,caption,extract = True):
   components = imageFile.split('.')
   if (len(components) != 2):
     format = 'SVG'
+    imageFile += '.svg'
   else:
     format = components[1]
   if (format == 'jpg' or format == 'jpeg' or format == 'JPG' or format == 'JPEG'):
@@ -2062,13 +2063,14 @@ def build(dbProxy,docType,sectionFlags,typeFlags,fileName,docDir):
   f.write(specDoc)
   f.close()
   
- 
   if (typeFlags[DOCOPT_HTML_ID]):
     docBookCmd = 'docbook2html -o ' + docDir + ' ' + docFile
   if (typeFlags[DOCOPT_RTF_ID]):
     docBookCmd = 'docbook2rtf -o ' + docDir + ' ' + docFile
   if (typeFlags[DOCOPT_PDF_ID]):
     docBookCmd = 'dblatex --param=table.in.float="0" -o  ' + docDir + '/' + fileName + '.pdf '  + docFile
+  if (typeFlags[DOCOPT_ODT_ID]):
+    docBookCmd = 'pandoc ' + docFile + ' --from docbook --to odt -o ' + docDir + '/' + fileName + '.odt '
 
   b = Borg()
   if(b.docker == True):
