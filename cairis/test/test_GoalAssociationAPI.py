@@ -85,6 +85,14 @@ class GoalAssociationAPITests(CairisDaemonTestCase):
     self.assertIsNotNone(assocs, 'No results after deserialization')
     self.assertEqual(len(assocs), 6)
 
+  def test_post_self_refine(self):
+    assoc = self.new_assoc_dict
+    assoc['object'].theSubGoal = assoc['object'].theGoal
+    method = 'test_post_self_refine'
+    rv = self.app.post('/api/goals/association', content_type='application/json', data=jsonpickle.encode(assoc))
+    msg = json_deserialize(rv.data)
+    self.assertEqual(msg['code'],400)
+
   def test_post(self):
     method = 'test_post_new'
     rv = self.app.post('/api/goals/association', content_type='application/json', data=jsonpickle.encode(self.new_assoc_dict))
@@ -98,12 +106,18 @@ class GoalAssociationAPITests(CairisDaemonTestCase):
     ackMsg = json_resp.get('message', None)
     self.assertEqual(ackMsg, 'Goal Association successfully added')
 
+  def test_put_self_refine(self):
+    method = 'test_put'
+    self.new_assoc_dict['object'].theGoal = self.new_assoc_dict['object'].theSubGoal
+    url = '/api/goals/association/environment/Psychosis/goal/Upload%20clinical%20data%20to%20NeuroGrid/subgoal/Secure%20data%20transmission?session_id=test'
+    rv = self.app.put(url, content_type='application/json', data=jsonpickle.encode(self.new_assoc_dict))
+    msg = json_deserialize(rv.data)
+    self.assertEqual(msg['code'],400)
+
   def test_put(self):
     method = 'test_put'
-
     self.new_assoc_dict['object'].theAlternativeId = '1'
     url = '/api/goals/association/environment/Psychosis/goal/Upload%20clinical%20data%20to%20NeuroGrid/subgoal/Secure%20data%20transmission?session_id=test'
-
     rv = self.app.put(url, content_type='application/json', data=jsonpickle.encode(self.new_assoc_dict))
     if (sys.version_info > (3,)):
       responseData = rv.data.decode('utf-8')

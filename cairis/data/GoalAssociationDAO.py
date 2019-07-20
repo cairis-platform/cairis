@@ -60,6 +60,9 @@ class GoalAssociationDAO(CairisDAO):
       raise CairisHTTPError(status_code=http.client.BAD_REQUEST,status="Server error",message=format(ex))
 
   def add_goal_association(self, assoc):
+    if (assoc.theGoal == assoc.theSubGoal):
+      raise CairisHTTPError(status_code=http.client.BAD_REQUEST,status="Self-refinement error",message='Cannot self-refine ' + assoc.theGoal)
+
     assocParams = GoalAssociationParameters(
       envName=assoc.theEnvironmentName,
       goalName=assoc.theGoal,
@@ -69,6 +72,7 @@ class GoalAssociationDAO(CairisDAO):
       subGoalDimName=assoc.theSubGoalDimension,
       alternativeId=assoc.theAlternativeId,
       rationale=assoc.theRationale)
+
     try:
       self.db_proxy.addGoalAssociation(assocParams)
     except ARMException as ex:
@@ -77,6 +81,8 @@ class GoalAssociationDAO(CairisDAO):
 
 
   def update_goal_association(self,assoc,environment_name,goal_name,subgoal_name):
+    if (assoc.theGoal == assoc.theSubGoal):
+      raise CairisHTTPError(status_code=http.client.BAD_REQUEST,status="Self-refinement error",message='Cannot self-refine ' + assoc.theGoal)
 
     old_assoc = self.get_goal_association(environment_name,goal_name,subgoal_name,False)
     assocId = old_assoc.theId
