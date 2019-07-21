@@ -58,6 +58,7 @@ DROP VIEW IF EXISTS datastore_asset;
 DROP VIEW IF EXISTS datastore_personal_information;
 DROP VIEW IF EXISTS personal_risk;
 DROP VIEW IF EXISTS goal_associations;
+DROP VIEW IF EXISTS riskModel_tagged;
 
 DROP TABLE IF EXISTS trust_boundary_usecase;
 DROP TABLE IF EXISTS trust_boundary_asset;
@@ -4056,7 +4057,17 @@ CREATE VIEW goal_associations as
   union
   select ga.id, e.name environment, hg.name goal, 'obstacle' goal_dim, rt.name ref_type, tg.name subgoal, 'role' subgoal_dim, ga.alternative_id, ga.rationale from obstaclerole_goalassociation ga, environment e, obstacle hg, role tg, reference_type rt where ga.environment_id = e.id and ga.goal_id = hg.id and ga.subgoal_id = tg.id and ga.ref_type_id = rt.id;
 
-  
+CREATE VIEW riskModel_tagged as
+  select t.name tag, a.name object, e.name environment from attacker_tag at, attacker a, tag t, environment_attacker ea, environment e where t.id = at.tag_id and a.id = at.attacker_id and at.attacker_id = ea.attacker_id and ea.environment_id = e.id
+  union
+  select t.name tag, a.name object, e.name environment from asset_tag at, asset a, tag t, environment_asset ea, environment e where t.id = at.tag_id and a.id = at.asset_id and at.asset_id = ea.asset_id and ea.environment_id = e.id
+  union
+  select t.name tag, v.name object, e.name environment from vulnerability_tag vt, vulnerability v, tag t, environment_vulnerability  ev, environment e where t.id = vt.tag_id and v.id = vt.vulnerability_id and vt.vulnerability_id = ev.vulnerability_id and ev.environment_id = e.id
+  union
+  select t.name tag, th.name object, e.name environment from threat_tag tt, threat th, tag t, environment_threat et, environment e where t.id = tt.tag_id and th.id = tt.threat_id and tt.threat_id = et.threat_id and et.environment_id = e.id
+  union
+  select t.name tag, r.name object, e.name environment from risk_tag rt, risk r, tag t, environment_risk er, environment e where t.id = rt.tag_id and r.id = rt.risk_id and rt.risk_id = er.id and er.environment_id = e.id;
+
 
 INSERT INTO version (major,minor,patch) VALUES (2,1,3);
 INSERT INTO attributes (id,name) VALUES (103,'did');

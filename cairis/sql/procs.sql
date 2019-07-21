@@ -974,6 +974,7 @@ drop procedure if exists componentViewDependents;
 drop procedure if exists getGoalAssociation;
 drop procedure if exists obstructedRootGoals;
 drop procedure if exists checkDataFlowExists;
+drop procedure if exists riskModelTags;
 
 
 delimiter //
@@ -5319,8 +5320,6 @@ begin
   then
     select 'asset' from_objt,a.name from_name, 'threat' to_objt,t.name to_name from asset_threat at,asset a, threat t where at.environment_id = environmentId and at.asset_id = a.id and at.threat_id = t.id
     union
-    select 'asset' from_objt,a.name from_name, 'tag' to_objt,t.name to_name from asset_tag at,asset a, tag t, environment_asset ea where ea.environment_id = environmentId and ea.asset_id = a.id and at.asset_id = ea.asset_id and at.tag_id = t.id
-    union
     select 'asset' from_objt,a.name from_name,'vulnerability' to_objt, v.name to_name from asset_vulnerability av, asset a, vulnerability v where av.environment_id = environmentId and av.vulnerability_id = v.id and  av.asset_id = a.id
     union
     select 'attacker' from_objt, a.name from_name, 'threat' to_objt, t.name to_name from threat_attacker ta, threat t, attacker a, environment_attacker ea, environment_threat et where ta.environment_id = environmentId and ta.attacker_id = a.id and ta.threat_id = t.id and ta.environment_id = ea.environment_id and ta.environment_id = et.environment_id and ea.environment_id = environmentId and et.environment_id = environmentId
@@ -5394,8 +5393,6 @@ begin
     select 'risk' from_objt, r.name from_name, 'threat' to_objt, t.name to_name from risk_threat rt, environment_risk er, environment_threat et, risk r, threat t where er.environment_id = environmentId and et.environment_id = environmentId and er.id = rt.risk_id and rt.risk_id = r.id and et.threat_id = rt.threat_id and rt.threat_id = t.id;
   else
     select 'asset' from_objt,a.name from_name, 'threat' to_objt,t.name to_name from asset_threat at,asset a, threat t where at.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and at.asset_id = a.id and at.threat_id = t.id
-    union
-    select 'asset' from_objt,a.name from_name, 'tag' to_objt,t.name to_name from asset_tag at,asset a, tag t, environment_asset ea where ea.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and ea.asset_id = a.id and at.asset_id = ea.asset_id and at.tag_id = t.id
     union
     select 'asset' from_objt,a.name from_name,'vulnerability' to_objt, v.name to_name from asset_vulnerability av, asset a, vulnerability v where av.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and av.vulnerability_id = v.id and  av.asset_id = a.id
     union
@@ -28682,6 +28679,13 @@ begin
   declare objtCount int;
   select count(*) into objtCount from dataflows where dataflow = dfName and environment = envName and from_name = fromName and from_type = fromType and to_name = toName and to_type = toType;
   select objtCount;
+end
+//
+
+create procedure riskModelTags(in envName text)
+begin
+  select tag, object from riskModel_tagged where environment = envName order by 1;
+
 end
 //
 

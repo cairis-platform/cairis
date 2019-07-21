@@ -4765,3 +4765,15 @@ class MySQLDatabaseProxy:
   def checkDataFlowExists(self,dfName,fromType,fromName,toType,toName,envName):
     objtCount = self.responseList('call checkDataFlowExists(:dfName,:fromType,:fromName,:toType,:toName,:env)',{'dfName':dfName,'fromType':fromType,'fromName':fromName,'toType':toType,'toName':toName,'env':envName},'MySQL error checking dataflow in environment')[0]
     if (objtCount > 0): raise ARMException(dfName + ' between ' + fromType + ' ' + fromName + ' and ' + toType + ' ' + toName + ' in environment ' + envName + ' already exists.')
+
+  def riskModelTags(self, envName):
+    rows = self.responseList('call riskModelTags(:env)',{'env':envName},'MySQL error getting risk model tags')
+    tagDict = {}
+    for row in rows:
+      tag = row[0]
+      objt = row[1]
+      if (tag not in tagDict):
+        tagDict[tag] = [objt]
+      else:
+        tagDict[tag].append(objt)
+    return tagDict

@@ -42,6 +42,7 @@ CAIRIS documentation
    validation
    configurable
    searching
+   tags
    gendoc
    troubleshooting
 
