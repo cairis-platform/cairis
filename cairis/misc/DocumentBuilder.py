@@ -2062,6 +2062,7 @@ def build(dbProxy,docType,sectionFlags,typeFlags,fileName,docDir):
     fileSuffix = 'jpg'
   if (typeFlags[DOCOPT_PDF_ID]):
     docBookCmd = 'dblatex --param=table.in.float="0" -o  ' + docDir + '/' + fileName + '.pdf '  + docFile
+    fileSuffix = 'jpg'
   if (typeFlags[DOCOPT_ODT_ID]):
     docBookCmd = 'pandoc ' + docFile + ' --from docbook --to odt -o ' + docDir + '/' + fileName + '.odt '
     fileSuffix = 'jpg'
