@@ -417,8 +417,11 @@ class MySQLDatabaseProxy:
       self.addDimensionRoles(attackerId,'attacker',environmentName,environmentProperties.roles())
     return attackerId
 
-  def addDimensionEnvironment(self,dimId,table,environmentName):
-    self.updateDatabase('call add_' + table + '_environment(:id,:name)',{'id':dimId,'name':environmentName},'MySQL error associating ' + table + ' id ' + str(dimId) + ' with environment ' + environmentName)
+  def addDimensionEnvironment(self,dimId,table,environmentName,session = None):
+    if (session != None):
+      self.updateDatabase('call add_' + table + '_environment(:id,:name)',{'id':dimId,'name':environmentName},'MySQL error associating ' + table + ' id ' + str(dimId) + ' with environment ' + environmentName,session)
+    else:
+      self.updateDatabase('call add_' + table + '_environment(:id,:name)',{'id':dimId,'name':environmentName},'MySQL error associating ' + table + ' id ' + str(dimId) + ' with environment ' + environmentName)
 
   def addAttackerMotives(self,attackerId,environmentName,motives):
     for motive in motives:
@@ -1096,17 +1099,17 @@ class MySQLDatabaseProxy:
       self.addTaskEnvironmentCodes(taskName,environmentName,cProperties.codes())
     return taskId
 
-  def addMisuseCase(self,parameters):
+  def addMisuseCase(self,parameters,session):
     parameters.validate()
     mcName = parameters.name()
     mcId = self.newId()
-    self.updateDatabase('call addMisuseCase(:id,:name)',{'id':mcId,'name':mcName},'MySQL error adding misuse case ' + mcName)
-    self.addMisuseCaseRisk(mcId,parameters.risk())
+    self.updateDatabase('call addMisuseCase(:id,:name)',{'id':mcId,'name':mcName},'MySQL error adding misuse case ' + mcName,session)
+    self.addMisuseCaseRisk(mcId,parameters.risk(),session)
     for cProperties in parameters.environmentProperties():
       cProperties.validate()
       environmentName = cProperties.name()
-      self.addDimensionEnvironment(mcId,'misusecase',environmentName)
-      self.addMisuseCaseNarrative(mcId,cProperties.narrative(),environmentName)
+      self.addDimensionEnvironment(mcId,'misusecase',environmentName,session)
+      self.addMisuseCaseNarrative(mcId,cProperties.narrative(),environmentName,session)
     return mcId
 
 
@@ -1133,18 +1136,18 @@ class MySQLDatabaseProxy:
       self.addTaskNarrative(taskId,cProperties.narrative(),cProperties.consequences(),cProperties.benefits(),environmentName)
       self.addTaskEnvironmentCodes(taskName,environmentName,cProperties.codes())
 
-  def updateMisuseCase(self,parameters):
+  def updateMisuseCase(self,parameters,session):
     parameters.validate()
     mcId = parameters.id()
     mcName = parameters.name()
-    session = self.updateDatabase('call deleteMisuseCaseComponents(:id)',{'id':mcId},'MySQL error dleting misuse case components',None,False)
-    self.updateDatabase('call updateMisuseCase(:id,:name)',{'id':mcId,'name':mcName},'MySQL error updating misuse case',session)
-    self.addMisuseCaseRisk(mcId,parameters.risk())
+    self.updateDatabase('call deleteMisuseCaseComponents(:id)',{'id':mcId},'MySQL error dleting misuse case components',session,False)
+    self.updateDatabase('call updateMisuseCase(:id,:name)',{'id':mcId,'name':mcName},'MySQL error updating misuse case',session,False)
+    self.addMisuseCaseRisk(mcId,parameters.risk(),session)
     for cProperties in parameters.environmentProperties():
       cProperties.validate()
       environmentName = cProperties.name()
-      self.addDimensionEnvironment(mcId,'misusecase',environmentName)
-      self.addMisuseCaseNarrative(mcId,cProperties.narrative(),environmentName)
+      self.addDimensionEnvironment(mcId,'misusecase',environmentName,session)
+      self.addMisuseCaseNarrative(mcId,cProperties.narrative(),environmentName,session)
 
 
   def addTaskPersonas(self,taskId,personas,environmentName):
@@ -1159,8 +1162,8 @@ class MySQLDatabaseProxy:
       self.updateDatabase('call addTaskAsset(:tId,:ass,:env)',{'tId':taskId,'ass':asset,'env':environmentName},'MySQL error adding task asset',session,False)
     self.commitDatabase(session)
 
-  def addMisuseCaseRisk(self,mcId,riskName):
-    self.updateDatabase('call addMisuseCaseRisk(:id,:risk)',{'id':mcId,'risk':riskName},'MySQL error associating risk with misuse case')
+  def addMisuseCaseRisk(self,mcId,riskName,session):
+    self.updateDatabase('call addMisuseCaseRisk(:id,:risk)',{'id':mcId,'risk':riskName},'MySQL error associating risk with misuse case',session,False)
 
   def deleteTask(self,taskId):
     self.deleteObject(taskId,'task')
@@ -1212,11 +1215,12 @@ class MySQLDatabaseProxy:
     riskId = self.newId()
     riskName = parameters.name()
     inTxt = parameters.intent()
-    self.updateDatabase('call addRisk(:threat,:vuln,:rId,:risk,:txt)',{'threat':threatName,'vuln':vulName,'rId':riskId,'risk':riskName,'txt':inTxt},'MySQL error adding risk')
+    session = self.updateDatabase('call addRisk(:threat,:vuln,:rId,:risk,:txt)',{'threat':threatName,'vuln':vulName,'rId':riskId,'risk':riskName,'txt':inTxt},'MySQL error adding risk',None,False)
     mc = parameters.misuseCase()
     mcParameters = MisuseCaseParameters(mc.name(),mc.environmentProperties(),mc.risk())
-    self.addMisuseCase(mcParameters)
+    self.addMisuseCase(mcParameters,session)
     self.addTags(riskName,'risk',tags)
+    self.commitDatabase(session)
     return riskId
 
   def updateRisk(self,parameters):
@@ -1226,15 +1230,17 @@ class MySQLDatabaseProxy:
     tags = parameters.tags()
     riskName = parameters.name()
     inTxt = parameters.intent()
-    self.updateDatabase('call updateRisk(:threat,:vuln,:rId,:risk,:txt)',{'threat':threatName,'vuln':vulName,'rId':riskId,'risk':riskName,'txt':inTxt},'MySQL error updating risk')
-    self.addTags(riskName,'risk',tags)
+    session = self.updateDatabase('call updateRisk(:threat,:vuln,:rId,:risk,:txt)',{'threat':threatName,'vuln':vulName,'rId':riskId,'risk':riskName,'txt':inTxt},'MySQL error updating risk',None,False)
+    self.commitDatabase(session)
 
     mc = parameters.misuseCase()
     mcName = 'Exploit ' + riskName
     mcId,oldMcName = self.responseList('call riskMisuseCase(:id)',{'id':riskId},'MySQL error getting risk misuse case')[0]
     mcParameters = MisuseCaseParameters(mcName,mc.environmentProperties(),riskName)
     mcParameters.setId(mcId)
-    self.updateMisuseCase(mcParameters)
+    self.updateMisuseCase(mcParameters,session)
+    self.addTags(riskName,'risk',tags)
+    self.commitDatabase(session)
 
   def deleteRisk(self,riskId):
     self.deleteObject(riskId,'risk')
@@ -1701,8 +1707,8 @@ class MySQLDatabaseProxy:
   def misuseCaseNarrative(self,mcId,environmentId):
     return self.responseList('select misuseCaseNarrative(:mcId,:env)',{'mcId':mcId,'env':environmentId},'MySQL error getting narrative for misusecase id ' + str(mcId) + ' in environment ' + str(environmentId))[0]
 
-  def addMisuseCaseNarrative(self,mcId,narrativeText,environmentName):
-    self.updateDatabase('call addMisuseCaseNarrative(:mcId,:nTxt,:env)',{'mcId':mcId,'nTxt':narrativeText,'env':environmentName},'MySQL error adding misuse case narrative')
+  def addMisuseCaseNarrative(self,mcId,narrativeText,environmentName,session):
+    self.updateDatabase('call addMisuseCaseNarrative(:mcId,:nTxt,:env)',{'mcId':mcId,'nTxt':narrativeText,'env':environmentName},'MySQL error adding misuse case narrative',session)
 
   def taskDependencies(self,tId,environmentId):
     return self.responseList('select taskDependencies(:tId,:eId)',{'tId':tId,'eId':environmentId},'MySQL error getting dependencies for task id ' + str(tId) + ' in environment ' + str(environmentId))[0]
