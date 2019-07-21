@@ -35,6 +35,7 @@ from cairis.core.armid import *
 import requests
 from base64 import b64decode
 import io
+import shutil
 
 __author__ = 'Shamal Faily'
 
@@ -334,14 +335,24 @@ def bookFooter():
 
 def reqNotation():
   b = Borg()
-  chapterText = ''' 
-  <xi:include href="'''+b.configDir+"""/reqNotation.xml" xmlns:xi="http://www.w3.org/2003/XInclude"/> """ 
+  chapterText = open(b.configDir + '/reqNotation.xml').read()
+  notationImages = ['raModelKey.pdf','goalModelKey.pdf','taskModelKey.pdf','APKey.pdf','icons.png']
+  tmpDir = b.tmpDir
+  configDir = b.configDir
+  for image in notationImages:
+    chapterText = chapterText.replace(image,tmpDir + '/' + image)
+    shutil.copy(configDir + '/' + image,tmpDir)
   return chapterText
 
 def perNotation():
   b = Borg()
-  chapterText = ''' 
-  <xi:include href="'''+b.configDir+"""/perNotation.xml" xmlns:xi="http://www.w3.org/2003/XInclude"/> """ 
+  chapterText = open(b.configDir + '/perNotation.xml').read()
+  notationImages = ['taskModelKey.pdf','APKey.pdf']
+  tmpDir = b.tmpDir
+  configDir = b.configDir
+  for image in notationImages:
+    chapterText = chapterText.replace(image,tmpDir + '/' + image)
+    shutil.copy(configDir + '/' + image,tmpDir)
   return chapterText
 
 def projectPurpose(pSettings):
