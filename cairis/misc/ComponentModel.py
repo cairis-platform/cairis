@@ -68,7 +68,7 @@ class ComponentModel:
       self.buildConnector(cnName,fromName,toName,pName,arName)
 
   def size(self):
-    return len(self.theAssociations)
+    return len(self.theConnectors)
 
   def buildInterface(self,componentName,interfaceName,reqId):
     componentUrl = 'component#' + componentName

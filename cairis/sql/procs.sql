@@ -975,6 +975,7 @@ drop procedure if exists getGoalAssociation;
 drop procedure if exists obstructedRootGoals;
 drop procedure if exists checkDataFlowExists;
 drop procedure if exists riskModelTags;
+drop procedure if exists securityPatternClassModel;
 
 
 delimiter //
@@ -28689,5 +28690,13 @@ begin
 end
 //
 
+create procedure securityPatternClassModel(in spName text)
+begin
+  declare spId int;
+  select id into spId from securitypattern where name = spName limit 1;
+
+  select ha.name,hat.name,hm.name,a.head_role_name,a.tail_role_name,tm.name,tat.name,ta.name from securitypattern_classassociation a, template_asset ha, multiplicity_type hm, association_type hat, association_type tat, multiplicity_type tm, template_asset ta where a.pattern_id = spId and a.head_id = ha.id and a.head_multiplicity_id = hm.id and a.head_association_type_id = hat.id and a.tail_association_type_id = tat.id and a.tail_multiplicity_id = tm.id and a.tail_id = ta.id;
+end
+//
 
 delimiter ;

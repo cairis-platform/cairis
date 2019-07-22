@@ -4777,3 +4777,20 @@ class MySQLDatabaseProxy:
       else:
         tagDict[tag].append(objt)
     return tagDict
+
+  def securityPatternAssetModel(self,spName):
+    rows = self.responseList('call securityPatternClassModel(:sp)',{'sp':spName},'MySQL error getting security pattern asset model')
+    associations = {}
+    for headName,headType,headMult,headRole,tailRole,tailMult,tailType,tailName in rows:
+      associationId = -1
+      envName = ''
+      headNav = 0
+      tailNav = 0
+      rationale = ''
+      headDim  = 'template_asset'
+      tailDim  = 'template_asset'
+      parameters = ClassAssociationParameters(envName,headName,headDim,headNav,headType,headMult,headRole,tailRole,tailMult,tailType,tailNav,tailDim,tailName,rationale)
+      association = ObjectFactory.build(associationId,parameters)
+      asLabel = spName + '/' + headName + '/' + tailName
+      associations[asLabel] = association
+    return associations

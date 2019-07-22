@@ -30,7 +30,9 @@ from .KaosModel import KaosModel
 from .AssetModel import AssetModel
 from .DataFlowDiagram import DataFlowDiagram
 from .LocationModel import LocationModel
+from .ComponentModel import ComponentModel
 from .AssumptionPersonaModel import AssumptionPersonaModel
+from cairis.core.PropertyHolder import PropertyHolder
 from cairis.core.armid import *
 import requests
 from base64 import b64decode
@@ -211,6 +213,38 @@ def buildModel(p,envName,modelType,graphFile,locsName = '',fileSuffix = 'svg'):
     if (model.size() == 0):
       return False
     drawGraph(model.graph(),'dot',graphFile,fileSuffix)
+  return True
+
+def buildComponentModel(p,pName,graphFile,fileSuffix = 'svg'):
+  interfaces,connectors = p.componentView(pName)
+  model = ComponentModel(interfaces,connectors,db_proxy=p)
+  if (model.size() == 0):
+    return False
+  drawGraph(model.graph(),'dot',graphFile,fileSuffix) 
+  return True
+
+def buildComponentAssetModel(p,cName,graphFile,fileSuffix = 'svg'):
+  assocDict = p.componentAssetModel(cName)
+  model = AssetModel(list(assocDict.values()), db_proxy=p, fontName=None, fontSize=None,isComponentAssetModel=True)
+  if (model.size() == 0):
+    return False
+  drawGraph(model.graph(),'dot',graphFile,fileSuffix) 
+  return True
+
+def buildSecurityPatternAssetModel(p,cName,graphFile,fileSuffix = 'svg'):
+  assocDict = p.securityPatternAssetModel(cName)
+  model = AssetModel(list(assocDict.values()), db_proxy=p, fontName=None, fontSize=None,isComponentAssetModel=True)
+  if (model.size() == 0):
+    return False
+  drawGraph(model.graph(),'dot',graphFile,fileSuffix) 
+  return True
+
+def buildComponentGoalModel(p,cName,graphFile,fileSuffix = 'svg'):
+  assocDict = p.componentGoalModel(cName)
+  model = KaosModel(list(assocDict.values()),'', kaosModelType='template_goal', db_proxy=p)
+  if (model.size() == 0):
+    return False
+  drawGraph(model.graph(),'dot',graphFile,fileSuffix) 
   return True
 
 def buildAPModel(p,personaName,bvName,graphFile,fileSuffix = 'svg'):
@@ -1858,6 +1892,65 @@ def dependencies(p):
   """          
   return chapterTxt
 
+def templateAssets(p):
+  templateAssets = p.getTemplateAssets()
+  if (len(templateAssets) == 0):
+    return ''
+  chapterTxt = """
+  <chapter><title>Template Assets</title>
+"""
+  for objtName in templateAssets:
+    chapterTxt += """
+    <section><title>""" + objtName + "</title>"
+    objt = templateAssets[objtName]
+
+    oAttributes = [('Type',objt.type()),('Description',paraText(objt.description())),('Significance',paraText(objt.significance())),('Surface Type',objt.surfaceType()),('Access Rights',objt.accessRight()),('Tags',listToItems(objt.tags()))]
+    chapterTxt += buildTable( objtName.replace(" ","_") + "TemplateAssetPropertiesTable",objtName + " attributes",['Attribute','Description'],oAttributes,0)
+    
+    pl = PropertyHolder(objt.properties())
+    pList = pl.propertyList()
+    if (len(pList) > 0):
+      chapterTxt += buildTable( objtName.replace(" ","_") + "PropertiesTable",objtName + " security properties",['Property','Value'],pList,0)
+    chapterTxt += """
+    </section>"""
+  chapterTxt += """
+  </chapter>
+  """
+  return chapterTxt
+
+def templateGoals(p):
+  templateGoals = p.getTemplateGoals()
+  if (len(templateGoals) == 0):
+    return ''
+  chapterTxt = """
+  <chapter><title>Template Goals</title>
+"""
+  objtRows = []
+  for objtName in templateGoals:
+    objt = templateGoals[objtName]
+    objtRows.append((objt.name(), objt.definition(), objt.rationale(), listToItems(objt.concerns()), listToItems(objt.responsibilities())))
+  chapterTxt += buildTable( "TemplateGoalsTable","Template Goals",['Name','Definition','Rationale','Concerns','Responsibilities'],objtRows,0) + """
+  </chapter>
+  """
+  return chapterTxt
+
+def templateRequirements(p):
+  templateReqs = p.getTemplateRequirements()
+  if (len(templateReqs) == 0):
+    return ''
+  chapterTxt = """
+  <chapter><title>Template Requirements</title>
+"""
+  objtRows = []
+  for objtName in templateReqs:
+    objt = templateReqs[objtName]
+    objtRows.append((objt.name(), objt.asset(), objt.type(), objt.description(), objt.rationale(), objt.fitCriterion()))
+  chapterTxt += buildTable( "TemplateRequirementsTable","Template Requirements",['Name','Asset','Type','Description','Rationale','Fit Criterion'],objtRows,0) + """
+  </chapter>
+  """
+  return chapterTxt
+
+
 def dataflows(p,docDir,fileSuffix = 'svg'):
   chapterTxt = """
   <chapter><title>Data Flows</title>
@@ -1914,11 +2007,132 @@ def locations(p,docDir,fileSuffix = 'svg'):
   """          
   return chapterTxt
 
+def securityPatterns(p,docDir,fileSuffix):
+  sPatterns = p.getSecurityPatterns()
+  if (len(sPatterns) == 0):
+    return ''
+  chapterTxt = """
+  <chapter><title>Security Patterns</title>
+  """
+  for pName in sPatterns:
+    chapterTxt += """
+      <section><title>""" + pName + """</title>
+    """          
+    pattern = sPatterns[pName]
+    chapterTxt += """
+        <section><title>Context</title>
+          <para>""" + paraText(pattern.context()) + """</para>
+        </section>
+        <section><title>Problem</title>
+          <para>""" + paraText(pattern.problem()) + """</para>
+        </section>
+        <section><title>Solution</title>
+          <para>""" + paraText(pattern.solution()) + """</para>
+        </section>"""
+    pStruct = pattern.associations()
+    if (len(pStruct) > 0):
+      chapterTxt += """
+        <section><title>Structure</title>
+      """
+      modelFile = docDir + '/' + pName + 'AssetModel'
+      if (buildSecurityPatternAssetModel(p,pName,modelFile,fileSuffix) == True):
+        chapterTxt += buildImage(p,modelFile,pName + ' ' + 'Asset Model',fileSuffix,False)
+      chapterTxt += buildTable(pName + "StructureTable","Structure",['Head','Type','Nry','Role','Role','Nry','Type','Tail'],pStruct,0) + """
+        </section>"""
+    pReqs = pattern.requirements()
+    if (len(pReqs) > 0):
+      chapterTxt += """
+        <section><title>Requirements</title>"""
+      chapterTxt += buildTable(pName + "RequirementsTable","Security Pattern Requirements",['Type','Name','Description','Rationale','Fit Criterion','Asset'],pReqs,0) + """
+        </section>"""
+    chapterTxt += """
+      </section>"""
+  chapterTxt += """
+  </chapter>
+  """
+  return chapterTxt
 
-def architecture(p,docDir):
+
+def architecture(p,docDir,fileSuffix):
+  aPatterns = p.getComponentViews()
+  if (len(aPatterns) == 0):
+    return ''
   chapterTxt = """
   <chapter><title>Architectural Patterns</title>
 """
+  for pName in aPatterns:
+    chapterTxt += """
+      <section><title>""" + pName + """</title>
+    """          
+    pattern = aPatterns[pName]
+    modelFile = docDir + '/' + pName + 'ComponentModel'
+    if (buildComponentModel(p,pName,modelFile,fileSuffix) == True):
+      chapterTxt += buildImage(p,modelFile,pName + ' ' + 'Component Model',fileSuffix,False)
+
+    chapterTxt += """
+        <section><title>Synopsis</title>
+          <para>""" + paraText(pattern.synopsis()) + """</para>
+        </section>"""
+    chapterTxt += """
+        <section><title>Components</title>"""
+    for component in pattern.components():
+      componentName = component.name()
+      chapterTxt += """
+          <section><title>""" + componentName + """</title>
+            <section><title>Description</title>
+              <para>""" + paraText(component.description()) + """</para>
+            </section>"""
+
+      compIfs = component.interfaces()
+      if (len(compIfs) > 0):
+        chapterTxt += """
+            <section><title>Interfaces</title>
+        """ 
+        chapterTxt += buildTable(componentName + "InterfacesTable","Interfaces",['Name','Type','Access Right','Privilege'],compIfs,0) + """
+            </section>"""
+
+      compStruct = component.structure()
+      if (len(compStruct) > 0):
+        chapterTxt += """
+            <section><title>Structure</title>
+        """ 
+        modelFile = docDir + '/' + pName + '_' + componentName + 'AssetModel'
+        if (buildComponentAssetModel(p,componentName,modelFile,fileSuffix) == True):
+          chapterTxt += buildImage(p,modelFile,componentName + ' ' + 'Asset Model',fileSuffix,False)
+        chapterTxt += buildTable(componentName + "StructureTable","Structure",['Head','Type','Nav','Nry','Role','Role','Nry','Nav','Type','Tail'],compStruct,0) + """
+            </section>"""
+      compReqs = component.requirements()
+      if (len(compReqs) > 0):
+        chapterTxt += """
+            <section><title>Requirements</title>"""
+        chapterTxt += buildTable(componentName + "RequirementsTable","Template Requirements",['Name'],compReqs,0) + """
+            </section>"""
+
+      compGoals = component.goals()
+      if (len(compGoals) > 0):
+        chapterTxt += """
+            <section><title>Goals</title>"""
+        chapterTxt += buildTable(componentName + "GoalsTable","Template Goals",['Name'],compGoals,0) + """
+            </section>"""
+
+      compGas = component.associations()
+      if (len(compGas) > 0):
+        chapterTxt += """
+            <section><title>Goal Associations</title>"""
+        modelFile = docDir + '/' + pName + '_' + componentName + 'GoalModel'
+        if (buildComponentGoalModel(p,componentName,modelFile,fileSuffix) == True):
+          chapterTxt += buildImage(p,modelFile,componentName + ' ' + 'Goal Model',fileSuffix,False)
+        chapterTxt += buildTable(componentName + "GoalAssociationsTable","Goal Associations",['Goal','Ref. Type','Sub Goal','Rationale'],compGas,0) + """
+            </section>"""
+      chapterTxt += """
+          </section>"""
+
+    chapterTxt += """
+        </section>
+        <section><title>Connectors</title>"""
+    chapterTxt += buildTable(pName + "ConnectorTable","Connectors",['Connectors','Component','Role','Interface','Component','Interface','Role','Asset','Protocol','Access Right'],pattern.connectors(),0) + """
+        </section>
+      </section>"""
   chapterTxt += """
   </chapter>
   """          
@@ -2015,8 +2229,17 @@ def buildReqSpecBody(p,sectionFlags,docDir,fileSuffix = 'svg'):
 
   if (sectionFlags[REQDOC_DEPENDENCIES_ID]):
     specDoc += dependencies(p)
+  if (sectionFlags[REQDOC_TEMPLATEASSETS_ID]):
+    specDoc += templateAssets(p)
+  if (sectionFlags[REQDOC_TEMPLATEGOALS_ID]):
+    specDoc += templateGoals(p)
+  if (sectionFlags[REQDOC_TEMPLATEREQUIREMENTS_ID]):
+    specDoc += templateRequirements(p)
+  if (sectionFlags[REQDOC_SECURITYPATTERNS_ID]):
+    specDoc += securityPatterns(p,docDir,fileSuffix)
   if (sectionFlags[REQDOC_ARCHITECTURALPATTERNS_ID]):
-    specDoc += architecture(p,docDir)
+    specDoc += architecture(p,docDir,fileSuffix)
+
   return specDoc
 
 def buildPersonasBody(p,sectionFlags,docDir,fileSuffix = 'svg'):

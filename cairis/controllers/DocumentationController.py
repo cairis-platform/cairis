@@ -44,7 +44,7 @@ class DocumentationAPI(Resource):
     session_id = get_session_id(session, request)
     fileName = request.args.get('filename', 'report')
     dao = DocumentationDAO(session_id)
-    sectionFlags = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+    sectionFlags = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
     if (doc_format == 'PDF'):
       filePostfix = 'pdf'
       doc_format = [0,0,1,0,0]
