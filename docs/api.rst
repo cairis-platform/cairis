@@ -55,7 +55,7 @@ The cairis_test database
 
 As part of the quick setup process, a cairis_test database is created (password: cairis_test). Associated with this database is the session_id test . This database makes it possible to do general front-end development and testing without worrying about authentication.
 
-You can import models directly into this database by using cimport.py without setting the user and database parameters. You can also use any the end-points with this session_id, e.g.
+You can import models directly into this database by using cimport.py without setting the user and database parameters. You can also use any end-points with this session_id, e.g.
 
 
 .. code-block:: bash
