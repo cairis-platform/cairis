@@ -44,6 +44,7 @@ CAIRIS documentation
    searching
    tags
    gendoc
+   api
    troubleshooting
 
 
