@@ -55,7 +55,7 @@ class PersonasAPI(Resource):
     dao.add_persona(new_persona)
     dao.close()
 
-    resp_dict = {'message': 'Persona successfully added'}
+    resp_dict = {'message': new_persona.name() + 'created'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp
@@ -81,7 +81,7 @@ class PersonaByNameAPI(Resource):
     dao.update_persona(req, name=name)
     dao.close()
 
-    resp_dict = {'message': 'Persona successfully updated'}
+    resp_dict = {'message': req.name() + ' updated'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
@@ -93,7 +93,7 @@ class PersonaByNameAPI(Resource):
     dao.delete_persona(name=name)
     dao.close()
 
-    resp_dict = {'message': 'Persona successfully deleted'}
+    resp_dict = {'message': name + ' deleted'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp

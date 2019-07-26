@@ -55,7 +55,7 @@ class AttackersAPI(Resource):
     new_attacker = dao.from_json(request)
     dao.add_attacker(new_attacker)
     dao.close()
-    resp_dict = {'message': 'Attacker successfully added'}
+    resp_dict = {'message': new_attacker.name() + ' created'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp
@@ -81,7 +81,7 @@ class AttackerByNameAPI(Resource):
     dao.update_attacker(req, name=name)
     dao.close()
 
-    resp_dict = {'message': 'Attacker successfully updated'}
+    resp_dict = {'message': req.name() + ' updated'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
@@ -93,7 +93,7 @@ class AttackerByNameAPI(Resource):
     dao.delete_attacker(name=name)
     dao.close()
 
-    resp_dict = {'message': 'Attacker successfully deleted'}
+    resp_dict = {'message': name + ' deleted'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
