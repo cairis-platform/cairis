@@ -94,7 +94,7 @@ class RoleAPITests(CairisDaemonTestCase):
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     message = json_resp.get('message', None)
     self.assertIsNotNone(message, 'No message returned')
-    self.assertEqual(message, 'Add successful')
+    self.assertEqual(message, 'Student created')
 
   def test_get_name(self):
     method = 'test_get_name'
@@ -131,7 +131,7 @@ class RoleAPITests(CairisDaemonTestCase):
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     message = json_resp.get('message', None)
     self.assertIsNotNone(message, 'No message returned')
-    self.assertEqual(message, 'Update successful')
+    self.assertEqual(message, upd_role.theName + ' updated')
 
     rv = self.app.get('/api/roles/name/Test3?session_id=test')
     if (sys.version_info > (3,)):
@@ -157,7 +157,7 @@ class RoleAPITests(CairisDaemonTestCase):
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     message = json_resp.get('message', None)
     self.assertIsNotNone(message, 'No message returned')
-    self.logger.info('[%s] Message: %s\n', method, message)
+    self.assertEqual(message, 'Student deleted')
 
     rv = self.app.post('/api/roles', content_type='application/json', data=self.new_role_body)
 

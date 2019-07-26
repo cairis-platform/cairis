@@ -51,7 +51,7 @@ class RolesAPI(Resource):
     new_role = dao.from_json(request)
     dao.add_role(new_role)
     dao.close()
-    resp_dict = {'message': 'Add successful'}
+    resp_dict = {'message': new_role.name() + ' created'}
     resp = make_response(json_serialize(resp_dict, session_id=session_id), OK)
     resp.contenttype = 'application/json'
     return resp
@@ -73,7 +73,7 @@ class RolesByNameAPI(Resource):
     upd_role = dao.from_json(request)
     dao.update_role(upd_role, name=name)
     dao.close()
-    resp_dict = {'message': 'Update successful'}
+    resp_dict = {'message': upd_role.name() + ' updated'}
     resp = make_response(json_serialize(resp_dict, session_id=session_id), OK)
     resp.contenttype = 'application/json'
     return resp
@@ -83,7 +83,7 @@ class RolesByNameAPI(Resource):
     dao = RoleDAO(session_id)
     dao.delete_role(name=name)
     dao.close()
-    resp_dict = {'message': 'Role successfully deleted'}
+    resp_dict = {'message': name + ' deleted'}
     resp = make_response(json_serialize(resp_dict, session_id=session_id), OK)
     resp.contenttype = 'application/json'
     return resp
