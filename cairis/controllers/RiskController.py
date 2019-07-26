@@ -51,7 +51,7 @@ class RisksAPI(Resource):
     risk = dao.from_json(request)
     dao.add_risk(risk)
 
-    resp_dict = {'message': 'Risk successfully added'}
+    resp_dict = {'message': risk.name() + ' created'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp
@@ -76,7 +76,7 @@ class RiskByNameAPI(Resource):
     dao.update_risk(name, new_risk)
     dao.close()
 
-    resp_dict = {'message': 'Risk successfully updated'}
+    resp_dict = {'message': new_risk.name() + ' updated'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
@@ -87,7 +87,7 @@ class RiskByNameAPI(Resource):
     dao.delete_risk(name)
     dao.close()
 
-    resp_dict = {'message': 'Risk successfully deleted'}
+    resp_dict = {'message': name + ' deleted'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp

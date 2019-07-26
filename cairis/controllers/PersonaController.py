@@ -55,7 +55,7 @@ class PersonasAPI(Resource):
     dao.add_persona(new_persona)
     dao.close()
 
-    resp_dict = {'message': new_persona.name() + 'created'}
+    resp_dict = {'message': new_persona.name() + ' created'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp

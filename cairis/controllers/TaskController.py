@@ -56,7 +56,7 @@ class TasksAPI(Resource):
     task_id = dao.add_task(new_task)
     dao.close()
 
-    resp_dict = {'message': 'Task successfully added'}
+    resp_dict = {'message': new_task.name() + ' created'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp
@@ -82,7 +82,7 @@ class TaskByNameAPI(Resource):
     dao.update_task(req, name=name)
     dao.close()
 
-    resp_dict = {'message': 'Task successfully updated'}
+    resp_dict = {'message': req.name() + ' updated'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
@@ -94,7 +94,7 @@ class TaskByNameAPI(Resource):
     dao.delete_task(name=name)
     dao.close()
 
-    resp_dict = {'message': 'Task successfully deleted'}
+    resp_dict = {'message': name + ' deleted'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp

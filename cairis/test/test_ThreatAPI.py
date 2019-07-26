@@ -185,7 +185,7 @@ class ThreatAPITests(CairisDaemonTestCase):
     message = json_resp.get('message', None)
     self.assertIsNotNone(message, 'No message in response')
     self.logger.info('[%s] Message: %s', method, message)
-    self.assertGreater(message.find('successfully updated'), -1, 'The threat was not successfully updated')
+    self.assertGreater(message.find('updated'), -1, 'The threat was not successfully updated')
 
     rv = self.app.get('/api/threats/name/%s?session_id=test' % quote(threat_to_update.theThreatName))
     if (sys.version_info > (3,)):
