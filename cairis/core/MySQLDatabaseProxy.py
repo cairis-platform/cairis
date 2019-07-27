@@ -18,7 +18,7 @@
 
 from .Borg import Borg
 import MySQLdb
-from sqlalchemy.exc import OperationalError, ProgrammingError, DataError
+from sqlalchemy.exc import OperationalError, ProgrammingError, DataError, IntegrityError
 from . import RequirementFactory
 from .Environment import Environment
 from .ARM import *
@@ -240,6 +240,9 @@ class MySQLDatabaseProxy:
       else:
         return session
     except OperationalError as e:
+      exceptionText = 'Update error (message:' + format(e) + ')'
+      raise DatabaseProxyException(exceptionText) 
+    except IntegrityError as e:
       exceptionText = 'Update error (message:' + format(e) + ')'
       raise DatabaseProxyException(exceptionText) 
     except _mysql_exceptions.DatabaseError as e:
@@ -3028,7 +3031,7 @@ class MySQLDatabaseProxy:
   def addUseCaseStep(self,ucId,envName,stepNo,step):
     step.validate()
     self.updateDatabase('call addUseCaseStep(:id,:env,:step,:text,:synopsis,:actor,:type)',{'id':ucId,'env':envName,'step':stepNo,'text':step.text(),'synopsis':step.synopsis(),'actor':step.actor(),'type':step.actorType()},'MySQL error adding use case step') 
-    for tag in step.tags(): self.addUseCaseStepTag(ucId,envName,stepNo,tag)
+    for tag in set(step.tags()): self.addUseCaseStepTag(ucId,envName,stepNo,tag)
     for idx,exc in list((step.theExceptions).items()):
       self.addUseCaseStepException(ucId,envName,stepNo,exc[0],exc[1],exc[2],exc[3],exc[4])
 
@@ -3486,14 +3489,13 @@ class MySQLDatabaseProxy:
   def addTags(self,dimObjt,dimName,tags):
     self.deleteTags(dimObjt,dimName)
     curs = self.conn.connection().connection.cursor()
-    for tag in tags:
+    for tag in set(tags):
       try:
         curs.execute('call addTag(%s,%s,%s)',[dimObjt,tag,dimName])
       except OperationalError as e:
         raise DatabaseProxyException('MySQL error adding tag (message: ' + format(e))
       except _mysql_exceptions.DatabaseError as e:
-        id,msg = e
-        raise DatabaseProxyException('MySQL error adding tag (id:' + str(id) + ', message: ' + msg)
+        raise DatabaseProxyException('MySQL error adding ' + dimName + ' ' + dimObjt + ' tag ' + tag + ': ' + format(e))
     curs.close()
 
   def getTags(self,dimObjt,dimName):

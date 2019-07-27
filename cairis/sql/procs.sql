@@ -24022,6 +24022,7 @@ begin
   declare toId int;
   declare envId int;
   declare assetId int;
+  declare dfaCount int;
 
   select id into envId from environment where name = envName limit 1;
 
@@ -24054,7 +24055,11 @@ begin
 
   select id into assetId from asset where name = assetName limit 1;
 
-  insert into dataflow_asset(dataflow_id,asset_id) values (dfId,assetId);
+  select count(*) into dfaCount from dataflow_asset where dataflow_id = dfId and asset_id = assetId;
+  if dfaCount = 0
+  then
+    insert into dataflow_asset(dataflow_id,asset_id) values (dfId,assetId);
+  end if;
 end
 //
 
