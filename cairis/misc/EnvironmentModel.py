@@ -66,7 +66,7 @@ def arrayToThreatSecurityPropertiesTable(spArray,objtName):
 
 
 class EnvironmentModel:
-  def __init__(self,tlinks,environmentName,dp, modelLayout, fontName=None, fontSize=None):
+  def __init__(self,tlinks,environmentName,dp, modelLayout, fontName=None, fontSize=None,isTagged=False):
     self.theTraceLinks = tlinks
     self.theEnvironmentName = environmentName
     self.dbProxy = dp
@@ -78,6 +78,7 @@ class EnvironmentModel:
     self.theGraphName = b.tmpDir + '/pydotout.dot'
     self.theRenderer = modelLayout
     self.theNodeLookup = {}
+    self.isTagged = isTagged
 
   def buildGraph(self):
     self.buildGraph()
@@ -177,13 +178,14 @@ class EnvironmentModel:
       edge = pydot.Edge(str(fromName),str(toName),dir=dirType)
       self.theGraph.add_edge(edge)
 
-    tags = self.dbProxy.riskModelTags(self.theEnvironmentName)
-    if (len(tags) > 0):
-      for tag in tags:
-        cluster = pydot.Cluster(tag,label=tag)
-        for objt in tags[tag]:
-          cluster.add_node(pydot.Node(objt))
-        self.theGraph.add_subgraph(cluster)
+      if (self.isTagged == True):
+        tags = self.dbProxy.riskModelTags(self.theEnvironmentName)
+        if (len(tags) > 0):
+          for tag in tags:
+            cluster = pydot.Cluster(tag,label=tag)
+            for objt in tags[tag]:
+              cluster.add_node(pydot.Node(objt))
+            self.theGraph.add_subgraph(cluster)
     return self.layout()
 
   def layout(self):

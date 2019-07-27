@@ -100,6 +100,11 @@ class RiskAnalysisModelAPI(Resource):
     model_generator = get_model_generator()
     dim_name = request.args.get('dimension_name', '')
     obj_name = request.args.get('object_name', '')
+    isTagged = request.args.get('tagged', '0')
+    if (isTagged == '1'):
+      isTagged = True
+    else:
+      isTagged = False
     model_layout = request.args.get('layout','Hierarchical')
 
     if dim_name == 'all': dim_name = ''
@@ -115,7 +120,7 @@ class RiskAnalysisModelAPI(Resource):
       renderer = 'circo'
 
     dao = RiskDAO(session_id)
-    dot_code = dao.get_risk_analysis_model(environment, dim_name, obj_name, renderer)
+    dot_code = dao.get_risk_analysis_model(environment, dim_name, obj_name, renderer, isTagged)
     dao.close()
 
     resp = make_response(model_generator.generate(dot_code, model_type='risk', renderer=renderer), OK)
