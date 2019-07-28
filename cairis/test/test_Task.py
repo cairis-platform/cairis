@@ -91,7 +91,7 @@ class TaskTest(unittest.TestCase):
     oTask = theTasks[self.iTasks[0]["theName"]] 
 
     self.assertEqual(iTask.name(),oTask.name())
-    self.assertEqual(iTask.tags(),oTask.tags())
+    self.assertEqual(set(iTask.tags()),set(oTask.tags()))
     self.assertEqual(iTask.shortCode(),oTask.shortCode())
     self.assertEqual(iTask.objective(),oTask.objective())
     self.assertEqual(iTask.assumption(),oTask.assumption())
@@ -112,7 +112,7 @@ class TaskTest(unittest.TestCase):
     theTasks = b.dbProxy.getTasks()
     oTask = theTasks['Updated name'] 
     self.assertEqual(oTask.name(),'Updated name')
-    self.assertEqual(iTask.tags(),oTask.tags())
+    self.assertEqual(set(iTask.tags()),set(oTask.tags()))
     self.assertEqual(iTask.shortCode(),oTask.shortCode())
     self.assertEqual(iTask.objective(),oTask.objective())
     self.assertEqual(iTask.assumption(),oTask.assumption())
