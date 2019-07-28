@@ -208,7 +208,8 @@ class UseCaseAPITests(CairisDaemonTestCase):
     json_resp = json_deserialize(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     ackMsg = json_resp.get('message', None)
-    self.assertEqual(ackMsg, 'Persona Characteristic successfully updated')
+    self.assertGreater(ackMsg.find('updated'),-1,'PC not updated')
+
 
 
     url = '/api/usecases'
