@@ -14,7 +14,7 @@ RUN pip3 install Flask
 RUN mkdir /latex
 COPY LaTeXApi.py /latex
 RUN touch __init__.py
-RUN git clone --depth 1 -b master https://github.com/failys/cairis /cairis
+RUN git clone --depth 1 -b master https://github.com/cairis-platform/cairis /cairis
 
 RUN mkdir -p /cairisTmp/cairis
 RUN mv /cairis/cairis/config /cairisTmp/cairis

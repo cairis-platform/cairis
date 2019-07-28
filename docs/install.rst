@@ -52,7 +52,7 @@ To update your docker containers, stop the docker containers and run the below c
    sudo docker volume rm $(docker volume ls)
 
 
-Please feel free to use this container to evaluate CAIRIS, but do not use it for operational use without configuring the default credentials first.  The scripts used to build the container can be found on `GitHub <https://github.com/failys/cairis/tree/master/docker>`_, and provides a useful template for getting started.
+Please feel free to use this container to evaluate CAIRIS, but do not use it for operational use without configuring the default credentials first.  The scripts used to build the container can be found on `GitHub <https://github.com/cairis-platform/cairis/tree/master/docker>`_, and provides a useful template for getting started.
 
 Installation and configuration via GitHub
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -71,7 +71,7 @@ Clone the latest version of the CAIRIS github repository, and use pip to install
 
 .. code-block:: bash
 
-   git clone https://github.com/failys/cairis
+   git clone https://github.com/cairis-platform/cairis
    cd cairis
    sudo pip3 install -r requirements.txt
 
@@ -107,7 +107,7 @@ The final step entails installing the UI code by running the below script in cai
 
    sudo -E ./installUI.sh
 
-The CAIRIS UI code is managed in the `cairis-ui github repository <https://github.com/failys/cairis-ui>`_.  Running this script will setup `node <https://nodejs.org>`_ and `yarn <https://yarnpkg>`_, download the github repo, create a production version of the latest UI code and deploy to cairis/cairis/dist.
+The CAIRIS UI code is managed in the `cairis-ui github repository <https://github.com/cairis-platform/cairis-ui>`_.  Running this script will setup `node <https://nodejs.org>`_ and `yarn <https://yarnpkg>`_, download the github repo, create a production version of the latest UI code and deploy to cairis/cairis/dist.
 The -E flag is required, as the CAIRIS_SRC environment variable needs to be visible to root.
 
 You should now start up your CAIRIS server.  If you plan to develop with CAIRIS, you should skip this step as you'll find it more useful to manually start the development cairisd server.  For everyone else, create the following *cairis.service* file, substituting *cairisuser* for the name of your account.  Using sudo or root, copy this file to /etc/systemd/system.

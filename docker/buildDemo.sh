@@ -6,7 +6,7 @@ export CAIRIS_REPO=$REPOS_DIR/cairis
 
 rm -rf $CAIRIS_REPO
 
-git clone http://github.com/failys/cairis $CAIRIS_REPO
+git clone http://github.com/cairis-platform/cairis $CAIRIS_REPO
 
 sudo docker stop CAIRIS
 sudo docker stop cairis-mysql

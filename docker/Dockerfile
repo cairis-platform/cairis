@@ -1,5 +1,5 @@
 FROM ubuntu:disco
-MAINTAINER Shamal Faily <sfaily@bournemouth.ac.uk>
+MAINTAINER Shamal Faily <admin@cairis.org>
 RUN apt-get update 
 RUN apt-get install -y python3-dev
 RUN apt-get install -y build-essential
@@ -30,7 +30,7 @@ ENV PYTHONPATH=/cairis
 RUN mkdir /tmpDocker
 RUN mkdir /images
 
-RUN git clone --depth 1 -b master https://github.com/failys/cairis /cairis
+RUN git clone --depth 1 -b master https://github.com/cairis-platform/cairis /cairis
 RUN mkdir /cairisTmp
 RUN mv /cairis/cairis /cairisTmp/cairis
 RUN rm -rf /cairis/
