@@ -99,7 +99,8 @@ class TaskCharacteristicAPITests(CairisDaemonTestCase):
     json_resp = json_deserialize(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     ackMsg = json_resp.get('message', None)
-    self.assertEqual(ackMsg, 'Task Characteristic successfully added')
+    self.assertGreater(ackMsg.find('created'),-1,'TC not created')
+
 
 
   def test_put(self):
@@ -115,7 +116,7 @@ class TaskCharacteristicAPITests(CairisDaemonTestCase):
     json_resp = json_deserialize(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     ackMsg = json_resp.get('message', None)
-    self.assertEqual(ackMsg, 'Task Characteristic successfully updated')
+    self.assertGreater(ackMsg.find('updated'),-1,'TC not updated')
 
 
   def test_delete(self):
@@ -138,5 +139,5 @@ class TaskCharacteristicAPITests(CairisDaemonTestCase):
     json_resp = json_deserialize(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     ackMsg = json_resp.get('message', None)
-    self.assertEqual(ackMsg, 'Task Characteristic successfully deleted')
+    self.assertGreater(ackMsg.find('deleted'),-1,'TC not deleted')
 

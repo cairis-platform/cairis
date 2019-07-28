@@ -94,7 +94,8 @@ class ConceptReferenceAPITests(CairisDaemonTestCase):
     json_resp = json_deserialize(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     ackMsg = json_resp.get('message', None)
-    self.assertEqual(ackMsg, 'Concept Reference successfully added')
+    self.assertGreater(ackMsg.find('created'),-1,'Concept reference not created')
+
 
   def test_put(self):
     method = 'test_put'
@@ -109,7 +110,7 @@ class ConceptReferenceAPITests(CairisDaemonTestCase):
     json_resp = json_deserialize(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     ackMsg = json_resp.get('message', None)
-    self.assertEqual(ackMsg, 'Concept Reference successfully updated')
+    self.assertGreater(ackMsg.find('updated'),-1,'Concept reference not updated')
 
   def test_delete(self):
     method = 'test_delete'
@@ -133,4 +134,4 @@ class ConceptReferenceAPITests(CairisDaemonTestCase):
     json_resp = json_deserialize(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     ackMsg = json_resp.get('message', None)
-    self.assertEqual(ackMsg, 'Concept Reference successfully deleted')
+    self.assertGreater(ackMsg.find('deleted'),-1,'Concept reference not deleted')

@@ -54,7 +54,7 @@ class ExternalDocumentsAPI(Resource):
     dao.add_external_document(new_edoc)
     dao.close()
 
-    resp_dict = {'message': 'External Document successfully added'}
+    resp_dict = {'message': new_edoc.name() + ' created'}
     resp = make_response(json_serialize(resp_dict, session_id=session_id), OK)
     resp.contenttype = 'application/json'
     return resp
@@ -81,7 +81,7 @@ class ExternalDocumentByNameAPI(Resource):
     dao.update_external_document(upd_edoc, name)
     dao.close()
 
-    resp_dict = {'message': 'External Document successfully updated'}
+    resp_dict = {'message': upd_edoc.name() + ' updated'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp
@@ -93,7 +93,7 @@ class ExternalDocumentByNameAPI(Resource):
     dao.delete_external_document(name)
     dao.close()
 
-    resp_dict = {'message': 'External Document successfully deleted'}
+    resp_dict = {'message': name + ' deleted'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp

@@ -56,7 +56,7 @@ class PersonaCharacteristicsAPI(Resource):
       dao.assignIntentionalElements(ps,rss,rcs)
     dao.close()
 
-    resp_dict = {'message': 'Persona Characteristic successfully added'}
+    resp_dict = {'message': new_pc.characteristic() + ' created'}
     resp = make_response(json_serialize(resp_dict, session_id=session_id), OK)
     resp.contenttype = 'application/json'
     return resp
@@ -84,7 +84,7 @@ class PersonaCharacteristicByNameAPI(Resource):
       dao.assignIntentionalElements(ps,rss,rcs)
     dao.close()
 
-    resp_dict = {'message': 'Persona Characteristic successfully updated'}
+    resp_dict = {'message': upd_pc.characteristic() + ' updated'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp
@@ -96,7 +96,7 @@ class PersonaCharacteristicByNameAPI(Resource):
     dao.delete_persona_characteristic(name)
     dao.close()
 
-    resp_dict = {'message': 'Persona Characteristic successfully deleted'}
+    resp_dict = {'message': name + ' deleted'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp

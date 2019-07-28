@@ -64,7 +64,7 @@ class RequirementsAPI(Resource):
     dao.add_requirement(new_req, asset_name=asset_name, environment_name=environment_name)
     dao.close()
 
-    resp_dict = {'message': 'Requirement successfully added'}
+    resp_dict = {'message': new_req.name() + ' created'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp
@@ -119,7 +119,7 @@ class RequirementByNameAPI(Resource):
     dao.delete_requirement(name=name)
     dao.close()
 
-    resp_dict = {'message': 'Requirement successfully deleted'}
+    resp_dict = {'message': name + ' deleted'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
@@ -131,7 +131,7 @@ class RequirementByNameAPI(Resource):
     dao.update_requirement(req, name=name)
     dao.close()
 
-    resp_dict = {'message': 'Requirement successfully updated'}
+    resp_dict = {'message': req.name() + ' updated'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp

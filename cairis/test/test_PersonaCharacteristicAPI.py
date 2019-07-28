@@ -116,7 +116,7 @@ class PersonaCharacteristicAPITests(CairisDaemonTestCase):
     json_resp = json_deserialize(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     ackMsg = json_resp.get('message', None)
-    self.assertEqual(ackMsg, 'Persona Characteristic successfully added')
+    self.assertGreater(ackMsg.find('created'),-1,'PC not created')
 
 
   def test_put(self):
@@ -132,7 +132,7 @@ class PersonaCharacteristicAPITests(CairisDaemonTestCase):
     json_resp = json_deserialize(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     ackMsg = json_resp.get('message', None)
-    self.assertEqual(ackMsg, 'Persona Characteristic successfully updated')
+    self.assertGreater(ackMsg.find('updated'),-1,'PC not updated')
 
 
   def test_delete(self):
@@ -156,4 +156,4 @@ class PersonaCharacteristicAPITests(CairisDaemonTestCase):
     json_resp = json_deserialize(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     ackMsg = json_resp.get('message', None)
-    self.assertEqual(ackMsg, 'Persona Characteristic successfully deleted')
+    self.assertGreater(ackMsg.find('deleted'),-1,'PC not deleted')

@@ -56,7 +56,7 @@ class DomainPropertiesAPI(Resource):
     dao.add_domain_property(new_domain_property)
     dao.close()
 
-    resp_dict = {'message': 'DomainProperty successfully added'}
+    resp_dict = {'message': new_domain_property.name() + ' created'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp
@@ -82,7 +82,7 @@ class DomainPropertiesByNameAPI(Resource):
     dao.update_domain_property(req, name=name)
     dao.close()
 
-    resp_dict = {'message': 'DomainProperty successfully updated'}
+    resp_dict = {'message': req.name() + ' updated'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
@@ -94,7 +94,7 @@ class DomainPropertiesByNameAPI(Resource):
     dao.delete_domain_property(name=name)
     dao.close()
 
-    resp_dict = {'message': 'DomainProperty successfully deleted'}
+    resp_dict = {'message': name + ' deleted'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp

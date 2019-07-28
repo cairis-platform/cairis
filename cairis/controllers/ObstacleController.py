@@ -55,7 +55,7 @@ class ObstaclesAPI(Resource):
     new_obstacle_id = dao.add_obstacle(new_obstacle)
     dao.close()
 
-    resp_dict = {'message': 'Obstacle successfully added'}
+    resp_dict = {'message': new_obstacle.name() + ' created'}
     resp = make_response(json_serialize(resp_dict, session_id=session_id), OK)
     resp.contenttype = 'application/json'
     return resp
@@ -82,7 +82,7 @@ class ObstacleByNameAPI(Resource):
     dao.update_obstacle(upd_obs, name)
     dao.close()
 
-    resp_dict = {'message': 'Obstacle successfully updated'}
+    resp_dict = {'message': upd_obs.name() + ' updated'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp
@@ -94,7 +94,7 @@ class ObstacleByNameAPI(Resource):
     dao.delete_obstacle(name)
     dao.close()
 
-    resp_dict = {'message': 'Obstacle successfully deleted'}
+    resp_dict = {'message': name + ' deleted'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp

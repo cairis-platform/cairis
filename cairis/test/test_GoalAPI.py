@@ -185,7 +185,7 @@ class GoalAPITests(CairisDaemonTestCase):
     message = json_resp.get('message', None)
     self.assertIsNotNone(message, 'No message in response')
     self.logger.info('[%s] Message: %s', method, message)
-    self.assertGreater(message.find('successfully updated'), -1, 'The goal was not successfully updated')
+    self.assertGreater(message.find('updated'), -1, 'The goal was not successfully updated')
     
     rv = self.app.get('/api/goals/name/%s?session_id=test' % quote(goal_to_update.theName))
     if (sys.version_info > (3,)):

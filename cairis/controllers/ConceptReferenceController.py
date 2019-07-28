@@ -55,7 +55,7 @@ class ConceptReferencesAPI(Resource):
     dao.add_concept_reference(new_cr)
     dao.close()
 
-    resp_dict = {'message': 'Concept Reference successfully added'}
+    resp_dict = {'message': new_cr.name() + ' created'}
     resp = make_response(json_serialize(resp_dict, session_id=session_id), OK)
     resp.contenttype = 'application/json'
     return resp
@@ -82,7 +82,7 @@ class ConceptReferenceByNameAPI(Resource):
     dao.update_concept_reference(upd_cr, name)
     dao.close()
 
-    resp_dict = {'message': 'Concept Reference successfully updated'}
+    resp_dict = {'message': upd_cr.name() + ' updated'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp
@@ -94,7 +94,7 @@ class ConceptReferenceByNameAPI(Resource):
     dao.delete_concept_reference(name)
     dao.close()
 
-    resp_dict = {'message': 'Concept Reference successfully deleted'}
+    resp_dict = {'message': name + ' deleted'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp

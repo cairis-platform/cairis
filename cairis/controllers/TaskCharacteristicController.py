@@ -55,7 +55,7 @@ class TaskCharacteristicsAPI(Resource):
     dao.add_task_characteristic(new_tc)
     dao.close()
 
-    resp_dict = {'message': 'Task Characteristic successfully added'}
+    resp_dict = {'message': new_tc.characteristic() + ' created'}
     resp = make_response(json_serialize(resp_dict, session_id=session_id), OK)
     resp.contenttype = 'application/json'
     return resp
@@ -82,7 +82,7 @@ class TaskCharacteristicByNameAPI(Resource):
     dao.update_task_characteristic(upd_tc, name)
     dao.close()
 
-    resp_dict = {'message': 'Task Characteristic successfully updated'}
+    resp_dict = {'message': upd_tc.characteristic() + ' updated'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp
@@ -94,7 +94,7 @@ class TaskCharacteristicByNameAPI(Resource):
     dao.delete_task_characteristic(name)
     dao.close()
 
-    resp_dict = {'message': 'Task Characteristic successfully deleted'}
+    resp_dict = {'message': name + ' deleted'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp

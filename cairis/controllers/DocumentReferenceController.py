@@ -55,7 +55,7 @@ class DocumentReferencesAPI(Resource):
     dao.add_document_reference(new_dr)
     dao.close()
 
-    resp_dict = {'message': 'Document Reference successfully added'}
+    resp_dict = {'message': new_dr.name() + ' created'}
     resp = make_response(json_serialize(resp_dict, session_id=session_id), OK)
     resp.contenttype = 'application/json'
     return resp
@@ -82,7 +82,7 @@ class DocumentReferenceByNameAPI(Resource):
     dao.update_document_reference(upd_dr, name)
     dao.close()
 
-    resp_dict = {'message': 'Document Reference successfully updated'}
+    resp_dict = {'message': upd_dr.name() + ' updated'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp
@@ -94,7 +94,7 @@ class DocumentReferenceByNameAPI(Resource):
     dao.delete_document_reference(name)
     dao.close()
 
-    resp_dict = {'message': 'Document Reference successfully deleted'}
+    resp_dict = {'message': name + ' deleted'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp

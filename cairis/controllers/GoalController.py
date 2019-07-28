@@ -60,7 +60,7 @@ class GoalsAPI(Resource):
     new_goal_id = dao.add_goal(new_goal)
     dao.close()
 
-    resp_dict = {'message': 'Goal successfully added'}
+    resp_dict = {'message': new_goal.name() + ' created'}
     resp = make_response(json_serialize(resp_dict, session_id=session_id), OK)
     resp.contenttype = 'application/json'
     return resp
@@ -88,7 +88,7 @@ class GoalByNameAPI(Resource):
     dao.update_goal(upd_goal, unquote(name))
     dao.close()
 
-    resp_dict = {'message': 'Goal successfully updated'}
+    resp_dict = {'message': upd_goal.name() + ' updated'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp
@@ -100,7 +100,7 @@ class GoalByNameAPI(Resource):
     dao.delete_goal(unquote(name))
     dao.close()
 
-    resp_dict = {'message': 'Goal successfully deleted'}
+    resp_dict = {'message': name + ' deleted'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp
