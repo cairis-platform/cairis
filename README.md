@@ -1,6 +1,6 @@
 # CAIRIS 
 
-[![Build Status](https://secure.travis-ci.org/failys/cairis.png?branch=master)](http://travis-ci.org/failys/cairis)
+[![Build Status](https://secure.travis-ci.org/cairis-platform/cairis.png?branch=master)](http://travis-ci.org/cairis-platform/cairis)
 [![Coverage Status](https://coveralls.io/repos/github/failys/cairis/badge.svg?branch=master)](https://coveralls.io/github/failys/cairis?branch=master)
 [![DOI](https://zenodo.org/badge/3790944.svg)](https://zenodo.org/badge/latestdoi/3790944)
 [![GitHub issues](https://img.shields.io/github/issues/cairis-platform/cairis.svg?style=flat-square)](https://github.com/cairis-platform/cairis/issues?utf8=✓&q=is%3Aissue+is%3Aopen)
