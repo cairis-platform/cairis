@@ -4269,6 +4269,7 @@ INSERT INTO reference_type values(3,'responsible');
 INSERT INTO reference_type values(4,'obstruct');
 INSERT INTO reference_type values(5,'resolve');
 INSERT INTO reference_type values(6,'depend');
+INSERT INTO reference_type values(7,'supports');
 INSERT INTO priority_type values (1,'Low');
 INSERT INTO priority_type values (2,'Medium');
 INSERT INTO priority_type values (3,'High');
