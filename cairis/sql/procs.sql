@@ -976,6 +976,7 @@ drop procedure if exists obstructedRootGoals;
 drop procedure if exists checkDataFlowExists;
 drop procedure if exists riskModelTags;
 drop procedure if exists securityPatternClassModel;
+drop procedure if exists conceptMapModel_all;
 
 
 delimiter //
@@ -14372,7 +14373,9 @@ begin
     union
     select 'risk', r.name, 'threat', t.name, '' from risk_threat rt, threat t, risk r where rt.risk_id = r.id and rt.threat_id = t.id
     union
-    select 'response', r.name, 'goal', g.name, '' from response_goal rg, response r, goal g where rg.response_id = r.id and rg.goal_id = g.id;
+    select 'response', r.name, 'goal', g.name, '' from response_goal rg, response r, goal g where rg.response_id = r.id and rg.goal_id = g.id
+    union
+    select 'requirement', fr.name, 'requirement', tr.name, rr.label from requirement_requirement rr, requirement fr, requirement tr where rr.from_id = fr.id and rr.to_id = tr.id;
 
   declare goalAssocCursor cursor for
     select e.name,hg.name,'goal',rt.name,tg.name,'goal',ga.alternative_id,ga.rationale from goalgoal_goalassociation ga, environment e, goal hg, reference_type rt, goal tg where ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and ga.environment_id = e.id
@@ -14436,6 +14439,9 @@ begin
     if (fromDim = 'requirement' and toDim = 'usecase') or (fromDim = 'requirement' and toDim = 'task')
     then
       set buf = concat(buf,' ref_type=\"',refType,'\"');
+    elseif (fromDim = 'requirement' and toDim = 'requirement')
+    then
+      set buf = concat(buf,' label=\"',refType,'\"');
     end if;
     set buf = concat(buf,' />\n');
     set maCount = maCount + 1;
@@ -28703,5 +28709,23 @@ begin
   select ha.name,hat.name,hm.name,a.head_role_name,a.tail_role_name,tm.name,tat.name,ta.name from securitypattern_classassociation a, template_asset ha, multiplicity_type hm, association_type hat, association_type tat, multiplicity_type tm, template_asset ta where a.pattern_id = spId and a.head_id = ha.id and a.head_multiplicity_id = hm.id and a.head_association_type_id = hat.id and a.tail_association_type_id = tat.id and a.tail_multiplicity_id = tm.id and a.tail_id = ta.id;
 end
 //
+
+create procedure conceptMapModel_all(in envName text, in reqName text)
+begin
+  if envName = 'all' and reqName = 'all'
+  then
+    select from_name,to_name,label,from_objt,to_objt from conceptMapModel_all;
+  elseif envName = 'all' and reqName != 'all'
+  then
+    select from_name,to_name,label,from_objt,to_objt from conceptMapModel_all where from_name = reqName or to_name = reqName;
+  elseif envName != 'all' and reqName = 'all'
+  then
+    select from_name,to_name,label,from_objt,to_objt from conceptMapModel_all where from_objt = envName or to_objt = envName;
+  else
+    select from_name,to_name,label,from_objt,to_objt from conceptMapModel_all where (from_name = reqName or to_name = reqName) and (from_objt = envName or to_objt = envName);
+  end if;
+end
+//
+
 
 delimiter ;

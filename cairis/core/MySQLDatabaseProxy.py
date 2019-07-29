@@ -3432,12 +3432,15 @@ class MySQLDatabaseProxy:
     if (session_id != None):
       db_proxy.reconnect(False, session_id)
 
-  def conceptMapModel(self,envName,reqName = ''):
-    callTxt = 'call parameterisedConceptMapModel(:env,:req)'
+  def conceptMapModel(self,envName,reqName = 'all'):
+    callTxt = 'call conceptMapModel_all(:env,:req)'
     argDict = {'env':envName,'req':reqName}
-    if reqName == '':
-      callTxt = 'call conceptMapModel(:env)'
-      argDict = {'env':envName}
+#    if envName == 'all' and reqName == 'all':
+#      callTxt = 'call conceptMapModel_all()'
+#      argDict = {}
+#    if reqName == '':
+#      callTxt = 'call conceptMapModel(:env)'
+#      argDict = {'env':envName}
     rows = self.responseList(callTxt,argDict,'MySQL error getting concept map model')
     associations = {}
 

@@ -59,6 +59,7 @@ DROP VIEW IF EXISTS datastore_personal_information;
 DROP VIEW IF EXISTS personal_risk;
 DROP VIEW IF EXISTS goal_associations;
 DROP VIEW IF EXISTS riskModel_tagged;
+DROP VIEW IF EXISTS conceptMapModel_all;
 
 DROP TABLE IF EXISTS trust_boundary_usecase;
 DROP TABLE IF EXISTS trust_boundary_asset;
@@ -4067,6 +4068,20 @@ CREATE VIEW riskModel_tagged as
   select t.name tag, th.name object, e.name environment from threat_tag tt, threat th, tag t, environment_threat et, environment e where t.id = tt.tag_id and th.id = tt.threat_id and tt.threat_id = et.threat_id and et.environment_id = e.id
   union
   select t.name tag, r.name object, e.name environment from risk_tag rt, risk r, tag t, environment_risk er, environment e where t.id = rt.tag_id and r.id = rt.risk_id and rt.risk_id = er.id and er.environment_id = e.id;
+
+CREATE VIEW conceptMapModel_all as
+  select fr.name from_name, tr.name to_name, rr.label,e.name from_objt,te.name to_objt from requirement fr, requirement tr, requirement_requirement rr,environment_requirement er, environment_requirement fer, environment e, environment te where rr.from_id = fr.id and fr.version = (select max(i.version) from requirement i where i.id = fr.id) and tr.version = (select max(i.version) from requirement i where i.id = tr.id) and rr.to_id = tr.id and tr.version = (select max(i.version) from requirement i where i.id = tr.id) and tr.id = er.requirement_id and rr.from_id = fer.requirement_id and fer.environment_id = e.id and rr.to_id = er.requirement_id and er.environment_id = te.id
+  union
+  select fr.name from_name, tr.name to_name, rr.label,fe.name from_objt,e.name to_objt from requirement fr, requirement tr, requirement_requirement rr,environment_requirement er, environment_requirement fer, environment fe, environment e where rr.from_id = fr.id and fr.version = (select max(i.version) from requirement i where i.id = fr.id) and tr.version = (select max(i.version) from requirement i where i.id = tr.id) and rr.to_id = tr.id and tr.version = (select max(i.version) from requirement i where i.id = tr.id) and fr.id = er.requirement_id and rr.to_id = fer.requirement_id and fer.environment_id = e.id and rr.from_id = er.requirement_id and er.environment_id = fe.id
+  union
+  select fr.name from_name, tr.name to_name, rr.label,fa.name from_objt,ta.name to_objt from requirement fr, requirement tr, requirement_requirement rr,asset_requirement far, asset_requirement tar, asset fa, asset ta, environment_asset fea, environment_asset tea where rr.from_id = fr.id and fr.version = (select max(i.version) from requirement i where i.id = fr.id) and fr.id = far.requirement_id and far.asset_id = fa.id and fa.id = fea.asset_id and rr.to_id = tr.id and tr.version = (select max(i.version) from requirement i where i.id = tr.id) and tr.id = tar.requirement_id and tar.asset_id = ta.id and ta.id = tea.asset_id
+  union
+  select fr.name from_name, tr.name to_name, rr.label,fe.name from_objt,ta.name to_objt from requirement fr, requirement tr, requirement_requirement rr,environment_requirement fer, asset_requirement tar, environment fe, asset ta, environment_asset tea where rr.from_id = fr.id and fr.version = (select max(i.version) from requirement i where i.id = fr.id) and fr.id = fer.requirement_id and fer.environment_id = fe.id and rr.to_id = tr.id and tr.version = (select max(i.version) from requirement i where i.id = tr.id) and tr.id = tar.requirement_id and tar.asset_id = ta.id and ta.id = tea.asset_id
+  union
+  select fr.name from_name, tr.name to_name, rr.label,fa.name from_objt,te.name to_objt from requirement fr, requirement tr, requirement_requirement rr, asset_requirement far, asset fa, environment_asset fea, environment_requirement ter, environment te where rr.from_id = fr.id and fr.version = (select max(i.version) from requirement i where i.id = fr.id) and fr.id = far.requirement_id and far.asset_id = fa.id and fa.id = fea.asset_id and rr.to_id = tr.id and tr.version = (select max(i.version) from requirement i where i.id = tr.id) and tr.id = ter.requirement_id and ter.environment_id = te.id order by 1,2;
+
+
+
 
 
 INSERT INTO version (major,minor,patch) VALUES (2,1,3);

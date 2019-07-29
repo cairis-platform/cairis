@@ -58,7 +58,7 @@ class TraceDAO(CairisDAO):
       trace_table = tr.theFromObject + '_' + tr.theToObject
       fromId = self.db_proxy.getDimensionId(tr.theFromName,tr.theFromObject)
       toId = self.db_proxy.getDimensionId(tr.theToName,tr.theToObject)
-      self.db_proxy.addTrace(trace_table,fromId,toId)
+      self.db_proxy.addTrace(trace_table,fromId,toId,'supports')
     except ARMException as ex:
       self.close()
       raise ARMHTTPError(ex)

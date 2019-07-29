@@ -142,9 +142,6 @@ class ConceptMapModelAPI(Resource):
     session_id = get_session_id(session, request)
     model_generator = get_model_generator()
 
-    if requirement == 'all':
-      requirement = ''
-
     dao = RequirementDAO(session_id)
     dot_code = dao.get_concept_map_model(environment, requirement)
     dao.close()
