@@ -45,7 +45,9 @@ class TraceAPITests(CairisDaemonTestCase):
       fObjt = 'requirement',
       fName = 'Dataset policy',
       tObjt = 'vulnerability',
-      tName = 'Certificate ubiquity')
+      tName = 'Certificate ubiquity',
+      lbl = 'supports')
+    
     self.new_tr_dict = {
       'session_id' : 'test',
       'object': self.new_tr

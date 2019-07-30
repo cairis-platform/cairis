@@ -94,15 +94,18 @@ class KaosModel:
     elif (dimName == 'misusecase'):
       ellipseColour = 'black'
       if (self.theKaosModel == 'task'):
-        riskName = objtName[8:]
-        riskObjt = self.dbProxy.dimensionObject(riskName,'risk')
-        riskScores = self.dbProxy.riskScore(riskObjt.threat(),riskObjt.vulnerability(),self.theEnvironmentName,riskName)
-        highestScore = 0
-        for riskScore in riskScores:
-          currentScore = riskScore[2]
-          if (currentScore > highestScore):
-            highestScore = currentScore
-        ellipseColour = threatColourCode(highestScore)
+        try:
+          riskName = objtName[8:]
+          riskObjt = self.dbProxy.dimensionObject(riskName,'risk')
+          riskScores = self.dbProxy.riskScore(riskObjt.threat(),riskObjt.vulnerability(),self.theEnvironmentName,riskName)
+          highestScore = 0
+          for riskScore in riskScores:
+            currentScore = riskScore[2]
+            if (currentScore > highestScore):
+              highestScore = currentScore
+          ellipseColour = threatColourCode(highestScore)
+        except TypeError as ex:
+          raise ARMException("Error processing risk " + riskName + " in task model" + format(ex))
       self.theGraph.add_node(pydot.Node(objtName,shape='ellipse',margin=0,style='filled',color=ellipseColour,fontcolor=riskTextColourCode(highestScore),fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'persona'):
       objt = self.dbProxy.dimensionObject(objtName,'persona')

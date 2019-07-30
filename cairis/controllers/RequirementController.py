@@ -83,6 +83,17 @@ class RequirementsByAssetAPI(Resource):
     resp.headers['Content-type'] = 'application/json'
     return resp
 
+class RequirementNamesByAssetAPI(Resource):
+
+  def get(self, name):
+    session_id = get_session_id(session, request)
+    dao = RequirementDAO(session_id)
+    reqs = dao.get_dimension_requirement_names('asset',name)
+    dao.close()
+    resp = make_response(json_serialize(reqs, session_id=session_id), OK)
+    resp.headers['Content-type'] = 'application/json'
+    return resp
+
 
 class RequirementsByEnvironmentAPI(Resource):
 
@@ -98,6 +109,17 @@ class RequirementsByEnvironmentAPI(Resource):
     resp.headers['Content-type'] = 'application/json'
     return resp
 
+
+class RequirementNamesByEnvironmentAPI(Resource):
+
+  def get(self, name):
+    session_id = get_session_id(session, request)
+    dao = RequirementDAO(session_id)
+    reqs = dao.get_dimension_requirement_names('environment',name)
+    dao.close()
+    resp = make_response(json_serialize(reqs, session_id=session_id), OK)
+    resp.headers['Content-type'] = 'application/json'
+    return resp
 
 class RequirementByNameAPI(Resource):
 
@@ -140,10 +162,16 @@ class ConceptMapModelAPI(Resource):
 
   def get(self, environment,requirement):
     session_id = get_session_id(session, request)
+    isAsset = request.args.get('asset', '0')
+    if (isAsset == '1'):
+      isAsset = True
+    else:
+      isAsset = False
+
     model_generator = get_model_generator()
 
     dao = RequirementDAO(session_id)
-    dot_code = dao.get_concept_map_model(environment, requirement)
+    dot_code = dao.get_concept_map_model(environment, requirement, isAsset)
     dao.close()
 
     if not isinstance(dot_code, str):

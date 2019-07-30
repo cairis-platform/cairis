@@ -1016,16 +1016,18 @@ class TraceModel(object):
     "theFromObject": fields.String,
     "theFromName": fields.String,
     "theToObject": fields.String,
-    "theToName": fields.String
+    "theToName": fields.String,
+    "theLabel" : fields.String
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
 
-  def __init__(self,fromObjt,fromName,toObjt,toName):
+  def __init__(self,fromObjt,fromName,toObjt,toName,lbl):
     self.theFromObject = fromObjt
     self.theFromName = fromName
     self.theToObject = toObjt
     self.theToName = toName
+    self.theLabel = lbl
 
 class WeaknessTargetModel(object):
   resource_fields = {

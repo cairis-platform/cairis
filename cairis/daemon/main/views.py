@@ -415,6 +415,8 @@ api.add_resource(ProjectController.ProjectShowDatabasesAPI, '/api/settings/datab
 api.add_resource(RequirementController.RequirementsAPI, '/api/requirements',endpoint='requirements')
 api.add_resource(RequirementController.RequirementsByAssetAPI, '/api/requirements/asset/<path:name>',endpoint='requirements_assets')
 api.add_resource(RequirementController.RequirementsByEnvironmentAPI, '/api/requirements/environment/<path:name>',endpoint='requirement_environments')
+api.add_resource(RequirementController.RequirementNamesByAssetAPI, '/api/requirements/asset/<path:name>/names',endpoint='requirements_assets_names')
+api.add_resource(RequirementController.RequirementNamesByEnvironmentAPI, '/api/requirements/environment/<path:name>/names',endpoint='requirement_environments_names')
 api.add_resource(RequirementController.RequirementByNameAPI, '/api/requirements/name/<path:name>',endpoint='requirement')
 api.add_resource(RequirementController.RequirementByNameAPI, '/api/requirements/shortcode/<path:name>',endpoint='requirementshortcode')
 api.add_resource(RequirementController.ConceptMapModelAPI, '/api/requirements/model/environment/<path:environment>/requirement/<path:requirement>',endpoint='conceptmapmodel')

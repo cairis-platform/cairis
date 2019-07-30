@@ -1409,10 +1409,10 @@ class MySQLDatabaseProxy:
   def removableTraces(self,environmentName):
     traceRows = self.responseList('call viewRemovableTraces(:env)',{'env':environmentName},'MySQL error getting removable trace relations')
     traces = []
-    for fromObjt,fromName,toObjt,toName in traceRows:
+    for fromObjt,fromName,toObjt,toName,lbl in traceRows:
       if (fromObjt == 'task' and toObjt == 'asset'):
         continue
-      traces.append((fromObjt,fromName,toObjt,toName))
+      traces.append((fromObjt,fromName,toObjt,toName,lbl))
     return traces
 
   def allowableTraceDimension(self,fromId,toId):
@@ -1436,11 +1436,11 @@ class MySQLDatabaseProxy:
   def vulnerableAssets(self,vulId,environmentId):
     return self.responseList('call vulnerability_asset(:vId,:eId)',{'vId':vulId,'eId':environmentId},'MySQL error getting assets associated with vulnerability id ' + str(vulId) + ' in environment id ' + str(environmentId))
 
-  def addTrace(self,traceTable,fromId,toId,contributionType = 'and'):
+  def addTrace(self,traceTable,fromId,toId,label = 'supports'):
     if (traceTable != 'requirement_task' and traceTable != 'requirement_usecase' and traceTable != 'requirement_requirement'):
       self.updateDatabase('insert into ' + traceTable + ' values(:fromId,:toId)',{'fromId':fromId,'toId':toId},'MySQL error adding trace')
     elif (traceTable == 'requirement_requirement'):
-      self.updateDatabase('insert into ' + traceTable + ' values(:fromId,:toId,":contType")',{'fromId':fromId,'toId':toId,'contType':contributionType},'MySQL error adding trace')
+      self.updateDatabase('insert into ' + traceTable + ' values(:fromId,:toId,":label")',{'fromId':fromId,'toId':toId,'label':label},'MySQL error adding trace')
     else:
       refTypeId = self.getDimensionId(contributionType,'reference_type')
       self.updateDatabase('insert into ' + traceTable + ' values(:fromId,:toId,:refTypeId)',{'fromId':fromId,'toId':toId,'refTypeId':refTypeId},'MySQL error adding trace')
@@ -3435,12 +3435,6 @@ class MySQLDatabaseProxy:
   def conceptMapModel(self,envName,reqName = 'all'):
     callTxt = 'call conceptMapModel_all(:env,:req)'
     argDict = {'env':envName,'req':reqName}
-#    if envName == 'all' and reqName == 'all':
-#      callTxt = 'call conceptMapModel_all()'
-#      argDict = {}
-#    if reqName == '':
-#      callTxt = 'call conceptMapModel(:env)'
-#      argDict = {'env':envName}
     rows = self.responseList(callTxt,argDict,'MySQL error getting concept map model')
     associations = {}
 
@@ -4799,3 +4793,6 @@ class MySQLDatabaseProxy:
       asLabel = spName + '/' + headName + '/' + tailName
       associations[asLabel] = association
     return associations
+
+  def dimensionRequirements(self,dimName,objtName): return self.responseList('call ' + dimName + 'RequirementNames(:objt)',{'objt':objtName},'MySQL error getting requirements associated with ' + dimName + ' ' + objtName)
+

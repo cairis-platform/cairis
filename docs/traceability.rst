@@ -34,6 +34,8 @@ To add manual traceability links, right click on the left arrow for a *Supported
 .. figure:: contributesTo.jpg
    :alt: contribute to form
 
+If the traceability link is between two requirements, you will also be able to add a label describing the nature of the traceability.
+
 
 To delete a manual traceability link, select the Options / Traceability menu, select the environment that the traceability link is specific to if appropriate, and select the delete icon.
 

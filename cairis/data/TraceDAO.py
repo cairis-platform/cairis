@@ -50,7 +50,7 @@ class TraceDAO(CairisDAO):
   def simplify(self,trs):
     trList = []
     for tr in trs:
-      trList.append(TraceModel(tr[0],tr[1],tr[2],tr[3]))
+      trList.append(TraceModel(tr[0],tr[1],tr[2],tr[3],tr[4]))
     return trList
 
   def add_trace(self, tr):
@@ -58,7 +58,7 @@ class TraceDAO(CairisDAO):
       trace_table = tr.theFromObject + '_' + tr.theToObject
       fromId = self.db_proxy.getDimensionId(tr.theFromName,tr.theFromObject)
       toId = self.db_proxy.getDimensionId(tr.theToName,tr.theToObject)
-      self.db_proxy.addTrace(trace_table,fromId,toId,'supports')
+      self.db_proxy.addTrace(trace_table,fromId,toId,tr.theLabel)
     except ARMException as ex:
       self.close()
       raise ARMHTTPError(ex)

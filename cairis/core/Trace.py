@@ -18,13 +18,15 @@
 __author__ = 'Shamal Faily'
 
 class Trace:
-  def __init__(self,fObjt,fName,tObjt,tName):
+  def __init__(self,fObjt,fName,tObjt,tName,lbl = 'supports'):
     self.theFromObject = fObjt
     self.theFromName = fName
     self.theToObject = tObjt
     self.theToName = tName
+    self.theLabel = lbl
 
   def fromObject(self): return self.theFromObject
   def fromName(self): return self.theFromName
   def toObject(self): return self.theToObject
   def toName(self): return self.theToName
+  def label(self): return self.theLabel
