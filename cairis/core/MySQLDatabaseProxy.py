@@ -1442,7 +1442,7 @@ class MySQLDatabaseProxy:
     elif (traceTable == 'requirement_requirement'):
       self.updateDatabase('insert into ' + traceTable + ' values(:fromId,:toId,":label")',{'fromId':fromId,'toId':toId,'label':label},'MySQL error adding trace')
     else:
-      refTypeId = self.getDimensionId(contributionType,'reference_type')
+      refTypeId = self.getDimensionId(label,'reference_type')
       self.updateDatabase('insert into ' + traceTable + ' values(:fromId,:toId,:refTypeId)',{'fromId':fromId,'toId':toId,'refTypeId':refTypeId},'MySQL error adding trace')
 
   def deleteEnvironment(self,environmentId):
