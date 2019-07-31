@@ -221,7 +221,7 @@ identified.
 
 -  When the attributes have been entered, click on the Create button to add the requirement.
 
--  When a requirement has been added or update, the asset or environment filter will be updated based on the asset or environment the new/updated requirement is associated with.
+-  When a requirement has been added or update, the asset/environment filter will be updated based on the asset or environment the new/updated requirement is associated with.
 
 -  In the requirements table, a requirement can be deleting by clicking on the delete button.
 
