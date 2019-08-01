@@ -4084,7 +4084,7 @@ CREATE VIEW conceptMapModel_all as
 
 
 
-INSERT INTO version (major,minor,patch) VALUES (2,1,3);
+INSERT INTO version (major,minor,patch) VALUES (2,1,4);
 INSERT INTO attributes (id,name) VALUES (103,'did');
 INSERT INTO trace_dimension values (0,'requirement');
 INSERT INTO trace_dimension values (1,'persona');
