@@ -7,6 +7,11 @@ Live Demo
 A live demo of CAIRIS is available to use on https://demo.cairis.org.  The username and password you need are *test* and *test*. Internet Explorer isn't supported by CAIRIS, but it does work well with Edge, Safari, Chrome, Firefox, and Opera.
 The live demo is rebuilt every night based on the latest updates to CAIRIS, so please feel free to add, update, or remove elements in the example models, or even create new CAIRIS databases.  
 
+Video tutorials
+---------------
+
+The `CAIRIS YouTube channel <https://m.youtube.com/channel/UC21MvLyGwF9S0f9XlMLBA9Q>`_ has several short video primers on different aspects of CAIRIS.
+
 
 Example models
 --------------
