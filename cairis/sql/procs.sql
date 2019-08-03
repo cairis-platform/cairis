@@ -3403,9 +3403,10 @@ create procedure addUseCaseStepException(in ucId int, in envName text, in stepNo
 begin
   declare envId int;
   declare goalId int;
+  declare obsId int;
+  declare assocId int;
   declare catTypeId int;
-  declare reqLabel int;
-  declare shortCode varchar(100);
+  declare ucName varchar(200);
 
   select id into envId from environment where name = envName;
   select id into catTypeId from obstacle_category_type where name = catName;
@@ -3422,6 +3423,22 @@ begin
   then
     select o.id into goalId from requirement o where o.name = dimName and o.version = (select max(i.version) from requirement i where i.id = o.id);
     insert into usecase_step_requirement_exception(usecase_id,environment_id,step_no,name,goal_id,category_type_id,description) values (ucId,envId,stepNo,exName,goalId,catTypeId,excDesc);
+  end if;
+
+  if dimType = 'goal' or dimType = 'requirement'
+  then
+    select name into ucName from usecase where id = ucId limit 1;
+    select id into obsId from obstacle where name = exName limit 1;
+    if obsId is null
+    then
+      call newId1(obsId);
+      call addObstacle(obsId,exName,'CAIRIS');
+      call add_obstacle_environment(obsId,envName);
+      call addObstacleDefinition(obsId,envName,excDesc,0.0,'None');
+      call addObstacleCategory(obsId,envName,catName);
+    end if;
+    call newId1(assocId);
+    call addGoalAssociation(assocId,envName,dimName,dimType,'obstruct',exName,'obstacle',0,concat('Obstructs use case ',ucName));
   end if;
 end
 //

@@ -31,7 +31,6 @@ from cairis.tools.JsonConverter import json_serialize, json_deserialize
 from cairis.tools.ModelDefinitions import UseCaseModel, UseCaseEnvironmentPropertiesModel, UseCaseContributionModel
 from cairis.tools.SessionValidator import check_required_keys, get_fonts
 from cairis.tools.PseudoClasses import StepAttributes, StepsAttributes, ExceptionAttributes, CharacteristicReferenceContribution
-import cairis.core.ObstacleFactory
 
 __author__ = 'Shamal Faily'
 
@@ -288,22 +287,6 @@ class UseCaseDAO(CairisDAO):
       self.close()
       raise MissingParameterHTTPError(param_names=['real_props', 'fake_props'])
     return new_props
-
-  def generate_obstacle_from_usecase(self,uc,environment_name,step_name,exception_name):
-    for env in uc.environmentProperties():
-      if (env.theEnvironmentName == environment_name):
-        for ucStep in env.theSteps:
-          if (ucStep.text() == step_name):
-            for excName in ucStep.theExceptions:
-              if (excName == exception_name):
-                excDetails = ucStep.theExceptions[excName]
-                obsName = excDetails[0]
-                excDim = excDetails[1]
-                excVal = excDetails[2]
-                excCat = excDetails[3]
-                excDef = excDetails[4]
-                obsParameters = cairis.core.ObstacleFactory.build(environment_name,obsName,excDim,excVal,excCat,excDef)
-                self.db_proxy.addObstacle(obsParameters)
 
   def assign_usecase_contribution(self,rc):
     if (self.db_proxy.hasContribution('usecase',rc.source(),rc.destination())):

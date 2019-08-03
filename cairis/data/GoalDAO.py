@@ -149,7 +149,9 @@ class GoalDAO(CairisDAO):
       goalFilter = 0
       ucFilter = 0
       if goal_name != '': goalFilter = 1
-      if usecase_name != '': ucFilter = 1
+      if usecase_name != '': 
+        ucFilter = 1
+        goal_name = usecase_name
       associationDictionary = self.db_proxy.goalModel(environment_name,goal_name,is_top_level,ucFilter)
       associations = KaosModel(list(associationDictionary.values()), environment_name, 'goal',goal_name,db_proxy=self.db_proxy, font_name=fontName,font_size=fontSize)
       dot_code = associations.graph()

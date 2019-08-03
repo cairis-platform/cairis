@@ -132,21 +132,6 @@ class UseCaseGoalsByNameAPI(Resource):
     resp.headers['Content-type'] = 'application/json'
     return resp
 
-
-class UseCaseExceptionAPI(Resource):
-
-  def post(self,environment_name,step_name,exception_name):
-    session_id = get_session_id(session, request)
-    dao = UseCaseDAO(session_id)
-    uc,ucContribs = dao.from_json(request)
-    dao.generate_obstacle_from_usecase(uc,environment_name,step_name,exception_name)
-    dao.close()
-
-    resp_dict = {'message': 'Obstacle generated from exception'}
-    resp = make_response(json_serialize(resp_dict), OK)
-    resp.contenttype = 'application/json'
-    return resp
-
 class UseCasesSummaryAPI(Resource):
 
   def get(self):

@@ -513,7 +513,6 @@ api.add_resource(UseCaseController.UseCasesSummaryAPI, '/api/usecases/summary',e
 api.add_resource(UseCaseController.UseCaseByNameAPI, '/api/usecases/name/<path:name>',endpoint='usecase')
 api.add_resource(UseCaseController.UseCaseRequirementsByNameAPI, '/api/usecases/name/<path:usecase_name>/requirements',endpoint='usecaserequirements')
 api.add_resource(UseCaseController.UseCaseGoalsByNameAPI, '/api/usecases/name/<path:usecase_name>/environment/<path:environment_name>/goals',endpoint='usecasegoals')
-api.add_resource(UseCaseController.UseCaseExceptionAPI, '/api/usecases/environment/<path:environment_name>/step/<path:step_name>/exception/<path:exception_name>/generate_obstacle',endpoint='usecasegenerateobstacle')
 
 # Validation route
 api.add_resource(ValidationController.ValidationAPI, '/api/validation/environment/<path:name>',endpoint='environmentvalidation')

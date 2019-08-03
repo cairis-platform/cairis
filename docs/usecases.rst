@@ -42,8 +42,6 @@ Add exceptions to use case steps
 
 -  Select the goal or requirement that this step conflicts with, otherwise select the None radio button.  Goals are visible only if you have added a sub-goal refinement relationship between goals and this use case.  Requirements are visible only if you have added a manual 'Supported by' traceability link between requirements and this use case.
 
--  Click Add to add the exception to the Exceptions table.
+-  Click Add to add the exception to the Exceptions table.  When the use case is created or update, obstacles are generated based on exceptions associated with goals or requirements.
 
 -  Existing exceptions can be modified by double clicking on the step in the Exceptions table, making the necessary changes, and clicking on the Update button.
-
--  If the exception is associated with a goal or requirement then, to generate an Obstacle based on this exception, right click on the exception entry in this table, and select Generate Obstacle from the speed menu.
