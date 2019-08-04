@@ -10,7 +10,7 @@ The live demo is rebuilt every night based on the latest updates to CAIRIS, so p
 Video tutorials
 ---------------
 
-The `CAIRIS YouTube channel <https://m.youtube.com/channel/UC21MvLyGwF9S0f9XlMLBA9Q>`_ has several short video primers on different aspects of CAIRIS.
+The `CAIRIS YouTube channel <https://m.youtube.com/channel/UC21MvLyGwF9S0f9XlMLBA9Q>`_ has several short video primers.  These include an overview of the UI, and guidance on using CAIRIS for different design activities.
 
 
 Example models
