@@ -4796,3 +4796,4 @@ class MySQLDatabaseProxy:
 
   def dimensionRequirements(self,dimName,objtName): return self.responseList('call ' + dimName + 'RequirementNames(:objt)',{'objt':objtName},'MySQL error getting requirements associated with ' + dimName + ' ' + objtName)
 
+  def exceptionRootObstacles(self,ucId): return self.responseList('call hasRootObstacles(:id)',{'id':ucId},'MySQL error getting root obstacles resulting from exceptions for use case ')[0]

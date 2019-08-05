@@ -979,6 +979,9 @@ drop procedure if exists securityPatternClassModel;
 drop procedure if exists conceptMapModel_all;
 drop procedure if exists assetRequirementNames;
 drop procedure if exists environmentRequirementNames;
+drop function if exists hasRootObstacle;
+drop procedure if exists hasRootObstacles;
+drop procedure if exists deleteGeneratedObstacles;
 
 
 delimiter //
@@ -3640,6 +3643,7 @@ begin
   delete from usecase_role where usecase_id = ucId;
   delete from usecase_conditions where usecase_id = ucId;
   delete from usecase_step where usecase_id = ucId;
+  call deleteGeneratedObstacles(ucId);
   delete from usecase_step_none_exception where usecase_id = ucId;
   delete from usecase_step_goal_exception where usecase_id = ucId;
   delete from usecase_step_requirement_exception where usecase_id = ucId;
@@ -13341,9 +13345,9 @@ begin
     union
     select usge.name, 'Goal', g.name, oct.name, xmlEscaped(usge.description) from usecase_step_goal_exception usge, goal g, obstacle_category_type oct where usge.usecase_id = ucId and usge.environment_id = envId and usge.step_no = stepNo and usge.goal_id = g.id and usge.category_type_id = oct.id
     union
-    select usge.name, 'Requirement', concat(a.short_code,'-',r.label), oct.name, xmlEscaped(usge.description) from usecase_step_requirement_exception usge, requirement r, asset_requirement ar, asset a, obstacle_category_type oct where usge.usecase_id = ucId and usge.environment_id = envId and usge.step_no = stepNo and usge.goal_id = r.id and r.id = ar.requirement_id and ar.asset_id = a.id and r.version = (select max(i.version) from requirement i where i.id = r.id) and usge.category_type_id = oct.id
+    select usge.name, 'Requirement', r.name, oct.name, xmlEscaped(usge.description) from usecase_step_requirement_exception usge, requirement r, asset_requirement ar, asset a, obstacle_category_type oct where usge.usecase_id = ucId and usge.environment_id = envId and usge.step_no = stepNo and usge.goal_id = r.id and r.id = ar.requirement_id and ar.asset_id = a.id and r.version = (select max(i.version) from requirement i where i.id = r.id) and usge.category_type_id = oct.id
     union
-    select usge.name, 'Requirement', concat(e.short_code,'-',r.label), oct.name, xmlEscaped(usge.description) from usecase_step_requirement_exception usge, requirement r, environment_requirement er, environment e, obstacle_category_type oct where usge.usecase_id = ucId and usge.environment_id = envId and usge.step_no = stepNo and usge.goal_id = r.id and r.id = er.requirement_id and er.environment_id = e.id and r.version = (select max(i.version) from requirement i where i.id = r.id) and usge.category_type_id = oct.id;
+    select usge.name, 'Requirement', r.name, oct.name, xmlEscaped(usge.description) from usecase_step_requirement_exception usge, requirement r, environment_requirement er, environment e, obstacle_category_type oct where usge.usecase_id = ucId and usge.environment_id = envId and usge.step_no = stepNo and usge.goal_id = r.id and r.id = er.requirement_id and er.environment_id = e.id and r.version = (select max(i.version) from requirement i where i.id = r.id) and usge.category_type_id = oct.id;
   declare ucStepTagCursor cursor for select t.name from usecase_step_tag ust, tag t where ust.usecase_id = ucId and ust.environment_id = envId and ust.step_no = stepNo and ust.tag_id = t.id order by 1;
   declare cmCursor cursor for select c.id,c.name,xmlEscaped(c.description),at.name from countermeasure c,asset_type at where c.countermeasure_type_id = at.id;
   declare cmEnvCursor cursor for select ec.environment_id,e.name from environment_countermeasure ec, environment e where ec.countermeasure_id = cmId and ec.environment_id = e.id;
@@ -28761,5 +28765,129 @@ begin
 end
 //
 
+create function hasRootObstacle(ucId int,envId int) 
+returns int
+deterministic 
+begin
+  declare obsCount int;
+
+  select count(ga2.subgoal_id) into obsCount from goalobstacle_goalassociation ga, obstacleobstacle_goalassociation ga2, usecase_step_goal_exception usge, obstacle o where usge.usecase_id = ucId and usge.environment_id = envId and usge.environment_id = ga.environment_id and ga.subgoal_id = o.id and o.originator = 'CAIRIS' and ga.subgoal_id = ga2.goal_id and ga.environment_id = ga2.environment_id;
+  if (obsCount > 0)
+  then
+    return obsCount;
+  end if; 
+
+  select count(ga2.subgoal_id) into obsCount from requirementobstacle_goalassociation ga, obstacleobstacle_goalassociation ga2, usecase_step_goal_exception usge, obstacle o where usge.usecase_id = ucId and usge.environment_id = envId and usge.environment_id = ga.environment_id and ga.subgoal_id = o.id and o.originator = 'CAIRIS' and ga.subgoal_id = ga2.goal_id and ga.environment_id = ga2.environment_id;
+  if (obsCount > 0)
+  then
+    return obsCount;
+  end if;
+
+  select count(ga2.subgoal_id) into obsCount from goalobstacle_goalassociation ga, obstaclegoal_goalassociation ga2, usecase_step_goal_exception usge, obstacle o where usge.usecase_id = ucId and usge.environment_id = envId and usge.environment_id = ga.environment_id and ga.subgoal_id = o.id and o.originator = 'CAIRIS' and ga.subgoal_id = ga2.goal_id and ga.environment_id = ga2.environment_id;
+  if (obsCount > 0)
+  then
+    return obsCount;
+  end if; 
+
+  select count(ga2.subgoal_id) into obsCount from requirementobstacle_goalassociation ga, obstaclegoal_goalassociation ga2, usecase_step_goal_exception usge, obstacle o where usge.usecase_id = ucId and usge.environment_id = envId and usge.environment_id = ga.environment_id and ga.subgoal_id = o.id and o.originator = 'CAIRIS' and ga.subgoal_id = ga2.goal_id and ga.environment_id = ga2.environment_id;
+  if (obsCount > 0)
+  then
+    return obsCount;
+  end if;
+
+  select count(ga2.subgoal_id) into obsCount from goalobstacle_goalassociation ga, obstacledomainproperty_goalassociation ga2, usecase_step_goal_exception usge, obstacle o where usge.usecase_id = ucId and usge.environment_id = envId and usge.environment_id = ga.environment_id and ga.subgoal_id = o.id and o.originator = 'CAIRIS' and ga.subgoal_id = ga2.goal_id and ga.environment_id = ga2.environment_id;
+  if (obsCount > 0)
+  then
+    return obsCount;
+  end if; 
+
+  select count(ga2.subgoal_id) into obsCount from requirementobstacle_goalassociation ga, obstacledomainproperty_goalassociation ga2, usecase_step_goal_exception usge, obstacle o where usge.usecase_id = ucId and usge.environment_id = envId and usge.environment_id = ga.environment_id and ga.subgoal_id = o.id and o.originator = 'CAIRIS' and ga.subgoal_id = ga2.goal_id and ga.environment_id = ga2.environment_id;
+  if (obsCount > 0)
+  then
+    return obsCount;
+  end if;
+
+
+  select count(ga2.subgoal_id) into obsCount from goalobstacle_goalassociation ga, obstaclerequirement_goalassociation ga2, usecase_step_goal_exception usge, obstacle o where usge.usecase_id = ucId and usge.environment_id = envId and usge.environment_id = ga.environment_id and ga.subgoal_id = o.id and o.originator = 'CAIRIS' and ga.subgoal_id = ga2.goal_id and ga.environment_id = ga2.environment_id;
+  if (obsCount > 0)
+  then
+    return obsCount;
+  end if; 
+
+  select count(ga2.subgoal_id) into obsCount from requirementobstacle_goalassociation ga, obstaclerequirement_goalassociation ga2, usecase_step_goal_exception usge, obstacle o where usge.usecase_id = ucId and usge.environment_id = envId and usge.environment_id = ga.environment_id and ga.subgoal_id = o.id and o.originator = 'CAIRIS' and ga.subgoal_id = ga2.goal_id and ga.environment_id = ga2.environment_id;
+  if (obsCount > 0)
+  then
+    return obsCount;
+  end if;
+
+  return 0;
+end
+//
+
+
+create procedure hasRootObstacles(in ucId int)
+begin
+  declare envId int;
+  declare envName varchar(200);
+  declare msgTxt varchar(1000) default '';
+  declare done int default 0;
+  declare obsCount int default 0;
+  declare envCursor cursor for select eu.environment_id,e.name from environment_usecase eu, environment e where eu.usecase_id = ucId and eu.environment_id = e.id;
+  declare continue handler for not found set done = 1;
+
+  open envCursor;
+  env_loop: loop
+    fetch envCursor into envId, envName;
+    if done = 1
+    then
+      leave env_loop;
+    end if;
+    select hasRootObstacle(ucId,envId) into obsCount;
+    if (obsCount > 0)
+    then
+      leave env_loop;
+    end if;
+  end loop env_loop;
+  close envCursor;
+
+  if (obsCount > 0)
+  then
+    select 1;
+  else
+    select 0;
+  end if;
+
+end
+//
+
+create procedure deleteGeneratedObstacles(in ucId int)
+begin
+  declare obsId int;
+  declare done int default 0;
+  declare obsCursor cursor for select distinct id from temp_rootObstacles;
+  declare continue handler for not found set done = 1;
+
+  drop table if exists temp_rootObstacles;
+  create temporary table temp_rootObstacles (id int);
+
+  insert into temp_rootObstacles (id)
+  select ga.subgoal_id from goalobstacle_goalassociation ga, usecase_step_goal_exception usge where usge.usecase_id = ucId and usge.environment_id = ga.environment_id and ga.goal_id = usge.goal_id;
+
+  insert into temp_rootObstacles (id)
+  select ga.subgoal_id from requirementobstacle_goalassociation ga, usecase_step_requirement_exception usre where usre.usecase_id = ucId and usre.environment_id = ga.environment_id and ga.goal_id = usre.goal_id;
+
+
+  open obsCursor;
+  obs_loop: loop
+    fetch obsCursor into obsId;
+    if done = 1
+    then
+      leave obs_loop;
+    end if;
+    call delete_obstacle(obsId); 
+  end loop obs_loop;
+  close obsCursor;
+end
+//
 
 delimiter ;
