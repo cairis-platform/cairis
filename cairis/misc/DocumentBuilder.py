@@ -406,10 +406,10 @@ def projectPurpose(pSettings):
   return chapterTxt
 
 def dpiaNeed(p,pSettings):
-  chapterTxt = """
-  <chapter><title>Motivation for DPIA</title>"""
   if (len(pSettings) == 0):
     return ""
+  chapterTxt = """
+  <chapter><title>Motivation for DPIA</title>"""
   chapterTxt += """
     <section><title>Background</title>
       <para>""" + paraText(pSettings['Project Background']) + """</para>
@@ -426,7 +426,7 @@ def dpiaNeed(p,pSettings):
     chapterTxt += richPictureSection(p,rpFile)
 
   environments = p.getEnvironments()
-  if (environments != None):
+  if (len(environments) != 0):
     chapterTxt += """
     <section><title>Contexts of Use</title>
       <para>This section describes the environments within which the planned system will operate in.  Personal information, data flows, and privacy risks may vary based on these environments.</para>
@@ -459,14 +459,14 @@ def dpiaNeed(p,pSettings):
 
 
 def dpiaProcessing(p,docDir,fileSuffix = 'svg'):
+  roles = p.getRoles()
+  if (len(roles) == 0):
+    return ""
   chapterTxt = """
   <chapter><title>Processing</title>
     <section><title>Roles</title>
       <para>The following roles participate in processes and dataflows.  However, roles may also be fulfilled by potential attackers.</para>
 """
-  roles = p.getRoles()
-  if (roles == None):
-    return ""
   componentRows = []
   for idx,role in roles.items():
     componentRows.append((role.name(),role.description()))
@@ -529,13 +529,15 @@ def dpiaProcessing(p,docDir,fileSuffix = 'svg'):
   return chapterTxt
 
 def dpiaConsultation(p,docDir,fileSuffix):
+  personas = p.getPersonas()
+  if (len(personas) == 0):
+    return ""
   chapterTxt = """
   <chapter><title>Consultation</title>
     <section><title>Overview</title>
       <para>Individual views were sought when creating the personas.  These are described in the sections that follow.</para>
     </section>
   """
-  personas = p.getPersonas()
   for idx,persona in personas.items():
     personaName = persona.name()
     chapterTxt += """
@@ -550,11 +552,13 @@ def dpiaConsultation(p,docDir,fileSuffix):
   return chapterTxt
 
 def dpiaNecessity(p,docDir):
+  envs = p.getEnvironments()
+  if (len(envs) == 0):
+    return ""
   chapterTxt = """
   <chapter><title>Necessity and Proportionality</title>
     <para>The table below describe the processes that handle personal data, and the goals that describe the necessity of this processing.</para>
   """
-  envs = p.getEnvironments()
   for idx,env in envs.items():
     envName = env.name()
     lpTable = p.lawfulProcessingTable(envName)
@@ -636,12 +640,12 @@ def projectScope(pSettings,p,docDir):
 
 
 def mandatedConstraints(p):
+  objts = p.getDomainProperties()
+  if (len(objts) == 0):
+    return ""
   chapterTxt = """
   <chapter><title>Mandated Constraints</title>
 """
-  objts = p.getDomainProperties()
-  if (objts == None):
-    return ""
 
   rows = []
   for idx,objt in objts.items():
@@ -653,13 +657,13 @@ def mandatedConstraints(p):
   return chapterTxt
 
 def namingConventions(p):
+  objts = p.getDictionary()
+  if (len(objts) == 0):
+    return ""
   chapterTxt = """
   <chapter><title>Naming Conventions</title>
 """
   entryRows = []
-  objts = p.getDictionary()
-  if (objts == None):
-    return ""
 
   for defn in objts:
     entryRows.append((defn['name'],defn['value'])) 
@@ -697,10 +701,13 @@ def frReqSection(typename,reqs):
   return reqSect
 
 def functionalRequirements(frDomDict,ddDomDict):
+  if ((len(frDomDict) == 0) and (len(ddDomDict) == 0)):
+    return ""
   chapterTxt = """
   <chapter><title>Functional Requirements</title>
 """
   chapterTxt += frReqSection('Functional',frDomDict)
+
   chapterTxt += frReqSection('Data',ddDomDict)
   chapterTxt += """
   </chapter>
@@ -708,6 +715,8 @@ def functionalRequirements(frDomDict,ddDomDict):
   return chapterTxt
 
 def nonFunctionalRequirements(reqDict):
+  if (len(reqDict) == 0):
+    return ''
   chapterTxt = """
   <chapter><title>Nonfunctional Requirements</title>
 """
@@ -727,6 +736,9 @@ def nonFunctionalRequirements(reqDict):
   return chapterTxt
 
 def useCases(p,docDir):
+  ucs = p.getUseCases()
+  if (len(ucs) == 0):
+    return ""
   chapterTxt = """
   <chapter><title>Use Cases</title>
     <section><title>Overview</title>
@@ -741,7 +753,7 @@ def useCases(p,docDir):
 
 def buildUseCases(p,docDir,chapterTxt):
   ucs = p.getUseCases()
-  if (ucs == None):
+  if (len(ucs) == 0):
     return ""
 
   for idx,uc in ucs.items():
@@ -791,6 +803,9 @@ def buildUseCases(p,docDir,chapterTxt):
 
 
 def tasks(p,docDir,fileSuffix = 'svg'):
+  tasks = p.getTasks()
+  if (len(tasks) == 0):
+    return ""
   chapterTxt = """
   <chapter><title>Tasks</title>
     <section><title>Overview</title>
@@ -798,9 +813,6 @@ def tasks(p,docDir,fileSuffix = 'svg'):
     </section>
 """
   chapterTxt += modelSection(p,'Task',docDir,fileSuffix)
-  tasks = p.getTasks()
-  if (tasks == None):
-    return ""
   
   durationLookup = {}
   durationLookup['None'] = 'None'
@@ -862,6 +874,10 @@ def characteristicsToRows(pcDict):
   return rows
 
 def personas(p,docDir,fileSuffix):
+  roles = p.getRoles()
+  if (len(roles) == 0):
+    return ""
+
   chapterTxt = """
   <chapter><title>Personas</title>
     <section><title>Overview</title>
@@ -870,9 +886,6 @@ def personas(p,docDir,fileSuffix):
     <section><title>Roles</title>
       <para>Personas may fulfil one or more of the below roles.  However, roles may also be fulfilled by potential attackers.</para>
 """
-  roles = p.getRoles()
-  if (roles == None):
-    return ""
   componentRows = []
   for idx,role in roles.items():
     componentRows.append((role.name(),role.description()))
@@ -978,6 +991,10 @@ def buildPersonaRationale(p,personaName,docDir,chapterTxt,fileSuffix):
   return chapterTxt
 
 def attackers(p):
+  attackers = p.getAttackers()
+  if (len(attackers) == 0):
+    return ""
+
   chapterTxt = """
   <chapter><title>Attackers</title>
     <section><title>Overview</title>
@@ -1005,14 +1022,14 @@ def buildAttackers(p,chapterTxt,isPia = False,fileSuffix = 'svg'):
     </section>
 """
   b = Borg()
-  attackers = None
+  attackers = {}
   if (isPia == True):
     attackers = p.getPersonalAttackers()
   else: 
     attackers = p.getAttackers()
 
-  if (attackers == None):
-    return ""
+  if (len(attackers) == 0):
+    return chapterTxt
   for idx,attacker in attackers.items():
     attackerName = attacker.name()
     chapterTxt += """
@@ -1051,15 +1068,16 @@ def objectiveText(p,environmentName,threatName,vulName):
   return txt
 
 def misuseCases(p):
+  mcs = p.getMisuseCases()
+  if (len(mcs) == 0):
+    return ""
+
   chapterTxt = """
   <chapter><title>Misuse Cases</title>
     <section><title>Overview</title>
       <para>The Misuse Cases below describe how an attacker exploits each of the identified risks.</para>
     </section>
 """
-  mcs = p.getMisuseCases()
-  if mcs == None:
-    return ""
  
   for idx,mc in mcs.items():
     mcName = mc.name()
@@ -1093,6 +1111,9 @@ def misuseCases(p):
 
 
 def assets(p,docDir,fileSuffix):
+  objts = p.getAssets()
+  if (len(objts) == 0):
+    return ""
   chapterTxt = """
   <chapter><title>Assets</title>
     <section><title>Overview</title>
@@ -1123,14 +1144,14 @@ def buildAssetContent(p,docDir,chapterTxt,isPia = False,fileSuffix = 'svg'):
   if (isPia == False):
     chapterTxt += modelSection(p,'Asset',docDir,fileSuffix)
 
-  objts = None
+  objts = {}
   if (isPia == True):
     objts = p.getPersonalInformation()
   else:
     objts = p.getAssets()
 
-  if (objts == None):
-    return ""
+  if (len(objts) == 0):
+    return chapterTxt
   for idx,objt in objts.items():
     objtName = objt.name()
     chapterTxt += """
@@ -1157,6 +1178,10 @@ def buildAssetContent(p,docDir,chapterTxt,isPia = False,fileSuffix = 'svg'):
 
 
 def threats(p):
+  objts = p.getThreats()
+  if (len(objts) == 0):
+    return ""
+
   chapterTxt = """
   <chapter><title>Threats</title>
     <section><title>Overview</title>
@@ -1188,14 +1213,14 @@ def buildThreats(p,chapterTxt,isPia = False):
   chapterTxt += buildTable("ThreatPropertiesTable","Threat Properties",['Property','Description'],threatPropertyRows,0) + """
     </section>
 """
-  objts = None
+  objts = {}
   if (isPia == True):
     objts = p.getPersonalThreats()
   else:
     objts = p.getThreats()
 
-  if (objts == None):
-    return ""
+  if (len(objts) == 0):
+    return chapterTxt
   for idx,objt in objts.items():
     objtName = objt.name()
     chapterTxt += """
@@ -1212,6 +1237,9 @@ def buildThreats(p,chapterTxt,isPia = False):
   return chapterTxt
 
 def vulnerabilities(p):
+  objts = p.getVulnerabilities()
+  if (len(objts) == 0):
+    return ""
   chapterTxt = """
   <chapter><title>Vulnerabilities</title>
     <section><title>Overview</title>
@@ -1239,14 +1267,14 @@ def buildVulnerabilities(p,chapterTxt,isPia = False):
     </section>
 """
 
-  objts = None
+  objts = {}
   if (isPia == True):
     objts = p.getPersonalVulnerabilities()
   else:
     objts = p.getVulnerabilities()
 
-  if (objts == None):
-    return ""
+  if (len(objts) == 0):
+    return chapterTxt
   for idx,objt in objts.items():
     objtName = objt.name()
     chapterTxt +=  """
@@ -1354,6 +1382,9 @@ def richPictureSection(p,rpFile,fileSuffix = 'svg'):
   return txt
 
 def goals(p,docDir,fileSuffix = 'svg'):
+  objts = p.getGoals()
+  if (len(objts) == 0):
+    return ""
   chapterTxt = """
   <chapter><title>Goals</title>
     <section><title>Overview</title>
@@ -1361,9 +1392,6 @@ def goals(p,docDir,fileSuffix = 'svg'):
     </section>
 """
   chapterTxt += modelSection(p,'Goal',docDir,fileSuffix)
-  objts = p.getGoals()
-  if (objts == None):
-    return ""
   for idx,objt in objts.items():
     objtName = objt.name()
     chapterTxt +=  """
@@ -1380,6 +1408,9 @@ def goals(p,docDir,fileSuffix = 'svg'):
   return chapterTxt
 
 def responsibilities(p,docDir,fileSuffix = 'svg'):
+  deps = p.getDependencyTables()
+  if (len(deps) == 0):
+    return "" 
   chapterTxt = """
   <chapter><title>Responsibilities</title>
     <section><title>Overview</title>
@@ -1387,25 +1418,19 @@ def responsibilities(p,docDir,fileSuffix = 'svg'):
     </section>
 """
   chapterTxt += modelSection(p,'Responsibility',docDir,fileSuffix)
-  deps = p.getDependencyTables()
-  if (len(deps) == 0):
-    chapterTxt += """
-  </chapter>"""
-    return chapterTxt 
-  else:
-    chapterTxt += """
+  chapterTxt += """
     <section><title>Dependencies</title>
     """
-    envs = list(deps.keys())
-    envs.sort()
-    for env in envs:
-      chapterTxt += """
-      <section><title>""" + env + """</title>
-      """
-      componentRows = deps[env]
-      chapterTxt += buildTable( env.replace(" ","_") + "DependencyTable","Dependency",['Depender','Dependee','Type','Dependency','Rationale'],componentRows,0) + """
-      </section>"""
+  envs = list(deps.keys())
+  envs.sort()
+  for env in envs:
     chapterTxt += """
+    <section><title>""" + env + """</title>
+    """
+    componentRows = deps[env]
+    chapterTxt += buildTable( env.replace(" ","_") + "DependencyTable","Dependency",['Depender','Dependee','Type','Dependency','Rationale'],componentRows,0) + """
+    </section>"""
+  chapterTxt += """
     </section>"""
   chapterTxt += """
   </chapter>
@@ -1413,6 +1438,9 @@ def responsibilities(p,docDir,fileSuffix = 'svg'):
   return chapterTxt
 
 def obstacles(p,docDir,fileSuffix = 'svg'):
+  objts = p.getObstacles()
+  if (len(objts) == 0):
+    return ""
   chapterTxt = """
   <chapter><title>Obstacles</title>
     <section><title>Overview</title>
@@ -1420,9 +1448,6 @@ def obstacles(p,docDir,fileSuffix = 'svg'):
     </section>
 """
   chapterTxt += modelSection(p,'Obstacle',docDir,fileSuffix)
-  objts = p.getObstacles()
-  if (objts == None):
-    return ""
   for idx,objt in objts.items():
     objtName = objt.name()
     chapterTxt +=  """
@@ -1440,6 +1465,9 @@ def obstacles(p,docDir,fileSuffix = 'svg'):
 
 
 def risks(p,docDir,fileSuffix = 'svg'):
+  objts = p.getRisks()
+  if (len(objts) == 0):
+    return ""
   chapterTxt = """
   <chapter><title>Risks</title>
     <section><title>Overview</title>
@@ -1463,14 +1491,14 @@ def buildRisks(p,docDir,chapterTxt,isPia = False):
     </section>
   """
 
-  objts = None
+  objts = {}
   if (isPia == True):
     objts = p.getPersonalRisks()
   else:
     objts = p.getRisks()
 
-  if (objts == None):
-    return ""
+  if (len(objts) == 0):
+    return chapterTxt
   for idx,objt in objts.items():
     objtName = objt.name()
     chapterTxt +=  """
@@ -1697,6 +1725,9 @@ def mitigateSection(response):
 
 
 def responses(p):
+  responses = p.getResponses()
+  if (len(responses) == 0):
+    return ""
   chapterTxt = """
   <chapter><title>Responses</title>
   """
@@ -1707,14 +1738,14 @@ def responses(p):
   return chapterTxt
 
 def buildResponses(p,chapterTxt,isPia = False):
-  responses = None
+  responses = {}
   if (isPia == True):
     responses = p.getPersonalResponses()
   else:
     responses = p.getResponses()
 
-  if (responses == None):
-    return ""
+  if (len(responses) == 0):
+    return chapterTxt
   acceptTxt = ''
   transferTxt = ''
   mitigateTxt = ''
@@ -1752,12 +1783,12 @@ def buildResponses(p,chapterTxt,isPia = False):
   return chapterTxt
 
 def countermeasures(p):
+  objts = p.getCountermeasures()
+  if (len(objts) == 0):
+    return ""
   chapterTxt = """
   <chapter><title>Countermeasures</title>
 """
-  objts = p.getCountermeasures()
-  if (objts == None):
-    return ""
   for idx,objt in objts.items():
     objtName = objt.name()
     chapterTxt +=  """
@@ -1799,7 +1830,7 @@ def countermeasures(p):
 
 def environments(p,docDir):
   environments = p.getEnvironments()
-  if (environments == None):
+  if (len(environments) == 0):
     return ""
   chapterTxt = """
   <chapter><title>Environments</title>
@@ -1868,10 +1899,12 @@ def environments(p,docDir):
   return chapterTxt
 
 def dependencies(p):
+  dependencies = p.getDependencies()
+  if (len(dependencies) == 0):
+    return ""
   chapterTxt = """
   <chapter><title>Dependencies</title>
 """
-  dependencies = p.getDependencies()
   envDict = {}
   for idx,d in dependencies.items():
     if d.environment() not in envDict:
@@ -1952,11 +1985,13 @@ def templateRequirements(p):
 
 
 def dataflows(p,docDir,fileSuffix = 'svg'):
+  dfs = p.getDataFlows()
+  if (len(dfs) == 0):
+    return ""
   chapterTxt = """
   <chapter><title>Data Flows</title>
 """
   chapterTxt += modelSection(p,'DataFlow',docDir,fileSuffix)
-  dfs = p.getDataFlows()
   envDict = {}
   for d in dfs:
     if d.environment() not in envDict:
@@ -1978,11 +2013,13 @@ def dataflows(p,docDir,fileSuffix = 'svg'):
   return chapterTxt
 
 def locations(p,docDir,fileSuffix = 'svg'):
+  allLocs = p.getLocations()
+  if (len(allLocs) == 0):
+    return ""
   chapterTxt = """
   <chapter><title>Locations</title>
     <section><title>Models</title>"""
 
-  allLocs = p.getLocations()
   locsList = list(allLocs.keys())
   locsList.sort()
   for locs in locsList:
