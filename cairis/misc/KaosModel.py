@@ -198,6 +198,8 @@ class KaosModel:
               self.theGraph.add_node(pydot.Node(refNodeName,shapefile=conflictFile,margin=0,label='',height='.1',width='.1',peripheries='0'))
               assocDirection = 'none'
               arrowHead = 'none'
+            elif((goalDimName == 'requirement') and (subGoalDimName == 'usecase')):
+              self.theGraph.add_node(pydot.Node(refNodeName,shape='circle',label=' ',height='.2',width='.2'))
             goalEdge = pydot.Edge(refNodeName,goalName,dir=assocDirection,arrowhead=arrowHead,weight='1')
             if ((refNodeName,goalName) not in edgeSet):
               self.theGraph.add_edge(goalEdge)
