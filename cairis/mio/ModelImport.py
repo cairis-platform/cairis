@@ -172,7 +172,7 @@ def importRequirementsString(buf,session_id = None):
     xml.sax.parseString(buf,handler)
     return importRequirements(handler.domainProperties(),handler.goals(),handler.obstacles(),handler.requirements(),handler.usecases(),handler.countermeasures(),session_id = session_id)
   except xml.sax.SAXException as e:
-    raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
+    raise ARMException("Error parsing imported file: " + e.getMessage())
 
 def importRequirements(dpParameterSet,goalParameterSet,obsParameterSet,reqParameterSet,ucParameterSet,cmParameterSet,session_id):
   b = Borg()

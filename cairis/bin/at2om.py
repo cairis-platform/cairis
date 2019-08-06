@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 #  Licensed to the Apache Software Foundation (ASF) under one
 #  or more contributor license agreements.  See the NOTICE file
@@ -32,27 +32,29 @@ def dotToObstacleModel(graph,contextName,originatorName):
   acs = {}
 
   for node in graph.get_nodes():
-    nodeShape = node.get_shape()
+    nodeShape = node.get_shape().replace('"','')
     nodeStyle = str(node.get_style())
-     
+    nodeName = node.get_name()
+
+    if (nodeName == 'node' or nodeName == 'edge'):
+      continue
+
     if nodeShape == 'box' and nodeStyle == 'rounded':
       obstacles.append(node.get_name())
     elif nodeShape == 'box' and nodeStyle == 'None':
-      nodeName = node.get_name()
-      if (nodeName != 'node' and nodeName != 'edge'):
-        goals.append(node.get_name())
-        goalNames.add(node.get_name())
+      goals.append(node.get_name())
+      goalNames.add(node.get_name())
     elif nodeShape == 'triangle':
       acs[node.get_name()] = node.get_label()
 
-  xmlBuf = '<?xml version="1.0"?>\n<!DOCTYPE cairis_model PUBLIC "-//CAIRIS//DTD MODEL 1.0//EN" "http://cairis.org/dtd/cairis_model.dtd">\n\n<cairis_model>\n\n'
+  xmlBuf = '<?xml version="1.0"?>\n<!DOCTYPE cairis_model PUBLIC "-//CAIRIS//DTD MODEL 1.0//EN" "https://cairis.org/dtd/cairis_model.dtd">\n\n<cairis_model>\n\n'
   xmlBuf += '<cairis>\n  <project_settings name="' + contextName + '">\n    <contributors>\n      <contributor first_name="None" surname="None" affiliation="' + originatorName + '" role="Scribe" />\n    </contributors>\n  </project_settings>\n  <environment name="' + contextName + '" short_code="' + contextName + '">\n    <definition>' + contextName + '</definition>\n    <asset_values>\n      <none>TBC</none>\n      <low>TBC</low>\n      <medium>TBC</medium>\n      <high>TBC</high>\n    </asset_values>\n  </environment>\n</cairis>\n\n<goals>\n'
  
   for g in goals:
-    xmlBuf += '  <goal name=' + g + ' originator="' + originatorName + '">\n    <goal_environment name="' + contextName + '" category="Maintain" priority="Medium">\n      <definition>' + g + '</definition>\n      <fit_criterion>TBC</fit_criterion>\n      <issue>None</issue>\n    </goal_environment>\n  </goal>\n'
+    xmlBuf += '  <goal name=' + g + ' originator="' + originatorName + '">\n    <goal_environment name="' + contextName + '" category="Maintain" priority="Medium">\n      <definition>' + g.replace('"','') + '</definition>\n      <fit_criterion>TBC</fit_criterion>\n      <issue>None</issue>\n    </goal_environment>\n  </goal>\n'
 
   for o in obstacles:
-    xmlBuf += '  <obstacle name=' + o + ' originator="' + originatorName + '">\n    <obstacle_environment name="' + contextName + '" category="Threat">\n      <definition>' + o + '</definition>\n    </obstacle_environment>\n  </obstacle>\n'
+    xmlBuf += '  <obstacle name=' + o + ' originator="' + originatorName + '">\n    <obstacle_environment name="' + contextName + '" category="Threat">\n      <definition>' + o.replace('"','') + '</definition>\n    </obstacle_environment>\n  </obstacle>\n'
 
   xmlBuf += '</goals>\n\n'
 

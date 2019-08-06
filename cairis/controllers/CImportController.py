@@ -121,6 +121,10 @@ class CImportTextAPI(Resource):
         dao = ImportDAO(session_id)
         result = dao.import_attack_tree(file_contents,environment_name,contributor_name)
         dao.close()
+        resp_dict = {'message': str(result)}
+        resp = make_response(json_serialize(resp_dict, session_id=session_id), OK)
+        resp.headers['Content-Type'] = 'application/json'
+        return resp
       except DatabaseProxyException as ex:
         raise ARMHTTPError(ex)
       except ARMException as ex:
