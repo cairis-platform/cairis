@@ -101,7 +101,7 @@ class DataFlowAPITests(CairisDaemonTestCase):
     self.logger.debug('[%s] Response data: %s', method, responseData)
     json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
-    self.assertEqual(json_resp['message'],'DataFlow successfully added')
+    self.assertEqual(json_resp['message'],'acknowledge created')
     rv = self.app.delete('/api/dataflows/name/acknowledge/environment/Psychosis?session_id=test')
 
   def test_put(self):
@@ -130,7 +130,7 @@ class DataFlowAPITests(CairisDaemonTestCase):
       responseData = rv.data
     json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp)
-    self.assertEqual(json_resp['message'],'DataFlow successfully updated')
+    self.assertEqual(json_resp['message'],'Edited test dataflow updated')
 
     rv = self.app.get('/api/dataflows/name/Edited%20test%20dataflow/environment/Psychosis?session_id=test')
     if (sys.version_info > (3,)):
@@ -155,7 +155,7 @@ class DataFlowAPITests(CairisDaemonTestCase):
       responseData = rv.data
     json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp)
-    self.assertEqual(json_resp['message'],'DataFlow successfully deleted')
+    self.assertEqual(json_resp['message'],'Edited test dataflow deleted')
 
   def test_dataflow_diagram(self):
     url = '/api/dataflows/diagram/environment/Psychosis/filter/None?session_id=test'

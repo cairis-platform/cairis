@@ -238,7 +238,7 @@ class UseCaseAPITests(CairisDaemonTestCase):
     message = json_resp.get('message', None)
     self.assertIsNotNone(message, 'No message in response')
     self.logger.info('[%s] Message: %s', method, message)
-    self.assertGreater(message.find('successfully updated'), -1, 'The usecase was not successfully updated')
+    self.assertGreater(message.find('updated'), -1, 'The usecase was not successfully updated')
 
     rv = self.app.get('/api/usecases/name/%s?session_id=test' % quote(usecase_to_update.name()))
     if (sys.version_info > (3,)):

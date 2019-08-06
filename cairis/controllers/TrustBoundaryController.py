@@ -53,7 +53,7 @@ class TrustBoundariesAPI(Resource):
     dao.add_trust_boundary(new_tb)
     dao.close()
 
-    resp_dict = {'message': 'TrustBoundary successfully added'}
+    resp_dict = {'message': new_tb.name() + ' created'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp
@@ -78,7 +78,7 @@ class TrustBoundaryByNameAPI(Resource):
     dao.update_trust_boundary(trust_boundary_name,tb)
     dao.close()
 
-    resp_dict = {'message': 'TrustBoundary successfully updated'}
+    resp_dict = {'message': tb.name() + ' updated'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
@@ -90,7 +90,7 @@ class TrustBoundaryByNameAPI(Resource):
     dao.delete_trust_boundary(trust_boundary_name)
     dao.close()
 
-    resp_dict = {'message': 'TrustBoundary successfully deleted'}
+    resp_dict = {'message': trust_boundary_name + ' deleted'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp

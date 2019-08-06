@@ -53,7 +53,7 @@ class DataFlowsAPI(Resource):
     dao.add_dataflow(new_dataflow)
     dao.close()
 
-    resp_dict = {'message': 'DataFlow successfully added'}
+    resp_dict = {'message': new_dataflow.name() + ' created'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp
@@ -77,7 +77,7 @@ class DataFlowByNameAPI(Resource):
     dao.update_dataflow(dataflow_name,environment_name,df)
     dao.close()
 
-    resp_dict = {'message': 'DataFlow successfully updated'}
+    resp_dict = {'message': df.name() + ' updated'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
@@ -89,7 +89,7 @@ class DataFlowByNameAPI(Resource):
     dao.delete_dataflow(dataflow_name, environment_name)
     dao.close()
 
-    resp_dict = {'message': 'DataFlow successfully deleted'}
+    resp_dict = {'message': dataflow_name + ' deleted'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp

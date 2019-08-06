@@ -61,7 +61,7 @@ class TrustBoundaryAPITests(CairisDaemonTestCase):
     self.logger.debug('[%s] Response data: %s', method, responseData)
     json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
-    self.assertEqual(json_resp['message'],'TrustBoundary successfully added')
+    self.assertEqual(json_resp['message'],'Shibboleth created')
     rv = self.app.delete('/api/trust_boundaries/name/Shibboleth?session_id=test')
 
 
@@ -115,7 +115,7 @@ class TrustBoundaryAPITests(CairisDaemonTestCase):
       responseData = rv.data
     json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp)
-    self.assertEqual(json_resp['message'],'TrustBoundary successfully updated')
+    self.assertEqual(json_resp['message'],'Shibboleth updated')
 
     rv = self.app.get('/api/trust_boundaries/name/Shibboleth?session_id=test')
     self.assertIsNotNone(rv.data, 'No response')
@@ -143,7 +143,7 @@ class TrustBoundaryAPITests(CairisDaemonTestCase):
       responseData = rv.data
     json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp)
-    self.assertEqual(json_resp['message'],'TrustBoundary successfully deleted')
+    self.assertEqual(json_resp['message'],'Shibboleth deleted')
     rv = self.app.delete('/api/trust_boundaries/name/Shibboleth?session_id=test')
 
   def tearDown(self):
