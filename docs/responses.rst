@@ -3,7 +3,7 @@ Risk Responses
 
 A risk can be treated in several ways.
 
-By choosing to *Accept* a risk, we indicate that we are prepared to
+By choosing to *Accept* a risk, we indicate we are prepared to
 accept the consequences of the risk being realised. Accepting the risk
 comes with a cost, and responsibility for accepting a risk must fall on
 one or more roles.
