@@ -52,7 +52,7 @@ class AssumptionTaskModel:
     elif (dimName == 'task_characteristic'):
       self.theGraph.add_node(pydot.Node(objtName,shape='record',margin=0,fontname=self.fontName,style='filled',fillcolor='green',fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'rebuttal'):
-      self.theGraph.add_node(pydot.Node(objtName,shape='record',margin=0,fontname=self.fontName,style='filled',fillcolor='red',fontsize=self.fontSize,URL=objtUrl))
+      self.theGraph.add_node(pydot.Node(objtName,shape='record',margin=0,fontname=self.fontName,style='filled',fillcolor='red',fontcolor='white',fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'qualifier'):
       self.theGraph.add_node(pydot.Node(objtName,shape='rectangle',margin=0,fontname=self.fontName,style='dashed',fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'warrant'):
