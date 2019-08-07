@@ -143,7 +143,7 @@ class ProjectAPITests(CairisDaemonTestCase):
     assert isinstance(json_dict, dict)
     message = json_dict.get('message', None)
     self.assertIsNotNone(message, 'No message in response')
-    self.assertGreater(message.find('0'), -1, 'Failed to import any data')
+    self.assertGreater(message.find('imported'), -1, 'Failed to import any data')
     self.logger.info('[%s] Successfully created new project and restored the example project\n', method)
 
   def convert_to_obj(self, json_dict):
