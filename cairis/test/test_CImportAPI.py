@@ -109,4 +109,4 @@ class CImportTests(CairisDaemonTestCase):
     message = json_dict.get('message')
     self.assertIsNotNone(message, 'Response does not contain a message')
     self.logger.info('[%s] Message: %s', method, message)
-    self.assertEquals(message,'0')
+    self.assertEquals(message,'import.xml imported')

@@ -69,7 +69,7 @@ class CImportPackageAPI(Resource):
     except Exception as ex:
       raise CairisHTTPError(status_code=500,message=str(ex),status='Unknown error')
 
-    resp_dict = {'message': 'Package successfully imported'}
+    resp_dict = {'message': package.filename + ' imported'}
     resp = make_response(json_serialize(resp_dict, session_id=session_id), OK)
     resp.contenttype = 'application/json'
     return resp
@@ -110,7 +110,10 @@ class CImportTextAPI(Resource):
 
       remove_file(abs_path)
 
-      resp_dict = {'message': str(result)}
+      message = str(result)
+      if (result == 0):
+        message = 'Model imported'
+      resp_dict = {'message': message}
       resp = make_response(json_serialize(resp_dict, session_id=session_id), OK)
       resp.headers['Content-Type'] = 'application/json'
       return resp
@@ -121,6 +124,10 @@ class CImportTextAPI(Resource):
         dao = ImportDAO(session_id)
         result = dao.import_attack_tree(file_contents,environment_name,contributor_name)
         dao.close()
+        message = str(result)
+        if (result == 0):
+          message = 'Model imported'
+        resp_dict = {'message': message}
         resp_dict = {'message': str(result)}
         resp = make_response(json_serialize(resp_dict, session_id=session_id), OK)
         resp.headers['Content-Type'] = 'application/json'
@@ -169,7 +176,10 @@ class CImportFileAPI(Resource):
 
     remove_file(abs_path)
 
-    resp_dict = { 'message': str(result) }
+    message = str(result)
+    if (result == 0):
+      message = file.filename + ' imported'
+    resp_dict = { 'message': message }
     resp = make_response(json_serialize(resp_dict, session_id=session_id), OK)
     resp.headers['Content-Type'] = 'application/json'
     return resp
