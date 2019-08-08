@@ -238,7 +238,7 @@ def importRequirements(dpParameterSet,goalParameterSet,obsParameterSet,reqParame
       cmParameters.setId(objtId)
       db_proxy.updateCountermeasure(cmParameters)
     cmCount += 1
-  msgStr = 'Imported ' + str(dpCount) + ' domain properties, ' + str(goalCount) + ' goals, ' + str(obsCount) + ' obstacles, ' + str(reqCount) + ' requirements, ' + str(ucCount) + 'use cases, and ' + str(cmCount) + ' countermeasures.'
+  msgStr = 'Imported ' + str(dpCount) + ' domain properties, ' + str(goalCount) + ' goals, ' + str(obsCount) + ' obstacles, ' + str(reqCount) + ' requirements, ' + str(ucCount) + ' use cases, and ' + str(cmCount) + ' countermeasures.'
   return msgStr
 
 def importRiskAnalysisFile(importFile,session_id = None):
