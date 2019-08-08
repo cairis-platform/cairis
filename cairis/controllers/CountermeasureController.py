@@ -56,7 +56,7 @@ class CountermeasuresAPI(Resource):
     dao.add_countermeasure(new_countermeasure)
     dao.close()
 
-    resp_dict = {'message': 'Countermeasure successfully added'}
+    resp_dict = {'message': new_countermeasure.name() + ' created'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp
@@ -78,11 +78,11 @@ class CountermeasureByNameAPI(Resource):
     session_id = get_session_id(session, request)
 
     dao = CountermeasureDAO(session_id)
-    req = dao.from_json(request)
-    dao.update_countermeasure(req, name=name)
+    cm = dao.from_json(request)
+    dao.update_countermeasure(cm, name=name)
     dao.close()
 
-    resp_dict = {'message': 'Countermeasure successfully updated'}
+    resp_dict = {'message': cm.name() + ' updated'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
@@ -94,7 +94,7 @@ class CountermeasureByNameAPI(Resource):
     dao.delete_countermeasure(name=name)
     dao.close()
 
-    resp_dict = {'message': 'Countermeasure successfully deleted'}
+    resp_dict = {'message': name + ' deleted'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
@@ -136,7 +136,7 @@ class GenerateAssetAPI(Resource):
     dao.generate_asset(name)
     dao.close()
 
-    resp_dict = {'message': 'Asset successfully generated'}
+    resp_dict = {'message': 'Asset ' + name + ' CM created'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
@@ -150,7 +150,7 @@ class GenerateAssetFromTemplateAPI(Resource):
     dao.generate_asset_from_template(name,template_asset_name)
     dao.close()
 
-    resp_dict = {'message': 'Asset successfully generated'}
+    resp_dict = {'message': 'Asset ' + template_asset_name  + ' created'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
@@ -164,7 +164,7 @@ class SituateCountermeasurePatternAPI(Resource):
     dao.situate_countermeasure_pattern(name,security_pattern_name)
     dao.close()
 
-    resp_dict = {'message': 'Security pattern situated'}
+    resp_dict = {'message': security_pattern_name + ' situated'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
@@ -178,7 +178,7 @@ class AssociateSituatedPatternAPI(Resource):
     dao.associate_situated_pattern(name,security_pattern_name)
     dao.close()
 
-    resp_dict = {'message': 'Situated pattern associated'}
+    resp_dict = {'message': security_pattern_name + ' associated'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
@@ -192,7 +192,7 @@ class RemoveSituatedPatternAPI(Resource):
     dao.remove_situated_pattern(name,security_pattern_name)
     dao.close()
 
-    resp_dict = {'message': 'Situated pattern removed'}
+    resp_dict = {'message': 'Situated pattern ' + security_pattern_name + ' removed'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
