@@ -276,7 +276,7 @@ class CountermeasureAPITests(CairisDaemonTestCase):
       responseData = rv.data
     json_resp = jsonpickle.decode(responseData)
     msg = json_resp.get('message', None)
-    self.assertEqual(msg, 'Security Pattern successfully situated')
+    self.assertEqual(msg, 'Protection Reverse Proxy situated')
 
     rv = self.app.get('api/countermeasures/name/Location-based%20X.509%20extension/candidate_patterns?session_id=test')
     if (sys.version_info > (3,)):
