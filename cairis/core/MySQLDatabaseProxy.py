@@ -2403,7 +2403,6 @@ class MySQLDatabaseProxy:
       exceptionText = 'Cannot add ' + vtType + 's'
       raise DatabaseProxyException(exceptionText) 
     self.updateDatabase('call addValueType(:id,:name,:desc,:type,:score,:rat)',{'id':valueTypeId,'name':vtName,'desc':vtDesc,'type':vtType,'score':vtScore,'rat':vtRat},'MySQL error adding value type')
-    return valueTypeId
 
   def updateValueType(self,parameters):
     valueTypeId = parameters.id()

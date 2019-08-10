@@ -10482,12 +10482,20 @@ begin
   if assetId = -1
   then
     delete from securitypattern_asset_template_asset;
+    delete from component_classassociation;
+    delete from connector;
     delete from component_asset_template_asset;
+    delete from template_goal_concern;
     delete from template_asset_interface;
     delete from template_asset_tag;
+    delete from template_asset_property;
     delete from template_asset;
   else
     call delete_template_asset_properties(assetId);
+    delete from component_classassociation where head_id = assetId;
+    delete from component_classassociation where tail_id = assetId;
+    delete from connector where template_asset_id = assetId;
+    delete from template_goal_concern where template_asset_id = assetId;
     delete from template_asset_interface where template_asset_id = assetId;
     delete from securitypattern_asset_template_asset where template_asset_id = assetId;
     delete from component_asset_template_asset where template_asset_id = assetId;

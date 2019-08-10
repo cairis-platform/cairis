@@ -51,7 +51,7 @@ class SecurityPatternsAPI(Resource):
     new_sp = dao.from_json(request)
     dao.add_security_pattern(new_sp)
     dao.close()
-    resp_dict = {'message': 'Security Pattern successfully added'}
+    resp_dict = {'message': new_sp['theName'] + ' created'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp
@@ -75,7 +75,7 @@ class SecurityPatternByNameAPI(Resource):
     upd_sp = dao.from_json(request)
     dao.update_security_pattern(upd_sp,name)
     dao.close()
-    resp_dict = {'message': 'Security Pattern successfully updated'}
+    resp_dict = {'message': upd_sp['theName'] + ' updated'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp
@@ -87,7 +87,7 @@ class SecurityPatternByNameAPI(Resource):
     dao.delete_security_pattern(name)
     dao.close()
 
-    resp_dict = {'message': 'Security Pattern successfully deleted'}
+    resp_dict = {'message': name + ' deleted'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
@@ -99,7 +99,7 @@ class SituateSecurityPatternAPI(Resource):
     dao = SecurityPatternDAO(session_id)
     dao.situate_security_pattern(security_pattern_name,environment_name)
     dao.close()
-    resp_dict = {'message': 'Security Pattern successfully situated'}
+    resp_dict = {'message': security_pattern_name + ' situated'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp
