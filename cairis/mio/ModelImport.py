@@ -60,28 +60,8 @@ def importSecurityPatterns(taps,spps,vts,session_id=None):
   b = Borg()
   db_proxy = b.get_dbproxy(session_id)
 
-  msgStr = 'No patterns imported'
-  if (noOfTaps > 0):
-    tapId = 0;
-    db_proxy.deleteSecurityPattern(-1)
-    db_proxy.deleteTemplateAsset(-1)
-
-    for vt in vts:
-      db_proxy.addValueType(vt)
-
-    for tap in taps:
-      tap.setId(tapId)
-      db_proxy.addTemplateAsset(tap)
-      tapId += 1
-
-    if (noOfSpps > 0):
-      spId = 0;
-      db_proxy.deleteSecurityPattern(-1)
-      for sp in spps:
-        sp.setId(spId)
-        db_proxy.addSecurityPattern(sp)
-        spId += 1
-      msgStr =  'Imported ' + str(noOfTaps) + ' template assets and ' + str(noOfSpps) + ' security patterns'
+  db_proxy.addSecurityPatterns(vts,taps,spps)
+  msgStr =  'Imported ' + str(noOfTaps) + ' template assets and ' + str(noOfSpps) + ' security patterns'
   return msgStr
 
 def importAttackPattern(importFile,session_id = None):

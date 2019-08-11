@@ -54,7 +54,7 @@ def file_import(importFile,mFormat,overwriteFlag,session_id = None):
 
   msgStr = ''
   if (mFormat == 'securitypattern' or mFormat == 'Security Pattern'):
-    msgStr += importSecurityPatternsFile(importFile,session_id = session_id)
+    msgStr += importSecurityPatternsFile(importFile,session_id)
   elif (mFormat == 'attackpattern' or mFormat == 'Attack Pattern'):
     msgStr += importAttackPattern(importFile,session_id)
   elif (mFormat == 'tvtypes' or mFormat == 'Threat and Vulnerability Types'):

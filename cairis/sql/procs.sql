@@ -9257,6 +9257,10 @@ begin
   if existingId is not null
   then
     call updateValueType(existingId,vtName,vtDesc,vtType,'',vtScore,vtRat);
+    set @sql = 'set @existingId = null';
+    prepare stmt from @sql;
+    execute stmt;
+    deallocate prepare stmt;
   else
     if vtType = 'capability' or vtType = 'motivation' or vtType = 'asset_type' or vtType = 'threat_type' or vtType = 'vulnerability_type' or vtType = 'risk_class'
     then
@@ -10485,6 +10489,7 @@ begin
     delete from component_classassociation;
     delete from connector;
     delete from component_asset_template_asset;
+    delete from template_requirement;
     delete from template_goal_concern;
     delete from template_asset_interface;
     delete from template_asset_tag;
@@ -10495,6 +10500,7 @@ begin
     delete from component_classassociation where head_id = assetId;
     delete from component_classassociation where tail_id = assetId;
     delete from connector where template_asset_id = assetId;
+    delete from template_requirement where asset_id = assetId;
     delete from template_goal_concern where template_asset_id = assetId;
     delete from template_asset_interface where template_asset_id = assetId;
     delete from securitypattern_asset_template_asset where template_asset_id = assetId;
@@ -18812,11 +18818,14 @@ begin
   deallocate prepare stmt;
   set dimId = @dimId;
 
-  set deleteTagsSql = concat('delete from ',tagDim,'_tag where ',tagDim,'_id = ',dimId);
-  set @sql = deleteTagsSql;
-  prepare stmt from @sql;
-  execute stmt;
-  deallocate prepare stmt;
+  if dimId is not null
+  then
+    set deleteTagsSql = concat('delete from ',tagDim,'_tag where ',tagDim,'_id = ',dimId);
+    set @sql = deleteTagsSql;
+    prepare stmt from @sql;
+    execute stmt;
+    deallocate prepare stmt;
+  end if;
 end
 //
 
