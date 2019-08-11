@@ -51,7 +51,7 @@ Exporting models
    :alt: export model form
 
 To export a model, select the System / Export Model option.  Exporting the current model renders the current CAIRIS database you are working with as a CAIRIS XML model (conforming to cairis_model.dtd).
-You can also export a selected architectural pattern, or a GRL model for a selected environment and task; this GRL can be imported into jUCMNav.
+You can also export a selected architectural pattern, the security patterns currently loaded into CAIRIS, or a GRL model for a selected environment and task; this GRL can be imported into jUCMNav.
 
 Like cimport.py, there is also a command line export script - cexport.py
  

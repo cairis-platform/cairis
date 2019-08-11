@@ -4809,3 +4809,6 @@ class MySQLDatabaseProxy:
         self.addTemplateAsset(tap)
     for sp in spps:
       self.addSecurityPattern(sp)
+
+  def securityPatternsToXml(self):
+    return self.responseList('call patternsToXml()',{},'MySQL error exporting security patterns to XML')[0]

@@ -82,3 +82,16 @@ class CExportGRLAPI(Resource):
     resp.headers["Content-Type"] = 'application/grl'
     resp.headers["Content-Disposition"] = 'Attachment; filename=' + fileName
     return resp
+
+class CExportSecurityPatternsAPI(Resource):
+
+  def get(self):
+    session_id = get_session_id(session, request)
+    fileName = request.args.get('filename', 'security_patterns.xml')
+    dao = ExportDAO(session_id)
+    modelBuf = dao.security_patterns_export()
+    dao.close()
+    resp = make_response(modelBuf)
+    resp.headers["Content-Type"] = 'application/xml'
+    resp.headers["Content-Disposition"] = 'Attachment; filename=' + fileName
+    return resp

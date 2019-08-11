@@ -177,6 +177,14 @@ def exportGRL(outFileName,personaNames,taskNames,envName,session_id = None):
   rFile.close()
   return 'Exported GRL for ' + str(pStr) + ' in tasks ' + str(tStr) + ' situated in environment ' + envName
 
+def exportSecurityPatterns(outFileName,session_id = None):
+  b = Borg()
+  buf = b.get_dbproxy(session_id).securityPatternsToXml()
+  rFile = open(outFileName,'w')
+  rFile.write(buf)
+  rFile.close()
+  return 'Exported security patterns'
+
 def buildComponentModel(p,apName,graphName):
   from cairis.gui.componentxdot import ComponentXDotParser
   from cairis.gui.ComponentModel import ComponentModel

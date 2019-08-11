@@ -982,6 +982,7 @@ drop procedure if exists environmentRequirementNames;
 drop function if exists hasRootObstacle;
 drop procedure if exists hasRootObstacles;
 drop procedure if exists deleteGeneratedObstacles;
+drop procedure if exists patternsToXml;
 
 
 delimiter //
@@ -28904,6 +28905,210 @@ begin
     call delete_obstacle(obsId); 
   end loop obs_loop;
   close obsCursor;
+end
+//
+
+create procedure patternsToXml()
+begin
+  declare arName varchar(50);
+  declare arDesc varchar(1000);
+  declare arValue int;
+  declare arRat varchar(1000);
+  declare stName varchar(50);
+  declare stDesc varchar(1000);
+  declare stValue int;
+  declare stRat varchar(1000);
+  declare assetId int;
+  declare taName varchar(50);
+  declare taShortCode varchar(20);
+  declare taAssetType varchar(50);
+  declare taSurfaceType varchar(50);
+  declare taAccessRight varchar(50);
+  declare taDesc varchar(1000);
+  declare taSig varchar(1000);
+  declare cProperty varchar(50);
+  declare iProperty varchar(50);
+  declare avProperty varchar(50);
+  declare acProperty varchar(50);
+  declare anProperty varchar(50);
+  declare panProperty varchar(50);
+  declare unlProperty varchar(50);
+  declare unoProperty varchar(50);
+  declare cRationale varchar(4000);
+  declare iRationale varchar(4000);
+  declare avRationale varchar(4000);
+  declare acRationale varchar(4000);
+  declare anRationale varchar(4000);
+  declare panRationale varchar(4000);
+  declare unlRationale varchar(4000);
+  declare unoRationale varchar(4000);
+  declare spId int;
+  declare spName varchar(50);
+  declare spContext varchar(4000);
+  declare spProblem varchar(4000);
+  declare spSolution varchar(4000);
+  declare hAsset varchar(50);
+  declare hAdorn varchar(50);
+  declare hNry varchar(50);
+  declare hRole varchar(50);
+  declare tRole varchar(50);
+  declare tNry varchar(50);
+  declare tAdorn varchar(50);
+  declare tAsset varchar(50);
+  declare trName varchar(255);
+  declare rtName varchar(50);
+  declare reqDesc varchar(4000);
+  declare reqRat varchar(255);
+  declare reqFC varchar(4000);
+  declare buf LONGTEXT default '<?xml version="1.0"?>\n<!DOCTYPE security_patterns PUBLIC "-//CAIRIS//DTD SECURITY PATTERN 1.0//EN" "http://cairis.org/dtd/security_pattern.dtd">\n\n<security_patterns>\n\n';
+  declare done int default 0;
+
+  declare accessRightCursor cursor for select name, description, value, rationale from access_right;
+  declare stCursor cursor for select name, description, value, rationale from surface_type;
+  declare taCursor cursor for select ta.id,ta.name, ta.short_code, at.name, st.name, ar.name, ta.description, ta.significance from template_asset ta, asset_type at, surface_type st, access_right ar where ta.asset_type_id = at.id and ta.surface_type_id = st.id and ta.access_right_id = ar.id;
+  declare spCursor cursor for select id,name,context,problem,solution from securitypattern;
+  declare psCursor cursor for select ha.name,hat.name,hm.name,cc.head_role_name,cc.tail_role_name,tm.name,tat.name,ta.name from securitypattern_classassociation cc, template_asset ha, template_asset ta, association_type hat, association_type tat, multiplicity_type hm, multiplicity_type tm where cc.head_id = ha.id and cc.head_association_type_id = hat.id and cc.head_multiplicity_id = hm.id and cc.tail_multiplicity_id = tm.id and cc.tail_association_type_id = tat.id and cc.tail_id = ta.id and cc.pattern_id = spId;
+  declare reqCursor cursor for select pr.name,ta.name,rt.name,pr.description,pr.rationale,pr.fit_criterion from securitypattern_requirement pr, template_asset ta, requirement_type rt where pr.pattern_id = spId and pr.asset_id = ta.id and pr.type_id = rt.id;
+  declare continue handler for not found set done = 1;
+
+  open accessRightCursor;
+  ar_loop: loop
+    fetch accessRightCursor into arName, arDesc, arValue,arRat;
+    if done = 1
+    then
+      leave ar_loop;
+    end if;
+    set buf = concat(buf,'<access_right name=\"',arName,'\" value=\"',arValue,'\" >\n  <description>',arDesc,'</description>\n  <rationale>',arRat,'</rationale>\n</access_right>\n');
+  end loop ar_loop;
+  close accessRightCursor;
+  set done = 0;
+
+  open stCursor;
+  st_loop: loop
+    fetch stCursor into stName, stDesc, stValue,stRat;
+    if done = 1
+    then
+      leave st_loop;
+    end if;
+    set buf = concat(buf,'<surface_type name=\"',stName,'\" value=\"',stValue,'\" >\n  <description>',stDesc,'</description>\n  <rationale>',stRat,'</rationale>\n</surface_type>\n');
+  end loop st_loop;
+  close stCursor;
+  set done = 0;
+  open taCursor;
+
+  ta_loop: loop
+    fetch taCursor into assetId, taName, taShortCode, taAssetType, taSurfaceType, taAccessRight, taDesc,taSig;
+    if done = 1
+    then
+      leave ta_loop;
+    end if;
+    set buf = concat(buf,'<asset name=\"',taName,'\" short_code=\"',taShortCode,'\" type=\"',taAssetType,'\" surface_type=\"',taSurfaceType,'\" access_right=\"',taAccessRight,'\" >\n  <description>',taDesc,'</description>\n  <significance>',taSig,'</significance>\n');
+    select spv.name,ap.property_rationale into cProperty,cRationale from template_asset_property ap, security_property_value spv where ap.template_asset_id = assetId and ap.property_id = 0 and ap.property_value_id = spv.id;
+    select spv.name,ap.property_rationale into iProperty,iRationale from template_asset_property ap, security_property_value spv where ap.template_asset_id = assetId and ap.property_id = 1 and ap.property_value_id = spv.id;
+    select spv.name,ap.property_rationale into avProperty,avRationale from template_asset_property ap, security_property_value spv where ap.template_asset_id = assetId and ap.property_id = 2 and ap.property_value_id = spv.id;
+    select spv.name,ap.property_rationale into acProperty,acRationale from template_asset_property ap, security_property_value spv where ap.template_asset_id = assetId and ap.property_id = 3 and ap.property_value_id = spv.id;
+    select spv.name,ap.property_rationale into anProperty,anRationale from template_asset_property ap, security_property_value spv where ap.template_asset_id = assetId and ap.property_id = 4 and ap.property_value_id = spv.id;
+    select spv.name,ap.property_rationale into panProperty,panRationale from template_asset_property ap, security_property_value spv where ap.template_asset_id = assetId and ap.property_id = 5 and ap.property_value_id = spv.id;
+    select spv.name,ap.property_rationale into unlProperty,unlRationale from template_asset_property ap, security_property_value spv where ap.template_asset_id = assetId and ap.property_id = 6 and ap.property_value_id = spv.id;
+    select spv.name,ap.property_rationale into unoProperty,unoRationale from template_asset_property ap, security_property_value spv where ap.template_asset_id = assetId and ap.property_id = 7 and ap.property_value_id = spv.id;
+    if cProperty != 'None'
+    then
+      set buf = concat(buf,'  <security_property property="confidentiality" value=\"',cProperty,'\">\n    <rationale>',cRationale,'</rationale>\n  </security_property>\n');
+    end if;
+    if iProperty != 'None'
+    then
+      set buf = concat(buf,'  <security_property property="integrity" value=\"',iProperty,'\">\n    <rationale>',iRationale,'</rationale>\n  </security_property>\n');
+    end if;
+    if avProperty != 'None'
+    then
+      set buf = concat(buf,'  <security_property property="availability" value=\"',avProperty,'\">\n    <rationale>',avRationale,'</rationale>\n  </security_property>\n');
+    end if;
+    if acProperty != 'None'
+    then
+      set buf = concat(buf,'  <security_property property="accountability" value=\"',acProperty,'\">\n    <rationale>',acRationale,'</rationale>\n  </security_property>\n');
+    end if;
+    if anProperty != 'None'
+    then
+      set buf = concat(buf,'  <security_property property="anonymity" value=\"',anProperty,'\">\n    <rationale>',anRationale,'</rationale>\n  </security_property>\n');
+    end if;
+    if panProperty != 'None'
+    then
+      set buf = concat(buf,'  <security_property property="pseudonymity" value=\"',panProperty,'\">\n    <rationale>',panRationale,'</rationale>\n  </security_property>\n');
+    end if;
+    if unlProperty != 'None'
+    then
+      set buf = concat(buf,'  <security_property property="unlinkability" value=\"',unlProperty,'\">\n    <rationale>',unlRationale,'</rationale>\n  </security_property>\n');
+    end if;
+    if unoProperty != 'None'
+    then
+      set buf = concat(buf,'  <security_property property="unobservability" value=\"',unoProperty,'\">\n    <rationale>',unoRationale,'</rationale>\n  </security_property>\n');
+    end if;
+    set buf = concat(buf,'</asset>\n');
+  end loop ta_loop;
+  close taCursor;
+  set done = 0;
+
+  open spCursor;
+  sp_loop: loop
+    fetch spCursor into spId, spName, spContext, spProblem, spSolution;
+    if done = 1
+    then
+      leave sp_loop;
+    end if;
+    set buf = concat(buf,'<pattern name=\"',spName,'\" >\n  <context>',spContext,'</context>\n  <problem>',spProblem,'</problem>\n  <solution>',spSolution,'</solution>\n');
+
+    open psCursor;
+    ps_loop: loop
+      fetch psCursor into hAsset,hAdorn,hNry,hRole,tRole,tNry,tAdorn,tAsset;
+       if done = 1
+       then
+         leave ps_loop;
+       end if;
+
+       if hNry = '*'
+       then
+         set hNry = 'a';
+       end if;
+       if hNry = '1..*'
+       then
+         set hNry = '1..a';
+       end if;
+
+       if tNry = '*'
+       then
+         set tNry = 'a';
+       end if;
+       if tNry = '1..*'
+       then
+         set tNry = '1..a';
+       end if;
+
+       set buf = concat(buf,'  <structure head_asset=\"',hAsset,'\" head_adornment=\"',hAdorn,'\" head_nry=\"',hNry,'\" head_role=\"',hRole,'\" tail_role=\"',tRole,'\" tail_nry=\"',tNry,'\" tail_adornment=\"',tAdorn,'\" tail_asset=\"',tAsset,'\" />\n');
+    end loop ps_loop;
+    close psCursor;
+    set done = 0;
+
+    open reqCursor;
+    req_loop: loop
+      fetch reqCursor into trName,taName,rtName,reqDesc,reqRat,reqFC;
+       if done = 1
+       then
+         leave req_loop;
+       end if;
+       set buf = concat(buf,'  <requirement name=\"',trName,'\" asset=\"',taName,'\" type=\"',rtName,'\" >\n    <description>',reqDesc,'</description>\n    <rationale>',reqRat,'</rationale>\n    <fit_criterion>',reqFC,'</fit_criterion>\n  </requirement>\n');
+    end loop req_loop;
+    close reqCursor;
+    set done = 0;
+
+    set buf = concat(buf,'</pattern>\n');
+  end loop sp_loop;
+  close spCursor;
+  set done = 0;
+
+
+  set buf = concat(buf,'\n\n</security_patterns>');
+  select buf;
+
 end
 //
 
