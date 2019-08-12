@@ -41,11 +41,7 @@ We're always interested in hearing from others interested in adopting the tool, 
 
 <h2>Are there any examples of CAIRIS in action?</h2>
 
-Yes, see the [Examples](https://cairis.org/examples) page.
-
-The [design data](https://github.com/webinos/webinos-design-data) for [webinos](http://webinos.org) is also based on CAIRIS.  
-
-We are currently working on [a project to build specification exemplars for critical infrastructure systems](https://cybersecurity.bournemouth.ac.uk/?page_id=55); these models will be based on CAIRIS.  [ACME Water](https://cairis.org/ACME_Water) is the first of these exemplars.  We are currently building a second exemplar based on a rail company.  Please [get in touch](mailto:sfaily@bournemouth.ac.uk) for more information if these models or this project is of interest.
+Yes, there are several [example models](https://cairis.readthedocs.io/en/latest/examples.html) you can look at and play with.
 
 <h2>Is there is a live demo of CAIRIS that I can play with?</h2>
 
@@ -53,7 +49,7 @@ Yes.  You can get started [here](https://cairis.org/cairis/cloud/).
 
 <h2>Is CAIRIS free?</h2>
 
-Yes.  CAIRIS has been made freely available under an Apache Software License.  You can find the source code for CAIRIS on [github](https://github.com/failys/cairis).
+Yes.  CAIRIS has been made freely available under an Apache Software License.  You can find the source code for CAIRIS on [github](https://github.com/cairis-platform/cairis).
 
 <h2>Does CAIRIS only work on Linux?</h2>
 
