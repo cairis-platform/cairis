@@ -70,8 +70,8 @@ def drawGraph(graph,graphName):
   os.system(cmd2)
 
 def buildConceptMap(p,envName,graphName):
-  from cairis.gui.kaosxdot import KaosXDotParser
-  from cairis.gui.ConceptMapModel import ConceptMapModel
+  from cairis.core.kaosxdot import KaosXDotParser
+  from cairis.core.ConceptMapModel import ConceptMapModel
   model = ConceptMapModel(list(p.conceptMapModel(envName).values()),envName,'',True)
   if (model.size() == 0):
     return False
@@ -186,8 +186,8 @@ def exportSecurityPatterns(outFileName,session_id = None):
   return 'Exported security patterns'
 
 def buildComponentModel(p,apName,graphName):
-  from cairis.gui.componentxdot import ComponentXDotParser
-  from cairis.gui.ComponentModel import ComponentModel
+  from cairis.legacy.componentxdot import ComponentXDotParser
+  from cairis.legacy.ComponentModel import ComponentModel
   interfaces,connectors = p.componentView(apName)
   model = ComponentModel(interfaces,connectors)
   parser = ComponentXDotParser(model.graph())
@@ -196,8 +196,8 @@ def buildComponentModel(p,apName,graphName):
   return True
 
 def buildComponentAssetModel(p,cName,graphName):
-  from cairis.gui.kaosxdot import KaosXDotParser
-  from cairis.gui.AssetModel import AssetModel
+  from cairis.legacy.kaosxdot import KaosXDotParser
+  from cairis.legacy.AssetModel import AssetModel
   assocs = p.componentAssetModel(cName)
   model = AssetModel(list(assocs.values()),'')
   parser = KaosXDotParser('class',model.graph())
@@ -206,8 +206,8 @@ def buildComponentAssetModel(p,cName,graphName):
   return True
 
 def buildComponentGoalModel(p,cName,graphName):
-  from cairis.gui.kaosxdot import KaosXDotParser
-  from cairis.gui.KaosModel import KaosModel
+  from cairis.legacy.kaosxdot import KaosXDotParser
+  from cairis.legacy.KaosModel import KaosModel
   assocs = p.componentGoalModel(cName)
   model = KaosModel(list(assocs.values()),'','template_goal')
   parser = KaosXDotParser('goal',model.graph())
@@ -216,8 +216,8 @@ def buildComponentGoalModel(p,cName,graphName):
   return True
 
 def buildRiskObstacleModel(p,apName,envName,graphName):
-  from cairis.gui.kaosxdot import KaosXDotParser
-  from cairis.gui.KaosModel import KaosModel
+  from cairis.legacy.kaosxdot import KaosXDotParser
+  from cairis.legacy.KaosModel import KaosModel
   assocs = p.riskObstacleModel(apName,envName)
   model = KaosModel(list(assocs.values()),envName,'obstacle',apName)
   parser = KaosXDotParser('obstacle',model.graph())

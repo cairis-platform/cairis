@@ -95,7 +95,7 @@ def initialise(user='cairis_test',db='cairis_test_default'):
   b.configDir = b.cairisRoot + '/config'
   setupDocBookConfig()
 
-  from cairis.gui.GUIDatabaseProxy import GUIDatabaseProxy
+  from cairis.legacy.GUIDatabaseProxy import GUIDatabaseProxy
   dbPasswd = ''
   if (user == 'cairis_test'):
     dbPasswd = 'cairis_test'
