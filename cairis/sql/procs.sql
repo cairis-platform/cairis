@@ -8406,7 +8406,7 @@ begin
     else
       set dimSql = concat(dimSql,'name');
     end if;
-    set dimSql = concat(dimSql,' = \'',dimText,'\'');
+    set dimSql = concat(dimSql,' = \"',dimText,'\"');
 
     set @sql = dimSql;
     prepare stmt from @sql;
