@@ -704,7 +704,6 @@ class MySQLDatabaseProxy:
         cName,ifName = dimensionName.split('_')
         rs = session.execute('select interfaceId(:name)',{'name':ifName})
       else:
-        dimensionName = self.conn.connection().connection.escape_string(dimensionName)
         rs = session.execute('call dimensionId(:name,:table)',{'name':dimensionName,'table':dimensionTable})
 
       if (rs.rowcount == 0):
