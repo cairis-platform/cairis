@@ -33,11 +33,11 @@
   },
   "GoalParameters" : {
     "theName" : 100,
-    "theOriginator" : 50
+    "theOriginator" : 100
   },
   "Goal" : {
     "theName" : 100,
-    "theOriginator" : 50
+    "theOriginator" : 100
   },
   "GoalEnvironmentProperties" : {
     "theLabel" : 255,
@@ -47,11 +47,11 @@
   },
   "ObstacleParameters" : {
     "theName" : 100,
-    "theOriginator" : 50
+    "theOriginator" : 100
   },
   "Obstacle" : {
     "theName" : 100,
-    "theOriginator" : 50
+    "theOriginator" : 100
   },
   "ObstacleEnvironmentProperties" : {
     "theLabel" : 255,

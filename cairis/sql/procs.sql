@@ -13259,10 +13259,10 @@ begin
   declare dpCount int default 0;
   declare goalId int;
   declare goalName varchar(100);
-  declare goalOrig varchar(50);
+  declare goalOrig varchar(100);
   declare obsId int;
   declare obsName varchar(100);
-  declare obsOrig varchar(50);
+  declare obsOrig varchar(100);
   declare envId int;
   declare envName varchar(50);
   declare concernName varchar(50);

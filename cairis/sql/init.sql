@@ -1372,7 +1372,7 @@ CREATE TABLE domainproperty_type (
 CREATE TABLE obstacle (
   id INT NOT NULL,
   name VARCHAR(100) NOT NULL,
-  originator VARCHAR(50) NOT NULL,
+  originator VARCHAR(100) NOT NULL,
   primary KEY(id)
 ) ENGINE=INNODB;
 CREATE TABLE obstacle_category_type (
@@ -1449,7 +1449,7 @@ CREATE TABLE domainproperty_asset (
 CREATE TABLE goal (
   id INT NOT NULL,
   name VARCHAR(100) NOT NULL,
-  originator VARCHAR(50) NOT NULL,
+  originator VARCHAR(100) NOT NULL,
   PRIMARY KEY(id)
 ) ENGINE=INNODB;
 CREATE TABLE response_goal(
