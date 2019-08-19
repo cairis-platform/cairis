@@ -67,17 +67,25 @@ def escapeText(txt):
       eTxt += c
   return eTxt
 
-
 def paraText(txt):
-  paraTxt = ''
+  inPara = False
+  if (txt.find('\n') >= 0):
+    paraTxt = '<para>'
+    inPara = True
+  else:
+    paraTxt = ''
   for c in txt:
-    if (c == '\n') and (txt != '\n'):
+    if (c == '\n'):
       paraTxt += '</para><para>'
+      inPara = True
     elif c == '&':
       paraTxt += '&amp;'
     else:
-      paraTxt += c 
+      paraTxt += c
+  if (inPara == True):
+    paraTxt += "</para>"
   return paraTxt
+
 
 def listToRows(l):
   rows = []
