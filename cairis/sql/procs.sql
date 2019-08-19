@@ -13648,6 +13648,8 @@ begin
   end loop uc_loop;
   close ucCursor;
 
+  set done = 0;
+
   open cmCursor;
   cm_loop: loop
     fetch cmCursor into cmId, cmName, cmDesc, cmType;
