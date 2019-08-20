@@ -9,7 +9,7 @@ comes with a cost, and responsibility for accepting a risk must fall on
 one or more roles.
 
 By choosing to *Transfer* a risk, we acknowledge that dealing with a
-risk is out of scope for this project. It may still, however, have a
+risk is out of scope for this project. It may, however, have a
 cost associated with it and, by accepting the risk, the risk must become
 the responsibility of one or more roles.
 
