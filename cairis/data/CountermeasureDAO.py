@@ -201,7 +201,9 @@ class CountermeasureDAO(CairisDAO):
   def generate_asset(self,cmName):
     try:
       cm = self.db_proxy.dimensionObject(cmName,'countermeasure')
-      assetId = self.db_proxy.addAsset(cairis.core.AssetParametersFactory.build(cm,self.db_proxy))
+      assetParameters = cairis.core.AssetParametersFactory.build(cm,self.db_proxy)
+      self.db_proxy.nameCheck(assetParameters.name(),'asset')
+      assetId = self.db_proxy.addAsset(assetParameters)
       self.db_proxy.addTrace('countermeasure_asset',cm.id(),assetId)
     except ObjectNotFound as ex:
       self.close()
@@ -216,7 +218,9 @@ class CountermeasureDAO(CairisDAO):
   def generate_asset_from_template(self,cmName,taName):
     try:
       cm = self.db_proxy.dimensionObject(cmName,'countermeasure')
-      assetId = self.db_proxy.addAsset(cairis.core.AssetParametersFactory.buildFromTemplate(taName,cm.environments()))
+      taParameters = cairis.core.AssetParametersFactory.buildFromTemplate(taName,cm.environments())
+      self.db_proxy.nameCheck(taParameters.name(),'asset')
+      assetId = self.db_proxy.addAsset(taParameters)
       self.db_proxy.addTrace('countermeasure_asset',cm.id(),assetId)
     except ObjectNotFound as ex:
       self.close()
@@ -234,7 +238,8 @@ class CountermeasureDAO(CairisDAO):
       patternId = self.db_proxy.getDimensionId(spName,'securitypattern')
       assetParametersList = []
       for assetName in self.db_proxy.patternAssets(patternId):
-        assetParametersList.append(cairis.core.AssetParametersFactory.buildFromTemplate(assetName,cm.environments()))
+        taParameters = cairis.core.AssetParametersFactory.buildFromTemplate(assetName,cm.environments())
+        assetParametersList.append(taParameters)
       self.db_proxy.addSituatedAssets(patternId,assetParametersList)
       self.db_proxy.addTrace('countermeasure_securitypattern',cm.id(),patternId)
     except ObjectNotFound as ex:

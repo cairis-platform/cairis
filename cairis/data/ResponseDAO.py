@@ -233,6 +233,7 @@ class ResponseDAO(CairisDAO):
       responses = self.db_proxy.getResponses(respId)
       goalParameters = cairis.core.GoalFactory.build(responses[responseName],self.db_proxy)
       riskParameters = goalParameters[0]
+      self.db_proxy.nameCheck(riskParameters.name(), 'goal')
       riskGoalId = self.db_proxy.addGoal(riskParameters)
       self.db_proxy.addTrace('response_goal',respId,riskGoalId)
       if (len(goalParameters) > 1):
