@@ -68,7 +68,7 @@ Security Patterns can be imported into the tool by selecting the System/Import M
 Associating countermeasures with pre-existing patterns
 ------------------------------------------------------
 
-In the situate dialog, you can also associate a countermeasure with a pre-existing security pattern.
+In the situate form, you can also associate a countermeasure with a pre-existing security pattern.
 However, a list of possible security patterns to choose from
 will only be displayed if the components of the security pattern are
 present in ALL of the environments the countermeasure is situated for.
