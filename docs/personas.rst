@@ -159,7 +159,9 @@ We find some text that indicates that operators live close to work, so we highli
 .. figure:: DRExample.jpg
    :alt: Generated document reference
 
-If we look in CAIRIS, we will see the corresponding document reference as indicated above.
+If we look in CAIRIS, we will see the corresponding document reference as indicated above.  
+
+Please remember that CAIRIS is sensitive to reserved characters so, when naming factoids, these should avoided.  Colons in factoid names or names of external documents is known to cause particular problems when generating persona models.
 
 
 Online affinity diagramming with Trello
