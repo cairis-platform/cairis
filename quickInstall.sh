@@ -1,7 +1,5 @@
 #!/bin/bash -x
 
-sudo apt-get update | sudo apt-get -y upgrade 
-
 CAIRIS_ROOT=$HOME/cairis
 ROOTPW=$1
 
