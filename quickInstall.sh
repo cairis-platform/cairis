@@ -1,7 +1,10 @@
 #!/bin/bash -x
 
-CAIRIS_ROOT=$1
-ROOTPW=$2
+CAIRIS_ROOT=$HOME/cairis
+ROOTPW=$1
+
+sudo systemctl stop cairis
+sudo systemctl disable cairis
 
 sudo rm -rf $CAIRIS_ROOT
 
@@ -11,7 +14,6 @@ sudo apt-get install python3-dev build-essential mysql-server mysql-client graph
 
 sudo pip3 install -r $CAIRIS_ROOT/requirements.txt
 
-$CAIRIS_ROOT/cairis/bin/quick_setup_headless.py --rootDir=$CAIRIS_ROOT/cairis --dbRootPassword=$ROOTPW --logLevel=debug 
 
 
 CMD1='flush privileges; use mysql; update user set authentication_string=PASSWORD("'
@@ -28,6 +30,13 @@ sudo pkill mysqld_safe
 sudo pkill mysqld
 sudo service mysql start
 
+export PYTHONPATH=$CAIRIS_ROOT
+$CAIRIS_ROOT/cairis/bin/quick_setup_headless.py --rootDir=$CAIRIS_ROOT/cairis --dbRootPassword=$ROOTPW --logLevel=debug 
 source $HOME/.bashrc
 
 sudo -E $CAIRIS_ROOT/cairis/bin/installUI.sh
+
+SVCFILE="[Unit]\nDescription=cairisd\n\n[Service]\nUser=$USERNAME\nWorkingDirectory=$CAIRIS_ROOT\nEnvironment=\"CAIRIS_CFG=$HOME/cairis.cnf\"\nEnvironment=\"PYTHONPATH=\${PYTHONPATH}:$CAIRIS_ROOT\"\nExecStart=$CAIRIS_ROOT/cairis/bin/cairisd.py runserver\nRestart=on-failure\n\n[Install]\nWantedBy=multi-user.target"
+echo -e $SVCFILE | sudo tee /etc/systemd/system/cairis.service
+
+sudo systemctl enable --now /etc/systemd/system/cairis.service
