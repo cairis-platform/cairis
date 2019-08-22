@@ -62,7 +62,7 @@ If you have a clean Ubuntu VM and want to quickly install, configure and start C
 
 .. code-block:: bash
 
-   curl -s https://cairis.org/quickInstall.sh | bash -s my-secret-pw
+   sudo apt install curl && curl -s https://cairis.org/quickInstall.sh | bash -s my-secret-pw
 
 In addition to configuring and install CAIRIS and its dependencies, the script creates an initial user account (username: test, password: test), and starts cairisd.py as a service.  You can use *journalctl* to check the CAIRIS log file.
 
