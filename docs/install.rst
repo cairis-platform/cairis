@@ -54,8 +54,24 @@ To update your docker containers, stop the docker containers and run the below c
 
 Please feel free to use this container to evaluate CAIRIS, but do not use it for operational use without configuring the default credentials first.  The scripts used to build the container can be found on `GitHub <https://github.com/cairis-platform/cairis/tree/master/docker>`_, and provides a useful template for getting started.
 
-Installation and configuration via GitHub
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Installation and configuration via GitHub (automated)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If you have a clean Ubuntu VM and want to quickly install, configure and start CAIRIS then you should run the below command - replacing my-secret-pw with your desired mysql root database password.
+
+
+.. code-block:: bash
+
+   curl -s https://cairis.org/quickInstall.sh | bash -s my-secret-pw
+
+In addition to configuring and install CAIRIS and its dependencies, the script creates an initial user account (username: test, password: test), and starts cairisd.py as a service.  You can use *journalctl* to check the CAIRIS log file.
+
+.. code-block:: bash
+
+   journalctl -u cairis.service -f
+
+Installation and configuration via GitHub (manual)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If you're happy to use the command line, you may like to install CAIRIS from the latest source code in GitHub.  CAIRIS can be installed on any platform that its open-source dependencies are available for.  The most tested platforms are `Ubuntu <http://www.ubuntu.com>`_ or `Debian <https://www.debian.org>`_ .  Assuming you are using some flavour of Linux, just follow the steps below:
 
