@@ -1,20 +1,17 @@
 #!/bin/bash -x
 
-export CAIRIS_ROOT=$HOME/cairis
-export ROOTPW=$1
+CAIRIS_ROOT=$HOME/cairis
+ROOTPW=$1
 
 sudo systemctl stop cairis
 sudo systemctl disable cairis
 
-sudo rm -rf $CAIRIS_ROOT
-
-git clone https://github.com/cairis-platform/cairis $CAIRIS_ROOT
-
 sudo apt-get -y install python3-dev build-essential mysql-server mysql-client graphviz docbook dblatex python3-pip python3-numpy git libmysqlclient-dev --no-install-recommends texlive-latex-extra docbook-utils inkscape libxml2-dev libxslt1-dev poppler-utils python3-setuptools pandoc
 
+sudo rm -rf $CAIRIS_ROOT
+git clone https://github.com/cairis-platform/cairis $CAIRIS_ROOT
+
 sudo pip3 install -r $CAIRIS_ROOT/requirements.txt
-
-
 
 CMD1='flush privileges; use mysql; update user set authentication_string=PASSWORD("'
 CMD2='") where User="root"; update user set plugin="mysql_native_password" where User="root";'
