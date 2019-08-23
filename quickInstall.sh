@@ -17,6 +17,7 @@
 #  under the License.
 
 CAIRIS_ROOT=$HOME/cairis
+export CAIRIS_SRC=$CAIRIS_ROOT
 ROOTPW=$1
 
 sudo systemctl stop cairis
@@ -26,6 +27,7 @@ sudo apt-get -y install python3-dev build-essential mysql-server mysql-client gr
 
 sudo rm -rf $CAIRIS_ROOT
 git clone https://github.com/cairis-platform/cairis $CAIRIS_ROOT
+sudo -E $CAIRIS_ROOT/cairis/bin/installUI.sh
 
 sudo pip3 install -r $CAIRIS_ROOT/requirements.txt
 
@@ -45,13 +47,10 @@ sudo service mysql start
 
 export PYTHONPATH=$CAIRIS_ROOT
 $CAIRIS_ROOT/cairis/bin/quick_setup_headless.py --rootDir=$CAIRIS_ROOT/cairis --dbRootPassword=$ROOTPW --logLevel=debug 
-source $HOME/.bashrc
-
-sudo -E $CAIRIS_ROOT/cairis/bin/installUI.sh
 
 SVCFILE="[Unit]\nDescription=cairisd\n\n[Service]\nUser=$USERNAME\nWorkingDirectory=$CAIRIS_ROOT\nEnvironment=\"CAIRIS_CFG=$HOME/cairis.cnf\"\nEnvironment=\"PYTHONPATH=\${PYTHONPATH}:$CAIRIS_ROOT\"\nExecStart=$CAIRIS_ROOT/cairis/bin/cairisd.py runserver\nRestart=on-failure\n\n[Install]\nWantedBy=multi-user.target"
 echo -e $SVCFILE | sudo tee /etc/systemd/system/cairis.service
 
-sudo systemctl enable --now /etc/systemd/system/cairis.service
+sudo systemctl enable /etc/systemd/system/cairis.service
 
 sudo shutdown -Fr now
