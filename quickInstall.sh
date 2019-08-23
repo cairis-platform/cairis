@@ -40,3 +40,5 @@ SVCFILE="[Unit]\nDescription=cairisd\n\n[Service]\nUser=$USERNAME\nWorkingDirect
 echo -e $SVCFILE | sudo tee /etc/systemd/system/cairis.service
 
 sudo systemctl enable --now /etc/systemd/system/cairis.service
+
+sudo shutdown -Fr now
