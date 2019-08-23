@@ -57,7 +57,7 @@ Please feel free to use this container to evaluate CAIRIS, but do not use it for
 Installation and configuration via GitHub (automated)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-If you have a clean Ubuntu VM, you can quickly install and configure CAIRIS and its dependencies with the command below:
+If you have a clean Ubuntu VM, you can quickly install and configure CAIRIS and its dependencies with the command below, replacing my-secret-pw with your desired root password for MySQL.
 
 .. code-block:: bash
 
