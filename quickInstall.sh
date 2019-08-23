@@ -1,7 +1,7 @@
 #!/bin/bash -x
 
-CAIRIS_ROOT=$HOME/cairis
-ROOTPW=$1
+export CAIRIS_ROOT=$HOME/cairis
+export ROOTPW=$1
 
 sudo systemctl stop cairis
 sudo systemctl disable cairis
