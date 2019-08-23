@@ -17,7 +17,7 @@
 #  under the License.
 
 CAIRIS_ROOT=$HOME/cairis
-export CAIRIS_SRC=$CAIRIS_ROOT
+export CAIRIS_SRC=$CAIRIS_ROOT/cairis
 ROOTPW=$1
 
 sudo systemctl stop cairis
@@ -52,5 +52,7 @@ SVCFILE="[Unit]\nDescription=cairisd\n\n[Service]\nUser=$USERNAME\nWorkingDirect
 echo -e $SVCFILE | sudo tee /etc/systemd/system/cairis.service
 
 sudo systemctl enable /etc/systemd/system/cairis.service
+
+echo "alias update_cairis=\"sudo apt-get update && sudo apt-get upgrade -y && sudo apt-get dist-upgrade -y && curl -s https://cairis.org/quickInstall.sh | bash -s $ROOTPW\"" >> $HOME/.bashrc
 
 sudo shutdown -Fr now
