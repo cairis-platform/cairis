@@ -57,18 +57,23 @@ Please feel free to use this container to evaluate CAIRIS, but do not use it for
 Installation and configuration via GitHub (automated)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-If you have a clean Ubuntu VM and want to quickly install, configure and start CAIRIS then you should run the below command - replacing my-secret-pw with your desired mysql root database password.
-
+If you have a clean Ubuntu VM, you can quickly install and configure CAIRIS and its dependencies with the command below, replacing my-secret-pw with your desired root password for MySQL.
 
 .. code-block:: bash
 
-   curl -s https://cairis.org/quickInstall.sh | bash -s my-secret-pw
+   sudo apt-get update && sudo apt-get upgrade -y && sudo apt-get dist-upgrade -y && sudo apt install curl -y && sudo apt install net-tools -y && curl -s https://cairis.org/quickInstall.sh | bash -s my-secret-pw
 
-In addition to configuring and install CAIRIS and its dependencies, the script creates an initial user account (username: test, password: test), and starts cairisd.py as a service.  You can use *journalctl* to check the CAIRIS log file.
+In addition to configuring and installing CAIRIS, the script creates an initial user account (username: test, password: test), starts cairisd.py as a service, and restarts the VM.  You can use *journalctl* to check the CAIRIS log file.
 
 .. code-block:: bash
 
    journalctl -u cairis.service -f
+
+This script also adds an alias so, in future, you can update CAIRIS by running the below command:
+
+.. code-block:: bash
+
+   update_cairis
 
 Installation and configuration via GitHub (manual)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
