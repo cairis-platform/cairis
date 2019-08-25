@@ -45,7 +45,7 @@ class ImportDAO(CairisDAO):
       fileList = zf.namelist()
       
       modelImages = []
-      models = {'cairis_model' : '', 'locations' : [], 'architectural_pattern' : []}
+      models = {'cairis_model' : '', 'locations' : [], 'architectural_pattern' : [], 'security_patterns' : []}
 
       for fileName in fileList:
         fName,fType = fileName.split('.')
@@ -70,11 +70,13 @@ class ImportDAO(CairisDAO):
         self.file_import(b.tmpDir + '/' + cairisModel,'all',1) 
         os.remove(b.tmpDir + '/' + cairisModel)
 
-      for typeKey in ['locations','architectural_pattern']:
+      for typeKey in ['locations','architectural_pattern','security_patterns']:
         for modelFile in models[typeKey]:
           zf.extract(modelFile,b.tmpDir)
           if (typeKey == 'architectural_pattern'):
             typeKey = 'architecturalpattern'
+          elif (typeKey == 'security_patterns'):
+            typeKey = 'securitypattern'
           self.file_import(b.tmpDir + '/' + modelFile,typeKey,0) 
           os.remove(b.tmpDir + '/' + modelFile)
       for imageFile in modelImages:

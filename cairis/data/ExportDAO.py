@@ -63,6 +63,11 @@ class ExportDAO(CairisDAO):
       apBuf = self.architectural_pattern_export(apName)
       zf.writestr(apName + '.xml',apBuf)
 
+    spNames = self.db_proxy.getDimensionNames('securitypattern','')
+    if (len(spNames) > 0):
+      spBuf = self.security_patterns_export()
+      zf.writestr('security_patterns.xml',spBuf)
+
     for imgName,imgContent in self.db_proxy.getImages():
       zf.writestr(imgName,b64decode(imgContent))
     zf.close()
