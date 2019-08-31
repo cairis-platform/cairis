@@ -54,6 +54,12 @@ To update your docker containers, stop the docker containers and run the below c
 
 Please feel free to use this container to evaluate CAIRIS, but do not use it for operational use without configuring the default credentials first.  The scripts used to build the container can be found on `GitHub <https://github.com/cairis-platform/cairis/tree/master/docker>`_, and provides a useful template for getting started.
 
+Ubuntu CAIRIS Virtual Machine
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If you have VMWare then you can download an Ubuntu CAIRIS virtual machine from `here <https://drive.google.com/open?id=1DT6B_3DaoZ1a8XAI8QAhigq8LPu7lrOJ>`_ .  This is Ubuntu VM was created using the quickInstall.sh script described in the section below.  To login to the VM, the username/password is cairisuser/cairisuser.  The account contains a short-cut to Chromium, which has the Persona Helper chrome extension installed.
+
+
 Installation and configuration via GitHub (automated)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
