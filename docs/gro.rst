@@ -151,7 +151,7 @@ Adding, updating, and deleting an obstacle
    Threat, Integrity Threat, Availability Threat, Accountability Threat,
    Vulnerability, Duration, Frequency, Demands, and Goal Support.
 
--  Enter a double-precision probability value (if known), together with a rationale statement justifying the value.
+-  Enter a probability value (if known), together with a rationale statement justifying the value.  When set, probability values need to be between 0 and 1, e.g. 0.2.
 
 -  Like goals, obstacle refinements can be added via the Goals and
    Sub-Goals tabs.
