@@ -54,7 +54,7 @@ class CAIRISDatabaseConfigurationForm(np.ActionForm):
     self.thePassword = self.add(np.TitlePassword, name = "Initial Password:", value = "")
 
   def findRootDir(self):
-    self.defaultRootDir = "/usr/local/lib/python2.7/dist-packages/cairis"
+    self.defaultRootDir = "/usr/local/lib/python3.7/dist-packages/cairis"
     for cpath in sys.path:
       if "/dist-packages/cairis-" in cpath and cpath.endswith(".egg"):
         self.defaultRootDir = os.path.join(cpath, "cairis")
