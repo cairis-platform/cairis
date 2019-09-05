@@ -1955,6 +1955,7 @@ begin
   delete from countermeasure_threat_target where threat_id = threatId;
   delete from threat_tag where threat_id = threatId;
   delete from threat_reference where threat_id = threatId;
+  delete from obstaclethreat_goalassociation where subgoal_id = threatId;
   delete from threat where id = threatId;
 end
 //
@@ -4664,6 +4665,8 @@ create procedure threatDependents(in threatId int)
 begin
   declare riskId int;
   declare riskName varchar(200);
+  declare obsId int;
+  declare obsName varchar(100);
   declare done int default 0;
   declare riskCursor cursor for select distinct id,name from risk where threat_id = threatId;  
   declare continue handler for not found set done = 1;
