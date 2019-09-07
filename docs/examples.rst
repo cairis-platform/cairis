@@ -1,12 +1,11 @@
 Sample models
 =============
 
-CAIRIS comes with a number of different example models.  These illustrate how CAIRIS can be used, and -- in some cases -- provide templates to inspire your own use of the platform.
-
 Exemplars
 ---------
 
-CAIRIS comes with three complete system specifications.  These are .cairis files that can be found in the cairis/examples/exemplars directory, but their component model files and images can be found in sub-directories within that directory.
+CAIRIS comes with three complete system specifications.  These illustrate how CAIRIS can be used, and -- in some cases -- provide templates to inspire your own use of the platform.
+These specifications are .cairis files can be found in the cairis/examples/exemplars directory, but their component model files and images can be found in sub-directories within that directory.
 
 NeuroGrid
 ~~~~~~~~~
