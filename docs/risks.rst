@@ -1,10 +1,10 @@
 Risks
 =====
 
-Risks are defined as the detriment arising from an attacker launching an
+A risk is the detriment arising from an attacker launching an
 attack, in the form of a threat, exploiting a system weakness, in the
-form of a vulnerability. Associated with each risk is a Misuse Case. A
-Misuse Case describes how the attacker (or attackers) behind the risk's
+form of a vulnerability. Associated with each risk is a Misuse Case.
+This describes how the attacker (or attackers) behind the risk's
 threat exploits the risk's vulnerability to realise the risk.
 
 The current status of Risk Analysis can be quickly ascertained by
