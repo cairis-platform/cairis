@@ -57,8 +57,3 @@ Generating documentation
 ------------------------
 
 Your stakeholders may not want to work directly with CAIRIS, so you can :doc:`generate documentation </gendoc>` to share your design documentation with others.
-
-Any questions / issues
-----------------------
-
-Please raise an issue in GitHub.
