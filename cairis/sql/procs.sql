@@ -19295,6 +19295,7 @@ begin
 
   delete from connector where component_view_id = cvId;
 
+  drop table if exists temp_component_id;
   create temporary table temp_component_id (component_id int);
   insert into temp_component_id select component_id from component_view_component where component_view_id = cvId;
   delete from component_view_component where component_view_id = cvId;
@@ -19311,6 +19312,7 @@ begin
   close componentCursor;
 
   drop table temp_component_id;
+
 end
 //
 
