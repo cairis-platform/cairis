@@ -19290,6 +19290,7 @@ create procedure deleteComponentViewComponents(in cvId int)
 begin
   declare done int default 0;
   declare cId int;
+  declare ncvcCount int default 0;
   declare componentCursor cursor for select component_id from temp_component_id;
   declare continue handler for not found set done = 1;
 
@@ -19307,7 +19308,12 @@ begin
     then
       leave component_loop;
     end if;
-    call delete_component(cId);
+
+    select count(*) into ncvcCount from component_view_component where component_id = cId and component_view_id != cvId;
+    if ncvcCount = 0
+    then
+      call delete_component(cId);
+    end if;
   end loop component_loop;
   close componentCursor;
 
