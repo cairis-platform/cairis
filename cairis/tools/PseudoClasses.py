@@ -237,7 +237,7 @@ class ProjectSettings(object):
     self.projectScope = project_settings.get("Project Scope", "")
     self.richPicture = project_settings.get("Rich Picture", "")
 
-    self.definitions = pDict or {}
+    self.definitions = pDict or []
     self.contributions = []
     for contributor in contributors or []:
       if isinstance(contributor, tuple):
