@@ -1,7 +1,7 @@
 Creating a new project
 ======================
 
-The first stage of the design process involves establishing the scope of
+The first stage of any design process involves establishing the scope of
 subsequent analysis. CAIRIS supports this exercise by using the Properties form.
 
 .. figure:: projectSettings.jpg
