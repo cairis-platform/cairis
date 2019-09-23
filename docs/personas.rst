@@ -188,7 +188,7 @@ The final step entails indicating the behavioural variable associated with the p
 .. figure:: FinalAffinityGroups.jpg
    :alt: Final affinity groups
 
-When you're ready, you can now import this Trello board back into CAIRIS.  However, before you can do you need to create a persona object for each board you import.  For example, an empty persona called Bob will be created to represent a water treatment plant operator.  
+When you're ready, you can import this Trello board back into CAIRIS.  However, before you can do you need to create a persona object for each board you import.  For example, an empty persona called Bob will be created to represent a water treatment plant operator.  
 
 To import the board, return to CAIRIS and select the System / Import from Trello menu.  From this form, you should select the Trello board you are exporting, select the persona associated with the persona characteristics that will be generated, and click on Import.
 
