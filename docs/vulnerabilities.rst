@@ -1,7 +1,7 @@
 Vulnerabilities
 ===============
 
-Vulnerabilities are weaknesses of a system, which are liable to
+Vulnerabilities are weaknesses of a system that are liable to
 exploitation.
 
 Create a vulnerability
