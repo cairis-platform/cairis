@@ -94,9 +94,9 @@ class AssetTest(unittest.TestCase):
     self.assertEqual(str(iaeps[0].properties()[5]), str(oap.securityProperties(envName,'',envName)[5]))
     self.assertEqual(str(iaeps[0].properties()[6]), str(oap.securityProperties(envName,'',envName)[6]))
     self.assertEqual(str(iaeps[0].properties()[7]), str(oap.securityProperties(envName,'',envName)[7]))
-    self.assertEqual([['Confidentiality','High'],['Availability','Medium']],oap.propertyList('Psychosis','',''))
-    self.assertEqual([['Confidentiality','High'],['Availability','Medium']],oap.propertyList('','Maximise',''))
-    self.assertEqual([['Confidentiality','High'],['Availability','Medium']],oap.propertyList('','Override','Psychosis'))
+    self.assertEqual([['Confidentiality','High','Researchers very worried about the disclosure of partially anonymised patient data.'],['Availability','Medium','Availability of NeuroGrid is quite important, but prepared to sacrifice this if doing so safeguards clinical data.']],oap.propertyList('Psychosis','',''))
+    self.assertEqual([['Confidentiality','High','None'],['Availability','Medium','None']],oap.propertyList('','Maximise',''))
+    self.assertEqual([['Confidentiality','High','None'],['Availability','Medium','None']],oap.propertyList('','Override','Psychosis'))
     oap.theShortCode = 'TESTCODE'
     oap.theAssetPropertyDictionary['Psychosis'].theSecurityProperties[0] = 1;
 

@@ -99,8 +99,8 @@ class ThreatTest(unittest.TestCase):
     self.assertEqual(str(iteps[0].rationale()[7]), oteps[0].rationale()[7])
     self.assertEqual(array([0,2,0,0,0,0,0,0]).tolist(),o.securityProperties('','Maximise','').tolist())
     self.assertEqual(array([0,2,0,0,0,0,0,0]).tolist(),o.securityProperties('','Override','Day').tolist())
-    self.assertEqual([['Integrity','Medium']],o.propertyList('','Maximise',''))
-    self.assertEqual([['Integrity','Medium']],o.propertyList('','Override','Day'))
+    self.assertEqual([['Integrity','Medium','None']],o.propertyList('','Maximise',''))
+    self.assertEqual([['Integrity','Medium','None']],o.propertyList('','Override','Day'))
 
     envName = self.iThreats[0]["theEnvironmentProperties"][0]["theName"]
     self.assertEqual(iteps[0].likelihood(), o.likelihood(envName,'',envName))

@@ -35,7 +35,7 @@ class Threat(ObjectValidator.ObjectValidator):
     for p in self.theEnvironmentProperties:
       environmentName = p.name()
       self.theEnvironmentDictionary[environmentName] = p
-      self.theThreatPropertyDictionary[environmentName] = PropertyHolder(p.properties())
+      self.theThreatPropertyDictionary[environmentName] = PropertyHolder(p.properties(),p.rationale())
     self.likelihoodLookup = {}
     self.likelihoodLookup['Incredible'] = 0
     self.likelihoodLookup['Improbable'] = 1

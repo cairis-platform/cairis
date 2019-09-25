@@ -32,8 +32,11 @@ MED_ID = 2
 HIGH_ID = 3
 
 class PropertyHolder:
-  def __init__(self,syProps):
+  def __init__(self,syProps,syRat = []):
     self.theSecurityProperties = syProps
+    if (len(syRat) == 0):
+      syRat = ['None','None','None','None','None','None','None','None']
+    self.theRationale = syRat
 
   def properties(self): return self.theSecurityProperties
 
@@ -45,17 +48,17 @@ class PropertyHolder:
     properties = []
     for idx,pr in enumerate(setProperties):
       if (pr == C_IDX):
-        properties.append(['Confidentiality',self.confidentialityPropertyString()]) 
+        properties.append(['Confidentiality',self.confidentialityPropertyString(),self.theRationale[C_IDX]]) 
       elif (pr == I_IDX):
-        properties.append(['Integrity',self.integrityPropertyString()]) 
+        properties.append(['Integrity',self.integrityPropertyString(),self.theRationale[I_IDX]]) 
       elif (pr == AV_IDX):
-        properties.append(['Availability',self.availabilityPropertyString()])
+        properties.append(['Availability',self.availabilityPropertyString(), self.theRationale[AV_IDX]])
       elif (pr == AC_IDX):
-        properties.append(['Accountability',self.accountabilityPropertyString()])
-      elif (pr == AN_IDX): properties.append(['Anonymity',self.anonymityPropertyString()])
-      elif (pr == PAN_IDX): properties.append(['Pseudonymity',self.pseudonymityPropertyString()])
-      elif (pr == UNL_IDX):  properties.append(['Unlinkability',self.unlinkabilityPropertyString()])
-      else: properties.append(['Unobservability',self.unobservabilityPropertyString()])
+        properties.append(['Accountability',self.accountabilityPropertyString(), self.theRationale[AC_IDX]])
+      elif (pr == AN_IDX): properties.append(['Anonymity',self.anonymityPropertyString(), self.theRationale[AN_IDX]])
+      elif (pr == PAN_IDX): properties.append(['Pseudonymity',self.pseudonymityPropertyString(), self.theRationale[PAN_IDX]])
+      elif (pr == UNL_IDX):  properties.append(['Unlinkability',self.unlinkabilityPropertyString(), self.theRationale[UNL_IDX]])
+      else: properties.append(['Unobservability',self.unobservabilityPropertyString(), self.theRationale[UNO_IDX]])
     return properties
 
   def propertyString(self,pValue):

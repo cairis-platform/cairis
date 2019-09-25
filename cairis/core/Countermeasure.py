@@ -36,7 +36,7 @@ class Countermeasure(ObjectValidator.ObjectValidator):
     for p in self.theEnvironmentProperties:
       environmentName = p.name()
       self.theEnvironmentDictionary[environmentName] = p
-      self.theCountermeasurePropertyDictionary[environmentName] = PropertyHolder(p.properties())
+      self.theCountermeasurePropertyDictionary[environmentName] = PropertyHolder(p.properties(),p.rationale())
     self.costLookup = {}
     self.costLookup['Low'] = 0
     self.costLookup['Medium'] = 1

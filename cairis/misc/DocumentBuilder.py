@@ -126,6 +126,12 @@ def tuplesToPara(ts):
     paraTxt += '<para>' + t[0] + ' : ' + t[1] + '</para>' 
   return paraTxt
 
+def propertiesToPara(ts):
+  paraTxt = ''
+  for t in ts:
+    paraTxt += '<para>' + t[0] + ' : ' + t[1] + ' (' + t[2] + ')</para>' 
+  return paraTxt
+
 def extractImageFile(p,tmpDir,fileName):
   buf,mimeType = p.getImage(fileName)
   buf = b64decode(buf)
@@ -1176,8 +1182,8 @@ def buildAssetContent(p,docDir,chapterTxt,isPia = False,fileSuffix = 'svg'):
     oaRows = []
     for eProps in objt.environmentProperties():
       environmentName = eProps.name()
-      oaRows.append((environmentName,tuplesToPara(objt.propertyList(environmentName,'',''))))
-    chapterTxt += buildTable( objtName.replace(" ","_") + "PropertiesTable",objtName + " environmental attributes",['Environment','Security Properties'],oaRows,0)
+      oaRows.append((environmentName,propertiesToPara(objt.propertyList(environmentName,'',''))))
+    chapterTxt += buildTable( objtName.replace(" ","_") + "PropertiesTable",objtName + " environmental attributes",['Environment','Security Property (Rationale)'],oaRows,0)
     chapterTxt += """
       </section>"""
   return chapterTxt
@@ -1239,7 +1245,7 @@ def buildThreats(p,chapterTxt,isPia = False):
     oaRows = []
     for eProps in objt.environmentProperties():
       environmentName = eProps.name()
-      oaRows.append((environmentName,eProps.likelihood(),listToPara(eProps.attackers()),tuplesToPara(objt.propertyList(environmentName,'',''))))
+      oaRows.append((environmentName,eProps.likelihood(),listToPara(eProps.attackers()),propertiesToPara(objt.propertyList(environmentName,'',''))))
     chapterTxt += buildTable( objtName.replace(" ","_") + "PropertiesTable",objtName + " environmental attributes",['Environment','Likelihood','Attackers','Security Properties'],oaRows,0) + """
       </section>"""
   return chapterTxt
@@ -1819,9 +1825,9 @@ def countermeasures(p):
       chapterTxt += buildTable( (objtName + environmentName).replace(" ","_") + "CountermeasureRequirementsTable","Requirements",['Requirement'],eProps.requirements(),0)
       chapterTxt += buildTable( (objtName + environmentName).replace(" ","_") + "CountermeasureTargetTable","Targets",['Target','Effectiveness'],eProps.targets(),0)
       cmRows = []
-      for p,v in objt.propertyList(environmentName,'',''):
-        cmRows.append((p,v))
-      chapterTxt += buildTable( (objtName + environmentName).replace(" ","_") + "CountermeasurePropertiesTable","Security Properties",['Property','Value'],cmRows,0) + """
+      for p,v,r in objt.propertyList(environmentName,'',''):
+        cmRows.append((p,v,r))
+      chapterTxt += buildTable( (objtName + environmentName).replace(" ","_") + "CountermeasurePropertiesTable","Security Properties",['Property','Value', 'Rationale'],cmRows,0) + """
           </section>
           <section id=\"""" + (objtName + environmentName).replace(" ","_") + "CountermeasureUsabilityProperties\"><title>Usability Properties</title>" 
       chapterTxt += buildTable( (objtName + environmentName).replace(" ","_") + "CountermeasureRolesTable","Roles",['Role'],eProps.roles(),1)

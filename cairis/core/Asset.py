@@ -40,7 +40,7 @@ class Asset(ObjectValidator.ObjectValidator):
     for p in self.theEnvironmentProperties:
       environmentName = p.name()
       self.theEnvironmentDictionary[environmentName] = p
-      self.theAssetPropertyDictionary[environmentName] = PropertyHolder(p.properties())
+      self.theAssetPropertyDictionary[environmentName] = PropertyHolder(p.properties(),p.rationale())
 
   def securityProperties(self,environmentName,dupProperty='',overridingEnvironment=''):
     try:
