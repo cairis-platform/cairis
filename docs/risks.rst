@@ -26,8 +26,8 @@ Adding, updating, and deleting a risk
    respective combo boxes. A risk is valid only if the threat and
    vulnerability exist within the same environment (or environments).
 
--  Highlighting the environment name in the environment box displays a
-   qualitative risk rating, and the mitigated and un-mitigated risk
+-  Clicking on the environment name in the environment card populates the risk details card.
+   The impact folder shows qualitative risk rating, and the mitigated and un-mitigated risk
    score associated with each risk response. 
 
 -  Before a risk can be created, an associated Misuse Case needs to be
@@ -39,14 +39,12 @@ Adding, updating, and deleting a risk
 
 -  Most of the fields in the Misuse Case form have already been
    completed based on the risk analysis carried out up to this point.
-   Click on the Narrative tab and enter a scenario which describes how
+   Enter a scenario which describes how
    the attacker realises the associated risk, i.e. carries out the
    threat by exploiting the vulnerability. The scenario written should
-   be written in line with the attributes and values displayed in the
-   Summary tab.
+   be written in line with the attributes and values displayed.
 
--  Click on the Create button to create the Misuse Case and close the
-   Misuse Case form. Following this, click Create add the new risk.
+-  Click on the Create button to add the new risk.
 
 -  Existing risks can be modified by clicking on the risk in the
    Risks table, making the necessary changes, and clicking on the
