@@ -105,8 +105,6 @@ class CImportTextAPI(Resource):
         raise ARMHTTPError(ex)
       except ARMException as ex:
         raise ARMHTTPError(ex)
-      except Exception as ex:
-        raise CairisHTTPError(status_code=500,message=str(ex),status='Unknown error')
 
       remove_file(abs_path)
 
