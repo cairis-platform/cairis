@@ -1,7 +1,7 @@
 Generating Documentation
 ========================
 
-The current contents of the CAIRIS database can be generated as a
+The current contents of the CAIRIS database can be rendered as a
 requirements specification by selecting the System/Documentation
 menu.  After choosing the type of specification, the output file name, and the output type -- PDF, Word Document (.docx), OpenDocument Text (.odt), Rich Text Format (.rtf) -- clicking on Generate will generate and download the specification document.
 
