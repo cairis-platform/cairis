@@ -246,7 +246,7 @@ Chernoff Faces can be seen by viewing the Requirements model (accessible via the
 Template Requirements
 ~~~~~~~~~~~~~~~~~~~~~
 
-.. figure:: TemplateRequirementDialog.jpg
+.. figure:: TemplateRequirementForm.jpg
 :alt: TemplateRequirementDialog
 
 You can specify libraries of template requirements that you might form the basis of security and architectural patterns.

@@ -25,7 +25,7 @@ Security Patterns in CAIRIS consist of the following elements:
    asset classes.
 
 -  A set of requirements, which need to be fulfilled in order to realise
-   the pattern.
+   the pattern.  These requirements are based on template requirements.
 
 Before a security pattern can be defined in CAIRIS, template assets --
 which represent the collaborating asset classes -- need to be first
@@ -79,7 +79,7 @@ Create a security pattern
 -  Click on the Structure page, and the Add button in the associations table to add associations between template assets; these associations form the collaborative structure for the pattern. The procedure for entering associations is based on that used for associating assets.
 
 -  Click on the Requirements page, and the Add button in the requirements
-   table to add names of requirements needing to be satisfied to realise
+   table to add names of template requirements needing to be satisfied to realise
    the pattern.
    
 -  Click on the Create button to add the new security pattern.
