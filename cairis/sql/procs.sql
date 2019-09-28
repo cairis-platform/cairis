@@ -983,6 +983,7 @@ drop function if exists hasRootObstacle;
 drop procedure if exists hasRootObstacles;
 drop procedure if exists deleteGeneratedObstacles;
 drop procedure if exists patternsToXml;
+drop procedure if exists inheritanceInconsistency;
 
 
 delimiter //
@@ -24555,6 +24556,7 @@ begin
   call implicitAssetInclusionCheck(environmentId);
   call implicitAssetVulnerabilityCheck(environmentId);
   call obstructedTasks(environmentId);
+  call inheritanceInconsistency(environmentId);
 
   select distinct label,message from temp_vout;
 
@@ -29121,7 +29123,59 @@ begin
 
   set buf = concat(buf,'\n\n</security_patterns>');
   select buf;
+end
+//
 
+create procedure inheritanceInconsistency(in environmentId int)
+begin
+  declare headAssetId int;
+  declare headAsset varchar(100);
+  declare headAssetType varchar(50);
+  declare tailAssetId int;
+  declare tailAsset varchar(100);
+  declare tailAssetType varchar(50);
+  declare propertyName varchar(50);
+  declare headPropertyValue int;
+  declare headValueName varchar(50);
+  declare tailPropertyValue int;
+  declare tailValueName varchar(50);
+  declare done int default 0;
+  declare assocCursor cursor for select a.head_id, ha.name, haty.name, a.tail_id, ta.name, taty.name from classassociation a, asset ha, asset ta, asset_type haty, asset_type taty where a.environment_id = environmentId and a.head_id = ha.id and a.tail_id = ta.id and ha.asset_type_id = haty.id and ta.asset_type_id = taty.id and a.head_association_type_id = 3;
+  declare propCursor cursor for select sp.name,hap.property_value_id,hv.name,tap.property_value_id,tv.name from security_property sp,asset_property hap, asset_property tap, security_property_value hv, security_property_value tv where hap.asset_id = headAssetId and tap.asset_id = tailAssetId and hap.property_id = sp.id and tap.property_id = hap.property_id and hap.environment_id = environmentId and hap.environment_id = tap.environment_id and hap.property_value_id = hv.id and tap.property_value_id = tv.id order by hap.property_id;
+
+  declare continue handler for not found set done = 1;
+
+  open assocCursor;
+  assoc_loop: loop
+    fetch assocCursor into headAssetId,headAsset,headAssetType,tailAssetId,tailAsset,tailAssetType;
+    if done = 1
+    then
+      leave assoc_loop;
+    end if;
+
+    if (headAssetType != tailAssetType)
+    then
+      insert into temp_vout(label,message) values('Inherited asset type',concat(tailAsset, ' is a type of ',headAsset,', but ',headAsset,' is ', headAssetType,' whereas ',tailAsset,' is ',tailAssetType,'.'));
+    end if;
+
+    open propCursor;
+    prop_loop: loop
+      fetch propCursor into propertyName,headPropertyValue,headValueName,tailPropertyValue,tailValueName;
+      if done = 1
+      then
+        leave prop_loop;
+      end if;
+      if (headPropertyValue > tailPropertyValue)
+      then
+        insert into temp_vout(label,message) values('Inherited asset inconsistency',concat(tailAsset, ' is a type of ',headAsset,', but ',headAsset,' has a ', propertyName,' value of ',headValueName,' whereas ',tailAsset,' has a weaker value of ',tailValueName,'.'));
+      end if;
+
+    end loop prop_loop;
+    close propCursor;
+    set done = 0;
+
+  end loop assoc_loop;
+  close assocCursor;
 end
 //
 
