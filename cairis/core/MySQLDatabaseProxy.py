@@ -1931,6 +1931,7 @@ class MySQLDatabaseProxy:
     tailType = parameters.tailType()
     tailAsset = parameters.tailAsset()
     assocRationale = parameters.rationale()
+    self.checkAssetAssociation(envName,headAsset,tailAsset)
     self.updateDatabase('call addClassAssociation(:ass,:env,:hAss,:hType,:hNav,:hMult,:hRole,:tRole,:tMult,:tNav,:tType,:tAss,:rationale)',{'ass':associationId,'env':envName,'hAss':headAsset,'hType':headType,'hNav':headNav,'hMult':headMult,'hRole':headRole,'tRole':tailRole,'tMult':tailMult,'tNav':tailNav,'tType':tailType,'tAss':tailAsset,'rationale':assocRationale},'MySQL error adding class association')
     return associationId
 
@@ -4811,3 +4812,8 @@ class MySQLDatabaseProxy:
 
   def securityPatternsToXml(self):
     return self.responseList('call patternsToXml()',{},'MySQL error exporting security patterns to XML')[0]
+
+  def checkAssetAssociation(self,envName,headName,tailName):
+    if (self.responseList('select isClassAssociationPresent(:env,:head,:tail)',{'env':envName,'head':headName,'tail':tailName},'MySQL error check asset association')[0]):
+      raise DatabaseProxyException('Association between head asset ' + headName + ' and tail asset ' + tailName + ' already exists in environment ' + envName)
+    

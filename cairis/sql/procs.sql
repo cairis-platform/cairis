@@ -984,6 +984,7 @@ drop procedure if exists hasRootObstacles;
 drop procedure if exists deleteGeneratedObstacles;
 drop procedure if exists patternsToXml;
 drop procedure if exists inheritanceInconsistency;
+drop function if exists isClassAssociationPresent;
 
 
 delimiter //
@@ -29176,6 +29177,24 @@ begin
 
   end loop assoc_loop;
   close assocCursor;
+end
+//
+
+create function isClassAssociationPresent(envName text,headName text, tailName text)
+returns int
+deterministic
+begin
+  declare envId int;
+  declare headId int;
+  declare tailId int;
+  declare assocCount int;
+
+  select id into envId from environment where name = envName limit 1;
+  select id into headId from asset where name = headName limit 1;
+  select id into tailId from asset where name = tailName limit 1;
+
+  select count(id) into assocCount from classassociation where environment_id = envId and head_id = headId and tail_id = tailId;
+  return assocCount;
 end
 //
 
