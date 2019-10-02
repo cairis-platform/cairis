@@ -11141,7 +11141,7 @@ begin
   union
   select tr.name,'threat' dimension_name,t.name object_name,tr.description from threat_reference tr, threat t, persona_characteristic_threat pct, persona_characteristic pc where tr.threat_id = t.id and tr.id = pct.reference_id and pct.characteristic_id = pc.id and pc.persona_id = personaId
   union
-  select vr.name,'vulnerability' dimension_name,v.name object_name,vr.description from vulnerability_reference vr, vulnerability v, persona_characteristic_vulnerability pcv, persona_characteristic pc where vr.vulnerability_id = v.id and vr.id = pcv.reference_id and pcv.characteristic_id = pc.id and pc.persona_id = personaId;
+  select vr.name, 'risk', v.name,'vulnerability' dimension_name,v.name object_name,vr.description from vulnerability_reference vr, vulnerability v, persona_characteristic_vulnerability pcv, persona_characteristic pc where vr.vulnerability_id = v.id and vr.id = pcv.reference_id and pcv.characteristic_id = pc.id and pc.persona_id = personaId;
 end
 //
 
@@ -12612,7 +12612,12 @@ begin
     union
     select 'countermeasure' from_objt, c.name from_name, 'role' from_objt, r.name to_name from countermeasure_role cr, countermeasure c, role r, countermeasure_threat_response_target ctrt, risk ri, response res where cr.environment_id = environmentId and cr.countermeasure_id = c.id and cr.role_id = r.id and cr.countermeasure_id = ctrt.countermeasure_id and cr.environment_id = ctrt.environment_id and ctrt.threat_id = ri.threat_id and ri.id = riskId and ctrt.response_id = res.id and res.risk_id = ri.id
     union
-    select 'role' from_objt, r.name from_name, 'attacker' to_objt, a.name to_name from attacker_role ar, attacker a, role r, threat_attacker ta, risk ri where ar.environment_id = environmentId and ar.attacker_id = a.id and ar.role_id = r.id and ar.attacker_id = ta.attacker_id and ar.environment_id = ta.environment_id and ta.threat_id = ri.threat_id and ri.id = riskId;
+    select 'role' from_objt, r.name from_name, 'attacker' to_objt, a.name to_name from attacker_role ar, attacker a, role r, threat_attacker ta, risk ri where ar.environment_id = environmentId and ar.attacker_id = a.id and ar.role_id = r.id and ar.attacker_id = ta.attacker_id and ar.environment_id = ta.environment_id and ta.threat_id = ri.threat_id and ri.id = riskId
+    union
+    select 'risk' from_objt, r2.name from_name, 'vulnerability' to_objt, v.name to_name from risk r, vulnerability v, risk_vulnerability rv, risk r2, environment_risk er, environment_vulnerability ev where r.id = riskId and r.vulnerability_id = ev.vulnerability_id and ev.environment_id = environmentId and ev.vulnerability_id = v.id and ev.vulnerability_id and ev.environment_id = er.environment_id and er.id = r2.id and r2.id = rv.risk_id and rv.vulnerability_id = v.id
+    union
+    select 'risk' from_objt, r2.name from_name, 'threat' to_objt, t.name to_name from risk r, threat t, risk_threat rt, risk r2, environment_risk er, environment_threat et where r.id = riskId and r.threat_id = et.threat_id and et.environment_id = environmentId and et.threat_id = t.id and et.threat_id and et.environment_id = er.environment_id and er.id = r2.id and r2.id = rt.risk_id and rt.threat_id = t.id;
+
   else
     select 0;
   end if;
