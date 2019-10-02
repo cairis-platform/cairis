@@ -103,6 +103,8 @@ class AssetAssociationDAO(CairisDAO):
       tailName=assoc.theTailAsset,
       rationale=assoc.theRationale)
     try:
+      if ((assoc.theEnvironmentName != oldEnvName) or (assoc.theHeadAsset != oldHeadAsset) or (assoc.theTailAsset != oldTailAsset)):
+        self.db_proxy.checkAssetAssociation(assoc.theEnvironmentName,assoc.theHeadAsset,assoc.theTailAsset)
       caId = self.db_proxy.getDimensionId(oldEnvName + '/' + oldHeadAsset + '/' + oldTailAsset,'classassociation')
       assocParams.setId(caId)
       self.db_proxy.updateClassAssociation(assocParams)
