@@ -985,6 +985,7 @@ drop procedure if exists deleteGeneratedObstacles;
 drop procedure if exists patternsToXml;
 drop procedure if exists inheritanceInconsistency;
 drop function if exists isClassAssociationPresent;
+drop procedure if exists isTracePresent;
 
 
 delimiter //
@@ -29200,6 +29201,55 @@ begin
 
   select count(id) into assocCount from classassociation where environment_id = envId and head_id = headId and tail_id = tailId;
   return assocCount;
+end
+//
+
+create procedure isTracePresent(in fromObjt text,in fromName text, in toObjt text, in toName text)
+begin
+  declare fromId int;
+  declare toId int;
+  declare fromIdSql varchar(4000);
+  declare toIdSql varchar(4000);
+  declare traceSql varchar(4000);
+  declare traceCount int;
+
+  if fromObjt = 'requirement'
+  then
+    select o.id into fromId from requirement o where o.name = fromName and o.version = (select max(i.version) from requirement i where i.id = o.id);
+  else
+    set fromIdSql = concat('select id into @fromId from ',fromObjt,' where name = "',fromName,'" limit 1');
+    set @sql = fromIdSql;
+    prepare stmt from @sql;
+    execute stmt;
+    deallocate prepare stmt;
+    set fromId = @fromId;
+  end if;
+
+  if toObjt = 'requirement'
+  then
+    select o.id into toId from requirement o where o.name = toName and o.version = (select max(i.version) from requirement i where i.id = o.id);
+  else
+    set toIdSql = concat('select id into @toId from ',toObjt,' where name = "',toName,'" limit 1');
+    set @sql = toIdSql;
+    prepare stmt from @sql;
+    execute stmt;
+    deallocate prepare stmt;
+    set toId = @toId;
+  end if;
+
+  if fromObjt = 'requirement' and toObjt = 'requirement'
+  then
+    set traceSql = concat('select count(*) into @traceCount from requirement_requirement where from_id = ',ifnull(fromId,-1),' and to_id = ',ifnull(toId,-1));
+  else
+    set traceSql = concat('select count(*) into @traceCount from ',fromObjt,'_',toObjt,' where ',fromObjt,'_id = ',ifnull(fromId,-1),' and ',toObjt,'_id = ',ifnull(toId,-1));
+  end if;
+
+  set @sql = traceSql;
+  prepare stmt from @sql;
+  execute stmt;
+  deallocate prepare stmt;
+  set traceCount = @traceCount;
+  select traceCount;
 end
 //
 

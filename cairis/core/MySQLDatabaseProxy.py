@@ -4814,6 +4814,10 @@ class MySQLDatabaseProxy:
     return self.responseList('call patternsToXml()',{},'MySQL error exporting security patterns to XML')[0]
 
   def checkAssetAssociation(self,envName,headName,tailName):
-    if (self.responseList('select isClassAssociationPresent(:env,:head,:tail)',{'env':envName,'head':headName,'tail':tailName},'MySQL error check asset association')[0]):
+    if (self.responseList('select isClassAssociationPresent(:env,:head,:tail)',{'env':envName,'head':headName,'tail':tailName},'MySQL error checking asset association')[0]):
       raise DatabaseProxyException('Association between head asset ' + headName + ' and tail asset ' + tailName + ' already exists in environment ' + envName)
+    
+  def checkTrace(self,fromObjt,fromName,toObjt,toName):
+    if (self.responseList('call isTracePresent(:fromObjt,:fromName,:toObjt,:toName)',{'fromObjt':fromObjt,'fromName':fromName,'toObjt':toObjt,'toName':toName},'MySQL error checking trace')[0]):
+      raise DatabaseProxyException('Trace from ' + fromObjt + ' ' + fromName + ' to ' + toObjt + ' ' + toName + ' already exists')
     

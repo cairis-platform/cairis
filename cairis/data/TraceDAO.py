@@ -56,6 +56,7 @@ class TraceDAO(CairisDAO):
   def add_trace(self, tr):
     try:
       trace_table = tr.theFromObject + '_' + tr.theToObject
+      self.db_proxy.checkTrace(tr.theFromObject,tr.theFromName,tr.theToObject,tr.theToName)
       fromId = self.db_proxy.getDimensionId(tr.theFromName,tr.theFromObject)
       toId = self.db_proxy.getDimensionId(tr.theToName,tr.theToObject)
       self.db_proxy.addTrace(trace_table,fromId,toId,tr.theLabel)
