@@ -23,7 +23,7 @@ ROOTPW=$1
 sudo systemctl stop cairis
 sudo systemctl disable cairis
 
-sudo apt-get -y install python3-dev build-essential mysql-server mysql-client graphviz docbook dblatex python3-pip python3-numpy git libmysqlclient-dev --no-install-recommends texlive-latex-extra docbook-utils inkscape libxml2-dev libxslt1-dev poppler-utils python3-setuptools pandoc
+sudo apt-get -y install python3-dev build-essential mysql-server mysql-client graphviz docbook dblatex python3-pip python3-mysqldb python3-numpy git libmysqlclient-dev --no-install-recommends texlive-latex-extra docbook-utils inkscape libxml2-dev libxslt1-dev poppler-utils python3-setuptools pandoc
 
 sudo rm -rf $CAIRIS_ROOT
 git clone https://github.com/cairis-platform/cairis $CAIRIS_ROOT
