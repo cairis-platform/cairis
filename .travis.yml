@@ -16,6 +16,7 @@ addons:
     - python3-pip
     - python3-numpy
     - python3-mysqldb
+    - python3-pytest
     - git
     - libmysqlclient-dev
     - docbook
