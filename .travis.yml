@@ -25,6 +25,7 @@ addons:
     - docbook-utils
     - libxml2-dev
     - libxslt1-dev
+    - python3-setuptools
     - pandoc
 
 env:
