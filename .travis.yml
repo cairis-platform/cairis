@@ -39,7 +39,8 @@ before_install:
 
 install:
 - pip install -r test_requirements.txt
-- pip install -r requirements.txt
+- pip install -r travis_requirements.txt
+
 
 script:
 - py.test cairis/test --doctest-modules -v --cov cairis/core cairis/daemon cairis/controllers

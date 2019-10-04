@@ -1,0 +1,26 @@
+argparse>=1.4.0
+pytest-cov>=2.7.1
+coveralls>=1.4.0
+coverage>=4.5.1
+jsonpickle>=0.9.3
+mysqlclient==1.3.12
+numpy>=1.6.2
+pyparsing>=2.1.10
+pydot>=1.2.3
+pytest>=3.3.0
+pytest-cache>=1.0
+pytest-pep8>=1.0.6
+npyscreen>= 4.10.5
+Flask>=1.0.2
+Flask-RESTful>= 0.3.5
+Flask-Cors>= 3.0.2
+Flask-SQLAlchemy>=2.1
+Flask-Security>=1.7.5
+Flask-Script>=2.0.5
+Flask-OAuthlib>=0.9.3
+mako>=1.0.4
+lxml>=3.6.4
+openpyxl>=2.4.0
+SQLAlchemy>=1.2.0b3
+bcrypt>=3.1.6
+python-magic>=0.4.15
