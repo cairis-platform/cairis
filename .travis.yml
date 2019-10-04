@@ -13,6 +13,7 @@ addons:
     - graphviz
     - python3-pip
     - python3-numpy
+    - python3-mysqldb
     - git
     - libmysqlclient-dev
     - docbook
