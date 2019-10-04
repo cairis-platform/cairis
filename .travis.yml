@@ -8,8 +8,10 @@ services:
 addons:
   apt:
     packages:
-    - python-dev
+    - python3-dev
     - build-essential
+    - mysql-server
+    - mysql-client
     - graphviz
     - python3-pip
     - python3-numpy
