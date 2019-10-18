@@ -63,7 +63,7 @@ If you have VMWare then you can download an Ubuntu CAIRIS virtual machine from `
 Installation and configuration via GitHub (automated)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-If you have a clean Ubuntu VM, you can quickly install and configure CAIRIS and its dependencies with the command below, replacing my-secret-pw with your desired root password for MySQL.
+If you have a clean Ubuntu 19.04 VM, you can quickly install and configure CAIRIS and its dependencies with the command below, replacing my-secret-pw with your desired root password for MySQL.
 
 .. code-block:: bash
 
@@ -84,7 +84,7 @@ This script also adds an alias so, in future, you can update CAIRIS by running t
 Installation and configuration via GitHub (manual)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-If you're happy to use the command line, you may like to install CAIRIS from the latest source code in GitHub.  CAIRIS can be installed on any platform that its open-source dependencies are available for.  The most tested platforms are `Ubuntu <http://www.ubuntu.com>`_ or `Debian <https://www.debian.org>`_ .  Assuming you are using some flavour of Linux, just follow the steps below:
+If you're happy to use the command line, you may like to install CAIRIS from the latest source code in GitHub.  CAIRIS can be installed on any platform that its open-source dependencies are available for.  The most tested platforms are `Ubuntu <http://www.ubuntu.com>`_ or `Debian <https://www.debian.org>`_ .  Please note that these steps are currently not supported on Ubuntu 19.10 as MySQL 8 is not currently supported.  Assuming you are using some flavour of Linux, just follow the steps below:
 
 Begin by installing the required applications and dependencies:
 
