@@ -63,7 +63,7 @@ class DocumentReferenceDAO(CairisDAO):
 
   def add_document_reference(self, dr):
     drParams = DocumentReferenceParameters(
-      refName=dr.theName,
+      refName=dr.theName.replace("\\'","'"),
       docName=dr.theDocName,
       cName=dr.theContributor,
       docExc=dr.theExcerpt)

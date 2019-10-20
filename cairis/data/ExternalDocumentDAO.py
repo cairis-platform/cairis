@@ -51,19 +51,20 @@ class ExternalDocumentDAO(CairisDAO):
     return edocsList
 
   def get_external_document(self, external_document_name):
+    edName = external_document_name.replace("\\'","'")
     edocs = self.get_external_documents()
     if edocs is None or len(edocs) < 1:
       self.close()
       raise ObjectNotFoundHTTPError('External Documents')
     for edoc in edocs:
-      if (edoc.name() == external_document_name):
+      if (edoc.name() == edName):
         return edoc
     self.close()
     raise ObjectNotFoundHTTPError('The provided external document parameters')
 
   def add_external_document(self, edoc):
     edParams = ExternalDocumentParameters(
-      edName=edoc.theName,
+      edName=edoc.theName.replace("\\'","'"),
       edVersion=edoc.theVersion,
       edDate=edoc.thePublicationDate,
       edAuths=edoc.theAuthors,
