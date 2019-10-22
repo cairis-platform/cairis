@@ -11142,7 +11142,7 @@ begin
   union
   select tr.name,'threat' dimension_name,t.name object_name,tr.description from threat_reference tr, threat t, persona_characteristic_threat pct, persona_characteristic pc where tr.threat_id = t.id and tr.id = pct.reference_id and pct.characteristic_id = pc.id and pc.persona_id = personaId
   union
-  select vr.name, 'risk', v.name,'vulnerability' dimension_name,v.name object_name,vr.description from vulnerability_reference vr, vulnerability v, persona_characteristic_vulnerability pcv, persona_characteristic pc where vr.vulnerability_id = v.id and vr.id = pcv.reference_id and pcv.characteristic_id = pc.id and pc.persona_id = personaId;
+  select vr.name, 'vulnerability' dimension_name,v.name object_name,vr.description from vulnerability_reference vr, vulnerability v, persona_characteristic_vulnerability pcv, persona_characteristic pc where vr.vulnerability_id = v.id and vr.id = pcv.reference_id and pcv.characteristic_id = pc.id and pc.persona_id = personaId;
 end
 //
 
