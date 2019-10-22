@@ -3916,6 +3916,8 @@ begin
     union
     select 'requirement',r.name from requirement r, environment_requirement er, environment e, requirement_task rt, environment_task et where er.environment_id = environmentId and r.version = (select max(i.version) from requirement i where i.id = r.id) and r.id = er.requirement_id and er.environment_id = e.id and rt.requirement_id = r.id and rt.task_id = et.task_id and et.environment_id = er.environment_id
     union
+    select 'requirement',r.name from requirement r, requirementgoal_goalassociation ga where ga.environment_id = environmentId and ga.goal_id = r.id and r.version = (select max(i.version) from requirement i where i.id = r.id)
+    union
     select 'usecase',u.name from usecase u, requirement_usecase ru, asset_requirement ar, environment_asset ea, environment_usecase eu  where eu.environment_id = environmentId and eu.usecase_id = ru.usecase_id and ru.usecase_id = u.id and ru.requirement_id = ar.requirement_id and ar.asset_id = ea.asset_id and ea.environment_id = eu.environment_id
     union
     select 'usecase',u.name from usecase u, requirement_usecase ru, environment_requirement er, environment e, environment_usecase eu  where eu.environment_id = environmentId and eu.usecase_id = ru.usecase_id and ru.usecase_id = u.id and ru.requirement_id = er.requirement_id and er.environment_id = e.id and er.environment_id = eu.environment_id
