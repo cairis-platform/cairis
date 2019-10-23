@@ -101,6 +101,7 @@ class RiskAnalysisModelAPI(Resource):
     dim_name = request.args.get('dimension_name', '')
     obj_name = request.args.get('object_name', '')
     isTagged = request.args.get('tagged', '0')
+    orientation = request.args.get('orientation','Vertical')
     if (isTagged == '1'):
       isTagged = True
     else:
@@ -119,8 +120,12 @@ class RiskAnalysisModelAPI(Resource):
     else:
       renderer = 'circo'
 
+    rankDir = 'TB'
+    if (orientation == 'Horizontal'):
+      rankDir = 'LR'
+
     dao = RiskDAO(session_id)
-    dot_code = dao.get_risk_analysis_model(environment, dim_name, obj_name, renderer, isTagged)
+    dot_code = dao.get_risk_analysis_model(environment, dim_name, obj_name, renderer, isTagged, rankDir)
     dao.close()
 
     resp = make_response(model_generator.generate(dot_code, model_type='risk', renderer=renderer), OK)

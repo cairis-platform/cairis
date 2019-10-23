@@ -66,7 +66,7 @@ def arrayToThreatSecurityPropertiesTable(spArray,objtName):
 
 
 class EnvironmentModel:
-  def __init__(self,tlinks,environmentName,dp, modelLayout, fontName=None, fontSize=None,isTagged=False):
+  def __init__(self,tlinks,environmentName,dp, modelLayout, fontName=None, fontSize=None,isTagged=False,rankDir='TB'):
     self.theTraceLinks = tlinks
     self.theEnvironmentName = environmentName
     self.dbProxy = dp
@@ -77,6 +77,7 @@ class EnvironmentModel:
     self.fontName = fontName or b.fontName
     self.theGraphName = b.tmpDir + '/pydotout.dot'
     self.theRenderer = modelLayout
+    self.theGraph.set_graph_defaults(rankdir=rankDir)
     self.theNodeLookup = {}
     self.isTagged = isTagged
 

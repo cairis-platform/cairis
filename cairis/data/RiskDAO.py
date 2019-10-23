@@ -111,11 +111,11 @@ class RiskDAO(CairisDAO):
       found_risk = self.simplify(found_risk)
     return found_risk
 
-  def get_risk_analysis_model(self, environment_name, dim_name, obj_name,model_layout,isTagged = False):
+  def get_risk_analysis_model(self, environment_name, dim_name, obj_name,model_layout,isTagged = False, rankDir = 'TB'):
     fontName, fontSize, apFontName = get_fonts(session_id=self.session_id)
     try:
       riskAnalysisModel = self.db_proxy.riskAnalysisModel(environment_name, dim_name, obj_name)
-      tLinks = EnvironmentModel(riskAnalysisModel, environment_name, self.db_proxy, model_layout, fontName=fontName, fontSize=fontSize, isTagged=isTagged)
+      tLinks = EnvironmentModel(riskAnalysisModel, environment_name, self.db_proxy, model_layout, fontName=fontName, fontSize=fontSize, isTagged=isTagged, rankDir=rankDir)
       dot_code = tLinks.graph()
       if not dot_code:
         raise ObjectNotFoundHTTPError('The risk analysis model')

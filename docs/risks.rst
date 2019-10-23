@@ -68,13 +68,11 @@ environment for.
 .. figure:: RiskAnalysisModel.jpg
    :alt: Risk Analysis Model
 
-By changing the environment name in the environment combo box, the risk
-analysis model for a different environment can be viewed. The layout of
-the model can also be replaced by selecting a layout option in the
-Layout combo box at the foot of the model viewer window.
+By changing the environment name in the environment combo box, the risk analysis model for a different environment can be viewed.
 
-By clicking on a model element, information about that artifact can be
-viewed.
+The orientation of the model can be changed by layout radio button.  By default, the orientation is set to Vertical but, if you are creating a kill chain that connects risk to threats or vulnerabilities, you might find a Horizontal layout helpful.
+
+By clicking on a model element, information about that artifact can be viewed.
 
 The risk analysis model can also be filtered by artifact type and
 artifact type. Filtering by type displays only the artifacts of the
