@@ -71,7 +71,7 @@ def addAdditionalUserData(userName,passWd):
   db.session.commit()
   b = Borg()
   dbAccount = canonicalDbUser(userName)
-  createDatabaseAccount(b.rPasswd,b.dbHost,b.dbPort,userName,rp)
+  createDatabaseAccount(b.rPasswd,b.dbHost,b.dbPort,dbAccount,rp)
   createDatabaseAndPrivileges(b.rPasswd,b.dbHost,b.dbPort,userName,rp,dbAccount + '_default')
   createDatabaseSchema(b.cairisRoot,b.dbHost,b.dbPort,userName,rp,dbAccount + '_default')
   createDefaults(b.cairisRoot,b.dbHost,b.dbPort,userName,rp,dbAccount + '_default')
