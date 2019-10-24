@@ -39,8 +39,8 @@ def main(args=None):
   parser.add_argument('--assetDir',dest='assetDir',help='Asset directory',default=defaultRootDir + '/cairis/dist')
   parser.add_argument('--mailServer',dest='mailServer',help='Mail server',default='')
   parser.add_argument('--mailPort',dest='mailPort',help='Mail port',default='')
-  parser.add_argument('--mailUser',dest='mailServer',help='Mail server',default='')
-  parser.add_argument('--mailPasswd',dest='mailPasswd',help='Mail port',default='')
+  parser.add_argument('--mailUser',dest='mailUser',help='Mail user',default='')
+  parser.add_argument('--mailPasswd',dest='mailPasswd',help='Mail password',default='')
   args = parser.parse_args() 
   quick_setup(args.dbHost,int(args.dbPort),args.dbRootPassword,args.tmpDir,args.rootDir,args.configFile,int(args.webPort),args.logLevel,args.staticDir,args.assetDir,'','',args.mailServer,args.mailPort,args.mailUser,args.mailPasswd)
 
