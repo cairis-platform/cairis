@@ -27,6 +27,12 @@ MAILPASSWD=$5
 sudo systemctl stop cairis
 sudo systemctl disable cairis
 
+sudo rm /var/lib/mysql-files/auth_user
+
+mysql -h localhost --user=root --password=$ROOTPW <<!
+select id,email,account,password,dbtoken,name,active,confirmed_at into outfile '/var/lib/mysql-files/auth_user' from cairis_user.auth_user;
+!
+
 sudo apt-get -y install python3-dev build-essential mysql-server mysql-client graphviz docbook dblatex python3-pip python3-mysqldb python3-numpy git libmysqlclient-dev --no-install-recommends texlive-latex-extra docbook-utils inkscape libxml2-dev libxslt1-dev apache2 apache2-dev poppler-utils python3-setuptools pandoc apt-transport-https ca-certificates
 
 sudo rm -rf $CAIRIS_ROOT
@@ -36,20 +42,6 @@ sudo -E $CAIRIS_ROOT/cairis/bin/installUI.sh
 sudo pip3 install -r $CAIRIS_ROOT/requirements.txt
 sudo pip3 install -r $CAIRIS_ROOT/wsgi_requirements.txt
 
-CMD1='flush privileges; use mysql; update user set authentication_string=PASSWORD("'
-CMD2='") where User="root"; update user set plugin="mysql_native_password" where User="root";'
-CMD="$CMD1$ROOTPW$CMD2"
-
-sudo service mysql stop
-sudo mkdir -p /var/run/mysqld
-sudo chown mysql:mysql /var/run/mysqld
-sudo /usr/bin/mysqld_safe --skip-grant-tables &
-sleep 5
-mysql -u root --execute="$CMD"
-sudo pkill mysqld_safe
-sudo pkill mysqld
-sudo service mysql start
-
 export PYTHONPATH=$CAIRIS_ROOT
 $CAIRIS_ROOT/cairis/bin/server_setup_headless.py --rootDir=$CAIRIS_ROOT/cairis --dbRootPassword=$ROOTPW --logLevel=debug --mailServer=$MAILSVR --mailPort=$MAILPORT --mailUser=$MAILUSER --mailPasswd=$MAILPASSWD
 
@@ -57,5 +49,9 @@ SVCFILE="[Unit]\nDescription=cairisd\n\n[Service]\nUser=$USERNAME\nWorkingDirect
 echo -e $SVCFILE | sudo tee /etc/systemd/system/cairis.service
 
 sudo systemctl enable /etc/systemd/system/cairis.service
+
+mysql -h localhost --user=root --password=$ROOTPW <<!
+load data infile '/var/lib/mysql-files/auth_user' into table cairis_user.auth_user;
+!
 
 sudo shutdown -Fr now
