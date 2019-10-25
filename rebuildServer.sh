@@ -43,7 +43,7 @@ sudo pip3 install -r $CAIRIS_ROOT/requirements.txt
 sudo pip3 install -r $CAIRIS_ROOT/wsgi_requirements.txt
 
 export PYTHONPATH=$CAIRIS_ROOT
-$CAIRIS_ROOT/cairis/bin/server_setup_headless.py --rootDir=$CAIRIS_ROOT/cairis --dbRootPassword=$ROOTPW --logLevel=debug --mailServer=$MAILSVR --mailPort=$MAILPORT --mailUser=$MAILUSER --mailPasswd=$MAILPASSWD
+$CAIRIS_ROOT/cairis/bin/server_setup_headless.py --rootDir=$CAIRIS_ROOT/cairis --webPort=8000 --dbRootPassword=$ROOTPW --logLevel=debug --mailServer=$MAILSVR --mailPort=$MAILPORT --mailUser=$MAILUSER --mailPasswd=$MAILPASSWD
 
 SVCFILE="[Unit]\nDescription=cairisd\n\n[Service]\nUser=$USER\nWorkingDirectory=$CAIRIS_ROOT\nEnvironment=\"CAIRIS_CFG=$HOME/cairis.cnf\"\nEnvironment=\"PYTHONPATH=\${PYTHONPATH}:$CAIRIS_ROOT\"\nExecStart=mod_wsgi-express start-server $CAIRIS_ROOT/cairis/bin/cairis.wsgi --user www-data --group www-data\nRestart=on-failure\n\n[Install]\nWantedBy=multi-user.target"
 echo -e $SVCFILE | sudo tee /etc/systemd/system/cairis.service
