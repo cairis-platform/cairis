@@ -44,7 +44,7 @@ If you have command line access to the server running the CAIRIS server then a q
 
    ./cimport.py --user=test --database=test_default --type all --overwrite 1 ../../examples/exemplars/ACME_Water/ACME_Water.xml
 
-If you run cimport.py with the --help argument, you will see more detailed import options.
+Running cimport.py with the --help argument provides more detailed import options.
 
 Exporting models
 ----------------
