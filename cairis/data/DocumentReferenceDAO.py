@@ -24,6 +24,7 @@ from cairis.data.CairisDAO import CairisDAO
 from cairis.tools.ModelDefinitions import DocumentReferenceModel
 from cairis.tools.SessionValidator import check_required_keys
 from cairis.tools.JsonConverter import json_serialize, json_deserialize
+import re
 
 __author__ = 'Shamal Faily'
 
@@ -63,7 +64,7 @@ class DocumentReferenceDAO(CairisDAO):
 
   def add_document_reference(self, dr):
     drParams = DocumentReferenceParameters(
-      refName=dr.theName.replace("\\'","'"),
+      refName=re.sub("[^a-zA-Z' ]+", '', dr.theName),
       docName=dr.theDocName,
       cName=dr.theContributor,
       docExc=dr.theExcerpt)
@@ -76,7 +77,7 @@ class DocumentReferenceDAO(CairisDAO):
 
   def update_document_reference(self,dr,name):
     drParams = DocumentReferenceParameters(
-      refName=dr.theName,
+      refName=re.sub("[^a-zA-Z' ]+", '', dr.theName),
       docName=dr.theDocName,
       cName=dr.theContributor,
       docExc=dr.theExcerpt)

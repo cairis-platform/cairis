@@ -64,7 +64,7 @@ class ExternalDocumentDAO(CairisDAO):
 
   def add_external_document(self, edoc):
     edParams = ExternalDocumentParameters(
-      edName=edoc.theName.replace("\\'","'"),
+      edName = edoc.theName.replace("\\'","'"),
       edVersion=edoc.theVersion,
       edDate=edoc.thePublicationDate,
       edAuths=edoc.theAuthors,
