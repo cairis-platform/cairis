@@ -90,7 +90,24 @@ If you have a clean Ubuntu 19.04 VM, want to quickly install CAIRIS for multiple
 
    sudo apt-get update && sudo apt-get upgrade -y && sudo apt-get dist-upgrade -y && sudo apt install curl -y && sudo apt install net-tools -y && curl -s https://cairis.org/serverInstall.sh | bash -s my-secret-pw mymailserver.com 465 admin@mymailserver.com mypassword
 
-Although no update_cairis alias is created, we do provide a `rebuildServer.sh <https://cairis.org/rebuildServer.sh>`_ script which, if run from cron each night, will rebuild and reconfigure CAIRIS while still retaining the user accounts created on the server.  This script takes the same command line arguments as the serverInstall.sh script.
+In addition to the above, you also need to update my MySQL server system variables.  You can do this by adding or updating the below values to your mysqld.cnf file.  In Ubuntu 19.04, you can find this in /etc/mysql/mysql.conf.d, but the file location might differ depending on your OS.
+
+
+.. code-block:: bash
+   thread_stack = 256K
+   max_sp_recursion_depth = 255
+
+Once these changes have been made, you need to restart MySQL or reboot your server.  
+
+When working with very large models, you may get memory errors when viewing goal models or carrying out model validation checks.  If you do, you could consider increasing the thread_stack size.  For example, increasing the size to 1024K made it possible to valid even really big system-of-system models, but you can increase or decrease this size based on your server's performance and the number of users you expect the server to support.
+
+Although no update_cairis alias is created, we provide a `rebuildServer.sh <https://cairis.org/rebuildServer.sh>`_ script which, if run from cron each night, will rebuild and reconfigure CAIRIS while still retaining the user accounts created on the server.  This script takes the same command line arguments as the serverInstall.sh script, with the addition of additional arguments for the name of the account running CAIRIS, and the accounts home directly.  For example, if the account running CAIRIS is *sfaily* and the home directory in */home/sfaily* then, to rebuild the server at 0200 each morning you should run *sudo crontab -e* and add the following line to your crontab
+
+
+.. code-block:: bash
+   0 2 * * * /home/sfaily/rebuildServer.sh my-secret-pw mymailserver.com 465 admin@mymailserver.com mypassword sfaily /home/sfaily > /home/sfaily/rebuild.log 2>&1
+
+This script outputs the rebuild log to rebuild.log, which can be useful for troubleshooting any problems.
 
 Once the server is running, users can register for accounts using the Register link on the login page.  The account name should be a valid email address.  When an account is created, an email is sent to the user and the user is logged in.  If the Reset link is clicked and the acccount name is provided, CAIRIS will email instructions for resetting the password to the user.
 
