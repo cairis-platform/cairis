@@ -16,17 +16,16 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-# Replace CAIRIS_ACCOUNT, CAIRIS_HOME, and CAIRIS_ROOT based on the account running CAIRIS
-CAIRIS_ACCOUNT=sfaily
-CAIRIS_HOME=/home/sfaily
-CAIRIS_ROOT=/home/sfaily/cairis
-export CAIRIS_SRC=$CAIRIS_ROOT/cairis
-
 ROOTPW=$1
 MAILSVR=$2
 MAILPORT=$3
 MAILUSER=$4
 MAILPASSWD=$5
+CAIRIS_ACCOUNT=$6
+CAIRIS_HOME=$7
+
+CAIRIS_ROOT=$CAIRIS_HOME/cairis
+export CAIRIS_SRC=$CAIRIS_ROOT/cairis
 
 sudo systemctl stop cairis
 sudo systemctl disable cairis
