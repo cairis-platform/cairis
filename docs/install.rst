@@ -104,10 +104,10 @@ When working with very large models, you may get memory errors when viewing goal
 Although no update_cairis alias is created, we provide a `rebuildServer.sh <https://cairis.org/rebuildServer.sh>`_ script which, if run from cron each night, will rebuild and reconfigure CAIRIS while still retaining the user accounts created on the server.  This script takes the same command line arguments as the serverInstall.sh script, with the addition of additional arguments for the name of the account running CAIRIS, and the accounts home directly.  For example, if the account running CAIRIS is *sfaily* and the home directory in */home/sfaily* then, to rebuild the server at 0200 each morning you should run *sudo crontab -e* and add the following line to your crontab
 
 
-.. code-block:: bash
+.. code-block:: none
    0 2 * * * /home/sfaily/rebuildServer.sh my-secret-pw mymailserver.com 465 admin@mymailserver.com mypassword sfaily /home/sfaily > /home/sfaily/rebuild.log 2>&1
 
-This script outputs the rebuild log to rebuild.log, which can be useful for troubleshooting any problems.
+This rebuild.log file should be useful for troubleshooting any problems with the rebuild.
 
 Once the server is running, users can register for accounts using the Register link on the login page.  The account name should be a valid email address.  When an account is created, an email is sent to the user and the user is logged in.  If the Reset link is clicked and the acccount name is provided, CAIRIS will email instructions for resetting the password to the user.
 
