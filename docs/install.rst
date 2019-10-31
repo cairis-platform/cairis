@@ -90,10 +90,8 @@ If you have a clean Ubuntu 19.04 VM, want to quickly install CAIRIS for multiple
 
    sudo apt-get update && sudo apt-get upgrade -y && sudo apt-get dist-upgrade -y && sudo apt install curl -y && sudo apt install net-tools -y && curl -s https://cairis.org/serverInstall.sh | bash -s my-secret-pw mymailserver.com 465 admin@mymailserver.com mypassword
 
-In addition to the above, you also need to update my MySQL server system variables.  You can do this by adding or updating the below values to your mysqld.cnf file.  In Ubuntu 19.04, you can find this in /etc/mysql/mysql.conf.d, but the file location might differ depending on your OS.
+In addition to the above, you also need to update my MySQL server system variables.  You can do this by adding or updating the below values to your mysqld.cnf file.  In Ubuntu 19.04, you can find this in /etc/mysql/mysql.conf.d, but the file location might differ depending on your OS::
 
-
-.. code-block:: bash
    thread_stack = 256K
    max_sp_recursion_depth = 255
 
