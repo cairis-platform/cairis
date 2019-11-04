@@ -169,7 +169,7 @@ Online affinity diagramming with Trello
 
 `Trello <https://trello.com>`_ is a collaborative, web-based list manager.  It is a popular tool for sharing and collaboratative working on lists, where lists contain cards.  Because the relationship between cards and lists is analogous to the relationship between factoids and affinity groups, we can use Trello for online affinity diagramming too.  Moreover, becase factoids and affinity groups are also analogous with document referencs and persona characteristics then, using some simple annotations, we can also use lists and cards to represent persona characteristics and their grounds/warrants/rebuttals too.
 
-We can export all the document references in a currently open CAIRIS model by selecting the System/Export to Trello menu.  From here, you should enter a Trello board name.  This will be created for you once you click on Export, and the document references will be exported as cards to an *Uncategorised Factoids* list in your Trello account as indicated below.  If you have not already logged into Trello, you also be prompted to do this on clicking Export.
+We can export all the document references in a currently open CAIRIS model by selecting the System/Export to Trello menu.  From here, you should enter a Trello board name.  This will be created for you once you click on Export, and the document references will be exported as cards to an *Uncategorised Factoids* list in your Trello account as indicated below.  If you have not already logged into Trello, you will also be prompted to do this on clicking Export.
 
 
 .. figure:: TEExample.jpg
