@@ -835,9 +835,9 @@ def tasks(p,docDir,fileSuffix = 'svg'):
   durationLookup['High'] = 'Hours or longer' 
 
   frequencyLookup = {}
-  frequencyLookup['High'] = 'Hourly or more'
+  frequencyLookup['High'] = 'Monthly or less'
   frequencyLookup['Medium'] = 'Daily - Weekly'
-  frequencyLookup['Low'] = 'Monthly or less'
+  frequencyLookup['Low'] = 'Hourly or more'
   frequencyLookup['None'] = 'None'
 
   for idx,task in tasks.items():
