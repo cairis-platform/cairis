@@ -12,6 +12,6 @@ When using the `Persona Helper <https://chrome.google.com/webstore/detail/person
 
 There are no easy ways of getting around this problem in the Persona Helper extension, but there are two easy ways within CAIRIS itself to avoid or work-around this problem.
 
-1.  Go the UX/External Documents menu and, if you see any external documents with reserved characters in their names, simply remove them from CAIRIS.
+1.  Go to the UX/External Documents menu and, if you see any external documents with reserved characters in their names, simply remove them from CAIRIS.
 
 2.  If you forget to do this and discover an error when importing the model file, you can easily remove the offending characters from the model file itself. If you have exported your model as 'Model (XML file)' then, you can use a tool like xmllint or one of the several free online XML validators available, such as FreeFormater to check your model.  This will flag invalid XML that you remove or reword.  If you have exported your model as 'Model' then you need to (i) unzip the model file, (ii) repeat the above step for the model.xml file, (iii) re-zip the model file as a .cairis file.
