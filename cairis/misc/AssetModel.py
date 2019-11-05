@@ -72,7 +72,7 @@ class AssetModel:
         borderColour = 'red'
       if (dimName == 'template_asset' and self.isComponentAssetModel):
         stValue,arValue = self.dbProxy.templateAssetMetrics(objtName)
-        assetNode = pydot.Node(objtName,shape='record',style='filled',margin=0,fillcolor=surfaceTypeColourCode(stValue / arValue),fontcolor=surfaceTypeTextColourCode(stValue / arValue),fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl)
+        assetNode = pydot.Node(objtName,shape='record',style='filled',margin=0,fillcolor=surfaceTypeColourCode(round(stValue / arValue)),fontcolor=surfaceTypeTextColourCode(round(stValue / arValue)),fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl)
       else:
         asMetric = self.dbProxy.assetAttackSurface(objtName,self.theEnvironmentName)
         assetNode = pydot.Node(objtName,shape='record',style='filled',margin=0,colorscheme='orrd4',color='black',fillcolor=vulnerabilitySeverityColourCode(asMetric),fontcolor=vulnerabilitySeverityTextColourCode(asMetric),fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl)
