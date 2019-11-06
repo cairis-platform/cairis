@@ -105,7 +105,7 @@ def initialise(user='cairis_test',db='cairis_test_default'):
     user = canonicalDbUser(user)
     b.dbUser = user
     b.dbPasswd = dbPasswd
-    db = canonicalDbName(db)
+    db = user + '_' + canonicalDbName(db)
     b.dbName = db
   b.dbProxy = GUIDatabaseProxy(user=user,passwd=b.dbPasswd,db=db)
   initialiseDesktopSettings()
