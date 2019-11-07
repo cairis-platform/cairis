@@ -14018,11 +14018,11 @@ begin
   declare demandsValue varchar(50);
   declare gcValue varchar(50);
   declare concernName varchar(100);
-  declare sourceName varchar(50);
+  declare sourceName varchar(100);
   declare sourceNry varchar(10);
-  declare concernLink varchar(50);
+  declare concernLink varchar(100);
   declare targetNry varchar(10);
-  declare targetName varchar(50);
+  declare targetName varchar(100);
   declare tagName varchar(255);
 
   declare buf LONGTEXT default '<?xml version="1.0"?>\n<!DOCTYPE usability PUBLIC "-//CAIRIS//DTD USABILITY 1.0//EN" "http://cairis.org/dtd/usability.dtd">\n\n<usability>\n';
