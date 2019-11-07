@@ -14017,7 +14017,7 @@ begin
   declare frequencyValue varchar(50);
   declare demandsValue varchar(50);
   declare gcValue varchar(50);
-  declare concernName varchar(50);
+  declare concernName varchar(100);
   declare sourceName varchar(50);
   declare sourceNry varchar(10);
   declare concernLink varchar(50);
