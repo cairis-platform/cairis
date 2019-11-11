@@ -8462,6 +8462,9 @@ begin
   if dimensionTable = 'detection_mechanism'
   then
     set dimSql = 'select dm.asset_id, a.name from detection_mechanism dm, asset a where dm.asset_id = a.id order by 2';
+  elseif dimensionTable = 'requirement' and constraintId = -1
+  then
+    set dimSql = 'select o.id,o.name from requirement o where o.version = (select max(i.version) from requirement i where i.id = o.id)';
   else
     if dimensionTable = 'persona_characteristic'
     then
