@@ -4572,13 +4572,13 @@ begin
     union
     select from_name from dataflows where environment = envName
     union
-    select to_name from dataflows where environment = envName;
+    select to_name from dataflows where environment = envName order by 1;
   else
     select dataflow from dataflows
     union
     select from_name from dataflows
     union
-    select to_name from dataflows;
+    select to_name from dataflows order by 1;
   end if;
 end
 //
