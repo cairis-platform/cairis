@@ -988,7 +988,7 @@ def buildPersonaRationale(p,personaName,docDir,chapterTxt,fileSuffix):
     chapterTxt += """
         <section><title>External Documents</title>
     """
-    chapterTxt += buildTable( personaName.replace(" ","_") + "ExternalDocumentReferencesTable",personaName + " External Documents",['Document','Version','Authors','Date'],edRefs,0)
+    chapterTxt += buildTable( personaName.replace(" ","_") + "ExternalDocumentReferencesTable",personaName + " External Documents",['Document','Version','Authors','Date','Description'],edRefs,0)
     chapterTxt += """
         </section>
     """
