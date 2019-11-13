@@ -24737,7 +24737,7 @@ begin
         leave pa_loop;
       end if;
 
-      set msg = concat('Usecase ',ucName,' handles personal data (',assetName,') but no requirements or goals associated with this usecase process this data.');
+      set msg = concat('Usecase ',ucName,' handles personal data (',assetName,') but no requirements or goals associated with this usecase processes this data.');
       select count(ru.requirement_id) into srgCount from requirement_usecase ru, asset_requirement ar where ru.usecase_id = ucId and ru.requirement_id = ar.requirement_id and ar.asset_id = assetId;
       if srgCount = 0
       then
