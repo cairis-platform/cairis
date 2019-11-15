@@ -24201,7 +24201,7 @@ create procedure dataflowsToXml(in includeHeader int)
 begin
   declare buf LONGTEXT default '<?xml version="1.0"?>\n<!DOCTYPE dataflows PUBLIC "-//CAIRIS//DTD DATAFLOW 1.0//EN" "http://cairis.org/dtd/dataflow.dtd">\n\n<dataflows>\n';
   declare done int default 0;
-  declare dfName varchar(50);
+  declare dfName varchar(255);
   declare envName varchar (200);
   declare fromName varchar (200);
   declare fromType varchar (9);
