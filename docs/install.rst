@@ -23,6 +23,16 @@ For the smaller install (without pdf export functionality) download and run the 
    sudo docker run --name cairis-mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql:5.7 --thread_stack=256K
    sudo docker run --name CAIRIS --link cairis-mysql:mysql -d -P -p 80:8000 --net=bridge shamalfaily/cairis
 
+If you run the above commands on macOS (and possibly other non-Linux platformns), you might get the error *links are only supported for user-defined networks*.  If so, you should instead run the below commands to download and run your containers:
+
+.. code-block:: bash
+   
+   NET=cairisnet
+   docker network create -d bridge $NET
+   docker run --name cairis-mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql:5.7 --thread_stack=256K
+   docker network connect $NET cairis-mysql
+   docker run --name CAIRIS -d -P -p 80:8000 --net=$NET shamalfaily/cairis
+
 The *docker run* commands will create and start-up CAIRIS, but you will need to create an account before you can use it.  To do this, run the below command - replacing test and test with your desired username and password. 
 
 .. code-block:: bash
