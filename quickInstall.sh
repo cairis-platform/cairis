@@ -29,10 +29,13 @@ sudo rm -rf $CAIRIS_ROOT
 git clone https://github.com/cairis-platform/cairis $CAIRIS_ROOT
 sudo -E $CAIRIS_ROOT/cairis/bin/installUI.sh
 
+sudo pip3 install wheel
 sudo pip3 install -r $CAIRIS_ROOT/requirements.txt
 
-CMD1='flush privileges; use mysql; update user set authentication_string=PASSWORD("'
-CMD2='") where User="root"; update user set plugin="mysql_native_password" where User="root";'
+echo -e "[mysqld]\nthread_stack = 256K\nmax_sp_recursion_depth = 255\nlog_bin_trust_function_creators = 1" | sudo tee /etc/mysql/conf.d/mysql.cnf
+
+CMD1='flush privileges; set global log_bin_trust_function_creators = 1; flush privileges;  use mysql; update user set plugin="mysql_native_password" where User="root"; flush privileges; alter user "root"@"localhost" identified by "'
+CMD2='"'
 CMD="$CMD1$ROOTPW$CMD2"
 
 sudo service mysql stop
@@ -53,6 +56,6 @@ echo -e $SVCFILE | sudo tee /etc/systemd/system/cairis.service
 
 sudo systemctl enable /etc/systemd/system/cairis.service
 
-echo "alias update_cairis=\"sudo apt-get update && sudo apt-get upgrade -y && sudo apt-get dist-upgrade -y && curl -s https://cairis.org/quickInstall.sh | bash -s $ROOTPW\"" >> $HOME/.bashrc
+echo "alias update_cairis=\"sudo apt-get update && sudo apt-get upgrade -y && sudo apt-get dist-upgrade -y && curl -s https://cairis.org/quickInstall_mysql8.sh | bash -s $ROOTPW\"" >> $HOME/.bashrc
 
 sudo shutdown -Fr now

@@ -33,11 +33,14 @@ sudo rm -rf $CAIRIS_ROOT
 git clone https://github.com/cairis-platform/cairis $CAIRIS_ROOT
 sudo -E $CAIRIS_ROOT/cairis/bin/installUI.sh
 
+sudo pip3 install wheel
 sudo pip3 install -r $CAIRIS_ROOT/requirements.txt
 sudo pip3 install -r $CAIRIS_ROOT/wsgi_requirements.txt
 
-CMD1='flush privileges; use mysql; update user set authentication_string=PASSWORD("'
-CMD2='") where User="root"; update user set plugin="mysql_native_password" where User="root";'
+echo -e "[mysqld]\nthread_stack = 256K\nmax_sp_recursion_depth = 255\nlog_bin_trust_function_creators = 1" | sudo tee /etc/mysql/conf.d/mysql.cnf
+
+CMD1='flush privileges; set global log_bin_trust_function_creators = 1; flush privileges;  use mysql; update user set plugin="mysql_native_password" where User="root"; flush privileges; alter user "root"@"localhost" identified by "'
+CMD2='"'
 CMD="$CMD1$ROOTPW$CMD2"
 
 sudo service mysql stop
