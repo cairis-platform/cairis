@@ -32,7 +32,7 @@ sudo -E $CAIRIS_ROOT/cairis/bin/installUI.sh
 sudo pip3 install wheel
 sudo pip3 install -r $CAIRIS_ROOT/requirements.txt
 
-sudo echo -e "[mysqld]\nthread_stack = 256K\nmax_sp_recursion_depth = 255\nlog_bin_trust_function_creators = 1" > /etc/mysql/conf.d/mysql.cnf
+echo -e "[mysqld]\nthread_stack = 256K\nmax_sp_recursion_depth = 255\nlog_bin_trust_function_creators = 1" | sudo tee /etc/mysql/conf.d/mysql.cnf
 
 CMD1='flush privileges; set global log_bin_trust_function_creators = 1; flush privileges;  use mysql; update user set plugin="mysql_native_password" where User="root"; flush privileges; alter user "root"@"localhost" identified by "'
 CMD2='"'
