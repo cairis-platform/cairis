@@ -42,6 +42,7 @@ sudo rm -rf $CAIRIS_ROOT
 git clone https://github.com/cairis-platform/cairis $CAIRIS_ROOT
 sudo -E $CAIRIS_ROOT/cairis/bin/installUI.sh
 
+sudo pip3 install wheel
 sudo pip3 install -r $CAIRIS_ROOT/requirements.txt
 sudo pip3 install -r $CAIRIS_ROOT/wsgi_requirements.txt
 
