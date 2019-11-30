@@ -128,6 +128,8 @@ If you are installing Ubuntu 18.04 LTS or later, or have not been prompted to se
 
 In addition to the above, you also need to update my MySQL server system variables. You can do this by adding or updating the below values to your mysqld.cnf file. In Ubuntu 19.04, you can find this in /etc/mysql/mysql.conf.d, but the file location might differ depending on your OS and MySQL version:
 
+.. code-block:: bash
+
    thread_stack = 256K
    max_sp_recursion_depth = 255
    log_bin_trust_function_creators = 1
