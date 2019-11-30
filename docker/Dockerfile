@@ -21,6 +21,7 @@ RUN apt-get install -y ca-certificates
 
 COPY requirements.txt /
 COPY wsgi_requirements.txt /
+RUN pip3 install wheel
 RUN pip3 install -r requirements.txt
 RUN pip3 install -r wsgi_requirements.txt
 ENV CAIRIS_SRC=/cairis/cairis
