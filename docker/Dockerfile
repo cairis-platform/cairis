@@ -1,4 +1,4 @@
-FROM ubuntu:disco
+FROM ubuntu:latest
 MAINTAINER Shamal Faily <admin@cairis.org>
 RUN apt-get update 
 RUN apt-get install -y python3-dev
