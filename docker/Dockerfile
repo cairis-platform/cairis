@@ -1,8 +1,9 @@
 FROM ubuntu:latest
 MAINTAINER Shamal Faily <admin@cairis.org>
 RUN apt-get update 
-RUN apt-get install -y python3-dev
+RUN pip3 install wheel
 RUN apt-get install -y build-essential
+RUN apt-get install -y python3-dev
 RUN apt-get install -y mysql-client
 RUN apt-get install -y graphviz
 RUN apt-get install -y python3-pip
@@ -21,7 +22,6 @@ RUN apt-get install -y ca-certificates
 
 COPY requirements.txt /
 COPY wsgi_requirements.txt /
-RUN pip3 install wheel
 RUN pip3 install -r requirements.txt
 RUN pip3 install -r wsgi_requirements.txt
 ENV CAIRIS_SRC=/cairis/cairis
