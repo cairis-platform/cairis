@@ -9,7 +9,7 @@ RUN apt-get install -y python3-pip
 RUN apt-get install -y python3-numpy
 RUN apt-get install -y python3-mysqldb
 RUN apt-get install -y git
-RUN apt-get install -y libmysqlclient-dev
+RUN apt-get install -y default-libmysqlclient-dev
 RUN apt-get install -y python-apt
 RUN apt-get install -y libxml2-dev
 RUN apt-get install -y libxslt1-dev 
