@@ -6,7 +6,6 @@ RUN apt-get install -y python3-dev
 RUN apt-get install -y mysql-client
 RUN apt-get install -y graphviz
 RUN apt-get install -y python3-pip
-RUN pip3 install wheel
 RUN apt-get install -y python3-numpy
 RUN apt-get install -y python3-mysqldb
 RUN apt-get install -y git
@@ -14,12 +13,14 @@ RUN apt-get install -y default-libmysqlclient-dev
 RUN apt-get install -y python-apt
 RUN apt-get install -y libxml2-dev
 RUN apt-get install -y libxslt1-dev 
+RUN apt-get install -y libssl-dev 
 RUN apt-get install -y apache2
 RUN apt-get install -y apache2-dev
 RUN apt-get install -y poppler-utils
 RUN apt-get install -y apt-transport-https 
 RUN apt-get install -y ca-certificates
 
+RUN pip3 install wheel
 COPY requirements.txt /
 COPY wsgi_requirements.txt /
 RUN pip3 install -r requirements.txt
