@@ -1,12 +1,12 @@
 FROM ubuntu:latest
 MAINTAINER Shamal Faily <admin@cairis.org>
 RUN apt-get update 
-RUN pip3 install wheel
 RUN apt-get install -y build-essential
 RUN apt-get install -y python3-dev
 RUN apt-get install -y mysql-client
 RUN apt-get install -y graphviz
 RUN apt-get install -y python3-pip
+RUN pip3 install wheel
 RUN apt-get install -y python3-numpy
 RUN apt-get install -y python3-mysqldb
 RUN apt-get install -y git
