@@ -21,6 +21,8 @@ from .ARM import *
 import _mysql_exceptions 
 from .Borg import Borg
 import os
+from random import choice
+import string
 
 __author__ = 'Shamal Faily'
 
@@ -111,7 +113,6 @@ def dropCairisUserDatabase(rPasswd,dbHost,dbPort):
   stmts = ['drop database if exists cairis_user']
   runAdminCommands(rPasswd,dbHost,dbPort,stmts)
 
-
 def createCairisUserDatabase(rPasswd,dbHost,dbPort):
   stmts = ['create database if not exists cairis_user',
            'set global max_sp_recursion_depth = 255',
@@ -182,3 +183,35 @@ def dbUsers(dbName):
     return []
   else:
     return rows
+
+def accounts(rPasswd,dbHost,dbPort):
+  sqlTxt = 'select email from cairis_user.auth_user'
+  return rootResponseList(sqlTxt)
+
+def dropUser(rPasswd,dbHost,dbPort,email):
+  dbUser = canonicalDbUser(email)
+  stmts = []
+  for dbName,dbOwner in databases(dbUser):
+    stmts.append('drop database if exists ' + dbName)
+    stmts.append('delete from cairis_owner.db_owner where db = "' + dbName + '"')
+  stmts.append('drop user if exists ' + dbUser)
+  stmts.append('delete from cairis_user.auth_user where email = "' + email + '"')
+  stmts.append('commit')
+  runAdminCommands(rPasswd,dbHost,dbPort,stmts)
+
+def resetUser(cairisRoot,rPasswd,dbHost,dbPort,email):
+  dbUser = canonicalDbUser(email)
+  stmts = []
+  for dbName,dbOwner in databases(dbUser):
+    stmts.append('drop database if exists ' + dbName)
+    stmts.append('delete from cairis_owner.db_owner where db = "' + dbName + '"')
+    stmts.append('commit')
+  runAdminCommands(rPasswd,dbHost,dbPort,stmts)
+  rp = dbtoken(rPasswd,dbHost,dbPort,dbUser)
+  createDatabaseAndPrivileges(rPasswd,dbHost,dbPort,dbUser,rp,dbUser + '_default')
+  createDatabaseSchema(cairisRoot,dbHost,dbPort,email,rp,dbUser + '_default')
+  createDefaults(cairisRoot,dbHost,dbPort,email,rp,dbUser + '_default')
+
+def resetUsers(cairisRoot,rPasswd,dbHost,dbPort):
+  for email in accounts(rPasswd,dbHost,dbPort):
+    resetUser(cairisRoot,rPasswd,dbHost,dbPort,email)
