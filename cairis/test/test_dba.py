@@ -22,7 +22,7 @@ from flask_security import Security, SQLAlchemyUserDatastore, UserMixin, RoleMix
 from flask_cors import CORS
 import cairis.core.BorgFactory
 from cairis.core.Borg import Borg
-from cairis.core.dba import accounts,canonicalDbUser,createDatabaseAccount,createDatabaseAndPrivileges,createDatabaseSchema,createDefaults,dropUser
+from cairis.core.dba import accounts,canonicalDbUser,createDbOwnerDatabase,createCairisUserDatabase,createDatabaseAccount,createDatabaseAndPrivileges,createDatabaseSchema,createDefaults,dropUser
 import sys
 from random import choice
 import string
@@ -69,6 +69,10 @@ class DBATest(unittest.TestCase):
   def testCreateDelete(self):
     b = Borg()
     testAccount = 'dbatest@cairis.org'
+
+    createDbOwnerDatabase(b.rPasswd,b.dbHost,b.dbPort)
+    createCairisUserDatabase(b.rPasswd,b.dbHost,b.dbPort)
+    db.create_all()
     dropUser(b.rPasswd,b.dbHost,b.dbPort,testAccount)
 
     accountList = accounts(b.rPasswd,b.dbHost,b.dbPort)
@@ -79,7 +83,6 @@ class DBATest(unittest.TestCase):
     createDatabaseAndPrivileges(b.rPasswd,b.dbHost,b.dbPort,dbAccount,rp,canonicalDbUser(testAccount) + '_default')
     createDatabaseSchema(b.cairisRoot,b.dbHost,b.dbPort,testAccount,rp,dbAccount + '_default')
 
-    db.create_all()
     user_datastore.create_user(email=testAccount, account=dbAccount, password='test',dbtoken=rp,name = 'Test user')
     db.session.commit()
 
