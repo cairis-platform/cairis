@@ -193,8 +193,10 @@ def dropUser(rPasswd,dbHost,dbPort,email):
   stmts = []
   for dbName,dbOwner in databases(dbUser):
     stmts.append('drop database if exists ' + dbName)
+    stmts.append('flush privileges')
     stmts.append('delete from cairis_owner.db_owner where db = "' + dbName + '"')
   stmts.append('drop user if exists ' + dbUser)
+  stmts.append('flush privileges')
   stmts.append('delete from cairis_user.auth_user where email = "' + email + '"')
   stmts.append('commit')
   runAdminCommands(rPasswd,dbHost,dbPort,stmts)
@@ -204,10 +206,11 @@ def resetUser(cairisRoot,rPasswd,dbHost,dbPort,email):
   stmts = []
   for dbName,dbOwner in databases(dbUser):
     stmts.append('drop database if exists ' + dbName)
+    stmts.append('flush privileges')
     stmts.append('delete from cairis_owner.db_owner where db = "' + dbName + '"')
     stmts.append('commit')
   runAdminCommands(rPasswd,dbHost,dbPort,stmts)
-  rp = dbtoken(rPasswd,dbHost,dbPort,dbUser)
+  rp = dbtoken(rPasswd,dbHost,dbPort,email)
   createDatabaseAndPrivileges(rPasswd,dbHost,dbPort,dbUser,rp,dbUser + '_default')
   createDatabaseSchema(cairisRoot,dbHost,dbPort,email,rp,dbUser + '_default')
   createDefaults(cairisRoot,dbHost,dbPort,email,rp,dbUser + '_default')
