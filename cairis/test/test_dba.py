@@ -22,7 +22,7 @@ from flask_security import Security, SQLAlchemyUserDatastore, UserMixin, RoleMix
 from flask_cors import CORS
 import cairis.core.BorgFactory
 from cairis.core.Borg import Borg
-from cairis.core.dba import dbtoken, accounts,canonicalDbUser,createDbOwnerDatabase,createCairisUserDatabase,createDatabaseAccount,createDatabaseAndPrivileges,createDatabaseSchema,createDefaults,dropUser
+from cairis.core.dba import dbtoken, accounts,canonicalDbUser,createDbOwnerDatabase,createCairisUserDatabase,createDatabaseAccount,createDatabaseAndPrivileges,createDatabaseSchema,createDefaults,dropUser,databases,dbUsers,dropCairisUserDatabase,isOwner,grantDatabaseAccess,revokeDatabaseAccess,resetUsers
 import sys
 from random import choice
 import string
@@ -64,10 +64,11 @@ security = Security(app, user_datastore)
 class DBATest(unittest.TestCase):
 
   def setUp(self):
-    pass 
+    pass
 
-  def testCreateDelete(self):
+  def testCreateShareResetDelete(self):
     b = Borg()
+    dropCairisUserDatabase(b.rPasswd,b.dbHost,b.dbPort)
     testAccount = 'dbatest@cairis.org'
 
     createDbOwnerDatabase(b.rPasswd,b.dbHost,b.dbPort)
@@ -82,7 +83,6 @@ class DBATest(unittest.TestCase):
     createDatabaseAccount(b.rPasswd,b.dbHost,b.dbPort,dbAccount,rp)
     createDatabaseAndPrivileges(b.rPasswd,b.dbHost,b.dbPort,dbAccount,rp,canonicalDbUser(testAccount) + '_default')
     createDatabaseSchema(b.cairisRoot,b.dbHost,b.dbPort,testAccount,rp,dbAccount + '_default')
-
     user_datastore.create_user(email=testAccount, account=dbAccount, password='test',dbtoken=rp,name = 'Test user')
     db.session.commit()
 
@@ -91,9 +91,46 @@ class DBATest(unittest.TestCase):
     createDefaults(b.cairisRoot,b.dbHost,b.dbPort,testAccount,rp,dbAccount + '_default')
     accountList = accounts(b.rPasswd,b.dbHost,b.dbPort)
     self.assertEqual(testAccount in accountList,True)
+    self.assertEqual(len(databases(dbAccount)),1)
+
+    createDatabaseAndPrivileges(b.rPasswd,b.dbHost,b.dbPort,dbAccount,rp,canonicalDbUser(testAccount) + '_Test1')
+    createDatabaseSchema(b.cairisRoot,b.dbHost,b.dbPort,testAccount,rp,dbAccount + '_Test1')
+
+    self.assertEqual(len(databases(dbAccount)),2)
+    self.assertEqual(len(dbUsers(dbAccount + '_Test1')),0)
+    self.assertEqual(isOwner(dbAccount,'Test1'),True)
+
+    
+    testAccount2 = 'dbatest2@cairis.org'
+    rp2 = ''.join(choice(string.ascii_letters + string.digits) for i in range(255))
+    dbAccount2 = canonicalDbUser(testAccount2)
+    createDatabaseAccount(b.rPasswd,b.dbHost,b.dbPort,dbAccount2,rp2)
+    createDatabaseAndPrivileges(b.rPasswd,b.dbHost,b.dbPort,dbAccount2,rp2,canonicalDbUser(testAccount2) + '_default')
+    createDatabaseSchema(b.cairisRoot,b.dbHost,b.dbPort,testAccount,rp2,dbAccount2 + '_default')
+    user_datastore.create_user(email=testAccount2, account=dbAccount2, password='test',dbtoken=rp2,name = 'Test user 2')
+    db.session.commit()
+    accountList = accounts(b.rPasswd,b.dbHost,b.dbPort)
+    self.assertEqual(testAccount2 in accountList,True)
+    self.assertEqual(len(databases(dbAccount2)),1)
+
+    grantDatabaseAccess(b.rPasswd,b.dbHost,b.dbPort,'Test1',testAccount2)
+    self.assertEqual(len(databases(dbAccount2)),2)
+    self.assertEqual(len(dbUsers(dbAccount + '_Test1')),1)
+    self.assertEqual(isOwner(dbAccount2,'Test1'),False)
+
+    revokeDatabaseAccess(b.rPasswd,b.dbHost,b.dbPort,'Test1',testAccount2)
+    self.assertEqual(len(databases(dbAccount2)),1)
+    self.assertEqual(len(dbUsers(dbAccount + '_Test1')),0)
+
+    resetUsers(b.cairisRoot,b.rPasswd,b.dbHost,b.dbPort)
+    self.assertEqual(len(databases(dbAccount)),1)
+    self.assertEqual(len(databases(dbAccount2)),1)
+
     dropUser(b.rPasswd,b.dbHost,b.dbPort,testAccount)
+    dropUser(b.rPasswd,b.dbHost,b.dbPort,testAccount2)
     accountList = accounts(b.rPasswd,b.dbHost,b.dbPort)
     self.assertEqual(testAccount not in accountList,True)
+    self.assertEqual(testAccount2 not in accountList,True)
   
   def tearDown(self):
     pass
