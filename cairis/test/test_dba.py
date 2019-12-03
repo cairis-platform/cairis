@@ -22,7 +22,7 @@ from flask_security import Security, SQLAlchemyUserDatastore, UserMixin, RoleMix
 from flask_cors import CORS
 import cairis.core.BorgFactory
 from cairis.core.Borg import Borg
-from cairis.core.dba import accounts,canonicalDbUser,createDbOwnerDatabase,createCairisUserDatabase,createDatabaseAccount,createDatabaseAndPrivileges,createDatabaseSchema,createDefaults,dropUser
+from cairis.core.dba import dbtoken, accounts,canonicalDbUser,createDbOwnerDatabase,createCairisUserDatabase,createDatabaseAccount,createDatabaseAndPrivileges,createDatabaseSchema,createDefaults,dropUser
 import sys
 from random import choice
 import string
@@ -85,6 +85,8 @@ class DBATest(unittest.TestCase):
 
     user_datastore.create_user(email=testAccount, account=dbAccount, password='test',dbtoken=rp,name = 'Test user')
     db.session.commit()
+
+    self.assertEqual(rp, dbtoken(b.rPasswd,b.dbHost,b.dbPort,testAccount))
 
     createDefaults(b.cairisRoot,b.dbHost,b.dbPort,testAccount,rp,dbAccount + '_default')
     accountList = accounts(b.rPasswd,b.dbHost,b.dbPort)
