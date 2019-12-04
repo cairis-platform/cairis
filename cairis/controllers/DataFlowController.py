@@ -101,9 +101,6 @@ class DataFlowDiagramAPI(Resource):
     model_generator = get_model_generator()
     dao = DataFlowDAO(session_id)
 
-    if filter_type == 'None':
-      filter_element = ''
-
     if filter_element == 'None':
       filter_element = ''
     dot_code = dao.get_dataflow_diagram(environment_name,filter_type,filter_element)
