@@ -124,7 +124,7 @@ class DataFlowTest(unittest.TestCase):
   def testDataFlowDiagram(self):
     importDataflowsFile(os.environ['CAIRIS_SRC'] + '/test/testdataflow.xml')
     b = Borg()
-    dfs = b.dbProxy.dataFlowDiagram('Psychosis','')
+    dfs = b.dbProxy.dataFlowDiagram('Psychosis','None','')
     self.assertEqual(len(dfs),1)
 
   def tearDown(self):
