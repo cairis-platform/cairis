@@ -4635,8 +4635,8 @@ class MySQLDatabaseProxy:
   def deleteDataFlow(self,dfName,envName):
     self.updateDatabase('call deleteDataFlow(:df,:env)',{'df':dfName,'env':envName},'MySQL Error deleting data flow')
 
-  def dataFlowDiagram(self,envName,filterElement = ''):
-    return self.responseList('call dataFlowDiagram(:env,:fe)',{'env':envName,'fe':filterElement},'MySQL error getting data flow diagram')
+  def dataFlowDiagram(self,envName,filterType = 'None',filterElement = ''):
+    return self.responseList('call dataFlowDiagram(:env,:ft,:fe)',{'env':envName,'ft':filterType,'fe':filterElement},'MySQL error getting data flow diagram')
 
   def personalDataFlowDiagram(self,envName,filterElement = ''):
     return self.responseList('call personalDataFlowDiagram(:env,:fe)',{'env':envName,'fe':filterElement},'MySQL error getting personal data flow diagram')

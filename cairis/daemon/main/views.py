@@ -294,7 +294,7 @@ api.add_resource(CountermeasureController.CountermeasurePatternsAPI, '/api/count
 # Dataflow routes
 api.add_resource(DataFlowController.DataFlowsAPI, '/api/dataflows',endpoint='dataflows')
 api.add_resource(DataFlowController.DataFlowByNameAPI, '/api/dataflows/name/<path:dataflow_name>/environment/<path:environment_name>',endpoint='dataflow')
-api.add_resource(DataFlowController.DataFlowDiagramAPI, '/api/dataflows/diagram/environment/<path:environment_name>/filter/<path:filter_element>',endpoint='dataflowdiagram')
+api.add_resource(DataFlowController.DataFlowDiagramAPI, '/api/dataflows/diagram/environment/<path:environment_name>/filter_type/<path:filter_type>/filter_name/<path:filter_element>',endpoint='dataflowdiagram')
 
 # Dependency routes
 api.add_resource(DependencyController.DependenciesAPI, '/api/dependencies',endpoint='dependencies')

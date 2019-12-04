@@ -24304,17 +24304,27 @@ begin
 end
 //
 
-create procedure dataFlowDiagram(in envName text,in filterElement text)
+create procedure dataFlowDiagram(in envName text,in filterType text, in filterElement text)
 begin
-  if filterElement != ''
+  if filterType = 'None' and filterElement != ''
   then
     select dataflow, from_name, from_type, to_name, to_type from dataflows where environment = envName and from_name = filterElement
     union
     select dataflow, from_name, from_type, to_name, to_type from dataflows where environment = envName and to_name = filterElement
     union
     select dataflow, from_name, from_type, to_name, to_type from dataflows where environment = envName and dataflow = filterElement;
-  else
+  elseif filterType = 'None' and filterElement = ''
+  then
     select dataflow, from_name, from_type, to_name, to_type from dataflows where environment = envName;
+  elseif filterType != 'None' and filterElement = ''
+  then
+    select dataflow, from_name, from_type, to_name, to_type from dataflows where environment = envName and from_type = filterType
+    union
+    select dataflow, from_name, from_type, to_name, to_type from dataflows where environment = envName and to_type = filterType;
+  else
+    select dataflow, from_name, from_type, to_name, to_type from dataflows where environment = envName and from_name = filterElement and from_type = filterType
+    union
+    select dataflow, from_name, from_type, to_name, to_type from dataflows where environment = envName and to_name = filterElement and to_type = filterType;
   end if;
 end
 //

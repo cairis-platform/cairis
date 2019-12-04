@@ -148,10 +148,10 @@ class DataFlowDAO(CairisDAO):
     else:
       return dataflow
 
-  def get_dataflow_diagram(self, environment_name, filter_element):
+  def get_dataflow_diagram(self, environment_name, filter_type,filter_element):
     fontName, fontSize, apFontName = get_fonts(session_id=self.session_id)
     try:
-      dfdRows = self.db_proxy.dataFlowDiagram(environment_name,filter_element)
+      dfdRows = self.db_proxy.dataFlowDiagram(environment_name,filter_type,filter_element)
       associations = DataFlowDiagram(dfdRows,environment_name,self.db_proxy,font_name=fontName, font_size=fontSize)
       dot_code = associations.graph()
       if not dot_code:

@@ -96,13 +96,17 @@ class DataFlowByNameAPI(Resource):
 
 class DataFlowDiagramAPI(Resource):
 
-  def get(self, environment_name,filter_element):
+  def get(self, environment_name,filter_type,filter_element):
     session_id = get_session_id(session, request)
     model_generator = get_model_generator()
     dao = DataFlowDAO(session_id)
+
+    if filter_type == 'None':
+      filter_element = ''
+
     if filter_element == 'None':
       filter_element = ''
-    dot_code = dao.get_dataflow_diagram(environment_name,filter_element)
+    dot_code = dao.get_dataflow_diagram(environment_name,filter_type,filter_element)
     dao.close()
     resp = make_response(model_generator.generate(dot_code, model_type='dataflow',renderer='dot'), OK)
 

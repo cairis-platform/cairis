@@ -158,7 +158,7 @@ class DataFlowAPITests(CairisDaemonTestCase):
     self.assertEqual(json_resp['message'],'Edited test dataflow deleted')
 
   def test_dataflow_diagram(self):
-    url = '/api/dataflows/diagram/environment/Psychosis/filter/None?session_id=test'
+    url = '/api/dataflows/diagram/environment/Psychosis/filter_type/None/filter_name/None?session_id=test'
     method = 'test_dataflow_datagram'
     self.logger.info('[%s] URL: %s', method, url)
     rv = self.app.get(url, content_type='application/json')
