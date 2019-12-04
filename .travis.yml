@@ -18,6 +18,7 @@ addons:
     - python3-mysqldb
     - python3-pytest
     - git
+    - libmysqlclient-dev
     - default-libmysqlclient-dev
     - docbook
     - python3-apt
