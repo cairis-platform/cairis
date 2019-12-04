@@ -229,8 +229,11 @@ drop procedure if exists delete_requirement;
 drop procedure if exists detectionMechanisms;
 drop procedure if exists assetNames;
 drop procedure if exists entityNames;
+drop procedure if exists diagramEntityNames;
 drop procedure if exists datastoreNames;
+drop procedure if exists diagramDatastoreNames;
 drop procedure if exists processNames;
+drop procedure if exists diagramProcessNames;
 drop procedure if exists dfd_filterNames;
 drop procedure if exists classAssociationNames;
 drop procedure if exists goalAssociationNames;
@@ -4538,6 +4541,14 @@ begin
 end
 //
 
+create procedure diagramEntityNames(in environmentName text)
+begin
+  select from_name from dataflows where environment = environmentName and from_type = 'entity'
+  union
+  select to_name from dataflows where environment = environmentName and to_type = 'entity';
+end
+//
+
 create procedure datastoreNames(in environmentName text)
 begin
   declare environmentId int;
@@ -4551,6 +4562,14 @@ begin
 end
 //
 
+create procedure diagramDatastoreNames(in environmentName text)
+begin
+  select from_name from dataflows where environment = environmentName and from_type = 'datastore'
+  union
+  select to_name from dataflows where environment = environmentName and to_type = 'datastore';
+end
+//
+
 create procedure processNames(in environmentName text)
 begin
   declare environmentId int;
@@ -4561,6 +4580,14 @@ begin
     select id into environmentId from environment where name = environmentName limit 1;
     select u.name from usecase u, environment_usecase eu where eu.environment_id = environmentId and eu.usecase_id = u.id order by 1;
   end if;
+end
+//
+
+create procedure diagramProcessNames(in environmentName text)
+begin
+  select from_name from dataflows where environment = environmentName and from_type = 'process'
+  union
+  select to_name from dataflows where environment = environmentName and to_type = 'process';
 end
 //
 
