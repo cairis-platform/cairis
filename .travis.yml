@@ -9,7 +9,7 @@ addons:
   apt:
     packages:
     - python3-dev
-    - build-essential
+    - build-essentials
     - mysql-server
     - mysql-client
     - graphviz
