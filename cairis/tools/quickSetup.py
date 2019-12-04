@@ -21,8 +21,6 @@ from cairis.core.ARM import ARMException
 from sqlalchemy.exc import SQLAlchemyError
 import os
 import sys
-import MySQLdb
-import _mysql_exceptions
 from cairis.core.dba import createDatabaseAccount, createDbOwnerDatabase, createDatabaseAndPrivileges, createDatabaseSchema, createDefaults, canonicalDbUser, dropCairisUserDatabase, createCairisUserDatabase
 import binascii
 from random import choice

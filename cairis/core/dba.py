@@ -18,7 +18,7 @@
 
 import MySQLdb
 from .ARM import *
-import _mysql_exceptions 
+from MySQLdb._exceptions import DatabaseError, IntegrityError
 from .Borg import Borg
 import os
 from random import choice
@@ -46,7 +46,7 @@ def dbtoken(rPasswd,dbHost,dbPort,dbUser):
     rootCursor.close()
     rootConn.close()
     return t[0]
-  except _mysql_exceptions.DatabaseError as e:
+  except DatabaseError as e:
     exceptionText = 'MySQL error getting token for ' + dbUser + ': ' + format(e)
     raise DatabaseProxyException(exceptionText) 
 
@@ -78,7 +78,7 @@ def runAdminCommands(adminPasswd,dbHost,dbPort,stmts,adminUser='root'):
       rootCursor.execute(stmt)
     rootCursor.close()
     rootConn.close()
-  except _mysql_exceptions.DatabaseError as e:
+  except DatabaseError as e:
     exceptionText = 'MySQL error running "' + ', '.join(stmts) + '": message:' + format(e) 
     raise DatabaseProxyException(exceptionText) 
 
@@ -145,7 +145,7 @@ def rootResponseList(sqlTxt):
     rootCursor.close()
     rootConn.close()
     return responseList
-  except _mysql_exceptions.DatabaseError as e:
+  except DatabaseError as e:
     exceptionText = 'MySQL error getting responses: ' + format(e)
     raise DatabaseProxyException(exceptionText) 
 

@@ -22,7 +22,7 @@ from sqlalchemy.exc import OperationalError, ProgrammingError, DataError, Integr
 from . import RequirementFactory
 from .Environment import Environment
 from .ARM import *
-import _mysql_exceptions 
+from MySQLdb._exceptions import DatabaseError, IntegrityError
 from . import Attacker
 from . import Asset
 from . import Threat
@@ -135,7 +135,7 @@ class MySQLDatabaseProxy:
     except OperationalError as e:
       exceptionText = 'MySQL error connecting to the CAIRIS database ' + db + ' on host ' + host + ' at port ' + str(port) + ' with user ' + user + ' (message:' + format(e) + ')'
       raise DatabaseProxyException(exceptionText) 
-    except _mysql_exceptions.DatabaseError as e:
+    except DatabaseError as e:
       id,msg = e
       exceptionText = 'MySQL error connecting to the CAIRIS database ' + db + ' on host ' + host + ' at port ' + str(port) + ' with user ' + user + ' (id:' + str(id) + ',message:' + msg
       raise DatabaseProxyException(exceptionText) 
@@ -169,10 +169,10 @@ class MySQLDatabaseProxy:
     except ProgrammingError as e:
       exceptionText = 'MySQL error re-connecting to the CAIRIS database: ' + format(e)
       raise DatabaseProxyException(exceptionText) 
-    except _mysql_exceptions.IntegrityError as e:
+    except IntegrityError as e:
       exceptionText = 'MySQL error re-connecting to the CAIRIS database: ' + format(e)
       raise DatabaseProxyException(exceptionText) 
-    except _mysql_exceptions.DatabaseError as e:
+    except DatabaseError as e:
       exceptionText = 'MySQL error re-connecting to the CAIRIS database: ' + format(e)
       raise DatabaseProxyException(exceptionText) 
     self.theDimIdLookup, self.theDimNameLookup = self.buildDimensionLookup()
@@ -223,7 +223,7 @@ class MySQLDatabaseProxy:
     except OperationalError as e:
       exceptionText = 'Commit error (message:' + format(e) + ')'
       raise DatabaseProxyException(exceptionText) 
-    except _mysql_exceptions.DatabaseError as e:
+    except DatabaseError as e:
       id,msg = e
       exceptionText = 'Commit error (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
@@ -245,7 +245,7 @@ class MySQLDatabaseProxy:
     except IntegrityError as e:
       exceptionText = 'Update error (message:' + format(e) + ')'
       raise DatabaseProxyException(exceptionText) 
-    except _mysql_exceptions.DatabaseError as e:
+    except DatabaseError as e:
       id,msg = e
       exceptionText = 'Update error (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
@@ -337,7 +337,7 @@ class MySQLDatabaseProxy:
     except DataError as e:
       exceptionText = 'MySQL error calling ' + callTxt + ' (message:' + format(e) + ')'
       raise DatabaseProxyException(exceptionText) 
-    except _mysql_exceptions.DatabaseError as e:
+    except DatabaseError as e:
       id,msg = e
       exceptionText = errorTxt + ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
@@ -727,7 +727,7 @@ class MySQLDatabaseProxy:
       exceptionText = 'MySQL error getting '
       exceptionText += dimensionTable + ' (message:' + format(e) + ')'
       raise DatabaseProxyException(exceptionText) 
-    except _mysql_exceptions.DatabaseError as e:
+    except DatabaseError as e:
       id,msg = e
       exceptionText = 'MySQL error getting '
       exceptionText += dimensionTable + ' (id:' + str(id) + ',message:' + msg + ')'
@@ -1452,13 +1452,13 @@ class MySQLDatabaseProxy:
       session = self.conn()
       session.commit()
       curs.close()
-    except _mysql_exceptions.IntegrityError as e:
+    except IntegrityError as e:
       exceptionText = 'Cannot remove environment due to dependent data (' + str(e) + ').'
       raise IntegrityException(exceptionText) 
     except OperationalError as e:
       exceptionText = 'MySQL error deleting environments (' + format(e) + ')'
       raise DatabaseProxyException(exceptionText)  
-    except _mysql_exceptions.DatabaseError as e:
+    except DatabaseError as e:
       exceptionText = 'MySQL error deleting environments (' + str(e) + ')'
       raise DatabaseProxyException(exceptionText)  
 
@@ -3490,7 +3490,7 @@ class MySQLDatabaseProxy:
         curs.execute('call addTag(%s,%s,%s)',[dimObjt,tag,dimName])
       except OperationalError as e:
         raise DatabaseProxyException('MySQL error adding tag (message: ' + format(e))
-      except _mysql_exceptions.DatabaseError as e:
+      except DatabaseError as e:
         raise DatabaseProxyException('MySQL error adding ' + dimName + ' ' + dimObjt + ' tag ' + tag + ': ' + format(e))
     curs.close()
 
@@ -3592,7 +3592,7 @@ class MySQLDatabaseProxy:
     except OperationalError as e:
       exceptionText = 'MySQL error adding interfaces to ' + dimName + ' ' + dimObjt +  ' (message:' + format(e) + ')'
       raise DatabaseProxyException(exceptionText) 
-    except _mysql_exceptions.DatabaseError as e:
+    except DatabaseError as e:
       id,msg = e
       exceptionText = 'MySQL error adding interfaces to ' + dimName + ' ' + dimObjt +  ' (id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
@@ -4566,7 +4566,7 @@ class MySQLDatabaseProxy:
     except OperationalError as e:
       exceptionText = 'MySQL error creating CAIRIS database ' + dbName + '(message:' + format(e) + ')'
       raise DatabaseProxyException(exceptionText) 
-    except _mysql_exceptions.DatabaseError as e:
+    except DatabaseError as e:
       id,msg = e
       exceptionText = 'MySQL error creating CAIRIS database ' + dbName + '(id:' + str(id) + ',message:' + msg + ')'
       raise DatabaseProxyException(exceptionText) 
