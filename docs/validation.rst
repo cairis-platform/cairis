@@ -17,7 +17,7 @@ The security design checks currently supported are as follows:
 ================================= ==================================================================================================================================
 Check                             Description
 ================================= ==================================================================================================================================
-Composition/Aggregation Integrity For Hardware/Software/Information assets, checks head asset integrity isn't lower than the tail asset.
+Composition/Aggregation Integrity For Hardware/Software/Information assets, checks asset integrity for the head asset isn't lower than the tail asset.
 Implicit asset inclusion          Asset implicitly included in an environment because of an asset association but no security or privacy properties have been set.
 Inherited asset inconsistency     Checks an asset inheriting from another asset doesn't have weaker security or privacy properties.
 Inherited asset type              Checks an asset inheriting from another asset have the same asset type.
