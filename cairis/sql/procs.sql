@@ -952,6 +952,7 @@ drop function if exists trustBoundaryPrivilege;
 drop procedure if exists unrelatedExceptionCheck;
 drop procedure if exists reassociateRequirement;
 drop procedure if exists locationsToXml;
+drop procedure if exists locationsToJSON;
 drop procedure if exists implicitAssetInclusionCheck;
 drop procedure if exists implicitAssetVulnerabilityCheck;
 drop function if exists lastNumericRequirementLabel;
@@ -29294,5 +29295,144 @@ begin
   select traceCount;
 end
 //
+
+create procedure locationsToJSON()
+begin
+  declare locsCount int default 0;
+  declare locsId int;
+  declare locsName varchar(1000);
+  declare locsDia varchar(1000);
+  declare locId int;
+  declare locName varchar(1000);
+  declare aiName varchar(1000);
+  declare assetName varchar(200);
+  declare piName varchar(1000);
+  declare personaName varchar(50);
+  declare linkName varchar(1000);
+  declare headElement int default 1;
+
+  declare done int default 0;
+  declare buf LONGTEXT default '';
+  declare locsCursor cursor for select id,name,diagram from locations order by 2;
+  declare locCursor cursor for select id,name from location where locations_id = locsId order by 2;
+  declare aiCursor cursor for select ai.name,a.name from asset_instance ai, asset a where location_id = locId and ai.asset_id = a.id order by 1;
+  declare piCursor cursor for select pi.name,p.name from persona_instance pi, persona p where location_id = locId and pi.persona_id = p.id order by 1;
+  declare linkCursor cursor for 
+    select l.name from location l, location_link ll where ll.locations_id = locsId and ll.head_location_id != locId and ll.head_location_id = l.id
+    union
+    select l.name from location l, location_link ll where ll.locations_id = locsId and ll.tail_location_id != locId and ll.tail_location_id = l.id;
+
+  declare continue handler for not found set done = 1;
+
+  set buf = concat(buf,'"locations" : [\n');
+  open locsCursor;
+  locs_loop: loop
+    fetch locsCursor into locsId, locsName, locsDia;
+    if done = 1
+    then
+      set buf = concat(buf,"]\n\n");
+      leave locs_loop;
+    else
+      if headElement = 1
+      then
+        set headElement = 0;
+      else
+        set buf = concat(buf,",\n");
+      end if;
+    end if;
+    set buf = concat(buf,'  {"name" : "',locsName,'", "diagram" : "',locsDia,'", "locations" : [\n');
+    set locsCount = locsCount + 1;
+
+    set headElement = 1;
+    open locCursor;
+    loc_loop: loop
+      fetch locCursor into locId,locName;
+      if done = 1
+      then
+        set buf = concat(buf,"  ]}\n");
+        leave loc_loop;
+      else
+        if headElement = 1
+        then
+          set headElement = 0;
+        else
+          set buf = concat(buf,",");
+        end if;
+      end if;
+      set buf = concat(buf,'    {"name" : "',locName,'", "asset_instances" : [');
+
+      set headElement = 1;
+      open aiCursor;
+      ai_loop: loop
+        fetch aiCursor into aiName, assetName;
+        if done = 1
+        then
+          set buf = concat(buf,'],"persona_instances" : [');
+          leave ai_loop;
+        else
+          if headElement = 1
+          then
+            set headElement = 0;
+          else
+            set buf = concat(buf,",");
+          end if;
+        end if;
+        set buf = concat(buf,'{"name" : "',aiName,'", "asset" : "',assetName,'"}');
+      end loop ai_loop;
+      close aiCursor;
+      set done = 0;
+
+      set headElement = 1;
+      open piCursor;
+      pi_loop: loop
+        fetch piCursor into piName, personaName;
+        if done = 1
+        then
+          set buf = concat(buf,'],"links" : [');
+          leave pi_loop;
+        else
+          if headElement = 1
+          then
+            set headElement = 0;
+          else
+            set buf = concat(buf,",");
+          end if;
+        end if;
+        set buf = concat(buf,'{"name" : "',piName,'", "persona" : "',personaName,'"}');
+      end loop pi_loop;
+      close piCursor;
+      set done = 0;
+
+      set headElement = 1;
+      open linkCursor;
+      link_loop: loop
+        fetch linkCursor into linkName;
+        if done = 1
+        then
+          set buf = concat(buf,']}\n');
+          leave link_loop;
+        else
+          if headElement = 1
+          then
+            set headElement = 0;
+          else
+            set buf = concat(buf,",");
+          end if;
+        end if;
+        set buf = concat(buf,'{"name" : "',linkName,'"}');
+      end loop link_loop;
+      close linkCursor;
+      set done = 0;
+    
+    end loop loc_loop;
+    close locCursor;  
+    set done = 0; 
+
+  end loop locs_loop;
+  close locsCursor;
+  select buf,locsCount;
+end
+//
+
 
 delimiter ;

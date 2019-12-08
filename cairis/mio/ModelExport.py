@@ -319,6 +319,7 @@ def exportJSON(outFile = None, session_id = None):
   jsonBuf += b.get_dbproxy(session_id).riskAnalysisToJSON()[0] + ',\n'
   jsonBuf += b.get_dbproxy(session_id).usabilityToJSON()[0] + ',\n'
   jsonBuf += b.get_dbproxy(session_id).goalsToJSON()[0] + '\n\n'
+  jsonBuf += b.get_dbproxy(session_id).locationsToJSON()[0] + '\n\n'
   jsonBuf += '}'
   if outFile == None:
     return jsonBuf
