@@ -95,6 +95,9 @@ def createDbOwnerDatabase(rPasswd,dbHost,dbPort):
   runAdminCommands(rPasswd,dbHost,dbPort,stmts)
 
 def createDatabaseAndPrivileges(rPasswd,dbHost,dbPort,dbUser,dbPasswd,dbName):
+  collationString = 'general'
+  if (MySQLdb.get_client_info()[0] == '8'):
+    collationString = '0900_ai'
   dbUser = canonicalDbUser(dbUser)
   dbName = canonicalDbName(dbName)
   stmts = ['drop database if exists `' + dbName + '`',
@@ -102,7 +105,7 @@ def createDatabaseAndPrivileges(rPasswd,dbHost,dbPort,dbUser,dbPasswd,dbName):
            'create database ' + dbName,
            "grant all privileges on `" + dbName + "`.* TO '" + dbUser + "'@'%'",
            'alter database ' + dbName + ' default character set utf8mb4',
-           'alter database ' + dbName + ' default collate utf8mb4_0900_ai_ci',
+           'alter database ' + dbName + ' default collate utf8mb4_' + collationString + '_ci',
            'flush tables',
            'flush privileges',
            'insert into cairis_owner.db_owner(db,owner) values("' + dbName + '","' + dbUser + '")',
