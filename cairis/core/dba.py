@@ -102,7 +102,7 @@ def createDatabaseAndPrivileges(rPasswd,dbHost,dbPort,dbUser,dbPasswd,dbName):
            'create database ' + dbName,
            "grant all privileges on `" + dbName + "`.* TO '" + dbUser + "'@'%'",
            'alter database ' + dbName + ' default character set utf8mb4',
-           'alter database ' + dbName + ' default collate utf8mb4_general_ci',
+           'alter database ' + dbName + ' default collate utf8mb4_0900_ai_ci',
            'flush tables',
            'flush privileges',
            'insert into cairis_owner.db_owner(db,owner) values("' + dbName + '","' + dbUser + '")',

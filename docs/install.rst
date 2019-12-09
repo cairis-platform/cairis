@@ -116,7 +116,7 @@ Once the server is running, users can register for accounts using the Register l
 Installation and configuration via GitHub (manual)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-If you're happy to use the command line, you may like to install CAIRIS from the latest source code in GitHub.  CAIRIS can be installed on any platform that its open-source dependencies are available for.  The most tested platforms are `Ubuntu <http://www.ubuntu.com>`_ or `Debian <https://www.debian.org>`_ .  Assuming you are using some flavour of Linux, just follow the steps below:
+If you're happy to use the command line, you may like to install CAIRIS from the latest source code in GitHub.  CAIRIS can be installed on any platform that its open-source dependencies are available for.  The most tested platform is `Ubuntu <http://www.ubuntu.com>`_ .  Assuming you are using Ubuntu, just follow the steps below:
 
 Begin by installing the required applications and dependencies:
 
