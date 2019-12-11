@@ -26884,6 +26884,7 @@ begin
           set buf = concat(buf,"\n");
         end if;
       end if;
+
       if iProperty != 'None'
       then
         set buf = concat(buf,'      {"name" : "',envName,'", "property" : "integrity", "value" : "',iProperty,'", "rationale" : "',iRationale,'"}');
@@ -28349,14 +28350,14 @@ begin
 
   set done = 0;
   set headElement = 1;
-  set buf = concat(buf,'"obstacles" : [\n');
+  set buf = concat(buf,'",obstacles" : [\n');
 
   open obsCursor;
   obs_loop: loop
     fetch obsCursor into obsId, obsName,obsOrig;
     if done = 1
     then
-      set buf = concat(buf,"}\n]\n");
+      set buf = concat(buf,"\n],\n");
       leave obs_loop;
       set headElement = 1;
     else
@@ -28364,7 +28365,7 @@ begin
       then
         set headElement = 0;
       else
-        set buf = concat(buf,"},\n");
+        set buf = concat(buf,",\n");
       end if;
     end if;
     set buf = concat(buf,'  {"name" : "',obsName,'", "originator" : "',obsOrig,'", "environments" : [\n');
@@ -28377,9 +28378,8 @@ begin
       fetch obsEnvCursor into envId, envName;
       if done = 1
       then
-        set buf = concat(buf,'\n  ]');
+        set buf = concat(buf,'\n  ]}');
         leave obsEnv_loop;
-        set headElement = 1;
       else
         if headElement = 1
         then
@@ -28398,8 +28398,8 @@ begin
         if done = 1
         then
           set buf = concat(buf,'],');
+          set headElement = 0;
           leave obsConcern_loop;
-          set headElement = 1;
         else
           if headElement = 1
           then
@@ -28421,161 +28421,281 @@ begin
     set done = 0;
   end loop obs_loop;
   close obsCursor;
-  set done = 0;
 
+  set done = 0;
+  set headElement = 1;
+  set buf = concat(buf,'"requirements" : [\n');
   open reqCursor;
   req_loop: loop
     fetch reqCursor into refName,refType,reqLabel,reqType,reqPriority,reqName,reqDesc,reqRat,reqFc,reqOrig;
     if done = 1
     then
+      set buf = concat(buf,"\n],\n");
+      set headElement = 1;
       leave req_loop;
+    else
+      if headElement = 1
+      then
+        set headElement = 0;
+      else
+        set buf = concat(buf,",\n");
+      end if;
     end if;
-    set buf = concat(buf,'<requirement name=\"',reqName,'\" reference=\"',refName,'\" reference_type=\"',refType,'\" label=\"',reqLabel,'\" type=\"',replace(reqType,' ','_'),'\" priority=\"',reqPriority,'\" >\n  <description>',reqDesc,'</description>\n  <rationale>',reqRat,'</rationale>\n  <fit_criterion>',reqFc,'</fit_criterion>\n  <originator>',reqOrig,'</originator>\n</requirement>\n');
+    set buf = concat(buf,'  {"name" : "',reqName,'", "reference" : "',refName,'", "reference_type" : "',refType,'", "label" : "',reqLabel,'", "type" : "',replace(reqType,' ','_'),'", "priority" : "',reqPriority,'", "description" : "',reqDesc,'", "rationale" : "',reqRat,'", "fit_criterion" : "',reqFc,'", "originator" : "',reqOrig,'"}');
     set reqCount = reqCount + 1;
   end loop req_loop;
   close reqCursor;
-  set done = 0;
 
+  set headElement = 1;
+  set buf = concat(buf,'"usecases" : [\n');
   set done = 0;
   open ucCursor;
   uc_loop: loop
     fetch ucCursor into ucId,ucName,ucAuthor,ucShortCode,ucDesc;
     if done = 1
     then
+      set buf = concat(buf,"\n],\n");
       leave uc_loop;
+      set headElement = 1;
+    else
+      if headElement = 1
+      then
+        set headElement = 0;
+      else
+        set buf = concat(buf,",\n");
+      end if;
     end if;
-    set buf = concat(buf,'<usecase name=\"',ucName,'\" author=\"',ucAuthor,'\" code=\"',ucShortCode,'\" >\n  <description>',ucDesc,'</description>\n');
+    set buf = concat(buf,'  {"name" : "',ucName,'", "author" : "',ucAuthor,'", "code" : "',ucShortCode,'", "description" : "',ucDesc,'", "actors" : [');
     set ucCount = ucCount + 1;
 
+    set done = 0;
+    set headElement = 1;
     open ucActorCursor;
     ucActor_loop: loop
       fetch ucActorCursor into roleName;
       if done = 1
       then
+        set buf = concat(buf,'], "environments" : [\n');
         leave ucActor_loop;
+        set headElement = 1;
+      else
+        if headElement = 1
+        then
+          set headElement = 0;
+        else
+          set buf = concat(buf,",");
+        end if;
       end if;
-      set buf = concat(buf,'  <actor name=\"',roleName,'\" />\n');
+      set buf = concat(buf,'"',roleName,'"');
     end loop ucActor_loop;
     close ucActorCursor;
     set done = 0;
 
+    set done = 0;
+    set headElement = 1;
     open ucEnvCursor;
     ucEnv_loop: loop
       fetch ucEnvCursor into envId,envName;
       if done = 1
       then
+        set headElement = 0;
+        set buf = concat(buf,'\n  ]');
         leave ucEnv_loop;
+      else
+        if headElement = 1
+        then
+          set headElement = 0;
+        else
+          set buf = concat(buf,",\n");
+        end if;
       end if;
       select preconditions into ucPreCond from usecase_conditions where usecase_id = ucId and environment_id = envId;
-      set buf = concat(buf,'  <usecase_environment name=\"',envName,'\" >\n    <preconditions>',ucPreCond,'</preconditions>\n    <flow>\n');
+      set buf = concat(buf,'    {"name" : "',envName,'", "preconditions" : "',ucPreCond,'", "flow" : [\n');
 
+      set done = 0;
+      set headElement = 1;
       open ucStepCursor;
       ucStep_loop: loop
         fetch ucStepCursor into stepNo, stepDesc;
         if done = 1
         then
+          set buf = concat(buf,'],');
           leave ucStep_loop;
+        else
+          if headElement = 1
+          then
+            set headElement = 0;
+          else
+            set buf = concat(buf,",\n");
+          end if;
         end if; 
-        set buf = concat(buf,'      <step number=\"',stepNo,'\" description=\"',stepDesc,'\" >\n');
 
+        set buf = concat(buf,'      {"number" : "',stepNo,'", "description" : "',stepDesc,'", "tags" : [');
 
+        set done = 0;
+        set headElement = 1;
         open ucStepTagCursor;
         ucStepTag_loop: loop
           fetch ucStepTagCursor into tagName;
           if done = 1
           then
+            set buf = concat(buf,'], "exceptions" : [');
             leave ucStepTag_loop;
+            set headElement = 1;
+          else
+            if headElement = 1
+            then
+              set headElement = 0;
+            else
+              set buf = concat(buf,",");
+            end if;
           end if;
-          set buf = concat(buf,'        <tag name=\"',tagName,'\" />\n'); 
+          set buf = concat(buf,'"',tagName,'"'); 
         end loop ucStepTag_loop;
         close ucStepTagCursor;
-        set done = 0;
 
+        set done = 0;
+        set headElement = 1;
         open ucStepExceptionCursor;
         ucStepException_loop: loop
           fetch ucStepExceptionCursor into ucExcName,excDim,ucExcRelValue,ucExcCategory,ucExcDesc;
           if done = 1
           then
+            set buf = concat(buf,']}\n');
+            set headElement = 0;
             leave ucStepException_loop;
+          else
+            if headElement = 1
+            then
+              set headElement = 0;
+            else
+              set buf = concat(buf,",");
+            end if;
           end if;
-          set buf = concat(buf,'        <exception name=\"',ucExcName,'\" type=\"',excDim,'\" value=\"',ucExcRelValue,'\" category=\"',replace(ucExcCategory,' ','_'),'\" >\n          <definition>',ucExcDesc,'</definition>\n        </exception>\n');
+          set buf = concat(buf,'{"name" : "',ucExcName,'", "type" : "',excDim,'", "value" : "',ucExcRelValue,'", "category" : "',replace(ucExcCategory,' ','_'),'", "definition" : "',ucExcDesc,'"}');
         end loop ucStepException_loop;
         close ucStepExceptionCursor;
         set done = 0;
-
-        set buf = concat(buf,'      </step>\n');
       end loop ucStep_loop;
       close ucStepCursor;
       set done = 0;
-   
-      set buf = concat(buf,'    </flow>\n');
       select postconditions into ucPostCond from usecase_conditions where usecase_id = ucId and environment_id = envId;
-      set buf = concat(buf,'    <postconditions>',ucPostCond,'</postconditions>\n');
-      set buf = concat(buf,'  </usecase_environment>\n');
+      set buf = concat(buf,'     "postconditions" : "',ucPostCond,'"}\n');
     end loop ucEnv_loop;
     close ucEnvCursor;
     set done = 0;
-
-    set buf = concat(buf,'</usecase>\n');
   end loop uc_loop;
   close ucCursor;
 
+  set done = 0;
+  set buf = concat(buf,'"countermeasures" : [\n');
+  set headElement = 1;
   open cmCursor;
   cm_loop: loop
     fetch cmCursor into cmId, cmName, cmDesc, cmType;
     if done = 1
     then
+      set buf = concat(buf,"}\n]\n");
       leave cm_loop;
+      set headElement = 1;
+    else
+      if headElement = 1
+      then
+        set headElement = 0;
+      else
+        set buf = concat(buf,"},\n");
+      end if;
     end if;
-    set buf = concat(buf,'<countermeasure name=\"',cmName,'\" type=\"',cmType,'\" >\n  <description>',cmDesc,'</description>\n');
-    set cmCount = cmCount + 1;
 
+    set buf = concat(buf,'  {"name" : "',cmName,'", "type" : "',cmType,'", "description" : "',cmDesc,'", "environments" : [\n');
+    set cmCount = cmCount + 1;
+    set done = 0;
+    set headElement = 1;
     open cmEnvCursor;
     cmEnv_loop: loop
       fetch cmEnvCursor into envId, envName;
       if done = 1
       then
+        set headElement = 0;
+        set buf = concat(buf,'\n  ]');
         leave cmEnv_loop;
+      else
+        if headElement = 1
+        then
+          set headElement = 0;
+        else
+          set buf = concat(buf,",\n");
+        end if;
       end if;
-      set buf = concat(buf,'  <countermeasure_environment name=\"',envName,'\" cost=\"',countermeasureCost(cmId,envId),'\" >\n');
+      set buf = concat(buf,'    {"name" : "',envName,'", "cost" : "',countermeasureCost(cmId,envId),'", "requirements" : [');
 
+      set done = 0;
+      set headElement = 1;
       open cmReqsCursor;
       cmReqs_loop: loop
         fetch cmReqsCursor into reqName;
         if done = 1
         then
+          set buf = concat(buf,'], "targets" : [');
           leave cmReqs_loop;
+          set headElement = 1;
+        else
+          if headElement = 1
+          then
+            set headElement = 0;
+          else
+            set buf = concat(buf,",");
+          end if;
         end if;
-        set buf = concat(buf,'    <countermeasure_requirement name=\"',reqName,'\" />\n');
+        set buf = concat(buf,'"',reqName,'"');
       end loop cmReqs_loop;
       close cmReqsCursor;
-      set done = 0;
 
+      set done = 0;
+      set headElement = 1;
       open cmTargetsCursor;
       cmTargets_loop: loop
         fetch cmTargetsCursor into targetName,effValue,cmRationale;
         if done = 1
         then
+          set buf = concat(buf,'],');
+          leave cmTargets_loop;
+          set headElement = 1;
+        else
+          if headElement = 1
+          then
+            set headElement = 0;
+          else
+            set buf = concat(buf,",");
+          end if;
           leave cmTargets_loop;
         end if;
-        set buf = concat(buf,'    <target name=\"',targetName,'\" effectiveness=\"',effValue,'\" >\n');
+        set buf = concat(buf,'{"name" : "',targetName,'", "effectiveness" : "',effValue,'", "responses" : [');
 
         open targetResponseCursor;
         tr_loop: loop
           fetch targetResponseCursor into trName;
           if done = 1
           then
+            set buf = concat(buf,'], "rationale" : "',cmRationale,'"},"mitigating_properties" : [');
             leave tr_loop;
+            set headElement = 1;
+          else
+            if headElement = 1
+            then
+              set headElement = 0;
+            else
+              set buf = concat(buf,",");
+            end if;
           end if;
-          set buf = concat(buf,'      <target_response name=\"',trName,'\" />\n');
+          set buf = concat(buf,'"',trName,'"');
         end loop tr_loop;
         close targetResponseCursor;
         set done = 0;        
-
-        set buf = concat(buf,'      <rationale>',cmRationale,'</rationale>\n    </target>\n');
       end loop cmTargets_loop;
       close cmTargetsCursor;
       set done = 0;
+     
 
       select spv.name,cp.property_rationale into cProperty,cRationale from countermeasure_property cp, security_property_value spv where cp.countermeasure_id = cmId and cp.property_id = 0 and cp.environment_id = envId and cp.property_value_id = spv.id;
       select spv.name,cp.property_rationale into iProperty,iRationale from countermeasure_property cp, security_property_value spv where cp.countermeasure_id = cmId and cp.property_id = 1 and cp.environment_id = envId and cp.property_value_id = spv.id;
@@ -28585,73 +28705,119 @@ begin
       select spv.name,cp.property_rationale into panProperty,panRationale from countermeasure_property cp, security_property_value spv where cp.countermeasure_id = cmId and cp.property_id = 5 and cp.environment_id = envId and cp.property_value_id = spv.id;
       select spv.name,cp.property_rationale into unlProperty,unlRationale from countermeasure_property cp, security_property_value spv where cp.countermeasure_id = cmId and cp.property_id = 6 and cp.environment_id = envId and cp.property_value_id = spv.id;
       select spv.name,cp.property_rationale into unoProperty,unoRationale from countermeasure_property cp, security_property_value spv where cp.countermeasure_id = cmId and cp.property_id = 7 and cp.environment_id = envId and cp.property_value_id = spv.id;
+
       if cProperty != 'None'
       then
-        set buf = concat(buf,'    <mitigating_property name="confidentiality" value=\"',cProperty,'\">\n      <rationale>',cRationale,'</rationale>\n    </mitigating_property>\n');
+        set buf = concat(buf,'{"name" : "confidentiality", "value" : "',cProperty,'", "rationale" : "',cRationale,'"}');
+        if iProperty != 'None' or avProperty != 'None' or acProperty != 'None' or anProperty != 'None' or panProperty != 'None' or unlProperty != 'None' or unoProperty != 'None'
+        then
+          set buf = concat(buf,",");
+        end if;
       end if;
+
       if iProperty != 'None'
       then
-        set buf = concat(buf,'    <mitigating_property name="integrity" value=\"',iProperty,'\">\n      <rationale>',iRationale,'</rationale>\n    </mitigating_property>\n');
+        set buf = concat(buf,'{"name" : "integrity", "value" : "',iProperty,'", "rationale" : "',iRationale,'"}');
+        if avProperty != 'None' or acProperty != 'None' or anProperty != 'None' or panProperty != 'None' or unlProperty != 'None' or unoProperty != 'None'
+        then
+          set buf = concat(buf,",");
+        end if;
       end if;
       if avProperty != 'None'
       then
-        set buf = concat(buf,'    <mitigating_property name="availability" value=\"',avProperty,'\">\n      <rationale>',avRationale,'</rationale>\n    </mitigating_property>\n');
+        set buf = concat(buf,'{"name" : "availability", "value" : "',avProperty,'", "rationale" : "',avRationale,'"}');
+        if acProperty != 'None' or anProperty != 'None' or panProperty != 'None' or unlProperty != 'None' or unoProperty != 'None'
+        then
+          set buf = concat(buf,",");
+        end if;
       end if;
       if acProperty != 'None'
       then
-        set buf = concat(buf,'    <mitigating_property name="accountability" value=\"',acProperty,'\">\n      <rationale>',acRationale,'</rationale>\n    </mitigating_property>\n');
+        set buf = concat(buf,'{"name" : "accountability", "value" : "',acProperty,'", "rationale" : "',acRationale,'"}');
+        if anProperty != 'None' or panProperty != 'None' or unlProperty != 'None' or unoProperty != 'None'
+        then
+          set buf = concat(buf,",");
+        end if;
       end if;
       if anProperty != 'None'
       then
-        set buf = concat(buf,'    <mitigating_property name="anonymity" value=\"',anProperty,'\">\n      <rationale>',anRationale,'</rationale>\n    </mitigating_property>\n');
+        set buf = concat(buf,'{"name" : "anonymity", "value" : "',anProperty,'", "rationale" : "',anRationale,'"}');
+        if panProperty != 'None' or unlProperty != 'None' or unoProperty != 'None'
+        then
+          set buf = concat(buf,",");
+        end if;
       end if;
       if panProperty != 'None'
       then
-        set buf = concat(buf,'    <mitigating_property name="pseudonymity" value=\"',panProperty,'\">\n      <rationale>',panRationale,'</rationale>\n    </mitigating_property>\n');
+        set buf = concat(buf,'{"name" : "pseudonymity", "value" : "',panProperty,'", "rationale" : "',panRationale,'"}');
+        if unlProperty != 'None' or unoProperty != 'None'
+        then
+          set buf = concat(buf,",");
+        end if;
       end if;
       if unlProperty != 'None'
       then
-        set buf = concat(buf,'    <mitigating_property name="unlinkability" value=\"',unlProperty,'\">\n      <rationale>',unlRationale,'</rationale>\n    </mitigating_property>\n');
+        set buf = concat(buf,'{"name" : "unlinkability", "value" : "',unlProperty,'", "rationale" : "',unlRationale,'"}');
+        if unoProperty != 'None'
+        then
+          set buf = concat(buf,",");
+        end if;
       end if;
       if unoProperty != 'None'
       then
-        set buf = concat(buf,'    <mitigating_property name="unobservability" value=\"',unoProperty,'\">\n      <rationale>',unoRationale,'</rationale>\n    </mitigating_property>\n');
+        set buf = concat(buf,'{"name" : "unobservability", "value" : "',unoProperty,'", "rationale" : "',unoRationale,'"}');
       end if;
+      set buf = concat(buf,'], "responsible_roles" : [');
    
+      set done = 0;
+      set headElement = 1;
       open cmRolesCursor;
       cmRoles_loop: loop
         fetch cmRolesCursor into roleName;
         if done = 1
         then
+          set buf = concat(buf,'], "responsible_personas" : [');
+          set headElement = 1;
           leave cmRoles_loop;
+        else
+          if headElement = 1
+          then
+            set headElement = 0;
+          else
+            set buf = concat(buf,",");
+          end if;
         end if;
-        set buf = concat(buf,'    <responsible_role name=\"',roleName,'\" />\n');
+        set buf = concat(buf,'"',roleName,'"');
       end loop cmRoles_loop;
       close cmRolesCursor;
-      set done = 0;
 
+      set done = 0;
+      set headElement = 1;
       open cmPersonasCursor;
       cmPersonas_loop: loop
         fetch cmPersonasCursor into taskName,personaName,durValue,freqValue,demValue,gcValue;
         if done = 1
         then
+          set buf = concat(buf,']}');
+          set headElement = 0;
           leave cmPersonas_loop;
+        else
+          if headElement = 1
+          then
+            set headElement = 0;
+          else
+            set buf = concat(buf,",");
+          end if;
         end if;
-        set buf = concat(buf,'    <responsible_persona task=\"',taskName,'\" persona=\"',personaName,'\" duration=\"',replace(durValue,' ','_'),'\" frequency=\"',replace(freqValue,' ','_'),'\" demands=\"',replace(demValue,' ','_'),'\" goals=\"',replace(gcValue,' ','_'),'\" />\n');
+        set buf = concat(buf,'{"task" : "',taskName,'", "persona" : "',personaName,'", "duration" : "',replace(durValue,' ','_'),'", "frequency" : "',replace(freqValue,' ','_'),'", "demands" : "',replace(demValue,' ','_'),'", "goals" : "',replace(gcValue,' ','_'),'"}');
       end loop cmPersonas_loop;
       close cmPersonasCursor;
       set done = 0;
-
-      set buf = concat(buf,'  </countermeasure_environment>\n');
     end loop cmEnv_loop;
     close cmEnvCursor;
     set done = 0;
-
-    set buf = concat(buf,'</countermeasure>\n');
   end loop cm_loop;
   close cmCursor;
-
-  set buf = concat(buf,'</goals>');
   select buf,dpCount,goalCount,obsCount,reqCount,ucCount,cmCount;
 end
 //
