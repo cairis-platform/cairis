@@ -3408,6 +3408,9 @@ class MySQLDatabaseProxy:
   def locationsToJSON(self):
     return self.responseList('call locationsToJSON()',{},'MySQL error exporting locations to JSON')[0]
 
+  def associationsToJSON(self):
+    return self.responseList('call associationsToJSON()',{},'MySQL error exporting associations to JSON')[0]
+
   def clearDatabase(self,session_id = None,dbUser=None,dbPasswd=None,dbName=None):
     b = Borg()
     if b.runmode == 'desktop':

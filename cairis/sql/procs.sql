@@ -990,6 +990,7 @@ drop procedure if exists patternsToXml;
 drop procedure if exists inheritanceInconsistency;
 drop function if exists isClassAssociationPresent;
 drop procedure if exists isTracePresent;
+drop procedure if exists associationsToJSON;
 
 
 delimiter //
@@ -29600,5 +29601,189 @@ begin
 end
 //
 
+create procedure associationsToJSON()
+begin
+  declare buf LONGTEXT default '';
+  declare headElement int default 1;
+  declare fromDim varchar(50);
+  declare fromName varchar(200);
+  declare toDim varchar(50);
+  declare toName varchar(200);
+  declare refType varchar(50);
+  declare envName varchar(50);
+  declare goalName varchar(100);
+  declare goalDim varchar(50);
+  declare subGoalName varchar(100);
+  declare subGoalDim varchar(50);
+  declare alternativeId int;
+  declare altRationale varchar(1000);
+  declare cmName varchar(100);
+  declare reqName varchar(50);
+  declare responseName varchar(100);
+  declare roleName varchar(50);
+  declare costName varchar(50);
+  declare dependerName varchar(50);
+  declare dependeeName varchar(50);
+  declare depType varchar(50);
+  declare dependencyName varchar(200);
+  declare maCount int default 0;
+  declare gaCount int default 0;
+  declare rrCount int default 0;
+  declare depCount int default 0;
+  declare done int default 0;
+  declare maCursor cursor for
+    select 'requirement',r.name,'task', t.name,rty.name from task t, requirement r, requirement_task rt, reference_type rty where rt.task_id = t.id and rt.requirement_id = r.id and r.version = (select max(i.version) from requirement i where i.id = r.id) and rt.ref_type_id = rty.id
+    union
+    select 'requirement',r.name,'usecase', u.name,rty.name from usecase u, requirement r, requirement_usecase ru, reference_type rty where ru.usecase_id = u.id and ru.requirement_id = r.id and r.version = (select max(i.version) from requirement i where i.id = r.id) and ru.ref_type_id = rty.id
+    union
+    select 'usecase', u.name, 'task', t.name, '' from usecase_task ut, usecase u, task t where ut.usecase_id = u.id and ut.task_id = t.id
+    union
+    select 'task', t.name, 'vulnerability', v.name, '' from task_vulnerability tv, vulnerability v, task t where tv.task_id = t.id and tv.vulnerability_id = v.id
+    union
+    select 'requirement', r.name, 'vulnerability', v.name, '' from requirement r, vulnerability v, requirement_vulnerability rv where rv.requirement_id = r.id and r.version = (select max(i.version) from requirement i where i.id = r.id) and rv.vulnerability_id = v.id
+    union
+    select 'domainproperty', dp.name, 'asset', a.name, '' from domainproperty dp, domainproperty_asset da, asset a where da.asset_id = a.id and da.domainproperty_id = dp.id
+    union
+    select 'requirement', r.name, 'role', ro.name, '' from requirement r, role ro, requirement_role rr where rr.requirement_id = r.id and r.version = (select max(i.version) from requirement i where i.id = r.id) and rr.role_id = ro.id
+    union
+    select 'countermeasure', c.name, 'asset', a.name, '' from countermeasure_asset ca, countermeasure c, asset a where ca.countermeasure_id = c.id and ca.asset_id = a.id
+    union
+    select 'risk', r.name, 'vulnerability', v.name, '' from risk_vulnerability rv, vulnerability v, risk r where rv.risk_id = r.id and rv.vulnerability_id = v.id
+    union
+    select 'risk', r.name, 'threat', t.name, '' from risk_threat rt, threat t, risk r where rt.risk_id = r.id and rt.threat_id = t.id
+    union
+    select 'response', r.name, 'goal', g.name, '' from response_goal rg, response r, goal g where rg.response_id = r.id and rg.goal_id = g.id
+    union
+    select 'requirement', fr.name, 'requirement', tr.name, rr.label from requirement_requirement rr, requirement fr, requirement tr where rr.from_id = fr.id and rr.to_id = tr.id;
+
+  declare goalAssocCursor cursor for
+    select e.name,hg.name,'goal',rt.name,tg.name,'goal',ga.alternative_id,ga.rationale from goalgoal_goalassociation ga, environment e, goal hg, reference_type rt, goal tg where ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and ga.environment_id = e.id
+    union
+    select e.name,hg.name,'goal',rt.name,tg.name,'requirement',ga.alternative_id,ga.rationale from goalrequirement_goalassociation ga, environment e, goal hg, reference_type rt, requirement tg where ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and tg.version = (select max(i.version) from requirement i where i.id = tg.id) and ga.environment_id = e.id
+    union
+    select e.name,hg.name,'obstacle',rt.name,tg.name,'requirement',ga.alternative_id,ga.rationale from obstaclerequirement_goalassociation ga, environment e, obstacle hg, reference_type rt, requirement tg where ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and tg.version = (select max(i.version) from requirement i where i.id = tg.id) and ga.environment_id = e.id
+    union
+    select e.name,hg.name,'goal',rt.name,tg.name,'task',ga.alternative_id,ga.rationale from goaltask_goalassociation ga, environment e, goal hg, reference_type rt, task tg where ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and ga.environment_id = e.id
+    union
+    select e.name,hg.name,'obstacle',rt.name,tg.name,'task',ga.alternative_id,ga.rationale from obstacletask_goalassociation ga, environment e, obstacle hg, reference_type rt, task tg where ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and ga.environment_id = e.id
+    union
+    select e.name,hg.name,'obstacle',rt.name,tg.name,'usecase',ga.alternative_id,ga.rationale from obstacleusecase_goalassociation ga, environment e, obstacle hg, reference_type rt, usecase tg where ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and ga.environment_id = e.id
+    union
+    select e.name,hg.name,'goal',rt.name,tg.name,'usecase',ga.alternative_id,ga.rationale from goalusecase_goalassociation ga, environment e, goal hg, reference_type rt, usecase tg where ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and ga.environment_id = e.id
+    union
+    select e.name,hg.name,'goal',rt.name,tg.name,'role',ga.alternative_id,ga.rationale from goalrole_goalassociation ga, environment e, goal hg, reference_type rt, role tg where ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and ga.environment_id = e.id
+    union
+    select e.name,hg.name,'goal',rt.name,tg.name,'domainproperty',ga.alternative_id alternative_id,ga.rationale from goaldomainproperty_goalassociation ga, environment e, goal hg, reference_type rt, domainproperty tg where ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and ga.environment_id = e.id
+    union
+    select e.name,hg.name,'goal',rt.name,tg.name,'obstacle',ga.alternative_id,ga.rationale from goalobstacle_goalassociation ga, environment e, goal hg, reference_type rt, obstacle tg, environment_goal eg where ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and ga.environment_id = e.id and ga.environment_id = eg.environment_id and ga.goal_id = eg.goal_id
+    union
+    select e.name,hg.name,'domainproperty',rt.name,tg.name,'obstacle',ga.alternative_id,ga.rationale from domainpropertyobstacle_goalassociation ga, environment e, domainproperty hg, reference_type rt, obstacle tg where ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and ga.environment_id = e.id
+    union
+    select e.name,hg.name,'obstacle',rt.name,tg.name,'goal',ga.alternative_id,ga.rationale from obstaclegoal_goalassociation ga, environment e, obstacle hg, reference_type rt, goal tg where ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and ga.environment_id = e.id
+    union
+    select e.name,hg.name,'obstacle',rt.name,tg.name,'obstacle',ga.alternative_id,ga.rationale from obstacleobstacle_goalassociation ga, environment e, obstacle hg, reference_type rt, obstacle tg where ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and ga.environment_id = e.id
+    union
+    select e.name,hg.name,'requirement',rt.name,tg.name,'obstacle',ga.alternative_id,ga.rationale from requirementobstacle_goalassociation ga, environment e, requirement hg, reference_type rt, obstacle tg where ga.goal_id = hg.id and hg.version = (select max(i.version) from requirement i where i.id = hg.id) and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and ga.environment_id = e.id
+    union
+    select e.name,hg.name,'obstacle',rt.name,tg.name,'goal',ga.alternative_id,ga.rationale from obstaclegoal_goalassociation ga, environment e, obstacle hg, reference_type rt, goal tg where ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and ga.environment_id = e.id
+    union
+    select e.name,hg.name,'obstacle',rt.name,tg.name,'threat',ga.alternative_id,ga.rationale from obstaclethreat_goalassociation ga, environment_obstacle eo, environment e, obstacle hg, threat tg, reference_type rt where ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and ga.environment_id = e.id 
+    union
+    select e.name,hg.name,'obstacle',rt.name,tg.name,'vulnerability',ga.alternative_id,ga.rationale from obstaclevulnerability_goalassociation ga, environment_obstacle eo, environment e, obstacle hg, vulnerability tg, reference_type rt where ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and ga.environment_id = e.id
+    union
+    select e.name,hg.name,'countermeasure', rt.name,tg.name,'task',ga.alternative_id,ga.rationale from countermeasure hg, task tg, countermeasuretask_goalassociation ga, environment_countermeasure ec, environment_obstacle eo, reference_type rt, environment e where ga.goal_id = hg.id and ga.subgoal_id = tg.id and ga.ref_type_id = rt.id and ga.environment_id = ec.environment_id and ec.environment_id = eo.environment_id and eo.environment_id = e.id;
+
+  declare depCursor cursor for
+    select e.name,dr.name,de.name,'goal',g.name,rgr.rationale from rolegoalrole_dependency rgr, role dr, role de, environment e, goal g where rgr.environment_id = e.id and rgr.depender_id = dr.id and rgr.dependee_id = de.id and rgr.dependency_id = g.id
+    union
+    select e.name,dr.name,de.name,'task',t.name,rtr.rationale from roletaskrole_dependency rtr, role dr, role de, environment e, task t where rtr.environment_id = e.id and rtr.depender_id = dr.id and rtr.dependee_id = de.id and rtr.dependency_id = t.id
+    union
+    select e.name,dr.name,de.name,'asset',a.name,rar.rationale from roleassetrole_dependency rar, role dr, role de, environment e, asset a where rar.environment_id = e.id and rar.depender_id = dr.id and rar.dependee_id = de.id and rar.dependency_id = a.id;
+
+  declare continue handler for not found set done = 1;
+    
+
+  set buf = concat(buf,'"manual_associations" : [\n');  
+  set headElement = 1;
+  open maCursor;
+  ma_loop: loop
+    fetch maCursor into fromDim,fromName,toDim,toName,refType;
+    if done = 1
+    then
+      set buf = concat(buf,"]\n\n");
+      leave ma_loop;
+    else
+      if headElement = 1
+      then
+        set headElement = 0;
+      else
+        set buf = concat(buf,",\n");
+      end if;
+    end if;
+
+    set buf = concat(buf,'  {"from_name" : "',fromName,'", "from_dim" : "',fromDim,'", "to_name" : "',toName,'", "to_dim" : "',toDim,'"');
+    if (fromDim = 'requirement' and toDim = 'usecase') or (fromDim = 'requirement' and toDim = 'task')
+    then
+      set buf = concat(buf,' ",ref_type" : "',refType,'"');
+    elseif (fromDim = 'requirement' and toDim = 'requirement')
+    then
+      set buf = concat(buf,', "label" : "',refType,'"');
+    end if;
+    set buf = concat(buf,'}');
+    set maCount = maCount + 1;
+  end loop ma_loop;
+  close maCursor;
+
+  set buf = concat(buf,',"goal_associations" : [\n');  
+  set done = 0;
+  set headElement = 1;
+
+  open goalAssocCursor;
+  goalAssoc_loop: loop
+    fetch goalAssocCursor into envName, goalName, goalDim, refType, subGoalName, subGoalDim, alternativeId, altRationale;
+    if done = 1
+    then
+      set buf = concat(buf,"]\n\n");
+      leave goalAssoc_loop;
+    else
+      if headElement = 1
+      then
+        set headElement = 0;
+      else
+        set buf = concat(buf,",\n");
+      end if;
+    end if;
+    set buf = concat(buf,'  {"environment" : "',envName,'", "goal_name" : "',goalName,'", "goal_dim" : "',goalDim,'", "ref_type" : "',refType,'", "subgoal_name" : "',subGoalName,'", "subgoal_dim" : "',subGoalDim,'", "alternative_id" : "',alternativeId,'", "rationale" : "',altRationale,'"}');
+    set gaCount = gaCount + 1;
+  end loop goalAssoc_loop;
+  close goalAssocCursor;
+
+  set buf = concat(buf,',"dependencies" : [\n');  
+  set done = 0;
+  set headElement = 1;
+  open depCursor;
+  dep_loop: loop
+    fetch depCursor into envName,dependerName,dependeeName,depType,dependencyName,altRationale;
+    if done = 1
+    then
+      set buf = concat(buf,"]\n\n");
+      leave dep_loop;
+    else
+      if headElement = 1
+      then
+        set headElement = 0;
+      else
+        set buf = concat(buf,",\n");
+      end if;
+    end if;
+    set buf = concat(buf,'  {"depender" : "',dependerName,'", "dependee" : "',dependeeName,'", "dependency_type" : "',depType,'", "dependency" : "',dependencyName,'", "environment" : "',envName,'", "rationale" : "',altRationale,'"}');
+
+    set depCount = depCount + 1;
+  end loop dep_loop;
+  close depCursor;
+  set done = 0;
+  select buf,maCount,gaCount,rrCount,depCount;
+end
+//
 
 delimiter ;
