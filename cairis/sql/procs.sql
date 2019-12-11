@@ -28350,7 +28350,7 @@ begin
 
   set done = 0;
   set headElement = 1;
-  set buf = concat(buf,'",obstacles" : [\n');
+  set buf = concat(buf,',"obstacles" : [\n');
 
   open obsCursor;
   obs_loop: loop
