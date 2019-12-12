@@ -3110,6 +3110,9 @@ class MySQLDatabaseProxy:
   def dataflowsToXml(self,includeHeader=True):
     return self.responseList('call dataflowsToXml(:head)',{'head':includeHeader},'MySQL error exporting dataflow data to XML')[0]
 
+  def dataflowsToJSON(self):
+    return self.responseList('call dataflowsToJSON()',{},'MySQL error exporting dataflow data to JSON')[0]
+
   def projectToXml(self,includeHeader=True):
     return self.responseList('call projectToXml(:head)',{'head':includeHeader},'MySQL error exporting project data to XML')[0]
 

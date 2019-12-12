@@ -904,6 +904,7 @@ drop procedure if exists deleteDataFlow;
 drop procedure if exists getDataFlows;
 drop procedure if exists getDataFlowAssets;
 drop procedure if exists dataflowsToXml;
+drop procedure if exists dataflowsToJSON;
 drop procedure if exists dataFlowDiagram;
 drop procedure if exists addTrustBoundary;
 drop procedure if exists updateTrustBoundary;
@@ -24227,6 +24228,7 @@ begin
 
 end
 //
+
 create procedure dataflowsToXml(in includeHeader int)
 begin
   declare buf LONGTEXT default '<?xml version="1.0"?>\n<!DOCTYPE dataflows PUBLIC "-//CAIRIS//DTD DATAFLOW 1.0//EN" "http://cairis.org/dtd/dataflow.dtd">\n\n<dataflows>\n';
@@ -29969,6 +29971,152 @@ begin
   close tcCursor;
 
   select buf,crCount,tcCount;
+end
+//
+
+create procedure dataflowsToJSON()
+begin
+  declare buf LONGTEXT default '';
+  declare headElement int default 1;
+  declare done int default 0;
+  declare dfName varchar(255);
+  declare envName varchar (200);
+  declare fromName varchar (200);
+  declare fromType varchar (9);
+  declare toName varchar (200);
+  declare toType varchar (9);
+  declare assetName varchar (200);
+  declare compName varchar (200);
+  declare compType varchar (20);
+  declare tbName varchar(50);
+  declare tbDesc varchar(4000);
+  declare dfId int;
+  declare tbId int;
+  declare envId int;
+  declare dfCount int default 0;
+  declare tbCount int default 0;
+  declare dfCursor cursor for select dataflow, environment, from_name, from_type, to_name, to_type from dataflows;
+  declare tbCursor cursor for select id,name,description from trust_boundary;
+  declare tbEnvCursor cursor for select distinct environment_id from environment_trust_boundary where trust_boundary_id = tbId;
+  declare tbCompCursor cursor for
+    select uc.name,'process' from trust_boundary_usecase tbu, usecase uc where tbu.usecase_id = uc.id and trust_boundary_id = tbId and environment_id = envId
+    union
+    select a.name,'datastore' from trust_boundary_asset tba, asset a where tba.asset_id = a.id and trust_boundary_id = tbId and environment_id = envId;
+  declare dfAssetCursor cursor for select a.name from asset a, dataflow_asset da where da.dataflow_id = dfId and da.asset_id = a.id;
+  declare continue handler for not found set done = 1;
+
+  set headElement = 1;
+  set buf = concat(buf,'"dataflows": [\n');
+
+  open dfCursor;
+  df_loop: loop
+    fetch dfCursor into dfName, envName, fromName, fromType, toName, toType;
+    if done = 1
+    then
+      set buf = concat(buf,"]\n\n");
+      leave df_loop;
+    else
+      if headElement = 1
+      then
+        set headElement = 0;
+      else
+        set buf = concat(buf,",\n");
+      end if;
+    end if;
+
+    set buf = concat(buf,'  {"name" : "',dfName,'", "environment" : "',envName,'", "from_name" : "',fromName,'", "from_type" : "',fromType,'", "to_name" : "',toName,'", "to_type" : "',toType,'", "assets" : [');
+    select id into envId from environment where name = envName;
+    select id into dfId from dataflow where name = dfName and environment_id = envId limit 1;
+
+    open dfAssetCursor;
+    dfAsset_loop: loop
+      fetch dfAssetCursor into assetName;
+      if done = 1
+      then 
+        set buf = concat(buf,']}');
+        leave dfAsset_loop;
+      else
+        if headElement = 1
+        then
+          set headElement = 0;
+        else
+          set buf = concat(buf,",");
+        end if;
+      end if;
+      set buf = concat(buf,'"',assetName,'"');
+    end loop dfAsset_loop;
+    close dfAssetCursor;
+    set done = 0;
+    set dfCount = dfCount + 1;
+  end loop df_loop;
+  close dfCursor;
+
+  set buf = concat(buf,',"trust_boundaries": [\n');
+  set done = 0;
+  set headElement = 1;
+  open tbCursor;
+  tb_loop: loop
+    fetch tbCursor into tbId, tbName, tbDesc;
+    if done = 1
+    then
+      set buf = concat(buf,"]\n\n");
+      leave tb_loop;
+    else
+      if headElement = 1
+      then
+        set headElement = 0;
+      else
+        set buf = concat(buf,",\n");
+      end if;
+    end if;
+    set buf = concat(buf,'  {"name" : "',tbName,'", "description" : "',tbDesc,'", "environments" : [\n');
+    open tbEnvCursor;
+    tbEnv_loop: loop
+      fetch tbEnvCursor into envId;
+      if done = 1
+      then 
+        set buf = concat(buf,']}');
+        leave tbEnv_loop;
+      else
+        if headElement = 1
+        then
+          set headElement = 0;
+        else
+          set buf = concat(buf,",\n");
+        end if;
+      end if;
+      select name into envName from environment where id = envId;
+      set buf = concat(buf,'    {"name" : "',envName,'", "components" : [');
+
+      set done = 0;
+      set headElement = 1;
+      open tbCompCursor;
+      tbComp_loop: loop
+        fetch tbCompCursor into compName, compType;
+        if done = 1
+        then
+          set buf = concat(buf,']\n    }');
+          set headElement = 0;
+          leave tbComp_loop;
+        else
+          if headElement = 1
+          then
+            set headElement = 0;
+          else
+            set buf = concat(buf,",");
+          end if;
+        end if;
+        set buf = concat(buf,'{"name" : "',compName,'", "type" : "',compType,'"}');
+      end loop tbComp_loop;
+      close tbCompCursor;
+      set done = 0;
+    end loop tbEnv_loop;
+    close tbEnvCursor;
+    set done = 0;
+    set tbCount = tbCount + 1;
+  end loop tb_loop;
+  close tbCursor;
+  select buf,dfCount;
 end
 //
 

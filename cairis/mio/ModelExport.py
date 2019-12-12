@@ -321,6 +321,7 @@ def exportJSON(outFile = None, session_id = None):
   jsonBuf += b.get_dbproxy(session_id).goalsToJSON()[0] + ',\n\n'
   jsonBuf += b.get_dbproxy(session_id).associationsToJSON()[0] + ',\n\n'
   jsonBuf += b.get_dbproxy(session_id).misusabilityToJSON()[0] + ',\n\n'
+  jsonBuf += b.get_dbproxy(session_id).dataflowsToJSON()[0] + ',\n\n'
   jsonBuf += b.get_dbproxy(session_id).locationsToJSON()[0] + '\n\n'
   jsonBuf += '}'
   if outFile == None:

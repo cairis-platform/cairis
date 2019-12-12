@@ -33,6 +33,7 @@ class ModelExportTests(unittest.TestCase):
     cairis.core.BorgFactory.initialise()
 # Uncommenting the below and commenting the other setup lines might be useful if you want to test exporting using different models
 #    importModelFile(os.environ['CAIRIS_SRC'] + '/../examples/exemplars/NeuroGrid/NeuroGrid.xml',1)
+#    importModelFile(os.environ['CAIRIS_SRC'] + '/../examples/exemplars/ACME_Water/ACME_Water.xml',1)
     importModelFile(os.environ['CAIRIS_SRC'] + '/test/webinos_incomplete.xml',1)
     importTVTypeFile(os.environ['CAIRIS_SRC'] + '/test/OWASPTypes.xml',0)
     importTVTypeFile(os.environ['CAIRIS_SRC'] + '/../examples/threat_vulnerability_types/cwecapec_tv_types.xml',0)
