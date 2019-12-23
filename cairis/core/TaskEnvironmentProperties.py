@@ -20,7 +20,7 @@ __author__ = 'Shamal Faily'
 from .EnvironmentProperties import EnvironmentProperties
 
 class TaskEnvironmentProperties(EnvironmentProperties):
-  def __init__(self,environmentName,deps = '',personas = [],assets = [],concs=[],narrative = '',consequences = '', benefits = '',tCodes={'narrative':{},'benefits':{},'consequences':{}}):
+  def __init__(self,environmentName,deps = '',personas = [],assets = [],concs=[],narrative = '',consequences = '', benefits = '',contribs=[],tCodes={'narrative':{},'benefits':{},'consequences':{}}):
     EnvironmentProperties.__init__(self,environmentName)
     self.thePersonas = personas
     self.theAssets = assets
@@ -29,6 +29,7 @@ class TaskEnvironmentProperties(EnvironmentProperties):
     self.theConsequences = consequences
     self.theBenefits = benefits
     self.theConcernAssociations = concs
+    self.theContributions = contribs
     self.theCodes = tCodes
 
   def personas(self): return self.thePersonas
@@ -38,6 +39,7 @@ class TaskEnvironmentProperties(EnvironmentProperties):
   def benefits(self): return self.theBenefits
   def dependencies(self): return self.theDependencies
   def concernAssociations(self): return self.theConcernAssociations
+  def contributions(self): return self.theContributions
   def codes(self,sectName = ''): 
     if sectName == '': return self.theCodes
     else: return self.theCodes[sectName]

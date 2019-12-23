@@ -23,13 +23,14 @@ from cairis.core.Task import Task
 from cairis.core.TaskParameters import TaskParameters
 from cairis.core.ValueType import ValueType
 from cairis.core.ValueTypeParameters import ValueTypeParameters
+from cairis.core.TaskContribution import TaskContribution
 from cairis.misc.KaosModel import KaosModel
 from cairis.misc.AssumptionTaskModel import AssumptionTaskModel as GraphicalAssumptionTaskModel
 from cairis.data.CairisDAO import CairisDAO
 from cairis.tools.JsonConverter import json_serialize, json_deserialize
 from cairis.tools.ModelDefinitions import TaskModel, TaskEnvironmentPropertiesModel, ConcernAssociationModel
 from cairis.tools.SessionValidator import check_required_keys, get_fonts
-from cairis.tools.PseudoClasses import PersonaTaskCharacteristics
+from cairis.tools.PseudoClasses import PersonaTaskCharacteristics, TaskGoalContribution
 
 
 __author__ = 'Shamal Faily'
@@ -192,6 +193,12 @@ class TaskDAO(CairisDAO):
           for gca in real_prop.concernAssociations():
             gcaList.append(ConcernAssociationModel(gca[0],gca[1],gca[2],gca[3],gca[4])) 
           real_prop.theConcernAssociations = gcaList
+          realContList = real_prop.theContributions
+          del real_prop.theContributions
+          contList = []
+          for tgc in realContList:
+            contList.append(TaskGoalContribution(tgc.source(),tgc.destination(),tgc.environment(),tgc.contribution()))
+          real_prop.theContributions = contList
           new_props.append(real_prop)
     elif fake_props is not None:
       if len(fake_props) > 0:
@@ -205,8 +212,9 @@ class TaskDAO(CairisDAO):
           for gca in fake_prop['theConcernAssociations']:
             gcaList.append([gca['theSource'],gca['theSourceNry'],gca['theLinkVerb'],gca['theTarget'],gca['theTargetNry']]) 
           fake_prop['theConcernAssociations'] = gcaList
-         
-          
+          contList = []
+          for tgc in fake_prop['theContributions']:
+            contList.append(TaskContribution(tgc['theSource'],tgc['theDestination'],tgc['theEnvironment'],tgc['theContribution']))
           new_prop = TaskEnvironmentProperties(
                        environmentName=fake_prop['theEnvironmentName'],
                        deps=fake_prop['theDependencies'],
@@ -216,6 +224,7 @@ class TaskDAO(CairisDAO):
                        narrative=fake_prop['theNarrative'],
                        consequences=fake_prop['theConsequences'],
                        benefits=fake_prop['theBenefits'],
+                       contribs=contList,
                        tCodes=[]
                      )
           new_props.append(new_prop)

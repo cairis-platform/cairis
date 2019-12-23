@@ -50,6 +50,7 @@ from cairis.controllers import EnvironmentController
 from cairis.controllers import ExternalDocumentController
 from cairis.controllers import FindController
 from cairis.controllers import GoalController
+from cairis.controllers import GoalContributionController
 from cairis.controllers import LocationsController
 from cairis.controllers import MisuseCaseController
 from cairis.controllers import ObjectDependencyController
@@ -75,6 +76,7 @@ from cairis.controllers import TraceController
 from cairis.controllers import TrustBoundaryController
 from cairis.controllers import UploadController
 from cairis.controllers import UseCaseController
+from cairis.controllers import UserGoalController
 from cairis.controllers import ValidationController
 from cairis.controllers import ValueTypeController
 from cairis.controllers import VersionController
@@ -350,6 +352,10 @@ api.add_resource(GoalController.ResponsibilityModelAPI, '/api/responsibility/mod
 api.add_resource(GoalController.GoalAssociationAPI, '/api/goals/association',endpoint='goal_associations')
 api.add_resource(GoalController.GoalAssociationByNameAPI, '/api/goals/association/environment/<path:environment_name>/goal/<path:goal_name>/subgoal/<path:subgoal_name>',endpoint='goal_association')
 
+# Goal contribution routes
+api.add_resource(GoalContributionController.GoalContributionsAPI, '/api/goal_contributions',endpoint='goal_contributions')
+api.add_resource(GoalContributionController.GoalContributionByNameAPI, '/api/goal_contributions/source/<sourceName>/target/<targetName>',endpoint='goal_contribution')
+
 # Export route
 api.add_resource(CExportController.CExportFileAPI, '/api/export/file',endpoint='export')
 api.add_resource(CExportController.CExportArchitecturalPatternAPI, '/api/export/file/architectural_pattern/<path:architectural_pattern_name>',endpoint='exportarchitecturalpattern')
@@ -514,6 +520,11 @@ api.add_resource(UseCaseController.UseCasesSummaryAPI, '/api/usecases/summary',e
 api.add_resource(UseCaseController.UseCaseByNameAPI, '/api/usecases/name/<path:name>',endpoint='usecase')
 api.add_resource(UseCaseController.UseCaseRequirementsByNameAPI, '/api/usecases/name/<path:usecase_name>/requirements',endpoint='usecaserequirements')
 api.add_resource(UseCaseController.UseCaseGoalsByNameAPI, '/api/usecases/name/<path:usecase_name>/environment/<path:environment_name>/goals',endpoint='usecasegoals')
+
+# User goal routes
+api.add_resource(UserGoalController.UserGoalsAPI, '/api/user_goals',endpoint='user_goals')
+api.add_resource(UserGoalController.UserGoalByNameAPI, '/api/user_goals/name/<path:name>',endpoint='user_goal')
+api.add_resource(UserGoalController.UserGoalModelAPI, '/api/user_goals/model/environment/<path:environment_name>/filter_name/<path:filter_element>',endpoint='usergoalmodel')
 
 # Validation route
 api.add_resource(ValidationController.ValidationAPI, '/api/validation/environment/<path:name>',endpoint='environmentvalidation')

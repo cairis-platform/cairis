@@ -382,7 +382,7 @@
 <!ATTLIST dependency dependency CDATA #REQUIRED>
 <!ATTLIST dependency environment CDATA #REQUIRED>
 
-<!ELEMENT synopses (characteristic_synopsis*,reference_synopsis*,step_synopsis*,reference_contribution*,usecase_contribution*)>
+<!ELEMENT synopses (characteristic_synopsis*,reference_synopsis*,step_synopsis*,reference_contribution*,usecase_contribution*,task_contribution*)>
 <!ELEMENT characteristic_synopsis EMPTY>
 <!ATTLIST characteristic_synopsis characteristic CDATA #REQUIRED>
 <!ATTLIST characteristic_synopsis synopsis CDATA #REQUIRED>
@@ -412,6 +412,11 @@
 <!ATTLIST usecase_contribution referent CDATA #REQUIRED>
 <!ATTLIST usecase_contribution means_end (means | end) #REQUIRED>
 <!ATTLIST usecase_contribution contribution (Make | SomePositive | Help | Hurt | SomeNegative | Break) #REQUIRED>
+<!ELEMENT task_contribution EMPTY>
+<!ATTLIST task_contribution task CDATA #REQUIRED>
+<!ATTLIST task_contribution environment CDATA #REQUIRED>
+<!ATTLIST task_contribution referent CDATA #REQUIRED>
+<!ATTLIST task_contribution contribution (Make | SomePositive | Help | Hurt | SomeNegative | Break) #REQUIRED>
 
 <!ELEMENT misusability (concept_reference*,task_characteristic*)>
 

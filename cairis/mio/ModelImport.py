@@ -547,11 +547,12 @@ def importSynopsesFile(importFile,session_id = None):
     stepSyns = handler.stepSynopses()
     refConts = handler.referenceContributions()
     ucConts = handler.useCaseContributions()
-    return importSynopses(charSyns,refSyns,stepSyns,refConts,ucConts,session_id = session_id)
+    taskConts = handler.taskContributions()
+    return importSynopses(charSyns,refSyns,stepSyns,refConts,ucConts,taskConts,session_id = session_id)
   except xml.sax.SAXException as e:
     raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
 
-def importSynopses(charSyns,refSyns,stepSyns,refConts,ucConts,session_id):
+def importSynopses(charSyns,refSyns,stepSyns,refConts,ucConts,taskConts,session_id):
   b = Borg()
   db_proxy = b.get_dbproxy(session_id)
   for cs in charSyns:
@@ -565,8 +566,10 @@ def importSynopses(charSyns,refSyns,stepSyns,refConts,ucConts,session_id):
     db_proxy.addReferenceContribution(rc)
   for uc in ucConts:
     db_proxy.addUseCaseContribution(uc)
+  for tc in taskConts:
+    db_proxy.addTaskContribution(tc)
 
-  msgStr = 'Imported ' + str(len(charSyns)) + ' characteristic synopses, ' + str(len(refSyns)) + ' reference synopses, ' + str(len(stepSyns)) + ' step synopses, ' + str(len(refConts)) + ' reference contributions, and ' + str(len(ucConts)) + ' use case contributions.'
+  msgStr = 'Imported ' + str(len(charSyns)) + ' characteristic synopses, ' + str(len(refSyns)) + ' reference synopses, ' + str(len(stepSyns)) + ' step synopses, ' + str(len(refConts)) + ' reference contributions, ' + str(len(ucConts)) + ' use case contributions, and ' + str(len(taskConts)) + ' task contrbutions.'
   return msgStr
 
 def importDomainValuesFile(importFile,session_id = None):

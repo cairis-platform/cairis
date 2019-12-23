@@ -19,6 +19,7 @@
 from xml.sax.handler import ContentHandler,EntityResolver
 from cairis.core.ReferenceSynopsis import ReferenceSynopsis
 from cairis.core.ReferenceContribution import ReferenceContribution
+from cairis.core.TaskContribution import TaskContribution
 from cairis.core.Borg import Borg
 
 __author__ = 'Shamal Faily'
@@ -33,6 +34,7 @@ class SynopsesContentHandler(ContentHandler,EntityResolver):
     self.theStepSynopses = []
     self.theReferenceContributions = []
     self.theUseCaseContributions = []
+    self.theTaskContributions = []
 
   def resolveEntity(self,publicId,systemId):
     return systemId
@@ -51,6 +53,9 @@ class SynopsesContentHandler(ContentHandler,EntityResolver):
 
   def useCaseContributions(self):
     return self.theUseCaseContributions
+
+  def taskContributions(self):
+    return self.theTaskContributions
 
   def startElement(self,name,attrs):
     self.currentElementName = name
@@ -88,3 +93,9 @@ class SynopsesContentHandler(ContentHandler,EntityResolver):
       me = attrs['means_end']
       cont = attrs['contribution']
       self.theUseCaseContributions.append(ReferenceContribution(ucName,refName,me,cont))
+    elif name == 'task_contribution':
+      taskName = attrs['task']
+      envName = attrs['environment']
+      refName = attrs['referent']
+      cont = attrs['contribution']
+      self.theTaskContributions.append(TaskContribution(taskName,refName,envName,cont))

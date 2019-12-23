@@ -60,6 +60,9 @@ from cairis.core.ClassAssociation import ClassAssociation
 from cairis.core.GoalAssociation import GoalAssociation
 from cairis.core.ExternalDocument import ExternalDocument
 from cairis.core.DocumentReference import DocumentReference
+from cairis.core.ReferenceSynopsis import ReferenceSynopsis
+from cairis.core.ReferenceContribution import ReferenceContribution
+from cairis.core.GoalContribution import GoalContribution
 from cairis.core.ConceptReference import ConceptReference
 from cairis.core.PersonaCharacteristic import PersonaCharacteristic
 from cairis.core.TaskCharacteristic import TaskCharacteristic
@@ -795,6 +798,42 @@ class DocumentReferenceModel(object):
     "theDocName": fields.String,
     "theContributor": fields.String,
     "theExcerpt": fields.String
+  }
+  required = list(resource_fields.keys())
+  required.remove(obj_id_field)
+
+class ReferenceSynopsisModel(object):
+  resource_fields = {
+    obj_id_field: fields.String,
+    "theReference": fields.String,
+    "theSynopsis": fields.String,
+    "theDimension": fields.String,
+    "theActor": fields.String,
+    "theSynopsisDimension" : fields.String
+  }
+  required = list(resource_fields.keys())
+  required.remove(obj_id_field)
+
+class ReferenceContributionModel(object):
+  resource_fields = {
+    obj_id_field: fields.String,
+    "theSource": fields.String,
+    "theDestination": fields.String,
+    "theMeansEnd": fields.String,
+    "theContribution": fields.String
+  }
+  required = list(resource_fields.keys())
+  required.remove(obj_id_field)
+
+class GoalContributionModel(object):
+  resource_fields = {
+    obj_id_field: fields.String,
+    "theSource": fields.String,
+    "theSourceType": fields.String,
+    "theDestination": fields.String,
+    "theDestinationType": fields.String,
+    "theMeansEnd": fields.String,
+    "theContribution": fields.String
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)

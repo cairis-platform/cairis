@@ -106,6 +106,8 @@ from .DataFlow import DataFlow
 from .DataFlowParameters import DataFlowParameters
 from .TrustBoundary import TrustBoundary
 from .ValidationResult import ValidationResult
+from .GoalContribution import GoalContribution
+from .TaskContribution import TaskContribution
 from cairis.tools.PseudoClasses import RiskRating
 import string
 import os
@@ -741,7 +743,7 @@ class MySQLDatabaseProxy:
     return dimensions
 
   def getDimensionNames(self,dimensionTable,currentEnvironment = ''):
-    if (dimensionTable != 'template_asset' and dimensionTable != 'template_requirement' and dimensionTable != 'template_goal' and dimensionTable != 'locations' and dimensionTable != 'persona_characteristic_synopsis'):
+    if (dimensionTable != 'template_asset' and dimensionTable != 'template_requirement' and dimensionTable != 'template_goal' and dimensionTable != 'locations' and dimensionTable != 'persona_characteristic_synopsis' and dimensionTable != 'document_reference_synopsis'):
       callTxt = 'call ' + dimensionTable + 'Names(:env)' 
       argDict = {'env':currentEnvironment}
       return self.responseList(callTxt,argDict,'MySQL error getting ' + dimensionTable + 's')
@@ -750,6 +752,7 @@ class MySQLDatabaseProxy:
     elif (dimensionTable == 'template_goal'): return self.responseList('call template_goalNames()',{},'MySQL error getting ' + dimensionTable + 's')
     elif (dimensionTable == 'locations'): return self.responseList('call locationsNames()',{},'MySQL error getting ' + dimensionTable + 's')
     elif (dimensionTable == 'persona_characteristic_synopsis'): return self.responseList('call persona_characteristic_synopsisNames()',{},'MySQL error getting ' + dimensionTable + 's')
+    elif (dimensionTable == 'document_reference_synopsis'): return self.responseList('call document_reference_synopsisNames()',{},'MySQL error getting ' + dimensionTable + 's')
 
   def getEnvironmentNames(self):
     return self.responseList('call nonCompositeEnvironmentNames()',{},'MySQL error getting environments')
@@ -996,8 +999,9 @@ class MySQLDatabaseProxy:
         consequences = self.taskConsequences(taskId,environmentId)
         benefits = self.taskBenefits(taskId,environmentId)
         concernAssociations = self.taskConcernAssociations(taskId,environmentId)
+        contributions = self.taskContributions(taskName,environmentName)
         envCodes = self.taskEnvironmentCodes(taskName,environmentName)
-        properties = TaskEnvironmentProperties(environmentName,dependencies,personas,assets,concernAssociations,narrative,consequences,benefits,envCodes)
+        properties = TaskEnvironmentProperties(environmentName,dependencies,personas,assets,concernAssociations,narrative,consequences,benefits,contributions,envCodes)
         environmentProperties.append(properties)
       parameters = TaskParameters(taskName,taskShortCode,taskObjective,isAssumption,taskAuthor,tags,environmentProperties)
       task = ObjectFactory.build(taskId,parameters)
@@ -1098,6 +1102,7 @@ class MySQLDatabaseProxy:
       self.addTaskPersonas(taskId,cProperties.personas(),environmentName)
       self.addTaskConcernAssociations(taskId,environmentName,cProperties.concernAssociations())
       self.addTaskNarrative(taskId,cProperties.narrative(),cProperties.consequences(),cProperties.benefits(),environmentName)
+      self.addTaskContributions(cProperties.contributions())
       self.addTaskEnvironmentCodes(taskName,environmentName,cProperties.codes())
     return taskId
 
@@ -1136,6 +1141,7 @@ class MySQLDatabaseProxy:
       if (len(taskAssets) > 0):
         self.addTaskAssets(taskId,taskAssets,environmentName)
       self.addTaskNarrative(taskId,cProperties.narrative(),cProperties.consequences(),cProperties.benefits(),environmentName)
+      self.addTaskContributions(cProperties.contributions())
       self.addTaskEnvironmentCodes(taskName,environmentName,cProperties.codes())
 
   def updateMisuseCase(self,parameters,session):
@@ -3345,6 +3351,24 @@ class MySQLDatabaseProxy:
     contName = rc.contribution()
     self.updateDatabase('call updateUseCaseContribution(:useCase,:csName,:meName,:cont)',{'useCase':ucName,'csName':csName,'meName':meName,'cont':contName},'MySQL error updating use case contribution')
 
+  def addTaskContributions(self,tcs):
+    for tc in tcs:
+      self.addTaskContribution(tc)
+
+  def addTaskContribution(self,tc):
+    src = tc.source()
+    dest = tc.destination()
+    env = tc.environment()
+    cont = tc.contribution()
+    self.updateDatabase('call addTaskContribution(:src,:dest,:env,:cont)',{'src':src,'dest':dest,'env':env,'cont':cont},'MySQL error adding task contribution')
+
+  def updateTaskContribution(self,tc):
+    src = tc.source()
+    dest = tc.destination()
+    env = tc.environment()
+    cont = tc.contribution()
+    self.updateDatabase('call updateTaskContribution(:src,:dest,:env,:cont)',{'src':src,'dest':dest,'env':env,'cont':cont},'MySQL error updating task contribution')
+
   def pcToGrl(self,pNames,tNames,envName):
     return self.responseList('call pcToGrl(":pNames", ":tNames", :env)',{'pNames':pNames,'tNames':tNames,'env':envName},'MySQL error exporting to GRL')[0]
 
@@ -4833,3 +4857,52 @@ class MySQLDatabaseProxy:
     if (self.responseList('call isTracePresent(:fromObjt,:fromName,:toObjt,:toName)',{'fromObjt':fromObjt,'fromName':fromName,'toObjt':toObjt,'toName':toName},'MySQL error checking trace')[0]):
       raise DatabaseProxyException('Trace from ' + fromObjt + ' ' + fromName + ' to ' + toObjt + ' ' + toName + ' already exists')
     
+  def getUserGoals(self,constraintId = -1):
+    rows = self.responseList('call getUserGoals(:id)',{'id':constraintId},'MySQL error getting user goals')
+    objts = []
+    for row in rows:
+      objts.append(ReferenceSynopsis(row[0],row[1],row[2],row[3],'persona',row[4],row[5]))
+    return objts
+
+  def addUserGoal(self,objt):
+    ugId = self.newId()
+    refName = objt.reference()
+    synName = objt.synopsis()
+    dimName = objt.dimension()
+    personaName = objt.actor()
+    self.updateDatabase('call addUserGoal(:ugId,:refName,:synName,:dimName,:personaName)',{'ugId':ugId,'refName':refName,'synName':synName,'dimName':dimName,'personaName':personaName},'MySQL error adding user goal')
+
+  def updateUserGoal(self,objt):
+    ugId = objt.id()
+    refName = objt.reference()
+    synName = objt.synopsis()
+    dimName = objt.dimension()
+    personaName = objt.actor()
+    self.updateDatabase('call updateUserGoal(:ugId,:refName,:synName,:dimName,:personaName)',{'ugId':ugId,'refName':refName,'synName':synName,'dimName':dimName,'personaName':personaName},'MySQL error updating user goal')
+
+  def deleteUserGoal(self,ugId = -1):
+    self.deleteObject(ugId,'user_goal')
+
+  def getGoalContributions(self,envName,filterElement = ''):
+    rows = self.responseList('call getGoalContributions(:envName,:filter)',{'envName':envName,'filter':filterElement},'MySQL error getting goal contributions')
+    return rows
+
+  def goalSatisfactionScore(self,goalName,envName):
+    return self.responseList('call calculateGoalScore(:goalName,:envName)',{'goalName':goalName,'envName':envName},'MySQL error getting goal contribution')[0]
+
+  def getGoalContributionsTable(self,sourceId = -1, targetId = -1):
+    rows = self.responseList('call getGoalContributionsTable(:source_id,:target_id)',{'source_id':sourceId,'target_id':targetId},'MySQL error getting goal contribution table')
+    objts = []
+    for row in rows:
+      objts.append(GoalContribution(row[0],row[1],row[2],row[3],row[4],row[5]))
+    return objts
+
+  def deleteGoalContribution(self,src,tgt):
+    self.updateDatabase(' call deleteGoalContribution(:src,:tgt)',{'src':src,'tgt':tgt},'MySQL error deleting goal contribution')
+
+  def taskContributions(self,taskName,envName):
+    rows = self.responseList('call getTaskContributions(:taskName,:envName)',{'taskName':taskName,'envName':envName},'MySQL error getting task contributions')
+    objts = []
+    for row in rows:
+      objts.append(TaskContribution(taskName,row[0],envName,row[1]))
+    return objts

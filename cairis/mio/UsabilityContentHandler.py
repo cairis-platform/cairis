@@ -349,7 +349,7 @@ class UsabilityContentHandler(ContentHandler,EntityResolver):
       self.theTasks.append(p)
       self.resetTaskAttributes()
     elif name == 'task_environment':
-      p = TaskEnvironmentProperties(unescape(self.theEnvironmentName),unescape(self.theDependencies),self.theTaskPersonas,self.theConcerns,self.theConcernAssociations,unescape(self.theNarrative),unescape(self.theConsequences),unescape(self.theBenefits),{'narrative':{},'consequences':{},'benefits':{}})
+      p = TaskEnvironmentProperties(unescape(self.theEnvironmentName),unescape(self.theDependencies),self.theTaskPersonas,self.theConcerns,self.theConcernAssociations,unescape(self.theNarrative),unescape(self.theConsequences),unescape(self.theBenefits),[],{'narrative':{},'consequences':{},'benefits':{}})
       self.theEnvironmentProperties.append(p)
       self.resetTaskEnvironmentAttributes()
     elif name == 'activities':

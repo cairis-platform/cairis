@@ -19,6 +19,10 @@
 import argparse
 import os
 import sys
+from zipfile import ZipFile
+import magic
+import io
+import xml.etree.ElementTree as ET
 from cairis.core.ARM import ARMException
 
 __author__ = 'Shamal Faily'
@@ -28,27 +32,83 @@ def main(args=None):
   parser.add_argument('modelFile',help='model file to import')
   parser.add_argument('--user',dest='userName',help='user name', default='cairis_test')
   parser.add_argument('--database',dest='dbName',help='database name',default='cairis_test')
-  parser.add_argument('--type',dest='modelFormat',help='model type to import.  One of securitypattern, attackpattern, tvtypes, directory, requirements, riskanalysis, usability, misusability, project, domainvalues, architecturalpattern, associations, synopses, processes, assets, locations, dataflows or all',default='all')
+  parser.add_argument('--type',dest='modelFormat',help='model type to import.  One of securitypattern, attackpattern, tvtypes, directory, requirements, riskanalysis, usability, misusability, project, domainvalues, architecturalpattern, associations, synopses, processes, assets, locations, dataflows, package, or all',default='all')
   parser.add_argument('--overwrite',dest='isOverwrite',help='Where appropriate, overwrite an existing CAIRIS model with this model',default=1)
   parser.add_argument('--image_dir',dest='imageDir',help='Where appropriate, directory for model images (overwrites default_image_dir value in cairis.cnf)')
   args = parser.parse_args() 
   mFormat = args.modelFormat
   importFile = args.modelFile
   overwriteFlag = args.isOverwrite
+
+  if (os.access(importFile, os.R_OK)) == False:
+    raise ARMException("Cannot access " + importFile)
+
   import cairis.core.BorgFactory
   from cairis.core.Borg import Borg
   cairis.core.BorgFactory.initialise(user=args.userName,db=args.dbName)
   b = Borg()
-  if args.imageDir != None:
-    b.imageDir = os.path.abspath(args.imageDir)
-  file_import(importFile,mFormat,overwriteFlag)
+  if (mFormat == 'package'):
+    pkgStr = open(importFile,'rb').read()
+    package_import(pkgStr)
+  else:
+    if args.imageDir != None:
+      b.imageDir = os.path.abspath(args.imageDir)
+    file_import(importFile,mFormat,overwriteFlag)
+
+def package_import(pkgStr,session_id = None):
+  from cairis.core.Borg import Borg
+  b = Borg()
+  buf = io.BytesIO(pkgStr)
+  zf = ZipFile(buf)
+  fileList = zf.namelist()
+      
+  modelImages = []
+  models = {'cairis_model' : '', 'locations' : [], 'architectural_pattern' : [], 'security_patterns' : []}
+
+  for fileName in fileList:
+    fName,fType = fileName.split('.')
+    if (fType == 'xml'):
+      zf.extract(fileName,b.tmpDir)
+      modelType = ET.fromstring(open(b.tmpDir + '/' + fileName).read()).tag
+      os.remove(b.tmpDir + '/' + fileName)
+      if (modelType == 'cairis_model'):
+        if (models[modelType] != ''):
+          raise ARMException('Cannot have more than one CAIRIS model file in the package file')
+        models[modelType] = fileName
+      else:
+        models[modelType].append(fileName)
+    else:
+      modelImages.append(fileName)
+
+  cairisModel = models['cairis_model']
+  if (cairisModel == ''):
+    raise ARMException('No CAIRIS model file in the package file')
+  else:
+    zf.extract(cairisModel,b.tmpDir)
+    file_import(b.tmpDir + '/' + cairisModel,'all',1,session_id) 
+    os.remove(b.tmpDir + '/' + cairisModel)
+
+  for typeKey in ['locations','architectural_pattern','security_patterns']:
+    for modelFile in models[typeKey]:
+      zf.extract(modelFile,b.tmpDir)
+      if (typeKey == 'architectural_pattern'):
+        typeKey = 'architecturalpattern'
+      elif (typeKey == 'security_patterns'):
+        typeKey = 'securitypattern'
+      file_import(b.tmpDir + '/' + modelFile,typeKey,0,session_id) 
+      os.remove(b.tmpDir + '/' + modelFile)
+  for imageFile in modelImages:
+    buf = zf.read(imageFile)
+    mimeType = magic.from_buffer(buf,mime=True)
+    dbProxy = b.dbProxy
+    if (session_id != None):
+      dbProxy = b.settings[session_id]['dbProxy']
+    dbProxy.setImage(imageFile,buf,mimeType)
+
 
 def file_import(importFile,mFormat,overwriteFlag,session_id = None):
   if overwriteFlag == None:
     overwriteFlag = 1
-
-  if (os.access(importFile, os.R_OK)) == False:
-    raise ARMException("Cannot access " + importFile)
 
   from cairis.mio.ModelImport import importSecurityPatternsFile, importAttackPattern,importTVTypeFile,importDirectoryFile,importRequirementsFile, importRiskAnalysisFile, importUsabilityFile, importAssociationsFile, importProjectFile, importDomainValuesFile, importComponentViewFile, importSynopsesFile,importProcessesFile,importAssetsFile,importLocationsFile,importModelFile,importMisusabilityFile,importDataflowsFile
 

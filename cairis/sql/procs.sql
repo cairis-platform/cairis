@@ -993,6 +993,21 @@ drop procedure if exists inheritanceInconsistency;
 drop function if exists isClassAssociationPresent;
 drop procedure if exists isTracePresent;
 drop procedure if exists associationsToJSON;
+drop procedure if exists getUserGoals;
+drop procedure if exists addUserGoal;
+drop procedure if exists updateUserGoal;
+drop procedure if exists getGoalContributions;
+drop procedure if exists userGoalContribution;
+drop procedure if exists calculateGoalScore;
+drop procedure if exists addTaskContribution;
+drop procedure if exists updateTaskContribution;
+drop procedure if exists ugm_filterNames;
+drop procedure if exists delete_user_goal;
+drop procedure if exists getGoalContributionsTable;
+drop procedure if exists deleteGoalContribution;
+drop procedure if exists document_reference_synopsisNames;
+drop procedure if exists getTaskContributions;
+drop procedure if exists user_goalNames;
 
 
 delimiter //
@@ -3597,6 +3612,7 @@ begin
   delete from task_narrative where task_id = scId;
   delete from task_dependencies where task_id = scId;
   delete from task_concernassociation where task_id = scId;
+  delete from task_goal_contribution where task_id = scId;
 end
 //
 
@@ -3628,6 +3644,7 @@ begin
   close tcCursor;
 
   call deleteTaskComponents(tId);
+  delete from task_goal_contribution where task_id = tId;
   delete from requirement_task where task_id = tId;
   delete from task_asset where task_id = tId;
   delete from task_vulnerability where task_id = tId;
@@ -8439,9 +8456,12 @@ begin
   then
     set dimSql = concat('select id from ',dimTable,' where ');
 
-    if dimTable = 'persona_characteristic' or dimTable = 'task_characteristic'
+    if dimTable = 'persona_characteristic' or dimTable = 'task_characteristic' 
     then
       set dimSql = concat(dimSql,'description');
+    elseif dimTable = 'synopsis'
+    then
+      set dimSql = concat(dimSql,'synopsis');
     else
       set dimSql = concat(dimSql,'name');
     end if;
@@ -17153,16 +17173,19 @@ begin
 end
 //
 
-create procedure delete_reference_synopsis(in rsIdi int)
+create procedure delete_reference_synopsis(in rsId int)
 begin
   declare drsCount int;
 
   select count(id) into drsCount from document_reference_synopsis where id = rsId;
 
-  if refId > 0
+  if drsCount > 0
   then
+    delete from document_reference_contribution where reference_id = rsId;
+    delete from usecase_dr_contribution where reference_id = rsId;
     call delete_document_reference_synopsis(rsId);
   else
+    delete from requirement_reference_contribution where reference_id = rsId;
     call delete_requirement_reference_synopsis(rsId);
   end if;
 end
@@ -17171,6 +17194,7 @@ end
 create procedure delete_document_reference_synopsis(in rsId int)
 begin
   delete from document_reference_contribution where reference_id = rsId;
+  delete from task_goal_contribution where reference_id = rsId;
   delete from usecase_dr_contribution where reference_id = rsId;
   delete from document_reference_synopsis where id = rsId;
 end
@@ -17438,8 +17462,17 @@ begin
   then
     select characteristic_id into charId from task_characteristic_synopsis where synopsis = csName;
   end if;
+  if charId is null
+  then
+    select id into charId from document_reference_synopsis where synopsis = csName;
+  end if;
 
   select id into rsId from document_reference_synopsis where synopsis = rsName;
+  if rsId is null
+  then
+    select characteristic_id into rsId from persona_characteristic_synopsis where synopsis = rsName;
+  end if;
+  
   if rsId is null
   then
     select id into rsId from requirement_reference_synopsis where synopsis = rsName;
@@ -17465,8 +17498,17 @@ begin
   then
     select characteristic_id into charId from task_characteristic_synopsis where synopsis = csName;
   end if;
+  if charId is null
+  then
+    select id into charId from document_reference_synopsis where synopsis = csName;
+  end if;
 
   select id into rsId from document_reference_synopsis where synopsis = rsName;
+  if rsId is null
+  then
+    select characteristic_id into rsId from persona_characteristic_synopsis where synopsis = rsName;
+  end if;
+
   if rsId is null
   then
     select id into rsId from requirement_reference_synopsis where synopsis = rsName;
@@ -17475,9 +17517,6 @@ begin
     update document_reference_contribution set end_id = meId, contribution_id = lcId where reference_id = rsId and characteristic_id = charId;
 
   end if;
-
-
-
 end
 //
 
@@ -24013,7 +24052,7 @@ end
 
 create procedure persona_characteristic_synopsisNames() 
 begin
-  select synopsis from persona_characteristic_synopsis;
+  select synopsis from persona_characteristic_synopsis order by 1;
 end
 //
 
@@ -25330,6 +25369,7 @@ begin
   declare ssCount int default 0;
   declare rcCount int default 0;
   declare ucCount int default 0;
+  declare tcCount int default 0;
   declare charName varchar(2000);
   declare refName varchar(200);
   declare synName varchar(1000);
@@ -25344,7 +25384,7 @@ begin
   declare destName varchar(2000);
   declare meName varchar(100);
   declare contName varchar(100);
-
+  declare taskName varchar(200);
   declare done int default 0;
 
   declare csCursor cursor for 
@@ -25363,11 +25403,21 @@ begin
     select uc.name,ucss.step_no,ucss.synopsis,'role',r.name from usecase uc, usecase_step_synopsis ucss, role r where ucss.usecase_id = uc.id and ucss.environment_id = envId and ucss.actor_id = r.id and ucss.actor_type_id = 10;
 
   declare rcCursor cursor for
-    select drs.synopsis, pcs.synopsis, ce.name, lc.name from document_reference_contribution drc, document_reference_synopsis drs, persona_characteristic_synopsis pcs, contribution_end ce, link_contribution lc where drc.reference_id = drs.id and drc.characteristic_id = pcs.characteristic_id and drc.end_id = lc.id and drc.contribution_id = ce.id
+    select drs.synopsis, pcs.synopsis, ce.name, lc.name from document_reference_contribution drc, document_reference_synopsis drs, persona_characteristic_synopsis pcs, contribution_end ce, link_contribution lc where drc.reference_id = drs.id and drc.characteristic_id = pcs.characteristic_id and drc.end_id = ce.id and drc.contribution_id = lc.id
+    union
+    select pcs.synopsis, drs.synopsis, ce.name, lc.name from document_reference_contribution drc, document_reference_synopsis drs, persona_characteristic_synopsis pcs, contribution_end ce, link_contribution lc where drc.characteristic_id = drs.id and drc.reference_id = pcs.characteristic_id and drc.end_id = ce.id and drc.contribution_id = lc.id
+    union
+    select pcss.synopsis, pcst.synopsis, ce.name, lc.name from document_reference_contribution drc, persona_characteristic_synopsis pcss, persona_characteristic_synopsis pcst, contribution_end ce, link_contribution lc where drc.reference_id = pcss.characteristic_id and drc.characteristic_id = pcst.characteristic_id and drc.end_id = ce.id and drc.contribution_id = lc.id
+    union
+    select drss.synopsis, drst.synopsis, ce.name, lc.name from document_reference_contribution drc, document_reference_synopsis drss, document_reference_synopsis drst, contribution_end ce, link_contribution lc where drc.reference_id = drss.id and drc.characteristic_id = drst.id and drc.end_id = ce.id and drc.contribution_id = lc.id
     union
     select drs.synopsis, uc.name, ce.name, lc.name from usecase_dr_contribution udc, document_reference_synopsis drs, usecase uc, contribution_end ce, link_contribution lc where udc.usecase_id = uc.id and udc.reference_id = drs.id and udc.end_id = lc.id and udc.contribution_id = ce.id;
   declare ucCursor cursor for
     select uc.name, pcs.synopsis, ce.name, lc.name from usecase_pc_contribution upc, usecase uc, persona_characteristic_synopsis pcs, contribution_end ce, link_contribution lc where upc.usecase_id = uc.id and upc.characteristic_id = pcs.characteristic_id and upc.end_id = ce.id and upc.contribution_id = lc.id;
+  declare tcCursor cursor for
+    select t.name, e.name, drs.synopsis, lc.name from task t, environment e, document_reference_synopsis drs, link_contribution lc, task_goal_contribution tgc, environment_task et where tgc.task_id = t.id and tgc.task_id = et.task_id and et.environment_id = e.id and tgc.reference_id = drs.id and tgc.contribution_id = lc.id
+    union
+    select t.name, e.name, pcs.synopsis, lc.name from task t, environment e, persona_characteristic_synopsis pcs, link_contribution lc, task_goal_contribution tgc, environment_task et where tgc.task_id = t.id and tgc.task_id = et.task_id and et.environment_id = e.id and tgc.reference_id = pcs.characteristic_id and tgc.contribution_id = lc.id;
 
 
   declare continue handler for not found set done = 1;
@@ -25456,9 +25506,23 @@ begin
   end loop uc_loop;
   close ucCursor;
 
+  set done = 0;
+  open tcCursor;
+  tc_loop: loop
+    fetch tcCursor into taskName, envName, synName, contName;
+    if done = 1
+    then
+      leave tc_loop;
+    end if;
+    set buf = concat(buf,'  <task_contribution task="',taskName,'" environment="',envName,'" referent="',synName,'" contribution="',contName,'" />\n');
+    set tcCount = tcCount + 1;
+
+  end loop tc_loop;
+  close tcCursor;
+
 
   set buf = concat(buf,'</synopses>');
-  select buf,csCount,rsCount,ssCount,rcCount,ucCount;
+  select buf,csCount,rsCount,ssCount,rcCount,ucCount,tcCount;
   
 end
 //
@@ -30117,6 +30181,284 @@ begin
   end loop tb_loop;
   close tbCursor;
   select buf,dfCount;
+end
+//
+
+create procedure getUserGoals(in constraintId int)
+begin
+  if constraintId = -1
+  then
+    select drs.id, dr.name, drs.synopsis, td.name, p.name,'document_reference' from document_reference_synopsis drs, document_reference dr, persona p, trace_dimension td where drs.reference_id = dr.id and drs.dimension_id = td.id and drs.actor_id = p.id 
+    union
+    select pcs.characteristic_id,pc.description,pcs.synopsis, td.name, p.name,'persona_characteristic' from persona_characteristic_synopsis pcs, persona_characteristic pc, persona p, trace_dimension td where pcs.characteristic_id = pc.id and pcs.dimension_id = td.id and pc.persona_id = p.id order by 2;
+  else
+    select drs.id, dr.name, drs.synopsis, td.name, p.name, 'document_reference' from document_reference_synopsis drs, document_reference dr, persona p, trace_dimension td where drs.id = constraintId and drs.reference_id = dr.id and drs.dimension_id = td.id and drs.actor_id = p.id
+    union
+    select pcs.characteristic_id,pc.description,pcs.synopsis, td.name, p.name, 'persona_characteristic' from persona_characteristic_synopsis pcs, persona_characteristic pc, persona p, trace_dimension td where pcs.characteristic_id = constraintId and pcs.characteristic_id = pc.id and pcs.dimension_id = td.id and pc.persona_id = p.id order by 2;
+  end if;
+end
+//
+
+create procedure addUserGoal(in ugId int,in refName text, in synName text, in dimName text, in personaName text)
+begin
+  declare refId int;
+  declare dimId int;
+  declare pId int;
+
+  select id into dimId from trace_dimension where name = dimName limit 1;
+  select id into pId from persona where name = personaName limit 1;
+
+  select id into refId from document_reference where name = refName limit 1;
+  if refId is null
+  then
+    select id into refId from persona_characteristic where description = refName and persona_id = pId limit 1;
+    insert into persona_characteristic_synopsis(characteristic_id,synopsis,dimension_id) values (refId,synName,dimId);
+  else 
+    insert into document_reference_synopsis(id,reference_id,synopsis,dimension_id,actor_id,actor_type_id) values (ugId,refId,synName,dimId,pId,1);
+  end if;
+end
+//
+
+create procedure updateUserGoal(in ugId int,in refName text, in synName text, in dimName text, in personaName text)
+begin
+  declare refId int;
+  declare dimId int;
+  declare pId int;
+
+  select id into dimId from trace_dimension where name = dimName limit 1;
+  select id into pId from persona where name = personaName limit 1;
+
+  select id into refId from document_reference where name = refName limit 1;
+  if refId is null
+  then
+    select id into refId from persona_characteristic where description = refName and persona_id = pId limit 1;
+    update persona_characteristic_synopsis set synopsis = synName, dimension_id = dimId where characteristic_id = refId;
+  else
+    update document_reference_synopsis set reference_id = refId, synopsis = synName, dimension_id = dimId, actor_id = pId, actor_type_id = 1 where id = ugId;
+  end if;
+end
+//
+
+create procedure getGoalContributions(in envName text, in filterElement text)
+begin
+  if filterElement != ''
+  then
+    select source, source_type, source_dimension, target, target_type, target_dimension, means_end, contribution from goal_contribution where source = filterElement and environment in (envName,'')
+    union
+    select source, source_type, source_dimension, target, target_type, target_dimension, means_end, contribution from goal_contribution where target = filterElement and environment in (envName,'');
+  else
+    select source, source_type, source_dimension, target, target_type, target_dimension, means_end, contribution, environment from goal_contribution where environment in (envName,'');
+  end if;
+end
+//
+
+create procedure userGoalContribution(in ugId int, envId int, out score int) 
+begin
+  declare contScore int default 0;
+  declare linkScore int default 0;
+  declare ugScore int default 0;
+  declare cgId int;
+  declare refCount int;
+  declare charCount int;
+  declare done int default 0;
+  declare goalLinksCursor cursor for 
+    select characteristic_id, contribution_id from document_reference_contribution where reference_id = ugId and end_id = 1
+    union
+    select reference_id, contribution_id from document_reference_contribution where characteristic_id = ugId and end_id = 0;
+  declare taskContCursor cursor for select contribution_id from task_goal_contribution where reference_id = ugId and environment_id = envId;
+  declare continue handler for not found set done = 1;
+
+  set score = 0;
+
+  open taskContCursor;
+  tc_loop: loop
+    fetch taskContCursor into linkScore;
+    if done = 1
+    then
+      leave tc_loop;
+    end if;
+    select value into contScore from link_contribution where id = linkScore;
+    set score = score + contScore;
+  end loop tc_loop;
+  close taskContCursor;
+
+  set done = 0;
+  open goalLinksCursor;
+  gl_loop: loop
+    fetch goalLinksCursor into cgId, linkScore;
+    if done = 1
+    then
+      leave gl_loop;
+    end if;
+    select value into contScore from link_contribution where id = linkScore;
+    call userGoalContribution(cgId,envId,ugScore);
+    set ugScore = ugScore * contScore;
+    set score = score + ugScore;
+  end loop gl_loop;
+  close goalLinksCursor;
+
+  if score > 100 or score < -100
+  then
+    set score = score / 100;
+    if score < -100
+    then
+      set score = -100;
+    elseif score > 100
+    then
+      set score = 100;
+    end if; 
+  end if;
+end
+//
+
+create procedure calculateGoalScore(in goalName text, in envName text)
+begin
+  declare score int default 0;
+  declare ugId int;
+  declare envId int;
+
+  select id into envId from environment where name = envName limit 1;
+  
+  select id into ugId from document_reference_synopsis where synopsis = goalName limit 1;
+  if ugId is null
+  then
+    select characteristic_id into ugId from persona_characteristic_synopsis where synopsis = goalName limit 1;
+  end if;
+
+  call userGoalContribution(ugId,envId,score);
+  select score;
+end
+//
+
+create procedure addTaskContribution(in src text, in dest text, in env text, in cont text)
+begin
+  declare taskId int;
+  declare ugId int;
+  declare envId int;
+  declare lcId int;
+
+  select id into taskId from task where name = src limit 1;
+  select id into lcId from link_contribution where name = cont limit 1;
+  select id into envId from environment where name = env limit 1;
+
+  select id into ugId from document_reference_synopsis where synopsis = dest limit 1;
+  if ugId is null
+  then
+    select characteristic_id into ugId from persona_characteristic_synopsis where synopsis = dest limit 1;
+  end if;
+
+  insert into task_goal_contribution(task_id,environment_id,reference_id,contribution_id) values(taskId,envId,ugId,lcId);
+end
+//
+
+create procedure updateTaskContribution(in src text, in dest text, in env text, in cont text)
+begin
+  declare taskId int;
+  declare ugId int;
+  declare envId int;
+  declare lcId int;
+
+  select id into taskId from task where name = src limit 1;
+  select id into lcId from link_contribution where name = cont limit 1;
+  select id into envId from environment where name = env limit 1;
+
+  select id into ugId from document_reference_synopsis where synopsis = dest limit 1;
+  if ugId is null
+  then
+    select characteristic_id into ugId from persona_characteristic_synopsis where synopsis = dest limit 1;
+  end if;
+
+  update task_goal_contribution set contribution_id = lcId where task_id = taskId and reference_id = ugId and environment_id = envId;
+end
+//
+
+create procedure ugm_filterNames(in envName text)
+begin
+  if envName != ''
+  then
+    select source from goal_contribution where environment = envName
+    union
+    select target from goal_contribution where environment = envName order by 1;
+  else
+    select source from goal_contribution
+    union
+    select target from goal_contribution order by 1;
+  end if;
+end
+//
+
+create procedure delete_user_goal(in ugId int)
+begin
+  declare pcsCount int;
+
+  select count(characteristic_id) into pcsCount from persona_characteristic_synopsis where characteristic_id = ugId;
+
+  if pcsCount > 0
+  then
+    delete from persona_characteristic_synopsis where characteristic_id = ugId;
+  else
+    call delete_reference_synopsis(ugId);
+  end if;
+end
+//
+
+create procedure getGoalContributionsTable(in src text, in tgt text)
+begin
+  if src != '-1' and tgt != '-1'
+  then
+    select source, source_type, target, target_type, means_end, contribution from goal_contribution_table where source = src and target = tgt;
+  else
+    select source, source_type, target, target_type, means_end, contribution from goal_contribution_table;
+  end if;
+end
+//
+
+create procedure deleteGoalContribution(in src text, in tgt text)
+begin
+  declare srcId int;
+  declare tgtId int;
+
+  select id into srcId from document_reference_synopsis where synopsis = src limit 1;
+  if srcId is null
+  then
+    select characteristic_id into srcId from persona_characteristic_synopsis where synopsis = src limit 1;
+  end if;
+
+  select id into tgtId from document_reference_synopsis where synopsis = tgt limit 1;
+  if tgtId is null
+  then
+    select characteristic_id into tgtId from persona_characteristic_synopsis where synopsis = tgt limit 1;
+  end if;
+
+  delete from document_reference_contribution where reference_id = srcId and characteristic_id = tgtId;
+end
+//
+
+create procedure document_reference_synopsisNames() 
+begin
+  select synopsis from document_reference_synopsis order by 1;
+end
+//
+
+create procedure getTaskContributions(in taskName text, in envName text)
+begin
+  declare taskId int;
+  declare envId int;
+
+  select id into taskId from task where name = taskName limit 1;
+  select id into envId from environment where name = envName limit 1;
+
+  select drs.synopsis, lc.name from task_goal_contribution tgc, environment_task et, link_contribution lc, document_reference_synopsis drs where tgc.task_id = taskId and tgc.environment_id = envId and tgc.environment_id = et.environment_id and tgc.reference_id = drs.id and tgc.contribution_id = lc.id
+  union
+  select pcs.synopsis, lc.name from task_goal_contribution tgc, environment_task et, link_contribution lc, persona_characteristic_synopsis pcs where tgc.task_id = taskId and tgc.environment_id = envId and tgc.environment_id = et.environment_id and tgc.reference_id = pcs.characteristic_id and tgc.contribution_id = lc.id;
+end
+//
+
+create procedure user_goalNames(in dummyValue text)
+begin
+  select synopsis from document_reference_synopsis
+  union
+  select synopsis from persona_characteristic_synopsis order by 1;
 end
 //
 

@@ -112,3 +112,16 @@ def surfaceTypeColourCode(valueId):
 def surfaceTypeTextColourCode(valueId):
   if (valueId >= 7): return 'white'
   else: return 'black'
+
+def goalSatisfactionColourCode(valueId):
+  if (valueId >= 50): return '5'
+  elif (valueId > 0 and valueId < 50): return '4'
+  elif (valueId == 0): return '3'
+  elif (valueId >= -50 and valueId < 0): return '2'
+  elif (valueId < -50): return '1'
+
+def goalSatisfactionFontColourCode(valueId):
+  if (valueId >= 50 or valueId < -50): 
+    return 'white'
+  else:  
+    return 'black'

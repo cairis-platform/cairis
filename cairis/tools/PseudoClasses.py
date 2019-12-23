@@ -529,3 +529,19 @@ class ObjectDependency(object):
     self.theDimensionName = dimension_name
     self.theObjectName = object_name
 
+class TaskGoalContribution(object):
+  resource_fields = {
+    obj_id_field: fields.String,
+    'theSource': fields.String,
+    'theDestination': fields.String,
+    'theEnvironment': fields.String,
+    'theContribution': fields.String,
+  }
+  required = list(resource_fields.keys())
+  required.remove(obj_id_field)
+
+  def __init__(self,src,dest,env,cont):
+    self.theSource = src 
+    self.theDestination = dest
+    self.theEnvironment = env
+    self.theContribution = cont

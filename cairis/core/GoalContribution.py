@@ -17,21 +17,18 @@
 
 __author__ = 'Shamal Faily'
 
-class ReferenceSynopsis:
-  def __init__(self,rsId,refName,synName,dimName,aType,aName,synDim = 'document_reference'):
-    self.theId = rsId
-    self.theReference = refName
-    self.theSynopsis = synName
-    self.theDimension = dimName
-    self.theActorType = aType
-    self.theActor = aName
-    self.theSynopsisDimension = synDim
+class GoalContribution:
+  def __init__(self,src,srcType,dest,destType,me,cont):
+    self.theSource = src
+    self.theSourceType = srcType
+    self.theDestination = dest
+    self.theDestinationType = destType
+    self.theMeansEnd = me
+    self.theContribution = cont
 
-  def id(self): return self.theId
-  def setId(self,newId): self.theId = newId
-  def reference(self): return self.theReference
-  def synopsis(self): return self.theSynopsis
-  def dimension(self): return self.theDimension
-  def actorType(self): return self.theActorType
-  def actor(self): return self.theActor 
-  def synopsisDimension(self): return self.theSynopsisDimension
+  def source(self): return self.theSource
+  def sourceType(self): return self.theSourceType
+  def destination(self): return self.theDestination
+  def destinationType(self): return self.theDestinationType
+  def meansEnd(self): return self.theMeansEnd
+  def contribution(self): return self.theContribution
