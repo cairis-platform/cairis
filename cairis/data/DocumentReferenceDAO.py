@@ -64,7 +64,7 @@ class DocumentReferenceDAO(CairisDAO):
 
   def add_document_reference(self, dr):
     drParams = DocumentReferenceParameters(
-      refName=re.sub("[^a-zA-Z' ]+", '', dr.theName),
+      refName=dr.theName,
       docName=dr.theDocName,
       cName=dr.theContributor,
       docExc=dr.theExcerpt)
@@ -77,7 +77,7 @@ class DocumentReferenceDAO(CairisDAO):
 
   def update_document_reference(self,dr,name):
     drParams = DocumentReferenceParameters(
-      refName=re.sub("[^a-zA-Z' ]+", '', dr.theName),
+      refName=dr.theName,
       docName=dr.theDocName,
       cName=dr.theContributor,
       docExc=dr.theExcerpt)

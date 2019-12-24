@@ -17213,6 +17213,7 @@ begin
   declare atId int;
   declare actorId int;
   declare refId int;
+  declare drsCount int;
   declare actorIdSql varchar(4000);
 
   select id into dimId from trace_dimension where name = rsDim;
@@ -17228,7 +17229,13 @@ begin
   select id into refId from document_reference where name = refName;
   if refId is not null
   then
-    insert into document_reference_synopsis(id,reference_id,synopsis,dimension_id,actor_id,actor_type_id) values (rsId,refId,rsName,dimId,actorId,atId);
+    select count(id) into drsCount from document_reference_synopsis where reference_id = refId;
+    if drsCount > 0
+    then
+      update document_reference_synopsis set reference_id = refId, synopsis = rsName, dimension_id = dimId, actor_id = actorId, actor_type_id = atId where id = rsId;
+    else
+      insert into document_reference_synopsis(id,reference_id,synopsis,dimension_id,actor_id,actor_type_id) values (rsId,refId,rsName,dimId,actorId,atId);
+    end if;
   else
     select id into refId from requirement_reference where name = refName;
     insert into requirement_reference_synopsis(id,reference_id,synopsis,dimension_id,actor_id,actor_type_id) values (rsId,refId,rsName,dimId,actorId,atId);
@@ -17271,6 +17278,7 @@ begin
   declare dimId int;
   declare atId int;
   declare actorId int;
+  declare pcsCount int;
   declare actorIdSql varchar(4000);
 
   select id into dimId from trace_dimension where name = csDim;
@@ -17278,7 +17286,13 @@ begin
   select id into cId from persona_characteristic where description = cName;
   if cId is not null
   then
-    insert into persona_characteristic_synopsis(characteristic_id,synopsis,dimension_id) values (cId,csName,dimId);
+    select count(characteristic_id) into pcsCount from persona_characteristic_synopsis where synopsis = csName and dimension_id = dimId;
+    if pcsCount > 0
+    then
+      update persona_characteristic_synopsis set synopsis = csName,dimension_id = dimId where characteristic_id = cId;
+    else
+      insert into persona_characteristic_synopsis(characteristic_id,synopsis,dimension_id) values (cId,csName,dimId);
+    end if;
   else
     select id into cId from task_characteristic where description = cName;
     select id into atId from trace_dimension where name = atName;
@@ -17453,6 +17467,7 @@ begin
   declare charId int;
   declare meId int;
   declare lcId int;
+  declare drcCount int;
 
   select id into meId from contribution_end where name = meName;
   select id into lcId from link_contribution where name = contName;
@@ -17478,7 +17493,13 @@ begin
     select id into rsId from requirement_reference_synopsis where synopsis = rsName;
     insert into requirement_reference_contribution(reference_id,characteristic_id,end_id,contribution_id) values (rsId,charId,meId,lcId);
   else
-    insert into document_reference_contribution(reference_id,characteristic_id,end_id,contribution_id) values (rsId,charId,meId,lcId);
+    select count(*) into drcCount from document_reference_contribution where reference_id = rsId and characteristic_id = charId;
+    if drcCount > 0
+    then
+      update document_reference_contribution set end_id = meId, contribution_id = lcId where reference_id = rsId and characteristic_id = charId;
+    else
+      insert into document_reference_contribution(reference_id,characteristic_id,end_id,contribution_id) values (rsId,charId,meId,lcId);
+    end if;
   end if;
 end
 //
@@ -17549,6 +17570,8 @@ begin
   declare charId int;
   declare meId int;
   declare lcId int;
+  declare pcCount int;
+  declare drCount int;
 
   select id into ucId from usecase where name = ucName;
   select id into meId from contribution_end where name = meName;
@@ -17557,10 +17580,22 @@ begin
   select characteristic_id into charId from persona_characteristic_synopsis where synopsis = csName;
   if charId is not null
   then
-    insert into usecase_pc_contribution(usecase_id,characteristic_id,end_id,contribution_id) values (ucId,charId,meId,lcId);
+    select count(*) into pcCount from usecase_pc_contribution where usecase_id = ucId and characteristic_id = charId;
+    if pcCount > 0
+    then
+      update usecase_pc_contribution set end_id = meId, contribution_id = lcId where usecase_id = ucId and characteristic_id = charId;
+    else
+      insert into usecase_pc_contribution(usecase_id,characteristic_id,end_id,contribution_id) values (ucId,charId,meId,lcId);
+    end if;
   else
     select id into charId from document_reference_synopsis where synopsis = csName;
-    insert into usecase_dr_contribution(usecase_id,reference_id,end_id,contribution_id) values (ucId,charId,meId,lcId);
+    select count(*) into drCount from usecase_dr_contribution where usecase_id = ucId and characteristic_id = charId;
+    if drCount > 0
+    then
+      update usecase_dr_contribution set end_id = meId, contribution_id = lcId where usecase_id = ucId and reference_id = charId;
+    else
+      insert into usecase_dr_contribution(usecase_id,reference_id,end_id,contribution_id) values (ucId,charId,meId,lcId);
+    end if;
   end if;
 end
 //
