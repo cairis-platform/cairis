@@ -30295,6 +30295,7 @@ begin
   declare cgId int;
   declare refCount int;
   declare charCount int;
+  declare idCount int default 0;
   declare done int default 0;
   declare goalLinksCursor cursor for 
     select characteristic_id, contribution_id from document_reference_contribution where reference_id = ugId and end_id = 1
@@ -30305,43 +30306,50 @@ begin
 
   set score = 0;
 
-  open taskContCursor;
-  tc_loop: loop
-    fetch taskContCursor into linkScore;
-    if done = 1
-    then
-      leave tc_loop;
-    end if;
-    select value into contScore from link_contribution where id = linkScore;
-    set score = score + contScore;
-  end loop tc_loop;
-  close taskContCursor;
-
-  set done = 0;
-  open goalLinksCursor;
-  gl_loop: loop
-    fetch goalLinksCursor into cgId, linkScore;
-    if done = 1
-    then
-      leave gl_loop;
-    end if;
-    select value into contScore from link_contribution where id = linkScore;
-    call userGoalContribution(cgId,envId,ugScore);
-    set ugScore = ugScore * contScore;
-    set score = score + ugScore;
-  end loop gl_loop;
-  close goalLinksCursor;
-
-  if score > 100 or score < -100
+  select count(id) into idCount from temp_gid where id = ugId;
+  if idCount = 0
   then
-    set score = score / 100;
-    if score < -100
+    insert into temp_gid(id) values (ugId);
+
+    open taskContCursor;
+    tc_loop: loop
+      fetch taskContCursor into linkScore;
+      if done = 1
+      then
+        leave tc_loop;
+      end if;
+      select value into contScore from link_contribution where id = linkScore;
+      set score = score + contScore;
+    end loop tc_loop;
+    close taskContCursor;
+
+    set done = 0;
+    open goalLinksCursor;
+    gl_loop: loop
+      fetch goalLinksCursor into cgId, linkScore;
+      if done = 1
+      then
+        leave gl_loop;
+      end if;
+      select value into contScore from link_contribution where id = linkScore;
+      call userGoalContribution(cgId,envId,ugScore);
+      set ugScore = ugScore * contScore;
+      set score = score + ugScore;
+    end loop gl_loop;
+    close goalLinksCursor;
+
+    if score > 100 or score < -100
     then
-      set score = -100;
-    elseif score > 100
-    then
-      set score = 100;
-    end if; 
+      set score = score / 100;
+      if score < -100
+      then
+        set score = -100;
+      elseif score > 100
+      then
+        set score = 100;
+      end if; 
+    end if;
+
   end if;
 end
 //
@@ -30351,6 +30359,9 @@ begin
   declare score int default 0;
   declare ugId int;
   declare envId int;
+
+  drop table if exists temp_gid;
+  create temporary table temp_gid (id int not null);
 
   select id into envId from environment where name = envName limit 1;
   
