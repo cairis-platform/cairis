@@ -88,7 +88,7 @@ class UserGoalModel:
       nodeNameSet = set([])
       edgeSet = set([])
 
-      for source, sourceType, sourceDim, target, targetType, targetDim, meName, contName, envName in self.theContributions:
+      for source, sourceType, sourceDim, target, targetType, targetDim, meName, contName in self.theContributions:
 
         if (source not in nodeNameSet):
           self.buildNode(sourceDim,source)

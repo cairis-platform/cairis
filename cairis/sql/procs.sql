@@ -1008,6 +1008,8 @@ drop procedure if exists deleteGoalContribution;
 drop procedure if exists document_reference_synopsisNames;
 drop procedure if exists getTaskContributions;
 drop procedure if exists user_goalNames;
+drop procedure if exists userGoalLoopCheck;
+drop procedure if exists inLoop;
 
 
 delimiter //
@@ -24685,6 +24687,7 @@ begin
   call implicitAssetVulnerabilityCheck(environmentId);
   call obstructedTasks(environmentId);
   call inheritanceInconsistency(environmentId);
+  call userGoalLoopCheck();
 
   select distinct label,message from temp_vout;
 
@@ -30282,7 +30285,7 @@ begin
     union
     select source, source_type, source_dimension, target, target_type, target_dimension, means_end, contribution from goal_contribution where target = filterElement and environment in (envName,'');
   else
-    select source, source_type, source_dimension, target, target_type, target_dimension, means_end, contribution, environment from goal_contribution where environment in (envName,'');
+    select source, source_type, source_dimension, target, target_type, target_dimension, means_end, contribution from goal_contribution where environment in (envName,'');
   end if;
 end
 //
@@ -30505,6 +30508,66 @@ begin
   select synopsis from document_reference_synopsis
   union
   select synopsis from persona_characteristic_synopsis order by 1;
+end
+//
+
+create procedure userGoalLoopCheck()
+begin
+  declare li int default 0;
+  declare ugId int;
+  declare ugName varchar(1000);
+  declare done int default 0;
+  declare ugCursor cursor for select distinct reference_id from document_reference_contribution;
+  declare continue handler for not found set done = 1;
+
+  open ugCursor;
+  ug_loop: loop
+    fetch ugCursor into ugId;
+    if done = 1
+    then
+      leave ug_loop;
+    end if;
+    call inLoop(ugId,ugId,li);
+    if li = 1
+    then
+      select synopsis into ugName from synopsis where id = ugId;
+      insert into temp_vout(label,message) values('User Goal Contribution loop',concat(ugName,' is in a user goal contribution loop.'));
+    end if;
+  end loop ug_loop;
+  close ugCursor;
+  
+end
+//
+
+create procedure inLoop(in origId int, ugId int, out inLoop int) 
+begin
+  declare dgId int;
+  declare done int default 0;
+  declare contCursor cursor for
+    select characteristic_id from document_reference_contribution where reference_id = ugId and end_id = 0
+    union
+    select reference_id from document_reference_contribution where characteristic_id = ugId and end_id = 1;
+  declare continue handler for not found set done = 1;
+
+  set inLoop = 0;
+
+  open contCursor;
+  cont_loop: loop
+    fetch contCursor into dgId;
+    if done = 1 or inLoop = 1
+    then
+      leave cont_loop;
+    end if;
+    
+    if dgId = origId
+    then
+      set inLoop = 1;
+      leave cont_loop;
+    else
+      call inLoop(origId,dgId,inLoop);
+    end if;
+  end loop cont_loop;
+  close contCursor;
 end
 //
 
