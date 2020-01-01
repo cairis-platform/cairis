@@ -23,13 +23,13 @@
 <!ELEMENT characteristic_synopsis EMPTY>
 <!ATTLIST characteristic_synopsis characteristic CDATA #REQUIRED>
 <!ATTLIST characteristic_synopsis synopsis CDATA #REQUIRED>
-<!ATTLIST characteristic_synopsis dimension (goal | softgoal | task) #REQUIRED>
+<!ATTLIST characteristic_synopsis dimension (goal | softgoal | task | belief) #REQUIRED>
 <!ATTLIST characteristic_synopsis actor_type (persona | asset | component) #REQUIRED>
 <!ATTLIST characteristic_synopsis actor CDATA #REQUIRED>
 <!ELEMENT reference_synopsis EMPTY>
 <!ATTLIST reference_synopsis reference CDATA #REQUIRED>
 <!ATTLIST reference_synopsis synopsis CDATA #REQUIRED>
-<!ATTLIST reference_synopsis dimension (goal | softgoal | task) #REQUIRED>
+<!ATTLIST reference_synopsis dimension (goal | softgoal | task | belief) #REQUIRED>
 <!ATTLIST reference_synopsis actor_type (persona | asset | component) #REQUIRED>
 <!ATTLIST reference_synopsis actor CDATA #REQUIRED>
 <!ELEMENT step_synopsis EMPTY>

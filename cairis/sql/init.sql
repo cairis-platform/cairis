@@ -4144,6 +4144,7 @@ INSERT INTO trace_dimension values (18,'usecase');
 INSERT INTO trace_dimension values (19,'softgoal');
 INSERT INTO trace_dimension values (20,'document_reference');
 INSERT INTO trace_dimension values (21,'component');
+INSERT INTO trace_dimension values (22,'belief');
 INSERT INTO severity values (0,'Negligible','');
 INSERT INTO severity values (1,'Marginal','');
 INSERT INTO severity values (2,'Critical','');

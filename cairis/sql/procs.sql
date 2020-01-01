@@ -11781,6 +11781,9 @@ create procedure deletePersonaCharacteristicComponents(in pcId int)
 begin
     if pcId != -1
     then
+      delete from persona_characteristic_synopsis where characteristic_id = pcId;
+      delete from document_reference_synopsis where id in (select drc.reference_id from document_reference_contribution drc, persona_characteristic_document pcd where drc.characteristic_id = pcId and drc.characteristic_id = pcd.characteristic_id and pcd.reference_id = drc.reference_id);
+      delete from document_reference_contribution where characteristic_id = pcId and reference_id in (select reference_id from persona_characteristic_document where characteristic_id = pcId);
       delete from persona_characteristic_document where characteristic_id = pcId;
       delete from persona_characteristic_asset where characteristic_id = pcId;
       delete from persona_characteristic_attacker where characteristic_id = pcId;

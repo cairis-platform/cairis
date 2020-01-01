@@ -64,7 +64,7 @@ class UserGoalModel:
     colourCode = '3'
     fontColourCode = 'black'
     objtLabel = objtName
-    if (dimName == 'goal' or dimName == 'softgoal'):
+    if (dimName == 'goal' or dimName == 'softgoal' or dimName == 'belief'):
       objtUrl = 'user_goal#' + objtName
       satScore = self.dbProxy.goalSatisfactionScore(objtName,self.theEnvironmentName)
       colourCode = goalSatisfactionColourCode(satScore)
@@ -74,6 +74,8 @@ class UserGoalModel:
       self.theGraph.add_node(pydot.Node(objtName,label=objtLabel,shape='septagon',margin=0,style='"rounded,filled"',pencolor='black',colorscheme='rdylgn5',fillcolor=colourCode,fontcolour=fontColourCode,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'goal'):
       self.theGraph.add_node(pydot.Node(objtName,label=objtLabel,shape='box',margin=0,style='"rounded,filled"',pencolor='black',colorscheme='rdylgn5',fillcolor=colourCode,fontcolor=fontColourCode,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
+    elif (dimName == 'belief'):
+      self.theGraph.add_node(pydot.Node(objtName,label=objtLabel,shape='ellipse',margin=0,style='"filled"',pencolor='black',colorscheme='rdylgn5',fillcolor=colourCode,fontcolor=fontColourCode,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'task'):
       self.theGraph.add_node(pydot.Node(objtName,shape='hexagon',margin=0,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     else:
