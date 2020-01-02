@@ -4906,3 +4906,6 @@ class MySQLDatabaseProxy:
     for row in rows:
       objts.append(TaskContribution(taskName,row[0],envName,row[1]))
     return objts
+
+  def conflictingPersonaCharacteristics(self,pName,ugName):
+    return self.responseList('call conflictingPersonaCharacteristics(:pName,:ugName)',{'pName':pName,'ugName':ugName},'MySQL error getting persona characteristic user goals')

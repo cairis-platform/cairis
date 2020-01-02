@@ -25,17 +25,17 @@ from cairis.core.colourcodes import goalSatisfactionFontColourCode
 
 def contLabel(contName):
   if contName == 'Make':
-    return "*\n+\n(100)"
+    return "make\n(100)"
   elif contName == 'SomePositive':
-    return "+\n*\n(50)"
+    return "some+\n(50)"
   elif contName == 'Help':
-    return "+\n(25)"
+    return "help\n(25)"
   elif contName == 'Hurt':
-    return "-\n(-25)"
+    return "hurt\n(-25)"
   elif contName == 'SomeNegative':
-    return "-\n*\n(-50)"
+    return "some-\n(-50)"
   if contName == 'Break':
-    return "*\n-\n(-100)"
+    return "break\n(-100)"
 
   
 class UserGoalModel:
@@ -45,6 +45,7 @@ class UserGoalModel:
     self.fontName = font_name
     self.fontSize = font_size
     self.dbProxy = db_proxy
+    self.theClusters = {}
 
     b = Borg()
 
@@ -59,7 +60,12 @@ class UserGoalModel:
   def size(self):
     return len(self.theContributions)
 
-  def buildNode(self,dimName,objtName):
+  def buildNode(self,dimName,objtName,personaName):
+
+    targetGraph = self.theGraph
+    if personaName in self.theClusters:
+      targetGraph = self.theClusters[personaName]
+
     objtUrl = dimName + '#' + objtName
     colourCode = '3'
     fontColourCode = 'black'
@@ -71,13 +77,13 @@ class UserGoalModel:
       fontColourCode = goalSatisfactionFontColourCode(satScore)
       objtLabel += "\n(" + str(satScore) + ")"
     if (dimName == 'softgoal'):
-      self.theGraph.add_node(pydot.Node(objtName,label=objtLabel,shape='septagon',margin=0,style='"rounded,filled"',pencolor='black',colorscheme='rdylgn5',fillcolor=colourCode,fontcolour=fontColourCode,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
+      targetGraph.add_node(pydot.Node(objtName,label=objtLabel,shape='septagon',margin=0,style='"rounded,filled"',pencolor='black',colorscheme='rdylgn5',fillcolor=colourCode,fontcolour=fontColourCode,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'goal'):
-      self.theGraph.add_node(pydot.Node(objtName,label=objtLabel,shape='box',margin=0,style='"rounded,filled"',pencolor='black',colorscheme='rdylgn5',fillcolor=colourCode,fontcolor=fontColourCode,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
+      targetGraph.add_node(pydot.Node(objtName,label=objtLabel,shape='box',margin=0,style='"rounded,filled"',pencolor='black',colorscheme='rdylgn5',fillcolor=colourCode,fontcolor=fontColourCode,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'belief'):
-      self.theGraph.add_node(pydot.Node(objtName,label=objtLabel,shape='ellipse',margin=0,style='"filled"',pencolor='black',colorscheme='rdylgn5',fillcolor=colourCode,fontcolor=fontColourCode,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
+      targetGraph.add_node(pydot.Node(objtName,label=objtLabel,shape='ellipse',margin=0,style='"filled"',pencolor='black',colorscheme='rdylgn5',fillcolor=colourCode,fontcolor=fontColourCode,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'task'):
-      self.theGraph.add_node(pydot.Node(objtName,shape='hexagon',margin=0,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
+      targetGraph.add_node(pydot.Node(objtName,shape='hexagon',margin=0,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     else:
       raise UnknownNodeType(dimName)
 
@@ -90,14 +96,19 @@ class UserGoalModel:
       nodeNameSet = set([])
       edgeSet = set([])
 
-      for source, sourceType, sourceDim, target, targetType, targetDim, meName, contName in self.theContributions:
+      for pName in set(filter(lambda x: x != '',list(map(lambda x: x[3],self.theContributions)) + list(map(lambda x: x[7],self.theContributions)))):
+        c = pydot.Cluster(pName,label=str(pName),style='dashed',fontname=self.fontName,fontsize=self.fontSize)
+        self.theClusters[pName] = c
+        self.theGraph.add_subgraph(c)
+
+      for source, sourceType, sourceDim, sourcePersona, target, targetType, targetDim, targetPersona, meName, contName in self.theContributions:
 
         if (source not in nodeNameSet):
-          self.buildNode(sourceDim,source)
+          self.buildNode(sourceDim,source, sourcePersona)
           nodeNameSet.add(source)
 
         if (target not in nodeNameSet):
-          self.buildNode(targetDim,target)
+          self.buildNode(targetDim,target, targetPersona)
           nodeNameSet.add(target)
 
         if ((source,target) not in edgeSet):

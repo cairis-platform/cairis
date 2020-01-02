@@ -17,7 +17,8 @@
 
 from cairis.core.ARM import *
 from cairis.core.ReferenceSynopsis import ReferenceSynopsis
-from cairis.daemon.CairisHTTPError import ObjectNotFoundHTTPError, MalformedJSONHTTPError, ARMHTTPError, MissingParameterHTTPError, OverwriteNotAllowedHTTPError
+from http.client import BAD_REQUEST
+from cairis.daemon.CairisHTTPError import CairisHTTPError, ObjectNotFoundHTTPError, MalformedJSONHTTPError, ARMHTTPError, MissingParameterHTTPError, OverwriteNotAllowedHTTPError
 import cairis.core.armid
 from cairis.data.CairisDAO import CairisDAO
 from cairis.tools.ModelDefinitions import ReferenceSynopsisModel
@@ -63,9 +64,18 @@ class UserGoalDAO(CairisDAO):
 
   def update_user_goal(self,ug,name):
     try:
-      ugId = self.db_proxy.getDimensionId(name,'synopsis')
-      ug.setId(ugId)
-      self.db_proxy.updateUserGoal(ug)
+      ugPCs = self.db_proxy.conflictingPersonaCharacteristics(ug.theActor,name)
+      if (len(ugPCs) == 0):
+        ugId = self.db_proxy.getDimensionId(name,'synopsis')
+        ug.setId(ugId)
+        self.db_proxy.updateUserGoal(ug)
+      else:
+        excTxt = "Can't associate '" + name + "' with " + ug.theActor + " because it is associated with persona characteristic"
+        if (len(ugPCs) > 1): 
+          excTxt += "s " + ', '.join(ugPCs)
+        else:
+          excTxt += ugPCs[0]
+        raise CairisHTTPError(BAD_REQUEST,'Invalid update',excTxt)
     except ARMException as ex:
       self.close()
       raise ARMHTTPError(ex)

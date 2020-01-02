@@ -1010,6 +1010,7 @@ drop procedure if exists getTaskContributions;
 drop procedure if exists user_goalNames;
 drop procedure if exists userGoalLoopCheck;
 drop procedure if exists inLoop;
+drop procedure if exists conflictingPersonaCharacteristics;
 
 
 delimiter //
@@ -30284,11 +30285,11 @@ create procedure getGoalContributions(in envName text, in filterElement text)
 begin
   if filterElement != ''
   then
-    select source, source_type, source_dimension, target, target_type, target_dimension, means_end, contribution from goal_contribution where source = filterElement and environment in (envName,'')
+    select source, source_type, source_dimension, source_persona,  target, target_type, target_dimension, target_persona, means_end, contribution from goal_contribution where source = filterElement and environment in (envName,'')
     union
-    select source, source_type, source_dimension, target, target_type, target_dimension, means_end, contribution from goal_contribution where target = filterElement and environment in (envName,'');
+    select source, source_type, source_dimension, source_persona, target, target_type, target_dimension, target_persona, means_end, contribution from goal_contribution where target = filterElement and environment in (envName,'');
   else
-    select source, source_type, source_dimension, target, target_type, target_dimension, means_end, contribution from goal_contribution where environment in (envName,'');
+    select source, source_type, source_dimension, source_persona, target, target_type, target_dimension, target_persona, means_end, contribution from goal_contribution where environment in (envName,'');
   end if;
 end
 //
@@ -30573,5 +30574,54 @@ begin
   close contCursor;
 end
 //
+
+create procedure conflictingPersonaCharacteristics(in pName text, in synName text)
+begin
+  declare synId int;
+  declare pId int;
+  declare pcPId int;
+  declare refId int;
+  declare isConflict int default 0;
+  declare done int default 0;
+  declare pcCursor cursor for select pc.persona_id from persona_characteristic pc, persona_characteristic_document pcd where pc.id = pcd.characteristic_id and pcd.reference_id = refId;
+  declare continue handler for not found set done = 1;
+
+  select id into pId from persona where name = pName limit 1;
+
+  select id into synId from document_reference_synopsis where synopsis = synName limit 1;
+  if synId is null
+  then
+    select characteristic_id into synId from persona_characteristic_synopsis where synopsis = synName limit 1;
+    select persona_id into pcPId from persona_characteristic where id = synId limit 1;
+    if pcPId != pId
+    then
+      select concat(pc.description,' (',p.name,')') from persona_characteristic pc, persona_characteristic_synopsis pcs, persona p where pcs.synopsis = synName and pcs.characteristic_id = pc.id and pc.persona_id = p.id;
+    end if;
+  else
+    select reference_id into refId from document_reference_synopsis where id = synId limit 1;
+    open pcCursor;
+    pc_loop: loop
+      fetch pcCursor into pcPId;
+      if done = 1 or isConflict = 1
+      then
+        leave pc_loop;
+      end if;
+    
+      if pId != pcPId
+      then
+        set isConflict = 1;
+        leave pc_loop;
+      end if;
+    end loop pc_loop;
+    close pcCursor;
+
+    if isConflict = 1
+    then
+      select concat(pc.description,' (',p.name,')') from persona_characteristic pc, document_reference_contribution drc, persona p where drc.reference_id = synId and drc.characteristic_id = pc.id and pc.persona_id = p.id;
+    end if;
+  end if;
+end
+//
+
 
 delimiter ;
