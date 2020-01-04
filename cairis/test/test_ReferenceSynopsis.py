@@ -45,7 +45,7 @@ class ReferenceSynopsisTest(unittest.TestCase):
     pass
 
   def testAddSynopsis(self):
-    irs = ReferenceSynopsis(-1,self.rsData['theReference'],self.rsData['theSynopsis'],self.rsData['theDimension'],self.rsData['theActorType'],self.rsData['theActor'])
+    irs = ReferenceSynopsis(-1,self.rsData['theReference'],self.rsData['theSynopsis'],self.rsData['theDimension'],self.rsData['theActorType'],self.rsData['theActor'],self.rsData['theInitialSatisfaction'])
     b = Borg()
     b.dbProxy.addReferenceSynopsis(irs)
 
@@ -55,6 +55,7 @@ class ReferenceSynopsisTest(unittest.TestCase):
     self.assertEqual(irs.dimension(), ors.dimension())
     self.assertEqual(irs.actorType(), ors.actorType())
     self.assertEqual(irs.actor(), ors.actor())
+    self.assertEqual(irs.satisfaction(), ors.satisfaction())
 
   def testUpdateSynopsis(self):
     b = Borg()
@@ -67,6 +68,7 @@ class ReferenceSynopsisTest(unittest.TestCase):
     self.assertEqual(ors.dimension(), urs.dimension())
     self.assertEqual(ors.actorType(), urs.actorType())
     self.assertEqual(ors.actor(), urs.actor())
+    self.assertEqual(ors.satisfaction(), urs.satisfaction())
 
 
 if __name__ == '__main__':

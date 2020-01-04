@@ -47,7 +47,9 @@ class UserGoalAPITests(CairisDaemonTestCase):
       synName = 'Schedule activities',
       dimName = 'goal',
       aType = 'persona',
-      aName = 'Justin')
+      aName = 'Justin',
+      synDim = 'document_reference',
+      initialSatisfaction = 'None')
     self.new_ug_dict = {
       'session_id' : 'test',
       'object': self.new_ug

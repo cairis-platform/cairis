@@ -65,14 +65,24 @@ class SynopsesContentHandler(ContentHandler,EntityResolver):
       dimName = attrs['dimension']
       aType = attrs['actor_type']
       aName = attrs['actor']
-      self.theCharacteristicSynopses.append(ReferenceSynopsis(-1,cName,synName,dimName,aType,aName))
+      gSat = 'None'
+      try:
+        gSat = attrs['satisfaction']
+      except KeyError:
+        gSat = 'None'
+      self.theCharacteristicSynopses.append(ReferenceSynopsis(-1,cName,synName,dimName,aType,aName,'persona_characteristic',gSat))
     elif name == 'reference_synopsis':
       refName = attrs['reference']
       synName = attrs['synopsis']
       dimName = attrs['dimension']
       aType = attrs['actor_type']
       aName = attrs['actor']
-      self.theReferenceSynopses.append(ReferenceSynopsis(-1,refName,synName,dimName,aType,aName))
+      gSat = 'None'
+      try:
+        gSat = attrs['satisfaction']
+      except KeyError:
+        gSat = 'None'
+      self.theReferenceSynopses.append(ReferenceSynopsis(-1,refName,synName,dimName,aType,aName,'document_reference',gSat))
     elif name == 'step_synopsis':
       ucName = attrs['usecase']
       envName = attrs['environment']

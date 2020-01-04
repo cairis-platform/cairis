@@ -2572,6 +2572,8 @@ begin
   delete from classassociation where head_id = assetId;
   delete from classassociation where tail_id = assetId;
   delete from asset_vulnerability where asset_id = assetId;
+  delete from task_concernassociation where source_id = assetId;
+  delete from task_concernassociation where target_id = assetId;
   delete from task_asset where asset_id = assetId;
   delete from countermeasure_asset where asset_id = assetId;
   delete from asset_requirement where asset_id = assetId;
@@ -17213,7 +17215,7 @@ begin
 end
 //
 
-create procedure addReferenceSynopsis(in rsId int, in refName text, in rsName text, in rsDim text, in atName text, in actorName text)
+create procedure addReferenceSynopsis(in rsId int, in refName text, in rsName text, in rsDim text, in atName text, in actorName text, in gSat text)
 begin
   declare dimId int;
   declare atId int;
@@ -17221,7 +17223,9 @@ begin
   declare refId int;
   declare drsCount int;
   declare actorIdSql varchar(4000);
+  declare gsId int;
 
+  select id into gsId from goal_satisfaction where name = gSat;
   select id into dimId from trace_dimension where name = rsDim;
   select id into atId from trace_dimension where name = atName;
 
@@ -17238,9 +17242,9 @@ begin
     select count(id) into drsCount from document_reference_synopsis where reference_id = refId;
     if drsCount > 0
     then
-      update document_reference_synopsis set reference_id = refId, synopsis = rsName, dimension_id = dimId, actor_id = actorId, actor_type_id = atId where id = rsId;
+      update document_reference_synopsis set reference_id = refId, synopsis = rsName, dimension_id = dimId, actor_id = actorId, actor_type_id = atId, satisfaction = gsId where id = rsId;
     else
-      insert into document_reference_synopsis(id,reference_id,synopsis,dimension_id,actor_id,actor_type_id) values (rsId,refId,rsName,dimId,actorId,atId);
+      insert into document_reference_synopsis(id,reference_id,synopsis,dimension_id,actor_id,actor_type_id,satisfaction) values (rsId,refId,rsName,dimId,actorId,atId,gsId);
     end if;
   else
     select id into refId from requirement_reference where name = refName;
@@ -17249,14 +17253,16 @@ begin
 end
 //
 
-create procedure updateReferenceSynopsis(in rsId int, in refName text, in rsName text, in rsDim text, in atName text, in actorName text)
+create procedure updateReferenceSynopsis(in rsId int, in refName text, in rsName text, in rsDim text, in atName text, in actorName text, in gSat text)
 begin
   declare dimId int;
   declare atId int;
   declare actorId int;
   declare refId int;
   declare actorIdSql varchar(4000);
+  declare gsId int;
 
+  select id into gsId from goal_satisfaction where name = gSat;
   select id into dimId from trace_dimension where name = rsDim;
   select id into atId from trace_dimension where name = atName;
 
@@ -17270,7 +17276,7 @@ begin
   select id into refId from document_reference where name = refName;
   if refId is not null
   then
-    update document_reference_synopsis set reference_id = refId, synopsis = rsName, dimension_id = dimId, actor_id = actorId, actor_type_id = atId where id = rsId;
+    update document_reference_synopsis set reference_id = refId, synopsis = rsName, dimension_id = dimId, actor_id = actorId, actor_type_id = atId, satisfaction = gsId where id = rsId;
   else
     select id into refId from requirement_reference where name = refName;
     update requirement_reference_synopsis set reference_id = refId, synopsis = rsName, dimension_id = dimId, actor_id = actorId, actor_type_id = atId where id = rsId;
@@ -17278,7 +17284,7 @@ begin
 end
 //
 
-create procedure addCharacteristicSynopsis(in cName text, in csName text, in csDim text,in atName text, in actorName text)
+create procedure addCharacteristicSynopsis(in cName text, in csName text, in csDim text,in atName text, in actorName text, in gSat text)
 begin
   declare cId int;
   declare dimId int;
@@ -17286,8 +17292,10 @@ begin
   declare actorId int;
   declare pcsCount int;
   declare actorIdSql varchar(4000);
+  declare gsId int;
 
   select id into dimId from trace_dimension where name = csDim;
+  select id into gsId from goal_satisfaction where name = gSat;
 
   select id into cId from persona_characteristic where description = cName;
   if cId is not null
@@ -17295,9 +17303,9 @@ begin
     select count(characteristic_id) into pcsCount from persona_characteristic_synopsis where synopsis = csName and dimension_id = dimId;
     if pcsCount > 0
     then
-      update persona_characteristic_synopsis set synopsis = csName,dimension_id = dimId where characteristic_id = cId;
+      update persona_characteristic_synopsis set synopsis = csName,dimension_id = dimId, satisfaction = gsId where characteristic_id = cId;
     else
-      insert into persona_characteristic_synopsis(characteristic_id,synopsis,dimension_id) values (cId,csName,dimId);
+      insert into persona_characteristic_synopsis(characteristic_id,synopsis,dimension_id,satisfaction) values (cId,csName,dimId,gsId);
     end if;
   else
     select id into cId from task_characteristic where description = cName;
@@ -17313,20 +17321,22 @@ begin
 end
 //
 
-create procedure updateCharacteristicSynopsis(in cName text, in csName text, in csDim text,in atName text, in actorName text)
+create procedure updateCharacteristicSynopsis(in cName text, in csName text, in csDim text,in atName text, in actorName text, in gSat text)
 begin
   declare cId int;
   declare dimId int;
   declare atId int;
   declare actorId int;
   declare actorIdSql varchar(4000);
+  declare gsId int;
 
   select id into dimId from trace_dimension where name = csDim;
+  select id into gsId from goal_satisfaction where name = gSat;
 
   select id into cId from persona_characteristic where description = cName;
   if cId is not null
   then
-    update persona_characteristic_synopsis set synopsis = csName,dimension_id = dimId where characteristic_id = cId;
+    update persona_characteristic_synopsis set synopsis = csName,dimension_id = dimId, satisfaction = gsId where characteristic_id = cId;
   else
     select id into cId from task_characteristic where description = cName;
     select id into atId from trace_dimension where name = atName;
@@ -25427,12 +25437,13 @@ begin
   declare meName varchar(100);
   declare contName varchar(100);
   declare taskName varchar(200);
+  declare gSat varchar(100);
   declare done int default 0;
 
   declare csCursor cursor for 
-    select pc.description,pcs.synopsis,td.name,'persona',p.name from persona_characteristic_synopsis pcs, persona_characteristic pc, trace_dimension td, persona p where pcs.characteristic_id = pc.id and pc.persona_id = p.id and pcs.dimension_id = td.id;
+    select pc.description,pcs.synopsis,td.name,'persona',p.name,gs.name from persona_characteristic_synopsis pcs, persona_characteristic pc, trace_dimension td, persona p, goal_satisfaction gs where pcs.characteristic_id = pc.id and pc.persona_id = p.id and pcs.dimension_id = td.id and pcs.satisfaction = gs.id;
   declare rsCursor cursor for
-    select dr.name,drs.synopsis,td.name,'persona',p.name from document_reference_synopsis drs,document_reference dr, trace_dimension td, persona p where drs.reference_id = dr.id and drs.dimension_id = td.id and drs.actor_id = p.id;
+    select dr.name,drs.synopsis,td.name,'persona',p.name,gs.name from document_reference_synopsis drs,document_reference dr, trace_dimension td, persona p, goal_satisfaction gs where drs.reference_id = dr.id and drs.dimension_id = td.id and drs.actor_id = p.id and drs.satisfaction = gs.id;
 
   declare envCursor cursor for 
     select id,name from environment;
@@ -25471,12 +25482,12 @@ begin
 
   open csCursor;
   cs_loop: loop
-    fetch csCursor into charName,synName,synDim,aType,aName;
+    fetch csCursor into charName,synName,synDim,aType,aName,gSat;
     if done = 1
     then
       leave cs_loop;
     end if;
-    set buf = concat(buf,'  <characteristic_synopsis characteristic="',charName,'" synopsis="',synName,'" dimension="',synDim,'" actor_type="',aType,'" actor="',aName,'" />\n');
+    set buf = concat(buf,'  <characteristic_synopsis characteristic="',charName,'" synopsis="',synName,'" dimension="',synDim,'" actor_type="',aType,'" actor="',aName,'" satisfaction="',gSat,'" />\n');
     set csCount = csCount + 1;
   end loop cs_loop;
   close csCursor;
@@ -25484,12 +25495,12 @@ begin
   set done = 0;
   open rsCursor;
   rs_loop: loop
-    fetch rsCursor into refName,synName,synDim,aType,aName;
+    fetch rsCursor into refName,synName,synDim,aType,aName,gSat;
     if done = 1
     then
       leave rs_loop;
     end if;
-    set buf = concat(buf,'  <reference_synopsis reference="',refName,'" synopsis="',synName,'" dimension="',synDim,'" actor_type="',aType,'" actor="',aName,'" />\n');
+    set buf = concat(buf,'  <reference_synopsis reference="',refName,'" synopsis="',synName,'" dimension="',synDim,'" actor_type="',aType,'" actor="',aName,'" satisfaction="',gSat,'" />\n');
     set rsCount = rsCount + 1;
   end loop rs_loop;
   close rsCursor;
@@ -30230,53 +30241,57 @@ create procedure getUserGoals(in constraintId int)
 begin
   if constraintId = -1
   then
-    select drs.id, dr.name, drs.synopsis, td.name, p.name,'document_reference' from document_reference_synopsis drs, document_reference dr, persona p, trace_dimension td where drs.reference_id = dr.id and drs.dimension_id = td.id and drs.actor_id = p.id 
+    select drs.id, dr.name, drs.synopsis, td.name, p.name,'document_reference',gs.name from document_reference_synopsis drs, document_reference dr, persona p, trace_dimension td, goal_satisfaction gs where drs.reference_id = dr.id and drs.dimension_id = td.id and drs.actor_id = p.id and drs.satisfaction = gs.id
     union
-    select pcs.characteristic_id,pc.description,pcs.synopsis, td.name, p.name,'persona_characteristic' from persona_characteristic_synopsis pcs, persona_characteristic pc, persona p, trace_dimension td where pcs.characteristic_id = pc.id and pcs.dimension_id = td.id and pc.persona_id = p.id order by 2;
+    select pcs.characteristic_id,pc.description,pcs.synopsis, td.name, p.name,'persona_characteristic', gs.name from persona_characteristic_synopsis pcs, persona_characteristic pc, persona p, trace_dimension td, goal_satisfaction gs where pcs.characteristic_id = pc.id and pcs.dimension_id = td.id and pc.persona_id = p.id and pcs.satisfaction = gs.id order by 2;
   else
-    select drs.id, dr.name, drs.synopsis, td.name, p.name, 'document_reference' from document_reference_synopsis drs, document_reference dr, persona p, trace_dimension td where drs.id = constraintId and drs.reference_id = dr.id and drs.dimension_id = td.id and drs.actor_id = p.id
+    select drs.id, dr.name, drs.synopsis, td.name, p.name, 'document_reference',gs.name from document_reference_synopsis drs, document_reference dr, persona p, trace_dimension td, goal_satisfaction gs where drs.id = constraintId and drs.reference_id = dr.id and drs.dimension_id = td.id and drs.actor_id = p.id and drs.satisfaction = gs.id
     union
-    select pcs.characteristic_id,pc.description,pcs.synopsis, td.name, p.name, 'persona_characteristic' from persona_characteristic_synopsis pcs, persona_characteristic pc, persona p, trace_dimension td where pcs.characteristic_id = constraintId and pcs.characteristic_id = pc.id and pcs.dimension_id = td.id and pc.persona_id = p.id order by 2;
+    select pcs.characteristic_id,pc.description,pcs.synopsis, td.name, p.name, 'persona_characteristic',gs.name from persona_characteristic_synopsis pcs, persona_characteristic pc, persona p, trace_dimension td, goal_satisfaction gs where pcs.characteristic_id = constraintId and pcs.characteristic_id = pc.id and pcs.dimension_id = td.id and pc.persona_id = p.id and pcs.satisfaction = gs.id order by 2;
   end if;
 end
 //
 
-create procedure addUserGoal(in ugId int,in refName text, in synName text, in dimName text, in personaName text)
+create procedure addUserGoal(in ugId int,in refName text, in synName text, in dimName text, in personaName text, in gSat text)
 begin
   declare refId int;
   declare dimId int;
   declare pId int;
+  declare gsId int;
 
   select id into dimId from trace_dimension where name = dimName limit 1;
   select id into pId from persona where name = personaName limit 1;
+  select id into gsId from goal_satisfaction where name = gSat limit 1;
 
   select id into refId from document_reference where name = refName limit 1;
   if refId is null
   then
     select id into refId from persona_characteristic where description = refName and persona_id = pId limit 1;
-    insert into persona_characteristic_synopsis(characteristic_id,synopsis,dimension_id) values (refId,synName,dimId);
+    insert into persona_characteristic_synopsis(characteristic_id,synopsis,dimension_id,satisfaction) values (refId,synName,dimId,gsId);
   else 
-    insert into document_reference_synopsis(id,reference_id,synopsis,dimension_id,actor_id,actor_type_id) values (ugId,refId,synName,dimId,pId,1);
+    insert into document_reference_synopsis(id,reference_id,synopsis,dimension_id,actor_id,actor_type_id,satisfaction) values (ugId,refId,synName,dimId,pId,1,gsId);
   end if;
 end
 //
 
-create procedure updateUserGoal(in ugId int,in refName text, in synName text, in dimName text, in personaName text)
+create procedure updateUserGoal(in ugId int,in refName text, in synName text, in dimName text, in personaName text, in gSat text)
 begin
   declare refId int;
   declare dimId int;
   declare pId int;
+  declare gsId int;
 
   select id into dimId from trace_dimension where name = dimName limit 1;
   select id into pId from persona where name = personaName limit 1;
+  select id into gsId from goal_satisfaction where name = gSat limit 1;
 
   select id into refId from document_reference where name = refName limit 1;
   if refId is null
   then
     select id into refId from persona_characteristic where description = refName and persona_id = pId limit 1;
-    update persona_characteristic_synopsis set synopsis = synName, dimension_id = dimId where characteristic_id = refId;
+    update persona_characteristic_synopsis set synopsis = synName, dimension_id = dimId, satisfaction = gsId where characteristic_id = refId;
   else
-    update document_reference_synopsis set reference_id = refId, synopsis = synName, dimension_id = dimId, actor_id = pId, actor_type_id = 1 where id = ugId;
+    update document_reference_synopsis set reference_id = refId, synopsis = synName, dimension_id = dimId, actor_id = pId, actor_type_id = 1, satisfaction = gsId where id = ugId;
   end if;
 end
 //
@@ -30294,12 +30309,14 @@ begin
 end
 //
 
-create procedure userGoalContribution(in ugId int, envId int, out score int) 
+create procedure userGoalContribution(in ugId int, in envId int, inout score int) 
 begin
   declare contScore int default 0;
   declare linkScore int default 0;
   declare ugScore int default 0;
   declare cgId int;
+  declare igScore int default 0;
+  declare igScoreId int;
   declare refCount int;
   declare charCount int;
   declare idCount int default 0;
@@ -30311,52 +30328,67 @@ begin
   declare taskContCursor cursor for select contribution_id from task_goal_contribution where reference_id = ugId and environment_id = envId;
   declare continue handler for not found set done = 1;
 
-  set score = 0;
-
-  select count(id) into idCount from temp_gid where id = ugId;
-  if idCount = 0
+  if isnull(score)
   then
-    insert into temp_gid(id) values (ugId);
+    set score = 0;
+  end if;
 
-    open taskContCursor;
-    tc_loop: loop
-      fetch taskContCursor into linkScore;
-      if done = 1
-      then
-        leave tc_loop;
-      end if;
-      select value into contScore from link_contribution where id = linkScore;
-      set score = score + contScore;
-    end loop tc_loop;
-    close taskContCursor;
+  select satisfaction into igScoreId from document_reference_synopsis where id = ugId;
+  if igScoreId is null
+  then
+    select satisfaction into igScoreId from persona_characteristic_synopsis where characteristic_id = ugId;
+  end if;
 
-    set done = 0;
-    open goalLinksCursor;
-    gl_loop: loop
-      fetch goalLinksCursor into cgId, linkScore;
-      if done = 1
-      then
-        leave gl_loop;
-      end if;
-      select value into contScore from link_contribution where id = linkScore;
-      call userGoalContribution(cgId,envId,ugScore);
-      set ugScore = ugScore * contScore;
-      set score = score + ugScore;
-    end loop gl_loop;
-    close goalLinksCursor;
-
-    if score > 100 or score < -100
+  if igScoreId is not null and igScoreId != 0
+  then
+    select value into igScore from goal_satisfaction where id = igScoreId limit 1;
+    set score = igScore;
+  else
+    select count(id) into idCount from temp_gid where id = ugId;
+    if idCount = 0
     then
-      set score = score / 100;
-      if score < -100
-      then
-        set score = -100;
-      elseif score > 100
-      then
-        set score = 100;
-      end if; 
-    end if;
+      insert into temp_gid(id) values (ugId);
 
+      open taskContCursor;
+      tc_loop: loop
+        fetch taskContCursor into linkScore;
+        if done = 1
+        then
+          leave tc_loop;
+        end if;
+        select value into contScore from link_contribution where id = linkScore;
+        set score = score + contScore;
+      end loop tc_loop;
+      close taskContCursor;
+
+      set done = 0;
+      open goalLinksCursor;
+      gl_loop: loop
+        fetch goalLinksCursor into cgId, linkScore;
+        if done = 1
+        then
+          leave gl_loop;
+        end if;
+        call userGoalContribution(cgId,envId,ugScore);
+
+        select value into contScore from link_contribution where id = linkScore;
+        set ugScore = ugScore * contScore;
+        set score = score + ugScore;
+      end loop gl_loop;
+      close goalLinksCursor;
+
+      if score > 100 or score < -100
+      then
+        set score = score / 100;
+        if score < -100
+        then
+          set score = -100;
+        elseif score > 100
+        then
+          set score = 100;
+        end if; 
+      end if;
+    end if;
   end if;
 end
 //
@@ -30366,6 +30398,7 @@ begin
   declare score int default 0;
   declare ugId int;
   declare envId int;
+  declare gsScoreId int;
 
   drop table if exists temp_gid;
   create temporary table temp_gid (id int not null);
@@ -30376,7 +30409,12 @@ begin
   if ugId is null
   then
     select characteristic_id into ugId from persona_characteristic_synopsis where synopsis = goalName limit 1;
+    select satisfaction into gsScoreId from persona_characteristic_synopsis where characteristic_id = ugId;
+  else
+    select satisfaction into gsScoreId from document_reference_synopsis where id = ugId;
   end if;
+
+  select value into score from goal_satisfaction where id = gsScoreId;
 
   call userGoalContribution(ugId,envId,score);
   select score;
@@ -30596,6 +30634,8 @@ begin
     if pcPId != pId
     then
       select concat(pc.description,' (',p.name,')') from persona_characteristic pc, persona_characteristic_synopsis pcs, persona p where pcs.synopsis = synName and pcs.characteristic_id = pc.id and pc.persona_id = p.id;
+    else
+      select '';
     end if;
   else
     select reference_id into refId from document_reference_synopsis where id = synId limit 1;

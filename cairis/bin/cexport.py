@@ -26,7 +26,7 @@ def main(args=None):
   parser.add_argument('outputFile',help='output file name')
   parser.add_argument('--user',dest='userName',help='user name', default='cairis_test')
   parser.add_argument('--database',dest='dbName',help='database name',default='cairis_test')
-  parser.add_argument('--type',dest='modelFormat',help='model type to export.  One of all, requirements, scenarios, usecases, architecture, attackpatterns, securitypatterns or GRL')
+  parser.add_argument('--type',dest='modelFormat',help='model type to export.  One of all, package, requirements, scenarios, usecases, architecture, attackpatterns, securitypatterns or GRL')
   parser.add_argument('--persona',nargs='+',help='Persona name or ALL (relevant for GRL export only)')
   parser.add_argument('--task',nargs='+',help='Task name or ALL (relevant for GRL export only)')
   parser.add_argument('--environment',dest='envName',help='Environment name (relevant for GRL export only)')
@@ -35,10 +35,12 @@ def main(args=None):
   file_export(args.modelFormat,args.outputFile,args.persona,args.task,args.envName)
 
 def file_export(modelFormat = 'all', outputFile = None, persona = None, task = None, envName = None, session_id = None):
-  from cairis.mio.ModelExport import exportModel,exportRedmineScenarios,exportRedmineRequirements,exportRedmineUseCases,exportArchitecture,exportAttackPatterns,exportGRL,exportSecurityPatterns
+  from cairis.mio.ModelExport import exportModel,exportRedmineScenarios,exportRedmineRequirements,exportRedmineUseCases,exportArchitecture,exportAttackPatterns,exportGRL,exportSecurityPatterns,exportPackage
   msgStr = ''
   if (modelFormat == 'all'):
     msgStr += exportModel(outputFile,session_id)
+  if (modelFormat == 'package'):
+    msgStr += exportPackage(outputFile,session_id)
   elif (modelFormat == 'scenarios'):
     msgStr += exportRedmineScenarios(outputFile,session_id)
   elif (modelFormat == 'requirements'):

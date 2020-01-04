@@ -46,7 +46,7 @@ class CExportFileAPI(Resource):
     fileType = request.args.get('fileType','xml')
 
     dao = ExportDAO(session_id)
-    modelBuf = dao.file_export(fileName,fileType)
+    modelBuf = dao.file_export(fileType)
     dao.close()
     resp = make_response(modelBuf)
     if (fileType == 'cairis'):

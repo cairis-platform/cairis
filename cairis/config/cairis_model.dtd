@@ -389,12 +389,14 @@
 <!ATTLIST characteristic_synopsis dimension (goal | softgoal | task | belief) #REQUIRED>
 <!ATTLIST characteristic_synopsis actor_type (persona | asset | component) #REQUIRED>
 <!ATTLIST characteristic_synopsis actor CDATA #REQUIRED>
+<!ATTLIST characteristic_synopsis satisfaction (Satisfied | Weakly Satisfied | None | Weakly Denied | Denied) #IMPLIED>
 <!ELEMENT reference_synopsis EMPTY>
 <!ATTLIST reference_synopsis reference CDATA #REQUIRED>
 <!ATTLIST reference_synopsis synopsis CDATA #REQUIRED>
 <!ATTLIST reference_synopsis dimension (goal | softgoal | task | belief) #REQUIRED>
 <!ATTLIST reference_synopsis actor_type (persona | asset | component) #REQUIRED>
 <!ATTLIST reference_synopsis actor CDATA #REQUIRED>
+<!ATTLIST reference_synopsis satisfaction (Satisfied | Weakly Satisfied | None | Weakly Denied | Denied) #IMPLIED>
 <!ELEMENT step_synopsis EMPTY>
 <!ATTLIST step_synopsis usecase CDATA #REQUIRED>
 <!ATTLIST step_synopsis environment CDATA #REQUIRED>

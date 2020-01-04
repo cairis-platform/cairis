@@ -94,6 +94,7 @@ DROP TABLE IF EXISTS persona_characteristic_synopsis;
 DROP TABLE IF EXISTS task_characteristic_synopsis;
 DROP TABLE IF EXISTS contribution_end;
 DROP TABLE IF EXISTS link_contribution;
+DROP TABLE IF EXISTS goal_satisfaction;
 DROP TABLE IF EXISTS task_tag;
 DROP TABLE IF EXISTS usecase_tag;
 DROP TABLE IF EXISTS persona_tag;
@@ -2644,12 +2645,21 @@ CREATE TABLE link_contribution (
   PRIMARY KEY(id)
 ) ENGINE=INNODB;
 
+CREATE TABLE goal_satisfaction (
+  id INT NOT NULL,
+  name VARCHAR(100) NOT NULL,
+  value INT NOT NULL,
+  PRIMARY KEY(id)
+) ENGINE=INNODB;
+
 CREATE TABLE persona_characteristic_synopsis (
   characteristic_id INT NOT NULL,
   synopsis VARCHAR(1000) NOT NULL,
   dimension_id INT NOT NULL,
+  satisfaction INT NOT NULL DEFAULT 0,
   PRIMARY KEY(characteristic_id),
   FOREIGN KEY(characteristic_id) REFERENCES persona_characteristic(id),
+  FOREIGN KEY(satisfaction) REFERENCES goal_satisfaction(id),
   FOREIGN KEY(dimension_id) REFERENCES trace_dimension(id)
 ) ENGINE=INNODB;
 
@@ -2672,9 +2682,11 @@ CREATE TABLE document_reference_synopsis (
   dimension_id INT NOT NULL,
   actor_id INT NOT NULL,
   actor_type_id INT NOT NULL,
+  satisfaction INT NOT NULL DEFAULT 0,
   PRIMARY KEY(id),
   FOREIGN KEY(reference_id) REFERENCES document_reference(id),
   FOREIGN KEY(dimension_id) REFERENCES trace_dimension(id),
+  FOREIGN KEY(satisfaction) REFERENCES goal_satisfaction(id),
   FOREIGN KEY(actor_type_id) REFERENCES trace_dimension(id)
 ) ENGINE=INNODB;
 
@@ -4382,6 +4394,11 @@ insert into link_contribution (id,name,value) values (1,'Help',25);
 insert into link_contribution (id,name,value) values (-1,'Hurt',-25);
 insert into link_contribution (id,name,value) values (-2,'SomeNegative',-50);
 insert into link_contribution (id,name,value) values (-3,'Break',-100);
+insert into goal_satisfaction (id,name,value) values (2,'Satisfied',100);
+insert into goal_satisfaction (id,name,value) values (1,'Weakly Satisfied',50);
+insert into goal_satisfaction (id,name,value) values (0,'None',0);
+insert into goal_satisfaction (id,name,value) values (-1,'Weakly Denied',-50);
+insert into goal_satisfaction (id,name,value) values (-2,'Denied',-100);
 insert into artifact_section (id,name) values (-1,'none');
 insert into artifact_section (id,name) values (0,'activities');
 insert into artifact_section (id,name) values (1,'attitudes');

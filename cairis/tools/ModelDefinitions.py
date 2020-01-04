@@ -809,7 +809,8 @@ class ReferenceSynopsisModel(object):
     "theSynopsis": fields.String,
     "theDimension": fields.String,
     "theActor": fields.String,
-    "theSynopsisDimension" : fields.String
+    "theSynopsisDimension" : fields.String,
+    "theInitialSatisfaction" : fields.String
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)

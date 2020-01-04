@@ -3280,7 +3280,8 @@ class MySQLDatabaseProxy:
     rsDim = rs.dimension()
     atName = rs.actorType()
     actorName = rs.actor()
-    self.updateDatabase('call addReferenceSynopsis(:rsId,:ref,:rs,:dim,:atName,:actName)',{'rsId':rsId,'ref':refName,'rs':rsName,'dim':rsDim,'atName':atName,'actName':actorName},'MySQL error adding reference synopsis')
+    gSat = rs.satisfaction()
+    self.updateDatabase('call addReferenceSynopsis(:rsId,:ref,:rs,:dim,:atName,:actName,:gSat)',{'rsId':rsId,'ref':refName,'rs':rsName,'dim':rsDim,'atName':atName,'actName':actorName,'gSat':gSat},'MySQL error adding reference synopsis')
     return rsId
 
   def updateReferenceSynopsis(self,rs):
@@ -3290,7 +3291,8 @@ class MySQLDatabaseProxy:
     rsDim = rs.dimension()
     atName = rs.actorType()
     actorName = rs.actor()
-    self.updateDatabase('call updateReferenceSynopsis(:rsId,:ref,:rs,:dim,:atName,:actName)',{'rsId':rsId,'ref':refName,'rs':rsName,'dim':rsDim,'atName':atName,'actName':actorName},'MySQL error updating reference synopsis')
+    gSat = rs.satisfaction()
+    self.updateDatabase('call updateReferenceSynopsis(:rsId,:ref,:rs,:dim,:atName,:actName,:gSat)',{'rsId':rsId,'ref':refName,'rs':rsName,'dim':rsDim,'atName':atName,'actName':actorName,'gSat':gSat},'MySQL error updating reference synopsis')
 
   def addCharacteristicSynopsis(self,cs):
     cName = cs.reference()
@@ -3298,7 +3300,8 @@ class MySQLDatabaseProxy:
     csDim = cs.dimension()
     atName = cs.actorType()
     actorName = cs.actor()
-    self.updateDatabase('call addCharacteristicSynopsis(:cName,:csName,:csDim,:atName,:actName)',{'cName':cName,'csName':csName,'csDim':csDim,'atName':atName,'actName':actorName},'MySQL error adding characteristic synopsis')
+    gSat = cs.satisfaction()
+    self.updateDatabase('call addCharacteristicSynopsis(:cName,:csName,:csDim,:atName,:actName,:gSat)',{'cName':cName,'csName':csName,'csDim':csDim,'atName':atName,'actName':actorName,'gSat':gSat},'MySQL error adding characteristic synopsis')
 
   def updateCharacteristicSynopsis(self,cs):
     cName = cs.reference()
@@ -3306,7 +3309,8 @@ class MySQLDatabaseProxy:
     csDim = cs.dimension()
     atName = cs.actorType()
     actorName = cs.actor()
-    self.updateDatabase('call updateCharacteristicSynopsis(:cName,:csName,:csDim,:atName,:actName)',{'cName':cName,'csName':csName,'csDim':csDim,'atName':atName,'actName':actorName},'MySQL error updating characteristic synopsis')
+    gSat = cs.satisfaction()
+    self.updateDatabase('call updateCharacteristicSynopsis(:cName,:csName,:csDim,:atName,:actName,:gSat)',{'cName':cName,'csName':csName,'csDim':csDim,'atName':atName,'actName':actorName,'gSat':gSat},'MySQL error updating characteristic synopsis')
 
   def referenceCharacteristic(self,refName): return self.responseList('call referenceCharacteristic(:ref)',{'ref':refName},'MySQL error getting characteristics associated with reference ' + refName)
 
@@ -4861,7 +4865,7 @@ class MySQLDatabaseProxy:
     rows = self.responseList('call getUserGoals(:id)',{'id':constraintId},'MySQL error getting user goals')
     objts = []
     for row in rows:
-      objts.append(ReferenceSynopsis(row[0],row[1],row[2],row[3],'persona',row[4],row[5]))
+      objts.append(ReferenceSynopsis(row[0],row[1],row[2],row[3],'persona',row[4],row[5],row[6]))
     return objts
 
   def addUserGoal(self,objt):
@@ -4870,7 +4874,8 @@ class MySQLDatabaseProxy:
     synName = objt.synopsis()
     dimName = objt.dimension()
     personaName = objt.actor()
-    self.updateDatabase('call addUserGoal(:ugId,:refName,:synName,:dimName,:personaName)',{'ugId':ugId,'refName':refName,'synName':synName,'dimName':dimName,'personaName':personaName},'MySQL error adding user goal')
+    gSat = objt.satisfaction()
+    self.updateDatabase('call addUserGoal(:ugId,:refName,:synName,:dimName,:personaName,:gSat)',{'ugId':ugId,'refName':refName,'synName':synName,'dimName':dimName,'personaName':personaName,'gSat':gSat},'MySQL error adding user goal')
 
   def updateUserGoal(self,objt):
     ugId = objt.id()
@@ -4878,7 +4883,8 @@ class MySQLDatabaseProxy:
     synName = objt.synopsis()
     dimName = objt.dimension()
     personaName = objt.actor()
-    self.updateDatabase('call updateUserGoal(:ugId,:refName,:synName,:dimName,:personaName)',{'ugId':ugId,'refName':refName,'synName':synName,'dimName':dimName,'personaName':personaName},'MySQL error updating user goal')
+    gSat = objt.satisfaction()
+    self.updateDatabase('call updateUserGoal(:ugId,:refName,:synName,:dimName,:personaName,:gSat)',{'ugId':ugId,'refName':refName,'synName':synName,'dimName':dimName,'personaName':personaName,'gSat':gSat},'MySQL error updating user goal')
 
   def deleteUserGoal(self,ugId = -1):
     self.deleteObject(ugId,'user_goal')
@@ -4908,4 +4914,7 @@ class MySQLDatabaseProxy:
     return objts
 
   def conflictingPersonaCharacteristics(self,pName,ugName):
-    return self.responseList('call conflictingPersonaCharacteristics(:pName,:ugName)',{'pName':pName,'ugName':ugName},'MySQL error getting persona characteristic user goals')
+    objts = self.responseList('call conflictingPersonaCharacteristics(:pName,:ugName)',{'pName':pName,'ugName':ugName},'MySQL error getting persona characteristic user goals')
+    if (len(objts) == 1 and objts[0] == ''):
+      objts = []
+    return objts

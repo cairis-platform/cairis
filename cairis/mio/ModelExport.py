@@ -20,6 +20,9 @@ from cairis.core.Borg import Borg
 import os
 import re
 import codecs
+import io
+import zipfile
+from base64 import b64decode
 
 __author__ = 'Shamal Faily'
 
@@ -289,7 +292,7 @@ def exportAttackPatterns(outFile,session_id = None):
 
   return 'Exported ' + str(noAPs) + ' attack patterns.'
 
-def exportModel(outFile = None,session_id = None):
+def extractModel(session_id = None):
   b = Borg()
   xmlBuf = '<?xml version="1.0"?>\n<!DOCTYPE cairis_model PUBLIC "-//CAIRIS//DTD MODEL 1.0//EN" "http://cairis.org/dtd/cairis_model.dtd">\n<cairis_model>\n\n\n'
   xmlBuf+= b.get_dbproxy(session_id).tvTypesToXml(0)[0] + '\n\n'
@@ -303,6 +306,10 @@ def exportModel(outFile = None,session_id = None):
   xmlBuf+= b.get_dbproxy(session_id).misusabilityToXml(0)[0] + '\n\n'
   xmlBuf+= b.get_dbproxy(session_id).dataflowsToXml(0)[0] + '\n\n'
   xmlBuf+= b.get_dbproxy(session_id).locationsToXml()[0] + '\n\n</cairis_model>'
+  return xmlBuf
+
+def exportModel(outFile = None,session_id = None):
+  xmlBuf = extractModel(session_id)
   if outFile == None:
     return xmlBuf
   else:
@@ -310,6 +317,37 @@ def exportModel(outFile = None,session_id = None):
     f.write(xmlBuf)
     f.close()
     return 'Exported model'
+
+def extractPackage(session_id = None):
+  buf = io.BytesIO()
+  zf = zipfile.ZipFile(buf,'w',zipfile.ZIP_DEFLATED)
+  zf.writestr('model.xml',extractModel(session_id))
+
+  b = Borg()
+  apNames = b.get_dbproxy(session_id).getDimensionNames('component_view','')
+  for apName in apNames:
+    apBuf = b.get_dbproxy(session_id).architecturalPatternToXml(apName)
+    zf.writestr(apName + '.xml',apBuf)
+
+  spNames = b.get_dbproxy(session_id).getDimensionNames('securitypattern','')
+  if (len(spNames) > 0):
+    spBuf = b.get_dbproxy(session_id).securityPatternsToXml()
+    zf.writestr('security_patterns.xml',spBuf)
+
+  for imgName,imgContent in b.get_dbproxy(session_id).getImages():
+    zf.writestr(imgName,b64decode(imgContent))
+  zf.close()
+  return buf.getvalue()
+
+def exportPackage(outFile = None, session_id = None):
+  buf = extractPackage(session_id)
+  if outFile == None:
+    return buf
+  else:
+    f = codecs.open(outFile,'wb')
+    f.write(buf)
+    f.close()
+    return 'Exported package'
 
 def exportJSON(outFile = None, session_id = None):
   b = Borg()
