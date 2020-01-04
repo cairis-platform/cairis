@@ -19240,8 +19240,15 @@ end
 create procedure addComponentRequirement(in reqLabel int, in componentId int, in reqName text)
 begin
   declare reqId int;
+  declare crCount int;
+
   select id into reqId from template_requirement where name = reqName;
-  insert into component_template_requirement(template_requirement_id,component_id,label) values (reqId,componentId,reqLabel);
+
+  select count(*) into crCount from component_template_requirement where template_requirement_id = reqId and component_id = componentId;
+  if crCount = 0
+  then
+    insert into component_template_requirement(template_requirement_id,component_id,label) values (reqId,componentId,reqLabel);
+  end if;
 end
 //
 
@@ -19626,11 +19633,16 @@ create procedure addTemplateRequirement(in reqId int, in reqName text, in reqAss
 begin
   declare reqTypeId int;
   declare assetId int;
+  declare trCount int;
 
   select id into reqTypeId from requirement_type where name = reqType;
   select id into assetId from template_asset where name = reqAsset;
 
-  insert into template_requirement(id,name,type_id,description,rationale,fit_criterion,asset_id) values (reqId,reqName,reqTypeId,reqDesc,reqRat,reqFC,assetId);
+  select count(id) into trCount from template_requirement where name = reqName;
+  if trCount = 0
+  then
+    insert into template_requirement(id,name,type_id,description,rationale,fit_criterion,asset_id) values (reqId,reqName,reqTypeId,reqDesc,reqRat,reqFC,assetId);
+  end if;
 end
 //
 
@@ -20567,8 +20579,14 @@ end
 create procedure addComponentGoal(in componentId int, in goalName text)
 begin
   declare goalId int;
+  declare cgCount int;
   select id into goalId from template_goal where name = goalName;
-  insert into component_template_goal(template_goal_id,component_id) values (goalId,componentId);
+  
+  select count(*) into cgCount from component_template_goal where template_goal_id = goalId and component_id = componentId;
+  if cgCount = 0
+  then
+    insert into component_template_goal(template_goal_id,component_id) values (goalId,componentId);
+  end if;
 end
 //
 
@@ -20580,7 +20598,13 @@ end
 
 create procedure addTemplateGoal(in goalId int, in goalName text, in goalDef text, in goalRat text)
 begin
-  insert into template_goal(id,name,definition,rationale) values (goalId,goalName,goalDef,goalRat);
+  declare tgCount int;
+
+  select count(id) into tgCount from template_goal where name = goalName;
+  if tgCount = 0
+  then
+    insert into template_goal(id,name,definition,rationale) values (goalId,goalName,goalDef,goalRat);
+  end if;
 end
 //
 
@@ -20743,12 +20767,17 @@ begin
   declare goalId int;
   declare subGoalId int;
   declare refTypeId int;
+  declare cgaCount int;
 
   select id into goalId from template_goal where name = goalName;
   select id into subGoalId from template_goal where name = subGoalName;
   select id into refTypeId from reference_type where name = refType;
 
-  insert into component_goalgoal_goalassociation(component_id,goal_id,subgoal_id,ref_type_id,rationale) values(componentId,goalId,subGoalId,refTypeId,gaRationale);
+  select count(*) into cgaCount from component_goalgoal_goalassociation where component_id = componentId and goal_id = goalId and subgoal_id = subGoalId and ref_type_id = refTypeId;
+  if cgaCount = 0
+  then
+    insert into component_goalgoal_goalassociation(component_id,goal_id,subgoal_id,ref_type_id,rationale) values(componentId,goalId,subGoalId,refTypeId,gaRationale);
+  end if;
 end
 //
 
