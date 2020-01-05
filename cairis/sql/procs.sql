@@ -11222,6 +11222,16 @@ create procedure delete_external_document(in docId int)
 begin
   if docId != -1
   then
+    delete from document_reference_contribution where reference_id in
+      (select id from document_reference_synopsis where reference_id in 
+        (select id from document_reference where document_id = docId)
+      );
+    delete from document_reference_contribution where characteristic_id in
+      (select id from document_reference_synopsis where reference_id in 
+        (select id from document_reference where document_id = docId)
+      );
+    delete from document_reference_synopsis where reference_id in (select id from document_reference where document_id = docId);
+    delete from document_reference where document_id = docId;
     delete from external_document where id = docId;
   else
     delete from external_document;
@@ -11234,6 +11244,8 @@ begin
   if refId != -1
   then
     delete from persona_characteristic_document where reference_id = refId;
+    delete from document_reference_contribution where reference_id in (select id from document_reference_synopsis where reference_id = refId);
+    delete from document_reference_contribution where characteristic_id in (select id from document_reference_synopsis where reference_id = refId);
     delete from document_reference_synopsis where reference_id = refId;
     delete from document_reference where id = refId;
   else
