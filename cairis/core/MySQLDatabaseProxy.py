@@ -1083,9 +1083,9 @@ class MySQLDatabaseProxy:
     return self.responseList('call taskAssets(:tId,:eId)',{'tId':taskId,'eId':environmentId},'MySQL error getting task assets for environment id ' + str(environmentId))
 
   def addTask(self,parameters):
-    taskName = self.conn.connection().connection.escape_string(parameters.name())
-    taskShortCode = self.conn.connection().connection.escape_string(parameters.shortCode())
-    taskObjective = self.conn.connection().connection.escape_string(parameters.objective())
+    taskName = parameters.name()
+    taskShortCode = parameters.shortCode()
+    taskObjective = parameters.objective()
     isAssumption = parameters.assumption()
     taskAuthor = parameters.author()
     tags = parameters.tags()
