@@ -1011,6 +1011,7 @@ drop procedure if exists user_goalNames;
 drop procedure if exists userGoalLoopCheck;
 drop procedure if exists inLoop;
 drop procedure if exists conflictingPersonaCharacteristics;
+drop procedure if exists obstructedGoalDependencies;
 
 
 delimiter //
@@ -24757,6 +24758,7 @@ begin
   call implicitAssetInclusionCheck(environmentId);
   call implicitAssetVulnerabilityCheck(environmentId);
   call obstructedTasks(environmentId);
+  call obstructedGoalDependencies(environmentId);
   call inheritanceInconsistency(environmentId);
   call userGoalLoopCheck();
 
@@ -26127,7 +26129,7 @@ begin
 end
 //
 
-create procedure obstructedGoals(in taskId int, in envId int)
+create procedure obstructedGoals(in gtId int, in envId int)
 begin
   declare goalId int;
   declare goalCount int default 0;
@@ -26135,7 +26137,10 @@ begin
   declare done int default 0;
   declare rootGoalName varchar(100);
   declare obsGoalName varchar(100);
-  declare opGoalCursor cursor for select goal_id from goaltask_goalassociation where subgoal_id = taskId and environment_id = envId; 
+  declare opGoalCursor cursor for 
+    select goal_id from goaltask_goalassociation where subgoal_id = gtId and environment_id = envId
+    union
+    select goal_id from goalgoal_goalassociation where subgoal_id = gtId and environment_id = envId;
   declare obsGoalCursor cursor for select obstructed from temp_obstructed order by 1; 
   declare continue handler for not found set done = 1;
 
@@ -30717,6 +30722,36 @@ begin
       select concat(pc.description,' (',p.name,')') from persona_characteristic pc, document_reference_contribution drc, persona p where drc.reference_id = synId and drc.characteristic_id = pc.id and pc.persona_id = p.id;
     end if;
   end if;
+end
+//
+
+create procedure obstructedGoalDependencies(in environmentId int)
+begin
+  declare done int default 0;
+  declare goalId int;
+  declare isObstructed bool default 0;
+  declare rootName varchar(100);
+  declare obsName varchar(100);
+  declare dependerName varchar(255);
+  declare dependeeName varchar(255);
+  declare obstrGoalName varchar(100);
+  declare depCursor cursor for select dr.name, de.name, g.name,g.id from goal g, rolegoalrole_dependency rgr, role dr, role de where rgr.environment_id = environmentId and rgr.dependency_id = g.id and rgr.depender_id = dr.id and rgr.dependee_id = de.id order by 1;
+  declare continue handler for not found set done = 1;
+
+  open depCursor;
+  dep_loop: loop
+    fetch depCursor into dependerName, dependeeName, obstrGoalName, goalId;
+    if done = 1
+    then
+      leave dep_loop;
+    end if;
+    call isGoalObstructed(goalId,environmentId,isObstructed);
+    if isObstructed = true
+    then
+      insert into temp_vout(label,message) values ('Implicit vulnerability',concat(dependerName, ' depends on ',dependeeName,' for goal ',obstrGoalName,', but this goal is obstructed.'));
+    end if;
+  end loop dep_loop;
+  close depCursor;
 end
 //
 
