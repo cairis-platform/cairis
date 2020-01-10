@@ -35,6 +35,7 @@ class SynopsesContentHandler(ContentHandler,EntityResolver):
     self.theReferenceContributions = []
     self.theUseCaseContributions = []
     self.theTaskContributions = []
+    self.resetSynopsisAttributes()
 
   def resolveEntity(self,publicId,systemId):
     return systemId
@@ -57,32 +58,40 @@ class SynopsesContentHandler(ContentHandler,EntityResolver):
   def taskContributions(self):
     return self.theTaskContributions
 
+  def resetSynopsisAttributes(self):
+    self.theCharacteristic = ''
+    self.theReference = ''
+    self.theSynopsis = ''
+    self.theDimensionName = ''
+    self.theActorType = ''
+    self.theActor = ''
+    self.theInitialSatisfaction = 'None'
+    self.theSystemGoals = []
+
   def startElement(self,name,attrs):
     self.currentElementName = name
     if name == 'characteristic_synopsis':
-      cName = attrs['characteristic']
-      synName = attrs['synopsis']
-      dimName = attrs['dimension']
-      aType = attrs['actor_type']
-      aName = attrs['actor']
-      gSat = 'None'
+      self.theCharacteristic = attrs['characteristic']
+      self.theSynopsis = attrs['synopsis']
+      self.theDimensionName = attrs['dimension']
+      self.theActorType = attrs['actor_type']
+      self.theActor = attrs['actor']
       try:
-        gSat = attrs['satisfaction']
+        self.theInitialSatisfaction = attrs['satisfaction']
       except KeyError:
-        gSat = 'None'
-      self.theCharacteristicSynopses.append(ReferenceSynopsis(-1,cName,synName,dimName,aType,aName,'persona_characteristic',gSat))
+        pass 
     elif name == 'reference_synopsis':
-      refName = attrs['reference']
-      synName = attrs['synopsis']
-      dimName = attrs['dimension']
-      aType = attrs['actor_type']
-      aName = attrs['actor']
-      gSat = 'None'
+      self.theReference = attrs['reference']
+      self.theSynopsis = attrs['synopsis']
+      self.theDimensionName = attrs['dimension']
+      self.theActorType = attrs['actor_type']
+      self.theActor = attrs['actor']
       try:
-        gSat = attrs['satisfaction']
+        self.theInitialSatisfaction = attrs['satisfaction']
       except KeyError:
-        gSat = 'None'
-      self.theReferenceSynopses.append(ReferenceSynopsis(-1,refName,synName,dimName,aType,aName,'document_reference',gSat))
+        pass 
+    elif name == 'system_goal':
+      self.theSystemGoals.append(attrs['name'])
     elif name == 'step_synopsis':
       ucName = attrs['usecase']
       envName = attrs['environment']
@@ -109,3 +118,11 @@ class SynopsesContentHandler(ContentHandler,EntityResolver):
       refName = attrs['referent']
       cont = attrs['contribution']
       self.theTaskContributions.append(TaskContribution(taskName,refName,envName,cont))
+
+  def endElement(self,name):
+    if name == 'characteristic_synopsis':
+      self.theCharacteristicSynopses.append(ReferenceSynopsis(-1,self.theCharacteristic,self.theSynopsis,self.theDimensionName,self.theActorType,self.theActor,'persona_characteristic',self.theInitialSatisfaction,self.theSystemGoals))
+      self.resetSynopsisAttributes()
+    elif name == 'reference_synopsis':
+      self.theReferenceSynopses.append(ReferenceSynopsis(-1,self.theReference,self.theSynopsis,self.theDimensionName,self.theActorType,self.theActor,'document_reference',self.theInitialSatisfaction,self.theSystemGoals))
+      self.resetSynopsisAttributes()

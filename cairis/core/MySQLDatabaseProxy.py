@@ -3247,7 +3247,10 @@ class MySQLDatabaseProxy:
     dimName = row[2]
     aType = row[3]
     aName = row[4]
-    rs = ReferenceSynopsis(rsId,refName,synName,dimName,aType,aName)
+    synDim = row[5]
+    gsName = row[6]
+    goals = self.userGoalSystemGoals(rsId)
+    rs = ReferenceSynopsis(rsId,refName,synName,dimName,aType,aName,synDim,gsName,goals)
     return rs 
 
   def getReferenceContribution(self,charName,refName):
@@ -3282,6 +3285,8 @@ class MySQLDatabaseProxy:
     actorName = rs.actor()
     gSat = rs.satisfaction()
     self.updateDatabase('call addReferenceSynopsis(:rsId,:ref,:rs,:dim,:atName,:actName,:gSat)',{'rsId':rsId,'ref':refName,'rs':rsName,'dim':rsDim,'atName':atName,'actName':actorName,'gSat':gSat},'MySQL error adding reference synopsis')
+    for sysGoal in rs.goals():
+      self.addUserSystemGoalLink(rsName,sysGoal)
     return rsId
 
   def updateReferenceSynopsis(self,rs):
@@ -3292,7 +3297,10 @@ class MySQLDatabaseProxy:
     atName = rs.actorType()
     actorName = rs.actor()
     gSat = rs.satisfaction()
-    self.updateDatabase('call updateReferenceSynopsis(:rsId,:ref,:rs,:dim,:atName,:actName,:gSat)',{'rsId':rsId,'ref':refName,'rs':rsName,'dim':rsDim,'atName':atName,'actName':actorName,'gSat':gSat},'MySQL error updating reference synopsis')
+    session = self.updateDatabase('call deleteUserGoalComponents(:id)',{'id':rsId},'MySQL error deleting user goal components',None,False)
+    self.updateDatabase('call updateReferenceSynopsis(:rsId,:ref,:rs,:dim,:atName,:actName,:gSat)',{'rsId':rsId,'ref':refName,'rs':rsName,'dim':rsDim,'atName':atName,'actName':actorName,'gSat':gSat},'MySQL error updating reference synopsis',session)
+    for sysGoal in rs.goals():
+      self.addUserSystemGoalLink(rsName,sysGoal)
 
   def addCharacteristicSynopsis(self,cs):
     cName = cs.reference()
@@ -3302,6 +3310,8 @@ class MySQLDatabaseProxy:
     actorName = cs.actor()
     gSat = cs.satisfaction()
     self.updateDatabase('call addCharacteristicSynopsis(:cName,:csName,:csDim,:atName,:actName,:gSat)',{'cName':cName,'csName':csName,'csDim':csDim,'atName':atName,'actName':actorName,'gSat':gSat},'MySQL error adding characteristic synopsis')
+    for sysGoal in cs.goals():
+      self.addUserSystemGoalLink(csName,sysGoal)
 
   def updateCharacteristicSynopsis(self,cs):
     cName = cs.reference()
@@ -3310,7 +3320,10 @@ class MySQLDatabaseProxy:
     atName = cs.actorType()
     actorName = cs.actor()
     gSat = cs.satisfaction()
-    self.updateDatabase('call updateCharacteristicSynopsis(:cName,:csName,:csDim,:atName,:actName,:gSat)',{'cName':cName,'csName':csName,'csDim':csDim,'atName':atName,'actName':actorName,'gSat':gSat},'MySQL error updating characteristic synopsis')
+    session = self.updateDatabase('call deleteUserGoalComponents(:id)',{'id':cs.id()},'MySQL error deleting user goal components',None,False)
+    self.updateDatabase('call updateCharacteristicSynopsis(:cName,:csName,:csDim,:atName,:actName,:gSat)',{'cName':cName,'csName':csName,'csDim':csDim,'atName':atName,'actName':actorName,'gSat':gSat},'MySQL error updating characteristic synopsis',session)
+    for sysGoal in cs.goals():
+      self.addUserSystemGoalLink(csName,sysGoal)
 
   def referenceCharacteristic(self,refName): return self.responseList('call referenceCharacteristic(:ref)',{'ref':refName},'MySQL error getting characteristics associated with reference ' + refName)
 
@@ -4864,8 +4877,16 @@ class MySQLDatabaseProxy:
   def getUserGoals(self,constraintId = -1):
     rows = self.responseList('call getUserGoals(:id)',{'id':constraintId},'MySQL error getting user goals')
     objts = []
-    for row in rows:
-      objts.append(ReferenceSynopsis(row[0],row[1],row[2],row[3],'persona',row[4],row[5],row[6]))
+    for row in rows:  
+      rsId = row[0]
+      refName = row[1]
+      synName = row[2]
+      dimName = row[3]
+      personaName = row[4]
+      synDim = row[5]
+      gsName = row[6]
+      sysGoals = self.userGoalSystemGoals(rsId)
+      objts.append(ReferenceSynopsis(rsId,refName,synName,dimName,'persona',personaName,synDim,gsName,sysGoals))
     return objts
 
   def addUserGoal(self,objt):
@@ -4876,6 +4897,8 @@ class MySQLDatabaseProxy:
     personaName = objt.actor()
     gSat = objt.satisfaction()
     self.updateDatabase('call addUserGoal(:ugId,:refName,:synName,:dimName,:personaName,:gSat)',{'ugId':ugId,'refName':refName,'synName':synName,'dimName':dimName,'personaName':personaName,'gSat':gSat},'MySQL error adding user goal')
+    for sysGoal in objt.goals():
+      self.addUserSystemGoalLink(synName,sysGoal)
 
   def updateUserGoal(self,objt):
     ugId = objt.id()
@@ -4884,7 +4907,10 @@ class MySQLDatabaseProxy:
     dimName = objt.dimension()
     personaName = objt.actor()
     gSat = objt.satisfaction()
-    self.updateDatabase('call updateUserGoal(:ugId,:refName,:synName,:dimName,:personaName,:gSat)',{'ugId':ugId,'refName':refName,'synName':synName,'dimName':dimName,'personaName':personaName,'gSat':gSat},'MySQL error updating user goal')
+    session = self.updateDatabase('call deleteUserGoalComponents(:id)',{'id':ugId},'MySQL error deleting user goal components',None,False)
+    self.updateDatabase('call updateUserGoal(:ugId,:refName,:synName,:dimName,:personaName,:gSat)',{'ugId':ugId,'refName':refName,'synName':synName,'dimName':dimName,'personaName':personaName,'gSat':gSat},'MySQL error updating user goal',session)
+    for sysGoal in objt.goals():
+      self.addUserSystemGoalLink(synName,sysGoal)
 
   def deleteUserGoal(self,ugId = -1):
     self.deleteObject(ugId,'user_goal')
@@ -4904,7 +4930,7 @@ class MySQLDatabaseProxy:
     return objts
 
   def deleteGoalContribution(self,src,tgt):
-    self.updateDatabase(' call deleteGoalContribution(:src,:tgt)',{'src':src,'tgt':tgt},'MySQL error deleting goal contribution')
+    self.updateDatabase('call deleteGoalContribution(:src,:tgt)',{'src':src,'tgt':tgt},'MySQL error deleting goal contribution')
 
   def taskContributions(self,taskName,envName):
     rows = self.responseList('call getTaskContributions(:taskName,:envName)',{'taskName':taskName,'envName':envName},'MySQL error getting task contributions')
@@ -4918,3 +4944,9 @@ class MySQLDatabaseProxy:
     if (len(objts) == 1 and objts[0] == ''):
       objts = []
     return objts
+
+  def addUserSystemGoalLink(self,ugName,sgName):
+    self.updateDatabase('call addUserSystemGoalLink(:ugName,:sgName)',{'ugName':ugName,'sgName':sgName},'MySQL error adding user/system goal link')
+
+  def userGoalSystemGoals(self,ugId):
+    return self.responseList('call userGoalSystemGoals(:ugId)',{'ugId':ugId},'MySQL error getting user goal system goals')

@@ -18,7 +18,7 @@
 __author__ = 'Shamal Faily'
 
 class ReferenceSynopsis:
-  def __init__(self,rsId,refName,synName,dimName,aType,aName,synDim = 'document_reference',initialSatisfaction = 'None'):
+  def __init__(self,rsId,refName,synName,dimName,aType,aName,synDim = 'document_reference',initialSatisfaction = 'None',goals=[]):
     self.theId = rsId
     self.theReference = refName
     self.theSynopsis = synName
@@ -27,6 +27,7 @@ class ReferenceSynopsis:
     self.theActor = aName
     self.theSynopsisDimension = synDim
     self.theInitialSatisfaction = initialSatisfaction
+    self.theRelatedGoals = goals
 
   def id(self): return self.theId
   def setId(self,newId): self.theId = newId
@@ -37,3 +38,4 @@ class ReferenceSynopsis:
   def actor(self): return self.theActor 
   def synopsisDimension(self): return self.theSynopsisDimension
   def satisfaction(self): return self.theInitialSatisfaction
+  def goals(self): return self.theRelatedGoals

@@ -19,7 +19,7 @@ Check                             Description
 ================================= ==================================================================================================================================
 Composition/Aggregation Integrity For Hardware/Software/Information assets, checks asset integrity for the head asset isn't lower than the tail asset.
 Implicit asset inclusion          Asset implicitly included in an environment because of an asset association but no security or privacy properties have been set.
-Implicit vulnerability            Checks whether a goal dependency is obstructed, thereby introducing a vulnerability due to dependee goal non-fulfilment.
+Implicit vulnerability            Checks whether a goal dependency is obstructed or a related user goal is denied, thereby introducing a vulnerability due to goal non-fulfilment.
 Inherited asset inconsistency     Checks an asset inheriting from another asset doesn't have weaker security or privacy properties.
 Inherited asset type              Checks an asset inheriting from another asset have the same asset type.
 New risk contexts                 Risks present in environments that haven't been accounted for.

@@ -1012,6 +1012,11 @@ drop procedure if exists userGoalLoopCheck;
 drop procedure if exists inLoop;
 drop procedure if exists conflictingPersonaCharacteristics;
 drop procedure if exists obstructedGoalDependencies;
+drop procedure if exists deleteUserGoalComponents;
+drop procedure if exists addUserSystemGoalLink;
+drop procedure if exists userGoalSystemGoals;
+drop procedure if exists deniedUserGoalDependencies;
+drop procedure if exists isGoalDenied;
 
 
 delimiter //
@@ -5573,6 +5578,7 @@ end
 create procedure delete_goal(in goalId int)
 begin
   call deleteGoalComponents(goalId);
+  delete from user_system_goal_link where system_goal_id = goalId;
   delete from goalrequirement_goalassociation where goal_id = goalId;
   delete from requirementgoal_goalassociation where subgoal_id = goalId;
   delete from goalrole_goalassociation where goal_id = goalId;
@@ -11813,6 +11819,7 @@ create procedure deletePersonaCharacteristicComponents(in pcId int)
 begin
     if pcId != -1
     then
+      delete from user_system_goal_link where user_goal_id = pcId;
       delete from persona_characteristic_synopsis where characteristic_id = pcId;
       delete from document_reference_synopsis where id in (select drc.reference_id from document_reference_contribution drc, persona_characteristic_document pcd where drc.characteristic_id = pcId and drc.characteristic_id = pcd.characteristic_id and pcd.reference_id = drc.reference_id);
       delete from document_reference_contribution where characteristic_id = pcId and reference_id in (select reference_id from persona_characteristic_document where characteristic_id = pcId);
@@ -17152,16 +17159,18 @@ begin
   declare rsDim varchar(50);
   declare actorType varchar(50);
   declare actorName varchar(100);
+  declare synDim varchar(50);
+  declare gsName varchar(50);
 
   select id into refId from document_reference where name = refName;
   select id into rrRefId from requirement_reference where name = refName;
   if refId is not null
   then
-    select drs.id,drs.synopsis,td.name,td2.name,drs.actor_id into refSynId,refSyn,rsDim,actorType,actorId from document_reference_synopsis drs, trace_dimension td, trace_dimension td2 where drs.reference_id = refId and drs.dimension_id = td.id and drs.actor_type_id = td2.id;
+    select drs.id,drs.synopsis,td.name,td2.name,drs.actor_id,'document_reference',gs.name into refSynId,refSyn,rsDim,actorType,actorId,synDim,gsName from document_reference_synopsis drs, trace_dimension td, trace_dimension td2, goal_satisfaction gs where drs.reference_id = refId and drs.dimension_id = td.id and drs.actor_type_id = td2.id and drs.satisfaction = gs.id;
   elseif rrRefId is not null
   then
     set refId = rrRefId;
-    select rrs.id,rrs.synopsis,td.name,td2.name,rrs.actor_id into refSynId,refSyn,rsDim,actorType,actorId from requirement_reference_synopsis rrs, trace_dimension td, trace_dimension td2 where rrs.reference_id = refId and rrs.dimension_id = td.id and rrs.actor_type_id = td2.id;
+    select rrs.id,rrs.synopsis,td.name,td2.name,rrs.actor_id,'requirement','None' into refSynId,refSyn,rsDim,actorType,actorId,synDim,gsName from requirement_reference_synopsis rrs, trace_dimension td, trace_dimension td2 where rrs.reference_id = refId and rrs.dimension_id = td.id and rrs.actor_type_id = td2.id;
   else
     set refSynId = -1;
     set refSyn = '';
@@ -17180,7 +17189,7 @@ begin
     deallocate prepare stmt;
     set actorName = @actorName;
   end if;
-  select ifnull(refSynId,-1),ifnull(refSyn,''),ifnull(rsDim,''),ifnull(actorType,''),ifnull(actorName,'');
+  select ifnull(refSynId,-1),ifnull(refSyn,''),ifnull(rsDim,''),ifnull(actorType,''),ifnull(actorName,''),ifnull(synDim,''), ifnull(gsName,'None');
 end
 //
 
@@ -17213,6 +17222,8 @@ end
 create procedure delete_reference_synopsis(in rsId int)
 begin
   declare drsCount int;
+
+  call deleteUserGoalComponents(rsId);
 
   select count(id) into drsCount from document_reference_synopsis where id = rsId;
 
@@ -24759,6 +24770,7 @@ begin
   call implicitAssetVulnerabilityCheck(environmentId);
   call obstructedTasks(environmentId);
   call obstructedGoalDependencies(environmentId);
+  call deniedUserGoalDependencies(environmentId);
   call inheritanceInconsistency(environmentId);
   call userGoalLoopCheck();
 
@@ -25497,6 +25509,7 @@ begin
   declare contName varchar(100);
   declare taskName varchar(200);
   declare gSat varchar(100);
+  declare goalName varchar(100);
   declare done int default 0;
 
   declare csCursor cursor for 
@@ -25531,6 +25544,8 @@ begin
     union
     select t.name, e.name, pcs.synopsis, lc.name from task t, environment e, persona_characteristic_synopsis pcs, link_contribution lc, task_goal_contribution tgc, environment_task et where tgc.task_id = t.id and tgc.task_id = et.task_id and et.environment_id = e.id and tgc.reference_id = pcs.characteristic_id and tgc.contribution_id = lc.id;
 
+  declare goalCursor cursor for select g.name from user_system_goal_link usgl, goal g, synopsis s where usgl.user_goal_id = s.id and s.synopsis = synName and usgl.system_goal_id = g.id order by 1;
+
 
   declare continue handler for not found set done = 1;
 
@@ -25546,7 +25561,19 @@ begin
     then
       leave cs_loop;
     end if;
-    set buf = concat(buf,'  <characteristic_synopsis characteristic="',charName,'" synopsis="',synName,'" dimension="',synDim,'" actor_type="',aType,'" actor="',aName,'" satisfaction="',gSat,'" />\n');
+    set buf = concat(buf,'  <characteristic_synopsis characteristic="',charName,'" synopsis="',synName,'" dimension="',synDim,'" actor_type="',aType,'" actor="',aName,'" satisfaction="',gSat,'">\n');
+    open goalCursor;
+    goal_loop: loop
+      fetch goalCursor into goalName;
+      if done = 1
+      then
+        leave goal_loop;
+      end if;
+      set buf = concat(buf,'    <system_goal name="',goalName,'"/>\n');
+    end loop goal_loop;
+    close goalCursor;
+    set done = 0;
+    set buf = concat(buf,'  </characteristic_synopsis>\n');
     set csCount = csCount + 1;
   end loop cs_loop;
   close csCursor;
@@ -25559,7 +25586,19 @@ begin
     then
       leave rs_loop;
     end if;
-    set buf = concat(buf,'  <reference_synopsis reference="',refName,'" synopsis="',synName,'" dimension="',synDim,'" actor_type="',aType,'" actor="',aName,'" satisfaction="',gSat,'" />\n');
+    set buf = concat(buf,'  <reference_synopsis reference="',refName,'" synopsis="',synName,'" dimension="',synDim,'" actor_type="',aType,'" actor="',aName,'" satisfaction="',gSat,'">\n');
+    open goalCursor;
+    goal_loop: loop
+      fetch goalCursor into goalName;
+      if done = 1
+      then
+        leave goal_loop;
+      end if;
+      set buf = concat(buf,'    <system_goal name="',goalName,'"/>\n');
+    end loop goal_loop;
+    close goalCursor;
+    set done = 0;
+    set buf = concat(buf,'  </reference_synopsis>\n');
     set rsCount = rsCount + 1;
   end loop rs_loop;
   close rsCursor;
@@ -26276,8 +26315,6 @@ begin
   declare goalCursor cursor for select subgoal_id from goalgoal_goalassociation where environment_id = environmentId and goal_id = goalId;
   declare obsCursor cursor for select subgoal_id from goalobstacle_goalassociation where environment_id = environmentId and goal_id = goalId;
   declare continue handler for not found set done = 1;
-
-
 
   select count(subgoal_id) into obsCount from goalobstacle_goalassociation where goal_id = goalId and environment_id = environmentId;
   if (obsCount > 0)
@@ -30544,6 +30581,8 @@ create procedure delete_user_goal(in ugId int)
 begin
   declare pcsCount int;
 
+  call deleteUserGoalComponents(ugId);
+
   select count(characteristic_id) into pcsCount from persona_characteristic_synopsis where characteristic_id = ugId;
 
   if pcsCount > 0
@@ -30730,8 +30769,6 @@ begin
   declare done int default 0;
   declare goalId int;
   declare isObstructed bool default 0;
-  declare rootName varchar(100);
-  declare obsName varchar(100);
   declare dependerName varchar(255);
   declare dependeeName varchar(255);
   declare obstrGoalName varchar(100);
@@ -30754,6 +30791,92 @@ begin
   close depCursor;
 end
 //
+
+create procedure addUserSystemGoalLink(in ugName text, in sgName text)
+begin
+  declare ugId int;
+  declare sgId int;
+
+  select id into sgId from goal where name = sgName limit 1;
+  select id into ugId from document_reference_synopsis where synopsis = ugName limit 1;
+  if ugId is null
+  then
+    select characteristic_id into ugId from persona_characteristic_synopsis where synopsis = ugName limit 1;
+  end if;
+
+  insert into user_system_goal_link(user_goal_id,system_goal_id) values (ugId,sgId);
+end
+//
+
+create procedure deleteUserGoalComponents(in ugId int)
+begin
+  delete from user_system_goal_link where user_goal_id = ugId;
+end
+//
+
+create procedure userGoalSystemGoals(in ugId int)
+begin
+  select g.name from user_system_goal_link usgl, goal g where usgl.user_goal_id = ugId and usgl.system_goal_id = g.id order by 1;
+end
+//
+
+create procedure deniedUserGoalDependencies(in environmentId int)
+begin
+  declare done int default 0;
+  declare goalId int;
+  declare isDenied bool default 0;
+  declare dependerName varchar(255);
+  declare dependeeName varchar(255);
+  declare obstrGoalName varchar(100);
+  declare depCursor cursor for select dr.name, de.name, g.name,g.id from goal g, rolegoalrole_dependency rgr, role dr, role de where rgr.environment_id = environmentId and rgr.dependency_id = g.id and rgr.depender_id = dr.id and rgr.dependee_id = de.id order by 1;
+  declare continue handler for not found set done = 1;
+
+  open depCursor;
+  dep_loop: loop
+    fetch depCursor into dependerName, dependeeName, obstrGoalName, goalId;
+    if done = 1
+    then
+      leave dep_loop;
+    end if;
+    call isGoalDenied(goalId,environmentId,isDenied);
+    if isDenied = true
+    then
+      insert into temp_vout(label,message) values ('Implicit vulnerability',concat(dependerName, ' depends on ',dependeeName,' for goal ',obstrGoalName,', but one or more related user goals is denied.'));
+    end if;
+  end loop dep_loop;
+  close depCursor;
+end
+//
+
+create procedure isGoalDenied(in goalId int,in environmentId int, out isDenied bool) 
+begin
+  declare score int default 0;
+  declare done int default 0;
+  declare ugId int;
+  declare ugCursor cursor for select user_goal_id from user_system_goal_link where system_goal_id = goalId;
+  declare continue handler for not found set done = 1;
+
+  open ugCursor;
+  ug_loop: loop
+    fetch ugCursor into ugId;
+    if done = 1
+    then
+      leave ug_loop;
+    end if;
+    call userGoalContribution(ugId,environmentId,score);
+    if score < 0
+    then
+      set isDenied = 1;
+      leave ug_loop;
+    end if;
+  end loop ug_loop;
+
+  close ugCursor;
+
+
+end
+//
+
 
 
 delimiter ;

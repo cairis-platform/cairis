@@ -86,6 +86,7 @@ DROP TABLE IF EXISTS usecase_pc_contribution;
 DROP TABLE IF EXISTS usecase_tc_contribution;
 DROP TABLE IF EXISTS usecase_dr_contribution;
 DROP TABLE IF EXISTS ice_ic_contribution;
+DROP TABLE IF EXISTS user_system_goal_link;
 DROP TABLE IF EXISTS document_reference_contribution;
 DROP TABLE IF EXISTS requirement_reference_contribution;
 DROP TABLE IF EXISTS document_reference_synopsis;
@@ -2762,6 +2763,13 @@ CREATE TABLE document_reference_contribution (
   PRIMARY KEY(reference_id,characteristic_id),
   FOREIGN KEY(end_id) REFERENCES contribution_end(id),
   FOREIGN KEY(contribution_id) REFERENCES link_contribution(id)
+) ENGINE=INNODB;
+
+CREATE TABLE user_system_goal_link (
+  user_goal_id INT NOT NULL,
+  system_goal_id INT NOT NULL,
+  PRIMARY KEY(user_goal_id,system_goal_id),
+  FOREIGN KEY(system_goal_id) REFERENCES goal(id)
 ) ENGINE=INNODB;
 
 CREATE TABLE requirement_reference_contribution (
