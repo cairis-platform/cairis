@@ -252,7 +252,18 @@ class RiskAnalysisContentHandler(ContentHandler,EntityResolver):
       self.isCritical = attrs['is_critical']
       self.theSecurityProperties = []
     elif (name == 'interface'):
-      self.theInterfaces.append((attrs['name'],it2Id(attrs['type'])))
+      arName = 'None'
+      privName = 'None'
+      try:
+        arName = attrs['access_right'] 
+      except KeyError:
+        pass
+
+      try:
+        privName = attrs['privilege'] 
+      except KeyError:
+        pass
+      self.theInterfaces.append((attrs['name'],it2Id(attrs['type']),arName,privName))
     elif name == 'security_property':
       self.theEnvironmentName = attrs['environment'] 
       self.thePropertyName = attrs['property']

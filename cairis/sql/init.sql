@@ -4424,4 +4424,5 @@ insert into relationship_type (id,name) values(2,'conflict');
 insert into relationship_type (id,name) values(3,'part-of');
 insert into code_type (id,name) values (0,'event');
 insert into code_type (id,name) values (1,'context');
-insert into privilege (id,name,description,value,rationale) values (0,'None','No privileges',0,'Default');
+insert into access_right (id,name,description,value,rationale) values (0,'None','No access rights',1,'Default');
+insert into privilege (id,name,description,value,rationale) values (0,'None','No privileges',10,'Default');

@@ -12763,6 +12763,8 @@ begin
   declare isCritical int;
   declare ifName varchar(255);
   declare reqId int;
+  declare arName varchar(50);
+  declare privName varchar(50);
   declare ifType varchar(50);
   declare assetCr varchar(1000);
   declare cProperty varchar(50);
@@ -12822,7 +12824,7 @@ begin
   declare assocRationale longtext default '';
   declare buf LONGTEXT default '<?xml version="1.0"?>\n<!DOCTYPE riskanalysis PUBLIC "-//CAIRIS//DTD RISKANALYSIS 1.0//EN" "http://cairis.org/dtd/riskanalysis.dtd">\n\n<riskanalysis>\n';
   declare done int default 0;
-  declare assetIFCursor cursor for select i.name,ai.required_id from asset_interface ai, interface i where ai.asset_id = assetId and ai.interface_id = i.id;
+  declare assetIFCursor cursor for select i.name,ai.required_id,ar.name,p.name from asset_interface ai, interface i,access_right ar, privilege p where ai.asset_id = assetId and ai.interface_id = i.id and ai.access_right_id = ar.id and ai.privilege_id = p.id order by 1;
   declare assetTagCursor cursor for select t.name from asset_tag at, tag t where at.asset_id = assetId and at.tag_id = t.id;
   declare attackerTagCursor cursor for select t.name from attacker_tag at, tag t where at.attacker_id = attackerId and at.tag_id = t.id;
   declare vulTagCursor cursor for select t.name from vulnerability_tag vt, tag t where vt.vulnerability_id = vulId and vt.tag_id = t.id;
@@ -12895,7 +12897,7 @@ begin
 
     open assetIFCursor;
     assetIF_loop: loop
-      fetch assetIFCursor into ifName,reqId;
+      fetch assetIFCursor into ifName,reqId,arName,privName;
       if done = 1
       then
         leave assetIF_loop;
@@ -12906,7 +12908,7 @@ begin
       else
         set ifType = 'provided';
       end if;
-      set buf = concat(buf,'  <interface name=\"',ifName,'\" type=\"',ifType,'\" />\n');
+      set buf = concat(buf,'  <interface name=\"',ifName,'\" type=\"',ifType,'\" access_right="',arName,'" privilege="',privName,'" />\n');
     end loop assetIF_loop;
     close assetIFCursor;
     set done = 0;
@@ -26885,6 +26887,8 @@ begin
   declare isCritical int;
   declare ifName varchar(255);
   declare reqId int;
+  declare arName varchar(50);
+  declare privName varchar(50);
   declare ifType varchar(50);
   declare assetCr varchar(1000);
   declare cProperty varchar(50);
@@ -26944,7 +26948,7 @@ begin
   declare assocRationale longtext default '';
   declare buf LONGTEXT default '';
   declare done int default 0;
-  declare assetIFCursor cursor for select i.name,ai.required_id from asset_interface ai, interface i where ai.asset_id = assetId and ai.interface_id = i.id;
+  declare assetIFCursor cursor for select i.name,ai.required_id,ar.name,p.name from asset_interface ai, interface i,access_right ar, privilege p where ai.asset_id = assetId and ai.interface_id = i.id and ai.access_right_id = ar.id and ai.privilege_id = p.id order by 1;
   declare assetTagCursor cursor for select t.name from asset_tag at, tag t where at.asset_id = assetId and at.tag_id = t.id;
   declare attackerTagCursor cursor for select t.name from attacker_tag at, tag t where at.attacker_id = attackerId and at.tag_id = t.id;
   declare vulTagCursor cursor for select t.name from vulnerability_tag vt, tag t where vt.vulnerability_id = vulId and vt.tag_id = t.id;
@@ -27043,7 +27047,7 @@ begin
     set headElement = 1;
     open assetIFCursor;
     assetIF_loop: loop
-      fetch assetIFCursor into ifName,reqId;
+      fetch assetIFCursor into ifName,reqId,arName,privName;
       if done = 1
       then
         set buf = concat(buf,'],\n    "environments" : [\n');
@@ -27063,7 +27067,7 @@ begin
       else
         set ifType = 'provided';
       end if;
-      set buf = concat(buf,'      {"name" : "',ifName,'", "type" : "',ifType,'"}');
+      set buf = concat(buf,'      {"name" : "',ifName,'", "type" : "',ifType,'", "access_right" : "',arName,'", "privilege" : "',privName,'"}');
     end loop assetIF_loop;
     close assetIFCursor;
     set done = 0;
