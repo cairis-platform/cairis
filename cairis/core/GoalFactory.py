@@ -118,7 +118,7 @@ def reactText(response,dbProxy):
 def transferText(response):
   goalCat = 'Transfer'
   goalName = goalCat + response.risk()
-  goalDef = 'The roles of ' + str(response.roleNames('','Maximise','')) + ' shall be accountable for mitigating ' + response.risk() + '.'
+  goalDef = 'The roles of ' + ",".join(response.roleNames('','Maximise','')) + ' shall be accountable for mitigating ' + response.risk() + '.'
   return goalName,goalDef
 
 def mitigateText(response,dbProxy):
@@ -152,10 +152,14 @@ def mitigateText(response,dbProxy):
 def build(response,dbProxy = None):
   goalCategory = response.responseType()
   goalOriginator = 'Response ' + response.name()
+  goalPriority = 'Medium'
+  goalFitCriterion = 'None'
+  goalIssue = 'None'
+
   if (goalCategory == 'Transfer'):
     goalName,goalDef = transferText(response)
     goalEnvProperties = []
-    for p in environmentProperties:
+    for p in response.environmentProperties():
       envName = p.name()
       goalEnvProperties.append(GoalEnvironmentProperties(envName,'',goalDef,goalCategory,goalPriority,goalFitCriterion,goalIssue))
     tParameters = GoalParameters(goalName,goalOriginator,[],goalEnvProperties)
@@ -167,41 +171,36 @@ def build(response,dbProxy = None):
     riskGoalDef = riskText[1]
     riskGoalCategory = riskText[2] 
 
-
     thrText = mitText[1]
     vulText = mitText[2]
 
-  goalPriority = 'Medium'
-  goalFitCriterion = 'None'
-  goalIssue = 'None'
+    thrGoalName= thrText[0]
+    thrGoalDef = thrText[1]
+    thrGoalCategory = thrText[2] 
+    vulGoalName= vulText[0]
+    vulGoalDef = vulText[1]
+    vulGoalCategory = vulText[2] 
 
-  thrGoalName= thrText[0]
-  thrGoalDef = thrText[1]
-  thrGoalCategory = thrText[2] 
-  vulGoalName= vulText[0]
-  vulGoalDef = vulText[1]
-  vulGoalCategory = vulText[2] 
+    riskGoalEnvProperties = []
+    thrGoalEnvProperties = []
+    vulGoalEnvProperties = []
+    environmentProperties = response.environmentProperties()
+    for p in environmentProperties:
+      envName = p.name()
+      riskGoalEnvProperties.append(GoalEnvironmentProperties(envName,'',riskGoalDef,riskGoalCategory,goalPriority,goalFitCriterion,goalIssue))
+    riskParameters = GoalParameters(riskGoalName,goalOriginator,[],riskGoalEnvProperties)
 
-  riskGoalEnvProperties = []
-  thrGoalEnvProperties = []
-  vulGoalEnvProperties = []
-  environmentProperties = response.environmentProperties()
-  for p in environmentProperties:
-    envName = p.name()
-    riskGoalEnvProperties.append(GoalEnvironmentProperties(envName,'',riskGoalDef,riskGoalCategory,goalPriority,goalFitCriterion,goalIssue))
-  riskParameters = GoalParameters(riskGoalName,goalOriginator,[],riskGoalEnvProperties)
+    for p in environmentProperties:
+      envName = p.name()
+      thrGoalRef = [(riskGoalName,'goal','or','No','')]
+      thrGoalEnvProperties.append(GoalEnvironmentProperties(envName,'',thrGoalDef,thrGoalCategory,goalPriority,goalFitCriterion,goalIssue,thrGoalRef))
+    threatParameters = GoalParameters(thrGoalName,goalOriginator,[],thrGoalEnvProperties)
 
-  for p in environmentProperties:
-    envName = p.name()
-    thrGoalRef = [(riskGoalName,'goal','or','No','')]
-    thrGoalEnvProperties.append(GoalEnvironmentProperties(envName,'',thrGoalDef,thrGoalCategory,goalPriority,goalFitCriterion,goalIssue,thrGoalRef))
-  threatParameters = GoalParameters(thrGoalName,goalOriginator,[],thrGoalEnvProperties)
+    for p in environmentProperties:
+      envName = p.name()
+      vulGoalRef = [(riskGoalName,'goal','or','No','')]
+      vulGoalEnvProperties.append(GoalEnvironmentProperties(envName,'',vulGoalDef,vulGoalCategory,goalPriority,goalFitCriterion,goalIssue,vulGoalRef))
+    vulnerabilityParameters = GoalParameters(vulGoalName,goalOriginator,[],vulGoalEnvProperties)
 
-  for p in environmentProperties:
-    envName = p.name()
-    vulGoalRef = [(riskGoalName,'goal','or','No','')]
-    vulGoalEnvProperties.append(GoalEnvironmentProperties(envName,'',vulGoalDef,vulGoalCategory,goalPriority,goalFitCriterion,goalIssue,vulGoalRef))
-  vulnerabilityParameters = GoalParameters(vulGoalName,goalOriginator,[],vulGoalEnvProperties)
-
-  return [riskParameters,threatParameters,vulnerabilityParameters]
+    return [riskParameters,threatParameters,vulnerabilityParameters]
 
