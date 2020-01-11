@@ -164,7 +164,7 @@ def build(response,dbProxy = None):
       goalEnvProperties.append(GoalEnvironmentProperties(envName,'',goalDef,goalCategory,goalPriority,goalFitCriterion,goalIssue))
     tParameters = GoalParameters(goalName,goalOriginator,[],goalEnvProperties)
     return [tParameters]
-  else:
+  elif (goalCategory != 'Accept'):
     mitText = mitigateText(response,dbProxy)
     riskText = mitText[0]
     riskGoalName= riskText[0]

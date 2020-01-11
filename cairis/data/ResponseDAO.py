@@ -232,6 +232,8 @@ class ResponseDAO(CairisDAO):
       respId = self.db_proxy.getDimensionId(responseName,'response')
       responses = self.db_proxy.getResponses(respId)
       goalParameters = cairis.core.GoalFactory.build(responses[responseName],self.db_proxy)
+      if (goalParameters == None):
+        raise ARMException('Error generating a goal. Cannot generate goals from Accept responses')
       riskParameters = goalParameters[0]
       self.db_proxy.nameCheck(riskParameters.name(), 'goal')
       riskGoalId = self.db_proxy.addGoal(riskParameters)
