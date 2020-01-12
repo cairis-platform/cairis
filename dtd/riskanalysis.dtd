@@ -40,6 +40,8 @@
 <!ELEMENT interface EMPTY>
 <!ATTLIST interface name CDATA #REQUIRED>
 <!ATTLIST interface type (provided | required) #REQUIRED>
+<!ATTLIST interface access_right CDATA #IMPLIED>
+<!ATTLIST interface privilege CDATA #IMPLIED>
 
 <!ELEMENT security_property (rationale)>
 <!ATTLIST security_property environment CDATA #REQUIRED>
