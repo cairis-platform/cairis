@@ -30451,7 +30451,7 @@ begin
     if idCount = 0
     then
       insert into temp_gid(id) values (ugId);
-
+      set done = 0;
       open taskContCursor;
       tc_loop: loop
         fetch taskContCursor into linkScore;
