@@ -27,7 +27,7 @@ CAIRIS documentation
    domainproperties
    gro
    usecases
-   grl
+   usergoals
    dependencies
    patterns
    vulnerabilities
