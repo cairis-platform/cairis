@@ -37,9 +37,9 @@ Before you can create a user goal, you first need to create a document reference
 
 * If you wish, you can override the calculated satisfaction score with an initial satisfaction value.  The available values are Satisfied (100), Weakly Satisfied (50), None (0), Weakly Denied (-50), Denied (50). 
 
-* If you wish to associated the user goal with a KAOS goal, click on the Add button in the System Goal table to select the goal.
+* If you wish to associate the user goal with a KAOS goal, click on the Add button in the System Goal table to select the goal.
 
-* Click on the Create button button to add a new user goal.
+* Click on the Create button to add a new user goal.
 
 * Existing user goals can be modified by clicking on the user goal in the User Goals table, making the necessary changes, and clicking on the Update button.
 
