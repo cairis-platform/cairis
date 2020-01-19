@@ -30423,6 +30423,7 @@ begin
   declare refCount int;
   declare charCount int;
   declare idCount int default 0;
+  declare obsCount int default 0;
   declare done int default 0;
   declare goalLinksCursor cursor for 
     select characteristic_id, contribution_id from document_reference_contribution where reference_id = ugId and end_id = 1
@@ -30447,49 +30448,55 @@ begin
     select value into igScore from goal_satisfaction where id = igScoreId limit 1;
     set score = igScore;
   else
-    select count(id) into idCount from temp_gid where id = ugId;
-    if idCount = 0
+    select count(*) into obsCount from user_system_goal_link usgl, goalobstacle_goalassociation ga where usgl.user_goal_id = ugId and usgl.system_goal_id = ga.goal_id and ga.environment_id = envId;
+    if obsCount > 0
     then
-      insert into temp_gid(id) values (ugId);
-      set done = 0;
-      open taskContCursor;
-      tc_loop: loop
-        fetch taskContCursor into linkScore;
-        if done = 1
-        then
-          leave tc_loop;
-        end if;
-        select value into contScore from link_contribution where id = linkScore;
-        set score = score + contScore;
-      end loop tc_loop;
-      close taskContCursor;
-
-      set done = 0;
-      open goalLinksCursor;
-      gl_loop: loop
-        fetch goalLinksCursor into cgId, linkScore;
-        if done = 1
-        then
-          leave gl_loop;
-        end if;
-        call userGoalContribution(cgId,envId,ugScore);
-
-        select value into contScore from link_contribution where id = linkScore;
-        set ugScore = ugScore * contScore;
-        set score = score + ugScore;
-      end loop gl_loop;
-      close goalLinksCursor;
-
-      if score > 100 or score < -100
+      set score = -100;
+    else
+      select count(id) into idCount from temp_gid where id = ugId;
+      if idCount = 0
       then
-        set score = score / 100;
-        if score < -100
+        insert into temp_gid(id) values (ugId);
+        set done = 0;
+        open taskContCursor;
+        tc_loop: loop
+          fetch taskContCursor into linkScore;
+          if done = 1
+          then
+            leave tc_loop;
+          end if;
+          select value into contScore from link_contribution where id = linkScore;
+          set score = score + contScore;
+        end loop tc_loop;
+        close taskContCursor;
+
+        set done = 0;
+        open goalLinksCursor;
+        gl_loop: loop
+          fetch goalLinksCursor into cgId, linkScore;
+          if done = 1
+          then
+            leave gl_loop;
+          end if;
+          call userGoalContribution(cgId,envId,ugScore);
+
+          select value into contScore from link_contribution where id = linkScore;
+          set ugScore = ugScore * contScore;
+          set score = score + ugScore;
+        end loop gl_loop;
+        close goalLinksCursor;
+
+        if score > 100 or score < -100
         then
-          set score = -100;
-        elseif score > 100
-        then
-          set score = 100;
-        end if; 
+          set score = score / 100;
+          if score < -100
+          then
+            set score = -100;
+          elseif score > 100
+          then
+            set score = 100;
+          end if; 
+        end if;
       end if;
     end if;
   end if;
