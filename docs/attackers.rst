@@ -23,7 +23,7 @@ Adding, updating, and deleting an attacker
 
 -  If you have decided to personalise the attacker with a picture, this
    can be added by clicking on avatar silhouette next to the attacker
-   description, and selecting a image to represent the attacker. 
+   description, and selecting a image to represent the attacker. Permitted image types are jpg, png, giff, and bmp.
 
 -  Click on the Add button in the environment card, and select an environment to situate the attacker in. This will add the new environment to the environment list.
 

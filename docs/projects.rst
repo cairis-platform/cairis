@@ -20,7 +20,7 @@ subsequent analysis. CAIRIS supports this exercise by using the Properties form.
 
 -  If a rich picture or context diagram has been agreed, click on the
    Rich Picture tab, and click on the image (or avatar if no rich picture has been defined) to
-   import.
+   import. Permitted image types are jpg, png, giff, and bmp.
 
 -  Names or terms that the readership of the specification may be
    unfamiliar with can be added to the project on an on-going basis. To

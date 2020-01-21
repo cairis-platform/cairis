@@ -20,7 +20,7 @@ Adding, updating, or deleting a persona
 
 -  If you have decided to personalise the persona with a picture, this
    can be added by clicking on avatar silhouette next to the persona
-   description, and selecting a image to represent the persona. 
+   description, and selecting a image to represent the persona. Permitted image types are jpg, png, giff, and bmp.
 
 -  Click on the Activities tab and enter the activities carried out by
    the personas.
