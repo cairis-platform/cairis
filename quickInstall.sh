@@ -56,6 +56,6 @@ echo -e $SVCFILE | sudo tee /etc/systemd/system/cairis.service
 
 sudo systemctl enable /etc/systemd/system/cairis.service
 
-echo "alias update_cairis=\"sudo apt-get update && sudo apt-get upgrade -y && sudo apt-get dist-upgrade -y && curl -s https://cairis.org/quickInstall_mysql8.sh | bash -s $ROOTPW\"" >> $HOME/.bashrc
+echo "alias update_cairis=\"sudo apt-get update && sudo apt-get upgrade -y && sudo apt-get dist-upgrade -y && curl -s https://cairis.org/quickInstall.sh | bash -s $ROOTPW\"" >> $HOME/.bashrc
 
 sudo shutdown -Fr now
