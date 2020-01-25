@@ -26144,7 +26144,7 @@ begin
       select goal_id into obsId from obstaclevulnerability_goalassociation where subgoal_id = vulId and environment_id = envId;
       if obsId is not null
       then
-        call isObstacleObstructed(obsId,envId,isObstructed);
+        call isObstacleObstructed(obsId,envId,0,isObstructed);
         if isObstructed != true
         then
           set mitigatingRatingId = ratingId;
@@ -26198,7 +26198,7 @@ begin
       leave og_loop;
     end if;
 
-    call isGoalObstructed(goalId,envId,isObstructed);
+    call isGoalObstructed(goalId,envId,0,isObstructed);
     if isObstructed = true
     then
       select count(goal_id) into goalCount from goalgoal_goalassociation where subgoal_id = goalId and environment_id = envId;
@@ -26307,74 +26307,131 @@ begin
 end
 //
 
-create procedure isGoalObstructed(in goalId int,in environmentId int, out isObstructed bool) 
+create procedure isGoalObstructed(in goalId int,in environmentId int, in vulVariant int, out isObstructed bool) 
 begin
   declare done int default 0;
   declare obsCount int;
   declare obsId int;
   declare tgId int;
+  declare isDenied bool;
   declare roCount int default 0;
   declare goalCursor cursor for select subgoal_id from goalgoal_goalassociation where environment_id = environmentId and goal_id = goalId;
   declare obsCursor cursor for select subgoal_id from goalobstacle_goalassociation where environment_id = environmentId and goal_id = goalId;
   declare continue handler for not found set done = 1;
 
-  select count(subgoal_id) into obsCount from goalobstacle_goalassociation where goal_id = goalId and environment_id = environmentId;
-  if (obsCount > 0)
+  call isGoalDenied(goalId,environmentId,isDenied);
+  if isDenied = true
   then
-    select count(og.subgoal_id) into roCount from goalobstacle_goalassociation go, obstaclegoal_goalassociation og where go.goal_id = goalId and go.subgoal_id = og.goal_id and og.environment_id = environmentId and og.environment_id = go.environment_id;
-    if (roCount > 0)
+    set isObstructed = true;
+    insert into temp_obstructed
+    select name from goal where id = goalId;
+  else
+    select count(subgoal_id) into obsCount from goalobstacle_goalassociation where goal_id = goalId and environment_id = environmentId;
+    if (obsCount > 0)
     then
-      set isObstructed = false;
+      select count(og.subgoal_id) into roCount from goalobstacle_goalassociation go, obstaclegoal_goalassociation og where go.goal_id = goalId and go.subgoal_id = og.goal_id and og.environment_id = environmentId and og.environment_id = go.environment_id;
+      if (roCount > 0)
+      then
+        set isObstructed = false;
+      else
+        set isObstructed = true;
+        open obsCursor;
+        obs_loop: loop
+          fetch obsCursor into obsId;
+          if done = 1
+          then
+            leave obs_loop;
+          end if;
+          call isObstacleObstructed(obsId,environmentId,vulVariant,isObstructed);
+        end loop obs_loop;
+        close obsCursor;
+        set done = 0;
+      end if;
     else
-      set isObstructed = true;
-      open obsCursor;
-      obs_loop: loop
-        fetch obsCursor into obsId;
+      open goalCursor;
+      goal_loop: loop
+        fetch goalCursor into tgId;
         if done = 1
         then
-          leave obs_loop;
+          leave goal_loop;
         end if;
-        call isObstacleObstructed(obsId,environmentId,isObstructed);
-      end loop obs_loop;
-      close obsCursor;
-      set done = 0;
+        call isGoalObstructed(tgId,environmentId,vulVariant,isObstructed);
+        if (isObstructed = true)
+        then
+          insert into temp_obstructed
+          select name from goal where id = tgId;
+          leave goal_loop;
+        end if;
+      end loop goal_loop;
+      close goalCursor;
     end if;
-  else
-    open goalCursor;
-    goal_loop: loop
-      fetch goalCursor into tgId;
-      if done = 1
-      then
-        leave goal_loop;
-      end if;
-      call isGoalObstructed(tgId,environmentId,isObstructed);
-      if (isObstructed = true)
-      then
-        insert into temp_obstructed
-        select name from goal where id = tgId;
-        leave goal_loop;
-      end if;
-    end loop goal_loop;
-    close goalCursor;
   end if;
 end
 //
 
-create procedure isObstacleObstructed(in obstacleId int,in environmentId int, out isObstructed bool) 
+create procedure isObstacleObstructed(in obstacleId int,in environmentId int, in vulVariant int, out isObstructed bool) 
 begin
   declare done int default 0;
   declare loId int;
+  declare rgId int;
+  declare ugId int;
   declare roCount int default 0;
   declare dpCount int default 0;
+  declare vulCount int default 0;
+  declare score int default 0;
+  declare isDenied bool default false;
   declare andObsCursor cursor for select subgoal_id from obstacleobstacle_goalassociation where environment_id = environmentId and goal_id = obstacleId and ref_type_id = 0;
   declare orObsCursor cursor for select subgoal_id from obstacleobstacle_goalassociation where environment_id = environmentId and goal_id = obstacleId and ref_type_id = 1;
+  declare rgCursor cursor for select subgoal_id from obstaclegoal_goalassociation where environment_id = environmentId and goal_id = obstacleId;
+  declare ugCursor cursor for select user_goal_id from user_system_goal_link where system_goal_id = rgId;
   declare continue handler for not found set done = 1;
 
   select count(subgoal_id) into roCount from obstaclegoal_goalassociation og where goal_id = obstacleId and environment_id = environmentId;
   select count(subgoal_id) into dpCount from obstacledomainproperty_goalassociation og where goal_id = obstacleId and environment_id = environmentId;
-  if (roCount > 0 or dpCount > 0)
+
+  if vulVariant = 1
+  then
+    select count(subgoal_id) into vulCount from obstaclevulnerability_goalassociation og where goal_id = obstacleId and environment_id = environmentId;
+  end if;
+
+  if (roCount > 0)
+  then
+    open rgCursor;
+    rg_loop: loop
+      fetch rgCursor into rgId;
+      if done = 1
+      then
+        leave rg_loop;
+      end if;
+
+      open ugCursor;
+      ug_loop: loop
+        fetch ugCursor into ugId;
+        if done = 1
+        then
+          leave ug_loop;
+        end if;
+        call userGoalContribution(ugId,environmentId,score);
+        if score < 0
+        then
+          set roCount = 0;
+          set isDenied = true;
+          leave ug_loop;
+        end if;
+      end loop ug_loop;
+      close ugCursor;
+      set done = 0;
+    end loop rg_loop;
+    close rgCursor;
+    set done = 0;
+  end if;
+
+  if (roCount > 0 or dpCount > 0 or vulCount > 0)
   then
     set isObstructed = false;
+  elseif (isDenied = true)
+  then
+    set isObstructed = true;
   else
     set isObstructed = true;
     open orObsCursor;
@@ -26384,7 +26441,7 @@ begin
       then
         leave orobs_loop;
       end if;
-      call isObstacleObstructed(loId,environmentId,isObstructed);
+      call isObstacleObstructed(loId,environmentId,vulVariant,isObstructed);
       if (isObstructed = true)
       then
         leave orobs_loop;
@@ -26401,7 +26458,7 @@ begin
       then
         leave andobs_loop;
       end if;
-      call isObstacleObstructed(loId,environmentId,isObstructed);
+      call isObstacleObstructed(loId,environmentId,vulVariant,isObstructed);
       if (isObstructed = false)
       then
         leave andobs_loop;
@@ -29152,7 +29209,7 @@ begin
     then
       leave og_loop;
     end if;
-    call isGoalObstructed(goalId,envId,isObstructed);
+    call isGoalObstructed(goalId,envId,0,isObstructed);
     if isObstructed = true
     then
       select count(goal_id) into goalCount from goalgoal_goalassociation where subgoal_id = goalId and environment_id = envId;
@@ -30786,6 +30843,9 @@ begin
   declare depCursor cursor for select dr.name, de.name, g.name,g.id from goal g, rolegoalrole_dependency rgr, role dr, role de where rgr.environment_id = environmentId and rgr.dependency_id = g.id and rgr.depender_id = dr.id and rgr.dependee_id = de.id order by 1;
   declare continue handler for not found set done = 1;
 
+  drop table if exists temp_gid;
+  create temporary table temp_gid (id int not null);
+
   open depCursor;
   dep_loop: loop
     fetch depCursor into dependerName, dependeeName, obstrGoalName, goalId;
@@ -30793,10 +30853,10 @@ begin
     then
       leave dep_loop;
     end if;
-    call isGoalObstructed(goalId,environmentId,isObstructed);
+    call isGoalObstructed(goalId,environmentId,1,isObstructed);
     if isObstructed = true
     then
-      insert into temp_vout(label,message) values ('Implicit vulnerability',concat(dependerName, ' depends on ',dependeeName,' for goal ',obstrGoalName,', but this goal is obstructed.'));
+      insert into temp_vout(label,message) values ('Implicit vulnerability',concat(dependerName, ' depends on ',dependeeName,' for goal ',obstrGoalName,', but this goal is obstructed or denied.'));
     end if;
   end loop dep_loop;
   close depCursor;
@@ -30881,13 +30941,10 @@ begin
       leave ug_loop;
     end if;
   end loop ug_loop;
-
   close ugCursor;
 
 
 end
 //
-
-
 
 delimiter ;
