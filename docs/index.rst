@@ -45,6 +45,7 @@ CAIRIS documentation
    tags
    gendoc
    api
+   extending
    troubleshooting
 
 
