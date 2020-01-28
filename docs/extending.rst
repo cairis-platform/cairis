@@ -53,9 +53,9 @@ At this point, you should add a test case to `cairis/test <https://github.com/ca
 9.  Update the UI
 -----------------
 
-Until now, all the changes made will have been to the `CAIRIS <https://github.com/cairis-platform/cairis>`_ GitHub repository.  However, to update the UI, you will need to update the code in the `cairis-ui <https://github.com/cairis-platform/cairis-ui>`_ repository. Once the UI changes have been pushed to that repo, you should run the `installUI.sh <https://github.com/cairis-platform/cairis/blob/master/cairis/bin/installUI.sh>`_ as described the cairis-ui repository README.
+Until now, all the changes made will have been to the `CAIRIS <https://github.com/cairis-platform/cairis>`_ GitHub repository.  However, to update the UI, you will need to update the code in the `cairis-ui <https://github.com/cairis-platform/cairis-ui>`_ repository. Once the UI changes have been pushed to that repo, you should run the `installUI.sh <https://github.com/cairis-platform/cairis/blob/master/cairis/bin/installUI.sh>`_ as described the cairis-ui repository `README <https://github.com/cairis-platform/cairis-ui/blob/master/README.md>`_.
 
 10. Update the documentation generation process
 -----------------------------------------------
 
-`cairis/misc/DocumentBuilder.py <https://github.com/cairis-platform/cairis/blob/master/cairis/misc/DocumentBuilder.py>`_ is responsible for interacting with the Python database proxy to generate the DocBook that forms the basis of generated documentation.  This will need to be updated to include your model objects.
+`cairis/misc/DocumentBuilder.py <https://github.com/cairis-platform/cairis/blob/master/cairis/misc/DocumentBuilder.py>`_ is responsible for interacting with the Python database proxy to rendering a DocBook specification, which forms the basis of generated documentation.  This will need to update this to ensure your model objects appear in the specification.  The module contains helper functions for generating things like lists and tables, so looking at how other model objects are handled should give you the knowledge necessary for incorporating your objects too.
