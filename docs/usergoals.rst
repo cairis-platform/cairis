@@ -150,7 +150,7 @@ To view the user goal model, click on the Models/User Goal model.  Like other mo
 Working with workbooks
 ----------------------
 
-CAIRIS includes two scripts, which can generate an Excel spreadsheet for eliciting user goals and contribution links from persona charactacteristics (cairis/bin/ug2wb.py), and generating a CAIRIS model from the completed spreadsheet which can be imported back into CAIRIS (cairis/bin/wb2ug.py).
+CAIRIS includes two scripts, which can generate an Excel spreadsheet for capturing user goals and contribution links from persona charactacteristics (cairis/bin/ug2wb.py), and generating a CAIRIS model from the completed spreadsheet (cairis/bin/wb2ug.py).
 
 When running ug2wb.py you need to indicate the user account, database and name of the XLSX file to be generated, i.e.
 
@@ -163,7 +163,7 @@ The generated Excel spreadsheet (which is compatible with LibreOffice), contains
 .. figure:: UserGoalSheet.jpg
    :alt: user goal worksheet
 
-In the UserGoal worksheet, you should indicate the intentional elements associated with the persona characteristics or document references that provided their grounds, warrants, or rebuttals.  You should also indicate the element type (goal, softgoal, or belief), and - if you wish - the initial satisfaction level.
+The UserGoal worksheet is pre-populated with read-only data on the persona characteristic or document reference name, its desscription, the persona it is associated with, and an indicator to whether the *reference* corresponds to a persona [characteristic] or document reference.  When completing the worksheet, you should indicate the intentional elements associated with the persona characteristics or document references providing their grounds, warrants, or rebuttals.  You should also indicate the element type (goal, softgoal, or belief), and - if you wish - the initial satisfaction level using the dropdown lists provided.
 When generating a CAIRIS model, new user goals will only be created if cell values for each row are complete.
 
 
