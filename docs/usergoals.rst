@@ -163,7 +163,7 @@ The generated Excel spreadsheet (which is compatible with LibreOffice), contains
 .. figure:: UserGoalSheet.jpg
    :alt: user goal worksheet
 
-The UserGoal worksheet is pre-populated with read-only data on the persona characteristic or document reference name, its desscription, the persona it is associated with, and an indicator to whether the *reference* corresponds to a persona [characteristic] or document reference.  When completing the worksheet, you should indicate the intentional elements associated with the persona characteristics or document references providing their grounds, warrants, or rebuttals.  You should also indicate the element type (goal, softgoal, or belief), and - if you wish - the initial satisfaction level using the dropdown lists provided.
+The UserGoal worksheet is pre-populated with read-only data on the persona characteristic or document reference name, its description, the persona it is associated with, and an indicator to whether the *reference* corresponds to a persona [characteristic] or document reference.  When completing the worksheet, you should indicate the intentional elements associated with the persona characteristics or document references providing their grounds, warrants, or rebuttals.  You should also indicate the element type (goal, softgoal, or belief), and - if you wish - the initial satisfaction level using the dropdown lists provided.
 When generating a CAIRIS model, new user goals will only be created if cell values for each row are complete.
 
 
