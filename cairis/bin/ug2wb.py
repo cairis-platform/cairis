@@ -90,16 +90,16 @@ def main(args=None):
   contSheet = wb.add_worksheet('Contributions')
   hFormat = wb.add_format({'border':1,'bg_color' : '#C6EFCE', 'bold' : True, 'text_wrap' : True})
   contSheet.protect()
-  contSheet.write('A1','Source (PC User Goal)',hFormat)
-  contSheet.write('B1','Destination (GWR User Goal)',hFormat)
+  contSheet.write('A1','Source (GWR User Goal)',hFormat)
+  contSheet.write('B1','Destination (PC User Goal)',hFormat)
   contSheet.write('C1','Means/End',hFormat)
   contSheet.write('D1','Contribution',hFormat)
 
   contRow = 1
   for pc in pcs:
     for e in pc.grounds() + pc.warrant() + pc.rebuttal():
-      contSheet.write_formula(contRow,0,"=UserGoal!" + cellDict[pc.characteristic()],tWrap)
-      contSheet.write_formula(contRow,1,"=UserGoal!" + cellDict[e[0]],tWrap)
+      contSheet.write_formula(contRow,0,"=UserGoal!" + cellDict[e[0]],tWrap)
+      contSheet.write_formula(contRow,1,"=UserGoal!" + cellDict[pc.characteristic()],tWrap)
       contSheet.data_validation('C' + str(contRow + 1),{'validate':'list','source' : ['means','end']})
       contSheet.write('C' + str(contRow + 1),'means',unlocked)
       contSheet.data_validation('D' + str(contRow + 1),{'validate':'list','source' : ['Make','SomePositive','Help','Hurt','SomeNegative','Break']})
