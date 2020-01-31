@@ -90,8 +90,8 @@ def main(args=None):
   contSheet = wb.add_worksheet('Contributions')
   hFormat = wb.add_format({'border':1,'bg_color' : '#C6EFCE', 'bold' : True, 'text_wrap' : True})
   contSheet.protect()
-  contSheet.write('A1','PC User Goal',hFormat)
-  contSheet.write('B1','GWR User Goal',hFormat)
+  contSheet.write('A1','Source (PC User Goal)',hFormat)
+  contSheet.write('B1','Destination (GWR User Goal)',hFormat)
   contSheet.write('C1','Means/End',hFormat)
   contSheet.write('D1','Contribution',hFormat)
 
