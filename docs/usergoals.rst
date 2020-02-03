@@ -150,7 +150,7 @@ To view the user goal model, click on the Models/User Goal model.  Like other mo
 Working with workbooks
 ----------------------
 
-CAIRIS includes two scripts, which can generate an Excel spreadsheet for capturing user goals and contribution links from persona charactacteristics (cairis/bin/ug2wb.py), and generating a CAIRIS model from the completed spreadsheet (cairis/bin/wb2ug.py).
+CAIRIS includes scripts for generating an Excel workbook for capturing user goals and contribution links from persona charactacteristics (cairis/bin/ug2wb.py), and generating a CAIRIS model from the completed workbook (cairis/bin/wb2ug.py).
 
 When running ug2wb.py you need to indicate the user account, database and name of the XLSX file to be generated, i.e.
 
@@ -158,7 +158,7 @@ When running ug2wb.py you need to indicate the user account, database and name o
 
    ./ug2wb.py --user test --database default RickGoals.xlsx
 
-The generated Excel spreadsheet (which is compatible with LibreOffice), contains UserGoal and UserContribution worksheets. Edited cells for both sheets are coloured green.
+The generated Excel workbook (which is compatible with LibreOffice), contains UserGoal and UserContribution worksheets. Edited cells for both sheets are coloured green.
 
 .. figure:: UserGoalSheet.jpg
    :alt: user goal worksheet
@@ -173,13 +173,13 @@ When generating a CAIRIS model, new user goals will only be created if cell valu
 The source and destination cells in the ContributionsSheet are pre-populated once user goals have been added in the UserGoal sheet, so you only need to ensure the means/end and contribution links are set.
 When generating a CAIRIS model, contribution links will only be created if both Source AND Destination values have been set, i.e. their associated user goals have been defined.
 
-To convert the spreadsheet into a CAIRIS model, you need to run wb2ug.py as indicated below:
+To convert the workbook into a CAIRIS model, you need to run wb2ug.py as indicated below:
 
 .. code-block:: bash
 
    ./wb2ug.py --xlsx RickGoals.xlsx RickGoals.xml
 
-The resulting model can be imported into CAIRIS, but should be done so without overwriting existing data.
+The resulting model can be imported into CAIRIS, but take care not to overwrite existing data.
 
 
 Generating a jUCMNav compatible GRL model
