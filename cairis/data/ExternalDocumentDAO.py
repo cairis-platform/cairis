@@ -32,7 +32,7 @@ class ExternalDocumentDAO(CairisDAO):
   def __init__(self, session_id):
     CairisDAO.__init__(self, session_id)
 
-  def get_external_documents(self,constraint_id = -1):
+  def get_objects(self,constraint_id = -1):
     try:
       edocs = self.db_proxy.getExternalDocuments(constraint_id)
     except DatabaseProxyException as ex:
@@ -50,9 +50,9 @@ class ExternalDocumentDAO(CairisDAO):
       edocsList.append(edoc)
     return edocsList
 
-  def get_external_document(self, external_document_name):
+  def get_object_by_name(self, external_document_name):
     edName = external_document_name.replace("\\'","'")
-    edocs = self.get_external_documents()
+    edocs = self.get_objects()
     if edocs is None or len(edocs) < 1:
       self.close()
       raise ObjectNotFoundHTTPError('External Documents')
@@ -62,7 +62,7 @@ class ExternalDocumentDAO(CairisDAO):
     self.close()
     raise ObjectNotFoundHTTPError('The provided external document parameters')
 
-  def add_external_document(self, edoc):
+  def add_object(self, edoc):
     edParams = ExternalDocumentParameters(
       edName = edoc.theName.replace("\\'","'"),
       edVersion=edoc.theVersion,
@@ -76,7 +76,7 @@ class ExternalDocumentDAO(CairisDAO):
       raise ARMHTTPError(ex)
 
 
-  def update_external_document(self,edoc,name):
+  def update_object(self,edoc,name):
     edParams = ExternalDocumentParameters(
       edName=edoc.theName,
       edVersion=edoc.theVersion,
@@ -91,7 +91,7 @@ class ExternalDocumentDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def delete_external_document(self, name):
+  def delete_object(self, name):
     try:
       edId = self.db_proxy.getDimensionId(name,'external_document')
       self.db_proxy.deleteExternalDocument(edId)

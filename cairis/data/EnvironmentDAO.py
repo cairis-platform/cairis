@@ -32,7 +32,7 @@ class EnvironmentDAO(CairisDAO):
   def __init__(self, session_id):
     CairisDAO.__init__(self, session_id)
 
-  def get_environments(self, constraint_id=-1):
+  def get_objects(self, constraint_id=-1):
     try:
       environments = self.db_proxy.getEnvironments(constraint_id)
     except DatabaseProxyException as ex:
@@ -46,18 +46,7 @@ class EnvironmentDAO(CairisDAO):
       envList.append(self.simplify(value))
     return envList
 
-  def get_environment_names(self):
-    try:
-      environment_names = self.db_proxy.getEnvironmentNames()
-      return environment_names
-    except DatabaseProxyException as ex:
-      self.close()
-      raise ARMHTTPError(ex)
-    except ARMException as ex:
-      self.close()
-      raise ARMHTTPError(ex)
-    
-  def get_environment_by_name(self, name, simplify=True):
+  def get_object_by_name(self, name, simplify=True):
     found_environment = None
     try:
       environments = self.db_proxy.getEnvironments()
@@ -76,6 +65,17 @@ class EnvironmentDAO(CairisDAO):
       found_environment = self.simplify(found_environment)
 
     return found_environment
+
+  def get_environment_names(self):
+    try:
+      environment_names = self.db_proxy.getEnvironmentNames()
+      return environment_names
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+    except ARMException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
 
   def get_environments_by_threat_vulnerability(self, threat_name, vulnerability_name):
     env_names = self.get_environment_names_by_threat_vulnerability(threat_name, vulnerability_name)
@@ -111,7 +111,7 @@ class EnvironmentDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def add_environment(self, environment):
+  def add_object(self, environment):
     env_params = self.to_environment_parameters(environment)
     try:
       if not self.check_existing_environment(environment.theName):
@@ -126,7 +126,7 @@ class EnvironmentDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def update_environment(self, environment, name):
+  def update_object(self, environment, name):
     env_params = self.to_environment_parameters(environment)
     try:
       envId = self.db_proxy.getDimensionId(name,'environment')
@@ -139,7 +139,7 @@ class EnvironmentDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def delete_environment(self, name):
+  def delete_object(self, name):
     try:
       envId = self.db_proxy.getDimensionId(name,'environment')
       self.db_proxy.deleteEnvironment(envId)

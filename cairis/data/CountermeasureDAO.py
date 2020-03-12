@@ -65,7 +65,7 @@ class CountermeasureDAO(CairisDAO):
       self.rev_prop_dict[value] = key
 
 
-  def get_countermeasures(self, constraint_id=-1):
+  def get_objects(self, constraint_id=-1):
     try:
       countermeasures = self.db_proxy.getCountermeasures(constraint_id)
     except DatabaseProxyException as ex:
@@ -82,10 +82,10 @@ class CountermeasureDAO(CairisDAO):
       cmList.append(self.simplify(value))
     return cmList
 
-  def get_countermeasure_by_name(self, name):
+  def get_object_by_name(self, name):
     try:
       cmId = self.db_proxy.getDimensionId(name,'countermeasure')
-      countermeasures = self.get_countermeasures(cmId)
+      countermeasures = self.get_objects(cmId)
       return countermeasures[0]
     except ObjectNotFound as ex:
       self.close()
@@ -99,7 +99,7 @@ class CountermeasureDAO(CairisDAO):
 
 
 
-  def add_countermeasure(self, countermeasure):
+  def add_object(self, countermeasure):
     countermeasure_params = CountermeasureParameters(
       cmName=countermeasure.name(),
       cmDesc=countermeasure.description(),
@@ -121,7 +121,7 @@ class CountermeasureDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def update_countermeasure(self, countermeasure, name):
+  def update_object(self, countermeasure, name):
     countermeasure_params = CountermeasureParameters(
       cmName=countermeasure.name(),
       cmDesc=countermeasure.description(),
@@ -144,7 +144,7 @@ class CountermeasureDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def delete_countermeasure(self, name):
+  def delete_object(self, name):
     try:
       cmId = self.db_proxy.getDimensionId(name,'countermeasure')
       self.db_proxy.deleteCountermeasure(cmId)

@@ -37,7 +37,7 @@ class ResponseDAO(CairisDAO):
   def __init__(self, session_id):
     CairisDAO.__init__(self, session_id)
 
-  def get_responses(self, constraint_id=-1):
+  def get_objects(self, constraint_id=-1):
     try:
       responses = self.db_proxy.getResponses(constraintId=constraint_id)
     except DatabaseProxyException as ex:
@@ -53,7 +53,7 @@ class ResponseDAO(CairisDAO):
       respList.append(self.simplify(responses[key]))
     return respList
 
-  def get_response_by_name(self, response_name):
+  def get_object_by_name(self, response_name):
     respId = self.db_proxy.getDimensionId(response_name,'response')
     responses = self.db_proxy.getResponses(respId)
     found_response = responses.get(response_name, None)
@@ -63,7 +63,7 @@ class ResponseDAO(CairisDAO):
       raise ObjectNotFoundHTTPError(obj='The provided response name')
     return self.simplify(found_response)
 
-  def delete_response(self, response_name):
+  def delete_object(self, response_name):
     try:
       respId = self.db_proxy.getDimensionId(response_name,'response')
       self.db_proxy.deleteResponse(respId)
@@ -77,7 +77,7 @@ class ResponseDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def add_response(self, response):
+  def add_object(self, response):
     if self.check_existing_response(response.theName):
       self.close()
       raise OverwriteNotAllowedHTTPError('The provided response name')
@@ -99,7 +99,7 @@ class ResponseDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def update_response(self, resp_name, response):
+  def update_object(self, response, resp_name):
     params = ResponseParameters(
             respName=response.theName,
             respRisk=response.theRisk,
@@ -123,7 +123,7 @@ class ResponseDAO(CairisDAO):
 
   def check_existing_response(self, risk_name):
     try:
-      self.get_response_by_name(risk_name)
+      self.get_object_by_name(risk_name)
       return True
     except ObjectNotFound as ex:
       return False
@@ -180,6 +180,8 @@ class ResponseDAO(CairisDAO):
       new_props = { response_type: new_props_list }
     elif fake_props:
       new_props = []
+      if (response_type in ['Prevent','Deter','Detect','React']):
+        response_type = 'mitigate'
       if not (response_type in ResponseEnvironmentPropertiesModel.field_names):
         raise MalformedJSONHTTPError()
 

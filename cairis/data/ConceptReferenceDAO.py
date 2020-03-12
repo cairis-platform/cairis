@@ -32,7 +32,7 @@ class ConceptReferenceDAO(CairisDAO):
   def __init__(self, session_id):
     CairisDAO.__init__(self, session_id)
 
-  def get_concept_references(self,constraint_id = -1):
+  def get_objects(self,constraint_id = -1):
     try:
       crs = self.db_proxy.getConceptReferences(constraint_id)
     except DatabaseProxyException as ex:
@@ -50,7 +50,7 @@ class ConceptReferenceDAO(CairisDAO):
       crsList.append(cr)
     return crsList
 
-  def get_concept_reference(self, concept_reference_name):
+  def get_object_by_name(self, concept_reference_name):
     try:
       crId = self.db_proxy.getDimensionId(concept_reference_name,'concept_reference')
       crs = self.db_proxy.getConceptReferences(crId)
@@ -70,7 +70,7 @@ class ConceptReferenceDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def add_concept_reference(self, cr):
+  def add_object(self, cr):
     crParams = ConceptReferenceParameters(
       refName=cr.theName,
       dimName=cr.theDimName,
@@ -83,7 +83,7 @@ class ConceptReferenceDAO(CairisDAO):
       raise ARMHTTPError(ex)
 
 
-  def update_concept_reference(self,cr,name):
+  def update_object(self,cr,name):
     crParams = ConceptReferenceParameters(
       refName=cr.theName,
       dimName=cr.theDimName,
@@ -97,8 +97,8 @@ class ConceptReferenceDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def delete_concept_reference(self, name):
-    cr = self.get_concept_reference(name)
+  def delete_object(self, name):
+    cr = self.get_object_by_name(name)
     try:
       crId = self.db_proxy.getDimensionId(name,'concept_reference')
       self.db_proxy.deleteConceptReference(crId,cr.dimension())

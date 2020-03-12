@@ -116,7 +116,7 @@ class ArchitecturalPatternAPITests(CairisDaemonTestCase):
     json_resp = jsonpickle.decode(rv.data.decode('utf-8'))
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     msg = json_resp.get('message', None)
-    self.assertEqual(msg, 'Architectural Pattern successfully added')
+    self.assertEqual(msg, 'Context Policy Management created')
 
   def test_put(self):
     url = '/api/architectural_patterns/name/Context%20Policy%20Management?session_id=test'
@@ -133,7 +133,7 @@ class ArchitecturalPatternAPITests(CairisDaemonTestCase):
     json_resp = jsonpickle.decode(rv.data.decode('utf-8'))
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     msg = json_resp.get('message', None)
-    self.assertEqual(msg, 'Architectural Pattern successfully updated')
+    self.assertEqual(msg, 'Context Policy Management updated')
 
   def test_component_asset_model(self):
     url = '/api/architectural_patterns/component/asset/model/Policy%20Manager?session_id=test'

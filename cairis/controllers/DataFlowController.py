@@ -25,70 +25,43 @@ else:
 from flask import request, session, make_response
 from flask_restful import Resource
 from cairis.daemon.CairisHTTPError import ARMHTTPError
-from cairis.data.DataFlowDAO import DataFlowDAO
 from cairis.tools.JsonConverter import json_serialize
-from cairis.tools.MessageDefinitions import DataFlowMessage
-from cairis.tools.ModelDefinitions import DataFlowModel
 from cairis.tools.SessionValidator import get_session_id, get_model_generator
+from importlib import import_module
 
 __author__ = 'Shamal Faily'
 
 
-class DataFlowsAPI(Resource):
-
-  def get(self):
-    session_id = get_session_id(session, request)
-    dao = DataFlowDAO(session_id)
-    dataflows = dao.get_dataflows()
-    dao.close()
-    resp = make_response(json_serialize(dataflows, session_id=session_id), OK)
-    resp.contenttype = 'application/json'
-    return resp
-
-  def post(self):
-    session_id = get_session_id(session, request)
-
-    dao = DataFlowDAO(session_id)
-    new_dataflow = dao.from_json(request)
-    dao.add_dataflow(new_dataflow)
-    dao.close()
-
-    resp_dict = {'message': new_dataflow.name() + ' created'}
-    resp = make_response(json_serialize(resp_dict), OK)
-    resp.contenttype = 'application/json'
-    return resp
-
 class DataFlowByNameAPI(Resource):
+
+  def __init__(self):
+    self.DAOModule = getattr(import_module('cairis.data.DataFlowDAO'),'DataFlowDAO')
 
   def get(self, dataflow_name,environment_name):
     session_id = get_session_id(session, request)
-
-    dao = DataFlowDAO(session_id)
-    dataflow = dao.get_dataflow_by_name(dataflow_name,environment_name)
+    dao = self.DAOModule(session_id)
+    objt = dao.get_object_by_name(dataflow_name,environment_name)
     dao.close()
-    resp = make_response(json_serialize(dataflow, session_id=session_id), OK)
+    resp = make_response(json_serialize(objt, session_id=session_id), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
 
   def put(self, dataflow_name,environment_name):
     session_id = get_session_id(session, request)
-    dao = DataFlowDAO(session_id)
-    df = dao.from_json(request)
-    dao.update_dataflow(dataflow_name,environment_name,df)
+    dao = self.DAOModule(session_id)
+    objt = dao.from_json(request)
+    dao.update_object(dataflow_name,environment_name,objt)
     dao.close()
-
-    resp_dict = {'message': df.name() + ' updated'}
+    resp_dict = {'message': objt.name() + ' updated'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
 
   def delete(self, dataflow_name,environment_name):
     session_id = get_session_id(session, request)
-
-    dao = DataFlowDAO(session_id)
-    dao.delete_dataflow(dataflow_name, environment_name)
+    dao = self.DAOModule(session_id)
+    dao.delete_object(dataflow_name, environment_name)
     dao.close()
-
     resp_dict = {'message': dataflow_name + ' deleted'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.headers['Content-type'] = 'application/json'
@@ -96,17 +69,18 @@ class DataFlowByNameAPI(Resource):
 
 class DataFlowDiagramAPI(Resource):
 
+  def __init__(self):
+    self.DAOModule = getattr(import_module('cairis.data.DataFlowDAO'),'DataFlowDAO')
+
   def get(self, environment_name,filter_type,filter_element):
     session_id = get_session_id(session, request)
     model_generator = get_model_generator()
-    dao = DataFlowDAO(session_id)
-
+    dao = self.DAOModule(session_id)
     if filter_element == 'all':
       filter_element = ''
     dot_code = dao.get_dataflow_diagram(environment_name,filter_type,filter_element)
     dao.close()
     resp = make_response(model_generator.generate(dot_code, model_type='dataflow',renderer='dot'), OK)
-
     accept_header = request.headers.get('Accept', 'image/svg+xml')
     if accept_header.find('text/plain') > -1:
       resp.headers['Content-type'] = 'text/plain'

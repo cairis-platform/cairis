@@ -35,7 +35,7 @@ class GoalDAO(CairisDAO):
   def __init__(self, session_id):
     CairisDAO.__init__(self, session_id)
 
-  def get_goals(self, constraint_id=-1, coloured=False, simplify=True):
+  def get_objects(self, constraint_id=-1, coloured=False, simplify=True):
     try:
       if coloured:
         goals = self.db_proxy.getColouredGoals(constraint_id)
@@ -51,7 +51,7 @@ class GoalDAO(CairisDAO):
 
     return goals
 
-  def get_goals_summary(self):
+  def get_objects_summary(self):
     try:
       goals = self.db_proxy.getGoalsSummary()
     except DatabaseProxyException as ex:
@@ -60,11 +60,11 @@ class GoalDAO(CairisDAO):
     return goals
 
 
-  def get_goal_by_name(self, name, coloured=False, simplify=True):
+  def get_object_by_name(self, name, coloured=False, simplify=True):
     try:
       found_goal = None
       goalId = self.db_proxy.getDimensionId(name,'goal')
-      goals = self.get_goals(goalId,coloured=coloured, simplify=False)
+      goals = self.get_objects(goalId,coloured=coloured, simplify=False)
       if goals is not None:
         found_goal = goals.get(name)
       if found_goal is None:
@@ -84,7 +84,7 @@ class GoalDAO(CairisDAO):
       raise ARMHTTPError(ex)
 
 
-  def add_goal(self, goal):
+  def add_object(self, goal):
     goalParams = GoalParameters(
             goalName=goal.theName,
             goalOrig=goal.theOriginator,
@@ -100,7 +100,7 @@ class GoalDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def update_goal(self, goal, name):
+  def update_object(self, goal, name):
     params = GoalParameters(
             goalName=goal.theName,
             goalOrig=goal.theOriginator,
@@ -118,7 +118,7 @@ class GoalDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def delete_goal(self, name):
+  def delete_object(self, name):
     try:
       goalId = self.db_proxy.getDimensionId(name,'goal')
       self.db_proxy.deleteGoal(goalId)

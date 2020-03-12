@@ -118,7 +118,7 @@ class LocationsAPITests(CairisDaemonTestCase):
     json_resp = json_deserialize(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     ackMsg = json_resp.get('message', None)
-    self.assertEqual(ackMsg, 'Locations successfully added')
+    self.assertEqual(ackMsg, 'SturminsterWTW created')
 
   def test_put(self):
     method = 'test_put'
@@ -132,7 +132,7 @@ class LocationsAPITests(CairisDaemonTestCase):
     json_resp = json_deserialize(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     ackMsg = json_resp.get('message', None)
-    self.assertEqual(ackMsg, 'Locations successfully updated')
+    self.assertEqual(ackMsg, 'SturminsterWTW updated')
 
   def test_delete(self):
     method = 'test_delete'
@@ -155,7 +155,7 @@ class LocationsAPITests(CairisDaemonTestCase):
     json_resp = json_deserialize(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     ackMsg = json_resp.get('message', None)
-    self.assertEqual(ackMsg, 'Locations successfully deleted')
+    self.assertEqual(ackMsg, 'SturminsterWTW deleted')
 
   def test_locations_model(self):
     method = 'test_locations_model'

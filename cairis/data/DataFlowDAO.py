@@ -20,7 +20,6 @@ from cairis.daemon.CairisHTTPError import ARMHTTPError, ObjectNotFoundHTTPError,
     OverwriteNotAllowedHTTPError
 from cairis.core.DataFlow import DataFlow
 from cairis.core.DataFlowParameters import DataFlowParameters
-
 from cairis.misc.DataFlowDiagram import DataFlowDiagram
 from cairis.data.CairisDAO import CairisDAO
 from cairis.tools.JsonConverter import json_serialize, json_deserialize
@@ -36,7 +35,7 @@ class DataFlowDAO(CairisDAO):
   def __init__(self, session_id):
     CairisDAO.__init__(self, session_id)
 
-  def get_dataflows(self, dataflow_name = '', environment_name = ''):
+  def get_objects(self, dataflow_name = '', environment_name = ''):
     try:
       dfs = self.db_proxy.getDataFlows(dataflow_name,environment_name)
       return dfs
@@ -48,14 +47,14 @@ class DataFlowDAO(CairisDAO):
       raise ARMHTTPError(ex)
 
 
-  def get_dataflow_by_name(self, dataflow_name, environment_name):
-    dfs = self.get_dataflows(dataflow_name,environment_name)
+  def get_object_by_name(self, dataflow_name, environment_name):
+    dfs = self.get_objects(dataflow_name,environment_name)
     if len(dfs) == 0:
       self.close()
       raise ObjectNotFoundHTTPError('The provided dataflow name')
     return dfs[0]
 
-  def add_dataflow(self, dataflow):
+  def add_object(self, dataflow):
     df_params = DataFlowParameters(
       dfName=dataflow.name(),
       envName=dataflow.environment(),
@@ -79,7 +78,7 @@ class DataFlowDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def update_dataflow(self, old_dataflow_name,old_environment_name, dataflow):
+  def update_object(self, old_dataflow_name,old_environment_name, dataflow):
 
     df_params = DataFlowParameters(
       dfName=dataflow.name(),
@@ -92,11 +91,7 @@ class DataFlowDAO(CairisDAO):
     )
 
     try:
-#      if not self.check_existing_dataflow(dataflow.name(),dataflow.fromType(), dataflow.fromName(), dataflow.toType(), dataflow.toName(), dataflow.environment()):
        self.db_proxy.updateDataFlow(old_dataflow_name,old_environment_name,df_params)
-#      else:
-#        self.close()
-#        raise OverwriteNotAllowedHTTPError(obj_name=dataflow.name())
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)
@@ -104,7 +99,7 @@ class DataFlowDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def delete_dataflow(self, dataflow_name, environment_name):
+  def delete_object(self, dataflow_name, environment_name):
     try:
       self.db_proxy.deleteDataFlow(dataflow_name, environment_name)
     except DatabaseProxyException as ex:

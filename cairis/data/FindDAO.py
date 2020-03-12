@@ -26,7 +26,7 @@ class FindDAO(CairisDAO):
   def __init__(self, session_id):
     CairisDAO.__init__(self, session_id)
 
-  def search_model(self,search_string):
+  def get_objects(self,search_string):
     try:
       objts = self.db_proxy.searchModel(search_string,[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1])
       new_props = []

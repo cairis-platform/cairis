@@ -37,7 +37,7 @@ class PersonaDAO(CairisDAO):
   def __init__(self, session_id):
     CairisDAO.__init__(self, session_id)
 
-  def get_personas(self, constraint_id=-1, simplify=True):
+  def get_objects(self, constraint_id=-1, simplify=True):
     try:
       personas = self.db_proxy.getPersonas(constraint_id)
     except DatabaseProxyException as ex:
@@ -53,7 +53,7 @@ class PersonaDAO(CairisDAO):
 
     return personas
 
-  def get_personas_summary(self):
+  def get_objects_summary(self):
     try:
       ps = self.db_proxy.getPersonasSummary()
     except DatabaseProxyException as ex:
@@ -73,7 +73,7 @@ class PersonaDAO(CairisDAO):
     return persona_names
 
 
-  def get_persona_by_name(self, name, simplify=True):
+  def get_object_by_name(self, name, simplify=True):
     try:
       personaId = self.db_proxy.getDimensionId(name,'persona')
       personas = self.db_proxy.getPersonas(personaId)
@@ -92,7 +92,7 @@ class PersonaDAO(CairisDAO):
     found_persona = self.simplify(found_persona)
     return found_persona
 
-  def add_persona(self, persona):
+  def add_object(self, persona):
     persona_params = PersonaParameters(
       name=persona.name(),
       activities=persona.activities(),
@@ -123,7 +123,7 @@ class PersonaDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def update_persona(self, persona, name):
+  def update_object(self, persona, name):
     persona_params = PersonaParameters(
       name=persona.name(),
       activities=persona.activities(),
@@ -151,7 +151,7 @@ class PersonaDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def delete_persona(self, name):
+  def delete_object(self, name):
     try:
       personaId = self.db_proxy.getDimensionId(name,'persona')
       self.db_proxy.deletePersona(personaId)

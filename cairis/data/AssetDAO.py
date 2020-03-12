@@ -51,7 +51,7 @@ class AssetDAO(CairisDAO):
     for key, value in list(self.attr_dict.items()):
       self.rev_attr_dict[value] = key
 
-  def get_assets(self, constraint_id=-1, simplify=True):
+  def get_objects(self, constraint_id=-1, simplify=True):
     try:
       assets = self.db_proxy.getAssets(constraint_id)
     except DatabaseProxyException as ex:
@@ -62,7 +62,7 @@ class AssetDAO(CairisDAO):
         assets[key] = self.simplify(value)
     return assets
 
-  def get_assets_summary(self):
+  def get_objects_summary(self):
     try:
       assets = self.db_proxy.getAssetsSummary()
     except DatabaseProxyException as ex:
@@ -82,7 +82,7 @@ class AssetDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def get_asset_by_name(self, name):
+  def get_object_by_name(self, name):
     try:
       assetId = self.db_proxy.getDimensionId(name,'asset')
       assets = self.db_proxy.getAssets(assetId)
@@ -147,7 +147,7 @@ class AssetDAO(CairisDAO):
 
     return vulnerable_assets
 
-  def add_asset(self, asset, asset_props=None):
+  def add_object(self, asset, asset_props=None):
     try:
       self.db_proxy.nameCheck(asset.theName, 'asset')
     except ARMException as ex:
@@ -170,7 +170,7 @@ class AssetDAO(CairisDAO):
     self.db_proxy.addAsset(assetParams)
     return asset.theName
 
-  def update_asset(self, asset, name):
+  def update_object(self, asset, name):
     params = AssetParameters(
       assetName=asset.theName,
       shortCode=asset.theShortCode,
@@ -199,7 +199,7 @@ class AssetDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def delete_asset(self, name):
+  def delete_object(self, name):
     try:
       assetId = self.db_proxy.getDimensionId(name,'asset')
       self.db_proxy.deleteAsset(assetId)

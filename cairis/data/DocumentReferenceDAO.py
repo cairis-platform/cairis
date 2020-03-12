@@ -33,7 +33,7 @@ class DocumentReferenceDAO(CairisDAO):
   def __init__(self, session_id):
     CairisDAO.__init__(self, session_id)
 
-  def get_document_references(self,constraint_id = -1):
+  def get_objects(self,constraint_id = -1):
     try:
       drs = self.db_proxy.getDocumentReferences(constraint_id)
     except DatabaseProxyException as ex:
@@ -51,8 +51,8 @@ class DocumentReferenceDAO(CairisDAO):
       drsList.append(dr)
     return drsList
 
-  def get_document_reference(self, document_reference_name):
-    drs = self.get_document_references()
+  def get_object_by_name(self, document_reference_name):
+    drs = self.get_objects()
     if drs is None or len(drs) < 1:
       self.close()
       raise ObjectNotFoundHTTPError('External Documents')
@@ -62,7 +62,7 @@ class DocumentReferenceDAO(CairisDAO):
     self.close()
     raise ObjectNotFoundHTTPError('The provided document reference parameters')
 
-  def add_document_reference(self, dr):
+  def add_object(self, dr):
     drParams = DocumentReferenceParameters(
       refName=dr.theName,
       docName=dr.theDocName,
@@ -75,7 +75,7 @@ class DocumentReferenceDAO(CairisDAO):
       raise ARMHTTPError(ex)
 
 
-  def update_document_reference(self,dr,name):
+  def update_object(self,dr,name):
     drParams = DocumentReferenceParameters(
       refName=dr.theName,
       docName=dr.theDocName,
@@ -89,7 +89,7 @@ class DocumentReferenceDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def delete_document_reference(self, name):
+  def delete_object(self, name):
     try:
       drId = self.db_proxy.getDimensionId(name,'document_reference')
       self.db_proxy.deleteDocumentReference(drId)

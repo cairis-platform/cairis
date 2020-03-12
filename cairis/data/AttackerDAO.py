@@ -35,7 +35,7 @@ class AttackerDAO(CairisDAO):
   def __init__(self, session_id):
     CairisDAO.__init__(self, session_id)
 
-  def get_attackers(self, constraint_id=-1, simplify=True):
+  def get_objects(self, constraint_id=-1, simplify=True):
     try:
       attackers = self.db_proxy.getAttackers(constraint_id)
     except DatabaseProxyException as ex:
@@ -51,7 +51,7 @@ class AttackerDAO(CairisDAO):
 
     return attackers
 
-  def get_attackers_summary(self):
+  def get_objects_summary(self):
     try:
       ats = self.db_proxy.getAttackersSummary()
     except DatabaseProxyException as ex:
@@ -59,8 +59,8 @@ class AttackerDAO(CairisDAO):
       raise ARMHTTPError(ex)
     return ats
 
-  def get_attacker_by_name(self, name, simplify=True):
-    attackers = self.get_attackers(simplify=simplify)
+  def get_object_by_name(self, name, simplify=True):
+    attackers = self.get_objects(simplify=simplify)
     found_attacker = attackers.get(name, None)
 
     if found_attacker is None:
@@ -69,7 +69,7 @@ class AttackerDAO(CairisDAO):
 
     return found_attacker
 
-  def add_attacker(self, attacker):
+  def add_object(self, attacker):
     attacker_params = AttackerParameters(
       name=attacker.theName,
       desc=attacker.theDescription,
@@ -91,7 +91,7 @@ class AttackerDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def update_attacker(self, attacker, name):
+  def update_object(self, attacker, name):
     attacker_params = AttackerParameters(
       name=attacker.theName,
       desc=attacker.theDescription,
@@ -111,7 +111,7 @@ class AttackerDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def delete_attacker(self, name):
+  def delete_object(self, name):
     try:
       attackerId = self.db_proxy.getDimensionId(name,'attacker')
       self.db_proxy.deleteAttacker(attackerId)

@@ -39,7 +39,6 @@ class EnvironmentAPITests(CairisDaemonTestCase):
 
 
   def setUp(self):
-#    importModelFile(os.environ['CAIRIS_SRC'] + '/../examples/exemplars/NeuroGrid/NeuroGrid.xml',1,'test')
     self.logger = logging.getLogger(__name__)
     self.existing_environment_name = 'Stroke'
     self.environment_class = Environment.__module__+'.'+Environment.__name__
@@ -144,7 +143,6 @@ class EnvironmentAPITests(CairisDaemonTestCase):
     msg = json_resp.get('message', None)
     self.assertIsNotNone(msg, 'No message returned')
     self.logger.info('[%s] Message: %s\n', method, msg)
-
     rv = self.app.delete('/api/environments/name/%s?session_id=test' % quote(self.prepare_new_environment().theName))
 
   def test_put(self):
@@ -181,7 +179,7 @@ class EnvironmentAPITests(CairisDaemonTestCase):
     message = json_resp.get('message', None)
     self.assertIsNotNone(message, 'No message in response')
     self.logger.info('[%s] Message: %s', method, message)
-    self.assertGreater(message.find('successfully updated'), -1, 'The environment was not successfully updated')
+    self.assertGreater(message.find('updated'), -1, 'The environment was not successfully updated')
 
     rv = self.app.get('/api/environments/name/%s?session_id=test' % quote(environment_to_update.theName))
     if (sys.version_info > (3,)):
@@ -226,7 +224,7 @@ class EnvironmentAPITests(CairisDaemonTestCase):
     message = json_resp.get('message', None)
     self.assertIsNotNone(message, 'No message in response')
     self.logger.info('[%s] Message: %s', method, message)
-    self.assertGreater(message.find('successfully updated'), -1, 'The environment was not successfully updated')
+    self.assertGreater(message.find('updated'), -1, 'The environment was not successfully updated')
 
     rv = self.app.get('/api/environments/name/%s?session_id=test' % quote(environment_to_update.theName))
     if (sys.version_info > (3,)):

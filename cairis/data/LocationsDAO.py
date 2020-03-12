@@ -33,7 +33,7 @@ class LocationsDAO(CairisDAO):
   def __init__(self, session_id):
     CairisDAO.__init__(self, session_id)
 
-  def get_locations(self,constraint_id = -1):
+  def get_objects(self,constraint_id = -1):
     try:
       locs = self.db_proxy.getLocations(constraint_id)
     except DatabaseProxyException as ex:
@@ -48,8 +48,8 @@ class LocationsDAO(CairisDAO):
       locsList.append(self.simplify(locs[key]))
     return locsList
 
-  def get_locations_name(self, locations_name):
-    locsList = self.get_locations()
+  def get_object_by_name(self, locations_name):
+    locsList = self.get_objects()
     if locsList is None or len(locsList) < 1:
       self.close()
       raise ObjectNotFoundHTTPError('Locations')
@@ -59,7 +59,7 @@ class LocationsDAO(CairisDAO):
     self.close()
     raise ObjectNotFoundHTTPError('The provided Locations parameters')
 
-  def add_locations(self, locs):
+  def add_object(self, locs):
     p = LocationsParameters(
       locsName=locs.name(),
       locsDiagram=locs.diagram(),
@@ -72,7 +72,7 @@ class LocationsDAO(CairisDAO):
       raise ARMHTTPError(ex)
 
 
-  def update_locations(self,locs,name):
+  def update_object(self,locs,name):
     locs_id = self.db_proxy.getDimensionId(name, 'locations')
     p = LocationsParameters(
       locsName=locs.name(),
@@ -86,7 +86,7 @@ class LocationsDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def delete_locations(self, name):
+  def delete_object(self, name):
     try:
       locs_id = self.db_proxy.getDimensionId(name, 'locations')
       self.db_proxy.deleteLocations(locs_id)

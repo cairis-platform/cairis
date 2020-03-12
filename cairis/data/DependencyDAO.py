@@ -32,8 +32,9 @@ class DependencyDAO(CairisDAO):
   def __init__(self, session_id):
     CairisDAO.__init__(self, session_id)
 
-  def get_dependencies(self, constraint_id='',simplify=True):
+  def get_objects(self, constraint_id='',simplify=True):
     try:
+      if (constraint_id == -1): constraint_id = ''
       dependencies = self.db_proxy.getDependencies(constraint_id)
     except DatabaseProxyException as ex:
       self.close()
@@ -56,31 +57,7 @@ class DependencyDAO(CairisDAO):
         dependencies[key] = value
       return dependencies
       
-
-  def get_dependency(self, environment, depender, dependee, dependency):
-    args = [environment, depender, dependee, dependency]
-    if not 'all' in args:
-      return self.get_dependency_by_name(environment,depender,dependee,dependency)
-    else:
-      dependencies = self.get_dependencies(simplify = False)
-      found_dependencies = []
-
-      for key in dependencies:
-        parts = key.split('/')
-        if environment != 'all' and parts[0] != environment:
-          continue
-        if depender != 'all' and parts[1] != depender:
-          continue
-        if dependee != 'all' and parts[2] != dependee:
-          continue
-        if dependency != 'all' and parts[3] != dependency:
-          continue
-        dep = dependencies[key]
-        found_dependencies.append(dep)
-      return found_dependencies
-
-
-  def get_dependency_by_name(self, environment, depender, dependee, dependency):
+  def get_object_by_4parameters(self, environment, depender, dependee, dependency):
     try:
       dep = self.db_proxy.getDependency(environment, depender, dependee, dependency)
       del dep.theId
@@ -95,7 +72,7 @@ class DependencyDAO(CairisDAO):
       self.close()
       raise ARMHTTPError
     
-  def add_dependency(self, dependency):
+  def add_object(self, dependency):
     params = DependencyParameters(
       envName=dependency.theEnvironmentName,
       depender=dependency.theDepender,
@@ -114,7 +91,7 @@ class DependencyDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def delete_dependencies(self, environment, depender, dependee, dependency):
+  def delete_object_by_4parameters(self, environment, depender, dependee, dependency):
     try:
       dep = self.db_proxy.getDependency(environment, depender, dependee, dependency)
       self.db_proxy.deleteDependency(dep.theId,dep.theDependencyType)
@@ -129,7 +106,7 @@ class DependencyDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def update_dependency(self, environment, depender, dependee, dependency, new_dependency):
+  def update_object_by_4parameters(self, environment, depender, dependee, dependency, new_dependency):
     try:
       found_dependency = self.db_proxy.getDependency(environment, depender, dependee, dependency)
       params = DependencyParameters(

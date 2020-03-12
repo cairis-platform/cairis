@@ -25,75 +25,17 @@ else:
 from flask import session, request, make_response
 from flask_restful import Resource
 from cairis.daemon.CairisHTTPError import MalformedJSONHTTPError, ARMHTTPError, ObjectNotFoundHTTPError
-from cairis.data.RiskDAO import RiskDAO
 from cairis.tools.JsonConverter import json_serialize
-from cairis.tools.MessageDefinitions import RiskMessage
-from cairis.tools.PseudoClasses import RiskScore
 from cairis.tools.SessionValidator import get_session_id, get_model_generator
+from importlib import import_module
 
 __author__ = 'Robin Quetin, Shamal Faily'
 
 
-class RisksAPI(Resource):
-
-  def get(self):
-    session_id = get_session_id(session, request)
-    constraint_id = request.args.get('constraint_id', -1)
-    dao = RiskDAO(session_id)
-    risks = dao.get_risks(constraint_id)
-    resp = make_response(json_serialize(risks, session_id=session_id), OK)
-    resp.contenttype = 'application/json'
-    return resp
-
-  def post(self):
-    session_id = get_session_id(session, request)
-    dao = RiskDAO(session_id)
-    risk = dao.from_json(request)
-    dao.add_risk(risk)
-
-    resp_dict = {'message': risk.name() + ' created'}
-    resp = make_response(json_serialize(resp_dict), OK)
-    resp.contenttype = 'application/json'
-    return resp
-
-class RiskByNameAPI(Resource):
-
-  def get(self, name):
-    session_id = get_session_id(session, request)
-
-    dao = RiskDAO(session_id)
-    found_risk = dao.get_risk_by_name(name)
-    dao.close()
-
-    resp = make_response(json_serialize(found_risk, session_id=session_id), OK)
-    resp.headers['Content-type'] = 'application/json'
-    return resp
-
-  def put(self, name):
-    session_id = get_session_id(session, request)
-    dao = RiskDAO(session_id)
-    new_risk = dao.from_json(request)
-    dao.update_risk(name, new_risk)
-    dao.close()
-
-    resp_dict = {'message': new_risk.name() + ' updated'}
-    resp = make_response(json_serialize(resp_dict), OK)
-    resp.headers['Content-type'] = 'application/json'
-    return resp
-
-  def delete(self, name):
-    session_id = get_session_id(session, request)
-    dao = RiskDAO(session_id)
-    dao.delete_risk(name)
-    dao.close()
-
-    resp_dict = {'message': name + ' deleted'}
-    resp = make_response(json_serialize(resp_dict), OK)
-    resp.headers['Content-type'] = 'application/json'
-    return resp
-
-
 class RiskAnalysisModelAPI(Resource):
+
+  def __init__(self):
+    self.DAOModule = getattr(import_module('cairis.data.RiskDAO'),'RiskDAO')
 
   def get(self, environment):
     session_id = get_session_id(session, request)
@@ -124,7 +66,7 @@ class RiskAnalysisModelAPI(Resource):
     if (orientation == 'Horizontal'):
       rankDir = 'LR'
 
-    dao = RiskDAO(session_id)
+    dao = self.DAOModule(session_id)
     dot_code = dao.get_risk_analysis_model(environment, dim_name, obj_name, renderer, isTagged, rankDir)
     dao.close()
 
@@ -140,10 +82,12 @@ class RiskAnalysisModelAPI(Resource):
 
 class RisksScoreByNameAPI(Resource):
 
+  def __init__(self):
+    self.DAOModule = getattr(import_module('cairis.data.RiskDAO'),'RiskDAO')
+
   def get(self, name, threat, vulnerability, environment):
     session_id = get_session_id(session, request)
-
-    dao = RiskDAO(session_id)
+    dao = self.DAOModule(session_id)
     risk_scores = dao.get_scores_by_rtve(name, threat, vulnerability, environment)
 
     resp = make_response(json_serialize(risk_scores, session_id=session_id), OK)
@@ -153,10 +97,12 @@ class RisksScoreByNameAPI(Resource):
 
 class RisksRatingByNameAPI(Resource):
 
+  def __init__(self):
+    self.DAOModule = getattr(import_module('cairis.data.RiskDAO'),'RiskDAO')
+
   def get(self, threat, vulnerability, environment):
     session_id = get_session_id(session, request)
-
-    dao = RiskDAO(session_id)
+    dao = self.DAOModule(session_id)
     risk_rating = dao.get_risk_rating_by_tve(threat, vulnerability, environment)
 
     resp = make_response(json_serialize(risk_rating, session_id=session_id), OK)
@@ -165,9 +111,12 @@ class RisksRatingByNameAPI(Resource):
 
 class RiskAnalysisModelNamesAPI(Resource):
 
+  def __init__(self):
+    self.DAOModule = getattr(import_module('cairis.data.RiskDAO'),'RiskDAO')
+
   def get(self, environment):
     session_id = get_session_id(session, request)
-    dao = RiskDAO(session_id)
+    dao = self.DAOModule(session_id)
     element_names = dao.risk_model_elements(environment)
     resp = make_response(json_serialize(element_names, session_id=session_id), OK)
     resp.contenttype = 'application/json'
@@ -175,9 +124,12 @@ class RiskAnalysisModelNamesAPI(Resource):
 
 class RisksSummaryAPI(Resource):
 
+  def __init__(self):
+    self.DAOModule = getattr(import_module('cairis.data.RiskDAO'),'RiskDAO')
+
   def get(self):
     session_id = get_session_id(session, request)
-    dao = RiskDAO(session_id)
+    dao = self.DAOModule(session_id)
     objts = dao.get_risks_summary()
     dao.close()
     resp = make_response(json_serialize(objts, session_id=session_id))

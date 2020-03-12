@@ -26,41 +26,36 @@ else:
   from httplib import BAD_REQUEST, CONFLICT, NOT_FOUND, OK
 from flask import session, request, make_response
 from flask_restful import Resource
-from cairis.data.GoalDAO import GoalDAO
-from cairis.data.GoalAssociationDAO import GoalAssociationDAO
 from cairis.tools.JsonConverter import json_serialize
-from cairis.tools.MessageDefinitions import GoalMessage, GoalAssociationMessage
-from cairis.tools.ModelDefinitions import GoalModel as GoalAssociationModel
-from cairis.tools.ModelDefinitions import ObjectSummaryModel as SwaggerObjectSummaryModel
 from cairis.tools.SessionValidator import get_session_id, get_model_generator
+from importlib import import_module
 
 __author__ = 'Robin Quetin, Shamal Faily'
 
 
 class GoalsAPI(Resource):
 
+  def __init__(self):
+    self.DAOModule = getattr(import_module('cairis.data.GoalDAO'),'GoalDAO')
+
   def get(self):
     session_id = get_session_id(session, request)
     constraint_id = request.args.get('constraint_id', -1)
     coloured = request.args.get('coloured', False)
-
-    dao = GoalDAO(session_id)
-    goals = dao.get_goals(constraint_id=constraint_id, coloured=(coloured == '1'))
+    dao = self.DAOModule(session_id)
+    objts = dao.get_objects(constraint_id=constraint_id, coloured=(coloured == '1'))
     dao.close()
-
-    resp = make_response(json_serialize(goals, session_id=session_id))
+    resp = make_response(json_serialize(objts, session_id=session_id))
     resp.headers['Content-Type'] = "application/json"
     return resp
 
   def post(self):
     session_id = get_session_id(session, request)
-
-    dao = GoalDAO(session_id)
-    new_goal = dao.from_json(request)
-    new_goal_id = dao.add_goal(new_goal)
+    dao = self.DAOModule(session_id)
+    objt = dao.from_json(request)
+    dao.add_object(objt)
     dao.close()
-
-    resp_dict = {'message': new_goal.name() + ' created'}
+    resp_dict = {'message': objt.name() + ' created'}
     resp = make_response(json_serialize(resp_dict, session_id=session_id), OK)
     resp.contenttype = 'application/json'
     return resp
@@ -68,38 +63,35 @@ class GoalsAPI(Resource):
 
 class GoalByNameAPI(Resource):
 
+  def __init__(self):
+    self.DAOModule = getattr(import_module('cairis.data.GoalDAO'),'GoalDAO')
+
   def get(self, name):
     session_id = get_session_id(session, request)
     coloured = request.args.get('coloured', False)
-
-    dao = GoalDAO(session_id)
-    found_goal = dao.get_goal_by_name(unquote(name), coloured=(coloured == '1'))
+    dao = self.DAOModule(session_id)
+    found_goal = dao.get_object_by_name(unquote(name), coloured=(coloured == '1'))
     dao.close()
-
     resp = make_response(json_serialize(found_goal, session_id=session_id))
     resp.headers['Content-Type'] = "application/json"
     return resp
 
   def put(self, name):
     session_id = get_session_id(session, request)
-
-    dao = GoalDAO(session_id)
-    upd_goal = dao.from_json(request)
-    dao.update_goal(upd_goal, unquote(name))
+    dao = self.DAOModule(session_id)
+    objt = dao.from_json(request)
+    dao.update_object(objt, unquote(name))
     dao.close()
-
-    resp_dict = {'message': upd_goal.name() + ' updated'}
+    resp_dict = {'message': objt.name() + ' updated'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp
 
   def delete(self, name):
     session_id = get_session_id(session, request)
-
-    dao = GoalDAO(session_id)
-    dao.delete_goal(unquote(name))
+    dao = self.DAOModule(session_id)
+    dao.delete_object(unquote(name))
     dao.close()
-
     resp_dict = {'message': name + ' deleted'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
@@ -108,18 +100,18 @@ class GoalByNameAPI(Resource):
 
 class GoalModelAPI(Resource):
 
+  def __init__(self):
+    self.DAOModule = getattr(import_module('cairis.data.GoalDAO'),'GoalDAO')
+
   def get(self, environment, goal, usecase):
     session_id = get_session_id(session, request)
     isTopLevel = request.args.get('top', 0)
-
     model_generator = get_model_generator()
-
-    dao = GoalDAO(session_id)
+    dao = self.DAOModule(session_id)
     if goal == 'all':  goal = ''
     if usecase == 'all': usecase = ''
     dot_code = dao.get_goal_model(environment,goal,usecase,isTopLevel)
     dao.close()
-
     resp = make_response(model_generator.generate(dot_code, model_type='goal',renderer='dot'), OK)
     accept_header = request.headers.get('Accept', 'image/svg+xml')
     if accept_header.find('text/plain') > -1:
@@ -130,29 +122,30 @@ class GoalModelAPI(Resource):
 
 class GoalByEnvironmentNamesAPI(Resource):
 
+  def __init__(self):
+    self.DAOModule = getattr(import_module('cairis.data.GoalDAO'),'GoalDAO')
+
   def get(self, environment):
     session_id = get_session_id(session, request)
-
-    dao = GoalDAO(session_id)
+    dao = self.DAOModule(session_id)
     goals = dao.get_goal_names(environment=environment)
     dao.close()
-
     resp = make_response(json_serialize(goals, session_id=session_id))
     resp.headers['Content-Type'] = "application/json"
     return resp
 
 class ResponsibilityModelAPI(Resource):
 
+  def __init__(self):
+    self.DAOModule = getattr(import_module('cairis.data.GoalDAO'),'GoalDAO')
+
   def get(self, environment, role):
     session_id = get_session_id(session, request)
     model_generator = get_model_generator()
-
     if role == 'all': role = ''
-
-    dao = GoalDAO(session_id)
+    dao = self.DAOModule(session_id)
     dot_code = dao.get_responsibility_model(unquote(environment), unquote(role))
     dao.close()
-
     resp = make_response(model_generator.generate(dot_code, model_type='responsibility',renderer='dot'), OK)
     accept_header = request.headers.get('Accept', 'image/svg+xml')
     if accept_header.find('text/plain') > -1:
@@ -163,23 +156,23 @@ class ResponsibilityModelAPI(Resource):
 
 class GoalAssociationByNameAPI(Resource):
 
+  def __init__(self):
+    self.DAOModule = getattr(import_module('cairis.data.GoalAssociationDAO'),'GoalAssociationDAO')
+
   def get(self,environment_name,goal_name,subgoal_name):
     session_id = get_session_id(session, request)
-
-    dao = GoalAssociationDAO(session_id)
+    dao = self.DAOModule(session_id)
     assoc = dao.get_goal_association(unquote(environment_name),unquote(goal_name),unquote(subgoal_name))
     dao.close()
-
     resp = make_response(json_serialize(assoc, session_id=session_id))
     resp.headers['Content-Type'] = "application/json"
     return resp
 
   def delete(self,environment_name,goal_name,subgoal_name):
     session_id = get_session_id(session, request)
-    dao = GoalAssociationDAO(session_id)
+    dao = self.DAOModule(session_id)
     dao.delete_goal_association(unquote(environment_name),unquote(goal_name),unquote(subgoal_name))
     dao.close()
-
     resp_dict = {'message': 'Goal Association successfully deleted'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
@@ -187,11 +180,10 @@ class GoalAssociationByNameAPI(Resource):
 
   def put(self,environment_name,goal_name,subgoal_name):
     session_id = get_session_id(session, request)
-    dao = GoalAssociationDAO(session_id)
+    dao = self.DAOModule(session_id)
     assoc = dao.from_json(request)
     dao.update_goal_association(assoc,unquote(environment_name),unquote(goal_name),unquote(subgoal_name))
     dao.close()
-
     resp_dict = {'message': 'Goal Association successfully updated'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
@@ -199,10 +191,13 @@ class GoalAssociationByNameAPI(Resource):
 
 class GoalAssociationAPI(Resource):
 
+  def __init__(self):
+    self.DAOModule = getattr(import_module('cairis.data.GoalAssociationDAO'),'GoalAssociationDAO')
+
   def get(self):
     session_id = get_session_id(session, request)
     environment_name = request.args.get('environment_name', '')
-    dao = GoalAssociationDAO(session_id)
+    dao = self.DAOModule(session_id)
     assocs = dao.get_goal_associations(environment_name)
     dao.close()
     resp = make_response(json_serialize(assocs, session_id=session_id))
@@ -211,24 +206,11 @@ class GoalAssociationAPI(Resource):
 
   def post(self):
     session_id = get_session_id(session, request)
-
-    dao = GoalAssociationDAO(session_id)
+    dao = self.DAOModule(session_id)
     assoc = dao.from_json(request)
     dao.add_goal_association(assoc)
     dao.close()
-
     resp_dict = {'message': 'Goal Association successfully added'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
-    return resp
-
-class GoalsSummaryAPI(Resource):
-
-  def get(self):
-    session_id = get_session_id(session, request)
-    dao = GoalDAO(session_id)
-    objts = dao.get_goals_summary()
-    dao.close()
-    resp = make_response(json_serialize(objts, session_id=session_id))
-    resp.headers['Content-Type'] = "application/json"
     return resp

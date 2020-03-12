@@ -25,72 +25,20 @@ else:
 from flask import session, request, make_response
 from flask_restful import Resource
 from cairis.daemon.CairisHTTPError import MalformedJSONHTTPError, ARMHTTPError, ObjectNotFoundHTTPError
-from cairis.data.ResponseDAO import ResponseDAO
 from cairis.tools.JsonConverter import json_serialize
-from cairis.tools.MessageDefinitions import ResponseMessage
 from cairis.tools.SessionValidator import get_session_id
+from importlib import import_module
 
 __author__ = 'Robin Quetin, Shamal Faily'
 
-
-class ResponsesAPI(Resource):
-
-  def get(self):
-    session_id = get_session_id(session, request)
-    constraint_id = request.args.get('constraint_id', -1)
-    dao = ResponseDAO(session_id)
-    responses = dao.get_responses(constraint_id)
-    resp = make_response(json_serialize(responses, session_id=session_id), OK)
-    resp.contenttype = 'application/json'
-    return resp
-
-  def post(self):
-    session_id = get_session_id(session, request)
-    dao = ResponseDAO(session_id)
-    response = dao.from_json(request)
-    response_id = dao.add_response(response)
-    resp_dict = {'message': 'Response successfully added'}
-    resp = make_response(json_serialize(resp_dict), OK)
-    resp.contenttype = 'application/json'
-    return resp
-
-class ResponseByNameAPI(Resource):
-
-  def get(self, name):
-    session_id = get_session_id(session, request)
-    dao = ResponseDAO(session_id)
-    found_response = dao.get_response_by_name(name)
-    dao.close()
-    resp = make_response(json_serialize(found_response, session_id=session_id), OK)
-    resp.headers['Content-type'] = 'application/json'
-    return resp
-
-  def put(self, name):
-    session_id = get_session_id(session, request)
-    dao = ResponseDAO(session_id)
-    new_response = dao.from_json(request)
-    dao.update_response(name, new_response)
-    dao.close()
-    resp_dict = {'message': 'Response successfully updated'}
-    resp = make_response(json_serialize(resp_dict), OK)
-    resp.headers['Content-type'] = 'application/json'
-    return resp
-
-  def delete(self, name):
-    session_id = get_session_id(session, request)
-    dao = ResponseDAO(session_id)
-    dao.delete_response(name)
-    dao.close()
-    resp_dict = {'message': 'Response successfully deleted'}
-    resp = make_response(json_serialize(resp_dict), OK)
-    resp.headers['Content-type'] = 'application/json'
-    return resp
-
 class ResponseByNameGenerateAPI(Resource):
+
+  def __init__(self):
+    self.DAOModule = getattr(import_module('cairis.data.ResponseDAO'),'ResponseDAO')
 
   def post(self, name):
     session_id = get_session_id(session, request)
-    dao = ResponseDAO(session_id)
+    dao = self.DAOModule(session_id)
     dao.generate_goal(name)
     dao.close()
     resp_dict = {'message': 'Goal successfully generated'}

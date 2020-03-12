@@ -35,7 +35,7 @@ class DomainPropertyDAO(CairisDAO):
   def __init__(self, session_id):
     CairisDAO.__init__(self, session_id)
 
-  def get_domain_properties(self, constraint_id=-1):
+  def get_objects(self, constraint_id=-1):
     try:
       domain_properties = self.db_proxy.getDomainProperties(constraint_id)
     except DatabaseProxyException as ex:
@@ -51,7 +51,7 @@ class DomainPropertyDAO(CairisDAO):
       dpList.append(self.simplify(value))
     return dpList
 
-  def get_domain_property_by_name(self, name, simplify=True):
+  def get_object_by_name(self, name, simplify=True):
     try:
       dpId = self.db_proxy.getDimensionId(name,'domainproperty')
       domain_properties = self.db_proxy.getDomainProperties(dpId)
@@ -71,7 +71,7 @@ class DomainPropertyDAO(CairisDAO):
       raise ARMHTTPError(ex)
 
 
-  def add_domain_property(self, domain_property):
+  def add_object(self, domain_property):
     domain_property_params = DomainPropertyParameters(
       name=domain_property.name(),
       desc=domain_property.description(),
@@ -94,7 +94,7 @@ class DomainPropertyDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def update_domain_property(self, domain_property, name):
+  def update_object(self, domain_property, name):
 
     domain_property_params = DomainPropertyParameters(
       name=domain_property.name(),
@@ -118,7 +118,7 @@ class DomainPropertyDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def delete_domain_property(self, name):
+  def delete_object(self, name):
     try:
       dpId = self.db_proxy.getDimensionId(name,'domainproperty')
       self.db_proxy.deleteDomainProperty(dpId)

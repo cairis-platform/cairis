@@ -34,4 +34,5 @@ class Dependency:
   def dependencyType(self): return self.theDependencyType
   def dependency(self): return self.theDependency
   def rationale(self): return self.theRationale
-  def __str__(self): return self.theEnvironmentName + ' / ' + self.theDepender + ' / '  + self.theDependee + ' / ' + self.theDependencyType + ' / ' + self.theDependency + ' / ' + self.theRationale
+  def name(self): return self.theEnvironmentName + ' / ' + self.theDepender + ' / '  + self.theDependee + ' / ' + self.theDependencyType + ' / ' + self.theDependency + ' / ' + self.theRationale
+  def __str__(self): return self.name()

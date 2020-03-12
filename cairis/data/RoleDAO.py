@@ -32,7 +32,7 @@ class RoleDAO(CairisDAO):
   def __init__(self, session_id):
     CairisDAO.__init__(self, session_id)
 
-  def get_roles(self, constraint_id=-1):
+  def get_objects(self, constraint_id=-1):
     try:
       roles = self.db_proxy.getRoles(constraint_id)
     except DatabaseProxyException as ex:
@@ -47,7 +47,7 @@ class RoleDAO(CairisDAO):
       roleList.append(self.simplify(roles[key]))
     return roleList
 
-  def get_role_by_name(self, name, simplify=True):
+  def get_object_by_name(self, name, simplify=True):
     try:
       roleId = self.db_proxy.getDimensionId(name,'role')
       roles = self.db_proxy.getRoles(roleId)
@@ -70,12 +70,12 @@ class RoleDAO(CairisDAO):
       raise ARMHTTPError(ex)
 
   def get_role_props(self, name):
-    role = self.get_role_by_name(name, simplify=False)
+    role = self.get_object_by_name(name, simplify=False)
     props = role.theEnvironmentProperties
     return props
 
 
-  def add_role(self, role):
+  def add_object(self, role):
     role_params = RoleParameters(
       name=role.theName,
       rType=role.theType,
@@ -90,7 +90,7 @@ class RoleDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def update_role(self, role, name):
+  def update_object(self, role, name):
     params = RoleParameters(
       name=role.theName,
       rType=role.theType,
@@ -106,7 +106,7 @@ class RoleDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def delete_role(self, name):
+  def delete_object(self, name):
     try:
       roleId = self.db_proxy.getDimensionId(name,'role')
       self.db_proxy.deleteRole(roleId)

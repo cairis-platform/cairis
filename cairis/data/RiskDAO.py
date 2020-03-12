@@ -39,7 +39,7 @@ class RiskDAO(CairisDAO):
   def __init__(self, session_id):
     CairisDAO.__init__(self, session_id)
 
-  def get_risks(self, constraint_id=-1, simplify=True, skip_misuse=False):
+  def get_objects(self, constraint_id=-1, simplify=True, skip_misuse=False):
     try:
       risks = self.db_proxy.getRisks(constraintId=constraint_id)
     except DatabaseProxyException as ex:
@@ -59,7 +59,7 @@ class RiskDAO(CairisDAO):
     return riskList
 
 
-  def get_risks_summary(self):
+  def get_objects_summary(self):
     try:
       risks = self.db_proxy.getRisksSummary()
     except DatabaseProxyException as ex:
@@ -68,7 +68,7 @@ class RiskDAO(CairisDAO):
     return risks
 
   def get_risk_names(self):
-    risks = self.get_risks(skip_misuse=True)
+    risks = self.get_objects(skip_misuse=True)
     risk_names = list(risks.keys())
     return risk_names
 
@@ -84,10 +84,7 @@ class RiskDAO(CairisDAO):
 
 
 
-  def get_risk_by_name(self, name, simplify=True, skip_misuse=False):
-    """
-    :rtype : Risk
-    """
+  def get_object_by_name(self, name, simplify=True, skip_misuse=False):
     try:
       riskId = self.db_proxy.getDimensionId(name,'risk')
       risks = self.db_proxy.getRisks(riskId)
@@ -130,8 +127,8 @@ class RiskDAO(CairisDAO):
       self.close()
       print(ex)
 
-  def delete_risk(self, name):
-    found_risk = self.get_risk_by_name(name)
+  def delete_object(self, name):
+    found_risk = self.get_object_by_name(name)
 
     try:
       riskId = self.db_proxy.getDimensionId(name,'risk')
@@ -143,7 +140,7 @@ class RiskDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def add_risk(self, risk):
+  def add_object(self, risk):
     try:
       self.db_proxy.nameCheck(risk.name(), 'risk')
     except ARMException as ex:
@@ -161,7 +158,7 @@ class RiskDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def update_risk(self, risk_name, risk):
+  def update_object(self, risk, risk_name):
     params = RiskParameters(riskName=risk.theName,threatName=risk.theThreatName,vulName=risk.theVulnerabilityName,mc=risk.theMisuseCase,rTags=risk.theTags)
     try:
       riskId = self.db_proxy.getDimensionId(risk_name,'risk')
@@ -184,11 +181,6 @@ class RiskDAO(CairisDAO):
 
   # region Misuse cases
   def get_misuse_cases(self, constraint_id=-1, simplify=True):
-    """
-    :type constraint_id: int
-    :type simplify: bool
-    :rtype: dict[str,MisuseCase]
-    """
     try:
       misuse_cases = self.db_proxy.getMisuseCases(constraintId=constraint_id)
     except DatabaseProxyException as ex:
