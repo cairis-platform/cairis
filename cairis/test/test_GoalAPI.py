@@ -207,7 +207,6 @@ class GoalAPITests(CairisDaemonTestCase):
       "No",
       "None")
     ]
-    ngr2 = new_goal_refinements
     new_subgoal_refinements = [
       RefinementModel("PreventUnauthorised Certificate Access",
       "goal",
@@ -215,7 +214,6 @@ class GoalAPITests(CairisDaemonTestCase):
       "No",
       "None")
     ]
-    nsr2 = new_subgoal_refinements
     new_goal_props = [
       GoalEnvironmentProperties(
         environmentName=self.existing_environment_name_1,
@@ -237,8 +235,8 @@ class GoalAPITests(CairisDaemonTestCase):
         priority='Low',
         fitCriterion='None',
         issue='Test issue',
-        goalRefinements=ngr2,
-        subGoalRefinements=nsr2,
+        goalRefinements=[],
+        subGoalRefinements=[],
         concs=[],cas=[]
       )
     ]
