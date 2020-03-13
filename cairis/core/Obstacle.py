@@ -28,11 +28,11 @@ class Obstacle(ObjectValidator.ObjectValidator):
     self.theName = obsName
     self.theTags = tags
     self.theOriginator = obsOrig
-    self.theEnvironmentProperties = environmentProperties
     self.theEnvironmentDictionary = {}
-    for p in self.theEnvironmentProperties:
+    for p in environmentProperties:
       environmentName = p.name()
       self.theEnvironmentDictionary[environmentName] = p
+    self.theEnvironmentProperties = environmentProperties
 
   def id(self): return self.theId
   def setId(self,v): self.theId = v
