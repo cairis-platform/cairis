@@ -76,7 +76,7 @@ class CairisHTTPError(HTTPException):
       self.response = make_response(self.handle_exception_html(), self.status_code)
       self.__setattr__('data', resp_dict)
     else:
-      self.response = make_response(self.handle_exception_json(), self.status_code)
+      self.response = make_response(self.handle_exception_json(), self.status_code.value)
 
   def handle_exception_html(self):
     from cairis.tools.SessionValidator import get_template_generator

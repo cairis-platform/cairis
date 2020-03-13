@@ -136,10 +136,7 @@ class AssetAPITests(CairisDaemonTestCase):
     method = 'test_get_name'
     url = '/api/assets/name/invalidname?session_id=test'
     rv = self.app.get(url)
-#    if (sys.version_info > (3,)):
-#      msg = json_deserialize(rv.data.decode('utf-8'))
-#    else:
-    msg = json_deserialize(rv.data)
+    msg = json_deserialize(rv.data.decode('utf-8'))
     self.assertIsNotNone(msg, 'No results after deserialization')
     self.assertEqual(msg['code'],404)
    
