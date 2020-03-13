@@ -86,8 +86,8 @@ class CairisHTTPError(HTTPException):
     return templ_gen.serve_result('common.error', msg=message, code=self.status_code, title=self.status)
 
   def handle_exception_json(self):
-    self.__setattr__('data', {'message': self.message, 'code': self.status_code, 'status': self.status})
-    return json_serialize({'message': self.message, 'code': self.status_code, 'status': self.status})
+    self.__setattr__('data', {'message': self.message, 'code': self.status_code.value, 'status': self.status})
+    return json_serialize({'message': self.message, 'code': self.status_code.value, 'status': self.status})
 
 class ARMHTTPError(CairisHTTPError):
   status_code=BAD_REQUEST
