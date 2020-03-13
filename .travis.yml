@@ -44,7 +44,7 @@ install:
 
 
 script:
-- py.test cairis/test --doctest-modules -v --cov cairis/core cairis/daemon cairis/controllers
+- python3 -mpytest cairis/test --doctest-modules -v --cov cairis/core cairis/daemon cairis/controllers
   cairis/data cairis/tools --cov-report term-missing
 
 after_success:
