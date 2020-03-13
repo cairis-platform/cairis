@@ -218,8 +218,8 @@ class ObstacleAPITests(CairisDaemonTestCase):
         lbl='New Obstacle',
         category='Integrity Threat',
         definition='This is a test definition for env2',
-        gRefs=new_goal_refinements,
-        sgRefs=new_subgoal_refinements,
+        gRefs=[],
+        sgRefs=[],
         concs=[])
     ]
 
