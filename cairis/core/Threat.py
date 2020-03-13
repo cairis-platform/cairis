@@ -29,13 +29,13 @@ class Threat(ObjectValidator.ObjectValidator):
     self.theType = threatType
     self.theMethod = threatMethod
     self.theTags = tags
+    self.theEnvironmentProperties = cProps
     self.theEnvironmentDictionary = {}
     self.theThreatPropertyDictionary = {}
     for p in cProps:
       environmentName = p.name()
       self.theEnvironmentDictionary[environmentName] = p
       self.theThreatPropertyDictionary[environmentName] = PropertyHolder(p.properties(),p.rationale())
-    self.theEnvironmentProperties = cProps
     self.likelihoodLookup = {}
     self.likelihoodLookup['Incredible'] = 0
     self.likelihoodLookup['Improbable'] = 1
