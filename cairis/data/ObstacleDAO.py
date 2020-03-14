@@ -271,27 +271,18 @@ class ObstacleDAO(CairisDAO):
         new_props.append(real_prop)
     elif fake_props is not None:
       for fake_prop in fake_props:
-        check_required_keys(fake_prop, ObstacleEnvironmentPropertiesModel.required)
-
-        new_goal_refinements = []
-        for gr in fake_prop['theGoalRefinements']:
-          new_goal_refinements.append((gr['theEndName'],gr['theEndType'],gr['theRefType'],gr['isAlternate'],gr['theRationale']))
-
-        new_subgoal_refinements = []
-        for sgr in fake_prop['theSubGoalRefinements']:
-          new_subgoal_refinements.append((sgr['theEndName'],sgr['theEndType'],sgr['theRefType'],sgr['isAlternate'],sgr['theRationale']))
-
-        new_prop = ObstacleEnvironmentProperties(
-                   environmentName=fake_prop['theEnvironmentName'],
-                   lbl='',
-                   definition=fake_prop['theDefinition'],
-                   category=fake_prop['theCategory'],
-                   gRefs=new_goal_refinements,
-                   sgRefs=new_subgoal_refinements,
-                   concs=fake_prop['theConcerns'])
-        new_prop.theProbability = fake_prop['theProbability']
-        new_prop.theProbabilityRationale = fake_prop['theProbabilityRationale']
-        new_props.append(new_prop)
+        if fake_prop is not None:
+          check_required_keys(fake_prop, ObstacleEnvironmentPropertiesModel.required)
+          new_goal_refinements = []
+          for gr in fake_prop['theGoalRefinements']:
+            new_goal_refinements.append((gr['theEndName'],gr['theEndType'],gr['theRefType'],gr['isAlternate'],gr['theRationale']))
+          new_subgoal_refinements = []
+          for sgr in fake_prop['theSubGoalRefinements']:
+            new_subgoal_refinements.append((sgr['theEndName'],sgr['theEndType'],sgr['theRefType'],sgr['isAlternate'],sgr['theRationale']))
+          new_prop = ObstacleEnvironmentProperties(environmentName=fake_prop['theEnvironmentName'],lbl='',definition=fake_prop['theDefinition'],category=fake_prop['theCategory'],gRefs=new_goal_refinements,sgRefs=new_subgoal_refinements,concs=fake_prop['theConcerns'])
+          new_prop.theProbability = fake_prop['theProbability']
+          new_prop.theProbabilityRationale = fake_prop['theProbabilityRationale']
+          new_props.append(new_prop)
     else:
       self.close()
       raise MissingParameterHTTPError(param_names=['real_props', 'fake_props'])

@@ -34,7 +34,6 @@ __author__ = 'Robin Quetin, Shamal Faily'
 
 
 def check_required_keys(json_dict, required):
-#  if not all(reqKey in json_dict for reqKey in required):
   if not all(reqKey in list(json_dict.keys()) for reqKey in required):
     raise MissingParameterHTTPError(param_names=required)
 
