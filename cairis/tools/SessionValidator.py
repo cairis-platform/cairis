@@ -30,15 +30,12 @@ from cairis.daemon.CairisHTTPError import MissingParameterHTTPError, CairisHTTPE
 from cairis.tools.GraphicsGenerator import GraphicsGenerator
 from six import string_types
 
-__author__ = 'Robin Quetin'
+__author__ = 'Robin Quetin, Shamal Faily'
 
 
 def check_required_keys(json_dict, required):
-  """
-  :return:
-  :raise MissingParameterHTTPError:
-  """
-  if not all(reqKey in json_dict for reqKey in required):
+#  if not all(reqKey in json_dict for reqKey in required):
+  if not all(reqKey in list(json_dict.keys()) for reqKey in required):
     raise MissingParameterHTTPError(param_names=required)
 
 def get_logger():
@@ -58,11 +55,6 @@ def get_logger():
   return log
 
 def get_session_id(session, request):
-  """
-  Looks up the session ID in the HTTP session, request URL and body
-  :type session: flask.session
-  :type request: flask.request
-  """
   session_id = None
 
   # Look if HTTP session is being used
@@ -144,13 +136,6 @@ def validate_proxy(session, id, request=None, conf=None):
     )
 
 def get_fonts(session_id=None):
-  """
-  Validates that the fonts to output the SVG models are properly set up
-  :param session_id: The session ID provided by the user
-  :return: The font name, font size and AP font name
-  :rtype : str,str,str
-  :raise CairisHTTPError: Raises a CairisHTTPError when the database could not be properly set up
-  """
   if session_id is not None:
     b = Borg()
     settings = b.get_settings(session_id)
