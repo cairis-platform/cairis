@@ -33,7 +33,7 @@ class TaskCharacteristicDAO(CairisDAO):
   def __init__(self, session_id):
     CairisDAO.__init__(self, session_id)
 
-  def get_task_characteristics(self,constraint_id = -1):
+  def get_objects(self,constraint_id = -1):
     try:
       tcs = self.db_proxy.getTaskCharacteristics(constraint_id)
     except DatabaseProxyException as ex:
@@ -51,8 +51,8 @@ class TaskCharacteristicDAO(CairisDAO):
       tcsList.append(self.convert_tcrs(real_tc=value))
     return tcsList
 
-  def get_task_characteristic(self, task_characteristic_name):
-    tcs = self.get_task_characteristics()
+  def get_object_by_name(self, task_characteristic_name):
+    tcs = self.get_objects()
     if tcs is None or len(tcs) < 1:
       self.close()
       raise ObjectNotFoundHTTPError('Task characteristic')
@@ -62,7 +62,7 @@ class TaskCharacteristicDAO(CairisDAO):
     self.close()
     raise ObjectNotFoundHTTPError('Task characteristic:\"' + task_characteristic_name + '\"')
 
-  def add_task_characteristic(self, tc):
+  def add_object(self, tc):
     tcParams = TaskCharacteristicParameters(
       pName=tc.theTaskName,
       modQual=tc.theModQual,
@@ -78,7 +78,7 @@ class TaskCharacteristicDAO(CairisDAO):
       raise ARMHTTPError(ex)
 
 
-  def update_task_characteristic(self,tc,name):
+  def update_object(self,tc,name):
     tcParams = TaskCharacteristicParameters(
       pName=tc.theTaskName,
       modQual=tc.theModQual,
@@ -99,7 +99,7 @@ class TaskCharacteristicDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def delete_task_characteristic(self, name):
+  def delete_object(self, name):
     try:
       tcId = self.db_proxy.getDimensionId(name,'task_characteristic')
       self.db_proxy.deleteTaskCharacteristic(tcId)

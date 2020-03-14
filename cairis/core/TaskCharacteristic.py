@@ -33,6 +33,7 @@ class TaskCharacteristic:
   def task(self): return self.theTaskName
   def qualifier(self): return self.theModQual
   def characteristic(self): return self.theName
+  def name(self): return self.theName
   def grounds(self): return self.theGrounds
   def warrant(self): return self.theWarrant
   def backing(self): return self.theBacking

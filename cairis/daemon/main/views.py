@@ -62,7 +62,6 @@ from cairis.controllers import RoleController
 from cairis.controllers import SecurityPatternController
 from cairis.controllers import SummaryController
 from cairis.controllers import TaskController
-from cairis.controllers import TaskCharacteristicController
 from cairis.controllers import ThreatController
 from cairis.controllers import TraceController
 from cairis.controllers import UploadController
@@ -471,8 +470,8 @@ api.add_resource(TaskController.TaskScoreByNameAPI, '/api/tasks/name/<path:task>
 api.add_resource(TaskController.MisusabilityModelAPI, '/api/tasks/model/misusability/<path:mc_name>/characteristic/<path:tc_name>',endpoint='misusability_model')
 
 # Task Characteristic routes
-api.add_resource(TaskCharacteristicController.TaskCharacteristicsAPI, '/api/task_characteristics',endpoint='task_characteristics')
-api.add_resource(TaskCharacteristicController.TaskCharacteristicByNameAPI, '/api/task_characteristics/name/<path:name>',endpoint='task_characteristic')
+api.add_resource(ObjectController.ObjectsAPI, '/api/task_characteristics',endpoint='task_characteristics',resource_class_kwargs={'dao': 'TaskCharacteristicDAO'})
+api.add_resource(ObjectController.ObjectByNameAPI, '/api/task_characteristics/name/<path:name>',endpoint='task_characteristic',resource_class_kwargs={'dao' : 'TaskCharacteristicDAO'})
 
 # Template Asset routes
 api.add_resource(ObjectController.ObjectsAPI, '/api/template_assets',endpoint='template_assets',resource_class_kwargs={'dao': 'TemplateAssetDAO'})
