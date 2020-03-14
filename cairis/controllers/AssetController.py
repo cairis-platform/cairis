@@ -38,7 +38,6 @@ class AssetByEnvironmentNamesAPI(Resource):
   def __init__(self):
     self.DAOModule = getattr(import_module('cairis.data.AssetDAO'),'AssetDAO')
 
-
   def get(self, environment):
     session_id = get_session_id(session, request)
 
@@ -47,23 +46,6 @@ class AssetByEnvironmentNamesAPI(Resource):
     dao.close()
 
     resp = make_response(json_serialize(assets, session_id=session_id))
-    resp.headers['Content-Type'] = "application/json"
-    return resp
-
-
-class AssetNamesAPI(Resource):
-
-  def __init__(self):
-    self.DAOModule = getattr(import_module('cairis.data.AssetDAO'),'AssetDAO')
-
-  def get(self):
-    session_id = request.args.get('session_id', None)
-
-    dao = self.DAOModule(session_id)
-    assets_names = dao.get_asset_names()
-    dao.close()
-
-    resp = make_response(json_serialize(assets_names, session_id=session_id))
     resp.headers['Content-Type'] = "application/json"
     return resp
 

@@ -247,7 +247,7 @@ api.add_resource(ObjectController.ObjectsAPI, '/api/assets',endpoint='assets',re
 api.add_resource(ObjectController.ObjectByNameAPI, '/api/assets/name/<path:name>',endpoint='asset',resource_class_kwargs={'dao' : 'AssetDAO'})
 api.add_resource(ObjectController.ObjectsSummaryAPI, '/api/assets/summary',endpoint='assetssummary',resource_class_kwargs={'dao' : 'AssetDAO'})
 api.add_resource(AssetController.AssetByEnvironmentNamesAPI, '/api/assets/environment/<path:environment>/names',endpoint='assetbyenvironmentname')
-api.add_resource(AssetController.AssetNamesAPI, '/api/assets/all/names',endpoint='assetnames')
+api.add_resource(ObjectController.ObjectsByMethodAPI, '/api/assets/all/names',endpoint='assetnames',resource_class_kwargs={'dao' : 'AssetDAO','dao_method' : 'get_asset_names'})
 api.add_resource(AssetController.AssetTypesAPI, '/api/assets/types',endpoint='assettypes')
 api.add_resource(AssetController.AssetTypeByNameAPI, '/api/assets/types/name/<path:name>',endpoint='assettypebyname')
 api.add_resource(AssetController.AssetValuesAPI, '/api/environments/<path:environment_name>/asset-values',endpoint='assetvalues')
@@ -313,7 +313,7 @@ api.add_resource(ObjectController.ObjectByNameAPI, '/api/domainproperties/name/<
 # Environment routes
 api.add_resource(ObjectController.ObjectsAPI, '/api/environments',endpoint='environments',resource_class_kwargs={'dao': 'EnvironmentDAO'})
 api.add_resource(ObjectController.ObjectByNameAPI, '/api/environments/name/<path:name>',endpoint='environment',resource_class_kwargs={'dao' : 'EnvironmentDAO'})
-api.add_resource(EnvironmentController.EnvironmentNamesAPI, '/api/environments/names', '/api/environments/all/names',endpoint='environment_names')
+api.add_resource(ObjectController.ObjectsByMethodAPI, '/api/environments/names','/api/environments/all/names',endpoint='environment_names',resource_class_kwargs={'dao' : 'EnvironmentDAO','dao_method' : 'get_environment_names'})
 api.add_resource(
   EnvironmentController.EnvironmentsByThreatVulnerability,
   '/api/environments/threat/<path:threat>/vulnerability/<path:vulnerability>',

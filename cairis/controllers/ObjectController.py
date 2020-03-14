@@ -40,11 +40,9 @@ class ObjectsAPI(Resource):
   def get(self):
     session_id = get_session_id(session, request)
     constraint_id = request.args.get('constraint_id', -1)
-
     dao = self.DAOModule(session_id)
     objts = dao.get_objects(constraint_id)
     dao.close()
-
     resp = make_response(json_serialize(objts, session_id=session_id), OK)
     resp.contenttype = 'application/json'
     return resp
@@ -62,6 +60,21 @@ class ObjectsAPI(Resource):
     else:
       resp_dict = {'message': new_objt.name() + ' created'}
     resp = make_response(json_serialize(resp_dict), OK)
+    resp.contenttype = 'application/json'
+    return resp
+
+class ObjectsByMethodAPI(Resource):
+
+  def __init__(self,**kwargs):
+    self.DAOModule = getattr(import_module('cairis.data.' + kwargs['dao']),kwargs['dao'])
+    self.theDAOMethod = kwargs['dao_method']
+
+  def get(self):
+    session_id = get_session_id(session, request)
+    dao = self.DAOModule(session_id)
+    objts = getattr(dao, self.theDAOMethod)()
+    dao.close()
+    resp = make_response(json_serialize(objts, session_id=session_id), OK)
     resp.contenttype = 'application/json'
     return resp
 
