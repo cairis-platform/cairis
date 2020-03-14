@@ -61,7 +61,7 @@ class ThreatDAO(CairisDAO):
     for key, value in list(self.prop_dict.items()):
       self.rev_prop_dict[value] = key
 
-  def get_threats(self, constraint_id=-1):
+  def get_objects(self, constraint_id=-1):
     try:
       threats = self.db_proxy.getThreats(constraint_id)
     except DatabaseProxyException as ex:
@@ -74,7 +74,7 @@ class ThreatDAO(CairisDAO):
       threatList.append(self.simplify(threats[key]))
     return threatList
 
-  def get_threats_summary(self):
+  def get_objects_summary(self):
     try:
       thrs = self.db_proxy.getThreatsSummary()
     except DatabaseProxyException as ex:
@@ -82,7 +82,7 @@ class ThreatDAO(CairisDAO):
       raise ARMHTTPError(ex)
     return thrs
 
-  def get_threat_by_name(self, name, simplify=True):
+  def get_object_by_name(self, name, simplify=True):
     found_threat = None
     try:
       threats = self.db_proxy.getThreats()
@@ -102,7 +102,7 @@ class ThreatDAO(CairisDAO):
 
     return found_threat
     
-  def add_threat(self, threat):
+  def add_object(self, threat):
     threat_params = ThreatParameters(
       threatName=threat.theThreatName,
       thrType=threat.theType,
@@ -123,7 +123,7 @@ class ThreatDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def update_threat(self, threat, name):
+  def update_object(self, threat, name):
     threat_params = ThreatParameters(
       threatName=threat.theThreatName,
       thrType=threat.theType,
@@ -142,7 +142,7 @@ class ThreatDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def delete_threat(self, name):
+  def delete_object(self, name):
     try:
       threatId = self.db_proxy.getDimensionId(name,'threat')
       self.db_proxy.deleteThreat(threatId)

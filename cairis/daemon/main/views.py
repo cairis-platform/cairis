@@ -490,9 +490,9 @@ api.add_resource(TemplateRequirementController.TemplateRequirementsAPI, '/api/te
 api.add_resource(TemplateRequirementController.TemplateRequirementByNameAPI, '/api/template_requirements/name/<path:name>',endpoint='template_requirement')
 
 # Threat routes
-api.add_resource(ThreatController.ThreatAPI, '/api/threats',endpoint='threats')
-api.add_resource(ThreatController.ThreatByNameAPI, '/api/threats/name/<path:name>',endpoint='threat')
-api.add_resource(ThreatController.ThreatsSummaryAPI, '/api/threats/summary',endpoint='threatssummary')
+api.add_resource(ObjectController.ObjectsAPI, '/api/threats',endpoint='threats',resource_class_kwargs={'dao': 'ThreatDAO'})
+api.add_resource(ObjectController.ObjectByNameAPI, '/api/threats/name/<path:name>',endpoint='threat',resource_class_kwargs={'dao' : 'ThreatDAO'})
+api.add_resource(ObjectController.ObjectsSummaryAPI, '/api/threats/summary',endpoint='threatssummary',resource_class_kwargs={'dao' : 'ThreatDAO'})
 api.add_resource(ThreatController.ThreatTypesAPI, '/api/threats/types',endpoint='threat_types')
 api.add_resource(ThreatController.ThreatTypeByNameAPI, '/api/threats/types/name/<path:name>',endpoint='threat_type')
 api.add_resource(ThreatController.ThreatModelAPI, '/api/threats/model/environment/<path:environment_name>',endpoint='threat_model')
