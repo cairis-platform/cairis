@@ -321,6 +321,13 @@ class ThreatAPITests(CairisDaemonTestCase):
         rationale='Another test'
       )
     ]
+    2nd_security_attrs = [
+      SecurityAttribute(
+        name='Confidentiality',
+        value='High',
+        rationale='As a test'
+      )
+    ]
 
     new_threat_props = [
       ThreatEnvironmentProperties(
@@ -336,7 +343,7 @@ class ThreatAPITests(CairisDaemonTestCase):
         lhood='Improbable',
         assets=self.existing_asset_names,
         attackers=self.existing_attackers_names,
-        syProperties=new_security_attrs,
+        syProperties=2nd_security_attrs,
         pRationale=[]
       )
     ]
