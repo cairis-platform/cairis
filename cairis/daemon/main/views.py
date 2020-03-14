@@ -39,7 +39,6 @@ from cairis.controllers import CExportController
 from cairis.controllers import CImportController
 from cairis.controllers import CountermeasureController
 from cairis.controllers import DataFlowController
-from cairis.controllers import DimensionController
 from cairis.controllers import DirectoryController
 from cairis.controllers import DocumentationController
 from cairis.controllers import EnvironmentController
@@ -292,9 +291,9 @@ api.add_resource(DataFlowController.DataFlowDiagramAPI, '/api/dataflows/diagram/
 api.add_resource(ObjectController.ObjectsAPI, '/api/dependencies',endpoint='dependencies',resource_class_kwargs={'dao': 'DependencyDAO'})
 api.add_resource(ObjectController.ObjectByFourParametersAPI, '/api/dependencies/environment/<p1>/depender/<p2>/dependee/<p3>/dependency/<p4>',endpoint='dependency',resource_class_kwargs={'dao': 'DependencyDAO'})
 
-# DimensionController
-api.add_resource(DimensionController.DimensionsAPI, '/api/dimensions/table/<path:table>',endpoint='dimensions')
-api.add_resource(DimensionController.DimensionNamesAPI, '/api/dimensions/table/<path:table>/environment/<path:environment>',endpoint='dimension')
+# Dimension routes
+api.add_resource(ObjectController.ConstrainedObjectsByNameAPI, '/api/dimensions/table/<path:parameter_string>',endpoint='dimensions',resource_class_kwargs={'dao' : 'DimensionDAO','constraint_parameter' : 'constraint_id'})
+api.add_resource(ObjectController.ObjectsByTwoParametersAPI, '/api/dimensions/table/<path:p1>/environment/<path:p2>',endpoint='dimension',resource_class_kwargs={'dao' : 'DimensionDAO'})
 
 # DirectoryController
 api.add_resource(DirectoryController.ThreatDirectoryAPI, '/api/directory/threat/<path:entry_name>',endpoint='threatdirectory')
@@ -354,7 +353,6 @@ api.add_resource(CExportController.CExportGRLAPI, '/api/export/file/grl/task/<pa
 
 # Find route
 api.add_resource(ObjectController.ObjectsByNameAPI, '/api/find/<path:parameter_string>',endpoint='find',resource_class_kwargs={'dao' : 'FindDAO'})
-#api.add_resource(FindController.FindAPI, '/api/find/<path:search_string>',endpoint='find')
 
 # Import routes
 api.add_resource(CImportController.CImportPackageAPI, '/api/import/package',endpoint='import_package')

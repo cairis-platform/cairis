@@ -80,6 +80,24 @@ class ObjectsByNameAPI(Resource):
     resp.contenttype = 'application/json'
     return resp
 
+class ConstrainedObjectsByNameAPI(Resource):
+
+  def __init__(self,**kwargs):
+    self.DAOModule = getattr(import_module('cairis.data.' + kwargs['dao']),kwargs['dao'])
+    self.theConstraintParameter = kwargs['constraint_parameter']
+
+  def get(self,parameter_string):
+    session_id = get_session_id(session, request)
+    constraint_id = request.args.get(self.theConstraintParameter, -1)
+    dao = self.DAOModule(session_id)
+    objts = dao.get_objects_by_names(parameter_string,constraint_id)
+    dao.close()
+    resp = make_response(json_serialize(objts, session_id=session_id), OK)
+    resp.contenttype = 'application/json'
+    return resp
+
+
+
 class ObjectByNameAPI(Resource):
 
   def __init__(self,**kwargs):
@@ -139,6 +157,21 @@ class ObjectsSummaryAPI(Resource):
     resp = make_response(json_serialize(objts, session_id=session_id))
     resp.headers['Content-Type'] = "application/json"
     return resp
+
+class ObjectsByTwoParametersAPI(Resource):
+
+  def __init__(self,**kwargs):
+    self.DAOModule = getattr(import_module('cairis.data.' + kwargs['dao']),kwargs['dao'])
+
+  def get(self, p1, p2):
+    session_id = get_session_id(session, request)
+    dao = self.DAOModule(session_id)
+    objts = dao.get_objects_by_2parameters(p1,p2)
+    dao.close()
+    resp = make_response(json_serialize(objts, session_id=session_id), OK)
+    resp.headers['Content-type'] = 'application/json'
+    return resp
+
 
 class ObjectByFourParametersAPI(Resource):
 
