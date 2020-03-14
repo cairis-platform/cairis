@@ -185,4 +185,3 @@ class ObjectByFourParametersAPI(Resource):
     resp = make_response(json_serialize(resp_dict), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
-

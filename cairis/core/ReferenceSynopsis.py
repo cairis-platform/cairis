@@ -39,3 +39,4 @@ class ReferenceSynopsis:
   def synopsisDimension(self): return self.theSynopsisDimension
   def satisfaction(self): return self.theInitialSatisfaction
   def goals(self): return self.theRelatedGoals
+  def name(self): return self.theSynopsis

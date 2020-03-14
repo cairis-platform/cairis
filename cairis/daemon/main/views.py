@@ -519,8 +519,8 @@ api.add_resource(UseCaseController.UseCaseRequirementsByNameAPI, '/api/usecases/
 api.add_resource(UseCaseController.UseCaseGoalsByNameAPI, '/api/usecases/name/<path:usecase_name>/environment/<path:environment_name>/goals',endpoint='usecasegoals')
 
 # User goal routes
-api.add_resource(UserGoalController.UserGoalsAPI, '/api/user_goals',endpoint='user_goals')
-api.add_resource(UserGoalController.UserGoalByNameAPI, '/api/user_goals/name/<path:name>',endpoint='user_goal')
+api.add_resource(ObjectController.ObjectsAPI, '/api/user_goals',endpoint='user_goals',resource_class_kwargs={'dao': 'UserGoalDAO'})
+api.add_resource(ObjectController.ObjectByNameAPI, '/api/user_goals/name/<path:name>',endpoint='usergoal',resource_class_kwargs={'dao' : 'UserGoalDAO'})
 api.add_resource(UserGoalController.UserGoalModelAPI, '/api/user_goals/model/environment/<path:environment_name>/filter_name/<path:filter_element>',endpoint='usergoalmodel')
 
 # Validation route
@@ -529,6 +529,8 @@ api.add_resource(ValidationController.ValidationAPI, '/api/validation/environmen
 # Value Type routes
 api.add_resource(ValueTypeController.ValueTypesAPI, '/api/value_types/type/<path:type_name>/environment/<path:environment_name>',endpoint='value_types')
 api.add_resource(ValueTypeController.ValueTypesByNameAPI, '/api/value_types/type/<path:type_name>/environment/<path:environment_name>/name/<path:object_name>',endpoint='value_type')
+
+
 api.add_resource(ValueTypeController.ValueTypesCreateAPI, '/api/value_types/',endpoint='create_value_type')
 
 # Version route
