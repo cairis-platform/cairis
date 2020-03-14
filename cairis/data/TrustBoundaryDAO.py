@@ -33,7 +33,7 @@ class TrustBoundaryDAO(CairisDAO):
   def __init__(self, session_id):
     CairisDAO.__init__(self, session_id)
 
-  def get_trust_boundaries(self, constraint_id = -1):
+  def get_objects(self, constraint_id = -1):
     try:
       tbs = self.db_proxy.getTrustBoundaries(constraint_id)
       values = []
@@ -48,15 +48,15 @@ class TrustBoundaryDAO(CairisDAO):
       raise ARMHTTPError(ex)
 
 
-  def get_trust_boundary_by_name(self, trust_boundary_name):
+  def get_object_by_name(self, trust_boundary_name):
     tbId = self.db_proxy.getDimensionId(trust_boundary_name,'trust_boundary')
-    tbs = self.get_trust_boundaries(tbId)
+    tbs = self.get_objects(tbId)
     if len(tbs) == 0:
       self.close()
       raise ObjectNotFoundHTTPError('The provided trust boundary name')
     return tbs[0]
 
-  def add_trust_boundary(self, tb):
+  def add_object(self, tb):
     try:
       if not self.check_existing_trust_boundary(tb.name()):
         self.db_proxy.addTrustBoundary(tb)
@@ -70,7 +70,7 @@ class TrustBoundaryDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def update_trust_boundary(self, old_trust_boundary_name, tb):
+  def update_object(self, tb, old_trust_boundary_name):
     try:
       tbId = self.db_proxy.getDimensionId(old_trust_boundary_name,'trust_boundary')
       tb.theId = tbId
@@ -82,7 +82,7 @@ class TrustBoundaryDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def delete_trust_boundary(self, trust_boundary_name):
+  def delete_object(self, trust_boundary_name):
     try:
       tbId = self.db_proxy.getDimensionId(trust_boundary_name,'trust_boundary')
       self.db_proxy.deleteTrustBoundary(tbId)

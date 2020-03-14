@@ -68,7 +68,6 @@ from cairis.controllers import TemplateGoalController
 from cairis.controllers import TemplateRequirementController
 from cairis.controllers import ThreatController
 from cairis.controllers import TraceController
-from cairis.controllers import TrustBoundaryController
 from cairis.controllers import UploadController
 from cairis.controllers import UseCaseController
 from cairis.controllers import UserGoalController
@@ -505,8 +504,8 @@ api.add_resource(TraceController.TraceDimensionsAPI, '/api/traces/dimensions/<pa
 api.add_resource(TraceController.TraceByNameAPI, '/api/traces/from_type/<path:from_object>/from_name/<path:from_name>/to_type/<path:to_object>/to_name/<path:to_name>',endpoint='traces_name')
 
 # Trust Boundary routes
-api.add_resource(TrustBoundaryController.TrustBoundariesAPI, '/api/trust_boundaries',endpoint='trustboundaries')
-api.add_resource(TrustBoundaryController.TrustBoundaryByNameAPI, '/api/trust_boundaries/name/<path:trust_boundary_name>',endpoint='trustboundary')
+api.add_resource(ObjectController.ObjectsAPI, '/api/trust_boundaries',endpoint='trustboundaries',resource_class_kwargs={'dao': 'TrustBoundaryDAO'})
+api.add_resource(ObjectController.ObjectByNameAPI, '/api/trust_boundaries/name/<path:name>',endpoint='trustboundary',resource_class_kwargs={'dao' : 'TrustBoundaryDAO'})
 
 # Upload controller
 api.add_resource(UploadController.UploadImageAPI, '/api/upload/image',endpoint='upload')
