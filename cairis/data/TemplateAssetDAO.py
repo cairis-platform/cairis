@@ -49,7 +49,7 @@ class TemplateAssetDAO(CairisDAO):
     self.rev_value_dict = {0:'None', 1:'Low',2:'Medium', 3:'High'}
 
 
-  def get_template_assets(self,constraint_id = -1):
+  def get_objects(self,constraint_id = -1):
     try:
       tas = self.db_proxy.getTemplateAssets(constraint_id)
     except DatabaseProxyException as ex:
@@ -63,7 +63,7 @@ class TemplateAssetDAO(CairisDAO):
       tasList.append(self.simplify(value))
     return tasList
 
-  def get_template_asset(self, template_asset_name):
+  def get_object_by_name(self, template_asset_name):
     try:
       found_ta = None
       taId = self.db_proxy.getDimensionId(template_asset_name,'template_asset')
@@ -84,7 +84,7 @@ class TemplateAssetDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def add_template_asset(self, ta):
+  def add_object(self, ta):
     taParams = TemplateAssetParameters(
       assetName=ta.theName,
       shortCode=ta.theShortCode,
@@ -103,7 +103,7 @@ class TemplateAssetDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def update_template_asset(self,ta,name):
+  def update_object(self,ta,name):
     taParams = TemplateAssetParameters(
       assetName=ta.theName,
       shortCode=ta.theShortCode,
@@ -124,7 +124,7 @@ class TemplateAssetDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def delete_template_asset(self, name):
+  def delete_object(self, name):
     try:
       taId = self.db_proxy.getDimensionId(name,'template_asset')
       self.db_proxy.deleteTemplateAsset(taId)

@@ -32,7 +32,7 @@ class TemplateRequirementDAO(CairisDAO):
   def __init__(self, session_id):
     CairisDAO.__init__(self, session_id)
 
-  def get_template_requirements(self,constraint_id = -1):
+  def get_objects(self,constraint_id = -1):
     try:
       trs = self.db_proxy.getTemplateRequirements(constraint_id)
     except DatabaseProxyException as ex:
@@ -48,7 +48,7 @@ class TemplateRequirementDAO(CairisDAO):
       trsList.append(tr)
     return trsList
 
-  def get_template_requirement(self, template_requirement_name):
+  def get_object_by_name(self, template_requirement_name):
     try:
       found_tr = None
       trId = self.db_proxy.getDimensionId(template_requirement_name,'template_requirement')
@@ -71,7 +71,7 @@ class TemplateRequirementDAO(CairisDAO):
       raise ARMHTTPError(ex)
 
 
-  def add_template_requirement(self, tr):
+  def add_object(self, tr):
     trParams = TemplateRequirementParameters(
       reqName=tr.theName,
       assetName=tr.theAssetName,
@@ -85,7 +85,7 @@ class TemplateRequirementDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def update_template_requirement(self,tr,name):
+  def update_object(self,tr,name):
     trParams = TemplateRequirementParameters(
       reqName=tr.theName,
       assetName=tr.theAssetName,
@@ -101,7 +101,7 @@ class TemplateRequirementDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def delete_template_requirement(self, name):
+  def delete_object(self, name):
     try:
       trId = self.db_proxy.getDimensionId(name,'template_requirement')
       self.db_proxy.deleteTemplateRequirement(trId)

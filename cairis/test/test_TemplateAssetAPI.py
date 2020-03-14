@@ -129,7 +129,7 @@ class TemplateAssetAPITests(CairisDaemonTestCase):
     json_resp = json_deserialize(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     ackMsg = json_resp.get('message', None)
-    self.assertEqual(ackMsg, 'Template Asset successfully added')
+    self.assertGreater(ackMsg.find('created'), -1, 'Template asset not created')
 
   def test_put(self):
     method = 'test_put'
@@ -145,8 +145,7 @@ class TemplateAssetAPITests(CairisDaemonTestCase):
     json_resp = json_deserialize(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     ackMsg = json_resp.get('message', None)
-    self.assertEqual(ackMsg, 'Template Asset successfully updated')
-
+    self.assertGreater(ackMsg.find('updated'), -1, 'Template asset not updated')
 
   def test_delete(self):
     method = 'test_delete'
@@ -169,4 +168,4 @@ class TemplateAssetAPITests(CairisDaemonTestCase):
     json_resp = json_deserialize(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     ackMsg = json_resp.get('message', None)
-    self.assertEqual(ackMsg, 'Template Asset successfully deleted')
+    self.assertGreater(ackMsg.find('deleted'), -1, 'Template asset not deleted')

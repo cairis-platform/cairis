@@ -123,7 +123,7 @@ class TemplateRequirementAPITests(CairisDaemonTestCase):
     json_resp = json_deserialize(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     ackMsg = json_resp.get('message', None)
-    self.assertEqual(ackMsg, 'Template Requirement successfully added')
+    self.assertGreater(ackMsg.find('created'), -1, 'Template requirement not created')
 
   def test_put(self):
     method = 'test_put'
@@ -138,7 +138,7 @@ class TemplateRequirementAPITests(CairisDaemonTestCase):
     json_resp = json_deserialize(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     ackMsg = json_resp.get('message', None)
-    self.assertEqual(ackMsg, 'Template Requirement successfully updated')
+    self.assertGreater(ackMsg.find('updated'), -1, 'Template requirement not updated')
 
   def test_delete(self):
     method = 'test_delete'
@@ -162,4 +162,4 @@ class TemplateRequirementAPITests(CairisDaemonTestCase):
     json_resp = json_deserialize(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     ackMsg = json_resp.get('message', None)
-    self.assertEqual(ackMsg, 'Template Requirement successfully deleted')
+    self.assertGreater(ackMsg.find('deleted'), -1, 'Template requirement not deleted')

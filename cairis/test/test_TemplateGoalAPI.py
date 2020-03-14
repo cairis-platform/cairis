@@ -122,7 +122,7 @@ class TemplateGoalAPITests(CairisDaemonTestCase):
     json_resp = json_deserialize(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     ackMsg = json_resp.get('message', None)
-    self.assertEqual(ackMsg, 'Template Goal successfully added')
+    self.assertGreater(ackMsg.find('created'), -1, 'Template goal not created')
 
   def test_put(self):
     method = 'test_put'
@@ -137,7 +137,7 @@ class TemplateGoalAPITests(CairisDaemonTestCase):
     json_resp = json_deserialize(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     ackMsg = json_resp.get('message', None)
-    self.assertEqual(ackMsg, 'Template Goal successfully updated')
+    self.assertGreater(ackMsg.find('updated'), -1, 'Template goal not updated')
 
   def test_delete(self):
     method = 'test_delete'
@@ -160,4 +160,4 @@ class TemplateGoalAPITests(CairisDaemonTestCase):
     json_resp = json_deserialize(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     ackMsg = json_resp.get('message', None)
-    self.assertEqual(ackMsg, 'Template Goal successfully deleted')
+    self.assertGreater(ackMsg.find('deleted'), -1, 'Template goal not deleted')

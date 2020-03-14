@@ -63,9 +63,6 @@ from cairis.controllers import SecurityPatternController
 from cairis.controllers import SummaryController
 from cairis.controllers import TaskController
 from cairis.controllers import TaskCharacteristicController
-from cairis.controllers import TemplateAssetController
-from cairis.controllers import TemplateGoalController
-from cairis.controllers import TemplateRequirementController
 from cairis.controllers import ThreatController
 from cairis.controllers import TraceController
 from cairis.controllers import UploadController
@@ -478,16 +475,16 @@ api.add_resource(TaskCharacteristicController.TaskCharacteristicsAPI, '/api/task
 api.add_resource(TaskCharacteristicController.TaskCharacteristicByNameAPI, '/api/task_characteristics/name/<path:name>',endpoint='task_characteristic')
 
 # Template Asset routes
-api.add_resource(TemplateAssetController.TemplateAssetsAPI, '/api/template_assets',endpoint='template_assets')
-api.add_resource(TemplateAssetController.TemplateAssetByNameAPI, '/api/template_assets/name/<path:name>',endpoint='template_asset')
+api.add_resource(ObjectController.ObjectsAPI, '/api/template_assets',endpoint='template_assets',resource_class_kwargs={'dao': 'TemplateAssetDAO'})
+api.add_resource(ObjectController.ObjectByNameAPI, '/api/template_assets/name/<path:name>',endpoint='templateasset',resource_class_kwargs={'dao' : 'TemplateAssetDAO'})
 
 # Template Goal routes
-api.add_resource(TemplateGoalController.TemplateGoalsAPI, '/api/template_goals',endpoint='template_goals')
-api.add_resource(TemplateGoalController.TemplateGoalByNameAPI, '/api/template_goals/name/<path:name>',endpoint='template_goal')
+api.add_resource(ObjectController.ObjectsAPI, '/api/template_goals',endpoint='template_goals',resource_class_kwargs={'dao': 'TemplateGoalDAO'})
+api.add_resource(ObjectController.ObjectByNameAPI, '/api/template_goals/name/<path:name>',endpoint='templategoal',resource_class_kwargs={'dao' : 'TemplateGoalDAO'})
 
 # Template Requirement routes
-api.add_resource(TemplateRequirementController.TemplateRequirementsAPI, '/api/template_requirements',endpoint='template_requirements')
-api.add_resource(TemplateRequirementController.TemplateRequirementByNameAPI, '/api/template_requirements/name/<path:name>',endpoint='template_requirement')
+api.add_resource(ObjectController.ObjectsAPI, '/api/template_requirements',endpoint='template_requirements',resource_class_kwargs={'dao': 'TemplateRequirementDAO'})
+api.add_resource(ObjectController.ObjectByNameAPI, '/api/template_requirements/name/<path:name>',endpoint='template_requirement',resource_class_kwargs={'dao' : 'TemplateRequirementDAO'})
 
 # Threat routes
 api.add_resource(ObjectController.ObjectsAPI, '/api/threats',endpoint='threats',resource_class_kwargs={'dao': 'ThreatDAO'})
