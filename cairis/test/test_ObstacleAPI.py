@@ -202,34 +202,7 @@ class ObstacleAPITests(CairisDaemonTestCase):
 
 
   def prepare_new_obstacle(self):
-    new_goal_refinements = []
-    new_subgoal_refinements = []
-    new_obs_props = [
-      ObstacleEnvironmentProperties(
-        environmentName=self.existing_environment_name_1,
-        lbl='New Obstacle',
-        definition='This is a test definition for env1',
-        category='Integrity Threat',
-        gRefs=new_goal_refinements,
-        sgRefs=new_subgoal_refinements,
-        concs=[]),
-      ObstacleEnvironmentProperties(
-        environmentName=self.existing_environment_name_2,
-        lbl='New Obstacle',
-        category='Integrity Threat',
-        definition='This is a test definition for env2',
-        gRefs=[],
-        sgRefs=[],
-        concs=[])
-    ]
-
-    new_obstacle = Obstacle(
-      obsId=-1,
-      obsName='Test obstacle',
-      obsOrig='test case',
-      tags=['test', 'test123'],
-      environmentProperties=new_obs_props)
-    return new_obstacle
+    return Obstacle(-1,'Test obstacle','test case',['test','test123'],[ObstacleEnvironmentProperties('Psychosis','New Obstacle','This a test definition for env1','Integrity Threat',[],[],[]),ObstacleEnvironmentProperties('Stroke','New Obstacle','This is a test definition for env2','Integrity Threat',[],[],[])])
 
   def prepare_dict(self, obstacle=None):
     if obstacle is None:
