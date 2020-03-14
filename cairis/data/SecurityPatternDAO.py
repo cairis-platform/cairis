@@ -32,7 +32,7 @@ class SecurityPatternDAO(CairisDAO):
   def __init__(self, session_id):
     CairisDAO.__init__(self, session_id)
 
-  def get_security_patterns(self):
+  def get_objects(self,constraint_id=-1):
     try:
       sps = self.db_proxy.getSecurityPatterns()
       return self.realToFakeSPs(sps)
@@ -43,7 +43,7 @@ class SecurityPatternDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def get_security_pattern(self,name):
+  def get_object_by_name(self,name):
     try:
       spId = self.db_proxy.getDimensionId(name,'securitypattern')
       sps = self.db_proxy.getSecurityPatterns(spId)
@@ -55,7 +55,7 @@ class SecurityPatternDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def delete_security_pattern(self,name):
+  def delete_object(self,name):
     try:
       spId = self.db_proxy.getDimensionId(name,'securitypattern')
       self.db_proxy.deleteSecurityPattern(spId)
@@ -102,7 +102,7 @@ class SecurityPatternDAO(CairisDAO):
       sp['theConcernAssociations'].append(fcs)
     return sp
 
-  def add_security_pattern(self,sp):
+  def add_object(self,sp):
     spParams = self.fakeToRealSP(sp)
     try:
       if not self.check_existing_security_pattern(spParams.name()):
@@ -117,7 +117,7 @@ class SecurityPatternDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def update_security_pattern(self,sp,name):
+  def update_object(self,sp,name):
     try:
       spId = self.db_proxy.getDimensionId(name,'securitypattern')
       spParams = self.fakeToRealSP(sp)

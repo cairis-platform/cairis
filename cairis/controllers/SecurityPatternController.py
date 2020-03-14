@@ -28,75 +28,20 @@ from flask_restful import Resource
 from cairis.daemon.CairisHTTPError import ARMHTTPError, ObjectNotFoundHTTPError
 from cairis.data.SecurityPatternDAO import SecurityPatternDAO
 from cairis.tools.JsonConverter import json_serialize
-from cairis.tools.MessageDefinitions import SecurityPatternMessage
-from cairis.tools.SessionValidator import get_session_id, get_model_generator
+from cairis.tools.SessionValidator import get_session_id
+from importlib import import_module
 
 __author__ = 'Shamal Faily'
 
 
-class SecurityPatternsAPI(Resource):
-
-  def get(self):
-    session_id = get_session_id(session, request)
-    dao = SecurityPatternDAO(session_id)
-    sps = dao.get_security_patterns()
-    dao.close()
-    resp = make_response(json_serialize(sps, session_id=session_id), OK)
-    resp.contenttype = 'application/json'
-    return resp
-
-  def post(self):
-    session_id = get_session_id(session, request)
-    dao = SecurityPatternDAO(session_id)
-    new_sp = dao.from_json(request)
-    dao.add_security_pattern(new_sp)
-    dao.close()
-    resp_dict = {'message': new_sp['theName'] + ' created'}
-    resp = make_response(json_serialize(resp_dict), OK)
-    resp.contenttype = 'application/json'
-    return resp
-
-
-class SecurityPatternByNameAPI(Resource):
-
-  def get(self,name):
-    session_id = get_session_id(session, request)
-    dao = SecurityPatternDAO(session_id)
-    sp = dao.get_security_pattern(name)
-    dao.close()
-    resp = make_response(json_serialize(sp, session_id=session_id), OK)
-    resp.contenttype = 'application/json'
-    return resp
-
-
-  def put(self,name):
-    session_id = get_session_id(session, request)
-    dao = SecurityPatternDAO(session_id)
-    upd_sp = dao.from_json(request)
-    dao.update_security_pattern(upd_sp,name)
-    dao.close()
-    resp_dict = {'message': upd_sp['theName'] + ' updated'}
-    resp = make_response(json_serialize(resp_dict), OK)
-    resp.contenttype = 'application/json'
-    return resp
-
-
-  def delete(self,name):
-    session_id = get_session_id(session, request)
-    dao = SecurityPatternDAO(session_id)
-    dao.delete_security_pattern(name)
-    dao.close()
-
-    resp_dict = {'message': name + ' deleted'}
-    resp = make_response(json_serialize(resp_dict), OK)
-    resp.headers['Content-type'] = 'application/json'
-    return resp
-
 class SituateSecurityPatternAPI(Resource):
+
+  def __init__(self):
+    self.DAOModule = getattr(import_module('cairis.data.SecurityPatternDAO'),'SecurityPatternDAO')
 
   def post(self,security_pattern_name,environment_name):
     session_id = get_session_id(session, request)
-    dao = SecurityPatternDAO(session_id)
+    dao = self.DAOModule(session_id)
     dao.situate_security_pattern(security_pattern_name,environment_name)
     dao.close()
     resp_dict = {'message': security_pattern_name + ' situated'}

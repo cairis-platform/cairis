@@ -453,8 +453,8 @@ api.add_resource(ObjectController.ObjectByNameAPI, '/api/roles/name/<path:name>'
 api.add_resource(RoleController.RoleEnvironmentPropertiesAPI, '/api/roles/name/<path:name>/properties',endpoint='role_properties')
 
 # Security pattern routes
-api.add_resource(SecurityPatternController.SecurityPatternsAPI, '/api/security_patterns', endpoint = 'securitypatterns')
-api.add_resource(SecurityPatternController.SecurityPatternByNameAPI, '/api/security_patterns/name/<path:name>', endpoint='securitypattern')
+api.add_resource(ObjectController.ObjectsAPI, '/api/security_patterns',endpoint='securitypatterns',resource_class_kwargs={'dao': 'SecurityPatternDAO'})
+api.add_resource(ObjectController.ObjectByNameAPI, '/api/security_patterns/name/<path:name>',endpoint='securitypattern',resource_class_kwargs={'dao' : 'SecurityPatternDAO'})
 api.add_resource(SecurityPatternController.SituateSecurityPatternAPI, '/api/security_patterns/name/<path:security_pattern_name>/environment/<path:environment_name>/situate', endpoint='situatesecuritypattern')
 
 # Summary routes
