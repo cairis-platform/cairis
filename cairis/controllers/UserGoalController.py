@@ -22,6 +22,7 @@ from flask import session, request, make_response
 from flask_restful import Resource
 from cairis.tools.JsonConverter import json_serialize
 from cairis.tools.SessionValidator import get_session_id, get_model_generator
+from importlib import import_module
 
 __author__ = 'Shamal Faily'
 

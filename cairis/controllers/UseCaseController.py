@@ -25,35 +25,37 @@ else:
 from flask import request, session, make_response
 from flask_restful import Resource
 from cairis.daemon.CairisHTTPError import ARMHTTPError
-from cairis.data.UseCaseDAO import UseCaseDAO
 from cairis.tools.JsonConverter import json_serialize
-from cairis.tools.MessageDefinitions import UseCaseMessage, ValueTypeMessage
-from cairis.tools.ModelDefinitions import UseCaseModel, ValueTypeModel
 from cairis.tools.SessionValidator import get_session_id, get_model_generator
+from importlib import import_module
+
 
 __author__ = 'Shamal Faily'
 
 
 class UseCasesAPI(Resource):
 
+  def __init__(self):
+    self.DAOModule = getattr(import_module('cairis.data.UseCaseDAO'),'UseCaseDAO')
+
   def get(self):
     session_id = get_session_id(session, request)
     constraint_id = request.args.get('constraint_id', -1)
 
-    dao = UseCaseDAO(session_id)
-    usecases = dao.get_usecases(constraint_id=constraint_id)
+    dao = self.DAOModule(session_id)
+    objts = dao.get_objects(constraint_id)
     dao.close()
 
-    resp = make_response(json_serialize(usecases, session_id=session_id), OK)
+    resp = make_response(json_serialize(objts, session_id=session_id), OK)
     resp.contenttype = 'application/json'
     return resp
 
   def post(self):
     session_id = get_session_id(session, request)
 
-    dao = UseCaseDAO(session_id)
+    dao = self.DAOModule(session_id)
     new_usecase,ucContribs = dao.from_json(request)
-    dao.add_usecase(new_usecase)
+    dao.add_object(new_usecase)
     for rc in ucContribs:
       dao.assign_usecase_contribution(rc)
     dao.close()
@@ -65,23 +67,26 @@ class UseCasesAPI(Resource):
 
 class UseCaseByNameAPI(Resource):
 
+  def __init__(self):
+    self.DAOModule = getattr(import_module('cairis.data.UseCaseDAO'),'UseCaseDAO')
+
   def get(self, name):
     session_id = get_session_id(session, request)
 
-    dao = UseCaseDAO(session_id)
-    usecase = dao.get_usecase_by_name(name=name)
+    dao = self.DAOModule(session_id)
+    objt = dao.get_object_by_name(name)
     dao.close()
 
-    resp = make_response(json_serialize(usecase, session_id=session_id), OK)
+    resp = make_response(json_serialize(objt, session_id=session_id), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
 
   def put(self, name):
     session_id = get_session_id(session, request)
 
-    dao = UseCaseDAO(session_id)
+    dao = self.DAOModule(session_id)
     uc,ucContribs = dao.from_json(request)
-    dao.update_usecase(uc, name=name)
+    dao.update_object(uc, name)
     dao.remove_usecase_contributions(uc)
     if (len(ucContribs) > 0):
       for rc in ucContribs:
@@ -97,8 +102,8 @@ class UseCaseByNameAPI(Resource):
   def delete(self, name):
     session_id = get_session_id(session, request)
 
-    dao = UseCaseDAO(session_id)
-    dao.delete_usecase(name=name)
+    dao = self.DAOModule(session_id)
+    dao.delete_object(name)
     dao.close()
 
     resp_dict = {'message': name + ' deleted'}
@@ -108,37 +113,32 @@ class UseCaseByNameAPI(Resource):
 
 class UseCaseRequirementsByNameAPI(Resource):
 
+  def __init__(self):
+    self.DAOModule = getattr(import_module('cairis.data.UseCaseDAO'),'UseCaseDAO')
+
   def get(self, usecase_name):
     session_id = get_session_id(session, request)
 
-    dao = UseCaseDAO(session_id)
-    reqs = dao.get_usecase_requirements(usecase_name)
+    dao = self.DAOModule(session_id)
+    objts = dao.get_usecase_requirements(usecase_name)
     dao.close()
 
-    resp = make_response(json_serialize(reqs, session_id=session_id), OK)
+    resp = make_response(json_serialize(objts, session_id=session_id), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
 
 class UseCaseGoalsByNameAPI(Resource):
 
+  def __init__(self):
+    self.DAOModule = getattr(import_module('cairis.data.UseCaseDAO'),'UseCaseDAO')
+
   def get(self, usecase_name,environment_name):
     session_id = get_session_id(session, request)
 
-    dao = UseCaseDAO(session_id)
-    goals = dao.get_usecase_goals(usecase_name,environment_name)
+    dao = self.DAOModule(session_id)
+    objts = dao.get_usecase_goals(usecase_name,environment_name)
     dao.close()
 
-    resp = make_response(json_serialize(goals, session_id=session_id), OK)
+    resp = make_response(json_serialize(objts, session_id=session_id), OK)
     resp.headers['Content-type'] = 'application/json'
-    return resp
-
-class UseCasesSummaryAPI(Resource):
-
-  def get(self):
-    session_id = get_session_id(session, request)
-    dao = UseCaseDAO(session_id)
-    objts = dao.get_usecases_summary()
-    dao.close()
-    resp = make_response(json_serialize(objts, session_id=session_id))
-    resp.headers['Content-Type'] = "application/json"
     return resp

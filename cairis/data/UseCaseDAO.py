@@ -39,17 +39,9 @@ __author__ = 'Shamal Faily'
 class UseCaseDAO(CairisDAO):
 
   def __init__(self, session_id):
-    """
-    :raise CairisHTTPError:
-    """
     CairisDAO.__init__(self, session_id)
 
-  def get_usecases(self, constraint_id=-1, simplify=True):
-    """
-    :rtype: dict[str,UseCase]
-    :return
-    :raise ARMHTTPError:
-    """
+  def get_objects(self, constraint_id=-1, simplify=True):
     try:
       usecases = self.db_proxy.getUseCases(constraint_id)
       if simplify:
@@ -70,7 +62,7 @@ class UseCaseDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def get_usecases_summary(self):
+  def get_objects_summary(self):
     try:
       ucs = self.db_proxy.getUseCasesSummary()
     except DatabaseProxyException as ex:
@@ -78,11 +70,7 @@ class UseCaseDAO(CairisDAO):
       raise ARMHTTPError(ex)
     return ucs
 
-  def get_usecase_by_name(self, name, simplify=True):
-    """
-    :rtype: UseCase
-    :raise ObjectNotFoundHTTPError:
-    """
+  def get_object_by_name(self, name, simplify=True):
     try:
       ucId = self.db_proxy.getDimensionId(name,'usecase')
       ucs = self.db_proxy.getUseCases(ucId)
@@ -110,12 +98,7 @@ class UseCaseDAO(CairisDAO):
     return found_uc
 
 
-  def add_usecase(self, usecase):
-    """
-    :type usecase: UseCase
-    :rtype: int
-    :raise ARMHTTPError:
-    """
+  def add_object(self, usecase):
     usecase_params = UseCaseParameters(
       ucName=usecase.name(),
       ucAuth=usecase.author(),
@@ -145,7 +128,7 @@ class UseCaseDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def update_usecase(self, usecase, name):
+  def update_object(self, usecase, name):
     usecase_params = UseCaseParameters(
       ucName=usecase.name(),
       ucAuth=usecase.author(),
@@ -169,7 +152,7 @@ class UseCaseDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def delete_usecase(self, name):
+  def delete_object(self, name):
     try:
       ucId = self.db_proxy.getDimensionId(name,'usecase')
       self.db_proxy.deleteUseCase(ucId)
@@ -201,10 +184,6 @@ class UseCaseDAO(CairisDAO):
       raise ARMHTTPError(ex)
     
   def check_existing_usecase(self, name):
-    """
-    :rtype: bool
-    :raise: ARMHTTPError
-    """
     try:
       self.db_proxy.nameCheck(name, 'usecase')
       return False
@@ -221,10 +200,6 @@ class UseCaseDAO(CairisDAO):
 
 
   def from_json(self, request):
-    """
-    :rtype : UseCase
-    :raise MalformedJSONHTTPError:
-    """
     json = request.get_json(silent=True)
     if json is False or json is None:
       self.close()

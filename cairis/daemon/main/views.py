@@ -492,8 +492,8 @@ api.add_resource(TemplateRequirementController.TemplateRequirementByNameAPI, '/a
 
 # Threat routes
 api.add_resource(ThreatController.ThreatAPI, '/api/threats',endpoint='threats')
-api.add_resource(ThreatController.ThreatsSummaryAPI, '/api/threats/summary',endpoint='threatssummary')
 api.add_resource(ThreatController.ThreatByNameAPI, '/api/threats/name/<path:name>',endpoint='threat')
+api.add_resource(ThreatController.ThreatsSummaryAPI, '/api/threats/summary',endpoint='threatssummary')
 api.add_resource(ThreatController.ThreatTypesAPI, '/api/threats/types',endpoint='threat_types')
 api.add_resource(ThreatController.ThreatTypeByNameAPI, '/api/threats/types/name/<path:name>',endpoint='threat_type')
 api.add_resource(ThreatController.ThreatModelAPI, '/api/threats/model/environment/<path:environment_name>',endpoint='threat_model')
@@ -513,8 +513,8 @@ api.add_resource(UploadController.UploadImageAPI, '/api/upload/image',endpoint='
 
 # Use Case routes
 api.add_resource(UseCaseController.UseCasesAPI, '/api/usecases',endpoint='usecases')
-api.add_resource(UseCaseController.UseCasesSummaryAPI, '/api/usecases/summary',endpoint='usecasessummary')
 api.add_resource(UseCaseController.UseCaseByNameAPI, '/api/usecases/name/<path:name>',endpoint='usecase')
+api.add_resource(ObjectController.ObjectsSummaryAPI, '/api/usecases/summary',endpoint='usecasessummary',resource_class_kwargs={'dao' : 'UseCaseDAO'})
 api.add_resource(UseCaseController.UseCaseRequirementsByNameAPI, '/api/usecases/name/<path:usecase_name>/requirements',endpoint='usecaserequirements')
 api.add_resource(UseCaseController.UseCaseGoalsByNameAPI, '/api/usecases/name/<path:usecase_name>/environment/<path:environment_name>/goals',endpoint='usecasegoals')
 
