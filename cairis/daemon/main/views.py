@@ -461,8 +461,8 @@ api.add_resource(SecurityPatternController.SituateSecurityPatternAPI, '/api/secu
 api.add_resource(SummaryController.SummaryAPI, '/api/summary/dimension/<path:dimension_name>/environment/<path:environment_name>',endpoint='summary')
 
 # Task routes
-api.add_resource(TaskController.TasksAPI, '/api/tasks',endpoint='tasks')
-api.add_resource(TaskController.TaskByNameAPI, '/api/tasks/name/<path:name>',endpoint='task')
+api.add_resource(ObjectController.ObjectsAPI, '/api/tasks',endpoint='tasks',resource_class_kwargs={'dao': 'TaskDAO'})
+api.add_resource(ObjectController.ObjectByNameAPI, '/api/tasks/name/<path:name>',endpoint='task',resource_class_kwargs={'dao' : 'TaskDAO'})
 api.add_resource(TaskController.TaskModelByNameAPI, '/api/tasks/model/environment/<path:environment>/task/<path:task>/misusecase/<path:misusecase>',endpoint='task_model')
 api.add_resource(TaskController.TaskLoadByNameAPI, '/api/tasks/name/<path:task>/environment/<path:environment>/load',endpoint='task_load')
 api.add_resource(TaskController.TaskHindranceByNameAPI, '/api/tasks/name/<path:task>/environment/<path:environment>/hindrance',endpoint='task_hindrance')

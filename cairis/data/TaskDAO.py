@@ -41,7 +41,7 @@ class TaskDAO(CairisDAO):
   def __init__(self, session_id):
     CairisDAO.__init__(self, session_id)
 
-  def get_tasks(self, constraint_id=-1):
+  def get_objects(self, constraint_id=-1):
     try:
       tasks = self.db_proxy.getTasks(constraint_id)
     except DatabaseProxyException as ex:
@@ -57,7 +57,7 @@ class TaskDAO(CairisDAO):
       taskList.append(self.simplify(tasks[key]))
     return taskList
 
-  def get_task_by_name(self, name, simplify=True):
+  def get_object_by_name(self, name, simplify=True):
     try:
       taskId = self.db_proxy.getDimensionId(name,'task')
       tasks = self.db_proxy.getTasks(taskId)
@@ -76,7 +76,7 @@ class TaskDAO(CairisDAO):
     found_task = self.simplify(found_task)
     return found_task
 
-  def add_task(self, task):
+  def add_object(self, task):
     task_params = TaskParameters(
       tName=task.name(),
       tSName=task.shortCode(),
@@ -100,7 +100,7 @@ class TaskDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def update_task(self, task, name):
+  def update_object(self, task, name):
     task_params = TaskParameters(
       tName=task.name(),
       tSName=task.shortCode(),
@@ -121,7 +121,7 @@ class TaskDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def delete_task(self, name):
+  def delete_object(self, name):
     try:
       taskId = self.db_proxy.getDimensionId(name,'task')
       self.db_proxy.deleteTask(taskId)

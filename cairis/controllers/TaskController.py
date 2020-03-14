@@ -25,87 +25,23 @@ else:
 from flask import request, session, make_response
 from flask_restful import Resource
 from cairis.daemon.CairisHTTPError import ARMHTTPError
-from cairis.data.TaskDAO import TaskDAO
 from cairis.tools.JsonConverter import json_serialize
-from cairis.tools.MessageDefinitions import TaskMessage, ValueTypeMessage
-from cairis.tools.ModelDefinitions import TaskModel, ValueTypeModel
 from cairis.tools.SessionValidator import get_session_id, get_model_generator
+from importlib import import_module
 
 __author__ = 'Shamal Faily'
 
 
-class TasksAPI(Resource):
-
-  def get(self):
-    session_id = get_session_id(session, request)
-    constraint_id = request.args.get('constraint_id', -1)
-
-    dao = TaskDAO(session_id)
-    tasks = dao.get_tasks(constraint_id=constraint_id)
-    dao.close()
-
-    resp = make_response(json_serialize(tasks, session_id=session_id), OK)
-    resp.contenttype = 'application/json'
-    return resp
-
-  def post(self):
-    session_id = get_session_id(session, request)
-
-    dao = TaskDAO(session_id)
-    new_task = dao.from_json(request)
-    task_id = dao.add_task(new_task)
-    dao.close()
-
-    resp_dict = {'message': new_task.name() + ' created'}
-    resp = make_response(json_serialize(resp_dict), OK)
-    resp.contenttype = 'application/json'
-    return resp
-
-class TaskByNameAPI(Resource):
-
-  def get(self, name):
-    session_id = get_session_id(session, request)
-
-    dao = TaskDAO(session_id)
-    task = dao.get_task_by_name(name=name)
-    dao.close()
-
-    resp = make_response(json_serialize(task, session_id=session_id), OK)
-    resp.headers['Content-type'] = 'application/json'
-    return resp
-
-  def put(self, name):
-    session_id = get_session_id(session, request)
-
-    dao = TaskDAO(session_id)
-    req = dao.from_json(request)
-    dao.update_task(req, name=name)
-    dao.close()
-
-    resp_dict = {'message': req.name() + ' updated'}
-    resp = make_response(json_serialize(resp_dict), OK)
-    resp.headers['Content-type'] = 'application/json'
-    return resp
-
-  def delete(self, name):
-    session_id = get_session_id(session, request)
-
-    dao = TaskDAO(session_id)
-    dao.delete_task(name=name)
-    dao.close()
-
-    resp_dict = {'message': name + ' deleted'}
-    resp = make_response(json_serialize(resp_dict), OK)
-    resp.headers['Content-type'] = 'application/json'
-    return resp
-
 class TaskModelByNameAPI(Resource):
+
+  def __init__(self):
+    self.DAOModule = getattr(import_module('cairis.data.TaskDAO'),'TaskDAO')
 
   def get(self, environment,task,misusecase):
     session_id = get_session_id(session, request)
     model_generator = get_model_generator()
 
-    dao = TaskDAO(session_id)
+    dao = self.DAOModule(session_id)
     if task == 'all':  task = ''
     if misusecase == 'all': misusecase = ''
 
@@ -123,9 +59,12 @@ class TaskModelByNameAPI(Resource):
 
 class TaskLoadByNameAPI(Resource):
 
+  def __init__(self):
+    self.DAOModule = getattr(import_module('cairis.data.TaskDAO'),'TaskDAO')
+
   def get(self, task,environment):
     session_id = get_session_id(session, request)
-    dao = TaskDAO(session_id)
+    dao = self.DAOModule(session_id)
     taskLoad = dao.task_load_by_name_environment(task,environment)
     dao.close()
     resp = make_response(json_serialize(taskLoad, session_id=session_id), OK)
@@ -133,9 +72,12 @@ class TaskLoadByNameAPI(Resource):
 
 class TaskHindranceByNameAPI(Resource):
 
+  def __init__(self):
+    self.DAOModule = getattr(import_module('cairis.data.TaskDAO'),'TaskDAO')
+
   def get(self, task,environment):
     session_id = get_session_id(session, request)
-    dao = TaskDAO(session_id)
+    dao = self.DAOModule(session_id)
     cmLoad = dao.task_hindrance_by_name_environment(task,environment)
     dao.close()
     resp = make_response(json_serialize(cmLoad, session_id=session_id), OK)
@@ -143,9 +85,12 @@ class TaskHindranceByNameAPI(Resource):
 
 class TaskScoreByNameAPI(Resource):
 
+  def __init__(self):
+    self.DAOModule = getattr(import_module('cairis.data.TaskDAO'),'TaskDAO')
+
   def get(self, task,environment):
     session_id = get_session_id(session, request)
-    dao = TaskDAO(session_id)
+    dao = self.DAOModule(session_id)
     taskScore = dao.task_score_by_name_environment(task,environment)
     dao.close()
     resp = make_response(json_serialize(taskScore, session_id=session_id), OK)
@@ -153,11 +98,14 @@ class TaskScoreByNameAPI(Resource):
 
 class MisusabilityModelAPI(Resource):
 
+  def __init__(self):
+    self.DAOModule = getattr(import_module('cairis.data.TaskDAO'),'TaskDAO')
+
   def get(self, mc_name,tc_name):
     session_id = get_session_id(session, request)
     model_generator = get_model_generator()
 
-    dao = TaskDAO(session_id)
+    dao = self.DAOModule(session_id)
     if tc_name == 'all':  tc_name = ''
 
     dot_code = dao.get_misusability_model(mc_name,tc_name)
