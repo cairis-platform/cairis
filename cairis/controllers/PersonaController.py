@@ -70,20 +70,6 @@ class PersonaCharacteristicsByNameAPI(Resource):
     resp.headers['Content-type'] = 'application/json'
     return resp
 
-class PersonaNamesAPI(Resource):
-
-  def __init__(self):
-    self.DAOModule = getattr(import_module('cairis.data.PersonaDAO'),'PersonaDAO')
-
-  def get(self):
-    session_id = get_session_id(session, request)
-    dao = self.DAOModule(session_id)
-    persona_names = dao.get_persona_names()
-    dao.close()
-    resp = make_response(json_serialize(persona_names, session_id=session_id), OK)
-    resp.headers['Content-type'] = 'application/json'
-    return resp
-
 class PersonaTypesAPI(Resource):
 
   def __init__(self):

@@ -100,14 +100,3 @@ class PersonaCharacteristicByNameAPI(Resource):
     resp = make_response(json_serialize(resp_dict), OK)
     resp.contenttype = 'application/json'
     return resp
-
-class PersonaCharacteristicsSummaryAPI(Resource):
-
-  def get(self):
-    session_id = get_session_id(session, request)
-    dao = PersonaCharacteristicDAO(session_id)
-    objts = dao.get_persona_characteristics_summary()
-    dao.close()
-    resp = make_response(json_serialize(objts, session_id=session_id))
-    resp.headers['Content-Type'] = "application/json"
-    return resp
