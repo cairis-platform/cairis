@@ -67,14 +67,28 @@ class ObjectsByMethodAPI(Resource):
 
   def __init__(self,**kwargs):
     self.DAOModule = getattr(import_module('cairis.data.' + kwargs['dao']),kwargs['dao'])
-    self.theDAOMethod = kwargs['dao_method']
+    if 'get_method' in kwargs:
+      self.theGetMethod = kwargs['get_method']
+
+    if 'put_method' in kwargs:
+      self.thePutMethod = kwargs['put_method']
 
   def get(self):
     session_id = get_session_id(session, request)
     dao = self.DAOModule(session_id)
-    objts = getattr(dao, self.theDAOMethod)()
+    objts = getattr(dao, self.theGetMethod)()
     dao.close()
     resp = make_response(json_serialize(objts, session_id=session_id), OK)
+    resp.contenttype = 'application/json'
+    return resp
+
+  def put(self):
+    session_id = get_session_id(session, request)
+    dao = self.DAOModule(session_id)
+    objt = dao.from_json(request)
+    getattr(dao, self.thePutMethod)(objt)
+    resp_dict = {'message': 'Object updated'}
+    resp = make_response(json_serialize(resp_dict, session_id=session_id), OK)
     resp.contenttype = 'application/json'
     return resp
 

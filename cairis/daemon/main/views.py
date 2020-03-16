@@ -247,7 +247,7 @@ api.add_resource(ObjectController.ObjectsAPI, '/api/assets',endpoint='assets',re
 api.add_resource(ObjectController.ObjectByNameAPI, '/api/assets/name/<path:name>',endpoint='asset',resource_class_kwargs={'dao' : 'AssetDAO'})
 api.add_resource(ObjectController.ObjectsSummaryAPI, '/api/assets/summary',endpoint='assetssummary',resource_class_kwargs={'dao' : 'AssetDAO'})
 api.add_resource(AssetController.AssetByEnvironmentNamesAPI, '/api/assets/environment/<path:environment>/names',endpoint='assetbyenvironmentname')
-api.add_resource(ObjectController.ObjectsByMethodAPI, '/api/assets/all/names',endpoint='assetnames',resource_class_kwargs={'dao' : 'AssetDAO','dao_method' : 'get_asset_names'})
+api.add_resource(ObjectController.ObjectsByMethodAPI, '/api/assets/all/names',endpoint='assetnames',resource_class_kwargs={'dao' : 'AssetDAO','get_method' : 'get_asset_names'})
 api.add_resource(AssetController.AssetTypesAPI, '/api/assets/types',endpoint='assettypes')
 api.add_resource(AssetController.AssetTypeByNameAPI, '/api/assets/types/name/<path:name>',endpoint='assettypebyname')
 api.add_resource(AssetController.AssetValuesAPI, '/api/environments/<path:environment_name>/asset-values',endpoint='assetvalues')
@@ -313,7 +313,7 @@ api.add_resource(ObjectController.ObjectByNameAPI, '/api/domainproperties/name/<
 # Environment routes
 api.add_resource(ObjectController.ObjectsAPI, '/api/environments',endpoint='environments',resource_class_kwargs={'dao': 'EnvironmentDAO'})
 api.add_resource(ObjectController.ObjectByNameAPI, '/api/environments/name/<path:name>',endpoint='environment',resource_class_kwargs={'dao' : 'EnvironmentDAO'})
-api.add_resource(ObjectController.ObjectsByMethodAPI, '/api/environments/names','/api/environments/all/names',endpoint='environment_names',resource_class_kwargs={'dao' : 'EnvironmentDAO','dao_method' : 'get_environment_names'})
+api.add_resource(ObjectController.ObjectsByMethodAPI, '/api/environments/names','/api/environments/all/names',endpoint='environment_names',resource_class_kwargs={'dao' : 'EnvironmentDAO','get_method' : 'get_environment_names'})
 api.add_resource(
   EnvironmentController.EnvironmentsByThreatVulnerability,
   '/api/environments/threat/<path:threat>/vulnerability/<path:vulnerability>',
@@ -390,10 +390,10 @@ api.add_resource(PermissionsController.ChangePermissionAPI, '/api/permissions/da
 api.add_resource(ObjectController.ObjectsAPI, '/api/personas',endpoint='personas',resource_class_kwargs={'dao': 'PersonaDAO'})
 api.add_resource(ObjectController.ObjectByNameAPI, '/api/personas/name/<path:name>',endpoint='persona',resource_class_kwargs={'dao' : 'PersonaDAO'})
 api.add_resource(ObjectController.ObjectsSummaryAPI, '/api/personas/summary',endpoint='personassummary',resource_class_kwargs={'dao' : 'PersonaDAO'})
-api.add_resource(ObjectController.ObjectsByMethodAPI, '/api/personas/names',endpoint='persona_names',resource_class_kwargs={'dao' : 'PersonaDAO','dao_method' : 'get_persona_names'})
+api.add_resource(ObjectController.ObjectsByMethodAPI, '/api/personas/names',endpoint='persona_names',resource_class_kwargs={'dao' : 'PersonaDAO','get_method' : 'get_persona_names'})
 api.add_resource(PersonaController.PersonaModelByNameAPI, '/api/personas/model/name/<path:persona>/variable/<path:variable>/characteristic/<path:characteristic>',endpoint='persona_model')
 api.add_resource(PersonaController.PersonaCharacteristicsByNameAPI, '/api/personas/characteristics/name/<path:persona>/variable/<path:variable>/characteristic/<path:characteristic>',endpoint='persona_characteristic_persona')
-api.add_resource(ObjectController.ObjectsByMethodAPI, '/api/personas/types',endpoint='persona_types',resource_class_kwargs={'dao' : 'PersonaDAO','dao_method' : 'get_persona_types'})
+api.add_resource(ObjectController.ObjectsByMethodAPI, '/api/personas/types',endpoint='persona_types',resource_class_kwargs={'dao' : 'PersonaDAO','get_method' : 'get_persona_types'})
 
 # Persona Characteristic routes
 api.add_resource(PersonaCharacteristicController.PersonaCharacteristicsAPI, '/api/persona_characteristics',endpoint='persona_characteristics')
@@ -401,12 +401,12 @@ api.add_resource(ObjectController.ObjectsSummaryAPI, '/api/persona_characteristi
 api.add_resource(PersonaCharacteristicController.PersonaCharacteristicByNameAPI, '/api/persona_characteristics/name/<path:name>',endpoint='persona_characteristic')
 
 # Project routes
-api.add_resource(ProjectController.ProjectSettingsAPI, '/api/settings',endpoint='project_settings')
+api.add_resource(ObjectController.ObjectsByMethodAPI, '/api/settings',endpoint='project_settings',resource_class_kwargs={'dao' : 'ProjectDAO','get_method' : 'get_settings','put_method' : 'apply_settings'})
 api.add_resource(ProjectController.ProjectClearAPI, '/api/settings/clear',endpoint='project_clear')
 api.add_resource(ProjectController.ProjectCreateDatabaseAPI, '/api/settings/database/<path:db_name>/create',endpoint='database_create')
 api.add_resource(ProjectController.ProjectOpenDatabaseAPI, '/api/settings/database/<path:db_name>/open',endpoint='database_open')
 api.add_resource(ProjectController.ProjectDeleteDatabaseAPI, '/api/settings/database/<path:db_name>/delete',endpoint='database_delete')
-api.add_resource(ProjectController.ProjectShowDatabasesAPI, '/api/settings/databases',endpoint='show_databases')
+api.add_resource(ObjectController.ObjectsByMethodAPI, '/api/settings/databases',endpoint='show_databases',resource_class_kwargs={'dao' : 'ProjectDAO','get_method' : 'show_databases'})
 
 # Requirement routes
 api.add_resource(RequirementController.RequirementsAPI, '/api/requirements',endpoint='requirements')

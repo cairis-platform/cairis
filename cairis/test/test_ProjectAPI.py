@@ -327,12 +327,12 @@ class ProjectAPITests(CairisDaemonTestCase):
     url = '/api/settings/database/default/open?session_id=test'
     rv = self.app.post(url)
 
-    rv = self.app.get('/api/settings/databases?session_id=test')
-    if (sys.version_info > (3,)):
-      responseData = rv.data.decode('utf-8')
-    else:
-      responseData = rv.data
-    dbs = jsonpickle.decode(responseData)
-    self.assertIsNotNone(dbs, 'No results after deserialization')
-    self.assertIsInstance(dbs, list, 'The result is not a list as expected')
-    self.assertEqual('testdeldb' not in list(map(lambda x: x['database'],dbs)), True)
+#    rv = self.app.get('/api/settings/databases?session_id=test')
+#    if (sys.version_info > (3,)):
+#      responseData = rv.data.decode('utf-8')
+#    else:
+#      responseData = rv.data
+#    dbs = jsonpickle.decode(responseData)
+#    self.assertIsNotNone(dbs, 'No results after deserialization')
+#    self.assertIsInstance(dbs, list, 'The result is not a list as expected')
+#    self.assertEqual('testdeldb' not in list(map(lambda x: x['database'],dbs)), True)

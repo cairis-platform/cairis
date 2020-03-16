@@ -85,18 +85,6 @@ class ProjectDeleteDatabaseAPI(Resource):
     return resp
 
 
-
-class ProjectShowDatabasesAPI(Resource):
-
-  def get(self):
-    session_id = get_session_id(session, request)
-    dao = ProjectDAO(session_id)
-    dbs = dao.show_databases()
-    dao.close()
-    resp = make_response(json_serialize(dbs, session_id=session_id), OK)
-    resp.headers['Content-type'] = 'application/json'
-    return resp
-
 class ProjectSettingsAPI(Resource):
 
   def get(self):
