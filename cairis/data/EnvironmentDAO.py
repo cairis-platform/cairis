@@ -66,7 +66,7 @@ class EnvironmentDAO(CairisDAO):
 
     return found_environment
 
-  def get_environment_names(self):
+  def get_environment_names(self,pathValues = []):
     try:
       environment_names = self.db_proxy.getEnvironmentNames()
       return environment_names

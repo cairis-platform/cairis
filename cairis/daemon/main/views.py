@@ -34,7 +34,6 @@ from cairis.core.Borg import Borg
 from cairis.core.MySQLDatabaseProxy import MySQLDatabaseProxy,canonicalDbUser,canonicalDbName
 from cairis.controllers import ArchitecturalPatternController
 from cairis.controllers import AssetController
-from cairis.controllers import AttackerController
 from cairis.controllers import CExportController
 from cairis.controllers import CImportController
 from cairis.controllers import CountermeasureController
@@ -247,7 +246,7 @@ api.add_resource(ObjectController.ObjectsAPI, '/api/assets',endpoint='assets',re
 api.add_resource(ObjectController.ObjectByNameAPI, '/api/assets/name/<path:name>',endpoint='asset',resource_class_kwargs={'dao' : 'AssetDAO'})
 api.add_resource(ObjectController.ObjectsSummaryAPI, '/api/assets/summary',endpoint='assetssummary',resource_class_kwargs={'dao' : 'AssetDAO'})
 api.add_resource(AssetController.AssetByEnvironmentNamesAPI, '/api/assets/environment/<path:environment>/names',endpoint='assetbyenvironmentname')
-api.add_resource(ObjectController.ObjectsByMethodAPI, '/api/assets/all/names',endpoint='assetnames',resource_class_kwargs={'dao' : 'AssetDAO','get_method' : 'get_asset_names'})
+api.add_resource(ObjectController.ObjectsByMethodAPI, '/api/assets/all/names',endpoint='assetnames',resource_class_kwargs={'dao' : 'AssetDAO','get_method' : 'get_asset_names', 'path_parameters' : [('environment','')]})
 api.add_resource(AssetController.AssetTypesAPI, '/api/assets/types',endpoint='assettypes')
 api.add_resource(AssetController.AssetTypeByNameAPI, '/api/assets/types/name/<path:name>',endpoint='assettypebyname')
 api.add_resource(AssetController.AssetValuesAPI, '/api/environments/<path:environment_name>/asset-values',endpoint='assetvalues')
@@ -260,10 +259,10 @@ api.add_resource(AssetController.AssetAssociationByNameAPI, '/api/assets/associa
 api.add_resource(ObjectController.ObjectsAPI, '/api/attackers',endpoint='attackers',resource_class_kwargs={'dao': 'AttackerDAO'})
 api.add_resource(ObjectController.ObjectByNameAPI, '/api/attackers/name/<path:name>',endpoint='attackerbyname',resource_class_kwargs={'dao' : 'AttackerDAO'})
 api.add_resource(ObjectController.ObjectsSummaryAPI, '/api/attackers/summary',endpoint='attackerssummary',resource_class_kwargs={'dao' : 'AttackerDAO'})
-api.add_resource(AttackerController.AttackerCapabilitiesAPI, '/api/attackers/capabilities',endpoint='attackercapabilities')
-api.add_resource(AttackerController.AttackerCapabilityByNameAPI, '/api/attackers/capabilities/name/<path:name>',endpoint='attackercapability')
-api.add_resource(AttackerController.AttackerMotivationsAPI, '/api/attackers/motivations',endpoint='motivations')
-api.add_resource(AttackerController.AttackerMotivationByNameAPI, '/api/attackers/motivations/name/<path:name>',endpoint='motivationbyname')
+api.add_resource(ObjectController.ObjectsByMethodAPI, '/api/attackers/capabilities',endpoint='attackercapabilities',resource_class_kwargs={'dao' : 'AttackerDAO','get_method' : 'get_attacker_capabilities','path_parameters' : [('environment_name','')]})
+api.add_resource(ObjectController.ObjectsByMethodAndParameterAPI, '/api/attackers/capabilities/name/<path:parameter_string>',endpoint='attackercapabilitiesbyname',resource_class_kwargs={'dao' : 'AttackerDAO','get_method' : 'get_attacker_capabilities','path_parameters' : [('environment_name','')]})
+api.add_resource(ObjectController.ObjectsByMethodAPI, '/api/attackers/motivations',endpoint='attackermotivations',resource_class_kwargs={'dao' : 'AttackerDAO','get_method' : 'get_attacker_motivations','path_parameters' : [('environment_name','')]})
+api.add_resource(ObjectController.ObjectsByMethodAndParameterAPI, '/api/attackers/motivations/name/<path:parameter_string>',endpoint='attackermotivationsbyname',resource_class_kwargs={'dao' : 'AttackerDAO','get_method' : 'get_attacker_capabilities','path_parameters' : [('environment_name','')]})
 
 # Concept Reference routes
 api.add_resource(ObjectController.ObjectsAPI, '/api/concept_references',endpoint='concept_reference',resource_class_kwargs={'dao': 'ConceptReferenceDAO'})

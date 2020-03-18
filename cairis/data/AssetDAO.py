@@ -71,8 +71,9 @@ class AssetDAO(CairisDAO):
     return assets
 
 
-  def get_asset_names(self, environment=''):
+  def get_asset_names(self, pathValues):
     try:
+      environment = pathValues[0]
       asset_names = self.db_proxy.getDimensionNames('asset', environment)
       return asset_names
     except DatabaseProxyException as ex:

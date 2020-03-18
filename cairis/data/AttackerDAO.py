@@ -138,8 +138,9 @@ class AttackerDAO(CairisDAO):
       raise ARMHTTPError(ex)
 
   # region Capabilities
-  def get_attacker_capabilities(self, environment_name=''):
+  def get_attacker_capabilities(self, pathValues):
     try:
+      environment_name = pathValues[0]
       attacker_capabilities = self.db_proxy.getValueTypes('capability', environment_name)
       return attacker_capabilities
     except DatabaseProxyException as ex:
@@ -169,8 +170,9 @@ class AttackerDAO(CairisDAO):
 
     return found_capability
 
-  def add_attacker_capability(self, attacker_capability, environment_name=''):
+  def add_attacker_capability(self, attacker_capability, pathValues):
     assert isinstance(attacker_capability, ValueType)
+    environment_name = pathValues[0]
     type_exists = self.check_existing_attacker_capability(attacker_capability.theName, environment_name=environment_name)
 
     if type_exists:
@@ -195,11 +197,10 @@ class AttackerDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def update_attacker_capability(self, attacker_capability, name, environment_name=''):
+  def update_attacker_capability(self, attacker_capability, name, pathValues):
     assert isinstance(attacker_capability, ValueType)
-
+    environment_name = pathValues[0]
     found_capability = self.get_attacker_capability_by_name(name, environment_name)
-
     params = ValueTypeParameters(
       vtName=attacker_capability.theName,
       vtDesc=attacker_capability.theDescription,
@@ -219,9 +220,9 @@ class AttackerDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def delete_attacker_capability(self, name, environment_name=''):
+  def delete_attacker_capability(self, name, pathValues):
+    environment_name = pathValues[0]
     found_capability = self.get_attacker_capability_by_name(name, environment_name)
-
     try:
       self.db_proxy.deleteAssetType(found_capability.theId)
     except DatabaseProxyException as ex:
@@ -241,8 +242,9 @@ class AttackerDAO(CairisDAO):
   # endregion
 
   # region Motivations
-  def get_attacker_motivations(self, environment_name=''):
+  def get_attacker_motivations(self, pathValues):
     try:
+      environment_name = pathValues[0]
       attacker_motivations = self.db_proxy.getValueTypes('motivation', environment_name)
       return attacker_motivations
     except DatabaseProxyException as ex:
@@ -252,8 +254,9 @@ class AttackerDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def get_attacker_motivation_by_name(self, name, environment_name=''):
+  def get_attacker_motivation_by_name(self, name, pathValues):
     found_motivation = None
+    environment_name = pathValues[0]
     attacker_motivations = self.get_attacker_motivations(environment_name=environment_name)
 
     if attacker_motivations is None or len(attacker_motivations) < 1:
@@ -272,8 +275,9 @@ class AttackerDAO(CairisDAO):
 
     return found_motivation
 
-  def add_attacker_motivation(self, attacker_motivation, environment_name=''):
+  def add_attacker_motivation(self, attacker_motivation, pathValues):
     assert isinstance(attacker_motivation, ValueType)
+    environment_name = pathValues[0]
     type_exists = self.check_existing_attacker_motivation(attacker_motivation.theName, environment_name=environment_name)
 
     if type_exists:
@@ -298,9 +302,9 @@ class AttackerDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def update_attacker_motivation(self, attacker_motivation, name, environment_name=''):
+  def update_attacker_motivation(self, attacker_motivation, name, pathValues):
     assert isinstance(attacker_motivation, ValueType)
-
+    environment_name = pathValues[0]
     found_motivation = self.get_attacker_motivation_by_name(name, environment_name)
 
     params = ValueTypeParameters(
@@ -322,9 +326,9 @@ class AttackerDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def delete_attacker_motivation(self, name, environment_name=''):
+  def delete_attacker_motivation(self, name):
+    environment_name = pathValues[0]
     found_motivation = self.get_attacker_motivation_by_name(name, environment_name)
-
     try:
       self.db_proxy.deleteAssetType(found_motivation.theId)
     except DatabaseProxyException as ex:

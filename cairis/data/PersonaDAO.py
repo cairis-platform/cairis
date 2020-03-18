@@ -61,7 +61,7 @@ class PersonaDAO(CairisDAO):
       raise ARMHTTPError(ex)
     return ps
 
-  def get_persona_names(self):
+  def get_persona_names(self,pathValues = []):
     try:
       persona_names = self.db_proxy.getDimensionNames('persona')
     except DatabaseProxyException as ex:
@@ -264,7 +264,7 @@ class PersonaDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def get_persona_types(self):
+  def get_persona_types(self, pathValues = []):
     try:
       pTypes = self.db_proxy.getDimensions('persona_type')
       return pTypes 

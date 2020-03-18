@@ -114,7 +114,7 @@ class ProjectDAO(CairisDAO):
     except ARMException as ex:
       raise ARMHTTPError(ex)
 
-  def show_databases(self):
+  def show_databases(self, pathValues = []):
     try:
       b = Borg()
       ses_settings = b.get_settings(self.session_id)
@@ -134,7 +134,7 @@ class ProjectDAO(CairisDAO):
     except ARMException as ex:
       raise ARMHTTPError(ex)
 
-  def get_settings(self):
+  def get_settings(self,pathValues = []):
     try:
       pSettings = self.db_proxy.getProjectSettings()
       pDict = self.db_proxy.getDictionary()
@@ -148,7 +148,7 @@ class ProjectDAO(CairisDAO):
     settings = ProjectSettings(pSettings, pDict, contributors, revisions)
     return settings
 
-  def apply_settings(self, settings):
+  def apply_settings(self, settings, pathValues = []):
     try:
       b = Borg()
       self.db_proxy.updateSettings(
