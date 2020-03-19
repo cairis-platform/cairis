@@ -32,7 +32,7 @@ class AssetAssociationDAO(CairisDAO):
   def __init__(self, session_id):
     CairisDAO.__init__(self, session_id)
 
-  def get_asset_association(self, environment_name, head_name, tail_name):
+  def get_asset_association(self, environment_name, head_name, tail_name, pathValues = []):
     assocs = self.db_proxy.classModel(environment_name)
     if assocs is None or len(assocs) < 1:
       self.close()
@@ -46,7 +46,7 @@ class AssetAssociationDAO(CairisDAO):
     self.close()
     raise ObjectNotFoundHTTPError('The provided asset association parameters')
 
-  def get_asset_associations(self):
+  def get_asset_associations(self, pathValues = []):
     try:
       cas = self.db_proxy.getClassAssociations()
     except DatabaseProxyException as ex:
@@ -63,7 +63,7 @@ class AssetAssociationDAO(CairisDAO):
 
     return assocs
 
-  def add_asset_association(self, assoc):
+  def add_asset_association(self, assoc, pathValues = []):
     assocParams = ClassAssociationParameters(
       envName=assoc.theEnvironmentName,
       headName=assoc.theHeadAsset,
@@ -86,7 +86,7 @@ class AssetAssociationDAO(CairisDAO):
       raise ARMHTTPError(ex)
 
 
-  def update_asset_association(self,oldEnvName,oldHeadAsset,oldTailAsset,assoc):
+  def update_asset_association(self,assoc,oldEnvName,oldHeadAsset,oldTailAsset,pathValues = []):
     assocParams = ClassAssociationParameters(
       envName=assoc.theEnvironmentName,
       headName=assoc.theHeadAsset,
@@ -112,7 +112,7 @@ class AssetAssociationDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def delete_asset_association(self, environment_name, head_name, tail_name):
+  def delete_asset_association(self, environment_name, head_name, tail_name, pathValues = []):
     try:
       caId = self.db_proxy.getDimensionId(environment_name + '/' + head_name + '/' + tail_name,'classassociation')
       self.db_proxy.deleteClassAssociation(caId)

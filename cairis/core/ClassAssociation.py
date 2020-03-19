@@ -53,3 +53,4 @@ class ClassAssociation(ObjectValidator.ObjectValidator):
   def tailDimension(self): return self.theTailDim
   def tailAsset(self): return self.theTailAsset
   def rationale(self): return self.theRationale
+  def name(self): return self.theEnvironmentName + ' / ' + self.theHeadAsset + ' / ' + self.theTailAsset

@@ -33,7 +33,6 @@ from jsonpickle import encode
 from cairis.core.Borg import Borg
 from cairis.core.MySQLDatabaseProxy import MySQLDatabaseProxy,canonicalDbUser,canonicalDbName
 from cairis.controllers import ArchitecturalPatternController
-from cairis.controllers import AssetController
 from cairis.controllers import CExportController
 from cairis.controllers import CImportController
 from cairis.controllers import CountermeasureController
@@ -245,15 +244,14 @@ api.add_resource(ArchitecturalPatternController.SituateArchitecturalPatternAPI, 
 api.add_resource(ObjectController.ObjectsAPI, '/api/assets',endpoint='assets',resource_class_kwargs={'dao': 'AssetDAO'})
 api.add_resource(ObjectController.ObjectByNameAPI, '/api/assets/name/<path:name>',endpoint='asset',resource_class_kwargs={'dao' : 'AssetDAO'})
 api.add_resource(ObjectController.ObjectsSummaryAPI, '/api/assets/summary',endpoint='assetssummary',resource_class_kwargs={'dao' : 'AssetDAO'})
-api.add_resource(AssetController.AssetByEnvironmentNamesAPI, '/api/assets/environment/<path:environment>/names',endpoint='assetbyenvironmentname')
+api.add_resource(ObjectController.ObjectsByMethodAndParameterAPI, '/api/assets/environment/<path:parameter_string>/names',endpoint='assetbyenvironmentname',resource_class_kwargs={'dao' : 'AssetDAO','get_method' : 'get_asset_names_by_environment'})
 api.add_resource(ObjectController.ObjectsByMethodAPI, '/api/assets/all/names',endpoint='assetnames',resource_class_kwargs={'dao' : 'AssetDAO','get_method' : 'get_asset_names', 'path_parameters' : [('environment','')]})
-api.add_resource(AssetController.AssetTypesAPI, '/api/assets/types',endpoint='assettypes')
-api.add_resource(AssetController.AssetTypeByNameAPI, '/api/assets/types/name/<path:name>',endpoint='assettypebyname')
-api.add_resource(AssetController.AssetValuesAPI, '/api/environments/<path:environment_name>/asset-values',endpoint='assetvalues')
-api.add_resource(AssetController.AssetValueByNameAPI, '/api/environments/<path:environment_name>/asset-values/name/<path:name>',endpoint='assetvaluebyname')
-api.add_resource(AssetController.AssetModelAPI, '/api/assets/model/environment/<path:environment>/asset/<path:asset>',endpoint='assetmodel')
-api.add_resource(AssetController.AssetAssociationAPI, '/api/assets/association',endpoint='assetassociation')
-api.add_resource(AssetController.AssetAssociationByNameAPI, '/api/assets/association/environment/<path:environment_name>/head/<path:head_name>/tail/<path:tail_name>',endpoint='assetassociationbyname')
+api.add_resource(ObjectController.ObjectsByMethodAPI, '/api/assets/types',endpoint='assettypes',resource_class_kwargs={'dao' : 'AssetDAO','get_method' : 'get_asset_types', 'post_method' : 'add_asset_type', 'path_parameters' : [('environment','')], 'isType' : True})
+api.add_resource(ObjectController.ObjectsByMethodAndParameterAPI, '/api/assets/types/name/<path:parameter_string>',endpoint='assettypebyname',resource_class_kwargs={'dao' : 'AssetDAO','get_method' : 'get_asset_type_by_name', 'put_method' : 'update_asset_type','del_method' : 'delete_asset_type', 'path_parameters' : [('environment','')], 'isType' : True})
+api.add_resource(ObjectController.ModelByTwoParametersAPI, '/api/assets/model/environment/<path:p1>/asset/<path:p2>',endpoint='assetmodel',resource_class_kwargs={'dao' : 'AssetDAO','get_method' : 'get_asset_model','renderer' : 'dot', 'path_parameters' : [('hide_concerns','1')]})
+
+api.add_resource(ObjectController.ObjectsByMethodAPI, '/api/assets/association',endpoint='assetassociation',resource_class_kwargs={'dao' : 'AssetAssociationDAO','get_method' : 'get_asset_associations', 'post_method' : 'add_asset_association'})
+api.add_resource(ObjectController.ObjectsByMethodAndThreeParametersAPI, '/api/assets/association/environment/<path:p1>/head/<path:p2>/tail/<path:p3>',endpoint='assetassociationbyname',resource_class_kwargs={'dao' : 'AssetAssociationDAO','get_method' : 'get_asset_association', 'put_method' : 'update_asset_association','del_method' : 'delete_asset_association'})
 
 # Attacker routes
 api.add_resource(ObjectController.ObjectsAPI, '/api/attackers',endpoint='attackers',resource_class_kwargs={'dao': 'AttackerDAO'})

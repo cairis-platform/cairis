@@ -101,7 +101,7 @@ class AssetAssociationAPITests(CairisDaemonTestCase):
     json_resp = json_deserialize(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     ackMsg = json_resp.get('message', None)
-    self.assertEqual(ackMsg, 'Asset Association successfully added')
+    self.assertEqual(ackMsg, 'Psychosis / Portal / User certificate created')
 
   def test_put(self):
     method = 'test_put'
@@ -119,7 +119,7 @@ class AssetAssociationAPITests(CairisDaemonTestCase):
     json_resp = json_deserialize(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     ackMsg = json_resp.get('message', None)
-    self.assertEqual(ackMsg, 'Asset Association successfully updated')
+    self.assertEqual(ackMsg, 'Psychosis / Portal / User certificate updated')
 
   def test_delete(self):
     method = 'test_delete'
@@ -141,4 +141,4 @@ class AssetAssociationAPITests(CairisDaemonTestCase):
     json_resp = json_deserialize(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     ackMsg = json_resp.get('message', None)
-    self.assertEqual(ackMsg, 'Asset Association successfully deleted')
+    self.assertEqual(ackMsg, 'Psychosis / Portal / User certificate deleted')

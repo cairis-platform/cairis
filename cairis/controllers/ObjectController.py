@@ -26,7 +26,7 @@ from flask import request, session, make_response
 from flask_restful import Resource
 from cairis.daemon.CairisHTTPError import ARMHTTPError
 from cairis.tools.JsonConverter import json_serialize
-from cairis.tools.SessionValidator import get_session_id
+from cairis.tools.SessionValidator import get_session_id, get_model_generator
 from importlib import import_module
 
 __author__ = 'Robin Quetin, Shamal Faily'
@@ -76,13 +76,16 @@ class ObjectsByMethodAPI(Resource):
       self.thePostMethod = kwargs['post_method']
     if 'path_parameters' in kwargs:
       self.thePathParameters = kwargs['path_parameters']
+    self.isType = False
+    if 'isType' in kwargs:
+      self.isType = kwargs['isType']
 
   def get(self):
     session_id = get_session_id(session, request)
     dao = self.DAOModule(session_id)
     pathValues = []
     for parameterName,defaultValue in self.thePathParameters:
-      pathValues.append(request.gets(parameterName,defaultValue))
+      pathValues.append(request.args.get(parameterName,defaultValue))
     objts = getattr(dao, self.theGetMethod)(pathValues)
     dao.close()
     resp = make_response(json_serialize(objts, session_id=session_id), OK)
@@ -94,7 +97,7 @@ class ObjectsByMethodAPI(Resource):
     dao = self.DAOModule(session_id)
     pathValues = []
     for parameterName,defaultValue in self.thePathParameters:
-      pathValues.append(request.gets(parameterName,defaultValue))
+      pathValues.append(request.args.get(parameterName,defaultValue))
     objt = dao.from_json(request)
     getattr(dao, self.thePutMethod)(objt,pathValues)
     resp_dict = {'message': 'Object updated'}
@@ -107,13 +110,75 @@ class ObjectsByMethodAPI(Resource):
     dao = self.DAOModule(session_id)
     pathValues = []
     for parameterName,defaultValue in self.thePathParameters:
-      pathValues.append(request.gets(parameterName,defaultValue))
-    objt = dao.from_json(request)
+      pathValues.append(request.args.get(parameterName,defaultValue))
+    objt = None
+    if self.isType:
+      objt = dao.type_from_json(request)
+    else:
+      objt = dao.from_json(request)
     getattr(dao, self.thePostMethod)(objt,pathValues)
-    resp_dict = {'message': 'Object created'}
+    resp_dict = {'message': objt.name() + ' created'}
     resp = make_response(json_serialize(resp_dict, session_id=session_id), OK)
     resp.contenttype = 'application/json'
     return resp
+
+class ObjectsByMethodAndThreeParametersAPI(Resource):
+  def __init__(self,**kwargs):
+    self.DAOModule = getattr(import_module('cairis.data.' + kwargs['dao']),kwargs['dao'])
+    self.thePathParameters = []
+    if 'get_method' in kwargs:
+      self.theGetMethod = kwargs['get_method']
+    if 'put_method' in kwargs:
+      self.thePutMethod = kwargs['put_method']
+    if 'del_method' in kwargs:
+      self.theDelMethod = kwargs['del_method']
+    if 'path_parameters' in kwargs:
+      self.thePathParameters = kwargs['path_parameters']
+    self.isType = False
+    if 'isType' in kwargs:
+      self.isType = kwargs['isType']
+
+  def get(self,p1,p2,p3):
+    session_id = get_session_id(session, request)
+    dao = self.DAOModule(session_id)
+    pathValues = []
+    for parameterName,defaultValue in self.thePathParameters:
+      pathValues.append(request.args.get(parameterName,defaultValue))
+    objts = getattr(dao, self.theGetMethod)(p1,p2,p3,pathValues)
+    dao.close()
+    resp = make_response(json_serialize(objts, session_id=session_id), OK)
+    resp.contenttype = 'application/json'
+    return resp
+
+  def put(self,p1,p2,p3):
+    session_id = get_session_id(session, request)
+    dao = self.DAOModule(session_id)
+    pathValues = []
+    for parameterName,defaultValue in self.thePathParameters:
+      pathValues.append(request.args.get(parameterName,defaultValue))
+    objt = None
+    if self.isType:
+      objt = dao.type_from_json(request)
+    else:
+      objt = dao.from_json(request)
+    getattr(dao, self.thePutMethod)(objt,p1,p2,p3,pathValues)
+    resp_dict = {'message': objt.name() + ' updated'}
+    resp = make_response(json_serialize(resp_dict, session_id=session_id), OK)
+    resp.contenttype = 'application/json'
+    return resp
+
+  def delete(self,p1,p2,p3):
+    session_id = get_session_id(session, request)
+    dao = self.DAOModule(session_id)
+    pathValues = []
+    for parameterName,defaultValue in self.thePathParameters:
+      pathValues.append(request.args.get(parameterName,defaultValue))
+    getattr(dao, self.theDelMethod)(p1,p2,p3,pathValues)
+    resp_dict = {'message': p1 + ' / ' + p2 + ' / ' + p3 + ' deleted'}
+    resp = make_response(json_serialize(resp_dict, session_id=session_id), OK)
+    resp.contenttype = 'application/json'
+    return resp
+
 
 
 class ObjectsByMethodAndParameterAPI(Resource):
@@ -125,16 +190,20 @@ class ObjectsByMethodAndParameterAPI(Resource):
     if 'put_method' in kwargs:
       self.thePutMethod = kwargs['put_method']
     if 'del_method' in kwargs:
-      self.theDelMethod = kwargs['get_method']
+      self.theDelMethod = kwargs['del_method']
     if 'path_parameters' in kwargs:
       self.thePathParameters = kwargs['path_parameters']
+    self.isType = False
+    if 'isType' in kwargs:
+      self.isType = kwargs['isType']
+
 
   def get(self,parameter_string):
     session_id = get_session_id(session, request)
     dao = self.DAOModule(session_id)
     pathValues = []
     for parameterName,defaultValue in self.thePathParameters:
-      pathValues.append(request.gets(parameterName,defaultValue))
+      pathValues.append(request.args.get(parameterName,defaultValue))
     objts = getattr(dao, self.theGetMethod)(parameter_string,pathValues)
     dao.close()
     resp = make_response(json_serialize(objts, session_id=session_id), OK)
@@ -146,10 +215,14 @@ class ObjectsByMethodAndParameterAPI(Resource):
     dao = self.DAOModule(session_id)
     pathValues = []
     for parameterName,defaultValue in self.thePathParameters:
-      pathValues.append(request.gets(parameterName,defaultValue))
-    objt = dao.from_json(request)
+      pathValues.append(request.args.get(parameterName,defaultValue))
+    objt = None
+    if self.isType:
+      objt = dao.type_from_json(request)
+    else:
+      objt = dao.from_json(request)
     getattr(dao, self.thePutMethod)(objt,parameter_string,pathValues)
-    resp_dict = {'message': 'Object updated'}
+    resp_dict = {'message': objt.name() + ' updated'}
     resp = make_response(json_serialize(resp_dict, session_id=session_id), OK)
     resp.contenttype = 'application/json'
     return resp
@@ -159,10 +232,9 @@ class ObjectsByMethodAndParameterAPI(Resource):
     dao = self.DAOModule(session_id)
     pathValues = []
     for parameterName,defaultValue in self.thePathParameters:
-      pathValues.append(request.gets(parameterName,defaultValue))
-    objt = dao.from_json(request)
+      pathValues.append(request.args.get(parameterName,defaultValue))
     getattr(dao, self.theDelMethod)(parameter_string,pathValues)
-    resp_dict = {'message': 'Object updated'}
+    resp_dict = {'message': parameter_string + ' deleted'}
     resp = make_response(json_serialize(resp_dict, session_id=session_id), OK)
     resp.contenttype = 'application/json'
     return resp
@@ -319,4 +391,37 @@ class ObjectByFourParametersAPI(Resource):
     resp_dict = {'message': p1 + ' / ' + p2 + ' / ' + p3 + ' / ' + p4 + ' deleted'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.headers['Content-type'] = 'application/json'
+    return resp
+
+class ModelByTwoParametersAPI(Resource):
+
+  def __init__(self,**kwargs):
+    self.DAOModule = getattr(import_module('cairis.data.' + kwargs['dao']),kwargs['dao'])
+    self.thePathParameters = []
+    if 'get_method' in kwargs:
+      self.theGetMethod = kwargs['get_method']
+    if 'path_parameters' in kwargs:
+      self.thePathParameters = kwargs['path_parameters']
+    self.theRenderer = kwargs['renderer']
+
+  def get(self, p1, p2):
+    session_id = get_session_id(session, request)
+    pathValues = []
+    for parameterName,defaultValue in self.thePathParameters:
+      pathValues.append(request.args.get(parameterName,defaultValue))
+    model_generator = get_model_generator()
+    dao = self.DAOModule(session_id)
+    dot_code = getattr(dao, self.theGetMethod)(p1,p2,pathValues)
+    dao.close()
+
+    if not isinstance(dot_code, str):
+      raise ObjectNotFoundHTTPError('The model')
+
+    resp = make_response(model_generator.generate(dot_code,renderer=self.theRenderer), OK)
+    accept_header = request.headers.get('Accept', 'image/svg+xml')
+    if accept_header.find('text/plain') > -1:
+      resp.headers['Content-type'] = 'text/plain'
+    else:
+      resp.headers['Content-type'] = 'image/svg+xml'
+
     return resp
