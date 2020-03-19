@@ -28,17 +28,11 @@ __author__ = 'Shamal Faily'
 class DirectoryDAO(CairisDAO):
 
   def __init__(self, session_id):
-    """
-    :raise CairisHTTPError:
-    """
     CairisDAO.__init__(self, session_id)
 
-  def get_threat_directory(self, directory_entry = ''):
-    """
-    :rtype: [Directory]
-    :return
-    :raise ARMHTTPError:
-    """
+  def get_threat_directory(self, directory_entry, pathValues = []):
+    if directory_entry == 'all':
+      directory_entry = '' 
     try:
       tds = self.db_proxy.getThreatDirectory(directory_entry)
       tdObjts = []
@@ -52,12 +46,9 @@ class DirectoryDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def get_vulnerability_directory(self, directory_entry = ''):
-    """
-    :rtype: [Directory]
-    :return
-    :raise ARMHTTPError:
-    """
+  def get_vulnerability_directory(self, directory_entry, pathValues = []):
+    if directory_entry == 'all':
+      directory_entry = '' 
     try:
       vds = self.db_proxy.getVulnerabilityDirectory(directory_entry)
       vdObjts = []

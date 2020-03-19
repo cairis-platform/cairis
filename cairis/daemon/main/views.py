@@ -37,7 +37,7 @@ from cairis.controllers import CExportController
 from cairis.controllers import CImportController
 from cairis.controllers import CountermeasureController
 from cairis.controllers import DataFlowController
-from cairis.controllers import DirectoryController
+#from cairis.controllers import DirectoryController
 from cairis.controllers import DocumentationController
 from cairis.controllers import EnvironmentController
 from cairis.controllers import GoalController
@@ -293,8 +293,10 @@ api.add_resource(ObjectController.ConstrainedObjectsByNameAPI, '/api/dimensions/
 api.add_resource(ObjectController.ObjectsByTwoParametersAPI, '/api/dimensions/table/<path:p1>/environment/<path:p2>',endpoint='dimension',resource_class_kwargs={'dao' : 'DimensionDAO'})
 
 # DirectoryController
-api.add_resource(DirectoryController.ThreatDirectoryAPI, '/api/directory/threat/<path:entry_name>',endpoint='threatdirectory')
-api.add_resource(DirectoryController.VulnerabilityDirectoryAPI, '/api/directory/vulnerability/<path:entry_name>',endpoint='vulnerabilitydirectory')
+api.add_resource(ObjectController.ObjectsByMethodAndParameterAPI, '/api/directory/threat/<path:parameter_string>',endpoint='threatdirectory',resource_class_kwargs={'dao' : 'DirectoryDAO','get_method' : 'get_threat_directory'})
+api.add_resource(ObjectController.ObjectsByMethodAndParameterAPI, '/api/directory/vulnerability/<path:parameter_string>',endpoint='vulnerabilitydirectory',resource_class_kwargs={'dao' : 'DirectoryDAO','get_method' : 'get_vulnerability_directory'})
+#api.add_resource(DirectoryController.ThreatDirectoryAPI, '/api/directory/threat/<path:entry_name>',endpoint='threatdirectory')
+#api.add_resource(DirectoryController.VulnerabilityDirectoryAPI, '/api/directory/vulnerability/<path:entry_name>',endpoint='vulnerabilitydirectory')
 
 # Document Reference routes
 api.add_resource(ObjectController.ObjectsAPI, '/api/document_references',endpoint='document_reference',resource_class_kwargs={'dao': 'DocumentReferenceDAO'})
