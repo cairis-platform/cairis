@@ -157,7 +157,7 @@ class LocationsDAO(CairisDAO):
       raise MissingParameterHTTPError(param_names=['real_loc_list', 'fake_loc_list'])
     return new_loc_list
 
-  def get_locations_model(self, locations_name, environment_name):
+  def get_locations_model(self, locations_name, environment_name, pathValues = []):
     fontName, fontSize, apFontName = get_fonts(session_id=self.session_id)
     try:
       riskOverlay = self.db_proxy.locationsRiskModel(locations_name,environment_name) 

@@ -41,7 +41,6 @@ from cairis.controllers import DocumentationController
 from cairis.controllers import EnvironmentController
 from cairis.controllers import GoalController
 from cairis.controllers import GoalContributionController
-from cairis.controllers import LocationsController
 from cairis.controllers import MisuseCaseController
 from cairis.controllers import ObjectController
 from cairis.controllers import ObjectDependencyController
@@ -359,7 +358,7 @@ api.add_resource(CImportController.CImportFileAPI, '/api/import/file/type/<path:
 # Locations routes
 api.add_resource(ObjectController.ObjectsAPI, '/api/locations',endpoint='locations',resource_class_kwargs={'dao': 'LocationsDAO'})
 api.add_resource(ObjectController.ObjectByNameAPI, '/api/locations/name/<path:name>',endpoint='location',resource_class_kwargs={'dao' : 'LocationsDAO'})
-api.add_resource(LocationsController.LocationsModelAPI, '/api/locations/model/locations/<path:locations>/environment/<path:environment>',endpoint='locationsmodel')
+api.add_resource(ObjectController.ModelByTwoParametersAPI, '/api/locations/model/locations/<path:p1>/environment/<path:p2>',endpoint='locationmodel',resource_class_kwargs={'dao' : 'LocationsDAO','get_method' : 'get_locations_model','renderer' : 'dot'})
 
 # Misuse case routes
 api.add_resource(MisuseCaseController.MisuseCasesAPI, '/api/misusecases',endpoint='misusecases')
