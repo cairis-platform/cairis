@@ -109,13 +109,14 @@ class UserGoalDAO(CairisDAO):
       self.close()
       raise MalformedJSONHTTPError()
 
-  def get_user_goal_model(self, environment_name, filter_element):
+  def get_user_goal_model(self, environment_name, filter_element, pathValues = []):
     fontName, fontSize, apFontName = get_fonts(session_id=self.session_id)
+    if filter_element == 'all':
+      filter_element = ''
     try:
       gcs = self.db_proxy.getGoalContributions(environment_name,filter_element)
       ugm = UserGoalModel(gcs,environment_name,self.db_proxy,font_name=fontName, font_size=fontSize)
       dot_code = ugm.graph()
-
       if not dot_code:
         raise ObjectNotFoundHTTPError('The user goal model')
       return dot_code

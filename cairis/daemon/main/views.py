@@ -37,7 +37,6 @@ from cairis.controllers import CExportController
 from cairis.controllers import CImportController
 from cairis.controllers import CountermeasureController
 from cairis.controllers import DataFlowController
-#from cairis.controllers import DirectoryController
 from cairis.controllers import DocumentationController
 from cairis.controllers import EnvironmentController
 from cairis.controllers import GoalController
@@ -63,7 +62,6 @@ from cairis.controllers import ThreatController
 from cairis.controllers import TraceController
 from cairis.controllers import UploadController
 from cairis.controllers import UseCaseController
-from cairis.controllers import UserGoalController
 from cairis.controllers import ValidationController
 from cairis.controllers import ValueTypeController
 from cairis.controllers import VersionController
@@ -373,7 +371,6 @@ api.add_resource(MisuseCaseController.MisuseCaseByTVAPI, '/api/misusecases/threa
 api.add_resource(ObjectDependencyController.ObjectDependencyAPI, '/api/object_dependency/dimension/<path:dimension_name>/object/<path:object_name>',endpoint='object_dependency')
 
 # Obstacle routes
-
 api.add_resource(ObjectController.ObjectsAPI, '/api/obstacles',endpoint='obstacles',resource_class_kwargs={'dao': 'ObstacleDAO'})
 api.add_resource(ObjectController.ObjectByNameAPI, '/api/obstacles/name/<path:name>',endpoint='obstacle',resource_class_kwargs={'dao' : 'ObstacleDAO'})
 api.add_resource(ObjectController.ObjectsSummaryAPI, '/api/obstacles/summary',endpoint='obstaclessummary',resource_class_kwargs={'dao' : 'ObstacleDAO'})
@@ -513,7 +510,7 @@ api.add_resource(UseCaseController.UseCaseGoalsByNameAPI, '/api/usecases/name/<p
 # User goal routes
 api.add_resource(ObjectController.ObjectsAPI, '/api/user_goals',endpoint='user_goals',resource_class_kwargs={'dao': 'UserGoalDAO'})
 api.add_resource(ObjectController.ObjectByNameAPI, '/api/user_goals/name/<path:name>',endpoint='usergoal',resource_class_kwargs={'dao' : 'UserGoalDAO'})
-api.add_resource(UserGoalController.UserGoalModelAPI, '/api/user_goals/model/environment/<path:environment_name>/filter_name/<path:filter_element>',endpoint='usergoalmodel')
+api.add_resource(ObjectController.ModelByTwoParametersAPI, '/api/user_goals/model/environment/<path:p1>/filter_name/<path:p2>',endpoint='usergoalmodel',resource_class_kwargs={'dao' : 'UserGoalDAO','get_method' : 'get_user_goal_model','renderer' : 'dot'})
 
 # Validation route
 api.add_resource(ValidationController.ValidationAPI, '/api/validation/environment/<path:name>',endpoint='environmentvalidation')
