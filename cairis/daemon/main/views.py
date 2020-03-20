@@ -44,7 +44,6 @@ from cairis.controllers import GoalContributionController
 from cairis.controllers import MisuseCaseController
 from cairis.controllers import ObjectController
 from cairis.controllers import ObjectDependencyController
-from cairis.controllers import ObstacleController
 from cairis.controllers import PermissionsController
 from cairis.controllers import PersonaController
 from cairis.controllers import PersonaCharacteristicController
@@ -332,8 +331,8 @@ api.add_resource(GoalController.GoalsAPI, '/api/goals',endpoint='goals')
 api.add_resource(GoalController.GoalByNameAPI, '/api/goals/name/<path:name>',endpoint='goal')
 api.add_resource(ObjectController.ObjectsSummaryAPI, '/api/goals/summary',endpoint='goalssummary',resource_class_kwargs={'dao' : 'GoalDAO'})
 api.add_resource(GoalController.GoalByEnvironmentNamesAPI, '/api/goals/environment/<path:environment>/names',endpoint='goal_environment')
-api.add_resource(GoalController.GoalModelAPI, '/api/goals/model/environment/<path:environment>/goal/<path:goal>/usecase/<path:usecase>',endpoint='goal_model')
-api.add_resource(GoalController.ResponsibilityModelAPI, '/api/responsibility/model/environment/<path:environment>/role/<path:role>',endpoint='responsibility_model')
+api.add_resource(ObjectController.ModelByThreeParametersAPI, '/api/goals/model/environment/<path:p1>/goal/<path:p2>/usecase/<path:p3>',endpoint='goalmodel',resource_class_kwargs={'dao' : 'GoalDAO','get_method' : 'get_goal_model','renderer' : 'dot', 'path_parameters' : [('top','0')]})
+api.add_resource(ObjectController.ModelByTwoParametersAPI, '/api/responsibility/model/environment/<path:p1>/role/<path:p2>',endpoint='responsibilitymodel',resource_class_kwargs={'dao' : 'GoalDAO','get_method' : 'get_responsibility_model','renderer' : 'dot'})
 api.add_resource(GoalController.GoalAssociationAPI, '/api/goals/association',endpoint='goal_associations')
 api.add_resource(GoalController.GoalAssociationByNameAPI, '/api/goals/association/environment/<path:environment_name>/goal/<path:goal_name>/subgoal/<path:subgoal_name>',endpoint='goal_association')
 
@@ -373,9 +372,9 @@ api.add_resource(ObjectDependencyController.ObjectDependencyAPI, '/api/object_de
 api.add_resource(ObjectController.ObjectsAPI, '/api/obstacles',endpoint='obstacles',resource_class_kwargs={'dao': 'ObstacleDAO'})
 api.add_resource(ObjectController.ObjectByNameAPI, '/api/obstacles/name/<path:name>',endpoint='obstacle',resource_class_kwargs={'dao' : 'ObstacleDAO'})
 api.add_resource(ObjectController.ObjectsSummaryAPI, '/api/obstacles/summary',endpoint='obstaclessummary',resource_class_kwargs={'dao' : 'ObstacleDAO'})
-api.add_resource(ObstacleController.GenerateVulnerabilityAPI, '/api/obstacles/name/<path:name>/generate_vulnerability',endpoint='generatevulnerability')
-api.add_resource(ObstacleController.ObstacleByEnvironmentNamesAPI, '/api/obstacles/environment/<path:environment>/names',endpoint='obstacle_environment')
-api.add_resource(ObstacleController.ObstacleModelAPI, '/api/obstacles/model/environment/<path:environment>/obstacle/<path:obstacle>',endpoint='obstacle_model')
+
+api.add_resource(ObjectController.ObjectsByMethodAndParameterAPI, '/api/obstacles/name/<path:parameter_string>/generate_vulnerability',endpoint='generatevulnerability',resource_class_kwargs={'dao' : 'ObstacleDAO','post_method' : 'generate_vulnerability','post_message' : 'Vulnerability successfully generated'})
+api.add_resource(ObjectController.ModelByTwoParametersAPI, '/api/obstacles/model/environment/<path:p1>/obstacle/<path:p2>',endpoint='obstaclemodel',resource_class_kwargs={'dao' : 'ObstacleDAO','get_method' : 'get_obstacle_model','renderer' : 'dot'})
 
 # Permissions routes
 api.add_resource(PermissionsController.PermissionsAPI, '/api/permissions/database/<path:db_name>',endpoint='permissions')

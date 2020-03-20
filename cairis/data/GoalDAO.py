@@ -142,13 +142,19 @@ class GoalDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def get_goal_model(self, environment_name,goal_name,usecase_name,is_top_level):
+  def get_goal_model(self, environment_name,goal_name,usecase_name, pathValues):
     fontName, fontSize, apFontName = get_fonts(session_id=self.session_id)
+    is_top_level = pathValues[0]
+    if goal_name == 'all':
+      goal_name = ''
+    if usecase_name == 'all':
+      usecase_name = ''
     try:
       associationDictionary = {}
       goalFilter = 0
       ucFilter = 0
-      if goal_name != '': goalFilter = 1
+      if goal_name != '': 
+        goalFilter = 1
       if usecase_name != '': 
         ucFilter = 1
         goal_name = usecase_name
@@ -160,8 +166,10 @@ class GoalDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def get_responsibility_model(self, environment_name, role_name):
+  def get_responsibility_model(self, environment_name, role_name, pathValues = []):
     fontName, fontSize, apFontName = get_fonts(session_id=self.session_id)
+    if role_name == 'all':
+      role_name = ''
     try:
       associationDictionary = self.db_proxy.responsibilityModel(environment_name, role_name)
       associations = KaosModel(list(associationDictionary.values()), environment_name, 'responsibility',goalName=role_name,db_proxy=self.db_proxy, font_name=fontName,font_size=fontSize)

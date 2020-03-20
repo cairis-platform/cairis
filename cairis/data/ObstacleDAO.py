@@ -120,8 +120,10 @@ class ObstacleDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def get_obstacle_model(self, environment_name, obstacle_name):
+  def get_obstacle_model(self, environment_name, obstacle_name, pathValues = []):
     fontName, fontSize, apFontName = get_fonts(session_id=self.session_id)
+    if obstacle_name == 'all':  
+      obstacle_name = ''
 
     try:
       obstacle_filter = 0
@@ -319,18 +321,7 @@ class ObstacleDAO(CairisDAO):
     del obstacle.theEnvironmentDictionary
     return obstacle
 
-  def get_obstacle_names(self, environment=''):
-    try:
-      obstacle_names = self.db_proxy.getDimensionNames('obstacle', environment)
-      return obstacle_names
-    except DatabaseProxyException as ex:
-      self.close()
-      raise ARMHTTPError(ex)
-    except ARMException as ex:
-      self.close()
-      raise ARMHTTPError(ex)
-
-  def generate_vulnerability(self, name):
+  def generate_vulnerability(self, name, pathValues = []):
     obs = self.db_proxy.dimensionObject(name,'obstacle')
     vps = []
     gaps = []
