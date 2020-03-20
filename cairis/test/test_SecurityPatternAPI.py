@@ -158,7 +158,7 @@ class SecurityPatternAPITests(CairisDaemonTestCase):
     json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     msg = json_resp.get('message', None)
-    self.assertEqual(msg, 'Demilitarized Zone situated')
+    self.assertEqual(msg, 'Security Pattern successfully situated')
 
   def prepare_json(self, sp):
     data_dict = {'session_id' : 'test','object' : sp}

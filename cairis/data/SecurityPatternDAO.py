@@ -159,7 +159,7 @@ class SecurityPatternDAO(CairisDAO):
     spParams = SecurityPatternParameters(spName,spContext,spProb,spSol,spReqs,spAssocs)
     return spParams
 
-  def situate_security_pattern(self,spName,envName):
+  def situate_security_pattern(self,spName,envName,pathValues = []):
     spId = self.db_proxy.getDimensionId(spName,'securitypattern')
     patternStructure = self.db_proxy.patternStructure(spId)
     assetSet = set([])
