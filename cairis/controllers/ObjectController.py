@@ -333,41 +333,73 @@ class ObjectByNameAPI(Resource):
 
   def get(self, name):
     session_id = get_session_id(session, request)
-
     dao = self.DAOModule(session_id)
     objt = dao.get_object_by_name(name)
     dao.close()
-
     resp = make_response(json_serialize(objt, session_id=session_id), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
 
   def put(self, name):
     session_id = get_session_id(session, request)
-
     dao = self.DAOModule(session_id)
     objt = dao.from_json(request)
     dao.update_object(objt, name)
     dao.close()
-
     resp_dict = {}
     if (isinstance(objt,dict)):
       resp_dict = {'message': objt['theName'] + ' updated'}
     else:
       resp_dict = {'message': objt.name() + ' updated'}
-
     resp = make_response(json_serialize(resp_dict), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
 
   def delete(self, name):
     session_id = get_session_id(session, request)
-
     dao = self.DAOModule(session_id)
     dao.delete_object(name)
     dao.close()
-
     resp_dict = {'message': name + ' deleted'}
+    resp = make_response(json_serialize(resp_dict), OK)
+    resp.headers['Content-type'] = 'application/json'
+    return resp
+
+class ObjectByTwoParametersAPI(Resource):
+
+  def __init__(self,**kwargs):
+    self.DAOModule = getattr(import_module('cairis.data.' + kwargs['dao']),kwargs['dao'])
+
+  def get(self, p1, p2):
+    session_id = get_session_id(session, request)
+    dao = self.DAOModule(session_id)
+    objt = dao.get_object_by_name(p1, p2)
+    dao.close()
+    resp = make_response(json_serialize(objt, session_id=session_id), OK)
+    resp.headers['Content-type'] = 'application/json'
+    return resp
+
+  def put(self, p1, p2):
+    session_id = get_session_id(session, request)
+    dao = self.DAOModule(session_id)
+    objt = dao.from_json(request)
+    dao.update_object(objt, p1, p2)
+    dao.close()
+    resp_dict = {}
+    if (isinstance(objt,dict)):
+      resp_dict = {'message': objt['theName'] + ' updated'}
+    else:
+      resp_dict = {'message': objt.name() + ' updated'}
+    resp = make_response(json_serialize(resp_dict), OK)
+    resp.headers['Content-type'] = 'application/json'
+    return resp
+
+  def delete(self, p1, p2):
+    session_id = get_session_id(session, request)
+    dao = self.DAOModule(session_id)
+    dao.delete_object(p1, p2)
+    dao.close()
+    resp_dict = {'message': p1 + ' / ' + p2 + ' deleted'}
     resp = make_response(json_serialize(resp_dict), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp

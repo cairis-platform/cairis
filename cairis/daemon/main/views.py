@@ -35,7 +35,6 @@ from cairis.core.MySQLDatabaseProxy import MySQLDatabaseProxy,canonicalDbUser,ca
 from cairis.controllers import CExportController
 from cairis.controllers import CImportController
 from cairis.controllers import CountermeasureController
-from cairis.controllers import DataFlowController
 from cairis.controllers import DocumentationController
 from cairis.controllers import EnvironmentController
 from cairis.controllers import GoalController
@@ -273,8 +272,8 @@ api.add_resource(CountermeasureController.CountermeasurePatternsAPI, '/api/count
 
 # Dataflow routes
 api.add_resource(ObjectController.ObjectsAPI, '/api/dataflows',endpoint='dataflows',resource_class_kwargs={'dao': 'DataFlowDAO'})
-api.add_resource(DataFlowController.DataFlowByNameAPI, '/api/dataflows/name/<path:dataflow_name>/environment/<path:environment_name>',endpoint='dataflow')
-api.add_resource(DataFlowController.DataFlowDiagramAPI, '/api/dataflows/diagram/environment/<path:environment_name>/filter_type/<path:filter_type>/filter_name/<path:filter_element>',endpoint='dataflowdiagram')
+api.add_resource(ObjectController.ObjectByTwoParametersAPI, '/api/dataflows/name/<path:p1>/environment/<path:p2>',endpoint='dataflow',resource_class_kwargs={'dao' : 'DataFlowDAO'})
+api.add_resource(ObjectController.ModelByThreeParametersAPI, '/api/dataflows/diagram/environment/<path:p1>/filter_type/<path:p2>/filter_name/<path:p3>',endpoint='dataflowdiagram',resource_class_kwargs={'dao' : 'DataFlowDAO','get_method' : 'get_dataflow_diagram','renderer' : 'dot'})
 
 # Dependency routes
 api.add_resource(ObjectController.ObjectsAPI, '/api/dependencies',endpoint='dependencies',resource_class_kwargs={'dao': 'DependencyDAO'})

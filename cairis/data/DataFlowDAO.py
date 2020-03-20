@@ -78,7 +78,7 @@ class DataFlowDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def update_object(self, old_dataflow_name,old_environment_name, dataflow):
+  def update_object(self, dataflow, old_dataflow_name,old_environment_name):
 
     df_params = DataFlowParameters(
       dfName=dataflow.name(),
@@ -143,8 +143,10 @@ class DataFlowDAO(CairisDAO):
     else:
       return dataflow
 
-  def get_dataflow_diagram(self, environment_name, filter_type,filter_element):
+  def get_dataflow_diagram(self, environment_name, filter_type,filter_element,pathValues = []):
     fontName, fontSize, apFontName = get_fonts(session_id=self.session_id)
+    if filter_element == 'all':
+      filter_element = ''
     try:
       dfdRows = self.db_proxy.dataFlowDiagram(environment_name,filter_type,filter_element)
       associations = DataFlowDiagram(dfdRows,environment_name,self.db_proxy,font_name=fontName, font_size=fontSize)

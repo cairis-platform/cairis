@@ -155,7 +155,7 @@ class DataFlowAPITests(CairisDaemonTestCase):
       responseData = rv.data
     json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp)
-    self.assertEqual(json_resp['message'],'Edited test dataflow deleted')
+    self.assertEqual(json_resp['message'],'Edited test dataflow / Psychosis deleted')
 
   def test_dataflow_diagram(self):
     url = '/api/dataflows/diagram/environment/Psychosis/filter_type/None/filter_name/None?session_id=test'
