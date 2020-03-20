@@ -32,7 +32,6 @@ from flask_security.core import current_user
 from jsonpickle import encode
 from cairis.core.Borg import Borg
 from cairis.core.MySQLDatabaseProxy import MySQLDatabaseProxy,canonicalDbUser,canonicalDbName
-from cairis.controllers import ArchitecturalPatternController
 from cairis.controllers import CExportController
 from cairis.controllers import CImportController
 from cairis.controllers import CountermeasureController
@@ -227,11 +226,11 @@ def resetUser():
 # Architectural Pattern routes
 api.add_resource(ObjectController.ObjectsAPI, '/api/architectural_patterns',endpoint='architecturalpatterns',resource_class_kwargs={'dao': 'ArchitecturalPatternDAO'})
 api.add_resource(ObjectController.ObjectByNameAPI, '/api/architectural_patterns/name/<path:name>',endpoint='architecturalpattern',resource_class_kwargs={'dao' : 'ArchitecturalPatternDAO'})
-api.add_resource(ArchitecturalPatternController.ComponentGoalModelAPI, '/api/architectural_patterns/component/goal/model/<path:component>', endpoint = 'componentgoals')
-api.add_resource(ArchitecturalPatternController.ComponentAssetModelAPI, '/api/architectural_patterns/component/asset/model/<path:component>', endpoint = 'componentassets')
-api.add_resource(ArchitecturalPatternController.ComponentModelAPI, '/api/architectural_patterns/component/model/<path:ap_name>', endpoint = 'componentmodel')
-api.add_resource(ArchitecturalPatternController.WeaknessAnalysisAPI, '/api/architectural_patterns/name/<path:architectural_pattern_name>/environment/<path:environment_name>/weakness_analysis', endpoint='architecturalweaknessanalysis')
-api.add_resource(ArchitecturalPatternController.SituateArchitecturalPatternAPI, '/api/architectural_patterns/name/<path:architectural_pattern_name>/environment/<path:environment_name>/situate', endpoint='situatearchitecturalpattern')
+api.add_resource(ObjectController.ModelByParameterAPI, '/api/architectural_patterns/component/goal/model/<path:parameter_string>',endpoint='componentgoals',resource_class_kwargs={'dao' : 'ArchitecturalPatternDAO','get_method' : 'get_component_goal_model','renderer' : 'dot'})
+api.add_resource(ObjectController.ModelByParameterAPI, '/api/architectural_patterns/component/asset/model/<path:parameter_string>',endpoint='componentassets',resource_class_kwargs={'dao' : 'ArchitecturalPatternDAO','get_method' : 'get_component_asset_model','renderer' : 'dot'})
+api.add_resource(ObjectController.ModelByParameterAPI, '/api/architectural_patterns/component/model/<path:parameter_string>',endpoint='componentmodel',resource_class_kwargs={'dao' : 'ArchitecturalPatternDAO','get_method' : 'get_component_model','renderer' : 'dot'})
+api.add_resource(ObjectController.ObjectsByMethodAndTwoParametersAPI, '/api/architectural_patterns/name/<path:p1>/environment/<path:p2>/weakness_analysis',endpoint='weakness_analysis',resource_class_kwargs={'dao' : 'ArchitecturalPatternDAO','get_method' : 'get_weakness_analysis'})
+api.add_resource(ObjectController.ObjectsByMethodAndTwoParametersAPI, '/api/architectural_patterns/name/<path:p1>/environment/<path:p2>/situate',endpoint='situate',resource_class_kwargs={'dao' : 'ArchitecturalPatternDAO','post_method' : 'situate_component_view','post_message' : 'Architectural Pattern successfully situated'})
 
 # Asset routes
 api.add_resource(ObjectController.ObjectsAPI, '/api/assets',endpoint='assets',resource_class_kwargs={'dao': 'AssetDAO'})

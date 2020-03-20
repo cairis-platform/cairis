@@ -211,7 +211,7 @@ class ArchitecturalPatternDAO(CairisDAO):
     cvParams = ComponentViewParameters(apName,apSyn,[],[],[],[],[],theComponents,theConnectors)
     return cvParams
 
-  def get_component_asset_model(self,cName):
+  def get_component_asset_model(self,cName, pathValues = []):
     fontName, fontSize, apFontName = get_fonts(session_id=self.session_id)
     try:
       associationDictionary = self.db_proxy.componentAssetModel(cName)
@@ -227,7 +227,7 @@ class ArchitecturalPatternDAO(CairisDAO):
     except Exception as ex:
       print(ex)
 
-  def get_component_goal_model(self,cName):
+  def get_component_goal_model(self,cName, pathValues = []):
     fontName, fontSize, apFontName = get_fonts(session_id=self.session_id)
     try:
       associationDictionary = self.db_proxy.componentGoalModel(cName)
@@ -243,7 +243,7 @@ class ArchitecturalPatternDAO(CairisDAO):
     except Exception as ex:
       print(ex)
 
-  def get_component_model(self,cvName):
+  def get_component_model(self,cvName, pathValues = []):
     fontName, fontSize, apFontName = get_fonts(session_id=self.session_id)
     try:
       interfaces,connectors = self.db_proxy.componentView(cvName)
@@ -259,7 +259,7 @@ class ArchitecturalPatternDAO(CairisDAO):
     except Exception as ex:
       print(ex)
 
-  def get_weakness_analysis(self,cvName,envName):
+  def get_weakness_analysis(self,cvName,envName, pathValues = []):
     try:
       walm = WeaknessAnalysisModel()
       thrDict,vulDict = self.db_proxy.componentViewWeaknesses(cvName,envName)
@@ -309,7 +309,7 @@ class ArchitecturalPatternDAO(CairisDAO):
     except Exception as ex:
       print(ex)
 
-  def situate_component_view(self,cvName,envName):
+  def situate_component_view(self,cvName,envName, pathValues = []):
     acDict = {}
     assetParametersList = []
     for assetName,componentName in self.db_proxy.componentAssets(cvName):

@@ -180,6 +180,43 @@ class ObjectsByMethodAndThreeParametersAPI(Resource):
     return resp
 
 
+class ObjectsByMethodAndTwoParametersAPI(Resource):
+  def __init__(self,**kwargs):
+    self.DAOModule = getattr(import_module('cairis.data.' + kwargs['dao']),kwargs['dao'])
+    self.thePathParameters = []
+    if 'get_method' in kwargs:
+      self.theGetMethod = kwargs['get_method']
+    if 'post_method' in kwargs:
+      self.thePostMethod = kwargs['post_method']
+    if 'path_parameters' in kwargs:
+      self.thePathParameters = kwargs['path_parameters']
+    self.thePostMessage = ''
+    if 'post_message' in kwargs:
+      self.thePostMessage = kwargs['post_message']
+
+  def get(self,p1,p2):
+    session_id = get_session_id(session, request)
+    dao = self.DAOModule(session_id)
+    pathValues = []
+    for parameterName,defaultValue in self.thePathParameters:
+      pathValues.append(request.args.get(parameterName,defaultValue))
+    objts = getattr(dao, self.theGetMethod)(p1,p2,pathValues)
+    dao.close()
+    resp = make_response(json_serialize(objts, session_id=session_id), OK)
+    resp.contenttype = 'application/json'
+    return resp
+
+  def post(self,p1,p2):
+    session_id = get_session_id(session, request)
+    dao = self.DAOModule(session_id)
+    pathValues = []
+    for parameterName,defaultValue in self.thePathParameters:
+      pathValues.append(request.args.get(parameterName,defaultValue))
+    getattr(dao, self.thePostMethod)(p1,p2,pathValues)
+    resp_dict = {'message': self.thePostMessage}
+    resp = make_response(json_serialize(resp_dict, session_id=session_id), OK)
+    resp.contenttype = 'application/json'
+    return resp
 
 class ObjectsByMethodAndParameterAPI(Resource):
   def __init__(self,**kwargs):
@@ -409,6 +446,39 @@ class ObjectByFourParametersAPI(Resource):
     resp = make_response(json_serialize(resp_dict), OK)
     resp.headers['Content-type'] = 'application/json'
     return resp
+
+class ModelByParameterAPI(Resource):
+
+  def __init__(self,**kwargs):
+    self.DAOModule = getattr(import_module('cairis.data.' + kwargs['dao']),kwargs['dao'])
+    self.thePathParameters = []
+    if 'get_method' in kwargs:
+      self.theGetMethod = kwargs['get_method']
+    if 'path_parameters' in kwargs:
+      self.thePathParameters = kwargs['path_parameters']
+    self.theRenderer = kwargs['renderer']
+
+  def get(self, parameter_string):
+    session_id = get_session_id(session, request)
+    pathValues = []
+    for parameterName,defaultValue in self.thePathParameters:
+      pathValues.append(request.args.get(parameterName,defaultValue))
+    model_generator = get_model_generator()
+    dao = self.DAOModule(session_id)
+    dot_code = getattr(dao, self.theGetMethod)(parameter_string,pathValues)
+    dao.close()
+
+    if not isinstance(dot_code, str):
+      raise ObjectNotFoundHTTPError('The model')
+
+    resp = make_response(model_generator.generate(dot_code,renderer=self.theRenderer), OK)
+    accept_header = request.headers.get('Accept', 'image/svg+xml')
+    if accept_header.find('text/plain') > -1:
+      resp.headers['Content-type'] = 'text/plain'
+    else:
+      resp.headers['Content-type'] = 'image/svg+xml'
+    return resp
+
 
 class ModelByTwoParametersAPI(Resource):
 
