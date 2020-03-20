@@ -52,7 +52,6 @@ from cairis.controllers import RequirementController
 from cairis.controllers import ResponseController
 from cairis.controllers import RiskController
 from cairis.controllers import RiskLevelController
-from cairis.controllers import RoleController
 from cairis.controllers import SecurityPatternController
 from cairis.controllers import SummaryController
 from cairis.controllers import TaskController
@@ -442,7 +441,7 @@ api.add_resource(RiskLevelController.RiskThreatLevelByEnvironmentAPI, '/api/risk
 # Role routes
 api.add_resource(ObjectController.ObjectsAPI, '/api/roles',endpoint='roles',resource_class_kwargs={'dao': 'RoleDAO'})
 api.add_resource(ObjectController.ObjectByNameAPI, '/api/roles/name/<path:name>',endpoint='role',resource_class_kwargs={'dao' : 'RoleDAO'})
-api.add_resource(RoleController.RoleEnvironmentPropertiesAPI, '/api/roles/name/<path:name>/properties',endpoint='role_properties')
+api.add_resource(ObjectController.ObjectsByMethodAndParameterAPI, '/api/roles/name/<path:parameter_string>/properties',endpoint='role_properties',resource_class_kwargs={'dao' : 'RoleDAO','get_method' : 'get_role_props'})
 
 # Security pattern routes
 api.add_resource(ObjectController.ObjectsAPI, '/api/security_patterns',endpoint='securitypatterns',resource_class_kwargs={'dao': 'SecurityPatternDAO'})

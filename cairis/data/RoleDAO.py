@@ -69,7 +69,7 @@ class RoleDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def get_role_props(self, name):
+  def get_role_props(self, name, pathValues = []):
     role = self.get_object_by_name(name, simplify=False)
     props = role.theEnvironmentProperties
     return props
