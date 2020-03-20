@@ -55,14 +55,12 @@ from cairis.controllers import RiskLevelController
 from cairis.controllers import SecurityPatternController
 from cairis.controllers import SummaryController
 from cairis.controllers import TaskController
-from cairis.controllers import ThreatController
 from cairis.controllers import TraceController
 from cairis.controllers import UploadController
 from cairis.controllers import UseCaseController
 from cairis.controllers import ValidationController
 from cairis.controllers import ValueTypeController
 from cairis.controllers import VersionController
-from cairis.controllers import VulnerabilityController
 
 from cairis.daemon.main import main, api
 from cairis.tools.SessionValidator import get_session_id
@@ -290,8 +288,6 @@ api.add_resource(ObjectController.ObjectsByTwoParametersAPI, '/api/dimensions/ta
 # DirectoryController
 api.add_resource(ObjectController.ObjectsByMethodAndParameterAPI, '/api/directory/threat/<path:parameter_string>',endpoint='threatdirectory',resource_class_kwargs={'dao' : 'DirectoryDAO','get_method' : 'get_threat_directory'})
 api.add_resource(ObjectController.ObjectsByMethodAndParameterAPI, '/api/directory/vulnerability/<path:parameter_string>',endpoint='vulnerabilitydirectory',resource_class_kwargs={'dao' : 'DirectoryDAO','get_method' : 'get_vulnerability_directory'})
-#api.add_resource(DirectoryController.ThreatDirectoryAPI, '/api/directory/threat/<path:entry_name>',endpoint='threatdirectory')
-#api.add_resource(DirectoryController.VulnerabilityDirectoryAPI, '/api/directory/vulnerability/<path:entry_name>',endpoint='vulnerabilitydirectory')
 
 # Document Reference routes
 api.add_resource(ObjectController.ObjectsAPI, '/api/document_references',endpoint='document_reference',resource_class_kwargs={'dao': 'DocumentReferenceDAO'})
@@ -480,9 +476,7 @@ api.add_resource(ObjectController.ObjectByNameAPI, '/api/template_requirements/n
 api.add_resource(ObjectController.ObjectsAPI, '/api/threats',endpoint='threats',resource_class_kwargs={'dao': 'ThreatDAO'})
 api.add_resource(ObjectController.ObjectByNameAPI, '/api/threats/name/<path:name>',endpoint='threat',resource_class_kwargs={'dao' : 'ThreatDAO'})
 api.add_resource(ObjectController.ObjectsSummaryAPI, '/api/threats/summary',endpoint='threatssummary',resource_class_kwargs={'dao' : 'ThreatDAO'})
-api.add_resource(ThreatController.ThreatTypesAPI, '/api/threats/types',endpoint='threat_types')
-api.add_resource(ThreatController.ThreatTypeByNameAPI, '/api/threats/types/name/<path:name>',endpoint='threat_type')
-api.add_resource(ThreatController.ThreatModelAPI, '/api/threats/model/environment/<path:environment_name>',endpoint='threat_model')
+api.add_resource(ObjectController.ObjectsByMethodAndParameterAPI, '/api/threats/model/environment/<path:parameter_string>',endpoint='threat_model',resource_class_kwargs={'dao' : 'ThreatDAO','get_method' : 'get_threat_model'})
 
 # Trace routes
 api.add_resource(TraceController.TracesAPI, '/api/traces',endpoint='traces')
@@ -515,8 +509,6 @@ api.add_resource(ValidationController.ValidationAPI, '/api/validation/environmen
 # Value Type routes
 api.add_resource(ValueTypeController.ValueTypesAPI, '/api/value_types/type/<path:type_name>/environment/<path:environment_name>',endpoint='value_types')
 api.add_resource(ValueTypeController.ValueTypesByNameAPI, '/api/value_types/type/<path:type_name>/environment/<path:environment_name>/name/<path:object_name>',endpoint='value_type')
-
-
 api.add_resource(ValueTypeController.ValueTypesCreateAPI, '/api/value_types/',endpoint='create_value_type')
 
 # Version route
@@ -525,6 +517,3 @@ api.add_resource(VersionController.VersionAPI, '/api/version',endpoint='version'
 # Vulnerability routes
 api.add_resource(ObjectController.ObjectsAPI, '/api/vulnerabilities',endpoint='vulnerabilities',resource_class_kwargs={'dao': 'VulnerabilityDAO'})
 api.add_resource(ObjectController.ObjectByNameAPI, '/api/vulnerabilities/name/<path:name>',endpoint='vulnerabilitiy',resource_class_kwargs={'dao' : 'VulnerabilityDAO'})
-api.add_resource(VulnerabilityController.VulnerabilityTypesAPI, '/api/vulnerabilities/types',endpoint='vulnerability_types')
-api.add_resource(VulnerabilityController.VulnerabilityTypeByNameAPI, '/api/vulnerabilities/types/name/<path:name>',endpoint='vulnerability_type_name')
-
