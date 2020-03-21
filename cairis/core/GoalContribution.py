@@ -32,3 +32,4 @@ class GoalContribution:
   def destinationType(self): return self.theDestinationType
   def meansEnd(self): return self.theMeansEnd
   def contribution(self): return self.theContribution
+  def name(self): return self.theSource + ' / ' + self.theDestination

@@ -38,7 +38,6 @@ from cairis.controllers import CountermeasureController
 from cairis.controllers import DocumentationController
 from cairis.controllers import EnvironmentController
 from cairis.controllers import GoalController
-from cairis.controllers import GoalContributionController
 from cairis.controllers import MisuseCaseController
 from cairis.controllers import ObjectController
 from cairis.controllers import ObjectDependencyController
@@ -327,8 +326,8 @@ api.add_resource(GoalController.GoalAssociationAPI, '/api/goals/association',end
 api.add_resource(GoalController.GoalAssociationByNameAPI, '/api/goals/association/environment/<path:environment_name>/goal/<path:goal_name>/subgoal/<path:subgoal_name>',endpoint='goal_association')
 
 # Goal contribution routes
-api.add_resource(GoalContributionController.GoalContributionsAPI, '/api/goal_contributions',endpoint='goal_contributions')
-api.add_resource(GoalContributionController.GoalContributionByNameAPI, '/api/goal_contributions/source/<sourceName>/target/<targetName>',endpoint='goal_contribution')
+api.add_resource(ObjectController.ObjectsAPI, '/api/goal_contributions',endpoint='goal_contributions',resource_class_kwargs={'dao': 'GoalContributionDAO'})
+api.add_resource(ObjectController.ObjectsByMethodAndTwoParametersAPI, '/api/goal_contributions/source/<path:p1>/target/<path:p2>',endpoint='goal_contribution',resource_class_kwargs={'dao' : 'GoalContributionDAO','get_method' : 'get_objects', 'put_method' : 'update_object', 'del_method' : 'delete_object'})
 
 # Export route
 api.add_resource(CExportController.CExportFileAPI, '/api/export/file',endpoint='export')

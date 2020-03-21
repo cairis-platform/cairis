@@ -32,7 +32,7 @@ class GoalContributionDAO(CairisDAO):
   def __init__(self, session_id):
     CairisDAO.__init__(self, session_id)
 
-  def get_goal_contributions(self,source = -1, target = -1):
+  def get_objects(self,source = -1, target = -1, pathValues = []):
     try:
       rawObjts = self.db_proxy.getGoalContributionsTable(source,target)
       objts = []
@@ -49,15 +49,14 @@ class GoalContributionDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def add_goal_contribution(self, gc):
+  def add_object(self, gc):
     try:
       self.db_proxy.addReferenceContribution(gc)
     except ARMException as ex:
       self.close()
       raise ARMHTTPError(ex)
 
-
-  def update_goal_contribution(self,gc,source,target):
+  def update_object(self,gc,source,target, pathValues = []):
     try:
       self.db_proxy.deleteGoalContribution(source,target)
       self.db_proxy.addReferenceContribution(gc)
@@ -65,7 +64,7 @@ class GoalContributionDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def delete_goal_contribution(self, source, target):
+  def delete_object(self, source, target, pathValues = []):
     try:
       self.db_proxy.deleteGoalContribution(source,target)
     except ARMException as ex:

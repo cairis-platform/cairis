@@ -188,6 +188,10 @@ class ObjectsByMethodAndTwoParametersAPI(Resource):
       self.theGetMethod = kwargs['get_method']
     if 'post_method' in kwargs:
       self.thePostMethod = kwargs['post_method']
+    if 'put_method' in kwargs:
+      self.thePutMethod = kwargs['put_method']
+    if 'del_method' in kwargs:
+      self.theDelMethod = kwargs['del_method']
     if 'path_parameters' in kwargs:
       self.thePathParameters = kwargs['path_parameters']
     self.thePostMessage = ''
@@ -214,6 +218,31 @@ class ObjectsByMethodAndTwoParametersAPI(Resource):
       pathValues.append(request.args.get(parameterName,defaultValue))
     getattr(dao, self.thePostMethod)(p1,p2,pathValues)
     resp_dict = {'message': self.thePostMessage}
+    resp = make_response(json_serialize(resp_dict, session_id=session_id), OK)
+    resp.contenttype = 'application/json'
+    return resp
+
+  def put(self,p1,p2):
+    session_id = get_session_id(session, request)
+    dao = self.DAOModule(session_id)
+    pathValues = []
+    for parameterName,defaultValue in self.thePathParameters:
+      pathValues.append(request.args.get(parameterName,defaultValue))
+    objt = dao.from_json(request)
+    getattr(dao, self.thePutMethod)(objt,p1,p2,pathValues)
+    resp_dict = {'message': objt.name() + ' updated'}
+    resp = make_response(json_serialize(resp_dict, session_id=session_id), OK)
+    resp.contenttype = 'application/json'
+    return resp
+
+  def delete(self,p1,p2):
+    session_id = get_session_id(session, request)
+    dao = self.DAOModule(session_id)
+    pathValues = []
+    for parameterName,defaultValue in self.thePathParameters:
+      pathValues.append(request.args.get(parameterName,defaultValue))
+    getattr(dao, self.theDelMethod)(p1,p2,pathValues)
+    resp_dict = {'message': p1 + ' / ' + p2 + ' deleted'}
     resp = make_response(json_serialize(resp_dict, session_id=session_id), OK)
     resp.contenttype = 'application/json'
     return resp
