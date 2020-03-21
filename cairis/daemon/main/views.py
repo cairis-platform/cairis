@@ -51,7 +51,6 @@ from cairis.controllers import ResponseController
 from cairis.controllers import RiskController
 from cairis.controllers import RiskLevelController
 from cairis.controllers import SummaryController
-from cairis.controllers import TaskController
 from cairis.controllers import TraceController
 from cairis.controllers import UploadController
 from cairis.controllers import UseCaseController
@@ -271,7 +270,7 @@ api.add_resource(CountermeasureController.CountermeasurePatternsAPI, '/api/count
 # Dataflow routes
 api.add_resource(ObjectController.ObjectsAPI, '/api/dataflows',endpoint='dataflows',resource_class_kwargs={'dao': 'DataFlowDAO'})
 api.add_resource(ObjectController.ObjectByTwoParametersAPI, '/api/dataflows/name/<path:p1>/environment/<path:p2>',endpoint='dataflow',resource_class_kwargs={'dao' : 'DataFlowDAO'})
-api.add_resource(ObjectController.ModelByThreeParametersAPI, '/api/dataflows/diagram/environment/<path:p1>/filter_type/<path:p2>/filter_name/<path:p3>',endpoint='dataflowdiagram',resource_class_kwargs={'dao' : 'DataFlowDAO','get_method' : 'get_dataflow_diagram','renderer' : 'dot'})
+api.add_resource(ObjectController.ModelByThreeParametersAPI, '/api/dataflows/diagram/environment/<path:p1>/filter_type/<path:p2>/filter_name/<path:p3>',endpoint='dataflowdiagram',resource_class_kwargs={'dao' : 'DataFlowDAO','get_method' : 'get_dataflow_diagram','renderer' : 'dot', 'model_type' : 'dataflow'})
 
 # Dependency routes
 api.add_resource(ObjectController.ObjectsAPI, '/api/dependencies',endpoint='dependencies',resource_class_kwargs={'dao': 'DependencyDAO'})
@@ -322,8 +321,8 @@ api.add_resource(GoalController.GoalsAPI, '/api/goals',endpoint='goals')
 api.add_resource(GoalController.GoalByNameAPI, '/api/goals/name/<path:name>',endpoint='goal')
 api.add_resource(ObjectController.ObjectsSummaryAPI, '/api/goals/summary',endpoint='goalssummary',resource_class_kwargs={'dao' : 'GoalDAO'})
 api.add_resource(GoalController.GoalByEnvironmentNamesAPI, '/api/goals/environment/<path:environment>/names',endpoint='goal_environment')
-api.add_resource(ObjectController.ModelByThreeParametersAPI, '/api/goals/model/environment/<path:p1>/goal/<path:p2>/usecase/<path:p3>',endpoint='goalmodel',resource_class_kwargs={'dao' : 'GoalDAO','get_method' : 'get_goal_model','renderer' : 'dot', 'path_parameters' : [('top','0')]})
-api.add_resource(ObjectController.ModelByTwoParametersAPI, '/api/responsibility/model/environment/<path:p1>/role/<path:p2>',endpoint='responsibilitymodel',resource_class_kwargs={'dao' : 'GoalDAO','get_method' : 'get_responsibility_model','renderer' : 'dot'})
+api.add_resource(ObjectController.ModelByThreeParametersAPI, '/api/goals/model/environment/<path:p1>/goal/<path:p2>/usecase/<path:p3>',endpoint='goalmodel',resource_class_kwargs={'dao' : 'GoalDAO','get_method' : 'get_goal_model','renderer' : 'dot', 'path_parameters' : [('top','0')], 'model_type' : 'goal'})
+api.add_resource(ObjectController.ModelByTwoParametersAPI, '/api/responsibility/model/environment/<path:p1>/role/<path:p2>',endpoint='responsibilitymodel',resource_class_kwargs={'dao' : 'GoalDAO','get_method' : 'get_responsibility_model','renderer' : 'dot', 'model_type' : 'responsibility'})
 api.add_resource(GoalController.GoalAssociationAPI, '/api/goals/association',endpoint='goal_associations')
 api.add_resource(GoalController.GoalAssociationByNameAPI, '/api/goals/association/environment/<path:environment_name>/goal/<path:goal_name>/subgoal/<path:subgoal_name>',endpoint='goal_association')
 
@@ -446,11 +445,13 @@ api.add_resource(SummaryController.SummaryAPI, '/api/summary/dimension/<path:dim
 # Task routes
 api.add_resource(ObjectController.ObjectsAPI, '/api/tasks',endpoint='tasks',resource_class_kwargs={'dao': 'TaskDAO'})
 api.add_resource(ObjectController.ObjectByNameAPI, '/api/tasks/name/<path:name>',endpoint='task',resource_class_kwargs={'dao' : 'TaskDAO'})
-api.add_resource(TaskController.TaskModelByNameAPI, '/api/tasks/model/environment/<path:environment>/task/<path:task>/misusecase/<path:misusecase>',endpoint='task_model')
-api.add_resource(TaskController.TaskLoadByNameAPI, '/api/tasks/name/<path:task>/environment/<path:environment>/load',endpoint='task_load')
-api.add_resource(TaskController.TaskHindranceByNameAPI, '/api/tasks/name/<path:task>/environment/<path:environment>/hindrance',endpoint='task_hindrance')
-api.add_resource(TaskController.TaskScoreByNameAPI, '/api/tasks/name/<path:task>/environment/<path:environment>/score',endpoint='task_score')
-api.add_resource(TaskController.MisusabilityModelAPI, '/api/tasks/model/misusability/<path:mc_name>/characteristic/<path:tc_name>',endpoint='misusability_model')
+
+
+api.add_resource(ObjectController.ModelByThreeParametersAPI, '/api/tasks/model/environment/<path:p1>/task/<path:p2>/misusecase/<path:p3>',endpoint='task_model',resource_class_kwargs={'dao' : 'TaskDAO','get_method' : 'get_task_model','renderer' : 'dot', 'model_type' : 'task'})
+api.add_resource(ObjectController.ObjectsByMethodAndTwoParametersAPI, '/api/tasks/name/<path:p1>/environment/<path:p2>/load',endpoint='task_load',resource_class_kwargs={'dao' : 'TaskDAO','get_method' : 'task_load_by_name_environment'})
+api.add_resource(ObjectController.ObjectsByMethodAndTwoParametersAPI, '/api/tasks/name/<path:p1>/environment/<path:p2>/hindrance',endpoint='task_hindrance',resource_class_kwargs={'dao' : 'TaskDAO','get_method' : 'task_hindrance_by_name_environment'})
+api.add_resource(ObjectController.ObjectsByMethodAndTwoParametersAPI, '/api/tasks/name/<path:p1>/environment/<path:p2>/score',endpoint='task_score',resource_class_kwargs={'dao' : 'TaskDAO','get_method' : 'task_score_by_name_environment'})
+api.add_resource(ObjectController.ModelByTwoParametersAPI, '/api/tasks/model/misusability/<path:p1>/characteristic/<path:p2>',endpoint='misusability_model',resource_class_kwargs={'dao' : 'TaskDAO','get_method' : 'get_misusability_model','renderer' : 'dot','model_type' : 'misusability'})
 
 # Task Characteristic routes
 api.add_resource(ObjectController.ObjectsAPI, '/api/task_characteristics',endpoint='task_characteristics',resource_class_kwargs={'dao': 'TaskCharacteristicDAO'})

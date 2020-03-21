@@ -488,7 +488,12 @@ class ModelByParameterAPI(Resource):
       self.theGetMethod = kwargs['get_method']
     if 'path_parameters' in kwargs:
       self.thePathParameters = kwargs['path_parameters']
-    self.theRenderer = kwargs['renderer']
+    self.theModelType = ''
+    if 'model_type' in kwargs:
+      self.theModelType = kwargs['model_type']
+    self.theRenderer = 'dot'
+    if 'renderer' in kwargs:
+      self.theRenderer = kwargs['renderer']
 
   def get(self, parameter_string):
     session_id = get_session_id(session, request)
@@ -503,7 +508,7 @@ class ModelByParameterAPI(Resource):
     if not isinstance(dot_code, str):
       raise ObjectNotFoundHTTPError('The model')
 
-    resp = make_response(model_generator.generate(dot_code,renderer=self.theRenderer), OK)
+    resp = make_response(model_generator.generate(dot_code, model_type = self.theModelType, renderer = self.theRenderer), OK)
     accept_header = request.headers.get('Accept', 'image/svg+xml')
     if accept_header.find('text/plain') > -1:
       resp.headers['Content-type'] = 'text/plain'
@@ -521,7 +526,12 @@ class ModelByTwoParametersAPI(Resource):
       self.theGetMethod = kwargs['get_method']
     if 'path_parameters' in kwargs:
       self.thePathParameters = kwargs['path_parameters']
-    self.theRenderer = kwargs['renderer']
+    self.theModelType = ''
+    if 'model_type' in kwargs:
+      self.theModelType = kwargs['model_type']
+    self.theRenderer = 'dot'
+    if 'renderer' in kwargs:
+      self.theRenderer = kwargs['renderer']
 
   def get(self, p1, p2):
     session_id = get_session_id(session, request)
@@ -536,7 +546,7 @@ class ModelByTwoParametersAPI(Resource):
     if not isinstance(dot_code, str):
       raise ObjectNotFoundHTTPError('The model')
 
-    resp = make_response(model_generator.generate(dot_code,renderer=self.theRenderer), OK)
+    resp = make_response(model_generator.generate(dot_code,model_type = self.theModelType, renderer = self.theRenderer), OK)
     accept_header = request.headers.get('Accept', 'image/svg+xml')
     if accept_header.find('text/plain') > -1:
       resp.headers['Content-type'] = 'text/plain'
@@ -553,7 +563,12 @@ class ModelByThreeParametersAPI(Resource):
       self.theGetMethod = kwargs['get_method']
     if 'path_parameters' in kwargs:
       self.thePathParameters = kwargs['path_parameters']
-    self.theRenderer = kwargs['renderer']
+    self.theModelType = ''
+    if 'model_type' in kwargs:
+      self.theModelType = kwargs['model_type']
+    self.theRenderer = 'dot'
+    if 'renderer' in kwargs:
+      self.theRenderer = kwargs['renderer']
 
   def get(self, p1, p2, p3):
     session_id = get_session_id(session, request)
@@ -568,7 +583,7 @@ class ModelByThreeParametersAPI(Resource):
     if not isinstance(dot_code, str):
       raise ObjectNotFoundHTTPError('The model')
 
-    resp = make_response(model_generator.generate(dot_code,renderer=self.theRenderer), OK)
+    resp = make_response(model_generator.generate(dot_code,model_type = self.theModelType, renderer = self.theRenderer), OK)
     accept_header = request.headers.get('Accept', 'image/svg+xml')
     if accept_header.find('text/plain') > -1:
       resp.headers['Content-type'] = 'text/plain'
