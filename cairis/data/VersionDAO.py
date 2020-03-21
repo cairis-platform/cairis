@@ -26,7 +26,7 @@ class VersionDAO(CairisDAO):
   def __init__(self, session_id):
     CairisDAO.__init__(self, session_id)
 
-  def cairis_version(self):
+  def cairis_version(self, pathValues = []):
     try:
       return self.db_proxy.cairisVersion()
     except ARMException as ex:

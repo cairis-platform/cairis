@@ -57,7 +57,6 @@ from cairis.controllers import UploadController
 from cairis.controllers import UseCaseController
 from cairis.controllers import ValidationController
 from cairis.controllers import ValueTypeController
-from cairis.controllers import VersionController
 
 from cairis.daemon.main import main, api
 from cairis.tools.SessionValidator import get_session_id
@@ -509,7 +508,7 @@ api.add_resource(ValueTypeController.ValueTypesByNameAPI, '/api/value_types/type
 api.add_resource(ValueTypeController.ValueTypesCreateAPI, '/api/value_types/',endpoint='create_value_type')
 
 # Version route
-api.add_resource(VersionController.VersionAPI, '/api/version',endpoint='version')
+api.add_resource(ObjectController.ObjectsByMethodAPI, '/api/version',endpoint='version',resource_class_kwargs={'dao' : 'VersionDAO','get_method' : 'cairis_version'})
 
 # Vulnerability routes
 api.add_resource(ObjectController.ObjectsAPI, '/api/vulnerabilities',endpoint='vulnerabilities',resource_class_kwargs={'dao': 'VulnerabilityDAO'})
