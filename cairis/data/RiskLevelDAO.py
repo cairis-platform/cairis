@@ -27,12 +27,10 @@ class RiskLevelDAO(CairisDAO):
   def __init__(self, session_id):
     CairisDAO.__init__(self, session_id)
 
-  def get_risk_level(self,assetName,envName):
-    """
-    :rtype: int
-    :return
-    :raise ARMHTTPError:
-    """
+  def get_risk_level(self,assetName, pathValues = []):
+    return self.get_risk_level_by_environment(assetName,'',pathValues)
+
+  def get_risk_level_by_environment(self,assetName,envName = '', pathValues = []):
     try:
       riskLevel = self.db_proxy.assetRiskLevel(assetName,envName)
     except DatabaseProxyException as ex:
@@ -43,12 +41,10 @@ class RiskLevelDAO(CairisDAO):
       raise ARMHTTPError(ex)
     return riskLevel
 
-  def get_risk_threat_level(self,assetName,threatName,envName):
-    """
-    :rtype: int
-    :return
-    :raise ARMHTTPError:
-    """
+  def get_risk_threat_level(self,assetName,threatName,pathValues = []):
+    return self.get_risk_threat_level_by_environment(assetName,threatName,'',pathValues)
+
+  def get_risk_threat_level_by_environment(self,assetName,threatName,envName = '', pathValues = []):
     try:
       riskLevel = self.db_proxy.assetThreatRiskLevel(assetName,threatName,envName)
     except DatabaseProxyException as ex:

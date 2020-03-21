@@ -48,7 +48,6 @@ from cairis.controllers import ProjectController
 from cairis.controllers import RequirementController
 from cairis.controllers import ResponseController
 from cairis.controllers import RiskController
-from cairis.controllers import RiskLevelController
 from cairis.controllers import TraceController
 from cairis.controllers import UploadController
 from cairis.controllers import UseCaseController
@@ -421,10 +420,10 @@ api.add_resource(RiskController.RiskAnalysisModelAPI, '/api/risks/model/environm
 api.add_resource(RiskController.RiskAnalysisModelNamesAPI, '/api/risks/model/environment/<path:environment>/names',endpoint='risk_model_name')
 
 # Risk Levels routes
-api.add_resource(RiskLevelController.RiskLevelAPI, '/api/risk_level/asset/<path:name>',endpoint='risklevel')
-api.add_resource(RiskLevelController.RiskLevelByEnvironmentAPI, '/api/risk_level/asset/<path:name>/environment/<path:environment>',endpoint='risklevelbyenvironment')
-api.add_resource(RiskLevelController.RiskThreatLevelAPI, '/api/risk_level/asset/threat_type/<path:asset>/<path:threat>',endpoint='riskthreatlevel')
-api.add_resource(RiskLevelController.RiskThreatLevelByEnvironmentAPI, '/api/risk_level/asset/threat_type/<path:asset>/<path:threat>/environment/<path:environment>',endpoint='riskthreatlevelbyenvironment')
+api.add_resource(ObjectController.ObjectsByMethodAndParameterAPI, '/api/risk_level/asset/<path:parameter_string>',endpoint='risklevel',resource_class_kwargs={'dao' : 'RiskLevelDAO','get_method' : 'get_risk_level'})
+api.add_resource(ObjectController.ObjectsByMethodAndTwoParametersAPI, '/api/risk_level/asset/<path:p1>/environment/<path:p2>',endpoint='risklevelbyenvironment',resource_class_kwargs={'dao' : 'RiskLevelDAO','get_method' : 'get_risk_level_by_environment'})
+api.add_resource(ObjectController.ObjectsByMethodAndTwoParametersAPI, '/api/risk_level/asset/threat_type/<path:p1>/<path:p2>',endpoint='riskthreatlevel',resource_class_kwargs={'dao' : 'RiskLevelDAO','get_method' : 'get_risk_threat_level'})
+api.add_resource(ObjectController.ObjectsByMethodAndThreeParametersAPI, '/api/risk_level/asset/threat_type/<path:p1>/<path:p2>/environment/<path:p3>',endpoint='riskthreatlevelbyenvironment',resource_class_kwargs={'dao' : 'RiskLevelDAO','get_method' : 'get_risk_threat_level_by_environment'})
 
 # Role routes
 api.add_resource(ObjectController.ObjectsAPI, '/api/roles',endpoint='roles',resource_class_kwargs={'dao': 'RoleDAO'})
