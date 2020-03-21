@@ -49,7 +49,6 @@ from cairis.controllers import RequirementController
 from cairis.controllers import ResponseController
 from cairis.controllers import RiskController
 from cairis.controllers import RiskLevelController
-from cairis.controllers import SummaryController
 from cairis.controllers import TraceController
 from cairis.controllers import UploadController
 from cairis.controllers import UseCaseController
@@ -439,7 +438,7 @@ api.add_resource(ObjectController.ObjectByNameAPI, '/api/security_patterns/name/
 api.add_resource(ObjectController.ObjectsByMethodAndTwoParametersAPI, '/api/security_patterns/name/<path:p1>/environment/<path:p2>/situate',endpoint='situatesecuritypattern',resource_class_kwargs={'dao' : 'SecurityPatternDAO','post_method' : 'situate_security_pattern','post_message' : 'Security Pattern successfully situated'})
 
 # Summary routes
-api.add_resource(SummaryController.SummaryAPI, '/api/summary/dimension/<path:dimension_name>/environment/<path:environment_name>',endpoint='summary')
+api.add_resource(ObjectController.ObjectsByMethodAndTwoParametersAPI, '/api/summary/dimension/<path:p1>/environment/<path:p2>',endpoint='summary',resource_class_kwargs={'dao' : 'SummaryDAO','get_method' : 'get_summary'})
 
 # Task routes
 api.add_resource(ObjectController.ObjectsAPI, '/api/tasks',endpoint='tasks',resource_class_kwargs={'dao': 'TaskDAO'})

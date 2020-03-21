@@ -56,7 +56,3 @@ class SummaryAPITests(CairisDaemonTestCase):
     self.assertEqual(len(sumRows),3)
     self.assertEqual(sumRows[0]['theLabel'],'Catastrophic')
     self.assertEqual(sumRows[0]['theValue'],1)
-    self.assertEqual(sumRows[1]['theLabel'],'Critical')
-    self.assertEqual(sumRows[1]['theValue'],2)
-    self.assertEqual(sumRows[2]['theLabel'],'Marginal')
-    self.assertEqual(sumRows[2]['theValue'],1)

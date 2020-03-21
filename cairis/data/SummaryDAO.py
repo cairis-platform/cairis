@@ -29,7 +29,7 @@ class SummaryDAO(CairisDAO):
   def __init__(self, session_id):
     CairisDAO.__init__(self, session_id)
 
-  def get_summary(self,dimension_name,environment_name):
+  def get_summary(self,dimension_name,environment_name, pathValues = []):
     try:
       sumRows = self.db_proxy.dimensionSummary(dimension_name,environment_name)
     except DatabaseProxyException as ex:
