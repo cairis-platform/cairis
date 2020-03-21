@@ -16,7 +16,7 @@
 #  under the License.
 
 from cairis.core.ARM import *
-from cairis.daemon.CairisHTTPError import CairisHTTPError, ARMHTTPError
+from cairis.daemon.CairisHTTPError import ARMHTTPError
 from cairis.data.CairisDAO import CairisDAO
 __author__ = 'Shamal Faily'
 
@@ -26,7 +26,7 @@ class ValidationDAO(CairisDAO):
   def __init__(self, session_id):
     CairisDAO.__init__(self, session_id)
 
-  def model_validation(self,envName):
+  def model_validation(self,envName, pathValues = []):
     try:
       return self.db_proxy.modelValidation(envName)
     except ARMException as ex:

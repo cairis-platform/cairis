@@ -52,7 +52,6 @@ from cairis.controllers import RiskLevelController
 from cairis.controllers import TraceController
 from cairis.controllers import UploadController
 from cairis.controllers import UseCaseController
-from cairis.controllers import ValidationController
 from cairis.controllers import ValueTypeController
 
 from cairis.daemon.main import main, api
@@ -499,7 +498,7 @@ api.add_resource(ObjectController.ObjectByNameAPI, '/api/user_goals/name/<path:n
 api.add_resource(ObjectController.ModelByTwoParametersAPI, '/api/user_goals/model/environment/<path:p1>/filter_name/<path:p2>',endpoint='usergoalmodel',resource_class_kwargs={'dao' : 'UserGoalDAO','get_method' : 'get_user_goal_model','renderer' : 'dot'})
 
 # Validation route
-api.add_resource(ValidationController.ValidationAPI, '/api/validation/environment/<path:name>',endpoint='environmentvalidation')
+api.add_resource(ObjectController.ObjectsByMethodAndParameterAPI, '/api/validation/environment/<path:parameter_string>',endpoint='environmentvalidation',resource_class_kwargs={'dao' : 'ValidationDAO','get_method' : 'model_validation'})
 
 # Value Type routes
 api.add_resource(ValueTypeController.ValueTypesAPI, '/api/value_types/type/<path:type_name>/environment/<path:environment_name>',endpoint='value_types')
