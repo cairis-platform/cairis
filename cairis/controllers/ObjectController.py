@@ -122,6 +122,26 @@ class ObjectsByMethodAPI(Resource):
     resp.contenttype = 'application/json'
     return resp
 
+class ObjectsByMethodAndFourParametersAPI(Resource):
+  def __init__(self,**kwargs):
+    self.DAOModule = getattr(import_module('cairis.data.' + kwargs['dao']),kwargs['dao'])
+    self.thePathParameters = []
+    if 'get_method' in kwargs:
+      self.theGetMethod = kwargs['get_method']
+
+  def get(self,p1,p2,p3,p4):
+    session_id = get_session_id(session, request)
+    dao = self.DAOModule(session_id)
+    pathValues = []
+    for parameterName,defaultValue in self.thePathParameters:
+      pathValues.append(request.args.get(parameterName,defaultValue))
+    objts = getattr(dao, self.theGetMethod)(p1,p2,p3,p4,pathValues)
+    dao.close()
+    resp = make_response(json_serialize(objts, session_id=session_id), OK)
+    resp.contenttype = 'application/json'
+    return resp
+
+
 class ObjectsByMethodAndThreeParametersAPI(Resource):
   def __init__(self,**kwargs):
     self.DAOModule = getattr(import_module('cairis.data.' + kwargs['dao']),kwargs['dao'])
@@ -536,6 +556,16 @@ class ModelByParameterAPI(Resource):
 
     if not isinstance(dot_code, str):
       raise ObjectNotFoundHTTPError('The model')
+
+    if (self.theModelType == 'risk'):
+      if pathValues[4] == 'Hierarchical':
+        self.theRenderer = 'dot'
+      elif pathValues[4] == 'Spring':
+        self.theRenderer = 'fdp'
+      elif pathValues[4] == 'Radial':
+        self.theRenderer = 'twopi'
+      else:
+        self.theRenderer = 'circo'
 
     resp = make_response(model_generator.generate(dot_code, model_type = self.theModelType, renderer = self.theRenderer), OK)
     accept_header = request.headers.get('Accept', 'image/svg+xml')

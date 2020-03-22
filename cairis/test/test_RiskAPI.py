@@ -189,7 +189,7 @@ class RiskAPITests(CairisDaemonTestCase):
 
 
     def test_get_rating_by_name(self):
-        method = 'test_get_rating_by_tve'
+        method = 'test_get_rating'
         url = '/api/risks/threat/%s/vulnerability/%s/environment/%s?session_id=test' % (
             quote(self.existing_threat_name),
             quote(self.existing_vulnerability),
@@ -197,17 +197,29 @@ class RiskAPITests(CairisDaemonTestCase):
         )
         rv = self.app.get(url)
         self.assertIsNotNone(rv.data, 'No response')
-        if (sys.version_info > (3,)):
-          responseData = rv.data.decode('utf-8')
-        else:
-          responseData = rv.data
+        responseData = rv.data.decode('utf-8')
         self.logger.debug('[%s] Response data: %s', method, responseData)
         rating = jsonpickle.decode(responseData)
         self.assertIsNotNone(rating, 'No results after deserialization')
         self.logger.info('[%s] Risk rating: %s\n', method, rating['rating'])
 
-    def test_get_scoring_by_rtve(self):
-        method = 'test_get_scoring_by_rtve'
+        url = '/api/risks/vulnerability/%s/threat/%s/environment/%s?session_id=test' % (
+            quote(self.existing_vulnerability),
+            quote(self.existing_threat_name),
+            quote(self.existing_environment_name)
+        )
+        rv = self.app.get(url)
+        self.assertIsNotNone(rv.data, 'No response')
+        responseData = rv.data.decode('utf-8')
+        self.logger.debug('[%s] Response data: %s', method, responseData)
+        rating = jsonpickle.decode(responseData)
+        self.assertIsNotNone(rating, 'No results after deserialization')
+        self.logger.info('[%s] Risk rating: %s\n', method, rating['rating'])
+
+
+
+    def test_get_scoring(self):
+        method = 'test_get_scoring'
         url = '/api/risks/name/%s/threat/%s/vulnerability/%s/environment/%s?session_id=test' % (
             quote(self.existing_risk_name),
             quote(self.existing_threat_name),
@@ -216,10 +228,7 @@ class RiskAPITests(CairisDaemonTestCase):
         )
         rv = self.app.get(url)
         self.assertIsNotNone(rv.data, 'No response')
-        if (sys.version_info > (3,)):
-          responseData = rv.data.decode('utf-8')
-        else:
-          responseData = rv.data
+        responseData = rv.data.decode('utf-8')
         self.logger.debug('[%s] Response data: %s', method, responseData)
         scores = jsonpickle.decode(responseData)
         self.assertIsNotNone(scores, 'No results after deserialization')
@@ -228,6 +237,26 @@ class RiskAPITests(CairisDaemonTestCase):
         has_all_keys = all (k in list(score.keys()) for k in RiskScore.required)
         self.assertTrue(has_all_keys, 'Response is not a RiskScore object')
         self.logger.info('[%s] %s - %d - %d\n', method, score['responseName'], score['unmitScore'], score['mitScore'])
+
+        url = '/api/risks/name/%s/vulnerability/%s/threat/%s/environment/%s?session_id=test' % (
+            quote(self.existing_risk_name),
+            quote(self.existing_vulnerability),
+            quote(self.existing_threat_name),
+            quote(self.existing_environment_name)
+        )
+        rv = self.app.get(url)
+        self.assertIsNotNone(rv.data, 'No response')
+        responseData = rv.data.decode('utf-8')
+        self.logger.debug('[%s] Response data: %s', method, responseData)
+        scores = jsonpickle.decode(responseData)
+        self.assertIsNotNone(scores, 'No results after deserialization')
+        self.assertGreater(len(scores), 0, 'No results for current criteria')
+        score = scores[0]
+        has_all_keys = all (k in list(score.keys()) for k in RiskScore.required)
+        self.assertTrue(has_all_keys, 'Response is not a RiskScore object')
+        self.logger.info('[%s] %s - %d - %d\n', method, score['responseName'], score['unmitScore'], score['mitScore'])
+
+
 
     def prepare_new_risk(self):
         new_misuse_case = MisuseCaseParameters(

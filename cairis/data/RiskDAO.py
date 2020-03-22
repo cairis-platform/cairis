@@ -72,7 +72,7 @@ class RiskDAO(CairisDAO):
     risk_names = list(risks.keys())
     return risk_names
 
-  def risk_model_elements(self,envName):
+  def risk_model_elements(self,envName, pathValues = []):
     try:
       return self.db_proxy.riskModelElements(envName)
     except DatabaseProxyException as ex:
@@ -108,8 +108,38 @@ class RiskDAO(CairisDAO):
       found_risk = self.simplify(found_risk)
     return found_risk
 
-  def get_risk_analysis_model(self, environment_name, dim_name, obj_name,model_layout,isTagged = False, rankDir = 'TB'):
+  def get_risk_analysis_model(self, environment_name, pathValues = []):
     fontName, fontSize, apFontName = get_fonts(session_id=self.session_id)
+    dim_name = pathValues[0]
+    obj_name = pathValues[1]
+    isTagged = pathValues[2]
+    rankDir = pathValues[3]
+    model_layout = pathValues[4]
+
+    if (isTagged == '1'):
+      isTagged = True
+    else:
+      isTagged = False
+
+    if dim_name == 'all':
+      dim_name = ''
+    if obj_name == 'all':
+      obj_name = ''
+
+    if model_layout == 'Hierarchical':
+      model_layout = 'dot'
+    elif model_layout == 'Spring':
+      model_layout = 'fdp'
+    elif model_layout == 'Radial':
+      model_layout = 'twopi'
+    else:
+      model_layout = 'circo'
+
+    if rankDir == 'Horizontal':
+      rankDir = 'LR'
+    else:
+      rankDir = 'TB'
+   
     try:
       riskAnalysisModel = self.db_proxy.riskAnalysisModel(environment_name, dim_name, obj_name)
       tLinks = EnvironmentModel(riskAnalysisModel, environment_name, self.db_proxy, model_layout, fontName=fontName, fontSize=fontSize, isTagged=isTagged, rankDir=rankDir)
@@ -343,7 +373,6 @@ class RiskDAO(CairisDAO):
     return severity_name
 
   def expand_mc_props(self, misuse_case):
-    # Fetch threat and vulnerability name
     try:
       threat_name, vuln_name = self.db_proxy.misuseCaseRiskComponents(misuse_case.theName)
       misuse_case.theThreatName = threat_name
@@ -358,7 +387,6 @@ class RiskDAO(CairisDAO):
         self.close()
         raise ARMHTTPError(ex)
 
-    # Add objective, likelihood, severity and risk rating
     for idx in range(0, len(misuse_case.theEnvironmentProperties)):
       env_prop = misuse_case.theEnvironmentProperties[idx]
       assert isinstance(env_prop, MisuseCaseEnvironmentProperties)
@@ -374,10 +402,11 @@ class RiskDAO(CairisDAO):
       misuse_case.theEnvironmentProperties[idx] = env_prop
 
     return misuse_case
-  # endregion
 
-  # region Risk scores
-  def get_scores_by_rtve(self, risk_name, threat_name, vulnerability_name, environment_name):
+  def get_scores_by_rvte(self, risk_name, vulnerability_name, threat_name, environment_name, pathValues = []):
+    return self.get_scores_by_rtve(risk_name, vulnerability_name, threat_name, environment_name, pathValues)
+
+  def get_scores_by_rtve(self, risk_name, threat_name, vulnerability_name, environment_name, pathValues = []):
     try:
       scores = self.db_proxy.riskScore(threat_name, vulnerability_name, environment_name, risk_name)
       if len(scores) > 0:
@@ -416,13 +445,11 @@ class RiskDAO(CairisDAO):
       raise MissingParameterHTTPError(param_names=['scores'])
 
     return new_scores
-  # endregion
 
-  # region Risk rating
-  def get_risk_rating_by_tve(self, threat_name, vulnerability_name, environment_name):
-    """
-    :rtype: RiskRating
-    """
+  def get_risk_rating_by_vte(self, vulnerability_name, threat_name, environment_name, pathValues = []):
+    return self.get_risk_rating_by_tve(threat_name, vulnerability_name, environment_name, pathValues)
+
+  def get_risk_rating_by_tve(self, threat_name, vulnerability_name, environment_name, pathValues = []):
     try:
       rating = self.db_proxy.riskRating(-1,threat_name, vulnerability_name, environment_name)
       risk_rating = RiskRating(threat_name, vulnerability_name, environment_name, rating)

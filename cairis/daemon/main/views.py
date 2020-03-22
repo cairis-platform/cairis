@@ -47,7 +47,6 @@ from cairis.controllers import PersonaCharacteristicController
 from cairis.controllers import ProjectController
 from cairis.controllers import RequirementController
 from cairis.controllers import ResponseController
-from cairis.controllers import RiskController
 from cairis.controllers import TraceController
 from cairis.controllers import UploadController
 from cairis.controllers import UseCaseController
@@ -407,17 +406,12 @@ api.add_resource(ResponseController.ResponseByNameGenerateAPI, '/api/responses/n
 api.add_resource(ObjectController.ObjectsAPI, '/api/risks',endpoint='risks',resource_class_kwargs={'dao': 'RiskDAO'})
 api.add_resource(ObjectController.ObjectByNameAPI, '/api/risks/name/<path:name>',endpoint='risk',resource_class_kwargs={'dao' : 'RiskDAO'})
 api.add_resource(ObjectController.ObjectsSummaryAPI, '/api/risks/summary',endpoint='riskssummary',resource_class_kwargs={'dao' : 'RiskDAO'})
-api.add_resource(
-  RiskController.RisksScoreByNameAPI,
-  '/api/risks/name/<path:name>/threat/<path:threat>/vulnerability/<path:vulnerability>/environment/<path:environment>',
-  '/api/risks/name/<path:name>/vulnerability/<path:vulnerability>/threat/<path:threat>/environment/<path:environment>',endpoint='risk_score')
-api.add_resource(
-  RiskController.RisksRatingByNameAPI,
-  '/api/risks/threat/<path:threat>/vulnerability/<path:vulnerability>/environment/<path:environment>',
-  '/api/risks/vulnerability/<path:vulnerability>/threat/<path:threat>/environment/<path:environment>',endpoint='risk_rating'
-)
-api.add_resource(RiskController.RiskAnalysisModelAPI, '/api/risks/model/environment/<path:environment>',endpoint='risk_model')
-api.add_resource(RiskController.RiskAnalysisModelNamesAPI, '/api/risks/model/environment/<path:environment>/names',endpoint='risk_model_name')
+api.add_resource(ObjectController.ObjectsByMethodAndFourParametersAPI,'/api/risks/name/<path:p1>/threat/<path:p2>/vulnerability/<path:p3>/environment/<path:p4>',endpoint='risk_score_rtve',resource_class_kwargs={'dao': 'RiskDAO', 'get_method' : 'get_scores_by_rtve'})
+api.add_resource(ObjectController.ObjectsByMethodAndFourParametersAPI, '/api/risks/name/<path:p1>/vulnerability/<path:p2>/threat/<path:p3>/environment/<path:p4>',endpoint='risk_score_rvte', resource_class_kwargs={'dao' : 'RiskDAO','get_method' : 'get_scores_by_rvte'})
+api.add_resource(ObjectController.ObjectsByMethodAndThreeParametersAPI,'/api/risks/threat/<path:p1>/vulnerability/<path:p2>/environment/<path:p3>',endpoint='risk_rating_tve',resource_class_kwargs={'dao' : 'RiskDAO', 'get_method' : 'get_risk_rating_by_tve'})
+api.add_resource(ObjectController.ObjectsByMethodAndThreeParametersAPI,'/api/risks/vulnerability/<path:p1>/threat/<path:p2>/environment/<path:p3>',endpoint='risk_rating_vte',resource_class_kwargs={'dao' : 'RiskDAO', 'get_method' : 'get_risk_rating_by_vte'})
+api.add_resource(ObjectController.ModelByParameterAPI, '/api/risks/model/environment/<path:parameter_string>',endpoint='risk_model',resource_class_kwargs={'dao' : 'RiskDAO','get_method' : 'get_risk_analysis_model', 'path_parameters' : [('dimension_name',''),('object_name',''),('tagged','0'),('orientation','Vertical'),('layout','Hierarchical')], 'model_type' : 'risk'})
+api.add_resource(ObjectController.ObjectsByMethodAndParameterAPI, '/api/risks/model/environment/<path:parameter_string>/names',endpoint='risk_model_name',resource_class_kwargs={'dao' : 'RiskDAO','get_method' : 'risk_model_elements'})
 
 # Risk Levels routes
 api.add_resource(ObjectController.ObjectsByMethodAndParameterAPI, '/api/risk_level/asset/<path:parameter_string>',endpoint='risklevel',resource_class_kwargs={'dao' : 'RiskLevelDAO','get_method' : 'get_risk_level'})
