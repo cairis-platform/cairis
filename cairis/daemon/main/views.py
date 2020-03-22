@@ -42,7 +42,6 @@ from cairis.controllers import MisuseCaseController
 from cairis.controllers import ObjectController
 from cairis.controllers import ObjectDependencyController
 from cairis.controllers import PermissionsController
-from cairis.controllers import PersonaController
 from cairis.controllers import PersonaCharacteristicController
 from cairis.controllers import ProjectController
 from cairis.controllers import RequirementController
@@ -370,8 +369,9 @@ api.add_resource(ObjectController.ObjectsAPI, '/api/personas',endpoint='personas
 api.add_resource(ObjectController.ObjectByNameAPI, '/api/personas/name/<path:name>',endpoint='persona',resource_class_kwargs={'dao' : 'PersonaDAO'})
 api.add_resource(ObjectController.ObjectsSummaryAPI, '/api/personas/summary',endpoint='personassummary',resource_class_kwargs={'dao' : 'PersonaDAO'})
 api.add_resource(ObjectController.ObjectsByMethodAPI, '/api/personas/names',endpoint='persona_names',resource_class_kwargs={'dao' : 'PersonaDAO','get_method' : 'get_persona_names'})
-api.add_resource(PersonaController.PersonaModelByNameAPI, '/api/personas/model/name/<path:persona>/variable/<path:variable>/characteristic/<path:characteristic>',endpoint='persona_model')
-api.add_resource(PersonaController.PersonaCharacteristicsByNameAPI, '/api/personas/characteristics/name/<path:persona>/variable/<path:variable>/characteristic/<path:characteristic>',endpoint='persona_characteristic_persona')
+api.add_resource(ObjectController.ModelByThreeParametersAPI, '/api/personas/model/name/<path:p1>/variable/<path:p2>/characteristic/<path:p3>',endpoint='persona_model',resource_class_kwargs={'dao' : 'PersonaDAO','get_method' : 'get_persona_model','renderer' : 'dot', 'model_type' : 'persons'})
+
+api.add_resource(ObjectController.ObjectsByMethodAndThreeParametersAPI,'/api/personas/characteristics/name/<path:p1>/variable/<path:p2>/characteristic/<path:p3>',endpoint='persona_characteristic_persona',resource_class_kwargs={'dao' : 'PersonaDAO', 'get_method' : 'get_persona_characteristics'})
 api.add_resource(ObjectController.ObjectsByMethodAPI, '/api/personas/types',endpoint='persona_types',resource_class_kwargs={'dao' : 'PersonaDAO','get_method' : 'get_persona_types'})
 
 # Persona Characteristic routes

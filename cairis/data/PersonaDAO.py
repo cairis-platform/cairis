@@ -233,8 +233,13 @@ class PersonaDAO(CairisDAO):
       raise MissingParameterHTTPError(param_names=['real_props', 'fake_props'])
     return new_props
 
-  def get_persona_model(self, persona_name,variable_name,characteristic_name):
+  def get_persona_model(self, persona_name,variable_name,characteristic_name, pathValues = []):
     fontName, fontSize, apFontName = get_fonts(session_id=self.session_id)
+    if (variable_name == 'All' or variable_name == 'all'):  
+      variable_name = ''
+    if (characteristic_name == 'All' or characteristic_name == 'all'): 
+      characteristic_name = ''
+
     try:
       modelAssocs = self.db_proxy.assumptionPersonaModel(persona_name,variable_name,characteristic_name)
       associations = AssumptionPersonaModel(modelAssocs,font_name=fontName,font_size=fontSize)
@@ -249,8 +254,13 @@ class PersonaDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def get_persona_characteristics(self, persona_name,variable_name,characteristic_name):
+  def get_persona_characteristics(self, persona_name,variable_name,characteristic_name, pathValue = []):
     fontName, fontSize, apFontName = get_fonts(session_id=self.session_id)
+    if (variable_name == 'All' or variable_name == 'all'):  
+      variable_name = ''
+    if (characteristic_name == 'All' or characteristic_name == 'all'): 
+      characteristic_name = ''
+
     try:
       modelAssocs = self.db_proxy.assumptionPersonaModel(persona_name,variable_name,characteristic_name)
       associations = AssumptionPersonaModel(modelAssocs,font_name=fontName,font_size=fontSize)
