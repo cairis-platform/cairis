@@ -26,9 +26,7 @@ from flask import session, request, make_response
 from flask_restful import Resource
 from cairis.daemon.CairisHTTPError import ObjectNotFoundHTTPError, ARMHTTPError, MalformedJSONHTTPError, MissingParameterHTTPError
 from cairis.data.RequirementDAO import RequirementDAO
-from cairis.tools.MessageDefinitions import RequirementMessage
-from cairis.tools.ModelDefinitions import RequirementModel
-from cairis.tools.SessionValidator import get_session_id, get_model_generator
+from cairis.tools.SessionValidator import get_session_id
 from cairis.tools.JsonConverter import json_serialize
 
 __author__ = 'Robin Quetin, Shamal Faily'
@@ -119,68 +117,4 @@ class RequirementNamesByEnvironmentAPI(Resource):
     dao.close()
     resp = make_response(json_serialize(reqs, session_id=session_id), OK)
     resp.headers['Content-type'] = 'application/json'
-    return resp
-
-class RequirementByNameAPI(Resource):
-
-  def get(self, name):
-    session_id = get_session_id(session, request)
-
-    dao = RequirementDAO(session_id)
-    req = dao.get_requirement_by_name(name)
-    dao.close()
-
-    resp = make_response(json_serialize(req, session_id=session_id), OK)
-    resp.headers['Content-type'] = 'application/json'
-    return resp
-
-  def delete(self, name):
-    session_id = get_session_id(session, request)
-
-    dao = RequirementDAO(session_id)
-    dao.delete_requirement(name=name)
-    dao.close()
-
-    resp_dict = {'message': name + ' deleted'}
-    resp = make_response(json_serialize(resp_dict), OK)
-    resp.headers['Content-type'] = 'application/json'
-    return resp
-
-  def put(self,name):
-    session_id = get_session_id(session, request)
-    dao = RequirementDAO(session_id)
-    req = dao.from_json(request)
-    dao.update_requirement(req, name=name)
-    dao.close()
-
-    resp_dict = {'message': req.name() + ' updated'}
-    resp = make_response(json_serialize(resp_dict), OK)
-    resp.headers['Content-type'] = 'application/json'
-    return resp
-
-class ConceptMapModelAPI(Resource):
-
-  def get(self, environment,requirement):
-    session_id = get_session_id(session, request)
-    isAsset = request.args.get('asset', '0')
-    if (isAsset == '1'):
-      isAsset = True
-    else:
-      isAsset = False
-
-    model_generator = get_model_generator()
-
-    dao = RequirementDAO(session_id)
-    dot_code = dao.get_concept_map_model(environment, requirement, isAsset)
-    dao.close()
-
-    if not isinstance(dot_code, str):
-      raise ObjectNotFoundHTTPError('The model')
-
-    resp = make_response(model_generator.generate(dot_code,renderer='dot'), OK)
-    accept_header = request.headers.get('Accept', 'image/svg+xml')
-    if accept_header.find('text/plain') > -1:
-      resp.headers['Content-type'] = 'text/plain'
-    else:
-      resp.headers['Content-type'] = 'image/svg+xml'
     return resp

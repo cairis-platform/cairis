@@ -393,9 +393,13 @@ api.add_resource(RequirementController.RequirementsByAssetAPI, '/api/requirement
 api.add_resource(RequirementController.RequirementsByEnvironmentAPI, '/api/requirements/environment/<path:name>',endpoint='requirement_environments')
 api.add_resource(RequirementController.RequirementNamesByAssetAPI, '/api/requirements/asset/<path:name>/names',endpoint='requirements_assets_names')
 api.add_resource(RequirementController.RequirementNamesByEnvironmentAPI, '/api/requirements/environment/<path:name>/names',endpoint='requirement_environments_names')
-api.add_resource(RequirementController.RequirementByNameAPI, '/api/requirements/name/<path:name>',endpoint='requirement')
-api.add_resource(RequirementController.RequirementByNameAPI, '/api/requirements/shortcode/<path:name>',endpoint='requirementshortcode')
-api.add_resource(RequirementController.ConceptMapModelAPI, '/api/requirements/model/environment/<path:environment>/requirement/<path:requirement>',endpoint='conceptmapmodel')
+
+api.add_resource(ObjectController.ObjectByNameAPI, '/api/requirements/name/<path:name>','/api/requirements/shortcode/<path:name>',endpoint='requirement',resource_class_kwargs={'dao' : 'RequirementDAO'})
+#api.add_resource(RequirementController.RequirementByNameAPI, '/api/requirements/name/<path:name>',endpoint='requirement')
+#api.add_resource(RequirementController.RequirementByNameAPI, '/api/requirements/shortcode/<path:name>',endpoint='requirementshortcode')
+
+#api.add_resource(RequirementController.ConceptMapModelAPI, '/api/requirements/model/environment/<path:environment>/requirement/<path:requirement>',endpoint='conceptmapmodel')
+api.add_resource(ObjectController.ModelByTwoParametersAPI, '/api/requirements/model/environment/<path:p1>/requirement/<path:p2>',endpoint='conceptmapmodel',resource_class_kwargs={'dao' : 'RequirementDAO','get_method' : 'get_concept_map_model','renderer' : 'dot','path_parameters' : [('asset','0')]})
 
 # Response routes
 api.add_resource(ObjectController.ObjectsAPI, '/api/responses',endpoint='responses',resource_class_kwargs={'dao': 'ResponseDAO'})
