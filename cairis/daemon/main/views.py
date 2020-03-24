@@ -45,7 +45,6 @@ from cairis.controllers import PermissionsController
 from cairis.controllers import PersonaCharacteristicController
 from cairis.controllers import ProjectController
 from cairis.controllers import RequirementController
-from cairis.controllers import ResponseController
 from cairis.controllers import TraceController
 from cairis.controllers import UploadController
 from cairis.controllers import UseCaseController
@@ -395,16 +394,12 @@ api.add_resource(RequirementController.RequirementNamesByAssetAPI, '/api/require
 api.add_resource(RequirementController.RequirementNamesByEnvironmentAPI, '/api/requirements/environment/<path:name>/names',endpoint='requirement_environments_names')
 
 api.add_resource(ObjectController.ObjectByNameAPI, '/api/requirements/name/<path:name>','/api/requirements/shortcode/<path:name>',endpoint='requirement',resource_class_kwargs={'dao' : 'RequirementDAO'})
-#api.add_resource(RequirementController.RequirementByNameAPI, '/api/requirements/name/<path:name>',endpoint='requirement')
-#api.add_resource(RequirementController.RequirementByNameAPI, '/api/requirements/shortcode/<path:name>',endpoint='requirementshortcode')
-
-#api.add_resource(RequirementController.ConceptMapModelAPI, '/api/requirements/model/environment/<path:environment>/requirement/<path:requirement>',endpoint='conceptmapmodel')
 api.add_resource(ObjectController.ModelByTwoParametersAPI, '/api/requirements/model/environment/<path:p1>/requirement/<path:p2>',endpoint='conceptmapmodel',resource_class_kwargs={'dao' : 'RequirementDAO','get_method' : 'get_concept_map_model','renderer' : 'dot','path_parameters' : [('asset','0')]})
 
 # Response routes
 api.add_resource(ObjectController.ObjectsAPI, '/api/responses',endpoint='responses',resource_class_kwargs={'dao': 'ResponseDAO'})
 api.add_resource(ObjectController.ObjectByNameAPI, '/api/responses/name/<path:name>',endpoint='response',resource_class_kwargs={'dao' : 'ResponseDAO'})
-api.add_resource(ResponseController.ResponseByNameGenerateAPI, '/api/responses/name/<path:name>/generate_goal',endpoint='generate_goal')
+api.add_resource(ObjectController.ObjectsByMethodAndParameterAPI, '/api/responses/name/<path:parameter_string>/generate_goal',endpoint='generate_goal',resource_class_kwargs={'dao' : 'ResponseDAO','post_method' : 'generate_goal','post_message' : 'Goal successfully generated'})
 
 # Risk routes
 api.add_resource(ObjectController.ObjectsAPI, '/api/risks',endpoint='risks',resource_class_kwargs={'dao': 'RiskDAO'})

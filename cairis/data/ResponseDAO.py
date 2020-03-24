@@ -229,7 +229,7 @@ class ResponseDAO(CairisDAO):
 
     return obj
 
-  def generate_goal(self,responseName):
+  def generate_goal(self,responseName, pathValues = []):
     try:
       respId = self.db_proxy.getDimensionId(responseName,'response')
       responses = self.db_proxy.getResponses(respId)
