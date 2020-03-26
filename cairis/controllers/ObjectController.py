@@ -407,7 +407,8 @@ class ObjectByNameAPI(Resource):
         objtName = objt['theName']
       else:
         objtName = objt.name()
-      dao.nameCheck(objtName)
+      if (name != objtName):
+        dao.nameCheck(objtName)
     dao.update_object(objt, name)
     dao.close()
     resp_dict = {}
