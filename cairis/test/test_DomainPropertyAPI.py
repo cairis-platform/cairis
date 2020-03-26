@@ -115,6 +115,20 @@ class DomainPropertyAPITests(CairisDaemonTestCase):
     json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
 
+
+    rv = self.app.post(url, content_type='application/json', data=new_domainproperty_body)
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    json_resp = jsonpickle.decode(responseData)
+    self.assertIsNotNone(json_resp)
+    self.assertIsInstance(json_resp, dict)
+    message = json_resp.get('message', None)
+    self.assertIsNotNone(message, 'No message in response')
+    self.logger.info('[%s] Message: %s', method, message)
+    self.assertGreater(message.find('already exists'), -1, 'The domainproperty post should have failed')
+
     rv = self.app.delete('/api/domainproperties/name/%s?session_id=test' % quote(self.prepare_new_domainproperty().name()))
 
   def test_put(self):
@@ -158,6 +172,20 @@ class DomainPropertyAPITests(CairisDaemonTestCase):
     self.assertIsNotNone(upd_domainproperty, 'Unable to decode JSON data')
     self.logger.debug('[%s] Response data: %s', method, responseData)
     self.logger.info('[%s] Domain Property: %s\n', method, upd_domainproperty['theName'])
+
+    rv = self.app.put('/api/domainproperties/name/%s?session_id=test' % quote(self.prepare_new_domainproperty().name()), data=upd_env_body, content_type='application/json')
+    self.assertIsNotNone(rv.data, 'No response')
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    json_resp = jsonpickle.decode(responseData)
+    self.assertIsNotNone(json_resp)
+    self.assertIsInstance(json_resp, dict)
+    message = json_resp.get('message', None)
+    self.assertIsNotNone(message, 'No message in response')
+    self.logger.info('[%s] Message: %s', method, message)
+    self.assertGreater(message.find('already exists'), -1, 'The domainproperty update should have failed')
 
     rv = self.app.delete('/api/domainproperties/name/%s?session_id=test' % quote(domainproperty_to_update.theName))
 
