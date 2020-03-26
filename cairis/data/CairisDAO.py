@@ -35,12 +35,18 @@ from cairis.tools.SessionValidator import check_required_keys
 __author__ = 'Robin Quetin, Shamal Faily'
 
 class CairisDAO(object):
-  def __init__(self, session_id):
+  def __init__(self, session_id, dimension = ''):
     b = Borg()
     self.db_proxy = self.get_dbproxy(session_id)
     self.session_id = session_id
+    self.theDimension = dimension
     self.logger = logging.getLogger('cairisd')
     self.logger.setLevel(b.logLevel)
+
+  def dimension(self): return self.theDimension
+
+  def nameCheck(self,newObjtName):
+    self.db_proxy.nameCheck(newObjtName,self.theDimension)
 
   def close(self):
     if self.db_proxy.conn is not None:

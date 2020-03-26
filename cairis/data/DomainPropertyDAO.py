@@ -33,7 +33,7 @@ __author__ = 'Shamal Faily'
 class DomainPropertyDAO(CairisDAO):
 
   def __init__(self, session_id):
-    CairisDAO.__init__(self, session_id)
+    CairisDAO.__init__(self, session_id, 'domainproperty')
 
   def get_objects(self, constraint_id=-1):
     try:

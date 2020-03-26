@@ -37,7 +37,7 @@ __author__ = 'Robin Quetin, Shamal Faily'
 
 class ThreatDAO(CairisDAO):
   def __init__(self, session_id):
-    CairisDAO.__init__(self, session_id)
+    CairisDAO.__init__(self, session_id, 'threat')
     self.prop_dict = {
       0:'None',
       1:'Low',

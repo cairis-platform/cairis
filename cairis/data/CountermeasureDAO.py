@@ -40,7 +40,7 @@ __author__ = 'Shamal Faily'
 class CountermeasureDAO(CairisDAO):
 
   def __init__(self, session_id):
-    CairisDAO.__init__(self, session_id)
+    CairisDAO.__init__(self, session_id, 'countermeasure')
     self.prop_dict = {
       0:'None',
       1:'Low',

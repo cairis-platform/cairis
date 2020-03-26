@@ -37,7 +37,7 @@ __author__ = 'Robin Quetin, Shamal Faily'
 
 class RiskDAO(CairisDAO):
   def __init__(self, session_id):
-    CairisDAO.__init__(self, session_id)
+    CairisDAO.__init__(self, session_id, 'risk')
 
   def get_objects(self, constraint_id=-1, simplify=True, skip_misuse=False):
     try:

@@ -52,6 +52,14 @@ class ObjectsAPI(Resource):
 
     dao = self.DAOModule(session_id)
     new_objt = dao.from_json(request)
+ 
+    if (dao.dimension() != ''):
+      objtName = ''
+      if (isinstance(new_objt,dict)):
+        objtName = new_objt['theName']
+      else:
+        objtName = new_objt.name()
+      dao.nameCheck(objtName)
     dao.add_object(new_objt)
     dao.close()
     resp_dict = {}
@@ -393,6 +401,13 @@ class ObjectByNameAPI(Resource):
     session_id = get_session_id(session, request)
     dao = self.DAOModule(session_id)
     objt = dao.from_json(request)
+    if (dao.dimension() != ''):
+      objtName = ''
+      if (isinstance(objt,dict)):
+        objtName = objt['theName']
+      else:
+        objtName = objt.name()
+      dao.nameCheck(objtName)
     dao.update_object(objt, name)
     dao.close()
     resp_dict = {}

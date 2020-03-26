@@ -31,7 +31,7 @@ __author__ = 'Shamal Faily'
 
 class TaskCharacteristicDAO(CairisDAO):
   def __init__(self, session_id):
-    CairisDAO.__init__(self, session_id)
+    CairisDAO.__init__(self, session_id, 'task_characteristic')
 
   def get_objects(self,constraint_id = -1):
     try:

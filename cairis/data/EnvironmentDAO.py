@@ -30,7 +30,7 @@ __author__ = 'Robin Quetin, Shamal Faily'
 
 class EnvironmentDAO(CairisDAO):
   def __init__(self, session_id):
-    CairisDAO.__init__(self, session_id)
+    CairisDAO.__init__(self, session_id, 'environment')
 
   def get_objects(self, constraint_id=-1):
     try:

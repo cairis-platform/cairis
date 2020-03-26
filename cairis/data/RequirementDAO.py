@@ -30,7 +30,7 @@ __author__ = 'Robin Quetin, Shamal Faily'
 
 class RequirementDAO(CairisDAO):
   def __init__(self, session_id):
-    CairisDAO.__init__(self, session_id)
+    CairisDAO.__init__(self, session_id, 'requirement')
 
   def get_requirements(self, constraint_id='', is_asset=True, ordered=False):
     try:

@@ -32,7 +32,7 @@ __author__ = 'Shamal Faily'
 
 class TemplateAssetDAO(CairisDAO):
   def __init__(self, session_id):
-    CairisDAO.__init__(self, session_id)
+    CairisDAO.__init__(self, session_id, 'template_asset')
     self.attr_dict = {
       'Confidentiality': cairis.core.armid.C_PROPERTY,
       'Integrity': cairis.core.armid.I_PROPERTY,

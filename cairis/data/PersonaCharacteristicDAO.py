@@ -33,7 +33,7 @@ __author__ = 'Shamal Faily'
 
 class PersonaCharacteristicDAO(CairisDAO):
   def __init__(self, session_id):
-    CairisDAO.__init__(self, session_id)
+    CairisDAO.__init__(self, session_id, 'persona_characteristic')
 
   def get_persona_characteristics(self,constraint_id = -1,simplify=True):
     try:

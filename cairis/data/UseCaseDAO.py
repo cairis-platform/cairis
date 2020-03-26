@@ -39,7 +39,7 @@ __author__ = 'Shamal Faily'
 class UseCaseDAO(CairisDAO):
 
   def __init__(self, session_id):
-    CairisDAO.__init__(self, session_id)
+    CairisDAO.__init__(self, session_id, 'usecase')
 
   def get_objects(self, constraint_id=-1, simplify=True):
     try:

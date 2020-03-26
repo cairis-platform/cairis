@@ -36,7 +36,7 @@ __author__ = 'Shamal Faily'
 
 class ObstacleDAO(CairisDAO):
   def __init__(self, session_id):
-    CairisDAO.__init__(self, session_id)
+    CairisDAO.__init__(self, session_id, 'obstacle')
 
   def get_objects(self, constraint_id=-1, simplify=True):
     try:

@@ -36,7 +36,7 @@ __author__ = 'Robin Quetin, Shamal Faily'
 
 class AssetDAO(CairisDAO):
   def __init__(self, session_id):
-    CairisDAO.__init__(self, session_id)
+    CairisDAO.__init__(self, session_id, 'asset')
     self.attr_dict = {
       'Confidentiality': cairis.core.armid.C_PROPERTY,
       'Integrity': cairis.core.armid.I_PROPERTY,

@@ -33,7 +33,7 @@ __author__ = 'Robin Quetin, Shamal Faily'
 
 class AttackerDAO(CairisDAO):
   def __init__(self, session_id):
-    CairisDAO.__init__(self, session_id)
+    CairisDAO.__init__(self, session_id, 'attacker')
 
   def get_objects(self, constraint_id=-1, simplify=True):
     try:

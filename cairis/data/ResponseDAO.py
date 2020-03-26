@@ -35,7 +35,7 @@ __author__ = 'Robin Quetin, Shamal Faily'
 
 class ResponseDAO(CairisDAO):
   def __init__(self, session_id):
-    CairisDAO.__init__(self, session_id)
+    CairisDAO.__init__(self, session_id, 'response')
 
   def get_objects(self, constraint_id=-1):
     try:
