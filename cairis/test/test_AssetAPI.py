@@ -94,11 +94,11 @@ class AssetAPITests(CairisDaemonTestCase):
     else:
       assets = json_deserialize(rv.data)
     self.assertIsNotNone(assets, 'No results after deserialization')
-    self.assertIsInstance(assets, dict, 'The result is not a dictionary as expected')
-    self.assertGreater(len(assets), 0, 'No assets in the dictionary')
-    self.assertIsInstance(list(assets.values())[0], dict)
+    self.assertIsInstance(assets, list, 'The result is not a list as expected')
+    self.assertGreater(len(assets), 0, 'No assets in the list')
+    self.assertIsInstance(assets[0], dict)
     self.logger.info('[%s] Assets found: %d', method, len(assets))
-    self.logger.info('[%s] First asset: %s\n', method, list(assets.values())[0]['theName'])
+    self.logger.info('[%s] First asset: %s\n', method, assets[0]['theName'])
 
   def test_get_all_summary(self):
     method = 'test_get_all_summary'

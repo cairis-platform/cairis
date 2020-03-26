@@ -38,7 +38,6 @@ from cairis.controllers import CountermeasureController
 from cairis.controllers import DocumentationController
 from cairis.controllers import EnvironmentController
 from cairis.controllers import GoalController
-from cairis.controllers import MisuseCaseController
 from cairis.controllers import ObjectController
 from cairis.controllers import ObjectDependencyController
 from cairis.controllers import PermissionsController
@@ -343,10 +342,10 @@ api.add_resource(ObjectController.ObjectByNameAPI, '/api/locations/name/<path:na
 api.add_resource(ObjectController.ModelByTwoParametersAPI, '/api/locations/model/locations/<path:p1>/environment/<path:p2>',endpoint='locationmodel',resource_class_kwargs={'dao' : 'LocationsDAO','get_method' : 'get_locations_model','renderer' : 'dot'})
 
 # Misuse case routes
-api.add_resource(MisuseCaseController.MisuseCasesAPI, '/api/misusecases',endpoint='misusecases')
-api.add_resource(MisuseCaseController.MisuseCaseByRiskNameAPI, '/api/misusecases/risk/<path:risk_name>',endpoint='misusecase_risk')
-api.add_resource(MisuseCaseController.MisuseCaseByNameAPI, '/api/misusecases/name/<path:misuse_case_name>',endpoint='misusecase')
-api.add_resource(MisuseCaseController.MisuseCaseByTVAPI, '/api/misusecases/threat/<path:threat>/vulnerability/<path:vulnerability>',endpoint='misusecase_tv')
+api.add_resource(ObjectController.ObjectsByMethodAPI, '/api/misusecases',endpoint='misusecases',resource_class_kwargs={'dao': 'RiskDAO','get_method' : 'get_misuse_cases', 'path_parameters' : [('constraint_id',-1)]})
+api.add_resource(ObjectController.ObjectsByMethodAndParameterAPI, '/api/misusecases/name/<path:parameter_string>',endpoint='misusecase',resource_class_kwargs={'dao': 'RiskDAO','get_method' : 'get_misuse_case_by_name'})
+api.add_resource(ObjectController.ObjectsByMethodAndParameterAPI, '/api/misusecases/risk/<path:parameter_string>',endpoint='misusecase_risk',resource_class_kwargs={'dao': 'RiskDAO','get_method' : 'get_misuse_case_by_risk_name'})
+api.add_resource(ObjectController.ObjectsByMethodAndTwoParametersAPI, '/api/misusecases/threat/<path:p1>/vulnerability/<path:p2>',endpoint='misusecase_tv',resource_class_kwargs={'dao' : 'RiskDAO','get_method' : 'get_misuse_case_by_threat_vulnerability'})
 
 # Object dependency routes
 api.add_resource(ObjectDependencyController.ObjectDependencyAPI, '/api/object_dependency/dimension/<path:dimension_name>/object/<path:object_name>',endpoint='object_dependency')

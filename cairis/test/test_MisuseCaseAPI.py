@@ -52,10 +52,10 @@ class MisuseCaseAPITests(CairisDaemonTestCase):
       responseData = rv.data
     misuse_cases = jsonpickle.decode(responseData)
     self.assertIsNotNone(misuse_cases, 'No results after deserialization')
-    self.assertIsInstance(misuse_cases, dict, 'The result is not a dictionary as expected')
+    self.assertIsInstance(misuse_cases, list, 'The result is not a list as expected')
     self.assertGreater(len(misuse_cases), 0, 'No misuse_cases in the dictionary')
     self.logger.info('[%s] MisuseCases found: %d', method, len(misuse_cases))
-    misuse_case = list(misuse_cases.values())[0]
+    misuse_case = misuse_cases[0]
     self.logger.info('[%s] First misuse_case: %s\n', method, misuse_case['theName'])
 
   def test_get_by_name(self):

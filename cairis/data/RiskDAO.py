@@ -209,8 +209,8 @@ class RiskDAO(CairisDAO):
       self.db_proxy.reconnect(session_id=self.session_id)
       return False
 
-  # region Misuse cases
-  def get_misuse_cases(self, constraint_id=-1, simplify=True):
+  def get_misuse_cases(self, pathValues = []):
+    constraint_id = pathValues[0]
     try:
       misuse_cases = self.db_proxy.getMisuseCases(constraintId=constraint_id)
     except DatabaseProxyException as ex:
@@ -220,19 +220,19 @@ class RiskDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-    for key in misuse_cases:
+    mcKeys = sorted(misuse_cases.keys())
+    mcList = []
+    for key in mcKeys:
       threat_name, vuln_name = self.db_proxy.misuseCaseRiskComponents(key)
       misuse_cases[key].theThreatName = threat_name
       misuse_cases[key].theVulnerabilityName = vuln_name
       for mcep in misuse_cases[key].environmentProperties():
         envName = mcep.name()
         misuse_cases[key].theObjective = self.get_misuse_case_obj_and_assets(threat_name,vuln_name,envName)
-        if simplify:
-          misuse_cases[key] = self.simplify(misuse_cases[key])
+        mcList.append(self.simplify(misuse_cases[key]))
+    return mcList
 
-    return misuse_cases
-
-  def get_misuse_case_by_name(self, misuse_case_name):
+  def get_misuse_case_by_name(self, misuse_case_name, pathValues = []):
     try:
       misuse_cases = self.db_proxy.getMisuseCases()
       for key in misuse_cases:
@@ -246,7 +246,7 @@ class RiskDAO(CairisDAO):
       raise ARMHTTPError(ex)
     
 
-  def get_misuse_case_by_risk_name(self, risk_name, simplify=True):
+  def get_misuse_case_by_risk_name(self, risk_name, simplify=True, pathValues = []):
     try:
       riskId = self.db_proxy.getDimensionId(risk_name,'risk')
       misuse_case = self.db_proxy.riskMisuseCase(riskId)
@@ -272,7 +272,7 @@ class RiskDAO(CairisDAO):
 
     return misuse_case
 
-  def get_misuse_case_by_threat_vulnerability(self, threat_name,vulnerability_name):
+  def get_misuse_case_by_threat_vulnerability(self, threat_name,vulnerability_name, pathValues = []):
     try:
       misuse_case = self.db_proxy.riskMisuseCase(-1,threat_name,vulnerability_name)
       if misuse_case != None:

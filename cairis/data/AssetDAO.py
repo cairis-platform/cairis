@@ -58,9 +58,10 @@ class AssetDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
     if simplify:
+      assetList = []
       for key, value in list(assets.items()):
-        assets[key] = self.simplify(value)
-    return assets
+        assetList.append(self.simplify(value))
+    return assetList
 
   def get_objects_summary(self):
     try:
