@@ -101,8 +101,10 @@ class ExternalDocumentAPITests(CairisDaemonTestCase):
   def test_put(self):
     method = 'test_put'
     self.new_edoc_dict['object'].theVersion = '2'
+    upd_dict = self.new_edoc_dict
+    upd_dict['object'].theName = 'Unrelated GT concept'
     url = '/api/external_documents/name/%s?session_id=test' % quote(self.existing_edoc_name)
-    rv = self.app.put(url, content_type='application/json', data=jsonpickle.encode(self.new_edoc_dict))
+    rv = self.app.put(url, content_type='application/json', data=jsonpickle.encode(upd_dict))
     if (sys.version_info > (3,)):
       responseData = rv.data.decode('utf-8')
     else:

@@ -42,7 +42,7 @@ class ConceptReferenceAPITests(CairisDaemonTestCase):
     self.logger = logging.getLogger(__name__)
     self.new_cr = ConceptReference(
       refId = '-1',
-      refName = 'Personal device authentication',
+      refName = 'Personal device authn',
       dimName = 'requirement',
       objtName = 'PS-30',
       cDesc = 'Personal devices support authentication')
@@ -100,6 +100,7 @@ class ConceptReferenceAPITests(CairisDaemonTestCase):
   def test_put(self):
     method = 'test_put'
     self.new_cr_dict['object'].theDescription = 'Updated text segment'
+    self.new_cr_dict['object'].theName = 'Updated cr name'
     url = '/api/concept_references/name/%s?session_id=test' % quote(self.existing_cr_name)
     rv = self.app.put(url, content_type='application/json', data=jsonpickle.encode(self.new_cr_dict))
     if (sys.version_info > (3,)):
@@ -122,6 +123,8 @@ class ConceptReferenceAPITests(CairisDaemonTestCase):
       responseData = rv.data
     self.logger.debug('[%s] Response data: %s', method, responseData)
     json_resp = json_deserialize(responseData)
+    ackMsg = json_resp.get('message', None)
+    self.assertGreater(ackMsg.find('created'),-1,'Concept reference not created')
 
     url = '/api/concept_references/name/%s?session_id=test' % quote(self.new_cr.theName)
     rv = self.app.delete(url)

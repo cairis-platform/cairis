@@ -11070,7 +11070,7 @@ begin
   declare nameVar varchar(11) default 'name';
   declare ncSql varchar(4000);
 
-  if dimName = 'persona_characteristic'
+  if dimName = 'persona_characteristic' or dimName = 'task_characteristic'
   then
     set nameVar = 'description';
   end if;
