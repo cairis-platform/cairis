@@ -40,7 +40,6 @@ class GoalAPITests(CairisDaemonTestCase):
     importModelFile(os.environ['CAIRIS_SRC'] + '/../examples/exemplars/NeuroGrid/NeuroGrid.xml',1,'test')
 
   def setUp(self):
-    # region Class fields
     self.logger = logging.getLogger(__name__)
     self.existing_goal_name = 'Multi-Factor Authentication'
     self.existing_category = 'Maintain'
@@ -48,7 +47,6 @@ class GoalAPITests(CairisDaemonTestCase):
     self.existing_environment_name_2 = 'Psychosis'
     self.goal_class = Goal.__module__+'.'+Goal.__name__
     self.to_delete_ids = []
-    # endregion
 
   def test_get_all(self):
     method = 'test_get_all'
@@ -59,10 +57,10 @@ class GoalAPITests(CairisDaemonTestCase):
       responseData = rv.data
     goals = jsonpickle.decode(responseData)
     self.assertIsNotNone(goals, 'No results after deserialization')
-    self.assertIsInstance(goals, dict, 'The result is not a dictionary as expected')
+    self.assertIsInstance(goals, list, 'The result is not a list as expected')
     self.assertGreater(len(goals), 0, 'No goals in the dictionary')
     self.logger.info('[%s] Goals found: %d', method, len(goals))
-    goal = list(goals.values())[0]
+    goal = goals[0]
     self.logger.info('[%s] First goal: %s\n', method, goal['theName'])
 
   def test_get_all_summary(self):
@@ -86,14 +84,12 @@ class GoalAPITests(CairisDaemonTestCase):
       responseData = rv.data
     goals = jsonpickle.decode(responseData)
     self.assertIsNotNone(goals, 'No results after deserialization')
-    self.assertIsInstance(goals, dict, 'The result is not a dictionary as expected')
-    self.assertGreater(len(goals), 0, 'No goals in the dictionary')
+    self.assertIsInstance(goals, list, 'The result is not a list as expected')
+    self.assertGreater(len(goals), 0, 'No goals in the list')
     self.logger.info('[%s] Goals found: %d', method, len(goals))
-    goal = list(goals.values())[0]
+    goal = goals[0]
     self.logger.info('[%s] First goal: %s\n', method, goal['theName'])
 
-
-    
   def test_get_by_name(self):
     method = 'test_get_by_name'
     url = '/api/goals/name/%s?session_id=test' % quote(self.existing_goal_name)

@@ -37,7 +37,6 @@ from cairis.controllers import CImportController
 from cairis.controllers import CountermeasureController
 from cairis.controllers import DocumentationController
 from cairis.controllers import EnvironmentController
-from cairis.controllers import GoalController
 from cairis.controllers import ObjectController
 from cairis.controllers import ObjectDependencyController
 from cairis.controllers import PermissionsController
@@ -309,14 +308,15 @@ api.add_resource(ObjectController.ObjectByNameAPI, '/api/external_documents/name
 
 
 # Goal routes
-api.add_resource(GoalController.GoalsAPI, '/api/goals',endpoint='goals')
-api.add_resource(GoalController.GoalByNameAPI, '/api/goals/name/<path:name>',endpoint='goal')
+api.add_resource(ObjectController.ObjectsByMethodAPI, '/api/goals',endpoint='goals',resource_class_kwargs={'dao': 'GoalDAO', 'get_method' : 'get_objects', 'post_method' : 'add_object', 'path_parameters' : [('constraint_id',-1),('coloured',False)]})
+api.add_resource(ObjectController.ObjectsByMethodAndParameterAPI, '/api/goals/name/<path:parameter_string>',endpoint='goal',resource_class_kwargs={'dao' : 'GoalDAO', 'put_method' : 'update_object', 'get_method' : 'get_object_by_name', 'del_method' : 'delete_object', 'path_parameters' : [('constraint_id',-1),('coloured',False)]})
 api.add_resource(ObjectController.ObjectsSummaryAPI, '/api/goals/summary',endpoint='goalssummary',resource_class_kwargs={'dao' : 'GoalDAO'})
-api.add_resource(GoalController.GoalByEnvironmentNamesAPI, '/api/goals/environment/<path:environment>/names',endpoint='goal_environment')
+api.add_resource(ObjectController.ObjectsByMethodAndParameterAPI, '/api/goals/environment/<path:parameter_string>/names',endpoint='goal_environment',resource_class_kwargs={'dao' : 'GoalDAO', 'get_method' : 'get_goal_names'})
 api.add_resource(ObjectController.ModelByThreeParametersAPI, '/api/goals/model/environment/<path:p1>/goal/<path:p2>/usecase/<path:p3>',endpoint='goalmodel',resource_class_kwargs={'dao' : 'GoalDAO','get_method' : 'get_goal_model','renderer' : 'dot', 'path_parameters' : [('top','0')], 'model_type' : 'goal'})
 api.add_resource(ObjectController.ModelByTwoParametersAPI, '/api/responsibility/model/environment/<path:p1>/role/<path:p2>',endpoint='responsibilitymodel',resource_class_kwargs={'dao' : 'GoalDAO','get_method' : 'get_responsibility_model','renderer' : 'dot', 'model_type' : 'responsibility'})
-api.add_resource(GoalController.GoalAssociationAPI, '/api/goals/association',endpoint='goal_associations')
-api.add_resource(GoalController.GoalAssociationByNameAPI, '/api/goals/association/environment/<path:environment_name>/goal/<path:goal_name>/subgoal/<path:subgoal_name>',endpoint='goal_association')
+api.add_resource(ObjectController.ObjectsByMethodAPI, '/api/goals/association',endpoint='goal_associations',resource_class_kwargs={'dao': 'GoalAssociationDAO', 'get_method' : 'get_goal_associations', 'post_method' : 'add_goal_association', 'path_parameters' : [('environment_name','')]})
+api.add_resource(ObjectController.ObjectsByMethodAndThreeParametersAPI,'/api/goals/association/environment/<path:p1>/goal/<path:p2>/subgoal/<path:p3>',endpoint='goal_association',resource_class_kwargs={'dao' : 'GoalAssociationDAO', 'get_method' : 'get_goal_association', 'put_method' : 'update_goal_association', 'del_method' : 'delete_goal_association'})
+
 
 # Goal contribution routes
 api.add_resource(ObjectController.ObjectsAPI, '/api/goal_contributions',endpoint='goal_contributions',resource_class_kwargs={'dao': 'GoalContributionDAO'})

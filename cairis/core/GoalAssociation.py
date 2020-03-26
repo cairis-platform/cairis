@@ -38,5 +38,5 @@ class GoalAssociation:
   def subGoalDimension(self): return self.theSubGoalDimension
   def alternative(self): return self.theAlternativeId
   def rationale(self): return self.theRationale
-
+  def name(self): return self.theEnvironmentName + ' / ' + self.theGoal + ' / ' + self.theSubGoal
   def __str__(self): return self.theEnvironmentName + ' / ' + self.theGoal + ' / '  + self.theGoalDimension + ' / ' + self.theAssociationType + ' / ' + self.theSubGoal + ' / ' + self.theSubGoalDimension + ' / ' + str(self.theAlternativeId)

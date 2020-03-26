@@ -33,7 +33,8 @@ class GoalAssociationDAO(CairisDAO):
   def __init__(self, session_id):
     CairisDAO.__init__(self, session_id)
 
-  def get_goal_associations(self, environment_name):
+  def get_goal_associations(self, pathValues):
+    environment_name = pathValues[0]
     assocs = self.db_proxy.getGoalAssociations(environment_name)
     assocKeys = assocs.keys()
     assocList = []
@@ -43,7 +44,7 @@ class GoalAssociationDAO(CairisDAO):
       assocList.append(assoc)
     return assocList
 
-  def get_goal_association(self, environment_name, goal_name, subgoal_name, deleteId=True):
+  def get_goal_association(self, environment_name, goal_name, subgoal_name, deleteId=True, pathValues = []):
     try:
       assoc = self.db_proxy.getGoalAssociation(environment_name,goal_name,subgoal_name)
       if (deleteId == True):
@@ -59,7 +60,7 @@ class GoalAssociationDAO(CairisDAO):
       self.close()
       raise CairisHTTPError(status_code=http.client.BAD_REQUEST,status="Server error",message=format(ex))
 
-  def add_goal_association(self, assoc):
+  def add_goal_association(self, assoc, pathValues = []):
     if (assoc.theGoal == assoc.theSubGoal):
       raise CairisHTTPError(status_code=http.client.BAD_REQUEST,status="Self-refinement error",message='Cannot self-refine ' + assoc.theGoal)
 
@@ -80,7 +81,7 @@ class GoalAssociationDAO(CairisDAO):
       raise ARMHTTPError(ex)
 
 
-  def update_goal_association(self,assoc,environment_name,goal_name,subgoal_name):
+  def update_goal_association(self,assoc,environment_name,goal_name,subgoal_name, pathValues = []):
     if (assoc.theGoal == assoc.theSubGoal):
       raise CairisHTTPError(status_code=http.client.BAD_REQUEST,status="Self-refinement error",message='Cannot self-refine ' + assoc.theGoal)
 
@@ -103,7 +104,7 @@ class GoalAssociationDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def delete_goal_association(self, environment_name, goal_name, subgoal_name):
+  def delete_goal_association(self, environment_name, goal_name, subgoal_name, pathValues = []):
     assoc = self.get_goal_association(environment_name,goal_name,subgoal_name,False)
     try:
       self.db_proxy.deleteGoalAssociation(assoc.theId,assoc.theGoalDimension,assoc.theSubGoalDimension)

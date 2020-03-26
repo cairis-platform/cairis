@@ -35,7 +35,13 @@ class GoalDAO(CairisDAO):
   def __init__(self, session_id):
     CairisDAO.__init__(self, session_id, 'goal')
 
-  def get_objects(self, constraint_id=-1, coloured=False, simplify=True):
+  def get_objects(self, pathValues):
+    constraint_id = pathValues[0]
+    coloured = pathValues[1]
+    if (coloured == '1'):
+      coloured = True
+    else:
+      coloured = False
     try:
       if coloured:
         goals = self.db_proxy.getColouredGoals(constraint_id)
@@ -45,11 +51,11 @@ class GoalDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-    if simplify:
-      for key, value in list(goals.items()):
-        goals[key] = self.simplify(value)
-
-    return goals
+    goalKeys = sorted(goals.keys())
+    goalList = []
+    for key in goalKeys:
+      goalList.append(self.simplify(goals[key]))
+    return goalList
 
   def get_objects_summary(self):
     try:
@@ -60,22 +66,25 @@ class GoalDAO(CairisDAO):
     return goals
 
 
-  def get_object_by_name(self, name, coloured=False, simplify=True):
+  def get_object_by_name(self, name, pathValues):
+    coloured = pathValues[1]
+    if (coloured == '1'):
+      coloured = True
+    else:
+      coloured = False
     try:
-      found_goal = None
       goalId = self.db_proxy.getDimensionId(name,'goal')
-      goals = self.get_objects(goalId,coloured=coloured, simplify=False)
-      if goals is not None:
-        found_goal = goals.get(name)
+      if coloured:
+        goals = self.db_proxy.getColouredGoals(goalId)
+      else:
+        goals = self.db_proxy.getGoals(goalId)
+
+      found_goal = goals.get(name,None)
       if found_goal is None:
         self.close()
         raise ObjectNotFoundHTTPError('The provided goal name')
-      if simplify:
-        found_goal = self.simplify(found_goal)
+      found_goal = self.simplify(found_goal)
       return found_goal
-    except ObjectNotFound as ex:
-      self.close()
-      raise ObjectNotFoundHTTPError('The provided goal name')
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)
@@ -83,13 +92,8 @@ class GoalDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-
-  def add_object(self, goal):
-    goalParams = GoalParameters(
-            goalName=goal.theName,
-            goalOrig=goal.theOriginator,
-            tags=goal.theTags,
-            properties=goal.theEnvironmentProperties)
+  def add_object(self, goal, pathValues = []):
+    goalParams = GoalParameters(goalName=goal.theName,goalOrig=goal.theOriginator,tags=goal.theTags,properties=goal.theEnvironmentProperties)
     try:
       if not self.check_existing_goal(goal.theName):
         self.db_proxy.addGoal(goalParams)
@@ -100,13 +104,8 @@ class GoalDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def update_object(self, goal, name):
-    params = GoalParameters(
-            goalName=goal.theName,
-            goalOrig=goal.theOriginator,
-            tags=goal.theTags,
-            properties=goal.theEnvironmentProperties)
-
+  def update_object(self, goal, name, pathValues = []):
+    params = GoalParameters(goalName=goal.theName,goalOrig=goal.theOriginator,tags=goal.theTags,properties=goal.theEnvironmentProperties)
     try:
       goalId = self.db_proxy.getDimensionId(name,'goal')
       params.setId(goalId)
@@ -118,7 +117,7 @@ class GoalDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def delete_object(self, name):
+  def delete_object(self, name, pathValues = []):
     try:
       goalId = self.db_proxy.getDimensionId(name,'goal')
       self.db_proxy.deleteGoal(goalId)
@@ -408,7 +407,7 @@ class GoalDAO(CairisDAO):
     del goal.theColour
     return goal
 
-  def get_goal_names(self, environment=''):
+  def get_goal_names(self, environment='', pathValues = []):
     try:
       goal_names = self.db_proxy.getDimensionNames('goal', environment)
       return goal_names
