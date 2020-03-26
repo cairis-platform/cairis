@@ -127,8 +127,10 @@ class TemplateGoalAPITests(CairisDaemonTestCase):
   def test_put(self):
     method = 'test_put'
     self.new_tg_dict['object'].theDefinition = 'Updated definition'
+    updDict = self.new_tg_dict
+    updDict['object'].theName = 'Update TG name'
     url = '/api/template_goals/name/%s?session_id=test' % quote(self.existing_tg_name)
-    rv = self.app.put(url, content_type='application/json', data=jsonpickle.encode(self.new_tg_dict))
+    rv = self.app.put(url, content_type='application/json', data=jsonpickle.encode(updDict))
     if (sys.version_info > (3,)):
       responseData = rv.data.decode('utf-8')
     else:

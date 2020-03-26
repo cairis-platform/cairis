@@ -101,8 +101,10 @@ class DocumentReferenceAPITests(CairisDaemonTestCase):
   def test_put(self):
     method = 'test_put'
     self.new_dr_dict['object'].theExcerpt = 'Updated text segment'
+    updDict = self.new_dr_dict
+    updDict['object'].theName = 'Updated DR name'
     url = '/api/document_references/name/%s?session_id=test' % quote(self.existing_dr_name)
-    rv = self.app.put(url, content_type='application/json', data=jsonpickle.encode(self.new_dr_dict))
+    rv = self.app.put(url, content_type='application/json', data=jsonpickle.encode(updDict))
     if (sys.version_info > (3,)):
       responseData = rv.data.decode('utf-8')
     else:
