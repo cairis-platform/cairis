@@ -105,7 +105,7 @@ class TraceAPITests(CairisDaemonTestCase):
     json_resp = json_deserialize(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     ackMsg = json_resp.get('message', None)
-    self.assertEqual(ackMsg, 'Trace successfully added')
+    self.assertEqual(ackMsg, 'Dataset policy / Certificate ubiquity created')
 
   def test_delete(self):
     method = 'test_delete'
@@ -118,4 +118,4 @@ class TraceAPITests(CairisDaemonTestCase):
     json_resp = json_deserialize(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     ackMsg = json_resp.get('message', None)
-    self.assertEqual(ackMsg, 'Trace successfully deleted')
+    self.assertEqual(ackMsg, 'Dataset policy / Certificate ubiquity deleted')

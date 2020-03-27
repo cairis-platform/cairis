@@ -136,6 +136,8 @@ class ObjectsByMethodAndFourParametersAPI(Resource):
     self.thePathParameters = []
     if 'get_method' in kwargs:
       self.theGetMethod = kwargs['get_method']
+    if 'del_method' in kwargs:
+      self.theDelMethod = kwargs['del_method']
 
   def get(self,p1,p2,p3,p4):
     session_id = get_session_id(session, request)
@@ -148,6 +150,19 @@ class ObjectsByMethodAndFourParametersAPI(Resource):
     resp = make_response(json_serialize(objts, session_id=session_id), OK)
     resp.contenttype = 'application/json'
     return resp
+
+  def delete(self,p1,p2,p3,p4):
+    session_id = get_session_id(session, request)
+    dao = self.DAOModule(session_id)
+    pathValues = []
+    for parameterName,defaultValue in self.thePathParameters:
+      pathValues.append(request.args.get(parameterName,defaultValue))
+    getattr(dao, self.theDelMethod)(p1,p2,p3,p4,pathValues)
+    resp_dict = {'message': p2 + ' / ' + p4 + ' deleted'}
+    resp = make_response(json_serialize(resp_dict, session_id=session_id), OK)
+    resp.contenttype = 'application/json'
+    return resp
+
 
 
 class ObjectsByMethodAndThreeParametersAPI(Resource):

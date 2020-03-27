@@ -42,7 +42,6 @@ from cairis.controllers import PermissionsController
 from cairis.controllers import PersonaCharacteristicController
 from cairis.controllers import ProjectController
 from cairis.controllers import RequirementController
-from cairis.controllers import TraceController
 from cairis.controllers import UploadController
 from cairis.controllers import UseCaseController
 
@@ -462,10 +461,10 @@ api.add_resource(ObjectController.ObjectsSummaryAPI, '/api/threats/summary',endp
 api.add_resource(ObjectController.ObjectsByMethodAndParameterAPI, '/api/threats/model/environment/<path:parameter_string>',endpoint='threat_model',resource_class_kwargs={'dao' : 'ThreatDAO','get_method' : 'get_threat_model'})
 
 # Trace routes
-api.add_resource(TraceController.TracesAPI, '/api/traces',endpoint='traces')
-api.add_resource(TraceController.TraceByEnvironmentAPI, '/api/traces/environment/<path:environment_name>',endpoint='traces_environment')
-api.add_resource(TraceController.TraceDimensionsAPI, '/api/traces/dimensions/<path:dimension_name>/is_from/<path:is_from>',endpoint='trace_dimensions')
-api.add_resource(TraceController.TraceByNameAPI, '/api/traces/from_type/<path:from_object>/from_name/<path:from_name>/to_type/<path:to_object>/to_name/<path:to_name>',endpoint='traces_name')
+api.add_resource(ObjectController.ObjectsAPI, '/api/traces',endpoint='traces',resource_class_kwargs={'dao': 'TraceDAO'})
+api.add_resource(ObjectController.ObjectsByMethodAndParameterAPI, '/api/traces/environment/<path:parameter_string>',endpoint='traces_environment', resource_class_kwargs={'dao' : 'TraceDAO', 'get_method' : 'get_traces'})
+api.add_resource(ObjectController.ObjectsByMethodAndTwoParametersAPI, '/api/traces/dimensions/<path:p1>/is_from/<path:p2>',endpoint='trace_dimensions', resource_class_kwargs={'dao' : 'TraceDAO', 'get_method' : 'trace_dimensions'})
+api.add_resource(ObjectController.ObjectsByMethodAndFourParametersAPI, '/api/traces/from_type/<path:p1>/from_name/<path:p2>/to_type/<path:p3>/to_name/<path:p4>',endpoint='traces_name',resource_class_kwargs={'dao' : 'TraceDAO','del_method' : 'delete_trace'})
 
 # Trust Boundary routes
 api.add_resource(ObjectController.ObjectsAPI, '/api/trust_boundaries',endpoint='trustboundaries',resource_class_kwargs={'dao': 'TrustBoundaryDAO'})

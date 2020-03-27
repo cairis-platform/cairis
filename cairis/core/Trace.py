@@ -30,3 +30,4 @@ class Trace:
   def toObject(self): return self.theToObject
   def toName(self): return self.theToName
   def label(self): return self.theLabel
+  def name(self): return self.theFromName + ' / ' + self.theToName

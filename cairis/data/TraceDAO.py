@@ -31,14 +31,9 @@ class TraceDAO(CairisDAO):
   def __init__(self, session_id):
     CairisDAO.__init__(self, session_id)
 
-  def get_traces(self,constraint_id):
-    """
-    :rtype: [Trace]
-    :return
-    :raise ARMHTTPError:
-    """
+  def get_traces(self,envName, pathValues = []):
     try:
-      trs = self.db_proxy.removableTraces(constraint_id)
+      trs = self.db_proxy.removableTraces(envName)
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)
@@ -53,7 +48,7 @@ class TraceDAO(CairisDAO):
       trList.append(TraceModel(tr[0],tr[1],tr[2],tr[3],tr[4]))
     return trList
 
-  def add_trace(self, tr):
+  def add_object(self, tr):
     try:
       trace_table = tr.theFromObject + '_' + tr.theToObject
       self.db_proxy.checkTrace(tr.theFromObject,tr.theFromName,tr.theToObject,tr.theToName)
@@ -65,14 +60,18 @@ class TraceDAO(CairisDAO):
       raise ARMHTTPError(ex)
 
 
-  def delete_trace(self, fromObjt,fromName,toObjt,toName):
+  def delete_trace(self, fromObjt,fromName,toObjt,toName,pathValues = []):
     try:
       self.db_proxy.deleteTrace(fromObjt,fromName,toObjt,toName)
     except ARMException as ex:
       self.close()
       raise ARMHTTPError(ex)
 
-  def trace_dimensions(self,dimension_name,is_from):
+  def trace_dimensions(self,dimension_name,is_from, pathValues = []):
+    if is_from == '1':
+      is_from = True
+    else:
+      is_from = False
     try:
       return self.db_proxy.getTraceDimensions(dimension_name,is_from)
     except ARMException as ex:
