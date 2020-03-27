@@ -30,7 +30,7 @@ class ObjectDependencyDAO(CairisDAO):
   def __init__(self, session_id):
     CairisDAO.__init__(self, session_id)
 
-  def report_dependencies(self,dimension_name,object_name):
+  def report_dependencies(self,dimension_name,object_name, pathValues = []):
     try:
       if (dimension_name == 'architectural_pattern'):
         dimension_name = 'component_view'
@@ -49,7 +49,7 @@ class ObjectDependencyDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def delete_dependencies(self,dimension_name,object_name):
+  def delete_dependencies(self,dimension_name,object_name, pathValues = []):
     try:
       if (dimension_name == 'architectural_pattern'):
         dimension_name = 'component_view'

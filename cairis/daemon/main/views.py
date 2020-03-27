@@ -38,7 +38,6 @@ from cairis.controllers import CountermeasureController
 from cairis.controllers import DocumentationController
 from cairis.controllers import EnvironmentController
 from cairis.controllers import ObjectController
-from cairis.controllers import ObjectDependencyController
 from cairis.controllers import PermissionsController
 from cairis.controllers import PersonaCharacteristicController
 from cairis.controllers import ProjectController
@@ -347,7 +346,7 @@ api.add_resource(ObjectController.ObjectsByMethodAndParameterAPI, '/api/misuseca
 api.add_resource(ObjectController.ObjectsByMethodAndTwoParametersAPI, '/api/misusecases/threat/<path:p1>/vulnerability/<path:p2>',endpoint='misusecase_tv',resource_class_kwargs={'dao' : 'RiskDAO','get_method' : 'get_misuse_case_by_threat_vulnerability'})
 
 # Object dependency routes
-api.add_resource(ObjectDependencyController.ObjectDependencyAPI, '/api/object_dependency/dimension/<path:dimension_name>/object/<path:object_name>',endpoint='object_dependency')
+api.add_resource(ObjectController.ObjectsByMethodAndTwoParametersAPI, '/api/object_dependency/dimension/<path:p1>/object/<path:p2>',endpoint='object_dependency',resource_class_kwargs={'dao' : 'ObjectDependencyDAO','get_method' : 'report_dependencies', 'del_method' : 'delete_dependencies', 'del_message' : 'Object dependencies successfully deleted'})
 
 # Obstacle routes
 api.add_resource(ObjectController.ObjectsAPI, '/api/obstacles',endpoint='obstacles',resource_class_kwargs={'dao': 'ObstacleDAO'})

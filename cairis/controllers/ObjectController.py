@@ -225,6 +225,9 @@ class ObjectsByMethodAndTwoParametersAPI(Resource):
     self.thePostMessage = ''
     if 'post_message' in kwargs:
       self.thePostMessage = kwargs['post_message']
+    self.theDelMessage = ''
+    if 'del_message' in kwargs:
+      self.theDelMessage = kwargs['del_message']
 
   def get(self,p1,p2):
     session_id = get_session_id(session, request)
@@ -270,7 +273,11 @@ class ObjectsByMethodAndTwoParametersAPI(Resource):
     for parameterName,defaultValue in self.thePathParameters:
       pathValues.append(request.args.get(parameterName,defaultValue))
     getattr(dao, self.theDelMethod)(p1,p2,pathValues)
-    resp_dict = {'message': p1 + ' / ' + p2 + ' deleted'}
+    resp_dict = None
+    if (self.theDelMessage != ''):
+      resp_dict = {'message': self.theDelMessage}
+    else:
+      resp_dict = {'message': p1 + ' / ' + p2 + ' deleted'}
     resp = make_response(json_serialize(resp_dict, session_id=session_id), OK)
     resp.contenttype = 'application/json'
     return resp
