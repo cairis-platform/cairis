@@ -101,7 +101,7 @@ class ValueTypeAPITests(CairisDaemonTestCase):
     json_resp = json_deserialize(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     ackMsg = json_resp.get('message', None)
-    self.assertEqual(ackMsg, 'Value Type successfully added')
+    self.assertEqual(ackMsg, 'Path Traversal Attack created')
 
   def test_put(self):
     method = 'test_put'
@@ -124,7 +124,7 @@ class ValueTypeAPITests(CairisDaemonTestCase):
     json_resp = json_deserialize(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     ackMsg = json_resp.get('message', None)
-    self.assertEqual(ackMsg, 'Value Type successfully updated')
+    self.assertEqual(ackMsg, 'Physical updated')
 
   def test_delete(self):
     method = 'test_delete'
@@ -139,4 +139,4 @@ class ValueTypeAPITests(CairisDaemonTestCase):
     json_resp = json_deserialize(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     ackMsg = json_resp.get('message', None)
-    self.assertEqual(ackMsg, 'Value Type successfully deleted')
+    self.assertEqual(ackMsg, self.new_vt['theName'] + ' deleted')

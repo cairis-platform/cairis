@@ -20,6 +20,7 @@
 drop function if exists internalDocumentQuotationString;
 drop function if exists personaQuotationString;
 
+DROP VIEW IF EXISTS value_type;
 DROP VIEW IF EXISTS object_name;
 DROP VIEW IF EXISTS entity;
 DROP VIEW IF EXISTS datastore;
@@ -3500,6 +3501,29 @@ end
 //
 
 delimiter ; 
+
+CREATE VIEW value_type as
+  select id, name from asset_type
+  union
+  select id, name from access_right
+  union
+  select id, name from protocol
+  union
+  select id, name from privilege
+  union
+  select id, name from surface_type
+  union
+  select id, name from vulnerability_type
+  union
+  select id, name from severity
+  union
+  select id, name from capability
+  union
+  select id, name from motivation
+  union
+  select id, name from threat_type
+  union
+  select id, name from likelihood;
 
 CREATE VIEW object_name as
   select name from requirement

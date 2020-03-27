@@ -46,7 +46,6 @@ from cairis.controllers import RequirementController
 from cairis.controllers import TraceController
 from cairis.controllers import UploadController
 from cairis.controllers import UseCaseController
-from cairis.controllers import ValueTypeController
 
 from cairis.daemon.main import main, api
 from cairis.tools.SessionValidator import get_session_id
@@ -492,9 +491,9 @@ api.add_resource(ObjectController.ModelByTwoParametersAPI, '/api/user_goals/mode
 api.add_resource(ObjectController.ObjectsByMethodAndParameterAPI, '/api/validation/environment/<path:parameter_string>',endpoint='environmentvalidation',resource_class_kwargs={'dao' : 'ValidationDAO','get_method' : 'model_validation'})
 
 # Value Type routes
-api.add_resource(ValueTypeController.ValueTypesAPI, '/api/value_types/type/<path:type_name>/environment/<path:environment_name>',endpoint='value_types')
-api.add_resource(ValueTypeController.ValueTypesByNameAPI, '/api/value_types/type/<path:type_name>/environment/<path:environment_name>/name/<path:object_name>',endpoint='value_type')
-api.add_resource(ValueTypeController.ValueTypesCreateAPI, '/api/value_types/',endpoint='create_value_type')
+api.add_resource(ObjectController.ObjectsByTwoParametersAPI, '/api/value_types/type/<path:p1>/environment/<path:p2>',endpoint='value_types',resource_class_kwargs={'dao' : 'ValueTypeDAO'})
+api.add_resource(ObjectController.ObjectByThreeParametersAPI, '/api/value_types/type/<path:p1>/environment/<path:p2>/name/<path:p3>',endpoint='value_type',resource_class_kwargs={'dao' : 'ValueTypeDAO'})
+api.add_resource(ObjectController.ObjectsAPI, '/api/value_types/',endpoint='create_value_types',resource_class_kwargs={'dao': 'ValueTypeDAO'})
 
 # Version route
 api.add_resource(ObjectController.ObjectsByMethodAPI, '/api/version',endpoint='version',resource_class_kwargs={'dao' : 'VersionDAO','get_method' : 'cairis_version'})

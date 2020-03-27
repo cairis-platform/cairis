@@ -497,6 +497,49 @@ class ObjectsByTwoParametersAPI(Resource):
     resp.headers['Content-type'] = 'application/json'
     return resp
 
+class ObjectByThreeParametersAPI(Resource):
+
+  def __init__(self,**kwargs):
+    self.DAOModule = getattr(import_module('cairis.data.' + kwargs['dao']),kwargs['dao'])
+
+  def get(self, p1, p2, p3):
+    session_id = get_session_id(session, request)
+    dao = self.DAOModule(session_id)
+    objt = dao.get_object_by_3parameters(p1,p2,p3)
+    dao.close()
+    resp = make_response(json_serialize(objt, session_id=session_id), OK)
+    resp.headers['Content-type'] = 'application/json'
+    return resp
+
+  def put(self, p1, p2, p3):
+    session_id = get_session_id(session, request)
+    dao = self.DAOModule(session_id)
+    objt = dao.from_json(request)
+    if (dao.dimension() != ''):
+      objtName = ''
+      if (isinstance(objt,dict)):
+        objtName = objt['theName']
+      else:
+        objtName = objt.name()
+      if (p3 != objtName):
+        dao.nameCheck(objtName)
+    dao.update_object_by_3parameters(p1,p2,p3,objt)
+    dao.close()
+    resp_dict = {'message': objt.name() + ' updated'}
+    resp = make_response(json_serialize(resp_dict), OK)
+    resp.headers['Content-type'] = 'application/json'
+    return resp
+
+  def delete(self, p1, p2, p3):
+    session_id = get_session_id(session, request)
+    dao = self.DAOModule(session_id)
+    dao.delete_object_by_3parameters(p1,p2,p3)
+    dao.close()
+    resp_dict = {'message': p3 + ' deleted'}
+    resp = make_response(json_serialize(resp_dict), OK)
+    resp.headers['Content-type'] = 'application/json'
+    return resp
+
 
 class ObjectByFourParametersAPI(Resource):
 

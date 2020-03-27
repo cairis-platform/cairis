@@ -30,7 +30,17 @@ __author__ = 'Shamal Faily'
 
 class ValueTypeDAO(CairisDAO):
   def __init__(self, session_id):
-    CairisDAO.__init__(self, session_id)
+    CairisDAO.__init__(self, session_id, 'value_type')
+
+  def get_objects_by_2parameters(self,dimName,envName):
+    if envName == 'all':
+      envName = ''
+    return self.get_value_types(dimName,envName,True)
+
+  def get_object_by_3parameters(self,dimName,envName,objtName):
+    if envName == 'all':
+      envName = ''
+    return self.get_value_type(dimName,envName,objtName,True)
 
   def get_value_types(self,dimName,envName = '',deleteId=True):
     try:
@@ -62,14 +72,8 @@ class ValueTypeDAO(CairisDAO):
     self.close()
     raise ObjectNotFoundHTTPError('The provided ' + dimName + ' value types')
 
-  def add_value_type(self, vt):
-    vtParams = ValueTypeParameters(
-      vtName=vt.theName,
-      vtDesc=vt.theDescription,
-      vType=vt.theType,
-      envName=vt.theEnvironmentName,
-      vtScore=vt.theScore,
-      vtRat=vt.theRationale)
+  def add_object(self, vt):
+    vtParams = ValueTypeParameters(vtName=vt.theName,vtDesc=vt.theDescription,vType=vt.theType,envName=vt.theEnvironmentName,vtScore=vt.theScore,vtRat=vt.theRationale)
     try:
       self.db_proxy.addValueType(vtParams)
     except ARMException as ex:
@@ -77,15 +81,9 @@ class ValueTypeDAO(CairisDAO):
       raise ARMHTTPError(ex)
 
 
-  def update_value_type(self,vt,type_name,environment_name,object_name):
+  def update_object_by_3parameters(self,type_name,environment_name,object_name,vt):
     found_vt = self.get_value_type(type_name,environment_name,object_name,False)
-    vtParams = ValueTypeParameters(
-      vtName=vt.theName,
-      vtDesc=vt.theDescription,
-      vType=vt.theType,
-      envName=vt.theEnvironmentName,
-      vtScore=vt.theScore,
-      vtRat=vt.theRationale)
+    vtParams = ValueTypeParameters(vtName=vt.theName,vtDesc=vt.theDescription,vType=vt.theType,envName=vt.theEnvironmentName,vtScore=vt.theScore,vtRat=vt.theRationale)
     vtParams.setId(found_vt.theId)
     try:
       self.db_proxy.updateValueType(vtParams)
@@ -93,7 +91,7 @@ class ValueTypeDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def delete_value_type(self, type_name,environment_name,object_name):
+  def delete_object_by_3parameters(self, type_name,environment_name,object_name):
     vt = self.get_value_type(type_name,environment_name,object_name,False)
     try:
       self.db_proxy.deleteValueType(vt.theId,type_name)
