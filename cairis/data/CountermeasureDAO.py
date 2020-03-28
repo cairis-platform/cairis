@@ -173,7 +173,8 @@ class CountermeasureDAO(CairisDAO):
         self.close()
         raise ARMHTTPError(ex)
 
-  def get_countermeasure_targets(self,reqList,envName):
+  def get_countermeasure_targets(self,envName,pathValues):
+    reqList = pathValues[0]
     try:
       return list(self.db_proxy.targetNames(reqList,envName).keys())
     except DatabaseProxyException as ex:
@@ -183,7 +184,8 @@ class CountermeasureDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def get_countermeasure_tasks(self,roleList,envName):
+  def get_countermeasure_tasks(self,envName,pathValues):
+    roleList = pathValues[0]
     try:
       roleTasks = self.db_proxy.roleTasks(envName,roleList)
       outRoleTasks = []

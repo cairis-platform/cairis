@@ -32,41 +32,6 @@ from importlib import import_module
 
 __author__ = 'Shamal Faily'
 
-
-class TargetsAPI(Resource):
-
-  def __init__(self):
-    self.DAOModule = getattr(import_module('cairis.data.CountermeasureDAO'),'CountermeasureDAO')
-
-  def get(self, environment):
-    session_id = get_session_id(session, request)
-    reqList = request.args.getlist('requirement')
-    dao = self.DAOModule(session_id)
-    targets = dao.get_countermeasure_targets(reqList,environment)
-    dao.close()
-    resp = make_response(json_serialize(targets, session_id=session_id), OK)
-    resp.contenttype = 'application/json'
-    return resp
-
-
-class CountermeasureTasksAPI(Resource):
-
-  def __init__(self):
-    self.DAOModule = getattr(import_module('cairis.data.CountermeasureDAO'),'CountermeasureDAO')
-
-  def get(self, environment):
-    session_id = get_session_id(session, request)
-    roleList = request.args.getlist('role')
-    dao = self.DAOModule(session_id)
-    tasks = dao.get_countermeasure_tasks(roleList,environment)
-    dao.close()
-
-    resp = make_response(json_serialize(tasks, session_id=session_id), OK)
-    resp.contenttype = 'application/json'
-    return resp
-    dao.close()
-
-
 class GenerateAssetAPI(Resource):
 
   def __init__(self):

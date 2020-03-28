@@ -324,7 +324,10 @@ class ObjectsByMethodAndParameterAPI(Resource):
     dao = self.DAOModule(session_id)
     pathValues = []
     for parameterName,defaultValue in self.thePathParameters:
-      pathValues.append(request.args.get(parameterName,defaultValue))
+      if (self.DAOModule.__name__ == 'CountermeasureDAO' and parameterName in ['requirement','role']):
+        pathValues.append(request.args.getlist(parameterName))
+      else:
+        pathValues.append(request.args.get(parameterName,defaultValue))
     objts = getattr(dao, self.theGetMethod)(parameter_string,pathValues)
     dao.close()
     resp = make_response(json_serialize(objts, session_id=session_id), OK)

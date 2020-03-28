@@ -250,8 +250,8 @@ api.add_resource(CountermeasureController.GenerateAssetFromTemplateAPI, '/api/co
 api.add_resource(CountermeasureController.SituateCountermeasurePatternAPI, '/api/countermeasures/name/<path:name>/security_pattern/<path:security_pattern_name>/situate',endpoint='countermeasure_situate_countermeasure_pattern')
 api.add_resource(CountermeasureController.AssociateSituatedPatternAPI, '/api/countermeasures/name/<path:name>/security_pattern/<path:security_pattern_name>/associate_situated',endpoint='associate_situated_pattern')
 api.add_resource(CountermeasureController.RemoveSituatedPatternAPI, '/api/countermeasures/name/<path:name>/security_pattern/<path:security_pattern_name>/remove_situated',endpoint='remove_situated_pattern')
-api.add_resource(CountermeasureController.TargetsAPI, '/api/countermeasures/targets/environment/<path:environment>',endpoint='targets')
-api.add_resource(CountermeasureController.CountermeasureTasksAPI, '/api/countermeasures/tasks/environment/<path:environment>',endpoint='countermeasuretasks')
+api.add_resource(ObjectController.ObjectsByMethodAndParameterAPI, '/api/countermeasures/targets/environment/<path:parameter_string>',endpoint='targets',resource_class_kwargs={'dao' : 'CountermeasureDAO','get_method' : 'get_countermeasure_targets', 'path_parameters' : [('requirement',[])]})
+api.add_resource(ObjectController.ObjectsByMethodAndParameterAPI, '/api/countermeasures/tasks/environment/<path:parameter_string>',endpoint='countermeasuretasks',resource_class_kwargs={'dao' : 'CountermeasureDAO','get_method' : 'get_countermeasure_tasks', 'path_parameters' : [('role',[])]})
 api.add_resource(CountermeasureController.CandidatePatternsAPI, '/api/countermeasures/name/<path:name>/candidate_patterns',endpoint='candidate_patterns')
 api.add_resource(CountermeasureController.CountermeasurePatternsAPI, '/api/countermeasures/name/<path:name>/patterns',endpoint='countermeasure_patterns')
 
