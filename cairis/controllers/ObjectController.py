@@ -262,8 +262,10 @@ class ObjectsByMethodAndTwoParametersAPI(Resource):
     pathValues = []
     for parameterName,defaultValue in self.thePathParameters:
       pathValues.append(request.args.get(parameterName,defaultValue))
-    getattr(dao, self.thePostMethod)(p1,p2,pathValues)
+    postMsg = getattr(dao, self.thePostMethod)(p1,p2,pathValues)
     resp_dict = {'message': self.thePostMessage}
+    if (postMsg != None):
+      resp_dict = {'message': postMsg}
     resp = make_response(json_serialize(resp_dict, session_id=session_id), OK)
     resp.contenttype = 'application/json'
     return resp
@@ -287,9 +289,11 @@ class ObjectsByMethodAndTwoParametersAPI(Resource):
     pathValues = []
     for parameterName,defaultValue in self.thePathParameters:
       pathValues.append(request.args.get(parameterName,defaultValue))
-    getattr(dao, self.theDelMethod)(p1,p2,pathValues)
+    delMsg = getattr(dao, self.theDelMethod)(p1,p2,pathValues)
     resp_dict = None
-    if (self.theDelMessage != ''):
+    if (delMsg != None):
+      resp_dict = {'message': delMsg}
+    elif (self.theDelMessage != ''):
       resp_dict = {'message': self.theDelMessage}
     else:
       resp_dict = {'message': p1 + ' / ' + p2 + ' deleted'}
@@ -340,8 +344,10 @@ class ObjectsByMethodAndParameterAPI(Resource):
     pathValues = []
     for parameterName,defaultValue in self.thePathParameters:
       pathValues.append(request.args.get(parameterName,defaultValue))
-    getattr(dao, self.thePostMethod)(parameter_string,pathValues)
+    postMsg = getattr(dao, self.thePostMethod)(parameter_string,pathValues)
     resp_dict = {'message': self.thePostMessage}
+    if postMsg != None:
+      resp_dict = {'message': postMsg}
     resp = make_response(json_serialize(resp_dict, session_id=session_id), OK)
     resp.contenttype = 'application/json'
     return resp
