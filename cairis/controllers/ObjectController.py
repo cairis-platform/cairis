@@ -171,6 +171,8 @@ class ObjectsByMethodAndThreeParametersAPI(Resource):
     self.thePathParameters = []
     if 'get_method' in kwargs:
       self.theGetMethod = kwargs['get_method']
+    if 'post_method' in kwargs:
+      self.thePostMethod = kwargs['post_method']
     if 'put_method' in kwargs:
       self.thePutMethod = kwargs['put_method']
     if 'del_method' in kwargs:
@@ -190,6 +192,20 @@ class ObjectsByMethodAndThreeParametersAPI(Resource):
     objts = getattr(dao, self.theGetMethod)(p1,p2,p3,pathValues)
     dao.close()
     resp = make_response(json_serialize(objts, session_id=session_id), OK)
+    resp.contenttype = 'application/json'
+    return resp
+
+  def post(self,p1,p2,p3):
+    session_id = get_session_id(session, request)
+    dao = self.DAOModule(session_id)
+    pathValues = []
+    for parameterName,defaultValue in self.thePathParameters:
+      pathValues.append(request.args.get(parameterName,defaultValue))
+    postMsg = getattr(dao, self.thePostMethod)(p1,p2,p3,pathValues)
+    resp_dict = {'message': self.thePostMessage}
+    if (postMsg != None):
+      resp_dict = {'message': postMsg}
+    resp = make_response(json_serialize(resp_dict, session_id=session_id), OK)
     resp.contenttype = 'application/json'
     return resp
 

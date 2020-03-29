@@ -37,7 +37,6 @@ from cairis.controllers import CImportController
 from cairis.controllers import DocumentationController
 from cairis.controllers import EnvironmentController
 from cairis.controllers import ObjectController
-from cairis.controllers import PermissionsController
 from cairis.controllers import PersonaCharacteristicController
 from cairis.controllers import ProjectController
 from cairis.controllers import RequirementController
@@ -355,8 +354,8 @@ api.add_resource(ObjectController.ObjectsByMethodAndParameterAPI, '/api/obstacle
 api.add_resource(ObjectController.ModelByTwoParametersAPI, '/api/obstacles/model/environment/<path:p1>/obstacle/<path:p2>',endpoint='obstaclemodel',resource_class_kwargs={'dao' : 'ObstacleDAO','get_method' : 'get_obstacle_model','renderer' : 'dot'})
 
 # Permissions routes
-api.add_resource(PermissionsController.PermissionsAPI, '/api/permissions/database/<path:db_name>',endpoint='permissions')
-api.add_resource(PermissionsController.ChangePermissionAPI, '/api/permissions/database/<path:db_name>/user/<path:user_id>/permission/<path:permission>',endpoint='changepermission')
+api.add_resource(ObjectController.ObjectsByMethodAndParameterAPI, '/api/permissions/database/<path:parameter_string>',endpoint='permissions', resource_class_kwargs={'dao' : 'PermissionsDAO', 'get_method' : 'get_permissions'})
+api.add_resource(ObjectController.ObjectsByMethodAndThreeParametersAPI, '/api/permissions/database/<path:p1>/user/<path:p2>/permission/<path:p3>',endpoint='changepermission', resource_class_kwargs={'dao' : 'PermissionsDAO', 'post_method' : 'set_permissions'})
 
 # Persona routes
 api.add_resource(ObjectController.ObjectsAPI, '/api/personas',endpoint='personas',resource_class_kwargs={'dao': 'PersonaDAO'})

@@ -38,7 +38,7 @@ class PermissionsDAO(CairisDAO):
     CairisDAO.__init__(self, session_id)
     b = Borg()
 
-  def get_permissions(self,db_name):
+  def get_permissions(self,db_name, pathValues = []):
     try:
       b = Borg()
       dbUser = b.get_settings(self.session_id)['dbUser']
@@ -49,7 +49,7 @@ class PermissionsDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def set_permission(self,db_name, user_id, permission):
+  def set_permission(self,db_name, user_id, permission, pathValues = []):
 
     if (existingAccount(user_id) == False):
       raise CairisHTTPError(status_code=http.client.NOT_FOUND,status="User not found",message=user_id + " was not found.")
@@ -65,6 +65,12 @@ class PermissionsDAO(CairisDAO):
         grantDatabaseAccess(b.rPasswd, b.dbHost, b.dbPort, db_name, user_id)
       else:
         revokeDatabaseAccess(b.rPasswd, b.dbHost, b.dbPort, db_name, user_id)
+      msg = 'Permission successfully '
+      if (permission == 'grant'):
+        msg += 'granted'
+      else:
+        msg += 'revoked'
+      return msg
     except ARMException as ex:
       self.close()
       raise ARMHTTPError(ex)
