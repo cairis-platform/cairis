@@ -39,7 +39,6 @@ from cairis.controllers import EnvironmentController
 from cairis.controllers import ObjectController
 from cairis.controllers import PersonaCharacteristicController
 from cairis.controllers import ProjectController
-from cairis.controllers import RequirementController
 from cairis.controllers import UploadController
 from cairis.controllers import UseCaseController
 
@@ -381,11 +380,11 @@ api.add_resource(ProjectController.ProjectDeleteDatabaseAPI, '/api/settings/data
 api.add_resource(ObjectController.ObjectsByMethodAPI, '/api/settings/databases',endpoint='show_databases',resource_class_kwargs={'dao' : 'ProjectDAO','get_method' : 'show_databases'})
 
 # Requirement routes
-api.add_resource(RequirementController.RequirementsAPI, '/api/requirements',endpoint='requirements')
-api.add_resource(RequirementController.RequirementsByAssetAPI, '/api/requirements/asset/<path:name>',endpoint='requirements_assets')
-api.add_resource(RequirementController.RequirementsByEnvironmentAPI, '/api/requirements/environment/<path:name>',endpoint='requirement_environments')
-api.add_resource(RequirementController.RequirementNamesByAssetAPI, '/api/requirements/asset/<path:name>/names',endpoint='requirements_assets_names')
-api.add_resource(RequirementController.RequirementNamesByEnvironmentAPI, '/api/requirements/environment/<path:name>/names',endpoint='requirement_environments_names')
+api.add_resource(ObjectController.ObjectsByMethodAPI, '/api/requirements',endpoint='requirements', resource_class_kwargs={'dao' : 'RequirementDAO', 'get_method' : 'get_requirements', 'post_method' : 'add_requirement', 'path_parameters' : [('ordered',0),('constraint_id',''),('asset',None),('environment',None)]})
+api.add_resource(ObjectController.ObjectsByMethodAndParameterAPI, '/api/requirements/asset/<path:parameter_string>',endpoint='requirement_assets',resource_class_kwargs={'dao' : 'RequirementDAO', 'get_method' : 'get_requirements_by_asset','path_parameters' : [('ordered',1)]})
+api.add_resource(ObjectController.ObjectsByMethodAndParameterAPI, '/api/requirements/environment/<path:parameter_string>',endpoint='requirement_environments',resource_class_kwargs={'dao' : 'RequirementDAO', 'get_method' : 'get_requirements_by_environment','path_parameters' : [('ordered',1)]})
+api.add_resource(ObjectController.ObjectsByMethodAndParameterAPI, '/api/requirements/asset/<path:parameter_string>/names',endpoint='requirements_assets_names',resource_class_kwargs={'dao' : 'RequirementDAO', 'get_method' : 'get_asset_requirement_names'})
+api.add_resource(ObjectController.ObjectsByMethodAndParameterAPI, '/api/requirements/environment/<path:parameter_string>/names',endpoint='requirement_environments_names',resource_class_kwargs={'dao' : 'RequirementDAO', 'get_method' : 'get_environment_requirement_names'})
 
 api.add_resource(ObjectController.ObjectByNameAPI, '/api/requirements/name/<path:name>','/api/requirements/shortcode/<path:name>',endpoint='requirement',resource_class_kwargs={'dao' : 'RequirementDAO'})
 api.add_resource(ObjectController.ModelByTwoParametersAPI, '/api/requirements/model/environment/<path:p1>/requirement/<path:p2>',endpoint='conceptmapmodel',resource_class_kwargs={'dao' : 'RequirementDAO','get_method' : 'get_concept_map_model','renderer' : 'dot','path_parameters' : [('asset','0')]})

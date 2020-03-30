@@ -32,7 +32,34 @@ class RequirementDAO(CairisDAO):
   def __init__(self, session_id):
     CairisDAO.__init__(self, session_id, 'requirement')
 
-  def get_requirements(self, constraint_id='', is_asset=True, ordered=False):
+  def get_requirements_by_asset(self, name, pathValues):
+    ordered = pathValues[0]
+    constraint_id = name
+    assetName  = ''
+    environmentName = None
+    return self.get_requirements([pathValues[0],constraint_id,assetName,environmentName])
+
+  def get_requirements_by_environment(self, name, pathValues):
+    ordered = pathValues[0]
+    constraint_id = name
+    assetName  = None
+    environmentName = ''
+    return self.get_requirements([pathValues[0],constraint_id,assetName,environmentName])
+
+  def get_requirements(self, pathValues):
+    ordered = pathValues[0]
+    constraint_id = pathValues[1]
+    asset_name = pathValues[2]
+    environment_name = pathValues[3]
+    
+    ordered = False
+    if (ordered == 1):
+      ordered = True
+    
+    is_asset = False
+    if ((asset_name == None and environment_name == None) or (asset_name != None)):
+      is_asset = True
+
     try:
       if (constraint_id != ''):
         if (is_asset == True):
@@ -78,7 +105,10 @@ class RequirementDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def add_requirement(self, requirement, asset_name=None, environment_name=None):
+  def add_requirement(self, requirement, pathValues):
+    asset_name = pathValues[2]
+    environment_name = pathValues[3]
+
     try:
       self.db_proxy.nameCheck(requirement.theName, 'requirement')
     except ARMException as ex:
@@ -209,6 +239,12 @@ class RequirementDAO(CairisDAO):
       raise ARMHTTPError(ex)
     except Exception as ex:
       print(ex)
+
+  def get_environment_requirement_names(self,name, pathValues = []):
+    return self.get_dimension_requirement_names('environment',name)
+
+  def get_asset_requirement_names(self,name, pathValues = []):
+    return self.get_dimension_requirement_names('asset',name)
 
   def get_dimension_requirement_names(self, dimName, objtName):
     try:

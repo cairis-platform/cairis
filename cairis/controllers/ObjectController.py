@@ -120,7 +120,13 @@ class ObjectsByMethodAPI(Resource):
     for parameterName,defaultValue in self.thePathParameters:
       pathValues.append(request.args.get(parameterName,defaultValue))
     objt = None
-    if self.isType:
+    if (dao.dimension() == 'requirement'):
+     domain_name = pathValues[2]
+     envName = pathValues[3]
+     if (envName != None):
+       domain_name = envName
+     objt = dao.from_json(request,domain_name)
+    elif self.isType:
       objt = dao.type_from_json(request)
     else:
       objt = dao.from_json(request)
