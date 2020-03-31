@@ -77,19 +77,10 @@ class EnvironmentDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def get_environments_by_threat_vulnerability(self, threat_name, vulnerability_name):
-    env_names = self.get_environment_names_by_threat_vulnerability(threat_name, vulnerability_name)
-    environments = {}
-    for env_name in env_names:
-      try:
-        environment = self.get_environment_by_name(env_name)
-        environments[env_name] = environment
-      except:
-        pass
+  def get_environment_names_by_vulnerability_threat(self, vulnerability_name, threat_name, pathValues = []):
+    return self.get_environment_names_by_threat_vulnerability(threat_name, vulnerability_name, pathValues)
 
-    return environments
-
-  def get_environment_names_by_threat_vulnerability(self, threat_name, vulnerability_name):
+  def get_environment_names_by_threat_vulnerability(self, threat_name, vulnerability_name,  pathValues = []):
     try:
       environments = self.db_proxy.riskEnvironments(threat_name, vulnerability_name)
       return environments
@@ -100,7 +91,7 @@ class EnvironmentDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def get_environment_names_by_risk(self, risk_name):
+  def get_environment_names_by_risk(self, risk_name, pathValues = []):
     try:
       environments = self.db_proxy.riskEnvironmentsByRisk(risk_name)
       return environments

@@ -43,6 +43,26 @@ class EnvironmentAPITests(CairisDaemonTestCase):
     self.existing_environment_name = 'Stroke'
     self.environment_class = Environment.__module__+'.'+Environment.__name__
     
+  def test_get_environment_names_by_threat_vulnerability(self):
+    method = 'test_get_environment_names_by_threat_vulnerability'
+    rv = self.app.get('/api/environments/threat/Trojan%20Horse/vulnerability/Workflow%20channel/names?session_id=test')
+    responseData = rv.data.decode('utf-8')
+    names = jsonpickle.decode(responseData)
+    self.assertIsNotNone(names, 'No results after deserialization')
+    self.assertIsInstance(names, list, 'The result is not a list as expected')
+    self.assertGreater(len(names), 0, 'No environments in the list')
+    self.assertEqual(len(names),3)
+
+  def test_get_environment_names_by_vulnerability_threat(self):
+    method = 'test_get_environment_names_by_threat_vulnerability'
+    rv = self.app.get('/api/environments/vulnerability/Workflow%20channel/threat/Trojan%20Horse/names?session_id=test')
+    responseData = rv.data.decode('utf-8')
+    names = jsonpickle.decode(responseData)
+    self.assertIsNotNone(names, 'No results after deserialization')
+    self.assertIsInstance(names, list, 'The result is not a list as expected')
+    self.assertGreater(len(names), 0, 'No environments in the list')
+    self.assertEqual(len(names),3)
+
   def test_get_all(self):
     method = 'test_get_all'
     rv = self.app.get('/api/environments?session_id=test')

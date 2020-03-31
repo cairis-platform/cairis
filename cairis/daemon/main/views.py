@@ -35,7 +35,6 @@ from cairis.core.MySQLDatabaseProxy import MySQLDatabaseProxy,canonicalDbUser,ca
 from cairis.controllers import CExportController
 from cairis.controllers import CImportController
 from cairis.controllers import DocumentationController
-from cairis.controllers import EnvironmentController
 from cairis.controllers import ObjectController
 from cairis.controllers import PersonaCharacteristicController
 from cairis.controllers import ProjectController
@@ -284,17 +283,9 @@ api.add_resource(ObjectController.ObjectByNameAPI, '/api/domainproperties/name/<
 api.add_resource(ObjectController.ObjectsAPI, '/api/environments',endpoint='environments',resource_class_kwargs={'dao': 'EnvironmentDAO'})
 api.add_resource(ObjectController.ObjectByNameAPI, '/api/environments/name/<path:name>',endpoint='environment',resource_class_kwargs={'dao' : 'EnvironmentDAO'})
 api.add_resource(ObjectController.ObjectsByMethodAPI, '/api/environments/names','/api/environments/all/names',endpoint='environment_names',resource_class_kwargs={'dao' : 'EnvironmentDAO','get_method' : 'get_environment_names'})
-api.add_resource(
-  EnvironmentController.EnvironmentsByThreatVulnerability,
-  '/api/environments/threat/<path:threat>/vulnerability/<path:vulnerability>',
-  '/api/environments/vulnerability/<path:vulnerability>/threat/<path:threat>',endpoint='environments_tv'
-)
-api.add_resource(
-  EnvironmentController.EnvironmentNamesByThreatVulnerability,
-  '/api/environments/threat/<path:threat>/vulnerability/<path:vulnerability>/names',
-  '/api/environments/vulnerability/<path:vulnerability>/threat/<path:threat>/names',endpoint='environment_names_tv'
-)
-api.add_resource(EnvironmentController.EnvironmentNamesByRisk,'/api/environments/risk/<path:risk>/names',endpoint='environment_names_risk')
+api.add_resource(ObjectController.ObjectsByMethodAndTwoParametersAPI,'/api/environments/threat/<path:p1>/vulnerability/<path:p2>/names',endpoint='environment_names_tv', resource_class_kwargs={'dao':'EnvironmentDAO',  'get_method' : 'get_environment_names_by_threat_vulnerability'})
+api.add_resource(ObjectController.ObjectsByMethodAndTwoParametersAPI,'/api/environments/vulnerability/<path:p1>/threat/<path:p2>/names',endpoint='environment_names_vt', resource_class_kwargs={'dao':'EnvironmentDAO',  'get_method' : 'get_environment_names_by_vulnerability_threat'})
+api.add_resource(ObjectController.ObjectsByMethodAndParameterAPI,'/api/environments/risk/<path:parameter_string>/names',endpoint='environment_names_risk', resource_class_kwargs={'dao':'EnvironmentDAO',  'get_method' : 'get_environment_names_by_risk'})
 
 # External Document routes
 api.add_resource(ObjectController.ObjectsAPI, '/api/external_documents',endpoint='external_documents',resource_class_kwargs={'dao': 'ExternalDocumentDAO'})

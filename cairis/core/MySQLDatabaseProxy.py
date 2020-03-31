@@ -294,7 +294,7 @@ class MySQLDatabaseProxy:
     self.updateDatabase('call addCompositeEnvironmentProperties(:id,:dp,:oe)',{'id':environmentId,'dp':duplicateProperty,'oe':overridingEnvironment},'MySQL error adding duplicate properties for environment id ' + str(environmentId),session,False)
 
   def riskEnvironments(self,threatName,vulName):
-    return self.responseList('call riskEnvironments(:threat,:vul)',{'threat':threatName,'vul':vulName},'MySQL error getting environments associated with threat ' + threatName + ' and vulnerability ' + vulName)
+    return self.responseList('call riskEnvironments(:thr,:vul)',{'thr':threatName,'vul':vulName},'MySQL error getting environments associated with threat ' + threatName + ' and vulnerability ' + vulName)
 
   def riskEnvironmentsByRisk(self,riskName):
     return self.responseList('call riskEnvironmentsByRisk(:risk)',{'risk':riskName},'MySQL error getting environments associated with risk ' + riskName)

@@ -2775,8 +2775,11 @@ end
 
 create procedure riskEnvironments(in threatName text, in vulName text)
 begin
-  select c.name from threat t,environment_threat ct, environment c where t.name = threatName and t.id = ct.threat_id and ct.environment_id = c.id and c.name in
-  (select c.name from vulnerability v,environment_vulnerability cv, environment c where v.name = vulName and v.id = cv.vulnerability_id and cv.environment_id = c.id);
+  declare threatId int;
+  declare vulId int;
+  select id into threatId from threat where name = threatName limit 1;
+  select id into vulId from vulnerability where name = vulName limit 1;
+  select e.name from environment e, environment_threat et, environment_vulnerability ev where et.threat_id = threatId and et.environment_id = ev.environment_id and ev.vulnerability_id = vulId and et.environment_id = e.id order by 1;
 end
 //
 
