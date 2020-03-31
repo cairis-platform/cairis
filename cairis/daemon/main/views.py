@@ -37,7 +37,6 @@ from cairis.controllers import CImportController
 from cairis.controllers import DocumentationController
 from cairis.controllers import ObjectController
 from cairis.controllers import PersonaCharacteristicController
-from cairis.controllers import ProjectController
 from cairis.controllers import UploadController
 from cairis.controllers import UseCaseController
 
@@ -364,10 +363,10 @@ api.add_resource(PersonaCharacteristicController.PersonaCharacteristicByNameAPI,
 
 # Project routes
 api.add_resource(ObjectController.ObjectsByMethodAPI, '/api/settings',endpoint='project_settings',resource_class_kwargs={'dao' : 'ProjectDAO','get_method' : 'get_settings','put_method' : 'apply_settings'})
-api.add_resource(ProjectController.ProjectClearAPI, '/api/settings/clear',endpoint='project_clear')
-api.add_resource(ProjectController.ProjectCreateDatabaseAPI, '/api/settings/database/<path:db_name>/create',endpoint='database_create')
-api.add_resource(ProjectController.ProjectOpenDatabaseAPI, '/api/settings/database/<path:db_name>/open',endpoint='database_open')
-api.add_resource(ProjectController.ProjectDeleteDatabaseAPI, '/api/settings/database/<path:db_name>/delete',endpoint='database_delete')
+api.add_resource(ObjectController.ObjectsByMethodAPI, '/api/settings/clear',endpoint='project_clear', resource_class_kwargs={'dao' : 'ProjectDAO', 'post_method' : 'clear_project'})
+api.add_resource(ObjectController.ObjectsByMethodAndParameterAPI, '/api/settings/database/<path:parameter_string>/create',endpoint='database_create',resource_class_kwargs={'dao' : 'ProjectDAO', 'post_method' : 'create_new_database'})
+api.add_resource(ObjectController.ObjectsByMethodAndParameterAPI, '/api/settings/database/<path:parameter_string>/open',endpoint='database_open',resource_class_kwargs={'dao' : 'ProjectDAO', 'post_method' : 'open_database'})
+api.add_resource(ObjectController.ObjectsByMethodAndParameterAPI, '/api/settings/database/<path:parameter_string>/delete',endpoint='database_delete', resource_class_kwargs={'dao' : 'ProjectDAO', 'post_method' : 'delete_database'})
 api.add_resource(ObjectController.ObjectsByMethodAPI, '/api/settings/databases',endpoint='show_databases',resource_class_kwargs={'dao' : 'ProjectDAO','get_method' : 'show_databases'})
 
 # Requirement routes

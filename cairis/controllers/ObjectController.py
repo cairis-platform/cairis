@@ -60,10 +60,12 @@ class ObjectsAPI(Resource):
       else:
         objtName = new_objt.name()
       dao.nameCheck(objtName)
-    dao.add_object(new_objt)
+    postMsg = dao.add_object(new_objt)
     dao.close()
     resp_dict = {}
-    if (isinstance(new_objt,dict)):
+    if (postMsg != None):
+      resp_dict = {'message': postMsg}
+    elif (isinstance(new_objt,dict)):
       resp_dict = {'message': new_objt['theName'] + ' created'}
     else:
       resp_dict = {'message': new_objt.name() + ' created'}
@@ -120,7 +122,9 @@ class ObjectsByMethodAPI(Resource):
     for parameterName,defaultValue in self.thePathParameters:
       pathValues.append(request.args.get(parameterName,defaultValue))
     objt = None
-    if (dao.dimension() == 'requirement'):
+    if (dao.dimension() == 'project'):
+      objt = None
+    elif (dao.dimension() == 'requirement'):
      domain_name = pathValues[2]
      envName = pathValues[3]
      if (envName != None):
@@ -130,8 +134,12 @@ class ObjectsByMethodAPI(Resource):
       objt = dao.type_from_json(request)
     else:
       objt = dao.from_json(request)
-    getattr(dao, self.thePostMethod)(objt,pathValues)
-    resp_dict = {'message': objt.name() + ' created'}
+    postMsg = getattr(dao, self.thePostMethod)(objt,pathValues)
+    resp_dict = {}
+    if (postMsg != None):
+      resp_dict = {'message': postMsg}
+    else:
+      resp_dict = {'message': objt.name() + ' created'}
     resp = make_response(json_serialize(resp_dict, session_id=session_id), OK)
     resp.contenttype = 'application/json'
     return resp
@@ -397,8 +405,10 @@ class ObjectsByMethodAndParameterAPI(Resource):
     pathValues = []
     for parameterName,defaultValue in self.thePathParameters:
       pathValues.append(request.args.get(parameterName,defaultValue))
-    getattr(dao, self.theDelMethod)(parameter_string,pathValues)
+    delMsg = getattr(dao, self.theDelMethod)(parameter_string,pathValues)
     resp_dict = {'message': parameter_string + ' deleted'}
+    if (delMsg != None):
+      resp_dict = {'message': delMsg}
     resp = make_response(json_serialize(resp_dict, session_id=session_id), OK)
     resp.contenttype = 'application/json'
     return resp

@@ -29,9 +29,9 @@ __author__ = 'Robin Quetin, Shamal Faily'
 
 class ProjectDAO(CairisDAO):
   def __init__(self, session_id):
-    CairisDAO.__init__(self, session_id)
+    CairisDAO.__init__(self, session_id, 'project')
 
-  def clear_project(self):
+  def clear_project(self, objt = None, pathValues = []):
     try:
       self.db_proxy.clearDatabase(session_id=self.session_id)
       b = Borg()
@@ -42,12 +42,13 @@ class ProjectDAO(CairisDAO):
       dbPasswd = ses_settings['dbPasswd']
       dbName = ses_settings['dbName']
       createDefaults(b.cairisRoot,dbHost,dbPort,dbUser,dbPasswd,dbName)
+      return 'Project cleared successfully'
     except DatabaseProxyException as ex:
       raise ARMHTTPError(ex)
     except ARMException as ex:
       raise ARMHTTPError(ex)
 
-  def create_new_database(self,db_name):
+  def create_new_database(self,db_name, pathValues = []):
     try:
       if (db_name in ['null','']):
         raise ARMException('No database name defined')
@@ -62,12 +63,13 @@ class ProjectDAO(CairisDAO):
         raise ARMException(db_name + " already exists")
  
       self.db_proxy.createDatabase(db_name,self.session_id)
+      return 'New database successfully created'
     except DatabaseProxyException as ex:
       raise ARMHTTPError(ex)
     except ARMException as ex:
       raise ARMHTTPError(ex)
 
-  def open_database(self,db_name):
+  def open_database(self,db_name, pathValues = []):
     try:
       if (db_name in ['null','']):
         raise ARMException('No database name defined')
@@ -91,6 +93,7 @@ class ProjectDAO(CairisDAO):
         database_owner = dbOwner(db_name)
 
       self.db_proxy.openDatabase(database_owner + '_' + db_name,self.session_id)
+      return 'Database successfully opened'
     except ObjectNotFound as ex:
       self.close()
       raise ObjectNotFoundHTTPError(db_name + ' does not exist')
@@ -99,13 +102,14 @@ class ProjectDAO(CairisDAO):
     except ARMException as ex:
       raise ARMHTTPError(ex)
 
-  def delete_database(self,db_name):
+  def delete_database(self,db_name, pathValues = []):
     try:
       if (db_name in ['null','']):
         raise ARMException('No database name defined')
       if (db_name not in list(map(lambda db: db['database'],self.show_databases()))):
         raise ObjectNotFound(db_name + " does not exist")
       self.db_proxy.deleteDatabase(db_name,self.session_id)
+      return 'Database successfully deleted'
     except ObjectNotFound as ex:
       self.close()
       raise ObjectNotFoundHTTPError('The provided asset name')
