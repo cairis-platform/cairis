@@ -305,7 +305,7 @@ api.add_resource(ObjectController.ObjectsAPI, '/api/goal_contributions',endpoint
 api.add_resource(ObjectController.ObjectsByMethodAndTwoParametersAPI, '/api/goal_contributions/source/<path:p1>/target/<path:p2>',endpoint='goal_contribution',resource_class_kwargs={'dao' : 'GoalContributionDAO','get_method' : 'get_objects', 'put_method' : 'update_object', 'del_method' : 'delete_object'})
 
 # Export route
-api.add_resource(CExportController.CExportFileAPI, '/api/export/file',endpoint='export')
+api.add_resource(ObjectController.ObjectsByMethodAPI, '/api/export/file',endpoint='export',resource_class_kwargs={'dao' : 'ExportDAO', 'get_method' : 'file_export', 'path_parameters' : [('filename','model'),('fileType','xml')]})
 api.add_resource(CExportController.CExportArchitecturalPatternAPI, '/api/export/file/architectural_pattern/<path:architectural_pattern_name>',endpoint='exportarchitecturalpattern')
 api.add_resource(CExportController.CExportSecurityPatternsAPI, '/api/export/file/security_patterns',endpoint='exportsecuritypatterns')
 api.add_resource(CExportController.CExportGRLAPI, '/api/export/file/grl/task/<path:task_name>/persona/<path:persona_name>/environment/<path:environment_name>',endpoint='exportgrl')

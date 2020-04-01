@@ -114,8 +114,18 @@ class ObjectsByMethodAPI(Resource):
       pathValues.append(request.args.get(parameterName,defaultValue))
     objts = getattr(dao, self.theGetMethod)(pathValues)
     dao.close()
-    resp = make_response(json_serialize(objts, session_id=session_id), OK)
-    resp.contenttype = 'application/json'
+
+    resp = None
+    if (self.DAOModule.__name__ == 'ExportDAO'):
+      resp = make_response(objts)
+      if (self.theGetMethod == 'file_export' and pathValues[1] == 'cairis'):
+        resp.headers["Content-Type"] = 'application/octet-stream' 
+      else:
+        resp.headers["Content-Type"] = 'application/xml'
+      resp.headers["Content-Disposition"] = 'Attachment; filename=' + pathValues[0] + '.'  + pathValues[1]
+    else:
+      resp = make_response(json_serialize(objts, session_id=session_id), OK)
+      resp.contenttype = 'application/json'
     return resp
 
   def put(self):

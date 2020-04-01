@@ -37,25 +37,6 @@ from io import StringIO
 
 __author__ = 'Shamal Faily'
 
-
-class CExportFileAPI(Resource):
-
-  def get(self):
-    session_id = get_session_id(session, request)
-    fileName = request.args.get('filename', 'model')
-    fileType = request.args.get('fileType','xml')
-
-    dao = ExportDAO(session_id)
-    modelBuf = dao.file_export(fileType)
-    dao.close()
-    resp = make_response(modelBuf)
-    if (fileType == 'cairis'):
-      resp.headers["Content-Type"] = 'application/octet-stream'
-    else:
-      resp.headers["Content-Type"] = 'application/xml'
-    resp.headers["Content-Disposition"] = 'Attachment; filename=' + fileName + '.' + fileType
-    return resp
-
 class CExportArchitecturalPatternAPI(Resource):
 
   def get(self,architectural_pattern_name):

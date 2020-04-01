@@ -27,9 +27,10 @@ __author__ = 'Shamal Faily'
 class ExportDAO(CairisDAO):
 
   def __init__(self, session_id):
-    CairisDAO.__init__(self, session_id)
+    CairisDAO.__init__(self, session_id, 'export')
 
-  def file_export(self,fileType='xml'):
+  def file_export(self,pathValues):
+    fileType = pathValues[1]
     try:
       if (fileType == 'xml'):
         return extractModel(self.session_id)
