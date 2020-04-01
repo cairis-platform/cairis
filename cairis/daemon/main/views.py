@@ -36,9 +36,7 @@ from cairis.controllers import CExportController
 from cairis.controllers import CImportController
 from cairis.controllers import DocumentationController
 from cairis.controllers import ObjectController
-from cairis.controllers import PersonaCharacteristicController
 from cairis.controllers import UploadController
-from cairis.controllers import UseCaseController
 
 from cairis.daemon.main import main, api
 from cairis.tools.SessionValidator import get_session_id
@@ -357,9 +355,9 @@ api.add_resource(ObjectController.ObjectsByMethodAndThreeParametersAPI,'/api/per
 api.add_resource(ObjectController.ObjectsByMethodAPI, '/api/personas/types',endpoint='persona_types',resource_class_kwargs={'dao' : 'PersonaDAO','get_method' : 'get_persona_types'})
 
 # Persona Characteristic routes
-api.add_resource(PersonaCharacteristicController.PersonaCharacteristicsAPI, '/api/persona_characteristics',endpoint='persona_characteristics')
+api.add_resource(ObjectController.ObjectsAPI, '/api/persona_characteristics',endpoint='persona_characteristics',resource_class_kwargs={'dao': 'PersonaCharacteristicDAO'})
+api.add_resource(ObjectController.ObjectByNameAPI, '/api/persona_characteristics/name/<path:name>',endpoint='persona_characteristic',resource_class_kwargs={'dao' : 'PersonaCharacteristicDAO'})
 api.add_resource(ObjectController.ObjectsSummaryAPI, '/api/persona_characteristics/summary',endpoint='personacharacteristicssummary',resource_class_kwargs={'dao' : 'PersonaCharacteristicDAO'})
-api.add_resource(PersonaCharacteristicController.PersonaCharacteristicByNameAPI, '/api/persona_characteristics/name/<path:name>',endpoint='persona_characteristic')
 
 # Project routes
 api.add_resource(ObjectController.ObjectsByMethodAPI, '/api/settings',endpoint='project_settings',resource_class_kwargs={'dao' : 'ProjectDAO','get_method' : 'get_settings','put_method' : 'apply_settings'})
@@ -461,11 +459,11 @@ api.add_resource(ObjectController.ObjectByNameAPI, '/api/trust_boundaries/name/<
 api.add_resource(UploadController.UploadImageAPI, '/api/upload/image',endpoint='upload')
 
 # Use Case routes
-api.add_resource(UseCaseController.UseCasesAPI, '/api/usecases',endpoint='usecases')
-api.add_resource(UseCaseController.UseCaseByNameAPI, '/api/usecases/name/<path:name>',endpoint='usecase')
+api.add_resource(ObjectController.ObjectsAPI, '/api/usecases',endpoint='usecases',resource_class_kwargs={'dao': 'UseCaseDAO'})
+api.add_resource(ObjectController.ObjectByNameAPI, '/api/usecases/name/<path:name>',endpoint='usecase',resource_class_kwargs={'dao' : 'UseCaseDAO'})
 api.add_resource(ObjectController.ObjectsSummaryAPI, '/api/usecases/summary',endpoint='usecasessummary',resource_class_kwargs={'dao' : 'UseCaseDAO'})
-api.add_resource(UseCaseController.UseCaseRequirementsByNameAPI, '/api/usecases/name/<path:usecase_name>/requirements',endpoint='usecaserequirements')
-api.add_resource(UseCaseController.UseCaseGoalsByNameAPI, '/api/usecases/name/<path:usecase_name>/environment/<path:environment_name>/goals',endpoint='usecasegoals')
+api.add_resource(ObjectController.ObjectsByMethodAndParameterAPI, '/api/usecases/name/<path:parameter_string>/requirements',endpoint='usecaserequirements',resource_class_kwargs={'dao' : 'UseCaseDAO', 'get_method' : 'get_usecase_requirements'})
+api.add_resource(ObjectController.ObjectsByMethodAndTwoParametersAPI, '/api/usecases/name/<path:p1>/environment/<path:p2>/goals',endpoint='usecasegoals', resource_class_kwargs={'dao' : 'UseCaseDAO', 'get_method' : 'get_usecase_goals'})
 
 # User goal routes
 api.add_resource(ObjectController.ObjectsAPI, '/api/user_goals',endpoint='user_goals',resource_class_kwargs={'dao': 'UserGoalDAO'})

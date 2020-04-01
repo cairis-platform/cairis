@@ -163,7 +163,7 @@ class UseCaseDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def get_usecase_requirements(self, name):
+  def get_usecase_requirements(self, name, pathValues = []):
     try:
       return self.db_proxy.getUseCaseRequirements(name)
     except DatabaseProxyException as ex:
@@ -173,7 +173,7 @@ class UseCaseDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def get_usecase_goals(self, goal_name,environment_name):
+  def get_usecase_goals(self, goal_name,environment_name, pathValues = []):
     try:
       return self.db_proxy.getUseCaseGoals(goal_name,environment_name)
     except DatabaseProxyException as ex:

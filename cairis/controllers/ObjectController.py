@@ -51,7 +51,14 @@ class ObjectsAPI(Resource):
     session_id = get_session_id(session, request)
 
     dao = self.DAOModule(session_id)
-    new_objt = dao.from_json(request)
+
+    new_objt = None
+    if (dao.dimension() == 'usecase'):
+      new_objt, ucContribs = dao.from_json(request)
+    elif (dao.dimension() == 'persona_characteristic'):
+      new_objt,ps,rss,rcs = dao.from_json(request)
+    else:
+      new_objt = dao.from_json(request)
  
     if (dao.dimension() != ''):
       objtName = ''
@@ -60,7 +67,16 @@ class ObjectsAPI(Resource):
       else:
         objtName = new_objt.name()
       dao.nameCheck(objtName)
+
     postMsg = dao.add_object(new_objt)
+
+    if (dao.dimension() == 'usecase'):
+      for rc in ucContribs:
+        dao.assign_usecase_contribution(rc)
+    elif(dao.dimension() == 'persona_characteristic'):
+      if (ps != None):
+        dao.assignIntentionalElements(ps,rss,rcs)
+
     dao.close()
     resp_dict = {}
     if (postMsg != None):
@@ -463,7 +479,15 @@ class ObjectByNameAPI(Resource):
   def put(self, name):
     session_id = get_session_id(session, request)
     dao = self.DAOModule(session_id)
-    objt = dao.from_json(request)
+
+    objt = None
+    if (dao.dimension() == 'usecase'):
+      objt, ucContribs = dao.from_json(request)
+    elif (dao.dimension() == 'persona_characteristic'):
+      objt,ps,rss,rcs = dao.from_json(request)
+    else:
+      objt = dao.from_json(request)
+
     if (dao.dimension() != ''):
       objtName = ''
       if (isinstance(objt,dict)):
@@ -473,6 +497,15 @@ class ObjectByNameAPI(Resource):
       if (name != objtName):
         dao.nameCheck(objtName)
     dao.update_object(objt, name)
+
+    if (dao.dimension() == 'usecase'):
+      dao.remove_usecase_contributions(objt)
+      for rc in ucContribs:
+        dao.assign_usecase_contribution(rc)
+    elif(dao.dimension() == 'persona_characteristic'):
+      if (ps != None):
+        dao.assignIntentionalElements(ps,rss,rcs)
+
     dao.close()
     resp_dict = {}
     if (isinstance(objt,dict)):

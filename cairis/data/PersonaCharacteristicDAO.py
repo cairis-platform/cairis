@@ -35,7 +35,7 @@ class PersonaCharacteristicDAO(CairisDAO):
   def __init__(self, session_id):
     CairisDAO.__init__(self, session_id, 'persona_characteristic')
 
-  def get_persona_characteristics(self,constraint_id = -1,simplify=True):
+  def get_objects(self,constraint_id = -1,simplify=True):
     try:
       pcs = self.db_proxy.getPersonaCharacteristics(constraint_id)
     except DatabaseProxyException as ex:
@@ -64,9 +64,9 @@ class PersonaCharacteristicDAO(CairisDAO):
     return pcs
 
 
-  def get_persona_characteristic(self, persona_characteristic_name):
+  def get_object_by_name(self, persona_characteristic_name):
     pcId = self.db_proxy.getDimensionId(persona_characteristic_name,'persona_characteristic')
-    pcs = self.get_persona_characteristics(pcId)
+    pcs = self.get_objects(pcId)
     if pcs is None or len(pcs) < 1:
       self.close()
       raise ObjectNotFoundHTTPError('Persona characteristic')
@@ -78,7 +78,7 @@ class PersonaCharacteristicDAO(CairisDAO):
     self.close()
     raise ObjectNotFoundHTTPError('Persona characteristic:\"' + persona_characteristic_name + '\"')
 
-  def add_persona_characteristic(self, pc):
+  def add_object(self, pc):
     try:
       self.db_proxy.nameCheck(pc.theName, 'persona_characteristic')
     except ARMException as ex:
@@ -101,7 +101,7 @@ class PersonaCharacteristicDAO(CairisDAO):
       raise ARMHTTPError(ex)
 
 
-  def update_persona_characteristic(self,pc,name):
+  def update_object(self,pc,name):
     pcParams = PersonaCharacteristicParameters(
       pName=pc.thePersonaName,
       modQual=pc.theModQual,
@@ -119,7 +119,7 @@ class PersonaCharacteristicDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def delete_persona_characteristic(self, name):
+  def delete_object(self, name):
     try:
       pcId = self.db_proxy.getDimensionId(name,'persona_characteristic')
       self.db_proxy.deletePersonaCharacteristic(pcId)
