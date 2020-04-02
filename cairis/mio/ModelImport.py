@@ -60,6 +60,9 @@ def importSecurityPatterns(taps,spps,vts,session_id=None):
   b = Borg()
   db_proxy = b.get_dbproxy(session_id)
 
+  for tap in taps:
+    if (db_proxy.nameExists(tap.name(),'asset')):
+      raise ARMException("Cannot import template asset with name " + tap.name() + " as asset with same name already exists.")
   db_proxy.addSecurityPatterns(vts,taps,spps)
   msgStr =  'Imported ' + str(noOfTaps) + ' template assets and ' + str(noOfSpps) + ' security patterns'
   return msgStr

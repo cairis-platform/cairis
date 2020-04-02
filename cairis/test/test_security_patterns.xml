@@ -1,0 +1,342 @@
+<?xml version="1.0"?>
+<!DOCTYPE security_patterns PUBLIC "-//CAIRIS//DTD SECURITYPATTERN 1.0//EN" "https://cairis.org/dtd/securitypattern.dtd">
+
+<!-- 
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+
+
+<security_patterns>
+
+<access_right name="trusted" value="10">
+  <description>None</description>
+  <rationale>None</rationale>
+</access_right>
+<access_right name="authenticated" value="5">
+  <description>None</description>
+  <rationale>None</rationale>
+</access_right>
+<access_right name="anonymous" value="1">
+  <description>None</description>
+  <rationale>None</rationale>
+</access_right>
+
+<surface_type name="JSON" value="10">
+  <description>None</description>
+  <rationale>None</rationale>
+</surface_type>
+<surface_type name="Unconstrained XML" value="5">
+  <description>None</description>
+  <rationale>None</rationale>
+</surface_type>
+<surface_type name="Constrained XML" value="1">
+  <description>None</description>
+  <rationale>None</rationale>
+</surface_type>
+<surface_type name="Client application" value="10">
+  <description>None</description>
+  <rationale>None</rationale>
+</surface_type>
+<surface_type name="Privileged application" value="1">
+  <description>None</description>
+  <rationale>None</rationale>
+</surface_type>
+
+
+<asset name="PFFirewall" short_code ="PFF" type = "Software" access_right="trusted" surface_type="Privileged application">
+  <description>Intercepts all traffic coming and going from a port P and inspects its packets.</description>
+  <significance>Effectiveness and speed may be limited due to its rule set.  Can only enforce traffic going through the firewall.  Can't stop attacks at anything higher than an IP level.  Performance impact due to analysing each and every packet.</significance>
+  <security_property property="integrity" value="Medium">
+    <rationale>None</rationale>
+  </security_property>
+  <security_property property="availability" value="High">
+    <rationale>None</rationale>
+  </security_property>
+</asset>
+<asset name="RuleBase" short_code ="FRB" type = "Software" access_right="trusted" surface_type="JSON">
+  <description>Encapsulates data structures and operations to manage rules in a conventional way.</description>
+  <significance>Addition of new rules may interfere with existing rules, so a careful approach should be taken in adding and updating access rules.</significance>
+  <security_property property="integrity" value="Medium">
+    <rationale>None</rationale>
+  </security_property>
+  <security_property property="availability" value="High">
+    <rationale>None</rationale>
+  </security_property>
+</asset>
+<asset name="Rule" short_code ="FR" type = "Information" access_right="trusted" surface_type="JSON">
+  <description>Encapsulates organisational policy.</description>
+  <significance>None</significance>
+  <security_property property="availability" value="High">
+    <rationale>None</rationale>
+  </security_property>
+</asset>
+<asset name="ExternalHost" short_code ="EH" type = "Systems" access_right="trusted" surface_type="Privileged application">
+  <description>External Host interface</description>
+  <significance>None</significance>
+</asset>
+<asset name="LocalHost" short_code ="LH" type = "Systems" access_right="trusted" surface_type="Privileged application">
+  <description>Local Host interface</description>
+  <significance>None</significance>
+</asset>
+<asset name="Proxy-Based Firewall" short_code = "PBF" type = "Systems" access_right="trusted" surface_type="Privileged application">
+  <description>Inspects and filters incoming and outgoing network traffic based on the type of application service to be accessed, or performing the access.</description>
+  <significance>None</significance>
+  <security_property property="integrity" value="Medium">
+    <rationale>None</rationale>
+  </security_property>
+  <security_property property="availability" value="High">
+    <rationale>None</rationale>
+  </security_property>
+</asset>
+<asset name="Service" short_code ="GS" type = "Software" access_right="trusted" surface_type="Privileged application">
+  <description>Service interface</description>
+  <significance>None</significance>
+</asset>
+<asset name="Proxy" short_code ="GP" type = "Software" access_right="trusted" surface_type="Privileged application">
+  <description>Proxy interface</description>
+  <significance>None</significance>
+</asset>
+<asset name="Stateful Firewall" short_code ="SFF" type = "Systems" access_right="trusted" surface_type="Privileged application">
+  <description>Filters incoming and outgoing network traffic in a computer system based on state information derived from past communications.</description>
+  <significance>None</significance>
+  <security_property property="integrity" value="Medium">
+    <rationale>None</rationale>
+  </security_property>
+  <security_property property="availability" value="High">
+    <rationale>None</rationale>
+  </security_property>
+</asset>
+<asset name="State Table" short_code ="SFT" type = "Information" access_right="trusted" surface_type="Privileged application">
+  <description>Describes existing network connections.</description>
+  <significance>None</significance>
+  <security_property property="integrity" value="High">
+    <rationale>None</rationale>
+  </security_property>
+  <security_property property="availability" value="High">
+    <rationale>None</rationale>
+  </security_property>
+</asset>
+<asset name="Client browser" short_code = "GCB" type = "Software" access_right="trusted" surface_type="Privileged application">
+  <description>Vanilla web-browser used by end-user.</description>
+  <significance>None</significance>
+  <security_property property="integrity" value="Medium">
+    <rationale>None</rationale>
+  </security_property>
+  <security_property property="availability" value="Medium">
+    <rationale>None</rationale>
+  </security_property>
+</asset>
+<asset name="External router" short_code = "GER" type = "Software" access_right="trusted" surface_type="Privileged application">
+  <description>External filtering router, whose principle responsibility is to ensure thal all inbound traffic is directed to the firewall. Its secondary responsibility may be to keep out random traffic generated by attackers.</description>
+  <significance>None</significance>
+  <security_property property="integrity" value="High">
+    <rationale>None</rationale>
+  </security_property>
+  <security_property property="availability" value="High">
+    <rationale>None</rationale>
+  </security_property>
+  <security_property property="accountability" value="Low">
+    <rationale>None</rationale>
+  </security_property>
+</asset>
+<asset name="Firewall" short_code = "GF" type = "Software" access_right="trusted" surface_type="Privileged application">
+  <description>Responsible for receiving inbound requests from the external router and subjecting them to more sophisticated analysis, such as stateful inspection.  Legitimate requests are forwarded to an appropriate web server.</description>
+  <significance>None</significance>
+  <security_property property="integrity" value="High">
+    <rationale>None</rationale>
+  </security_property>
+  <security_property property="availability" value="High">
+    <rationale>None</rationale>
+  </security_property>
+  <security_property property="accountability" value="Low">
+    <rationale>None</rationale>
+  </security_property>
+</asset>
+<asset name="Internal router" short_code = "GIR" type = "Software" access_right="trusted" surface_type="Privileged application">
+  <description>Internal filtering router, whose principle responsibility is to ensure it only passes legitimate traffic from the Wb servers through to the internal network.</description>
+  <significance>None</significance>
+  <security_property property="integrity" value="High">
+    <rationale>None</rationale>
+  </security_property>
+  <security_property property="availability" value="High">
+    <rationale>None</rationale>
+  </security_property>
+  <security_property property="accountability" value="Low">
+    <rationale>None</rationale>
+  </security_property>
+</asset>
+<asset name="Application Server" short_code = "GAS" type = "Software" access_right="trusted" surface_type="Privileged application">
+  <description>A platform on which the application's code runs, typically in the form of Web components.</description>
+  <significance>None</significance>
+  <security_property property="integrity" value="High">
+    <rationale>None</rationale>
+  </security_property>
+  <security_property property="availability" value="High">
+    <rationale>None</rationale>
+  </security_property>
+  <security_property property="accountability" value="Low">
+    <rationale>None</rationale>
+  </security_property>
+</asset>
+<asset name="Reverse Proxy" short_code = "GRP" type = "Software" access_right="trusted" surface_type="Privileged application">
+  <description>Reverse Proxy</description>
+  <significance>None</significance>
+  <security_property property="integrity" value="High">
+    <rationale>None</rationale>
+  </security_property>
+  <security_property property="availability" value="High">
+    <rationale>None</rationale>
+  </security_property>
+  <security_property property="accountability" value="Low">
+    <rationale>None</rationale>
+  </security_property>
+</asset>
+<asset name="BackEnd Server" short_code = "GBS" type = "Systems" access_right="trusted" surface_type="Privileged application">
+  <description>Back-end server</description>
+  <significance>None</significance>
+  <security_property property="integrity" value="High">
+    <rationale>None</rationale>
+  </security_property>
+  <security_property property="availability" value="High">
+    <rationale>None</rationale>
+  </security_property>
+  <security_property property="accountability" value="Low">
+    <rationale>None</rationale>
+  </security_property>
+</asset>
+<pattern name = "Packet Filter Firewall">
+  <context>Computer systems on a local network connected to the Internet and to other networks with different levels of trust.  A host in a local network receives and sends traffic to other networks.  This traffic has several layers or levels.  THe most basic level is the IP level, made up of packets consisting of headers and bodies (payloads).  The headers include the source and destination addresses as well as other routing information, while the bodies include the message payloads.</context>
+  <problem>Some hosts on other networks may try to attack the local network through their IP-level payloads.  We also need to communicate with other networks, so isolating our network is not an option.  The protection mechanism should reflect the security policies of the organisation, and any protection mechanism should be transparent to the user.</problem>
+  <solution>A Packet Filter Firewall intercepts all traffic coming and going from a port P and inspects its packets.  Those coming from or going to mistrusted addresses are rejected</solution>
+  <structure head_asset = "ExternalHost" head_adornment = "Association" head_nry = "1" head_role = "" tail_role = "" tail_nry = "a" tail_adornment = "Association" tail_asset = "PFFirewall" />
+  <structure head_asset = "PFFirewall" head_adornment = "Association" head_nry = "a" head_role = "" tail_role = "" tail_nry = "1" tail_adornment = "Association" tail_asset = "LocalHost" />
+  <structure head_asset = "PFFirewall" head_adornment = "Composition" head_nry = "1" head_role = "" tail_role = "" tail_nry = "1" tail_adornment = "Association" tail_asset = "RuleBase" />
+  <structure head_asset = "RuleBase" head_adornment = "Composition" head_nry = "1" head_role = "" tail_role = "" tail_nry = "a" tail_adornment = "Association" tail_asset = "Rule" />
+  <requirement name="Policy rules" asset="Rule" type="Security">
+    <description>The Organisational Security Policy shall be modelled as a set of access rules.</description>
+    <rationale>Defines organisational policy for network access.</rationale>
+    <fit_criterion>None</fit_criterion> 
+  </requirement>
+  <requirement name="Standard Packet Filter Firewall" asset="PFFirewall" type="Security">
+    <description>The Packet Filter Firewall shall be configured according to a standard security architecture.</description>
+    <rationale>Avoids introduction of vulnerabilities due to inappropriate firewall application.</rationale>
+    <fit_criterion>Design documentation of deployment should closely match a reference security architecture.</fit_criterion> 
+  </requirement>
+</pattern>
+<pattern name="Proxy-Based Firewall">
+  <context>A higher level of security than that provided by packet filters is needed.  We want to control attacks at the application layer of the network protocol.  Incorrect commands or parameters can produce buffer overflows and other conditions that can be exploited for attacks.  We might also want to authenticate the client to avoid spoofing.  Outgoing flows to malicious sites can also be damaging in this environment.</context>
+  <problem>We need to protect the network from potential attacks embedded with the data segment ofthe packets.</problem>
+  <solution>We need to let external networks access our services, and local users access external sites.  There are a variety of application services in a system.  A variety of protection mechanisms are deployed so a clear model of what is being protected and what types of attacks are possible is needed.</solution>
+  <structure head_asset = "ExternalHost" head_adornment = "Association" head_nry = "a" head_role = "requestService" tail_role = "" tail_nry = "a" tail_adornment = "Association" tail_asset = "Proxy-Based Firewall" />
+  <structure head_asset = "Proxy-Based Firewall" head_adornment = "Association" head_nry = "1" head_role = "" tail_role = "filters" tail_nry = "a" tail_adornment = "Association" tail_asset = "LocalHost" />
+  <structure head_asset = "Proxy-Based Firewall" head_adornment = "Composition" head_nry = "1" head_role = "" tail_role = "" tail_nry = "a" tail_adornment = "Association" tail_asset = "Proxy" />
+  <structure head_asset = "Proxy" head_adornment = "Association" head_nry = "1" head_role = "" tail_role = "represents" tail_nry = "1" tail_adornment = "Association" tail_asset = "Service" />
+  <structure head_asset = "LocalHost" head_adornment = "Composition" head_nry = "1" head_role = "" tail_role = "" tail_nry = "a" tail_adornment = "Association" tail_asset = "Service" />
+  <structure head_asset = "Proxy" head_adornment = "Composition" head_nry = "1" head_role = "" tail_role = "" tail_nry = "a" tail_adornment = "Association" tail_asset = "RuleBase" />
+  <requirement name="Service proxies" asset="Proxy" type="Security">
+    <description>A Proxy shall be defined for each service made available to clients of the network.</description>
+    <rationale>None</rationale>
+    <fit_criterion>None</fit_criterion> 
+  </requirement>
+  <requirement name="Proxy location" asset="Proxy" type="Security">
+    <description>A location shall be assigned to each implemented proxy.</description>
+    <rationale></rationale>
+    <fit_criterion>None</fit_criterion> 
+  </requirement>
+  <requirement name="Service policy" asset="Service" type="Security">
+    <description>A policy for each service shall define which users can access the service.</description>
+    <rationale></rationale>
+    <fit_criterion>None</fit_criterion> 
+  </requirement>
+  <requirement name="Service type policy" asset="Service" type="Security">
+    <description>A policy for each service shall define the type of access authorised users to a service can have.</description>
+    <rationale></rationale>
+    <fit_criterion>None</fit_criterion> 
+  </requirement>
+</pattern>
+<pattern name="Stateful Firewall">
+  <context>A higher level of security than that provided by static packet or proxy filtering is needed.  The knowledge of whether a connection is a new connection or established connection is important for improved security: in particular, DoS attacks could be identified more conveniently if we knew the relationship between packets.</context>
+  <problem>We need to correlate incoming packets.</problem>
+  <solution>Keep a list of table (a dynamic rule set) with the connections that have been opened, and correlate the type of messages received or sent.  This gives the option of not inspecting the packets of a well-established connection.</solution>
+  <structure head_asset = "ExternalHost" head_adornment = "Association" head_nry = "a" head_role = "requestService" tail_role = "" tail_nry = "a" tail_adornment = "Association" tail_asset = "Stateful Firewall" />
+  <structure head_asset = "Stateful Firewall" head_adornment = "Association" head_nry = "a" head_role = "" tail_role = "requestService" tail_nry = "a" tail_adornment = "Association" tail_asset = "LocalHost" />
+  <structure head_asset = "Stateful Firewall" head_adornment = "Composition" head_nry = "1" head_role = "" tail_role = "" tail_nry = "1" tail_adornment = "Association" tail_asset = "State Table" />
+  <requirement name="Registered rules" asset="Stateful Firewall" type="Security">
+    <description>The set of access rules defined for the local network shall be registered with the firewall.</description>
+    <rationale>None</rationale>
+    <fit_criterion>None</fit_criterion>
+  </requirement>
+  <requirement name="Packet correlation" asset="State Table" type="Security">
+    <description>The State Table shall correlate packets according to attacks which need to be prevented.</description>
+    <rationale>None</rationale>
+    <fit_criterion>None</fit_criterion>
+  </requirement>
+</pattern>
+<pattern name="Demilitarized Zone">
+  <context>An Application Server Architecture has been adopted to deliver an Internet technology application. The business logic and dynamic Web content generation of the application resides on application servers, while all static content is provided by Web servers that also act as Protection Reverse Proxy for the dynamic Web content.  The applicationholds information on users and provides important functionality for users, but the application is exposed to an environment that contains potential attackers.</context>
+  <problem>Internet facing technologies are regularly subject to attack.  The scope and cost of any countermeasure must be commensurate with the perceived threat and cost of intrusion.  Intrusion into any part of the network must be as difficult as possible without conflicting with the goal of making the system open and easy for legitimate users.</problem>
+  <solution>Provide a region of the system separated from both the external users and the internal data -- a demilitarized zone (DMZ).  This region contains servers exposing the functionality of Web-based applications.  Restrict access to this region by limiting network traffic flow to certain physical servers.  Use the same techniques to restrict access from servers in the DMZ to the internal systems.</solution>
+  <structure head_asset = "Client browser" head_adornment = "Association" head_nry = "a" head_role = "" tail_role = "" tail_nry = "1" tail_adornment = "Association" tail_asset = "External router" />
+  <structure head_asset = "External router" head_adornment = "Association" head_nry = "1" head_role = "" tail_role = "" tail_nry = "1" tail_adornment = "Association" tail_asset = "Firewall" />
+  <structure head_asset = "Internal router" head_adornment = "Association" head_nry = "1" head_role = "" tail_role = "" tail_nry = "a" tail_adornment = "Association" tail_asset = "Application Server" />
+  <requirement name="External network address configuration" asset="External router" type="Security">
+    <description>The External Router shall be configured to deny any attempted access to any network addresses outside of those known in the DMZ.</description>
+    <rationale></rationale>
+    <fit_criterion>Synthesise packets with a destination address not matching the Web Server address and send them to the router.  The router log data should indicate that the packets have been rejected.</fit_criterion>
+  </requirement>
+  <requirement name="External port number configuration" asset="External router" type="Security">
+    <description>The External Router shall be configured to deny any attempted access to any port numbers outside of those specifically configured in the DMZ.</description>
+    <rationale></rationale>
+    <fit_criterion>Synthesise packets with an invalid port number and send them to the router.  The router log data should indicate that the packets have been rejected.</fit_criterion>
+  </requirement>
+  <requirement name="Specific protocol configuration" asset="Internal router" type="Security">
+    <description>The Internal Router shall be configured to deny any attempted access to any network traffic outside of its specified protocols.</description>
+    <rationale></rationale>
+    <fit_criterion>Transmit packets via an invalid protocol to the router.  The router log data should indicate that the packets have been rejected.</fit_criterion>
+  </requirement>
+  <requirement name="Specific service provision" asset="Application Server" type="Security">
+    <description>Application Server functionality shall be limited to provision of access to its specified services</description>
+    <rationale></rationale>
+    <fit_criterion></fit_criterion>
+  </requirement>
+</pattern>
+<pattern name="Protection Reverse Proxy">
+  <context>Any kind of service is accessible through the Internet or through another potentially hostile network environment.  Usually the access protocol is HTTP or HTTPS.</context>
+  <problem>Even with a Packet Filter Firewall, your Web Server is still vulnerable to attacks exploiting weaknesses in its protocol implementation.  Attack scenarios employ crafted request parameters to exploit buffer overflows.  Hardening your Web Server might not be possible, and frequently installing patches, while helping avoid known exploitations, also risks breaking system extensions.</problem>
+  <solution>Shield the Web Server with a Protection Reverse Proxy.  Configure this to filter all requests, so that only harmless requests reach the real Web Server.  Two Packet Filter Firewalls ensure that no external traffic reaches the real Web server.  The resulting network topology provides a DMZ containing only the reverse proxy machine, and a secured server zone containing the Web server.  This solution works for other protocols such as FTP, IMAP, and SMTP as well.</solution>
+  <structure head_asset = "Client browser" head_adornment = "Association" head_nry = "a" head_role = "getPage" tail_role = "outer" tail_nry = "1" tail_adornment = "Association" tail_asset = "Firewall" />
+  <structure head_asset = "Firewall" head_adornment = "Association" head_nry = "a" head_role = "inner" tail_role = "" tail_nry = "1" tail_adornment = "Association" tail_asset = "BackEnd Server" />
+  <structure head_asset = "Firewall" head_adornment = "Association" head_nry = "a" head_role = "outer" tail_role = "getPage" tail_nry = "a" tail_adornment = "Association" tail_asset = "Reverse Proxy" />
+  <structure head_asset = "Reverse Proxy" head_adornment = "Association" head_nry = "1" head_role = "getPage" tail_role = "inner" tail_nry = "a" tail_adornment = "Association" tail_asset = "Firewall" />
+  <requirement name="Port 80 HTTP traffic" asset="Reverse Proxy" type="Security">
+    <description>The Reverse Proxy shall only allow HTTP traffic on port 80, and specified protocol/port combinations.</description>
+    <rationale></rationale>
+    <fit_criterion></fit_criterion>
+  </requirement>
+  <requirement name="Content relative path" asset="BackEnd Server" type="Security">
+    <description>Web content on the Back-end web server shall rely on relative path names.</description>
+    <rationale>Links will not work if content is based on internal names or IP addresses as the browser cannot access the machine it is running on directly.</rationale>
+    <fit_criterion></fit_criterion>
+  </requirement>
+  <requirement name="White list filter" asset="Reverse Proxy" type="Security">
+    <description>The Reverse Proxy shall be configured with a white list filter of allowed requests, which is maintained in line with back-end server changes in its URI space.</description>
+    <rationale>Links will not work if content is based on internal names or IP addresses as the browser cannot access the machine it is running on directly.</rationale>
+    <fit_criterion></fit_criterion>
+  </requirement>
+</pattern>
+</security_patterns>

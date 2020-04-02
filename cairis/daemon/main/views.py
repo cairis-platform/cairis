@@ -32,7 +32,6 @@ from flask_security.core import current_user
 from jsonpickle import encode
 from cairis.core.Borg import Borg
 from cairis.core.MySQLDatabaseProxy import MySQLDatabaseProxy,canonicalDbUser,canonicalDbName
-from cairis.controllers import CExportController
 from cairis.controllers import CImportController
 from cairis.controllers import DocumentationController
 from cairis.controllers import ObjectController
@@ -304,11 +303,11 @@ api.add_resource(ObjectController.ObjectsByMethodAndThreeParametersAPI,'/api/goa
 api.add_resource(ObjectController.ObjectsAPI, '/api/goal_contributions',endpoint='goal_contributions',resource_class_kwargs={'dao': 'GoalContributionDAO'})
 api.add_resource(ObjectController.ObjectsByMethodAndTwoParametersAPI, '/api/goal_contributions/source/<path:p1>/target/<path:p2>',endpoint='goal_contribution',resource_class_kwargs={'dao' : 'GoalContributionDAO','get_method' : 'get_objects', 'put_method' : 'update_object', 'del_method' : 'delete_object'})
 
-# Export route
+# Export routes
 api.add_resource(ObjectController.ObjectsByMethodAPI, '/api/export/file',endpoint='export',resource_class_kwargs={'dao' : 'ExportDAO', 'get_method' : 'file_export', 'path_parameters' : [('filename','model'),('fileType','xml')]})
-api.add_resource(CExportController.CExportArchitecturalPatternAPI, '/api/export/file/architectural_pattern/<path:architectural_pattern_name>',endpoint='exportarchitecturalpattern')
-api.add_resource(CExportController.CExportSecurityPatternsAPI, '/api/export/file/security_patterns',endpoint='exportsecuritypatterns')
-api.add_resource(CExportController.CExportGRLAPI, '/api/export/file/grl/task/<path:task_name>/persona/<path:persona_name>/environment/<path:environment_name>',endpoint='exportgrl')
+api.add_resource(ObjectController.ObjectsByMethodAndParameterAPI, '/api/export/file/architectural_pattern/<path:parameter_string>',endpoint='exportarchitecturalpattern', resource_class_kwargs={'dao' : 'ExportDAO', 'get_method' : 'architectural_pattern_export', 'path_parameters' : [('filename','')]})
+api.add_resource(ObjectController.ObjectsByMethodAPI, '/api/export/file/security_patterns',endpoint='exportsecuritypatterns',resource_class_kwargs={'dao' : 'ExportDAO', 'get_method' : 'security_patterns_export', 'path_parameters' : [('filename','security_patterns.xml')]})
+api.add_resource(ObjectController.ObjectsByMethodAndThreeParametersAPI, '/api/export/file/grl/task/<path:p1>/persona/<path:p2>/environment/<path:p3>',endpoint='exportgrl', resource_class_kwargs={'dao' : 'ExportDAO', 'get_method' : 'grl_export', 'path_parameters' : [('filename','')]})
 
 # Find route
 api.add_resource(ObjectController.ObjectsByNameAPI, '/api/find/<path:parameter_string>',endpoint='find',resource_class_kwargs={'dao' : 'FindDAO'})

@@ -24,9 +24,10 @@ else:
 from io import StringIO
 from cairis.test.CairisDaemonTestCase import CairisDaemonTestCase
 from cairis.mio.ModelImport import importModelFile
-from cairis.mio.ModelImport import importComponentViewFile
+from cairis.mio.ModelImport import importComponentViewFile, importSecurityPatternsFile
 from cairis.mio.TVTypeContentHandler import TVTypeContentHandler
 from cairis.mio.ArchitecturalPatternContentHandler import ArchitecturalPatternContentHandler
+from cairis.mio.SecurityPatternContentHandler import SecurityPatternContentHandler
 import os
 import xml.sax
 
@@ -38,6 +39,7 @@ class CExportTests(CairisDaemonTestCase):
   def setUpClass(cls):
     importModelFile(os.environ['CAIRIS_SRC'] + '/test/webinos.xml',1,'test')
     importComponentViewFile(os.environ['CAIRIS_SRC'] + '/test/ContextPolicyManagement.xml','test')
+    importSecurityPatternsFile(os.environ['CAIRIS_SRC'] + '/test/test_security_patterns.xml','test')
 
   def setUp(self):
     self.logger = logging.getLogger(__name__)
@@ -57,6 +59,14 @@ class CExportTests(CairisDaemonTestCase):
     rv = self.app.get(url)
     self.assertIsNotNone(rv.data, 'No response')
     self.assertIsNone(xml.sax.parseString(rv.data,ArchitecturalPatternContentHandler()))
+
+  def test_cexport_securitypatterns_get(self):
+    method = 'test_cexport_securitypatterns_get?session_id=test'
+    url = '/api/export/file/security_patterns?session_id=test'
+    self.logger.info('[%s] URL: %s', method, url)
+    rv = self.app.get(url)
+    self.assertIsNotNone(rv.data, 'No response')
+    self.assertIsNone(xml.sax.parseString(rv.data,SecurityPatternContentHandler()))
 
   def test_cexport_grl_get(self):
     method = 'test_cexport_grl_get?session_id=test'

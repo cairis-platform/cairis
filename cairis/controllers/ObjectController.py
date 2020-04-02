@@ -122,7 +122,11 @@ class ObjectsByMethodAPI(Resource):
         resp.headers["Content-Type"] = 'application/octet-stream' 
       else:
         resp.headers["Content-Type"] = 'application/xml'
-      resp.headers["Content-Disposition"] = 'Attachment; filename=' + pathValues[0] + '.'  + pathValues[1]
+
+      if (self.theGetMethod == 'file_export'): 
+        resp.headers["Content-Disposition"] = 'Attachment; filename=' + pathValues[0] + '.'  + pathValues[1]
+      else:
+        resp.headers["Content-Disposition"] = 'Attachment; filename=' + pathValues[0]
     else:
       resp = make_response(json_serialize(objts, session_id=session_id), OK)
       resp.contenttype = 'application/json'
@@ -231,8 +235,17 @@ class ObjectsByMethodAndThreeParametersAPI(Resource):
       pathValues.append(request.args.get(parameterName,defaultValue))
     objts = getattr(dao, self.theGetMethod)(p1,p2,p3,pathValues)
     dao.close()
-    resp = make_response(json_serialize(objts, session_id=session_id), OK)
-    resp.contenttype = 'application/json'
+    resp = None
+    if (self.DAOModule.__name__ == 'ExportDAO'):
+      fileName = pathValues[0]
+      if (fileName == ''):
+        fileName = p1
+      resp = make_response(objts)
+      resp.headers["Content-Type"] = 'application/grl'
+      resp.headers["Content-Disposition"] = 'Attachment; filename=' + fileName + '.grl'
+    else:
+      resp = make_response(json_serialize(objts, session_id=session_id), OK)
+      resp.contenttype = 'application/json'
     return resp
 
   def post(self,p1,p2,p3):
@@ -390,8 +403,17 @@ class ObjectsByMethodAndParameterAPI(Resource):
         pathValues.append(request.args.get(parameterName,defaultValue))
     objts = getattr(dao, self.theGetMethod)(parameter_string,pathValues)
     dao.close()
-    resp = make_response(json_serialize(objts, session_id=session_id), OK)
-    resp.contenttype = 'application/json'
+    resp = None
+    if (self.DAOModule.__name__ == 'ExportDAO'):
+      resp = make_response(objts)
+      fileName = pathValues[0]
+      if (fileName == ''):
+        fileName = parameter_string
+      resp.headers["Content-Type"] = 'application/xml'
+      resp.headers["Content-Disposition"] = 'Attachment; filename=' + pathValues[0] + '.xml'
+    else:
+      resp = make_response(json_serialize(objts, session_id=session_id), OK)
+      resp.contenttype = 'application/json'
     return resp
 
   def post(self,parameter_string):
