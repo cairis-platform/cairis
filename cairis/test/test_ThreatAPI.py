@@ -67,7 +67,7 @@ class ThreatAPITests(CairisDaemonTestCase):
     self.assertGreater(len(threats), 0, 'No threats in the dictionary')
     self.logger.info('[%s] Threats found: %d', method, len(threats))
     threat = threats[0]
-    self.logger.info('[%s] First threat: %s\n', method, threat['theThreatName'])
+    self.logger.info('[%s] First threat: %s\n', method, threat['theName'])
 
   def test_get_all_summary(self):
     method = 'test_get_all_summary'
@@ -107,11 +107,11 @@ class ThreatAPITests(CairisDaemonTestCase):
     self.logger.debug('[%s] Response data: %s', method, responseData)
     threat = jsonpickle.decode(responseData)
     self.assertIsNotNone(threat, 'No results after deserialization')
-    self.logger.info('[%s] Threat: %s\n', method, threat['theThreatName'])
+    self.logger.info('[%s] Threat: %s\n', method, threat['theName'])
 
   def test_delete(self):
     method = 'test_delete'
-    url = '/api/threats/name/%s?session_id=test' % quote(self.prepare_new_threat().theThreatName)
+    url = '/api/threats/name/%s?session_id=test' % quote(self.prepare_new_threat().theName)
     new_threat_body = self.prepare_json()
 
     self.app.delete(url)
@@ -137,7 +137,7 @@ class ThreatAPITests(CairisDaemonTestCase):
     self.logger.info('[%s] URL: %s', method, url)
     new_threat_body = self.prepare_json()
 
-    self.app.delete('/api/threats/name/%s?session_id=test' % quote(self.prepare_new_threat().theThreatName))
+    self.app.delete('/api/threats/name/%s?session_id=test' % quote(self.prepare_new_threat().theName))
     rv = self.app.post(url, content_type='application/json', data=new_threat_body)
     if (sys.version_info > (3,)):
       responseData = rv.data.decode('utf-8')
@@ -149,7 +149,7 @@ class ThreatAPITests(CairisDaemonTestCase):
     msg = json_resp.get('message', None)
     self.assertIsNotNone(msg, 'No message returned')
     self.logger.info('[%s] Message: %s\n', method, msg)
-    rv = self.app.delete('/api/threats/name/%s?session_id=test' % quote(self.prepare_new_threat().theThreatName))
+    rv = self.app.delete('/api/threats/name/%s?session_id=test' % quote(self.prepare_new_threat().theName))
 
   def test_put(self):
     method = 'test_put'
@@ -157,7 +157,7 @@ class ThreatAPITests(CairisDaemonTestCase):
     self.logger.info('[%s] URL: %s', method, url)
     new_threat_body = self.prepare_json()
 
-    rv = self.app.delete('/api/threats/name/%s?session_id=test' % quote(self.prepare_new_threat().theThreatName))
+    rv = self.app.delete('/api/threats/name/%s?session_id=test' % quote(self.prepare_new_threat().theName))
     rv = self.app.post(url, content_type='application/json', data=new_threat_body)
     if (sys.version_info > (3,)):
       responseData = rv.data.decode('utf-8')
@@ -171,9 +171,9 @@ class ThreatAPITests(CairisDaemonTestCase):
     self.logger.info('[%s] Message: %s', method, msg)
 
     threat_to_update = self.prepare_new_threat()
-    threat_to_update.theThreatName = 'Edited test threat'
+    threat_to_update.theName = 'Edited test threat'
     upd_env_body = self.prepare_json(threat=threat_to_update)
-    rv = self.app.put('/api/threats/name/%s?session_id=test' % quote(self.prepare_new_threat().theThreatName), data=upd_env_body, content_type='application/json')
+    rv = self.app.put('/api/threats/name/%s?session_id=test' % quote(self.prepare_new_threat().theName), data=upd_env_body, content_type='application/json')
     self.assertIsNotNone(rv.data, 'No response')
     if (sys.version_info > (3,)):
       responseData = rv.data.decode('utf-8')
@@ -187,7 +187,7 @@ class ThreatAPITests(CairisDaemonTestCase):
     self.logger.info('[%s] Message: %s', method, message)
     self.assertGreater(message.find('updated'), -1, 'The threat was not successfully updated')
 
-    rv = self.app.get('/api/threats/name/%s?session_id=test' % quote(threat_to_update.theThreatName))
+    rv = self.app.get('/api/threats/name/%s?session_id=test' % quote(threat_to_update.theName))
     if (sys.version_info > (3,)):
       responseData = rv.data.decode('utf-8')
     else:
@@ -195,9 +195,9 @@ class ThreatAPITests(CairisDaemonTestCase):
     upd_threat = jsonpickle.decode(responseData)
     self.assertIsNotNone(upd_threat, 'Unable to decode JSON data')
     self.logger.debug('[%s] Response data: %s', method, responseData)
-    self.logger.info('[%s] Threat: %s\n', method, upd_threat['theThreatName'])
+    self.logger.info('[%s] Threat: %s\n', method, upd_threat['theName'])
 
-    rv = self.app.delete('/api/threats/name/%s?session_id=test' % quote(threat_to_update.theThreatName))
+    rv = self.app.delete('/api/threats/name/%s?session_id=test' % quote(threat_to_update.theName))
 
   def prepare_new_threat(self):
     new_security_attrs = [

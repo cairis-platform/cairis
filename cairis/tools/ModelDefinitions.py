@@ -518,7 +518,7 @@ class ThreatModel(object):
   resource_fields = {
     obj_id_field: fields.String,
     'theTags': fields.List(fields.String),
-    'theThreatName': fields.String,
+    'theName': fields.String,
     'theType': fields.String,
     'theMethod': fields.String,
     'theEnvironmentProperties': fields.List(fields.Nested(ThreatEnvironmentPropertiesModel.resource_fields)),

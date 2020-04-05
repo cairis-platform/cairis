@@ -104,7 +104,7 @@ class ThreatDAO(CairisDAO):
     
   def add_object(self, threat):
     threat_params = ThreatParameters(
-      threatName=threat.theThreatName,
+      threatName=threat.theName,
       thrType=threat.theType,
       thrMethod=threat.theMethod,
       tags=threat.theTags,
@@ -112,10 +112,10 @@ class ThreatDAO(CairisDAO):
     )
 
     try:
-      if not self.check_existing_threat(threat.theThreatName):
+      if not self.check_existing_threat(threat.theName):
         self.db_proxy.addThreat(threat_params)
       else:
-        raise OverwriteNotAllowedHTTPError(obj_name=threat.theThreatName)
+        raise OverwriteNotAllowedHTTPError(obj_name=threat.theName)
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)
@@ -125,7 +125,7 @@ class ThreatDAO(CairisDAO):
 
   def update_object(self, threat, name):
     threat_params = ThreatParameters(
-      threatName=threat.theThreatName,
+      threatName=threat.theName,
       thrType=threat.theType,
       thrMethod=threat.theMethod,
       tags=threat.theTags,
