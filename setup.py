@@ -14,13 +14,13 @@ with open('requirements.txt') as f:
     required = f.read().splitlines()
 
 setup(name='cairis',
-      version='2.3.1',
+      version='2.3.2',
       author='Shamal Faily',
-      author_email='shamal.faily@gmail.com',
+      author_email='admin@cairis.org',
       description = 'A security design tool',
       license = 'Apache Software License',
       url='https://github.com/cairis-platform/cairis',
-      download_url='https://github.com/cairis-platform/cairis/tarball/2.3.1',
+      download_url='https://github.com/cairis-platform/cairis/tarball/2.3.2',
       packages=['cairis'],
       include_package_data=True,
       data_files = [('cairis/examples', egFiles)],
