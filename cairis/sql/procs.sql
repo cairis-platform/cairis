@@ -25829,9 +25829,9 @@ begin
   declare aiCursor cursor for select ai.name,a.name from asset_instance ai, asset a where location_id = locId and ai.asset_id = a.id order by 1;
   declare piCursor cursor for select pi.name,p.name from persona_instance pi, persona p where location_id = locId and pi.persona_id = p.id order by 1;
   declare linkCursor cursor for 
-    select l.name from location l, location_link ll where ll.locations_id = locsId and ll.head_location_id != locId and ll.head_location_id = l.id
+    select l.name from location l, location_link ll where ll.locations_id = locsId and ll.head_location_id = locId and ll.tail_location_id = l.id
     union
-    select l.name from location l, location_link ll where ll.locations_id = locsId and ll.tail_location_id != locId and ll.tail_location_id = l.id;
+    select l.name from location l, location_link ll where ll.locations_id = locsId and ll.tail_location_id = locId and ll.head_location_id = l.id;
 
   declare continue handler for not found set done = 1;
 
