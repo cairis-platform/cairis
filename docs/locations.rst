@@ -25,7 +25,7 @@ Adding, updating, and deleting a locations object
 
 -  In the Peopler folder, click on the Add button to open the Persona Instance dialog.  Enter the name of the persona instance, select the persona name, and click on the Add button to add the instance object.
 
--  In the Links folder, click on the Add button to open the Location Link dialog.  Select the location you wish to link this location to, and click on the Add button to add the link between locations.
+-  In the Links folder, click on the Add button to open the Location Link dialog.  Select the location you wish to link this location to, and click on the Add button to add the link between locations. When a link is added, a corresponding is added to the linked location.
 
 -  Click on the Update button to add this location to the Locations object.
 
