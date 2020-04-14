@@ -42,8 +42,8 @@ Second, CAIRIS uses SAX to parse model files during the import process.  The dif
 At this stage, you can start thinking about implementing the code that will handle the API end-points.  This involves updating and creating a number of files.
 First, you need to create a Data Access Object (DAO) objects for your model concept in `cairis/data <https://github.com/cairis-platform/cairis/tree/master/cairis/data>`_ . In addition to acting as a wrapper for the database proxy, these objects are also responsible for marshalling Python objects to JSON (when retrieving objects), and vice-versa (when creating, updating, and deleting objects).
 Second, you need to define the object in `cairis/tools/ModelDefinitions.py <https://github.com/cairis-platform/cairis/blob/master/cairis/tools/ModelDefinitions.py>`_ so Flask understands how to work this object.
-Third, you need to define a Controller module with controller classes for your model concept in `cairis/controllers <https://github.com/cairis-platform/cairis/tree/master/cairis/controllers>`_ .  In this module, you will want to define a class per end-point, with methods per option, i.e. get, post, put, del.
-Finally, you need to define the end-points themselves in `cairis/daemon/main/views.py <https://github.com/cairis-platform/cairis/blob/master/cairis/daemon/main/views.py>`_.
+Third, you need to define the end-points themselves in `cairis/daemon/main/views.py <https://github.com/cairis-platform/cairis/blob/master/cairis/daemon/main/views.py>`_.
+Associated with each end-point will be an appropriate controller object in `cairis/controllers <https://github.com/cairis-platform/cairis/tree/master/cairis/controllers>`_ .  The object you choose will depend on the methods (i.e. get, post, put, del) you need to implement, and parameters you intend to use.
 
 8.  Write your API test case
 ----------------------------
