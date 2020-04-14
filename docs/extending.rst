@@ -32,9 +32,12 @@ CAIRIS XML models are defined in DTDs within `cairis/config <https://github.com/
 -----------------------------------------
 
 To ensure your exported CAIRIS model contains your model object, you need to make a number of changes.
+
 First, within `cairis/sql/procs.sql <https://github.com/cairis-platform/cairis/blob/master/cairis/sql/procs.sql>`_ are a collection of stored procedures for generating XML for model objects, e.g. *riskAnalysisToXml* for risk analysis related concepts.  You need to edit the appropriate procedures to include the SQL necessary for retrieving your model objects and adding them to the generated XML.  If you don't have to add a new stored procedure for your concept/s then this is all you need to do to ensure your exported model contains your new concept.
+
 Second, CAIRIS uses SAX to parse model files during the import process.  The different content handler classes used by the parser can be found in `cairis/mio <https://github.com/cairis-platform/cairis/tree/master/cairis/mio>`_ , and the appropriate class will need to be modified to create CAIRIS python objects to represent your model concepts.  You will then need to update `cairis/mio/ModelImport.py <https://github.com/cairis-platform/cairis/blob/master/cairis/mio/ModelImport.py>`_ to ensure these objects are subsequently added to the CAIRIS database the model is being imported into.
 
+Finally, depending on how fundamental your changes are, it might be sensible to also update the server-side `import <https://github.com/cairis-platform/cairis/blob/master/cairis/bin/cimport.py>`_ and `export <https://github.com/cairis-platform/cairis/blob/master/cairis/bin/cexport.py>`_ scripts too.  These will provide you with a quick way of testing your import and export logic before delving too deeply into your API changes.
 
 7.  Implement the server end-points
 -----------------------------------
