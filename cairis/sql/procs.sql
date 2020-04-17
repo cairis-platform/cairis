@@ -1017,6 +1017,13 @@ drop procedure if exists addUserSystemGoalLink;
 drop procedure if exists userGoalSystemGoals;
 drop procedure if exists deniedUserGoalDependencies;
 drop procedure if exists isGoalDenied;
+drop procedure if exists flows;
+drop procedure if exists entityDataFlows;
+drop procedure if exists prepareTaintFlowTable;
+drop procedure if exists addTaintFlow;
+drop procedure if exists checkPreProcessTaint;
+drop procedure if exists checkPostProcessTaint;
+drop procedure if exists analyseTaintFlows;
 
 
 delimiter //
@@ -30946,6 +30953,232 @@ begin
   end loop ug_loop;
   close ugCursor;
 
+
+end
+//
+
+create procedure flows(in originId int, in nodeId int, in environmentId int, in prefix_ids longtext, in prefix_names longtext)
+begin
+  declare dfId int;
+  declare toId int;
+  declare isVisited int; 
+  declare newPrefix_ids longtext default '';
+  declare newPrefix_names longtext default '';
+  declare noFlows int default 1;
+  declare dfName varchar(255);
+  declare done int default 0;
+  declare flowCursor cursor for 
+    select dep.dataflow_id,dep.to_id,d.name from dataflow_entity_process dep, dataflow d where dep.from_id = nodeId and dep.dataflow_id = d.id and d.environment_id = environmentId
+    union
+    select dpp.dataflow_id,dpp.to_id,d.name from dataflow_process_process dpp, dataflow d where dpp.from_id = nodeId and dpp.dataflow_id = d.id and d.environment_id = environmentId
+    union
+    select dpe.dataflow_id,dpe.to_id,d.name from dataflow_process_entity dpe, dataflow d where dpe.from_id = nodeId and dpe.dataflow_id = d.id and d.environment_id = environmentId
+    union
+    select dpd.dataflow_id,dpd.to_id,d.name from dataflow_process_datastore dpd, dataflow d where dpd.from_id = nodeId and dpd.dataflow_id = d.id and d.environment_id = environmentId
+    union
+    select ddp.dataflow_id,ddp.to_id,d.name from dataflow_datastore_process ddp, dataflow d where ddp.from_id = nodeId and ddp.dataflow_id = d.id and d.environment_id = environmentId;
+  declare continue handler for not found set done = 1;
+
+  insert into temp_visited(node_id) values(nodeId); 
+  set done = 0;
+  open flowCursor;
+  flow_loop: loop
+    fetch flowCursor into dfId,toId,dfName;
+    if done = 1
+    then
+      leave flow_loop;
+    end if;
+    set noFlows = 0;
+    set newPrefix_ids = prefix_ids;
+    set newPrefix_names = prefix_names;
+    if length(newPrefix_ids) > 0
+    then
+      set newPrefix_ids = concat(newPrefix_ids,',');
+      set newPrefix_names = concat(newPrefix_names,',');
+    end if;
+    set newPrefix_ids = concat(newPrefix_ids,dfId);
+    set newPrefix_names = concat(newPrefix_names,dfName);
+    
+    select count(*) into isVisited from temp_visited where node_id = toId;
+
+    if (isVisited > 0 )
+    then
+      insert into temp_entitydataflow(origin_id,ids,names) values(originId,newPrefix_ids,newPrefix_names);
+    else
+      call flows(originId,toId,environmentId,newPrefix_ids,newPrefix_names);
+    end if;
+  end loop flow_loop;
+  close flowCursor;
+  
+  if noFlows = 1
+  then
+    if length(prefix_ids) > 0
+    then
+      insert into temp_entitydataflow(origin_id,ids,names) values(originId,prefix_ids,prefix_names);
+    end if;
+  end if;
+end
+//
+
+create procedure entityDataFlows(in envName text)
+begin
+  declare entId int;
+  declare envId int;
+  declare done int default 0;
+  declare entityCursor cursor for select distinct dep.from_id from dataflow_entity_process dep, dataflow d where dep.dataflow_id = d.id and d.environment_id = envId; 
+  declare continue handler for not found set done = 1;
+
+  drop table if exists temp_entitydataflow;
+  create temporary table temp_entitydataflow (origin_id int, ids longtext, names longtext);
+
+  drop table if exists temp_visited;
+  create temporary table temp_visited (node_id int);
+
+  select id into envId from environment where name = envName limit 1;
+
+  open entityCursor;
+  entity_loop: loop
+    fetch entityCursor into entId;
+    if done = 1
+    then
+      leave entity_loop;
+    end if;
+    call flows(entId,entId,envId,'','');
+  end loop entity_loop;
+  close entityCursor;
+
+  select e.name,t.ids,t.names from temp_entitydataflow t, entity e where t.origin_id = e.id;
+
+end
+//
+
+create procedure prepareTaintFlowTable()
+begin
+
+  drop table if exists temp_taintflow;
+  create table temp_taintflow (dataflow_id int, environment_id int, entity longtext, df_sequence longtext);
+end
+//
+
+create procedure addTaintFlow(in dfId int, in envId int, in entName longtext, in dfSeq longtext)
+begin
+  insert into temp_taintflow(dataflow_id,environment_id,entity,df_sequence) values(dfId,envId,entName,dfSeq);
+end
+//
+
+create procedure checkPreProcessTaint(in envId int, in ucId int, in entName longtext, in dfSeq longtext)
+begin
+  declare done int default 0;
+  declare ucName varchar(200);
+  declare taskName varchar(200);
+  declare attackerName varchar(200);
+  declare tpCursor cursor for select t.name,a.name  from task t, task_persona tp, persona_role pr, attacker_role ar, attacker_motivation am, attacker_capability ac, usecase_task ut, motivation m, capability c, attacker a where ut.usecase_id = ucId and ut.task_id = tp.task_id and tp.environment_id = envId and (tp.demands_id >= 2 or tp.goalsupport_id >= 2) and tp.task_id = t.id and tp.persona_id = pr.persona_id and tp.environment_id = pr.environment_id and pr.role_id = ar.role_id and pr.environment_id = ar.environment_id and ar.attacker_id = a.id and ar.attacker_id = am.attacker_id and ar.environment_id = am.environment_id and am.motivation_id = m.id and m.name = 'Productivity' and ar.attacker_id = ac.attacker_id and ar.environment_id = ac.environment_id and ac.capability_id = c.id and c.name like ('Resources/%') and ac.capability_value_id = 1;
+  declare continue handler for not found set done = 1;
+
+  select name into ucName from usecase where id = ucId limit 1; 
+  open tpCursor;
+  tp_loop: loop
+    fetch tpCursor into taskName, attackerName;
+    if done = 1
+    then
+      leave tp_loop;
+    end if;
+    insert into temp_vout(label,message) values ('Pre-process taint',concat('Process ',ucName,' in dataflow "',dfSeq,'" from entity ',entName,' may be tainted due to the potential involvement of attacker ',attackerName,' in task ',taskName,'.'));
+  end loop tp_loop;
+  close tpCursor;
+end
+//
+
+create procedure checkPostProcessTaint(in dfId int, in envId int, in ucId int, in entName longtext, in dfSeq longtext)
+begin
+  declare done int default 0;
+  declare ucName varchar(200);
+  declare obsId int;
+  declare isObstructed bool;
+  declare gaCursor cursor for select goga.subgoal_id from goalusecase_goalassociation guga, goalobstacle_goalassociation goga, obstacle_concern oc where guga.subgoal_id = ucId and guga.environment_id = envId and guga.goal_id = goga.goal_id and guga.environment_id = goga.environment_id and guga.subgoal_id and goga.subgoal_id = oc.obstacle_id and goga.environment_id = oc.environment_id and oc.asset_id in (select asset_id from dataflow_asset where dataflow_id = dfId);
+  declare continue handler for not found set done = 1;
+
+  select name into ucName from usecase where id = ucId limit 1; 
+  open gaCursor;
+  ga_loop: loop
+    fetch gaCursor into obsId;
+    if done = 1
+    then
+      leave ga_loop;
+    end if;
+    call isObstacleObstructed(obsId,envId,0,isObstructed);
+
+    if (isObstructed = true)
+    then
+      insert into temp_vout(label,message) values ('Post-process taint',concat('Data from process ',ucName,' in dataflow "',dfSeq,'" from entity ',entName,' may be tainted because exceptions are obstructed that concern information assets in the out-going dataflow.'));
+    end if;
+  end loop ga_loop;
+  close gaCursor;
+
+end
+//
+
+create procedure analyseTaintFlows()
+begin
+  declare done int default 0;
+  declare dfId int;
+  declare envId int;
+  declare entName longtext;
+  declare dfSeq longtext;
+  declare ucId int;
+  declare dfCursor cursor for select dataflow_id,environment_id,entity,df_sequence from temp_taintflow;
+  declare continue handler for not found set done = 1;
+
+  drop table if exists temp_vout;
+  create temporary table temp_vout (label varchar(200), message varchar(1000));
+
+  open dfCursor;
+  df_loop: loop
+    fetch dfCursor into dfId, envId,entName,dfSeq;
+    if done = 1
+    then
+      leave df_loop;
+    end if;
+
+    select dpp.to_id into ucId from dataflow_process_process dpp, dataflow d where dpp.dataflow_id = dfId and dpp.dataflow_id = d.id and d.environment_id = envId;
+    if (ucId is null)
+    then
+      select dep.to_id into ucId from dataflow_entity_process dep, dataflow d where dep.dataflow_id = dfId and dep.dataflow_id = d.id and d.environment_id = envId;
+      if (ucId is null)
+      then
+        select ddp.to_id into ucId from dataflow_datastore_process ddp, dataflow d where ddp.dataflow_id = dfId and ddp.dataflow_id = d.id and d.environment_id = envId;
+      end if;
+    end if;
+
+    if (ucId is not null)
+    then
+      call checkPreProcessTaint(envId,ucId,entName,dfSeq);
+    end if;
+    set done = 0;
+
+    set ucId = null;
+
+    select dpp.from_id into ucId from dataflow_process_process dpp, dataflow d where dpp.dataflow_id = dfId and dpp.dataflow_id = d.id and d.environment_id = envId;
+    if (ucId is null)
+    then
+      select dpe.from_id into ucId from dataflow_process_entity dpe, dataflow d where dpe.dataflow_id = dfId and dpe.dataflow_id = d.id and d.environment_id = envId;
+      if (ucId is null)
+      then
+        select dpd.from_id into ucId from dataflow_process_datastore dpd, dataflow d where dpd.dataflow_id = dfId and dpd.dataflow_id = d.id and d.environment_id = envId;
+      end if;
+    end if;
+
+    if (ucId is not null)
+    then
+      call checkPostProcessTaint(dfId,envId,ucId,entName,dfSeq);
+    end if;
+    set done = 0;
+    set ucId = null;
+
+  end loop df_loop;
+  close dfCursor;
+  
+  select distinct label,message from temp_vout;
 
 end
 //

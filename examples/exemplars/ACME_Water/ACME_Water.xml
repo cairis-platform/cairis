@@ -761,13 +761,13 @@ Gareth has friends who work as building labourers as part of some capital projec
 Rick isn't a power-user; he acknowledges that younger "whizz kids" are much more adept at using PCs than he is.  Consequently, he only uses a sub-set of the desktop icons currently on his desktop.  "I don't know what these other applications do", Rick says,"I've tried clicking on one and it just gives me a Data Protection Warning.  I guess this means I'm not authorised to use it."</description>
   <attacker_environment name="Day">
     <attacker_role name="Plant Operator" />
-    <motivation name="Accident" />
+    <motivation name="Productivity" />
     <capability name="Resources/Facilities" value="Low" />
     <capability name="Software" value="Low" />
   </attacker_environment>
   <attacker_environment name="Night">
     <attacker_role name="Plant Operator" />
-    <motivation name="Accident" />
+    <motivation name="Productivity" />
     <capability name="Resources/Facilities" value="Low" />
     <capability name="Software" value="Low" />
   </attacker_environment>

@@ -319,9 +319,12 @@ class MySQLDatabaseProxy:
   def deleteRequirement(self,r):
     self.deleteObject(r,'requirement')
     
-  def responseList(self,callTxt,argDict,errorTxt):
+  def responseList(self,callTxt,argDict,errorTxt,session = None):
     try:
-      session = self.conn()
+      persistSession = True
+      if (session == None):
+        session = self.conn()
+        persistSession = False
       rs = session.execute(callTxt,argDict)
       responseList = []
       if (rs.rowcount > 0):
@@ -331,7 +334,8 @@ class MySQLDatabaseProxy:
           else:
             responseList.append(list(row)[0])
       rs.close()
-      session.close()
+      if (persistSession == False):
+        session.close()
       return responseList
     except OperationalError as e:
       exceptionText = 'MySQL error calling ' + callTxt + ' (message:' + format(e) + ')'
@@ -4773,6 +4777,7 @@ class MySQLDatabaseProxy:
 
   def modelValidation(self,envName):
     objtRows = self.responseList('call modelValidation(:envName)',{'envName':envName},'MySQL error validating model')
+    objtRows += self.dataFlowTaint(envName)
     rows = []
     for lbl,msg in objtRows:
       rows.append(ValidationResult(lbl,msg))
@@ -4950,3 +4955,18 @@ class MySQLDatabaseProxy:
 
   def userGoalSystemGoals(self,ugId):
     return self.responseList('call userGoalSystemGoals(:ugId)',{'ugId':ugId},'MySQL error getting user goal system goals')
+
+  def dataFlowTaint(self,envName):
+    seqs = self.responseList('call entityDataFlows(:env)',{'env':envName},'MySQL error getting data flow taint') 
+    session = self.updateDatabase('call prepareTaintFlowTable()',{},'MySQL error setting up taint flow table',None,False)
+    envId = self.getDimensionId(envName,'environment')
+    mvResults = []
+    for seq in seqs:
+      entityOrigin = seq[0]
+      seqTxt = seq[2]
+      dfs = seq[1].split(',') 
+      for dfId in dfs:
+        self.updateDatabase('call addTaintFlow(:dfId,:envId,:entity,:seq)',{'dfId':dfId,'envId':envId,'entity':entityOrigin,'seq':seqTxt},'MySQL error adding taint flow',session,False)
+    mvResults += self.responseList('call analyseTaintFlows()',{},'MySQL error analysing taint flows',session)
+    session.close()
+    return mvResults
