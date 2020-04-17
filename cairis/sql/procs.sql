@@ -31056,7 +31056,7 @@ create procedure prepareTaintFlowTable()
 begin
 
   drop table if exists temp_taintflow;
-  create table temp_taintflow (dataflow_id int, environment_id int, entity longtext, df_sequence longtext);
+  create temporary table temp_taintflow (dataflow_id int, environment_id int, entity longtext, df_sequence longtext);
 end
 //
 
