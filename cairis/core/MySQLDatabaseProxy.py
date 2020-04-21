@@ -4958,15 +4958,16 @@ class MySQLDatabaseProxy:
 
   def dataFlowTaint(self,envName):
     seqs = self.responseList('call entityDataFlows(:env)',{'env':envName},'MySQL error getting data flow taint') 
-    session = self.updateDatabase('call prepareTaintFlowTable()',{},'MySQL error setting up taint flow table',None,False)
-    envId = self.getDimensionId(envName,'environment')
     mvResults = []
-    for seq in seqs:
-      entityOrigin = seq[0]
-      seqTxt = seq[2]
-      dfs = seq[1].split(',') 
-      for dfId in dfs:
-        self.updateDatabase('call addTaintFlow(:dfId,:envId,:entity,:seq)',{'dfId':dfId,'envId':envId,'entity':entityOrigin,'seq':seqTxt},'MySQL error adding taint flow',session,False)
-    mvResults += self.responseList('call analyseTaintFlows()',{},'MySQL error analysing taint flows',session)
-    session.close()
+    if (len(seqs) > 0):
+      session = self.updateDatabase('call prepareTaintFlowTable()',{},'MySQL error setting up taint flow table',None,False)
+      envId = self.getDimensionId(envName,'environment')
+      for seq in seqs:
+        entityOrigin = seq[0]
+        seqTxt = seq[2]
+        dfs = seq[1].split(',') 
+        for dfId in dfs:
+          self.updateDatabase('call addTaintFlow(:dfId,:envId,:entity,:seq)',{'dfId':dfId,'envId':envId,'entity':entityOrigin,'seq':seqTxt},'MySQL error adding taint flow',session,False)
+      mvResults += self.responseList('call analyseTaintFlows()',{},'MySQL error analysing taint flows',session)
+      session.close()
     return mvResults
