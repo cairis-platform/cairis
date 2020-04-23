@@ -31072,20 +31072,26 @@ begin
   declare ucName varchar(200);
   declare taskName varchar(200);
   declare attackerName varchar(200);
+  declare isValidFlow int default 0;
   declare tpCursor cursor for select t.name,a.name  from task t, task_persona tp, persona_role pr, attacker_role ar, attacker_motivation am, attacker_capability ac, usecase_task ut, motivation m, capability c, attacker a, usecase_role ur, task_asset ta where ut.usecase_id = ucId and ut.task_id = tp.task_id and tp.environment_id = envId and (tp.demands_id >= 2 or tp.goalsupport_id >= 2) and tp.task_id = t.id and tp.persona_id = pr.persona_id and tp.environment_id = pr.environment_id and pr.role_id = ar.role_id and pr.environment_id = ar.environment_id and ar.attacker_id = a.id and ar.attacker_id = am.attacker_id and ar.environment_id = am.environment_id and am.motivation_id = m.id and m.name in ('Productivity','Accident') and ar.attacker_id = ac.attacker_id and ar.environment_id = ac.environment_id and ac.capability_id = c.id and c.name like ('Resources/%') and ac.capability_value_id = 1 and ut.usecase_id = ur.usecase_id and ur.role_id = ar.role_id and tp.task_id = ta.task_id and tp.environment_id = ta.environment_id and ta.asset_id in (select asset_id from dataflow_asset where dataflow_id = dfId);
   declare continue handler for not found set done = 1;
 
-  select name into ucName from usecase where id = ucId limit 1; 
-  open tpCursor;
-  tp_loop: loop
-    fetch tpCursor into taskName, attackerName;
-    if done = 1
-    then
-      leave tp_loop;
-    end if;
-    insert into temp_vout(label,message) values ('Pre-process taint',concat('Process ',ucName,' in dataflow "',dfSeq,'" from entity ',entName,' may be tainted due to the potential involvement of attacker ',attackerName,' in task ',taskName,'.'));
-  end loop tp_loop;
-  close tpCursor;
+  select count(*) into isValidFlow from dataflow_entity_process dep, dataflow d, asset a, asset_tag at, tag t, role r, usecase u, usecase_role ur where d.id = dfId and d.environment_id = envId and d.id = dep.dataflow_id and dep.from_id = a.id and a.id = at.asset_id and at.tag_id = t.id and substring(t.name,6) = r.name and r.id = ur.role_id and ur.usecase_id = dep.to_id;
+  if (isValidFlow > 0)
+  then
+    select name into ucName from usecase where id = ucId limit 1; 
+    set done = 0;
+    open tpCursor;
+    tp_loop: loop
+      fetch tpCursor into taskName, attackerName;
+      if done = 1
+      then
+        leave tp_loop;
+      end if;
+      insert into temp_vout(label,message) values ('Pre-process taint',concat('Process ',ucName,' in dataflow "',dfSeq,'" from entity ',entName,' may be tainted due to the potential involvement of attacker ',attackerName,' in task ',taskName,'.'));
+    end loop tp_loop;
+    close tpCursor;
+  end if;
 end
 //
 

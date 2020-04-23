@@ -256,6 +256,9 @@ class KaosModel:
       elif (assocType == 'rolepersona_association'):
         arrowHead = 'empty'
         assocDir = 'forward'
+      elif (assocType == 'roleattacker_association'):
+        arrowHead = 'empty'
+        assocDir = 'forward'
 
       if (assocType in ('misusecasethreatasset_association','misusecasevulnerabilityasset_association','taskasset_association')):
         arrowHead = 'none'
