@@ -24,3 +24,4 @@ lxml>=3.6.4
 openpyxl>=2.4.0
 bcrypt>=3.1.6
 python-magic>=0.4.15
+email_validator>=1.0.5
