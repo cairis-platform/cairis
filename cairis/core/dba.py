@@ -96,8 +96,8 @@ def createDbOwnerDatabase(rPasswd,dbHost,dbPort):
 
 def createDatabaseAndPrivileges(rPasswd,dbHost,dbPort,dbUser,dbPasswd,dbName):
   collationString = 'general'
-  if (MySQLdb.get_client_info()[0] == '8'):
-    collationString = '0900_ai'
+#  if (MySQLdb.get_client_info()[0] == '8'):
+#    collationString = '0900_ai'
   dbUser = canonicalDbUser(dbUser)
   dbName = canonicalDbName(dbName)
   stmts = ['drop database if exists `' + dbName + '`',
