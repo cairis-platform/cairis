@@ -24304,27 +24304,27 @@ begin
   then
     select id into fromId from usecase where name = fromName limit 1;
     select id into toId from usecase where name = toName limit 1;
-    select dpp.dataflow_id into dfId from dataflow_process_process dpp, dataflow df where dpp.from_id = fromId and dpp.to_id = toId and dpp.dataflow_id = df.id and df.environment_id = envId limit 1;
+    select dpp.dataflow_id into dfId from dataflow_process_process dpp, dataflow df where dpp.from_id = fromId and dpp.to_id = toId and dpp.dataflow_id = df.id and df.environment_id = envId and df.name = dfName limit 1;
   elseif fromType = 'entity' and toType = 'process'
   then
     select id into fromId from asset where name = fromName limit 1;
     select id into toId from usecase where name = toName limit 1;
-    select dep.dataflow_id into dfId from dataflow_entity_process dep, dataflow df where dep.from_id = fromId and dep.to_id = toId and dep.dataflow_id = df.id and df.environment_id = envId limit 1;
+    select dep.dataflow_id into dfId from dataflow_entity_process dep, dataflow df where dep.from_id = fromId and dep.to_id = toId and dep.dataflow_id = df.id and df.environment_id = envId and df.name = dfName limit 1;
   elseif fromType = 'process' and toType = 'entity'
   then
     select id into fromId from usecase where name = fromName limit 1;
     select id into toId from asset where name = toName limit 1;
-    select dpe.dataflow_id into dfId from dataflow_process_entity dpe, dataflow df where dpe.from_id = fromId and dpe.to_id = toId and dpe.dataflow_id = df.id and df.environment_id = envId limit 1;
+    select dpe.dataflow_id into dfId from dataflow_process_entity dpe, dataflow df where dpe.from_id = fromId and dpe.to_id = toId and dpe.dataflow_id = df.id and df.environment_id = envId and df.name = dfName limit 1;
   elseif fromType = 'datastore' and toType = 'process'
   then
     select id into fromId from asset where name = fromName limit 1;
     select id into toId from usecase where name = toName limit 1;
-    select ddp.dataflow_id into dfId from dataflow_datastore_process ddp, dataflow df where ddp.from_id = fromId and ddp.to_id = toId and ddp.dataflow_id = df.id and df.environment_id = envId limit 1;
+    select ddp.dataflow_id into dfId from dataflow_datastore_process ddp, dataflow df where ddp.from_id = fromId and ddp.to_id = toId and ddp.dataflow_id = df.id and df.environment_id = envId and df.name = dfName limit 1;
   elseif fromType = 'process' and toType = 'datastore'
   then
     select id into fromId from usecase where name = fromName limit 1;
     select id into toId from asset where name = toName limit 1;
-    select dpd.dataflow_id into dfId from dataflow_process_datastore dpd, dataflow df where dpd.from_id = fromId and dpd.to_id = toId and dpd.dataflow_id = df.id and df.environment_id = envId limit 1;
+    select dpd.dataflow_id into dfId from dataflow_process_datastore dpd, dataflow df where dpd.from_id = fromId and dpd.to_id = toId and dpd.dataflow_id = df.id and df.environment_id = envId and df.name = dfName limit 1;
   end if; 
 
   select id into assetId from asset where name = assetName limit 1;

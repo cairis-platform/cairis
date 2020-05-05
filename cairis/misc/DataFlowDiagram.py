@@ -67,7 +67,7 @@ class DataFlowDiagram:
       raise UnknownNodeType(dimName)
 
   def layout(self,renderer = 'dot'):
-    self.theGraph.write_xdot(self.theGraphName,prog=renderer)
+    self.theGraph.write_dot(self.theGraphName,prog=renderer)
     return open(self.theGraphName).read()
 
   def graph(self):
