@@ -526,7 +526,7 @@ class ObjectByNameAPI(Resource):
         objtName = objt['theName']
       else:
         objtName = objt.name()
-      if (name != objtName):
+      if ((name != objtName) and (name.lower() != objtName.lower())):
         dao.nameCheck(objtName)
     dao.update_object(objt, name)
 
@@ -649,7 +649,7 @@ class ObjectByThreeParametersAPI(Resource):
         objtName = objt['theName']
       else:
         objtName = objt.name()
-      if (p3 != objtName):
+      if ((p3 != objtName) and (p3.lower() != objtName.lower())):
         dao.nameCheck(objtName)
     dao.update_object_by_3parameters(p1,p2,p3,objt)
     dao.close()
