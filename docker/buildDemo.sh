@@ -13,7 +13,7 @@ sudo docker stop cairis-mysql
 sudo docker rm $(sudo docker ps -aq)
 sudo docker rmi $(sudo docker images -q)
 sudo docker volume rm $(docker volume ls)
-sudo docker run --name cairis-mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql:5.7 --thread_stack=256K
+sudo docker run --name cairis-mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql:5.7 --thread_stack=512K
 sudo docker run --name cairis-docs -d -v cairisDocumentation:/tmpDocker -v cairisImage:/images -t shamalfaily/cairis-docs
 sudo docker run --name CAIRIS -d --link cairis-mysql:mysql --link cairis-docs:docs -P -p 80:8000 --net=bridge -v cairisDocumentation:/tmpDocker -v cairisImage:/images shamalfaily/cairis
 

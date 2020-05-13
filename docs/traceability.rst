@@ -4,7 +4,7 @@ Traceability
 Allowable manual traceability links
 -----------------------------------
 
-CAIRIS is based on the IRIS meta-model and, in most cases, traceability between model elements is automatic because the CAIRIS database knows how model elements are connected based on this meta-model.
+CAIRIS is based on the IRIS meta-model.  In most cases, traceability between model elements is automatic because the CAIRIS database knows how model elements are connected based on this meta-model.
 In some cases, however, it is necessary to add manual traceability relationships, e.g. between one requirement and other.
 
 The table below indicates what manual links are allowed to be set between elements.
