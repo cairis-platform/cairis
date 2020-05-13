@@ -129,6 +129,7 @@ DROP TABLE IF EXISTS component_template_goal;
 DROP TABLE IF EXISTS component_vulnerability_target;
 DROP TABLE IF EXISTS component_threat_target;
 
+DROP TABLE IF EXISTS document_reference_vulnerability;
 DROP TABLE IF EXISTS ice_ic_contribution;
 DROP TABLE IF EXISTS implied_characteristic_element_intention;
 DROP TABLE IF EXISTS implied_characteristic_element;
@@ -3446,6 +3447,13 @@ CREATE TABLE task_goal_contribution (
   FOREIGN KEY(environment_id) REFERENCES environment(id)
 ) ENGINE=INNODB;
   
+CREATE TABLE document_reference_vulnerability (
+  document_reference_id INT NOT NULL,
+  vulnerability_id INT NOT NULL,
+  PRIMARY KEY(document_reference_id,vulnerability_id),
+  FOREIGN KEY(document_reference_id) REFERENCES document_reference(id),
+  FOREIGN KEY(vulnerability_id) REFERENCES vulnerability(id)
+) ENGINE=INNODB; 
 
 delimiter //
 
@@ -4284,6 +4292,7 @@ INSERT INTO allowable_trace values(21,18);
 INSERT INTO allowable_trace values(16,2);
 INSERT INTO allowable_trace values(7,5);
 INSERT INTO allowable_trace values(7,6);
+INSERT INTO allowable_trace values(20,6);
 INSERT INTO requirement_type values(0,'Functional');
 INSERT INTO requirement_type values(1,'Data');
 INSERT INTO requirement_type values(2,'Look and Feel');

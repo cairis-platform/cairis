@@ -147,6 +147,8 @@ class EnvironmentModel:
       self.theGraph.add_node(pydot.Node(objtName,shape='house',margin=0,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'inconsistency'):
       self.theGraph.add_node(pydot.Node(objtName,shape='polygon',margin=0,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
+    elif (dimName == 'document_reference'):
+      self.theGraph.add_node(pydot.Node(objtName,shape='rectangle',style='filled',fillcolor='gray', margin=0,fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'task'):
       taskScore = self.dbProxy.taskUsabilityScore(objtName,self.theEnvironmentName)
       self.theGraph.add_node(pydot.Node(objtName,shape='ellipse',margin=0,style='filled',color=usabilityColourCode(taskScore),pencolor='black',fontname=self.fontName,fontsize=self.fontSize,fontcolor=usabilityTextColourCode(taskScore),URL=objtUrl))
@@ -190,5 +192,5 @@ class EnvironmentModel:
     return self.layout()
 
   def layout(self):
-    self.theGraph.write_xdot(self.theGraphName,prog=self.theRenderer)
+    self.theGraph.write_dot(self.theGraphName,prog=self.theRenderer)
     return open(self.theGraphName).read()

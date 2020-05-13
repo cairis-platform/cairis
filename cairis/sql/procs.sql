@@ -5363,7 +5363,9 @@ begin
   union
   select 'requirement' from_objt, fr.name from_name, 'requirement' to_objt, tr.name to_name,rr.label from requirement fr, environment_requirement fer, environment fe, requirement tr, asset_requirement tar, asset ta, environment_asset tae, requirement_requirement rr where rr.from_id = fr.id and fr.id = fer.requirement_id and fer.environment_id = fe.id and fr.version = (select max(i.version) from requirement i where i.id = fr.id) and rr.to_id = tr.id and tr.id = tar.requirement_id and tar.asset_id = ta.id and tr.version = (select max(i.version) from requirement i where i.id = tr.id) and fer.environment_id = environmentId and fer.environment_id = tae.environment_id and tae.asset_id = tar.asset_id
   union
-  select 'requirement' from_objt, fr.name from_name, 'requirement' to_objt, tr.name to_name,rr.label from requirement fr, environment_requirement fer, environment fe, requirement tr, environment_requirement ter, environment te, requirement_requirement rr where rr.from_id = fr.id and fr.id = fer.requirement_id and fer.environment_id = fe.id and fr.version = (select max(i.version) from requirement i where i.id = fr.id) and rr.to_id = tr.id and tr.id = ter.requirement_id and ter.environment_id = te.id and tr.version = (select max(i.version) from requirement i where i.id = tr.id) and fer.environment_id = environmentId and fer.environment_id = ter.environment_id;
+  select 'requirement' from_objt, fr.name from_name, 'requirement' to_objt, tr.name to_name,rr.label from requirement fr, environment_requirement fer, environment fe, requirement tr, environment_requirement ter, environment te, requirement_requirement rr where rr.from_id = fr.id and fr.id = fer.requirement_id and fer.environment_id = fe.id and fr.version = (select max(i.version) from requirement i where i.id = fr.id) and rr.to_id = tr.id and tr.id = ter.requirement_id and ter.environment_id = te.id and tr.version = (select max(i.version) from requirement i where i.id = tr.id) and fer.environment_id = environmentId and fer.environment_id = ter.environment_id
+  union
+  select 'document_reference' from_objt, dr.name from_name, 'vulnerability' to_objt, v.name to_name, 'supports' label from document_reference_vulnerability drv, environment_vulnerability ev, vulnerability v, document_reference dr where ev.environment_id = environmentId and ev.vulnerability_id = drv.vulnerability_id and drv.document_reference_id = dr.id and ev.vulnerability_id = v.id;
 end
 //
 
@@ -5496,7 +5498,9 @@ begin
     union
     select 'risk' from_objt, r.name from_name, 'vulnerability' to_objt, v.name to_name from risk r, vulnerability v, environment_risk er, environment_vulnerability ev, risk_vulnerability rv where er.environment_id = environmentId and er.id = rv.risk_id and rv.risk_id = r.id and ev.environment_id = environmentId and ev.vulnerability_id = rv.vulnerability_id and rv.vulnerability_id = v.id
     union
-    select 'risk' from_objt, r.name from_name, 'threat' to_objt, t.name to_name from risk_threat rt, environment_risk er, environment_threat et, risk r, threat t where er.environment_id = environmentId and et.environment_id = environmentId and er.id = rt.risk_id and rt.risk_id = r.id and et.threat_id = rt.threat_id and rt.threat_id = t.id;
+    select 'risk' from_objt, r.name from_name, 'threat' to_objt, t.name to_name from risk_threat rt, environment_risk er, environment_threat et, risk r, threat t where er.environment_id = environmentId and et.environment_id = environmentId and er.id = rt.risk_id and rt.risk_id = r.id and et.threat_id = rt.threat_id and rt.threat_id = t.id
+    union
+    select 'document_reference' from_objt,dr.name from_name,'vulnerability' to_objt, v.name to_name from document_reference_vulnerability drv, document_reference dr, environment_vulnerability ev, vulnerability v where ev.environment_id = environmentId and ev.vulnerability_id = v.id and ev.vulnerability_id = drv.vulnerability_id and drv.document_reference_id = dr.id;
   else
     select 'asset' from_objt,a.name from_name, 'threat' to_objt,t.name to_name from asset_threat at,asset a, threat t where at.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and at.asset_id = a.id and at.threat_id = t.id
     union
@@ -5568,7 +5572,9 @@ begin
     union
     select 'risk' from_objt, r.name from_name, 'vulnerability' to_objt, v.name to_name from risk r, vulnerability v, environment_risk er, environment_vulnerability ev, risk_vulnerability rv where er.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and er.id = rv.risk_id and rv.risk_id = r.id and ev.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and ev.vulnerability_id = rv.vulnerability_id and rv.vulnerability_id = v.id
     union
-    select 'risk' from_objt, r.name from_name, 'threat' to_objt, t.name to_name from risk_threat rt, environment_risk er, environment_threat et, risk r, threat t where er.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and et.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and et.id = rt.risk_id and rt.risk_id = r.id and et.threat_id = rt.threat_id and rt.threat_id = t.id;
+    select 'risk' from_objt, r.name from_name, 'threat' to_objt, t.name to_name from risk_threat rt, environment_risk er, environment_threat et, risk r, threat t where er.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and et.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and et.id = rt.risk_id and rt.risk_id = r.id and et.threat_id = rt.threat_id and rt.threat_id = t.id
+    union
+    select 'document_reference' from_objt,dr.name from_name,'vulnerability' to_objt, v.name to_name from document_reference_vulnerability drv, document_reference dr, environment_vulnerability ev, vulnerability v where ev.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and ev.vulnerability_id = v.id and ev.vulnerability_id = drv.vulnerability_id and drv.document_reference_id = dr.id;
   end if;
 end
 //
@@ -12727,8 +12733,9 @@ begin
     union
     select 'risk' from_objt, r2.name from_name, 'vulnerability' to_objt, v.name to_name from risk r, vulnerability v, risk_vulnerability rv, risk r2, environment_risk er, environment_vulnerability ev where r.id = riskId and r.vulnerability_id = ev.vulnerability_id and ev.environment_id = environmentId and ev.vulnerability_id = v.id and ev.vulnerability_id and ev.environment_id = er.environment_id and er.id = r2.id and r2.id = rv.risk_id and rv.vulnerability_id = v.id
     union
-    select 'risk' from_objt, r2.name from_name, 'threat' to_objt, t.name to_name from risk r, threat t, risk_threat rt, risk r2, environment_risk er, environment_threat et where r.id = riskId and r.threat_id = et.threat_id and et.environment_id = environmentId and et.threat_id = t.id and et.threat_id and et.environment_id = er.environment_id and er.id = r2.id and r2.id = rt.risk_id and rt.threat_id = t.id;
-
+    select 'risk' from_objt, r2.name from_name, 'threat' to_objt, t.name to_name from risk r, threat t, risk_threat rt, risk r2, environment_risk er, environment_threat et where r.id = riskId and r.threat_id = et.threat_id and et.environment_id = environmentId and et.threat_id = t.id and et.threat_id and et.environment_id = er.environment_id and er.id = r2.id and r2.id = rt.risk_id and rt.threat_id = t.id
+    union
+    select 'document_reference' from_objt, dr.name from_name, 'vulnerability' to_objt, v.name to_name from document_reference dr, document_reference_vulnerability drv, environment_vulnerability ev, vulnerability v, risk r where ev.environment_id = environmentId and ev.vulnerability_id = drv.vulnerability_id and drv.vulnerability_id = v.id and drv.document_reference_id = dr.id and v.id = r.vulnerability_id and r.id = riskId;
   else
     select 0;
   end if;
@@ -14537,7 +14544,9 @@ begin
     union
     select 'response', r.name, 'goal', g.name, '' from response_goal rg, response r, goal g where rg.response_id = r.id and rg.goal_id = g.id
     union
-    select 'requirement', fr.name, 'requirement', tr.name, rr.label from requirement_requirement rr, requirement fr, requirement tr where rr.from_id = fr.id and rr.to_id = tr.id;
+    select 'requirement', fr.name, 'requirement', tr.name, rr.label from requirement_requirement rr, requirement fr, requirement tr where rr.from_id = fr.id and rr.to_id = tr.id
+    union
+    select 'document_reference', dr.name, 'vulnerability', v.name, '' from document_reference_vulnerability drv, document_reference dr, vulnerability v where drv.document_reference_id = dr.id and drv.vulnerability_id = v.id;
 
   declare goalAssocCursor cursor for
     select e.name,hg.name,'goal',rt.name,tg.name,'goal',ga.alternative_id,ga.rationale from goalgoal_goalassociation ga, environment e, goal hg, reference_type rt, goal tg where ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and ga.environment_id = e.id
@@ -29944,7 +29953,9 @@ begin
     union
     select 'response', r.name, 'goal', g.name, '' from response_goal rg, response r, goal g where rg.response_id = r.id and rg.goal_id = g.id
     union
-    select 'requirement', fr.name, 'requirement', tr.name, rr.label from requirement_requirement rr, requirement fr, requirement tr where rr.from_id = fr.id and rr.to_id = tr.id;
+    select 'requirement', fr.name, 'requirement', tr.name, rr.label from requirement_requirement rr, requirement fr, requirement tr where rr.from_id = fr.id and rr.to_id = tr.id
+    union
+    select 'document_reference', dr.name, 'vulnerability', v.name, '' from document_reference_vulnerability drv, document_reference dr, vulnerability v where drv.document_reference_id = dr.id and drv.vulnerability_id = v.id;
 
   declare goalAssocCursor cursor for
     select e.name,hg.name,'goal',rt.name,tg.name,'goal',ga.alternative_id,ga.rationale from goalgoal_goalassociation ga, environment e, goal hg, reference_type rt, goal tg where ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and ga.environment_id = e.id

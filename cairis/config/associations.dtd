@@ -23,7 +23,7 @@
 
 <!ELEMENT manual_association EMPTY>
 <!ATTLIST manual_association from_name CDATA #REQUIRED>
-<!ATTLIST manual_association from_dim (requirement | task | asset | domainproperty | usecase | response | countermeasure | component) #REQUIRED>
+<!ATTLIST manual_association from_dim (requirement | task | asset | domainproperty | usecase | response | countermeasure | component | document_reference) #REQUIRED>
 <!ATTLIST manual_association to_name CDATA #REQUIRED>
 <!ATTLIST manual_association to_dim (requirement | task | asset | vulnerability | role | usecase | goal | countermeasure) #REQUIRED>
 <!ATTLIST manual_association label CDATA #IMPLIED>
