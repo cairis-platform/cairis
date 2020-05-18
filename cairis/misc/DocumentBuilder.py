@@ -2016,15 +2016,15 @@ def dataflows(p,docDir,fileSuffix = 'svg'):
   envDict = {}
   for d in dfs:
     if d.environment() not in envDict:
-      envDict[d.environment()] = [(d.name(),d.fromName(),d.fromType(),d.toName(),d.toType(),listToItems(d.assets()))]
+      envDict[d.environment()] = [(d.name(),d.fromName(),d.fromType(),d.toName(),d.toType(),listToItems(d.assets()),listToItems(d.obstacles()))]
     else:
-      envDict[d.environment()].append((d.name(),d.fromName(),d.fromType(),d.toName(),d.toType(),listToItems(d.assets())))
+      envDict[d.environment()].append((d.name(),d.fromName(),d.fromType(),d.toName(),d.toType(),listToItems(d.assets()),listToItems(d.obstacles())))
   envList = list(envDict.keys())
   envList.sort()
   for envName in envList:
     chapterTxt +=  """
       <section id=\'""" + envName.replace(" ","_") + "_Dataflows\' ><title>" + envName + "</title>"
-    chapterTxt += buildTable(envName + '_' + 'DataFlows'.replace(" ","_"),'Data Flows',['Name','From','Type','To','Type','Assets'],envDict[envName],0)
+    chapterTxt += buildTable(envName + '_' + 'DataFlows'.replace(" ","_"),'Data Flows',['Name','From','Type','To','Type','Assets','Obstacles'],envDict[envName],0)
 
     chapterTxt += """
       </section>""" 

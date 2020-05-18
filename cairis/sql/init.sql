@@ -75,6 +75,7 @@ DROP TABLE IF EXISTS dataflow_process_entity;
 DROP TABLE IF EXISTS dataflow_process_datastore;
 DROP TABLE IF EXISTS dataflow_datastore_process;
 DROP TABLE IF EXISTS dataflow_asset;
+DROP TABLE IF EXISTS dataflow_obstacle;
 DROP TABLE IF EXISTS dataflow;
 DROP TABLE IF EXISTS persona_instance;
 DROP TABLE IF EXISTS asset_instance;
@@ -3326,6 +3327,13 @@ CREATE TABLE dataflow_asset (
   asset_id INT NOT NULL,
   PRIMARY KEY(dataflow_id,asset_id),
   FOREIGN KEY(asset_id) REFERENCES asset(id)
+) ENGINE=INNODB;
+
+CREATE TABLE dataflow_obstacle (
+  dataflow_id INT NOT NULL,
+  obstacle_id INT NOT NULL,
+  PRIMARY KEY(dataflow_id,obstacle_id),
+  FOREIGN KEY(obstacle_id) REFERENCES obstacle(id)
 ) ENGINE=INNODB;
 
 CREATE TABLE dataflow_process_process (

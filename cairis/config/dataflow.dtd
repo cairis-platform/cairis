@@ -21,7 +21,7 @@
 
 <!ELEMENT dataflows (dataflow*,trust_boundary*)>
 
-<!ELEMENT dataflow (dataflow_asset+)>
+<!ELEMENT dataflow (dataflow_asset+,dataflow_obstacle*)>
 <!ATTLIST dataflow name CDATA #REQUIRED>
 <!ATTLIST dataflow environment CDATA #REQUIRED>
 <!ATTLIST dataflow from_name CDATA #REQUIRED>
@@ -31,6 +31,9 @@
 
 <!ELEMENT dataflow_asset EMPTY>
 <!ATTLIST dataflow_asset name CDATA #REQUIRED>
+
+<!ELEMENT dataflow_obstacle EMPTY>
+<!ATTLIST dataflow_obstacle name CDATA #REQUIRED>
 
 <!ELEMENT trust_boundary (description,trust_boundary_environment+)>
 <!ATTLIST trust_boundary name CDATA #REQUIRED>

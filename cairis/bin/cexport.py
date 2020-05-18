@@ -39,7 +39,7 @@ def file_export(modelFormat = 'all', outputFile = None, persona = None, task = N
   msgStr = ''
   if (modelFormat == 'all'):
     msgStr += exportModel(outputFile,session_id)
-  if (modelFormat == 'package'):
+  elif (modelFormat == 'package'):
     msgStr += exportPackage(outputFile,session_id)
   elif (modelFormat == 'scenarios'):
     msgStr += exportRedmineScenarios(outputFile,session_id)

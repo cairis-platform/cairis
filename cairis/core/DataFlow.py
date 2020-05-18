@@ -18,7 +18,7 @@
 __author__ = 'Shamal Faily'
 
 class DataFlow:
-  def __init__(self,dfName,envName,fromName,fromType,toName,toType,dfAssets):
+  def __init__(self,dfName,envName,fromName,fromType,toName,toType,dfAssets,dfObs = []):
     self.theName = dfName
     self.theEnvironmentName = envName
     self.theFromName = fromName
@@ -26,6 +26,7 @@ class DataFlow:
     self.theToName = toName
     self.theToType = toType
     self.theAssets = dfAssets
+    self.theObstacles = dfObs
 
   def name(self): return self.theName
   def environment(self): return self.theEnvironmentName
@@ -34,3 +35,4 @@ class DataFlow:
   def toName(self): return self.theToName
   def toType(self): return self.theToType
   def assets(self): return self.theAssets
+  def obstacles(self): return self.theObstacles

@@ -897,12 +897,16 @@ drop procedure if exists persona_characteristic_synopsisNames;
 drop procedure if exists removeUseCaseContributions;
 drop procedure if exists addDataFlow;
 drop procedure if exists updateDataFlow;
+drop function if exists dataFlowId;
 drop procedure if exists addDataFlowAsset;
+drop procedure if exists addDataFlowObstacle;
 drop procedure if exists deleteDataFlowAssets;
+drop procedure if exists deleteDataFlowObstacles;
 drop procedure if exists delete_dataflow;
 drop procedure if exists deleteDataFlow;
 drop procedure if exists getDataFlows;
 drop procedure if exists getDataFlowAssets;
+drop procedure if exists getDataFlowObstacles;
 drop procedure if exists dataflowsToXml;
 drop procedure if exists dataflowsToJSON;
 drop procedure if exists dataFlowDiagram;
@@ -8644,6 +8648,7 @@ end
 create procedure delete_obstacle(in obsId int)
 begin
   call deleteObstacleComponents(obsId);
+  delete from dataflow_obstacle where obstacle_id = obsId;
   delete from obstacle_reference where obstacle_id = obsId;
   delete from obstacle_tag where obstacle_id = obsId;
   delete from obstacle where id = obsId;
@@ -24298,14 +24303,14 @@ begin
 end
 //
 
-create procedure addDataFlowAsset(in dfName text, in envName text, in fromType text, in fromName text, in toType text, in toName text, in assetName text)
+create function dataFlowId(dfName text, fromType text, fromName text, toType text, toName text, envName text)
+returns int
+deterministic
 begin
   declare dfId int;
   declare fromId int;
   declare toId int;
   declare envId int;
-  declare assetId int;
-  declare dfaCount int;
 
   select id into envId from environment where name = envName limit 1;
 
@@ -24335,7 +24340,17 @@ begin
     select id into toId from asset where name = toName limit 1;
     select dpd.dataflow_id into dfId from dataflow_process_datastore dpd, dataflow df where dpd.from_id = fromId and dpd.to_id = toId and dpd.dataflow_id = df.id and df.environment_id = envId and df.name = dfName limit 1;
   end if; 
+  return dfId;
+end
+//
 
+create procedure addDataFlowAsset(in dfName text, in envName text, in fromType text, in fromName text, in toType text, in toName text, in assetName text)
+begin
+  declare dfId int;
+  declare assetId int;
+  declare dfaCount int;
+
+  select dataFlowId(dfName,fromType,fromName,toType,toName,envName) into dfId;
   select id into assetId from asset where name = assetName limit 1;
 
   select count(*) into dfaCount from dataflow_asset where dataflow_id = dfId and asset_id = assetId;
@@ -24345,6 +24360,25 @@ begin
   end if;
 end
 //
+
+create procedure addDataFlowObstacle(in dfName text, in envName text, in fromType text, in fromName text, in toType text, in toName text, in obsName text)
+begin
+  declare dfId int;
+  declare obsId int;
+  declare dfoCount int;
+
+  select dataFlowId(dfName,fromType,fromName,toType,toName,envName) into dfId;
+  select id into obsId from obstacle where name = obsName limit 1;
+
+  select count(*) into dfoCount from dataflow_obstacle where dataflow_id = dfId and obstacle_id = obsId;
+  if dfoCount = 0
+  then
+    insert into dataflow_obstacle(dataflow_id,obstacle_id) values (dfId,obsId);
+  end if;
+end
+//
+
+
 
 create procedure deleteDataFlowAssets(in dfName text, in envName text)
 begin
@@ -24357,9 +24391,21 @@ begin
 end
 //
 
+create procedure deleteDataFlowObstacles(in dfName text, in envName text)
+begin
+  declare dfId int;
+  declare envId int;
+
+  select id into envId from environment where name = envName limit 1;
+  select id into dfId from dataflow where name = dfName and environment_id = envId limit 1;
+  delete from dataflow_obstacle where dataflow_id = dfId;
+end
+//
+
 create procedure delete_dataflow(in dfId int)
 begin
   delete from dataflow_asset where dataflow_id = dfId;
+  delete from dataflow_obstacle where dataflow_id = dfId;
   delete from dataflow_process_process where dataflow_id = dfId;
   delete from dataflow_entity_process where dataflow_id = dfId;
   delete from dataflow_process_entity where dataflow_id = dfId;
@@ -24403,11 +24449,20 @@ begin
 
   select id into envId from environment where name = envName limit 1;
   select id into dfId from dataflow where name = dfName and environment_id = envId limit 1;
-
   select a.name from dataflow_asset da, asset a where da.dataflow_id = dfId and da.asset_id = a.id order by 1;
-
 end
 //
+
+create procedure getDataFlowObstacles(in dfName text, in envName text)
+begin
+  declare dfId int;
+  declare envId int;
+
+  select id into envId from environment where name = envName limit 1;
+  select id into dfId from dataflow where name = dfName and environment_id = envId limit 1;
+  select o.name from dataflow_obstacle do, obstacle o where do.dataflow_id = dfId and do.obstacle_id = o.id order by 1;
+end
+// 
 
 create procedure dataflowsToXml(in includeHeader int)
 begin
@@ -24420,6 +24475,7 @@ begin
   declare toName varchar (200);
   declare toType varchar (9);
   declare assetName varchar (200);
+  declare obsName varchar (200);
   declare compName varchar (200);
   declare compType varchar (20);
   declare tbName varchar(50);
@@ -24437,6 +24493,7 @@ begin
     union
     select a.name,'datastore' from trust_boundary_asset tba, asset a where tba.asset_id = a.id and trust_boundary_id = tbId and environment_id = envId;
   declare dfAssetCursor cursor for select a.name from asset a, dataflow_asset da where da.dataflow_id = dfId and da.asset_id = a.id;
+  declare dfObsCursor cursor for select o.name from obstacle o, dataflow_obstacle do where do.dataflow_id = dfId and do.obstacle_id = o.id;
   declare continue handler for not found set done = 1;
 
   if includeHeader = 0
@@ -24466,6 +24523,18 @@ begin
       set buf = concat(buf,'    <dataflow_asset name=\"',assetName,'\" />\n');
     end loop dfAsset_loop;
     close dfAssetCursor;
+    set done = 0;
+
+    open dfObsCursor;
+    dfObs_loop: loop
+      fetch dfObsCursor into obsName;
+      if done = 1
+      then 
+        leave dfObs_loop;
+      end if;
+      set buf = concat(buf,'    <dataflow_obstacle name=\"',obsName,'\" />\n');
+    end loop dfObs_loop;
+    close dfObsCursor;
     set done = 0;
 
     set buf = concat(buf,'  </dataflow>\n');
@@ -30284,6 +30353,7 @@ begin
   declare toName varchar (200);
   declare toType varchar (9);
   declare assetName varchar (200);
+  declare obsName varchar(100);
   declare compName varchar (200);
   declare compType varchar (20);
   declare tbName varchar(50);
@@ -30301,6 +30371,7 @@ begin
     union
     select a.name,'datastore' from trust_boundary_asset tba, asset a where tba.asset_id = a.id and trust_boundary_id = tbId and environment_id = envId;
   declare dfAssetCursor cursor for select a.name from asset a, dataflow_asset da where da.dataflow_id = dfId and da.asset_id = a.id;
+  declare dfObsCursor cursor for select o.name from obstacle o, dataflow_obstacle do where do.dataflow_id = dfId and do.obstacle_id = o.id;
   declare continue handler for not found set done = 1;
 
   set headElement = 1;
@@ -30345,6 +30416,27 @@ begin
     end loop dfAsset_loop;
     close dfAssetCursor;
     set done = 0;
+
+    open dfObsCursor;
+    dfObs_loop: loop
+      fetch dfObsCursor into obsName;
+      if done = 1
+      then 
+        set buf = concat(buf,']}');
+        leave dfObs_loop;
+      else
+        if headElement = 1
+        then
+          set headElement = 0;
+        else
+          set buf = concat(buf,",");
+        end if;
+      end if;
+      set buf = concat(buf,'"',obsName,'"');
+    end loop dfObs_loop;
+    close dfObsCursor;
+    set done = 0;
+
     set dfCount = dfCount + 1;
   end loop df_loop;
   close dfCursor;

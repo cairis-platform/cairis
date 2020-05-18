@@ -1190,7 +1190,8 @@ class DataFlowModel(object):
     "theFromType": fields.String,
     "theToName": fields.String,
     "theToType": fields.String,
-    "theAssets": fields.List(fields.String)
+    "theAssets": fields.List(fields.String),
+    "theObstacles": fields.List(fields.String)
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
