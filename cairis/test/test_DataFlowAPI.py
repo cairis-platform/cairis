@@ -170,6 +170,18 @@ class DataFlowAPITests(CairisDaemonTestCase):
     self.assertIsNotNone(responseData, 'No results after deserialization')
     self.assertEqual(responseData.find('svg'),1)
 
+  def test_control_structure(self):
+    url = '/api/dataflows/control_structure/environment/Psychosis/filter_name/None?session_id=test'
+    method = 'test_control_structure'
+    self.logger.info('[%s] URL: %s', method, url)
+    rv = self.app.get(url, content_type='application/json')
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.logger.debug('[%s] Response data: %s', method, responseData)
+    self.assertIsNotNone(responseData, 'No results after deserialization')
+
 
   def prepare_new_dataflow(self):
     new_dataflow = DataFlow(

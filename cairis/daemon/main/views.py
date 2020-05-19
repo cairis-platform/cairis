@@ -251,6 +251,7 @@ api.add_resource(ObjectController.ObjectsByMethodAndParameterAPI, '/api/counterm
 api.add_resource(ObjectController.ObjectsAPI, '/api/dataflows',endpoint='dataflows',resource_class_kwargs={'dao': 'DataFlowDAO'})
 api.add_resource(ObjectController.ObjectByTwoParametersAPI, '/api/dataflows/name/<path:p1>/environment/<path:p2>',endpoint='dataflow',resource_class_kwargs={'dao' : 'DataFlowDAO'})
 api.add_resource(ObjectController.ModelByThreeParametersAPI, '/api/dataflows/diagram/environment/<path:p1>/filter_type/<path:p2>/filter_name/<path:p3>',endpoint='dataflowdiagram',resource_class_kwargs={'dao' : 'DataFlowDAO','get_method' : 'get_dataflow_diagram','renderer' : 'dot', 'model_type' : 'dataflow'})
+api.add_resource(ObjectController.ModelByTwoParametersAPI, '/api/dataflows/control_structure/environment/<path:p1>/filter_name/<path:p2>',endpoint='controlstructure',resource_class_kwargs={'dao' : 'DataFlowDAO','get_method' : 'get_control_structure','renderer' : 'dot', 'model_type' : 'control_structure'})
 
 # Dependency routes
 api.add_resource(ObjectController.ObjectsAPI, '/api/dependencies',endpoint='dependencies',resource_class_kwargs={'dao': 'DependencyDAO'})

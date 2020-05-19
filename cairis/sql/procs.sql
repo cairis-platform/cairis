@@ -1028,6 +1028,8 @@ drop procedure if exists addTaintFlow;
 drop procedure if exists checkPreProcessTaint;
 drop procedure if exists checkPostProcessTaint;
 drop procedure if exists analyseTaintFlows;
+drop procedure if exists controlStructure;
+drop procedure if exists controlNames;
 
 
 delimiter //
@@ -31289,6 +31291,71 @@ begin
   
   select distinct label,message from temp_vout;
 
+end
+//
+
+create procedure controlStructure(in envName text, in filterName text)
+begin
+  declare envId int;
+
+  select id into envId from environment where name = envName limit 1;
+
+  if filterName = ''
+  then
+    select d.name dataflow, fe.name from_name, 'entity' from_type, tb.name to_name, 'trust_boundary' to_type from dataflow d, dataflow_entity_process dep, asset fe, trust_boundary tb, trust_boundary_usecase tbu where d.environment_id = envId and d.id = dep.dataflow_id and dep.from_id = fe.id and dep.to_id = tbu.usecase_id and d.environment_id = tbu.environment_id and tbu.trust_boundary_id = tb.id
+    union
+    select d.name dataflow, tb.name from_name, 'trust_boundary' from_type, te.name to_name, 'entity' to_type from dataflow d, dataflow_process_entity dpe, asset te, trust_boundary tb, trust_boundary_usecase tbu where d.environment_id = envId and d.id = dpe.dataflow_id and dpe.from_id = tbu.usecase_id and d.environment_id = tbu.environment_id and tbu.trust_boundary_id = tb.id and dpe.to_id = te.id
+    union
+    select d.name dataflow, tbf.name from_name, 'trust_boundary' from_type, tbt.name to_name, 'trust_boundary' to_type from dataflow d, dataflow_process_process dpp, trust_boundary tbf, trust_boundary_usecase tbfu, trust_boundary tbt, trust_boundary_usecase tbtu where d.environment_id = envId and d.id = dpp.dataflow_id and dpp.from_id = tbfu.usecase_id and tbfu.trust_boundary_id = tbf.id and dpp.to_id = tbtu.usecase_id and tbtu.trust_boundary_id = tbt.id and tbf.id != tbt.id
+    union
+    select d.name dataflow, tbf.name from_name, 'trust_boundary' from_type, tbt.name to_name, 'trust_boundary' to_type from dataflow d, dataflow_process_datastore dpd, trust_boundary tbf, trust_boundary_usecase tbfu, trust_boundary tbt, trust_boundary_asset tbta where d.environment_id = envId and d.id = dpd.dataflow_id and dpd.from_id = tbfu.usecase_id and tbfu.trust_boundary_id = tbf.id and dpd.to_id = tbta.asset_id and tbta.trust_boundary_id = tbt.id and tbf.id != tbt.id
+    union
+    select d.name dataflow, tbf.name from_name, 'trust_boundary' from_type, tbt.name to_name, 'trust_boundary' to_type from dataflow d, dataflow_datastore_process ddp, trust_boundary tbf, trust_boundary_asset tbfa, trust_boundary tbt, trust_boundary_usecase tbtu where d.environment_id = envId and d.id = ddp.dataflow_id and ddp.from_id = tbfa.asset_id and tbfa.trust_boundary_id = tbf.id and ddp.to_id = tbtu.usecase_id and tbtu.trust_boundary_id = tbt.id and tbf.id != tbt.id;
+  else
+    select d.name dataflow, fe.name from_name, 'entity' from_type, tb.name to_name, 'trust_boundary' to_type from dataflow d, dataflow_entity_process dep, asset fe, trust_boundary tb, trust_boundary_usecase tbu where d.environment_id = envId and d.id = dep.dataflow_id and dep.from_id = fe.id and dep.to_id = tbu.usecase_id and d.environment_id = tbu.environment_id and tbu.trust_boundary_id = tb.id and fe.name = filterName
+    union
+    select d.name dataflow, fe.name from_name, 'entity' from_type, tb.name to_name, 'trust_boundary' to_type from dataflow d, dataflow_entity_process dep, asset fe, trust_boundary tb, trust_boundary_usecase tbu where d.environment_id = envId and d.id = dep.dataflow_id and dep.from_id = fe.id and dep.to_id = tbu.usecase_id and d.environment_id = tbu.environment_id and tbu.trust_boundary_id = tb.id and tb.name = filterName
+    union
+    select d.name dataflow, tb.name from_name, 'trust_boundary' from_type, te.name to_name, 'entity' to_type from dataflow d, dataflow_process_entity dpe, asset te, trust_boundary tb, trust_boundary_usecase tbu where d.environment_id = envId and d.id = dpe.dataflow_id and dpe.from_id = tbu.usecase_id and d.environment_id = tbu.environment_id and tbu.trust_boundary_id = tb.id and dpe.to_id = te.id and tb.name = filterName
+    union
+    select d.name dataflow, tb.name from_name, 'trust_boundary' from_type, te.name to_name, 'entity' to_type from dataflow d, dataflow_process_entity dpe, asset te, trust_boundary tb, trust_boundary_usecase tbu where d.environment_id = envId and d.id = dpe.dataflow_id and dpe.from_id = tbu.usecase_id and d.environment_id = tbu.environment_id and tbu.trust_boundary_id = tb.id and dpe.to_id = te.id and te.name = filterName
+    union
+    select d.name dataflow, tbf.name from_name, 'trust_boundary' from_type, tbt.name to_name, 'trust_boundary' to_type from dataflow d, dataflow_process_process dpp, trust_boundary tbf, trust_boundary_usecase tbfu, trust_boundary tbt, trust_boundary_usecase tbtu where d.environment_id = envId and d.id = dpp.dataflow_id and dpp.from_id = tbfu.usecase_id and tbfu.trust_boundary_id = tbf.id and dpp.to_id = tbtu.usecase_id and tbtu.trust_boundary_id = tbt.id and tbf.name = filterName
+    union
+    select d.name dataflow, tbf.name from_name, 'trust_boundary' from_type, tbt.name to_name, 'trust_boundary' to_type from dataflow d, dataflow_process_process dpp, trust_boundary tbf, trust_boundary_usecase tbfu, trust_boundary tbt, trust_boundary_usecase tbtu where d.environment_id = envId and d.id = dpp.dataflow_id and dpp.from_id = tbfu.usecase_id and tbfu.trust_boundary_id = tbf.id and dpp.to_id = tbtu.usecase_id and tbtu.trust_boundary_id = tbt.id and tbt.name = filterName
+    union
+    select d.name dataflow, tbf.name from_name, 'trust_boundary' from_type, tbt.name to_name, 'trust_boundary' to_type from dataflow d, dataflow_process_datastore dpd, trust_boundary tbf, trust_boundary_usecase tbfu, trust_boundary tbt, trust_boundary_asset tbta where d.environment_id = envId and d.id = dpd.dataflow_id and dpd.from_id = tbfu.usecase_id and tbfu.trust_boundary_id = tbf.id and dpd.to_id = tbta.asset_id and tbta.trust_boundary_id = tbt.id and tbf.name = filterName
+    union
+    select d.name dataflow, tbf.name from_name, 'trust_boundary' from_type, tbt.name to_name, 'trust_boundary' to_type from dataflow d, dataflow_process_datastore dpd, trust_boundary tbf, trust_boundary_usecase tbfu, trust_boundary tbt, trust_boundary_asset tbta where d.environment_id = envId and d.id = dpd.dataflow_id and dpd.from_id = tbfu.usecase_id and tbfu.trust_boundary_id = tbf.id and dpd.to_id = tbta.asset_id and tbta.trust_boundary_id = tbt.id and tbt.name = filterName
+    union
+    select d.name dataflow, tbf.name from_name, 'trust_boundary' from_type, tbt.name to_name, 'trust_boundary' to_type from dataflow d, dataflow_datastore_process ddp, trust_boundary tbf, trust_boundary_asset tbfa, trust_boundary tbt, trust_boundary_usecase tbtu where d.environment_id = envId and d.id = ddp.dataflow_id and ddp.from_id = tbfa.asset_id and tbfa.trust_boundary_id = tbf.id and ddp.to_id = tbtu.usecase_id and tbtu.trust_boundary_id = tbt.id and tbf.name = filterName
+    union
+    select d.name dataflow, tbf.name from_name, 'trust_boundary' from_type, tbt.name to_name, 'trust_boundary' to_type from dataflow d, dataflow_datastore_process ddp, trust_boundary tbf, trust_boundary_asset tbfa, trust_boundary tbt, trust_boundary_usecase tbtu where d.environment_id = envId and d.id = ddp.dataflow_id and ddp.from_id = tbfa.asset_id and tbfa.trust_boundary_id = tbf.id and ddp.to_id = tbtu.usecase_id and tbtu.trust_boundary_id = tbt.id and tbt.name = filterName;
+  end if;
+end
+//
+
+create procedure controlNames(in envName text)
+begin
+  declare envId int;
+
+  select id into envId from environment where name = envName;
+
+  select a.name from dataflow_entity_process dep, asset a, dataflow d where dep.dataflow_id = d.id and d.environment_id = envId and dep.from_id = a.id
+  union
+  select a.name from dataflow_process_entity dpe, asset a, dataflow d where dpe.dataflow_id = d.id and d.environment_id = envId and dpe.to_id = a.id
+  union
+  select tb.name from dataflow d, dataflow_process_process dpp, trust_boundary tb, trust_boundary_usecase tbu where d.environment_id = envId and d.id = dpp.dataflow_id and dpp.from_id = tbu.usecase_id and tbu.trust_boundary_id = tb.id
+  union
+  select tb.name from dataflow d, dataflow_process_process dpp, trust_boundary tb, trust_boundary_usecase tbu where d.environment_id = envId and d.id = dpp.dataflow_id and dpp.to_id = tbu.usecase_id and tbu.trust_boundary_id = tb.id
+  union
+  select tb.name from dataflow d, dataflow_process_datastore dpd, trust_boundary tb, trust_boundary_usecase tbu where d.environment_id = envId and d.id = dpd.dataflow_id and dpd.from_id = tbu.usecase_id and tbu.trust_boundary_id = tb.id
+  union
+  select tb.name from dataflow d, dataflow_process_datastore dpd, trust_boundary tb, trust_boundary_asset tba where d.environment_id = envId and d.id = dpd.dataflow_id and dpd.to_id = tba.asset_id and tba.trust_boundary_id = tb.id
+  union
+  select tb.name from dataflow d, dataflow_datastore_process ddp, trust_boundary tb, trust_boundary_asset tba where d.environment_id = envId and d.id = ddp.dataflow_id and ddp.from_id = tba.asset_id and tba.trust_boundary_id = tb.id
+  union
+  select tb.name from dataflow d, dataflow_datastore_process ddp, trust_boundary tb, trust_boundary_usecase tbu where d.environment_id = envId and d.id = ddp.dataflow_id and ddp.to_id = tbu.usecase_id and tbu.trust_boundary_id = tb.id order by 1;
 end
 //
 

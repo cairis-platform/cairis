@@ -21,6 +21,7 @@ from cairis.daemon.CairisHTTPError import ARMHTTPError, ObjectNotFoundHTTPError,
 from cairis.core.DataFlow import DataFlow
 from cairis.core.DataFlowParameters import DataFlowParameters
 from cairis.misc.DataFlowDiagram import DataFlowDiagram
+from cairis.misc.ControlStructure import ControlStructure
 from cairis.data.CairisDAO import CairisDAO
 from cairis.tools.JsonConverter import json_serialize, json_deserialize
 from cairis.tools.ModelDefinitions import DataFlowModel
@@ -155,6 +156,24 @@ class DataFlowDAO(CairisDAO):
       dot_code = associations.graph()
       if not dot_code:
         raise ObjectNotFoundHTTPError('The data flow diagram')
+      return dot_code
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+    except ARMException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+
+  def get_control_structure(self, environment_name, filter_element,pathValues = []):
+    fontName, fontSize, apFontName = get_fonts(session_id=self.session_id)
+    if filter_element == 'all':
+      filter_element = ''
+    try:
+      csRows = self.db_proxy.controlStructure(environment_name,filter_element)
+      associations = ControlStructure(csRows,environment_name,self.db_proxy,font_name=fontName, font_size=fontSize)
+      dot_code = associations.graph()
+      if not dot_code:
+        raise ObjectNotFoundHTTPError('The control structure')
       return dot_code
     except DatabaseProxyException as ex:
       self.close()

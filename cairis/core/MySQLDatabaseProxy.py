@@ -4986,3 +4986,6 @@ class MySQLDatabaseProxy:
       mvResults += self.responseList('call analyseTaintFlows()',{},'MySQL error analysing taint flows',session)
       session.close()
     return mvResults
+
+  def controlStructure(self,envName,filterElement = ''):
+    return self.responseList('call controlStructure(:env,:fe)',{'env':envName,'fe':filterElement},'MySQL error getting control structure')
