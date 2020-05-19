@@ -18,6 +18,8 @@ Adding, updating, or deleting a persona
 
 -  Enter a persona name and select the persona type.
 
+-  If the persona is grounded in assumption-based data, click on the Assumption-based checkbox.
+
 -  If you have decided to personalise the persona with a picture, this
    can be added by clicking on avatar silhouette next to the persona
    description, and selecting a image to represent the persona. Permitted image types are jpg, png, giff, and bmp.
@@ -54,7 +56,7 @@ Adding, updating, or deleting a persona
 
 -  After ensuring the environment is selected in the environment window,
    click on the Roles tab. Select the Direct User 
-   check-box if the persona is a direct stakeholder with respect to the
+   checkbox if the persona is a direct stakeholder with respect to the
    system being defined, and add roles fulfilled by the persona in the
    Roles list-box. These roles can be added by clicking on the add button in the role table,
    or deleted by clicking on the button next to the role to be removed.
