@@ -21,7 +21,10 @@
 
 <!ELEMENT dataflows (dataflow*,trust_boundary*)>
 
-<!ELEMENT dataflow (dataflow_asset+,dataflow_obstacle*)>
+<!ELEMENT tag EMPTY>
+<!ATTLIST tag name CDATA #REQUIRED>
+
+<!ELEMENT dataflow (tag*,dataflow_asset+,dataflow_obstacle*)>
 <!ATTLIST dataflow name CDATA #REQUIRED>
 <!ATTLIST dataflow type (Information  | Control | Feedback) #IMPLIED>
 <!ATTLIST dataflow environment CDATA #REQUIRED>
@@ -36,7 +39,7 @@
 <!ELEMENT dataflow_obstacle EMPTY>
 <!ATTLIST dataflow_obstacle name CDATA #REQUIRED>
 
-<!ELEMENT trust_boundary (description,trust_boundary_environment+)>
+<!ELEMENT trust_boundary (description,tag*,trust_boundary_environment+)>
 <!ATTLIST trust_boundary name CDATA #REQUIRED>
 <!ELEMENT description (#PCDATA)>
 <!ELEMENT trust_boundary_environment (trust_boundary_component+)>
