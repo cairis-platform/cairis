@@ -1192,7 +1192,8 @@ class DataFlowModel(object):
     "theToName": fields.String,
     "theToType": fields.String,
     "theAssets": fields.List(fields.String),
-    "theObstacles": fields.List(fields.String)
+    "theObstacles": fields.List(fields.String),
+    "theTags": fields.List(fields.String)
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
@@ -1213,7 +1214,8 @@ class TrustBoundaryComponent(object):
   resource_fields = {
     obj_id_field: fields.String,
     'theName': fields.String,
-    'theType': fields.String
+    'theType': fields.String,
+    "theTags": fields.List(fields.String)
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)

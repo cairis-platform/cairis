@@ -437,7 +437,7 @@
 <!ATTLIST task_characteristic modal_qualifier CDATA #REQUIRED>
 
 <!ELEMENT dataflows (dataflow*,trust_boundary*)>
-<!ELEMENT dataflow (dataflow_asset+,dataflow_obstacle*)>
+<!ELEMENT dataflow (tag*,dataflow_asset+,dataflow_obstacle*)>
 <!ATTLIST dataflow name CDATA #REQUIRED>
 <!ATTLIST dataflow type (Information  | Control | Feedback) #IMPLIED>
 <!ATTLIST dataflow environment CDATA #REQUIRED>
@@ -452,7 +452,7 @@
 <!ELEMENT dataflow_obstacle EMPTY>
 <!ATTLIST dataflow_obstacle name CDATA #REQUIRED>
 
-<!ELEMENT trust_boundary (description,trust_boundary_environment+)>
+<!ELEMENT trust_boundary (description,tag*,trust_boundary_environment+)>
 <!ATTLIST trust_boundary name CDATA #REQUIRED>
 <!ATTLIST trust_boundary privilege CDATA #IMPLIED>
 <!ELEMENT trust_boundary_environment (trust_boundary_component+)>

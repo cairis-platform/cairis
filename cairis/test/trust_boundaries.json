@@ -2,6 +2,7 @@
   "trust_boundaries" : [
     {"theName" : "Shibboleth",
      "theDescription" : "Identity Provider",
+     "theTags" : ["tag1"],
      "theEnvironmentProperties" : [
        {"theEnvironmentName" : "Psychosis",
         "thePrivilege" : "None",

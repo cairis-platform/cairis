@@ -448,7 +448,6 @@ class MySQLDatabaseProxy:
     attackerDesc = parameters.description()
     attackerImage = parameters.image()
     tags = parameters.tags()
-
     self.updateDatabase("call updateAttacker(:id,:name,:desc,:image)",{'id':attackerId,'name':attackerName,'desc':attackerDesc,'image':attackerImage},'MySQL error updating attacker',session)
     self.addTags(attackerName,'attacker',tags)
     for environmentProperties in parameters.environmentProperties():
@@ -4652,9 +4651,10 @@ class MySQLDatabaseProxy:
     dfRows = self.responseList('call getDataFlows(:df,:env)',{'df':dfName,'env':envName},'MySQL error getting data flows')
     dataFlows = []
     for dfName,dfType,envName,fromName,fromType,toName,toType in dfRows:
+      tags = self.getTags(dfName,'dataflow')
       dfAssets = self.getDataFlowAssets(dfName,envName)
       dfObs = self.getDataFlowObstacles(dfName,envName)
-      parameters = DataFlowParameters(dfName,dfType,envName,fromName,fromType,toName,toType,dfAssets,dfObs)
+      parameters = DataFlowParameters(dfName,dfType,envName,fromName,fromType,toName,toType,dfAssets,dfObs,tags)
       df = ObjectFactory.build(-1,parameters)
       dataFlows.append(df)
     return dataFlows
@@ -4676,7 +4676,9 @@ class MySQLDatabaseProxy:
     toType = parameters.toType()
     dfAssets = parameters.assets()
     dfObs = parameters.obstacles()
+    tags = parameters.tags()
     self.updateDatabase('call addDataFlow(:df,:dfType,:env,:fName,:fType,:tName,:tType)',{'df':dfName,'dfType':dfType,'env':envName,'fName':fromName,'fType':fromType,'tName':toName,'tType':toType},'MySQL error adding data flow')
+    self.addTags(dfName,'dataflow',tags)
     for dfAsset in dfAssets:
       self.addDataFlowAsset(dfName,envName,fromType,fromName,toType,toName,dfAsset)
     for dfOb in dfObs:
@@ -4698,9 +4700,11 @@ class MySQLDatabaseProxy:
     toType = parameters.toType()
     dfAssets = parameters.assets()
     dfObs = parameters.obstacles()
+    tags = parameters.tags()
     session = self.updateDatabase('call deleteDataFlowAssets(:df,:env)',{'df':oldDfName,'env':oldEnvName},'MySQL error deleting data flow assets',None,False)
     self.updateDatabase('call deleteDataFlowObstacles(:df,:env)',{'df':oldDfName,'env':oldEnvName},'MySQL error deleting data flow obstacles',session,False)
     self.updateDatabase('call updateDataFlow(:oDf,:nDf,:dfType,:oEnv,:nEnv,:fName,:fType,:tName,:tType)',{'oDf':oldDfName,'nDf':dfName,'dfType':dfType,'oEnv':oldEnvName,'nEnv':envName,'fName':fromName,'fType':fromType,'tName':toName,'tType':toType},'MySQL error updating data flow',session)
+    self.addTags(dfName,'dataflow',tags)
     for dfAsset in dfAssets:
       self.addDataFlowAsset(dfName,envName,fromType,fromName,toType,toName,dfAsset)
     for dfOb in dfObs:
@@ -4721,12 +4725,13 @@ class MySQLDatabaseProxy:
     tbRows = self.responseList('call getTrustBoundaries(:id)',{'id':constraintId},'MySQL error getting trust boundaries')
     tbs = [] 
     for tbId,tbName,tbDesc in tbRows:
+      tags = self.getTags(tbName,'trust_boundary')
       components = {}
       privileges = {}
       for environmentId,environmentName in self.dimensionEnvironments(tbId,'trust_boundary'):
         components[environmentName] = self.trustBoundaryComponents(tbId,environmentId)
         privileges[environmentName] = self.trustBoundaryPrivilege(tbId,environmentId)
-      tbs.append(TrustBoundary(tbId,tbName,tbDesc,components,privileges))
+      tbs.append(TrustBoundary(tbId,tbName,tbDesc,components,privileges,tags))
     return tbs
 
   def trustBoundaryComponents(self,tbId, envId):
@@ -4738,6 +4743,7 @@ class MySQLDatabaseProxy:
   def addTrustBoundary(self,tb):
     tbId = self.newId()
     self.updateDatabase("call addTrustBoundary(:id,:name,:desc)",{'id':tbId,'name':tb.name(),'desc':tb.description()},'MySQL error adding trust boundary ' + str(tbId))
+    self.addTags(tb.name(),'trust_boundary',tb.tags())
     defaultPrivilegeLevels = {}
     for environmentName in list(tb.components().keys()):
       defaultPrivilegeLevels[environmentName] = 'None'
@@ -4760,6 +4766,7 @@ class MySQLDatabaseProxy:
   def updateTrustBoundary(self,tb):
     self.updateDatabase('call deleteTrustBoundaryComponents(:id)',{'id':tb.id()},'MySQL error deleting trust boundary components for ' + tb.name())
     self.updateDatabase("call updateTrustBoundary(:id,:name,:desc)",{'id':tb.id(),'name':tb.name(),'desc':tb.description()},'MySQL error adding trust boundary ' + tb.name())
+    self.addTags(tb.name(),'trust_boundary',tb.tags())
     defaultPrivilegeLevels = {}
     for environmentName in list(tb.components().keys()):
       defaultPrivilegeLevels[environmentName] = 'None'

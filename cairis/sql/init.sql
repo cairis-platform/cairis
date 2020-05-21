@@ -68,6 +68,7 @@ DROP TABLE IF EXISTS task_goal_contribution;
 DROP TABLE IF EXISTS trust_boundary_usecase;
 DROP TABLE IF EXISTS trust_boundary_asset;
 DROP TABLE IF EXISTS trust_boundary_privilege;
+DROP TABLE IF EXISTS trust_boundary_tag;
 DROP TABLE IF EXISTS trust_boundary;
 DROP TABLE IF EXISTS dataflow_process_process;
 DROP TABLE IF EXISTS dataflow_entity_process;
@@ -76,6 +77,7 @@ DROP TABLE IF EXISTS dataflow_process_datastore;
 DROP TABLE IF EXISTS dataflow_datastore_process;
 DROP TABLE IF EXISTS dataflow_asset;
 DROP TABLE IF EXISTS dataflow_obstacle;
+DROP TABLE IF EXISTS dataflow_tag;
 DROP TABLE IF EXISTS dataflow;
 DROP TABLE IF EXISTS dataflow_type;
 DROP TABLE IF EXISTS persona_instance;
@@ -2637,6 +2639,7 @@ CREATE TABLE response_tag (
   FOREIGN KEY(tag_id) REFERENCES tag(id)
 ) ENGINE=INNODB;
 
+
 CREATE TABLE contribution_end (
   id INT NOT NULL,
   name VARCHAR(100) NOT NULL,
@@ -3346,6 +3349,14 @@ CREATE TABLE dataflow_obstacle (
   FOREIGN KEY(obstacle_id) REFERENCES obstacle(id)
 ) ENGINE=INNODB;
 
+CREATE TABLE dataflow_tag (
+  dataflow_id INT NOT NULL,
+  tag_id INT NOT NULL,
+  PRIMARY KEY(dataflow_id,tag_id),
+  FOREIGN KEY(dataflow_id) REFERENCES dataflow(id), 
+  FOREIGN KEY(tag_id) REFERENCES tag(id)
+) ENGINE=INNODB;
+
 CREATE TABLE dataflow_process_process (
   dataflow_id INT NOT NULL,
   from_id INT NOT NULL,
@@ -3356,7 +3367,7 @@ CREATE TABLE dataflow_process_process (
   FOREIGN KEY(to_id) REFERENCES usecase(id)
 ) ENGINE=INNODB;
 
-create TABLE dataflow_entity_process (
+CREATE TABLE dataflow_entity_process (
   dataflow_id INT NOT NULL,
   from_id INT NOT NULL,
   to_id INT NOT NULL,
@@ -3366,7 +3377,7 @@ create TABLE dataflow_entity_process (
   FOREIGN KEY(to_id) REFERENCES usecase(id)
 ) ENGINE=INNODB;
 
-create TABLE dataflow_process_entity (
+CREATE TABLE dataflow_process_entity (
   dataflow_id INT NOT NULL,
   from_id INT NOT NULL,
   to_id INT NOT NULL,
@@ -3376,7 +3387,7 @@ create TABLE dataflow_process_entity (
   FOREIGN KEY(to_id) REFERENCES asset(id)
 ) ENGINE=INNODB;
 
-create TABLE dataflow_process_datastore (
+CREATE TABLE dataflow_process_datastore (
   dataflow_id INT NOT NULL,
   from_id INT NOT NULL,
   to_id INT NOT NULL,
@@ -3386,7 +3397,7 @@ create TABLE dataflow_process_datastore (
   FOREIGN KEY(to_id) REFERENCES asset(id)
 ) ENGINE=INNODB;
 
-create TABLE dataflow_datastore_process (
+CREATE TABLE dataflow_datastore_process (
   dataflow_id INT NOT NULL,
   from_id INT NOT NULL,
   to_id INT NOT NULL,
@@ -3396,14 +3407,14 @@ create TABLE dataflow_datastore_process (
   FOREIGN KEY(to_id) REFERENCES usecase(id)
 ) ENGINE=INNODB;
 
-create TABLE trust_boundary (
+CREATE TABLE trust_boundary (
   id INT NOT NULL,
   name VARCHAR(50), 
   description VARCHAR(4000), 
   PRIMARY KEY(id)
 ) ENGINE=INNODB;
 
-create TABLE trust_boundary_usecase (
+CREATE TABLE trust_boundary_usecase (
   trust_boundary_id INT NOT NULL,
   environment_id INT NOT NULL,
   usecase_id INT NOT NULL,
@@ -3413,7 +3424,7 @@ create TABLE trust_boundary_usecase (
   FOREIGN KEY(usecase_id) REFERENCES usecase(id)
 ) ENGINE=INNODB;
 
-create TABLE trust_boundary_asset (
+CREATE TABLE trust_boundary_asset (
   trust_boundary_id INT NOT NULL,
   environment_id INT NOT NULL,
   asset_id INT NOT NULL,
@@ -3423,13 +3434,21 @@ create TABLE trust_boundary_asset (
   FOREIGN KEY(asset_id) REFERENCES asset(id)
 ) ENGINE=INNODB;
 
-create TABLE trust_boundary_privilege (
+CREATE TABLE trust_boundary_privilege (
   trust_boundary_id INT NOT NULL,
   environment_id INT NOT NULL,
   privilege_value INT NOT NULL,
   PRIMARY KEY(trust_boundary_id,environment_id,privilege_value),
   FOREIGN KEY(trust_boundary_id) REFERENCES trust_boundary(id),
   FOREIGN KEY(environment_id) REFERENCES environment(id)
+) ENGINE=INNODB;
+
+CREATE TABLE trust_boundary_tag (
+  trust_boundary_id INT NOT NULL,
+  tag_id INT NOT NULL,
+  PRIMARY KEY(trust_boundary_id,tag_id),
+  FOREIGN KEY(trust_boundary_id) REFERENCES trust_boundary(id), 
+  FOREIGN KEY(tag_id) REFERENCES tag(id)
 ) ENGINE=INNODB;
 
 CREATE TABLE risk_vulnerability (

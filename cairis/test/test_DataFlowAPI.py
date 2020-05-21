@@ -51,6 +51,7 @@ class DataFlowAPITests(CairisDaemonTestCase):
     self.existing_to_type = 'process'
     self.existing_type = 'Information'
     self.existing_assets = ['Credentials']
+    self.existing_tags = []
 
     dataflow_class = DataFlow.__module__+'.'+DataFlow.__name__
     # endregion
@@ -88,6 +89,7 @@ class DataFlowAPITests(CairisDaemonTestCase):
     self.assertEqual(dataflow['theFromType'],self.existing_from_type)
     self.assertEqual(dataflow['theToName'],self.existing_to_name)
     self.assertEqual(dataflow['theToType'],self.existing_to_type)
+    self.assertEqual(dataflow['theTags'],self.existing_tags)
 
   def test_post(self):
     method = 'test_post'
@@ -149,6 +151,7 @@ class DataFlowAPITests(CairisDaemonTestCase):
     self.assertEqual(upd_dataflow['theFromType'],dataflow_to_update.fromType())
     self.assertEqual(upd_dataflow['theToName'],dataflow_to_update.toName())
     self.assertEqual(upd_dataflow['theToType'],dataflow_to_update.toType())
+    self.assertEqual(upd_dataflow['theTags'],dataflow_to_update.tags())
 
     rv = self.app.delete('/api/dataflows/name/Edited%20test%20dataflow/environment/Psychosis?session_id=test')
     self.assertIsNotNone(rv.data, 'No response')
@@ -195,7 +198,8 @@ class DataFlowAPITests(CairisDaemonTestCase):
       fromType='process',
       toName='Authorised Researcher',
       toType='entity',
-      dfAssets=['Session']
+      dfAssets=['Session'],
+      dfTags=['tag1']
     )
     return new_dataflow
 

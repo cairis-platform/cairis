@@ -65,7 +65,8 @@ class DataFlowDAO(CairisDAO):
       toName=dataflow.toName(),
       toType=dataflow.toType(),
       dfAssets=dataflow.assets(),
-      dfObs=dataflow.obstacles()
+      dfObs=dataflow.obstacles(),
+      dfTags=dataflow.tags()
     )
 
     try:
@@ -92,7 +93,8 @@ class DataFlowDAO(CairisDAO):
       toName=dataflow.toName(),
       toType=dataflow.toType(),
       dfAssets=dataflow.assets(),
-      dfObs=dataflow.obstacles()
+      dfObs=dataflow.obstacles(),
+      dfTags=dataflow.tags()
     )
 
     try:

@@ -19009,6 +19009,8 @@ begin
   delete from vulnerability_tag where tag_id = tagId;
   delete from threat_tag where tag_id = tagId;
   delete from risk_tag where tag_id = tagId;
+  delete from dataflow_tag where tag_id = tagId;
+  delete from trust_boundary_tag where tag_id = tagId;
   delete from tag where id = tagId;
 end
 //
@@ -24417,6 +24419,7 @@ begin
   delete from dataflow_process_entity where dataflow_id = dfId;
   delete from dataflow_datastore_process where dataflow_id = dfId;
   delete from dataflow_process_datastore where dataflow_id = dfId;
+  delete from dataflow_tag where dataflow_id = dfId;
   delete from dataflow where id = dfId;
 end
 //
@@ -24474,6 +24477,7 @@ create procedure dataflowsToXml(in includeHeader int)
 begin
   declare buf LONGTEXT default '<?xml version="1.0"?>\n<!DOCTYPE dataflows PUBLIC "-//CAIRIS//DTD DATAFLOW 1.0//EN" "http://cairis.org/dtd/dataflow.dtd">\n\n<dataflows>\n';
   declare done int default 0;
+  declare tagName varchar(255);
   declare dfName varchar(255);
   declare dfType varchar(255);
   declare envName varchar (200);
@@ -24493,6 +24497,8 @@ begin
   declare dfCount int default 0;
   declare tbCount int default 0;
   declare dfCursor cursor for select dataflow, dataflow_type, environment, from_name, from_type, to_name, to_type from dataflows;
+  declare dfTagCursor cursor for select t.name from dataflow_tag dt, tag t where dt.dataflow_id = dfId and dt.tag_id = t.id;
+  declare tbTagCursor cursor for select t.name from trust_boundary_tag tt, tag t where tt.trust_boundary_id = tbId and tt.tag_id = t.id;
   declare tbCursor cursor for select id,name,description from trust_boundary;
   declare tbEnvCursor cursor for select distinct environment_id from environment_trust_boundary where trust_boundary_id = tbId;
   declare tbCompCursor cursor for
@@ -24519,6 +24525,19 @@ begin
     set buf = concat(buf,'  <dataflow name=\"',dfName,'\" type=\"',dfType,'\" environment=\"',envName,'\" from_name=\"',fromName,'\" from_type=\"',fromType,'\" to_name=\"',toName,'\" to_type=\"',toType,'\">\n');
     select id into envId from environment where name = envName;
     select id into dfId from dataflow where name = dfName and environment_id = envId limit 1;
+
+    open dfTagCursor;
+    dfTag_loop: loop
+      fetch dfTagCursor into tagName;
+      if done = 1
+      then
+        leave dfTag_loop;
+      end if;
+      set buf = concat(buf,'  <tag name=\"',tagName,'\" />\n'); 
+    end loop dfTag_loop;
+    close dfTagCursor;
+    set done = 0;
+
 
     open dfAssetCursor;
     dfAsset_loop: loop
@@ -24558,6 +24577,19 @@ begin
       leave tb_loop;
     end if;
     set buf = concat(buf,'  <trust_boundary name=\"',tbName,'\">\n    <description>',tbDesc,'</description>\n');
+
+    open tbTagCursor;
+    tbTag_loop: loop
+      fetch tbTagCursor into tagName;
+      if done = 1
+      then
+        leave tbTag_loop;
+      end if;
+      set buf = concat(buf,'    <tag name=\"',tagName,'\" />\n'); 
+    end loop tbTag_loop;
+    close tbTagCursor;
+
+    set done = 0;
     open tbEnvCursor;
     tbEnv_loop: loop
       fetch tbEnvCursor into envId;
@@ -24676,6 +24708,7 @@ end
 create procedure delete_trust_boundary(in tbId int)
 begin
   call deleteTrustBoundaryComponents(tbId);
+  delete from trust_boundary_tag where trust_boundary_id = tbId;
   delete from trust_boundary where id = tbId;
 end
 //

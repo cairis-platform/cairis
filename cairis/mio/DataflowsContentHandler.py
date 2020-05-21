@@ -47,6 +47,7 @@ class DataflowsContentHandler(ContentHandler,EntityResolver):
     self.theToType = ''
     self.theAssets = []
     self.theObstacles = []
+    self.theTags = []
 
   def resetTrustBoundaryAttributes(self):
     self.inDescription = 0
@@ -56,6 +57,7 @@ class DataflowsContentHandler(ContentHandler,EntityResolver):
     self.theEnvironmentComponents = {}
     self.theComponents = []
     self.theEnvironmentPrivileges = {}
+    self.theTags = []
 
   def startElement(self,name,attrs):
     self.currentElementName = name
@@ -76,6 +78,8 @@ class DataflowsContentHandler(ContentHandler,EntityResolver):
       self.theObstacles.append(dfObs)
     elif name == 'trust_boundary':
       self.theName = attrs['name']
+    elif name == 'tag':
+      self.theTags.append(attrs['name'])
     elif name == 'description':
       self.inDescription = 1
       self.theDescription = ''
@@ -94,14 +98,14 @@ class DataflowsContentHandler(ContentHandler,EntityResolver):
 
   def endElement(self,name):
     if name == 'dataflow':
-      self.theDataFlows.append(DataFlowParameters(self.theName,self.theType,self.theEnvironmentName,self.theFromName,self.theFromType,self.theToName,self.theToType,self.theAssets,self.theObstacles))
+      self.theDataFlows.append(DataFlowParameters(self.theName,self.theType,self.theEnvironmentName,self.theFromName,self.theFromType,self.theToName,self.theToType,self.theAssets,self.theObstacles,self.theTags))
       self.resetDataFlowAttributes()
     elif name == 'trust_boundary_environment':
       self.theEnvironmentComponents[self.theEnvironmentName] = self.theComponents
       self.theComponents = []
       self.theEnvironmentName = ''
     elif name == 'trust_boundary':
-      self.theTrustBoundaries.append(TrustBoundary(-1,self.theName,self.theDescription,self.theEnvironmentComponents,self.theEnvironmentPrivileges))
+      self.theTrustBoundaries.append(TrustBoundary(-1,self.theName,self.theDescription,self.theEnvironmentComponents,self.theEnvironmentPrivileges,self.theTags))
       self.resetTrustBoundaryAttributes()
     elif name == 'description':
       self.inDescription = 0

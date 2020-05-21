@@ -174,5 +174,5 @@ def build(objtId,p):
   if (p.__class__.__name__ == 'LocationsParameters'):
     return Locations(objtId,p.name(),p.diagram(),p.locations(),p.links())
   if (p.__class__.__name__ == 'DataFlowParameters'):
-    return DataFlow(p.name(),p.type(),p.environment(),p.fromName(),p.fromType(),p.toName(),p.toType(),p.assets(),p.obstacles())
+    return DataFlow(p.name(),p.type(),p.environment(),p.fromName(),p.fromType(),p.toName(),p.toType(),p.assets(),p.obstacles(),p.tags())
   else: raise UnknownParameterClass(str(objtId))
