@@ -75,9 +75,11 @@ Adding, updating, or deleting data flows
 
 -   To add a data flow, select the UX / Data Flows menu to open the Data Flows table.  Click on the Add button to open a dialog for adding a new data flow.
 
--   Enter the name for the data flow, and select the environment the data flow is specific to.  You should also select the *from* and *to* types associated with the flow.  These types are Entities, Data Stores, and Processes, where Entities are information, hardware, or people assets, Data Stores are information assets, and Processes are use cases.
+-   Enter the name for the data flow, select the environment the data flow is specific to, and select the data flow type.  You should also select the *from* and *to* types associated with the flow.  These types are Entities, Data Stores, and Processes, where Entities are information, hardware, or people assets, Data Stores are information assets, and Processes are use cases.
 
 -   Click the Add button in the Asset table to choose one or more assets carried by this data flow.
+
+-   Should there be any obstructions to the data flow, click the Add button in the Obstacle table to add associated obstacles.
 
 -   Click on the Create button to add the data flow to the Data Flows table.
 

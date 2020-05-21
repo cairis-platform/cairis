@@ -24212,17 +24212,19 @@ begin
 end
 //
 
-create procedure addDataFlow(in dfName text, in envName text, in fromName text, in fromType text, in toName text, in toType text)
+create procedure addDataFlow(in dfName text, in dfType text, in envName text, in fromName text, in fromType text, in toName text, in toType text)
 begin
   declare dfId int;
   declare envId int;
   declare fromId int;
   declare toId int;
+  declare typeId int;
 
   call newId2(dfId);
 
   select id into envId from environment where name = envName limit 1;
-  insert into dataflow(id,environment_id,name) values(dfId,envId,dfName);
+  select id into typeId from dataflow_type where name = dfType limit 1;
+  insert into dataflow(id,dataflow_type_id,environment_id,name) values(dfId,typeId,envId,dfName);
 
   if fromType = 'process' and toType = 'process'
   then
@@ -24255,20 +24257,22 @@ begin
 end
 //
 
-create procedure updateDataFlow(in oldDfName text, in newDfName text, in oldEnvName text, in newEnvName text, in fromName text, in fromType text, in toName text, in toType text)
+create procedure updateDataFlow(in oldDfName text, in newDfName text, in dfType text, in oldEnvName text, in newEnvName text, in fromName text, in fromType text, in toName text, in toType text)
 begin
   declare dfId int;
   declare oldEnvId int;
   declare envId int;
   declare fromId int;
   declare toId int;
+  declare typeId int;
 
   select id into oldEnvId from environment where name = oldEnvName limit 1;
   select id into envId from environment where name = newEnvName limit 1;
+  select id into typeId from dataflow_type where name = dfType limit 1;
 
   select id into dfId from dataflow where name = oldDfName and environment_id = oldEnvId limit 1;
 
-  update dataflow set environment_id = envId, name = newDfName where id = dfId;
+  update dataflow set environment_id = envId, name = newDfName, dataflow_type_id = typeId where id = dfId;
   delete from dataflow_process_process where dataflow_id = dfId;
   delete from dataflow_entity_process where dataflow_id = dfId;
   delete from dataflow_process_entity where dataflow_id = dfId;
@@ -24437,9 +24441,9 @@ begin
   then
     select id into envId from environment where name = envName limit 1;
     select id into dfId from dataflow where name = dfName and environment_id = envId limit 1;
-    select dataflow, environment, from_name, from_type, to_name, to_type from dataflows where dataflow=dfName and environment = envName;
+    select dataflow, dataflow_type, environment, from_name, from_type, to_name, to_type from dataflows where dataflow=dfName and environment = envName;
   else
-    select dataflow, environment, from_name, from_type, to_name, to_type from dataflows;
+    select dataflow, dataflow_type, environment, from_name, from_type, to_name, to_type from dataflows;
   end if;
 end
 //
@@ -24471,6 +24475,7 @@ begin
   declare buf LONGTEXT default '<?xml version="1.0"?>\n<!DOCTYPE dataflows PUBLIC "-//CAIRIS//DTD DATAFLOW 1.0//EN" "http://cairis.org/dtd/dataflow.dtd">\n\n<dataflows>\n';
   declare done int default 0;
   declare dfName varchar(255);
+  declare dfType varchar(255);
   declare envName varchar (200);
   declare fromName varchar (200);
   declare fromType varchar (9);
@@ -24487,7 +24492,7 @@ begin
   declare envId int;
   declare dfCount int default 0;
   declare tbCount int default 0;
-  declare dfCursor cursor for select dataflow, environment, from_name, from_type, to_name, to_type from dataflows;
+  declare dfCursor cursor for select dataflow, dataflow_type, environment, from_name, from_type, to_name, to_type from dataflows;
   declare tbCursor cursor for select id,name,description from trust_boundary;
   declare tbEnvCursor cursor for select distinct environment_id from environment_trust_boundary where trust_boundary_id = tbId;
   declare tbCompCursor cursor for
@@ -24505,13 +24510,13 @@ begin
 
   open dfCursor;
   df_loop: loop
-    fetch dfCursor into dfName, envName, fromName, fromType, toName, toType;
+    fetch dfCursor into dfName, dfType, envName, fromName, fromType, toName, toType;
     if done = 1
     then
       leave df_loop;
     end if;
 
-    set buf = concat(buf,'  <dataflow name=\"',dfName,'\" environment=\"',envName,'\" from_name=\"',fromName,'\" from_type=\"',fromType,'\" to_name=\"',toName,'\" to_type=\"',toType,'\">\n');
+    set buf = concat(buf,'  <dataflow name=\"',dfName,'\" type=\"',dfType,'\" environment=\"',envName,'\" from_name=\"',fromName,'\" from_type=\"',fromType,'\" to_name=\"',toName,'\" to_type=\"',toType,'\">\n');
     select id into envId from environment where name = envName;
     select id into dfId from dataflow where name = dfName and environment_id = envId limit 1;
 
@@ -30349,6 +30354,7 @@ begin
   declare headElement int default 1;
   declare done int default 0;
   declare dfName varchar(255);
+  declare dfType varchar(255);
   declare envName varchar (200);
   declare fromName varchar (200);
   declare fromType varchar (9);
@@ -30365,7 +30371,7 @@ begin
   declare envId int;
   declare dfCount int default 0;
   declare tbCount int default 0;
-  declare dfCursor cursor for select dataflow, environment, from_name, from_type, to_name, to_type from dataflows;
+  declare dfCursor cursor for select dataflow, dataflow_type, environment, from_name, from_type, to_name, to_type from dataflows;
   declare tbCursor cursor for select id,name,description from trust_boundary;
   declare tbEnvCursor cursor for select distinct environment_id from environment_trust_boundary where trust_boundary_id = tbId;
   declare tbCompCursor cursor for
@@ -30381,7 +30387,7 @@ begin
 
   open dfCursor;
   df_loop: loop
-    fetch dfCursor into dfName, envName, fromName, fromType, toName, toType;
+    fetch dfCursor into dfName, dfType, envName, fromName, fromType, toName, toType;
     if done = 1
     then
       set buf = concat(buf,"]\n\n");
@@ -30395,7 +30401,7 @@ begin
       end if;
     end if;
 
-    set buf = concat(buf,'  {"name" : "',dfName,'", "environment" : "',envName,'", "from_name" : "',fromName,'", "from_type" : "',fromType,'", "to_name" : "',toName,'", "to_type" : "',toType,'", "assets" : [');
+    set buf = concat(buf,'  {"name" : "',dfName,'", type : "',dfType,'", "environment" : "',envName,'", "from_name" : "',fromName,'", "from_type" : "',fromType,'", "to_name" : "',toName,'", "to_type" : "',toType,'", "assets" : [');
     select id into envId from environment where name = envName;
     select id into dfId from dataflow where name = dfName and environment_id = envId limit 1;
 

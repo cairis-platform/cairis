@@ -39,6 +39,7 @@ class DataflowsContentHandler(ContentHandler,EntityResolver):
 
   def resetDataFlowAttributes(self):
     self.theName = ''
+    self.theType = 'Information'
     self.theEnvironmentName = ''
     self.theFromName = ''
     self.theFromType = ''
@@ -60,6 +61,8 @@ class DataflowsContentHandler(ContentHandler,EntityResolver):
     self.currentElementName = name
     if name == 'dataflow':
       self.theName = attrs['name']
+      if 'type' in attrs:
+        self.theType = attrs['type']
       self.theEnvironmentName = attrs['environment']
       self.theFromName = attrs['from_name']
       self.theFromType = attrs['from_type']
@@ -91,7 +94,7 @@ class DataflowsContentHandler(ContentHandler,EntityResolver):
 
   def endElement(self,name):
     if name == 'dataflow':
-      self.theDataFlows.append(DataFlowParameters(self.theName,self.theEnvironmentName,self.theFromName,self.theFromType,self.theToName,self.theToType,self.theAssets,self.theObstacles))
+      self.theDataFlows.append(DataFlowParameters(self.theName,self.theType,self.theEnvironmentName,self.theFromName,self.theFromType,self.theToName,self.theToType,self.theAssets,self.theObstacles))
       self.resetDataFlowAttributes()
     elif name == 'trust_boundary_environment':
       self.theEnvironmentComponents[self.theEnvironmentName] = self.theComponents

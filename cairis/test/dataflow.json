@@ -93,6 +93,7 @@
   ],
   "dataflows" : [
     {"theName" : "authenticate",
+     "theType" : "Information",
      "theEnvironmentName" : "Psychosis",
      "theFromName" : "Authorised Researcher",
      "theFromType" : "entity",

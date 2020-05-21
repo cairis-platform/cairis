@@ -2,7 +2,7 @@
 <!DOCTYPE dataflows PUBLIC "-//CAIRIS//DTD DATAFLOW 1.0//EN" "https://cairis.org/dtd/dataflow.dtd">
 
 <dataflows>
-  <dataflow name="authenticate" type="Information" environment="Psychosis" from_name="Authorised Researcher" from_type="entity" to_name="Authenticate Researcher" to_type="process">
+  <dataflow name="authenticate" environment="Psychosis" from_name="Authorised Researcher" from_type="entity" to_name="Authenticate Researcher" to_type="process">
     <dataflow_asset name="Credentials" />
     <dataflow_obstacle name="Desktop installation" />
   </dataflow>

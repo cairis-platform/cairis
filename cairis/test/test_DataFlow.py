@@ -93,12 +93,13 @@ class DataFlowTest(unittest.TestCase):
     self.dfJson = d['dataflows'][0]
 
   def testAddDataFlow(self):
-    idfp = DataFlowParameters(self.dfJson['theName'],self.dfJson['theEnvironmentName'],self.dfJson['theFromName'],self.dfJson['theFromType'],self.dfJson['theToName'],self.dfJson['theToType'],self.dfJson['theAssets'],self.dfJson['theObstacles'])
+    idfp = DataFlowParameters(self.dfJson['theName'],self.dfJson['theType'],self.dfJson['theEnvironmentName'],self.dfJson['theFromName'],self.dfJson['theFromType'],self.dfJson['theToName'],self.dfJson['theToType'],self.dfJson['theAssets'],self.dfJson['theObstacles'])
     b = Borg()
     b.dbProxy.addDataFlow(idfp)
     odfs = b.dbProxy.getDataFlows()
     odf = odfs[0]
     self.assertEqual(idfp.name(),odf.name())
+    self.assertEqual(idfp.type(),odf.type())
     self.assertEqual(idfp.environment(),odf.environment())
     self.assertEqual(idfp.fromName(),odf.fromName())
     self.assertEqual(idfp.fromType(),odf.fromType())
@@ -108,7 +109,7 @@ class DataFlowTest(unittest.TestCase):
     self.assertEqual(idfp.obstacles(),odf.obstacles())
 
   def testUpdateDataFlow(self):
-    idfp = DataFlowParameters(self.dfJson['theName'],self.dfJson['theEnvironmentName'],self.dfJson['theFromName'],self.dfJson['theFromType'],self.dfJson['theToName'],self.dfJson['theToType'],self.dfJson['theAssets'],self.dfJson['theObstacles'])
+    idfp = DataFlowParameters(self.dfJson['theName'],self.dfJson['theType'],self.dfJson['theEnvironmentName'],self.dfJson['theFromName'],self.dfJson['theFromType'],self.dfJson['theToName'],self.dfJson['theToType'],self.dfJson['theAssets'],self.dfJson['theObstacles'])
     b = Borg()
     b.dbProxy.addDataFlow(idfp)
     idfp.theName = 'Authenticate'
@@ -116,6 +117,7 @@ class DataFlowTest(unittest.TestCase):
     odfs = b.dbProxy.getDataFlows()
     odf = odfs[0]
     self.assertEqual(idfp.name(),odf.name())
+    self.assertEqual(idfp.type(),odf.type())
     self.assertEqual(idfp.environment(),odf.environment())
     self.assertEqual(idfp.fromName(),odf.fromName())
     self.assertEqual(idfp.fromType(),odf.fromType())
@@ -126,6 +128,13 @@ class DataFlowTest(unittest.TestCase):
 
   def testImportDataflows(self):
     self.assertEqual(importDataflowsFile(os.environ['CAIRIS_SRC'] + '/test/testdataflow.xml'),'Imported 1 dataflow. Imported 0 trust boundaries.')
+
+  def testImportDataflowsWithoutTypee(self):
+    self.assertEqual(importDataflowsFile(os.environ['CAIRIS_SRC'] + '/test/testdataflow_withouttype.xml'),'Imported 1 dataflow. Imported 0 trust boundaries.')
+    b = Borg()
+    odfs = b.dbProxy.getDataFlows()
+    odf = odfs[0]
+    self.assertEqual(odf.type(),'Information')
 
   def testExportDataflows(self):
     importDataflowsFile(os.environ['CAIRIS_SRC'] + '/test/testdataflow.xml')

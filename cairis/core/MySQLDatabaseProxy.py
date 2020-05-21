@@ -4651,10 +4651,10 @@ class MySQLDatabaseProxy:
   def getDataFlows(self,dfName='',envName=''):
     dfRows = self.responseList('call getDataFlows(:df,:env)',{'df':dfName,'env':envName},'MySQL error getting data flows')
     dataFlows = []
-    for dfName,envName,fromName,fromType,toName,toType in dfRows:
+    for dfName,dfType,envName,fromName,fromType,toName,toType in dfRows:
       dfAssets = self.getDataFlowAssets(dfName,envName)
       dfObs = self.getDataFlowObstacles(dfName,envName)
-      parameters = DataFlowParameters(dfName,envName,fromName,fromType,toName,toType,dfAssets,dfObs)
+      parameters = DataFlowParameters(dfName,dfType,envName,fromName,fromType,toName,toType,dfAssets,dfObs)
       df = ObjectFactory.build(-1,parameters)
       dataFlows.append(df)
     return dataFlows
@@ -4668,6 +4668,7 @@ class MySQLDatabaseProxy:
 
   def addDataFlow(self,parameters):
     dfName = parameters.name()
+    dfType = parameters.type()
     envName = parameters.environment()
     fromName = parameters.fromName()
     fromType = parameters.fromType()
@@ -4675,7 +4676,7 @@ class MySQLDatabaseProxy:
     toType = parameters.toType()
     dfAssets = parameters.assets()
     dfObs = parameters.obstacles()
-    self.updateDatabase('call addDataFlow(:df,:env,:fName,:fType,:tName,:tType)',{'df':dfName,'env':envName,'fName':fromName,'fType':fromType,'tName':toName,'tType':toType},'MySQL error adding data flow')
+    self.updateDatabase('call addDataFlow(:df,:dfType,:env,:fName,:fType,:tName,:tType)',{'df':dfName,'dfType':dfType,'env':envName,'fName':fromName,'fType':fromType,'tName':toName,'tType':toType},'MySQL error adding data flow')
     for dfAsset in dfAssets:
       self.addDataFlowAsset(dfName,envName,fromType,fromName,toType,toName,dfAsset)
     for dfOb in dfObs:
@@ -4689,6 +4690,7 @@ class MySQLDatabaseProxy:
 
   def updateDataFlow(self,oldDfName,oldEnvName,parameters):
     dfName = parameters.name()
+    dfType = parameters.type()
     envName = parameters.environment()
     fromName = parameters.fromName()
     fromType = parameters.fromType()
@@ -4698,7 +4700,7 @@ class MySQLDatabaseProxy:
     dfObs = parameters.obstacles()
     session = self.updateDatabase('call deleteDataFlowAssets(:df,:env)',{'df':oldDfName,'env':oldEnvName},'MySQL error deleting data flow assets',None,False)
     self.updateDatabase('call deleteDataFlowObstacles(:df,:env)',{'df':oldDfName,'env':oldEnvName},'MySQL error deleting data flow obstacles',session,False)
-    self.updateDatabase('call updateDataFlow(:oDf,:nDf,:oEnv,:nEnv,:fName,:fType,:tName,:tType)',{'oDf':oldDfName,'nDf':dfName,'oEnv':oldEnvName,'nEnv':envName,'fName':fromName,'fType':fromType,'tName':toName,'tType':toType},'MySQL error updating data flow',session)
+    self.updateDatabase('call updateDataFlow(:oDf,:nDf,:dfType,:oEnv,:nEnv,:fName,:fType,:tName,:tType)',{'oDf':oldDfName,'nDf':dfName,'dfType':dfType,'oEnv':oldEnvName,'nEnv':envName,'fName':fromName,'fType':fromType,'tName':toName,'tType':toType},'MySQL error updating data flow',session)
     for dfAsset in dfAssets:
       self.addDataFlowAsset(dfName,envName,fromType,fromName,toType,toName,dfAsset)
     for dfOb in dfObs:

@@ -77,6 +77,7 @@ DROP TABLE IF EXISTS dataflow_datastore_process;
 DROP TABLE IF EXISTS dataflow_asset;
 DROP TABLE IF EXISTS dataflow_obstacle;
 DROP TABLE IF EXISTS dataflow;
+DROP TABLE IF EXISTS dataflow_type;
 DROP TABLE IF EXISTS persona_instance;
 DROP TABLE IF EXISTS asset_instance;
 DROP TABLE IF EXISTS location_link;
@@ -3314,12 +3315,21 @@ CREATE TABLE persona_instance (
   FOREIGN KEY(location_id) REFERENCES location(id)
 ) ENGINE=INNODB;
 
+CREATE TABLE dataflow_type (
+  id INT NOT NULL,
+  name VARCHAR(255),
+  description VARCHAR(1000),
+  PRIMARY KEY(id)
+) ENGINE=INNODB;
+
 CREATE TABLE dataflow (
   id INT NOT NULL,
   environment_id INT NOT NULL,
+  dataflow_type_id INT NOT NULL,
   name VARCHAR(255),
   PRIMARY KEY(id,environment_id,name),
-  FOREIGN KEY(environment_id) REFERENCES environment(id)
+  FOREIGN KEY(environment_id) REFERENCES environment(id),
+  FOREIGN KEY(dataflow_type_id) REFERENCES dataflow_type(id)
 ) ENGINE=INNODB;
 
 CREATE TABLE dataflow_asset (
@@ -3587,16 +3597,15 @@ CREATE VIEW datastore as
   select id,name,short_code,description,significance,asset_type_id,is_critical,critical_rationale from asset where asset_type_id = 0;
 
 CREATE VIEW dataflows as
-  select d.name dataflow, e.name environment,fp.name from_name,'process' from_type,tp.name to_name,'process' to_type from dataflow d, dataflow_process_process dpp, usecase fp, usecase tp, environment e where d.id = dpp.dataflow_id and d.environment_id = e.id and dpp.from_id = fp.id and dpp.to_id = tp.id
+  select d.name dataflow, dt.name dataflow_type, e.name environment,fp.name from_name,'process' from_type,tp.name to_name,'process' to_type from dataflow d, dataflow_process_process dpp, usecase fp, usecase tp, environment e, dataflow_type dt where d.id = dpp.dataflow_id and d.environment_id = e.id and dpp.from_id = fp.id and dpp.to_id = tp.id and d.dataflow_type_id = dt.id
   union
-  select d.name dataflow, e.name environment, fe.name from_name, 'entity' from_type, tp.name to_name, 'process' to_type from dataflow d, dataflow_entity_process dep, asset fe, usecase tp, environment e where d.id = dep.dataflow_id and d.environment_id = e.id and dep.from_id = fe.id and dep.to_id = tp.id
+  select d.name dataflow, dt.name dataflow_type, e.name environment, fe.name from_name, 'entity' from_type, tp.name to_name, 'process' to_type from dataflow d, dataflow_entity_process dep, asset fe, usecase tp, environment e, dataflow_type dt where d.id = dep.dataflow_id and d.environment_id = e.id and dep.from_id = fe.id and dep.to_id = tp.id and d.dataflow_type_id = dt.id
   union
-  select d.name dataflow, e.name environment, fp.name from_name, 'process' from_type, te.name to_name, 'entity' to_type from dataflow d, dataflow_process_entity dpe, usecase fp, asset te, environment e where d.id = dpe.dataflow_id and d.environment_id = e.id and dpe.from_id = fp.id and dpe.to_id = te.id
+  select d.name dataflow, dt.name dataflow_type, e.name environment, fp.name from_name, 'process' from_type, te.name to_name, 'entity' to_type from dataflow d, dataflow_process_entity dpe, usecase fp, asset te, environment e, dataflow_type dt where d.id = dpe.dataflow_id and d.environment_id = e.id and dpe.from_id = fp.id and dpe.to_id = te.id and d.dataflow_type_id = dt.id
   union
-  select d.name dataflow, e.name environment, fd.name from_name, 'datastore' from_type, tp.name to_name, 'process' to_type from dataflow d, dataflow_datastore_process ddp, asset fd, usecase tp, environment e where d.id = ddp.dataflow_id and d.environment_id = e.id and ddp.from_id = fd.id and ddp.to_id = tp.id
+  select d.name dataflow, dt.name dataflow_type, e.name environment, fd.name from_name, 'datastore' from_type, tp.name to_name, 'process' to_type from dataflow d, dataflow_datastore_process ddp, asset fd, usecase tp, environment e, dataflow_type dt where d.id = ddp.dataflow_id and d.environment_id = e.id and ddp.from_id = fd.id and ddp.to_id = tp.id and d.dataflow_type_id = dt.id
   union
-  select d.name dataflow, e.name environment, fp.name from_name, 'process' from_type, td.name to_name, 'datastore' to_type from dataflow d, dataflow_process_datastore dpd, usecase fp, asset td, environment e where d.id = dpd.dataflow_id and d.environment_id = e.id and dpd.from_id = fp.id and dpd.to_id = td.id;
-
+  select d.name dataflow, dt.name dataflow_type, e.name environment, fp.name from_name, 'process' from_type, td.name to_name, 'datastore' to_type from dataflow d, dataflow_process_datastore dpd, usecase fp, asset td, environment e, dataflow_type dt where d.id = dpd.dataflow_id and d.environment_id = e.id and dpd.from_id = fp.id and dpd.to_id = td.id and d.dataflow_type_id = dt.id;
 
 
 CREATE VIEW countermeasure_vulnerability_response_target as 
@@ -4467,3 +4476,6 @@ insert into code_type (id,name) values (0,'event');
 insert into code_type (id,name) values (1,'context');
 insert into access_right (id,name,description,value,rationale) values (0,'None','No access rights',1,'Default');
 insert into privilege (id,name,description,value,rationale) values (0,'None','No privileges',10,'Default');
+INSERT INTO dataflow_type values(0,'Information','Information flow');
+INSERT INTO dataflow_type values(1,'Control','Control action');
+INSERT INTO dataflow_type values(2,'Feedback','Feedback action');

@@ -58,6 +58,7 @@ class DataFlowDAO(CairisDAO):
   def add_object(self, dataflow):
     df_params = DataFlowParameters(
       dfName=dataflow.name(),
+      dfType=dataflow.type(),
       envName=dataflow.environment(),
       fromName=dataflow.fromName(),
       fromType=dataflow.fromType(),
@@ -84,6 +85,7 @@ class DataFlowDAO(CairisDAO):
 
     df_params = DataFlowParameters(
       dfName=dataflow.name(),
+      dfType=dataflow.type(),
       envName=dataflow.environment(),
       fromName=dataflow.fromName(),
       fromType=dataflow.fromType(),

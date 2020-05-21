@@ -49,6 +49,7 @@ class DataFlowAPITests(CairisDaemonTestCase):
     self.existing_from_type = 'entity'
     self.existing_to_name = 'Authenticate Researcher'
     self.existing_to_type = 'process'
+    self.existing_type = 'Information'
     self.existing_assets = ['Credentials']
 
     dataflow_class = DataFlow.__module__+'.'+DataFlow.__name__
@@ -81,6 +82,7 @@ class DataFlowAPITests(CairisDaemonTestCase):
     dataflow = jsonpickle.decode(responseData)
     self.assertIsNotNone(dataflow, 'No results after deserialization')
     self.assertEqual(dataflow['theName'],self.existing_dataflow_name)
+    self.assertEqual(dataflow['theType'],self.existing_type)
     self.assertEqual(dataflow['theEnvironmentName'],self.existing_environment_name)
     self.assertEqual(dataflow['theFromName'],self.existing_from_name)
     self.assertEqual(dataflow['theFromType'],self.existing_from_type)
@@ -141,6 +143,7 @@ class DataFlowAPITests(CairisDaemonTestCase):
     self.assertIsNotNone(upd_dataflow, 'Unable to decode JSON data')
 
     self.assertEqual(upd_dataflow['theName'],dataflow_to_update.name())
+    self.assertEqual(upd_dataflow['theType'],dataflow_to_update.type())
     self.assertEqual(upd_dataflow['theEnvironmentName'],dataflow_to_update.environment())
     self.assertEqual(upd_dataflow['theFromName'],dataflow_to_update.fromName())
     self.assertEqual(upd_dataflow['theFromType'],dataflow_to_update.fromType())
@@ -186,6 +189,7 @@ class DataFlowAPITests(CairisDaemonTestCase):
   def prepare_new_dataflow(self):
     new_dataflow = DataFlow(
       dfName='acknowledge',
+      dfType='Information',
       envName='Psychosis',
       fromName='Authenticate Researcher',
       fromType='process',

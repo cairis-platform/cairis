@@ -1185,6 +1185,7 @@ class DataFlowModel(object):
   resource_fields = {
     obj_id_field: fields.String,
     "theName": fields.String,
+    "theType": fields.String,
     "theEnvironmentName": fields.String,
     "theFromName": fields.String,
     "theFromType": fields.String,
