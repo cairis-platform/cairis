@@ -3675,6 +3675,7 @@ begin
   delete from requirement_task where task_id = tId;
   delete from task_asset where task_id = tId;
   delete from task_vulnerability where task_id = tId;
+  delete from usecase_task where task_id = tId;
   delete from countermeasuretask_goalassociation where subgoal_id= tId;
   delete from countermeasure_task_persona where task_id = tId;
   delete from goaltask_goalassociation where subgoal_id = tId;
@@ -3721,6 +3722,7 @@ begin
   delete from goalusecase_goalassociation where subgoal_id = ucId;
   delete from requirement_usecase where usecase_id = ucId;
   delete from obstacleusecase_goalassociation where subgoal_id = ucId;
+  delete from usecase_task where usecase_id = ucId;
   delete from usecase_reference where usecase_id = ucId;
   delete from component_usecase where usecase_id = ucId;
   delete from usecase_tag where usecase_id = ucId;
