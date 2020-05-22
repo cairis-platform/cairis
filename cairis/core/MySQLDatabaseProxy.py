@@ -4651,7 +4651,8 @@ class MySQLDatabaseProxy:
     dfRows = self.responseList('call getDataFlows(:df,:env)',{'df':dfName,'env':envName},'MySQL error getting data flows')
     dataFlows = []
     for dfName,dfType,envName,fromName,fromType,toName,toType in dfRows:
-      tags = self.getTags(dfName,'dataflow')
+#      tags = self.getTags(dfName,'dataflow')
+      tags = []
       dfAssets = self.getDataFlowAssets(dfName,envName)
       dfObs = self.getDataFlowObstacles(dfName,envName)
       parameters = DataFlowParameters(dfName,dfType,envName,fromName,fromType,toName,toType,dfAssets,dfObs,tags)
