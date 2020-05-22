@@ -54,7 +54,7 @@
 <!ATTLIST obstacle originator CDATA #REQUIRED>
 <!ELEMENT obstacle_environment (definition,concern*,probability)>
 <!ATTLIST obstacle_environment name CDATA #REQUIRED>
-<!ATTLIST obstacle_environment category (Confidentiality_Threat | Integrity_Threat | Availability_Threat | Accountability_Threat | Vulnerability | Duration | Frequency | Demands | Goal_Support | Anonymity_Threat | Pseudonymity_Threat | Unlinkability_Threat | Unobservability_Threat | Threat) #REQUIRED>
+<!ATTLIST obstacle_environment category (Confidentiality_Threat | Integrity_Threat | Availability_Threat | Accountability_Threat | Vulnerability | Duration | Frequency | Demands | Goal_Support | Anonymity_Threat | Pseudonymity_Threat | Unlinkability_Threat | Unobservability_Threat | Threat | Loss | Hazard) #REQUIRED>
 <!ELEMENT probability (rationale)>
 <!ATTLIST probability value CDATA #REQUIRED>
 <!ELEMENT rationale (#PCDATA)>
