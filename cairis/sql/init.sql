@@ -70,6 +70,7 @@ DROP TABLE IF EXISTS trust_boundary_asset;
 DROP TABLE IF EXISTS trust_boundary_privilege;
 DROP TABLE IF EXISTS trust_boundary_tag;
 DROP TABLE IF EXISTS trust_boundary;
+DROP TABLE IF EXISTS trust_boundary_type;
 DROP TABLE IF EXISTS dataflow_process_process;
 DROP TABLE IF EXISTS dataflow_entity_process;
 DROP TABLE IF EXISTS dataflow_process_entity;
@@ -3408,11 +3409,20 @@ CREATE TABLE dataflow_datastore_process (
   FOREIGN KEY(to_id) REFERENCES usecase(id)
 ) ENGINE=INNODB;
 
+CREATE TABLE trust_boundary_type (
+  id INT NOT NULL,
+  name VARCHAR(255),
+  description VARCHAR(4000),
+  PRIMARY KEY(id)
+) ENGINE=INNODB;
+
 CREATE TABLE trust_boundary (
   id INT NOT NULL,
   name VARCHAR(50), 
+  trust_boundary_type_id INT NOT NULL,
   description VARCHAR(4000), 
-  PRIMARY KEY(id)
+  PRIMARY KEY(id),
+  FOREIGN KEY(trust_boundary_type_id) REFERENCES trust_boundary_type(id)
 ) ENGINE=INNODB;
 
 CREATE TABLE trust_boundary_usecase (
@@ -4510,3 +4520,8 @@ insert into privilege (id,name,description,value,rationale) values (0,'None','No
 INSERT INTO dataflow_type values(0,'Information','Information flow');
 INSERT INTO dataflow_type values(1,'Control','Control action');
 INSERT INTO dataflow_type values(2,'Feedback','Feedback action');
+INSERT INTO trust_boundary_type values(0,'Controller','Controller');
+INSERT INTO trust_boundary_type values(1,'Controlled Process','Controlled Process');
+INSERT INTO trust_boundary_type values(2,'Sensor','Sensor');
+INSERT INTO trust_boundary_type values(3,'Actuator','Actuator');
+INSERT INTO trust_boundary_type values(4,'General','General');

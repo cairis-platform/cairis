@@ -1,6 +1,7 @@
 {
   "trust_boundaries" : [
     {"theName" : "Shibboleth",
+     "theType" : "General",
      "theDescription" : "Identity Provider",
      "theTags" : ["tag1"],
      "theEnvironmentProperties" : [

@@ -1246,6 +1246,7 @@ class TrustBoundaryModel(object):
   resource_fields = {
     obj_id_field: fields.String,
     'theName': fields.String,
+    'theType': fields.String,
     'theDescription': fields.String,
     'theEnvironmentProperties': fields.List(fields.Nested(TrustBoundaryEnvironmentModel.resource_fields))
   }

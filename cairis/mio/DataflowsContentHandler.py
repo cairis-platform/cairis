@@ -53,6 +53,7 @@ class DataflowsContentHandler(ContentHandler,EntityResolver):
     self.inDescription = 0
     self.theDescription = ''
     self.theName = ''
+    self.theTBType = 'General'
     self.theEnvironmentName = ''
     self.theEnvironmentComponents = {}
     self.theComponents = []
@@ -78,6 +79,8 @@ class DataflowsContentHandler(ContentHandler,EntityResolver):
       self.theObstacles.append(dfObs)
     elif name == 'trust_boundary':
       self.theName = attrs['name']
+      if 'type' in attrs:
+        self.theTBType = attrs['type']
     elif name == 'tag':
       self.theTags.append(attrs['name'])
     elif name == 'description':
@@ -105,7 +108,7 @@ class DataflowsContentHandler(ContentHandler,EntityResolver):
       self.theComponents = []
       self.theEnvironmentName = ''
     elif name == 'trust_boundary':
-      self.theTrustBoundaries.append(TrustBoundary(-1,self.theName,self.theDescription,self.theEnvironmentComponents,self.theEnvironmentPrivileges,self.theTags))
+      self.theTrustBoundaries.append(TrustBoundary(-1,self.theName,self.theTBType,self.theDescription,self.theEnvironmentComponents,self.theEnvironmentPrivileges,self.theTags))
       self.resetTrustBoundaryAttributes()
     elif name == 'description':
       self.inDescription = 0

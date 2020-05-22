@@ -95,7 +95,7 @@ Adding, updating, or deleting trust boundaries
 
 -   To add a trust boundary, select the UX / Trust Boundaries menu to open the Trust Boundaries table.  Click on the Add button to open a dialog for adding a new trust boundary.
 
--   Enter the name and a description for the trust boundary.
+-   Enter the name, select the type, and enter a description for the trust boundary.
 
 -   Click on the Add button in the environment card, and select an environment to situate the trust boundary in. This will add the new environment to the environment list.
 

@@ -24507,13 +24507,14 @@ begin
   declare tbDesc varchar(4000);
   declare dfId int;
   declare tbId int;
+  declare tbType varchar(255);
   declare envId int;
   declare dfCount int default 0;
   declare tbCount int default 0;
   declare dfCursor cursor for select dataflow, dataflow_type, environment, from_name, from_type, to_name, to_type from dataflows;
   declare dfTagCursor cursor for select t.name from dataflow_tag dt, tag t where dt.dataflow_id = dfId and dt.tag_id = t.id;
   declare tbTagCursor cursor for select t.name from trust_boundary_tag tt, tag t where tt.trust_boundary_id = tbId and tt.tag_id = t.id;
-  declare tbCursor cursor for select id,name,description from trust_boundary;
+  declare tbCursor cursor for select tb.id,tb.name,tbt.name,tb.description from trust_boundary tb, trust_boundary_type tbt where tb.trust_boundary_type_id = tbt.id;
   declare tbEnvCursor cursor for select distinct environment_id from environment_trust_boundary where trust_boundary_id = tbId;
   declare tbCompCursor cursor for
     select uc.name,'process' from trust_boundary_usecase tbu, usecase uc where tbu.usecase_id = uc.id and trust_boundary_id = tbId and environment_id = envId
@@ -24585,12 +24586,12 @@ begin
 
   open tbCursor;
   tb_loop: loop
-    fetch tbCursor into tbId, tbName, tbDesc;
+    fetch tbCursor into tbId, tbName, tbType, tbDesc;
     if done = 1
     then
       leave tb_loop;
     end if;
-    set buf = concat(buf,'  <trust_boundary name=\"',tbName,'\">\n    <description>',tbDesc,'</description>\n');
+    set buf = concat(buf,'  <trust_boundary name=\"',tbName,'\" type=\"',tbType,'" >\n    <description>',tbDesc,'</description>\n');
 
     open tbTagCursor;
     tbTag_loop: loop
@@ -24680,15 +24681,19 @@ begin
 end
 //
 
-create procedure addTrustBoundary(in tbId int, in tbName text, in tbDesc text)
+create procedure addTrustBoundary(in tbId int, in tbName text, in tbType text, in tbDesc text)
 begin
-  insert into trust_boundary(id,name,description) values (tbId,tbName,tbDesc);
+  declare tbTypeId int;
+  select id into tbTypeId from trust_boundary_type where name = tbType limit 1;
+  insert into trust_boundary(id,name,trust_boundary_type_id,description) values (tbId,tbName,tbTypeId,tbDesc);
 end
 //
 
-create procedure updateTrustBoundary(in tbId int, in tbName text, in tbDesc text)
+create procedure updateTrustBoundary(in tbId int, in tbName text, in tbType text, in tbDesc text)
 begin
-  update trust_boundary set name = tbName, description = tbDesc where id = tbId;
+  declare tbTypeId int;
+  select id into tbTypeId from trust_boundary_type where name = tbType limit 1;
+  update trust_boundary set name = tbName, trust_boundary_type_id = tbTypeId, description = tbDesc where id = tbId;
 end
 //
 
@@ -24696,9 +24701,9 @@ create procedure getTrustBoundaries(in constraintId int)
 begin
   if constraintId = -1
   then
-    select id,name,description from trust_boundary;
+    select tb.id,tb.name,tbt.name,tb.description from trust_boundary tb, trust_boundary_type tbt where tb.trust_boundary_type_id = tbt.id;
   else
-    select id,name,description from trust_boundary where id = constraintId;
+    select tb.id,tb.name,tbt.name,tb.description from trust_boundary tb, trust_boundary_type tbt where tb.id = constraintId and tb.trust_boundary_type_id = tbt.id;
   end if;
 end
 //
@@ -30414,6 +30419,7 @@ begin
   declare compName varchar (200);
   declare compType varchar (20);
   declare tbName varchar(50);
+  declare tbType varchar(255);
   declare tbDesc varchar(4000);
   declare dfId int;
   declare tbId int;
@@ -30421,7 +30427,7 @@ begin
   declare dfCount int default 0;
   declare tbCount int default 0;
   declare dfCursor cursor for select dataflow, dataflow_type, environment, from_name, from_type, to_name, to_type from dataflows;
-  declare tbCursor cursor for select id,name,description from trust_boundary;
+  declare tbCursor cursor for select tb.id,tb.name,tbt.name,tb.description from trust_boundary tb, trust_boundary_type tbt where tb.trust_boundary_type_id = tbt.id;
   declare tbEnvCursor cursor for select distinct environment_id from environment_trust_boundary where trust_boundary_id = tbId;
   declare tbCompCursor cursor for
     select uc.name,'process' from trust_boundary_usecase tbu, usecase uc where tbu.usecase_id = uc.id and trust_boundary_id = tbId and environment_id = envId
@@ -30503,7 +30509,7 @@ begin
   set headElement = 1;
   open tbCursor;
   tb_loop: loop
-    fetch tbCursor into tbId, tbName, tbDesc;
+    fetch tbCursor into tbId, tbName, tbType, tbDesc;
     if done = 1
     then
       set buf = concat(buf,"]\n\n");
@@ -30516,7 +30522,7 @@ begin
         set buf = concat(buf,",\n");
       end if;
     end if;
-    set buf = concat(buf,'  {"name" : "',tbName,'", "description" : "',tbDesc,'", "environments" : [\n');
+    set buf = concat(buf,'  {"name" : "',tbName,'", "type" : "', tbType,'", "description" : "',tbDesc,'", "environments" : [\n');
     open tbEnvCursor;
     tbEnv_loop: loop
       fetch tbEnvCursor into envId;
