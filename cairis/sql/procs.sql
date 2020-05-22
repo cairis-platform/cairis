@@ -31419,7 +31419,7 @@ begin
   declare dfId int;
   declare tagId int;
 
-  select dataFlowId(dfName,fromType,fromName,toType,toName,envName) into dfId limit 1;
+  select dataFlowId(dfName,fromType,fromName,toType,toName,envName) into dfId;
 
   select id into tagId from tag where name = tagName limit 1;
   if tagId is null
@@ -31435,7 +31435,7 @@ end
 create procedure getDataFlowTags(in dfName text, in fromType text, in fromName text, in toType text, in toName text, in envName text)
 begin
   declare dfId int;
-  select dataFlowId(dfName,fromType,fromName,toType,toName,envName) into dfId limit 1;
+  select dataFlowId(dfName,fromType,fromName,toType,toName,envName) into dfId;
   select t.name from dataflow_tag dt, tag t where dt.dataflow_id = dfId and dt.tag_id = t.id;
 end
 //
@@ -31444,7 +31444,7 @@ create procedure deleteDataFlowTags(in dfName text, in fromType text, in fromNam
 begin
   declare dfId int;
 
-  select dataFlowId(dfName,fromType,fromName,toType,toName,envName) into dfId limit 1;
+  select dataFlowId(dfName,fromType,fromName,toType,toName,envName) into dfId;
 
   if dfId is not null
   then
