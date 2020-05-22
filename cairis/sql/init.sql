@@ -134,6 +134,7 @@ DROP TABLE IF EXISTS component_vulnerability_target;
 DROP TABLE IF EXISTS component_threat_target;
 
 DROP TABLE IF EXISTS document_reference_vulnerability;
+DROP TABLE IF EXISTS document_reference_obstacle;
 DROP TABLE IF EXISTS ice_ic_contribution;
 DROP TABLE IF EXISTS implied_characteristic_element_intention;
 DROP TABLE IF EXISTS implied_characteristic_element;
@@ -3492,6 +3493,14 @@ CREATE TABLE document_reference_vulnerability (
   FOREIGN KEY(vulnerability_id) REFERENCES vulnerability(id)
 ) ENGINE=INNODB; 
 
+CREATE TABLE document_reference_obstacle (
+  document_reference_id INT NOT NULL,
+  obstacle_id INT NOT NULL,
+  PRIMARY KEY(document_reference_id,obstacle_id),
+  FOREIGN KEY(document_reference_id) REFERENCES document_reference(id),
+  FOREIGN KEY(obstacle_id) REFERENCES obstacle(id)
+) ENGINE=INNODB; 
+
 delimiter //
 
 create function internalDocumentQuotationString(idName text, startIdx int, endIdx int) 
@@ -4329,6 +4338,7 @@ INSERT INTO allowable_trace values(16,2);
 INSERT INTO allowable_trace values(7,5);
 INSERT INTO allowable_trace values(7,6);
 INSERT INTO allowable_trace values(20,6);
+INSERT INTO allowable_trace values(20,17);
 INSERT INTO requirement_type values(0,'Functional');
 INSERT INTO requirement_type values(1,'Data');
 INSERT INTO requirement_type values(2,'Look and Feel');
@@ -4422,6 +4432,8 @@ INSERT INTO obstacle_category_type values(10,'Pseudonymity Threat');
 INSERT INTO obstacle_category_type values(11,'Unlinkability Threat');
 INSERT INTO obstacle_category_type values(12,'Unobservability Threat');
 INSERT INTO obstacle_category_type values(13,'Threat');
+INSERT INTO obstacle_category_type values(14,'Loss');
+INSERT INTO obstacle_category_type values(15,'Hazard');
 INSERT INTO project_setting values(0,'Project Name','New Project');
 INSERT INTO project_setting values(1,'Project Background','None');
 INSERT INTO project_setting values(2,'Project Goals','None');

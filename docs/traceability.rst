@@ -25,6 +25,7 @@ Risk                Threat
 Risk                Vulnerability
 Component           Use Case
 Document Reference  Vulnerability
+Document Reference  Obstacle
 ==================  ===================
 
 Editing manual traceability links

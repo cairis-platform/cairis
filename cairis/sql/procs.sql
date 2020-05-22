@@ -5371,7 +5371,9 @@ begin
   union
   select 'requirement' from_objt, fr.name from_name, 'requirement' to_objt, tr.name to_name,rr.label from requirement fr, environment_requirement fer, environment fe, requirement tr, environment_requirement ter, environment te, requirement_requirement rr where rr.from_id = fr.id and fr.id = fer.requirement_id and fer.environment_id = fe.id and fr.version = (select max(i.version) from requirement i where i.id = fr.id) and rr.to_id = tr.id and tr.id = ter.requirement_id and ter.environment_id = te.id and tr.version = (select max(i.version) from requirement i where i.id = tr.id) and fer.environment_id = environmentId and fer.environment_id = ter.environment_id
   union
-  select 'document_reference' from_objt, dr.name from_name, 'vulnerability' to_objt, v.name to_name, 'supports' label from document_reference_vulnerability drv, environment_vulnerability ev, vulnerability v, document_reference dr where ev.environment_id = environmentId and ev.vulnerability_id = drv.vulnerability_id and drv.document_reference_id = dr.id and ev.vulnerability_id = v.id;
+  select 'document_reference' from_objt, dr.name from_name, 'vulnerability' to_objt, v.name to_name, 'supports' label from document_reference_vulnerability drv, environment_vulnerability ev, vulnerability v, document_reference dr where ev.environment_id = environmentId and ev.vulnerability_id = drv.vulnerability_id and drv.document_reference_id = dr.id and ev.vulnerability_id = v.id
+  union
+  select 'document_reference' from_objt, dr.name from_name, 'obstacle' to_objt, o.name to_name, 'supports' label from document_reference_obstacle dro, environment_obstacle eo, obstacle o, document_reference dr where eo.environment_id = environmentId and eo.obstacle_id = dro.obstacle_id and dro.document_reference_id = dr.id and eo.obstacle_id = o.id;
 end
 //
 
@@ -5506,7 +5508,9 @@ begin
     union
     select 'risk' from_objt, r.name from_name, 'threat' to_objt, t.name to_name from risk_threat rt, environment_risk er, environment_threat et, risk r, threat t where er.environment_id = environmentId and et.environment_id = environmentId and er.id = rt.risk_id and rt.risk_id = r.id and et.threat_id = rt.threat_id and rt.threat_id = t.id
     union
-    select 'document_reference' from_objt,dr.name from_name,'vulnerability' to_objt, v.name to_name from document_reference_vulnerability drv, document_reference dr, environment_vulnerability ev, vulnerability v where ev.environment_id = environmentId and ev.vulnerability_id = v.id and ev.vulnerability_id = drv.vulnerability_id and drv.document_reference_id = dr.id;
+    select 'document_reference' from_objt,dr.name from_name,'vulnerability' to_objt, v.name to_name from document_reference_vulnerability drv, document_reference dr, environment_vulnerability ev, vulnerability v where ev.environment_id = environmentId and ev.vulnerability_id = v.id and ev.vulnerability_id = drv.vulnerability_id and drv.document_reference_id = dr.id
+    union
+    select 'document_reference' from_objt,dr.name from_name,'obstacle' to_objt, o.name to_name from document_reference_obstacle dro, document_reference dr, environment_obstacle eo, obstacle o where eo.environment_id = environmentId and eo.obstacle_id = o.id and eo.obstacle_id = dro.obstacle_id and dro.document_reference_id = dr.id;
   else
     select 'asset' from_objt,a.name from_name, 'threat' to_objt,t.name to_name from asset_threat at,asset a, threat t where at.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and at.asset_id = a.id and at.threat_id = t.id
     union
@@ -5580,7 +5584,9 @@ begin
     union
     select 'risk' from_objt, r.name from_name, 'threat' to_objt, t.name to_name from risk_threat rt, environment_risk er, environment_threat et, risk r, threat t where er.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and et.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and et.id = rt.risk_id and rt.risk_id = r.id and et.threat_id = rt.threat_id and rt.threat_id = t.id
     union
-    select 'document_reference' from_objt,dr.name from_name,'vulnerability' to_objt, v.name to_name from document_reference_vulnerability drv, document_reference dr, environment_vulnerability ev, vulnerability v where ev.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and ev.vulnerability_id = v.id and ev.vulnerability_id = drv.vulnerability_id and drv.document_reference_id = dr.id;
+    select 'document_reference' from_objt,dr.name from_name,'vulnerability' to_objt, v.name to_name from document_reference_vulnerability drv, document_reference dr, environment_vulnerability ev, vulnerability v where ev.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and ev.vulnerability_id = v.id and ev.vulnerability_id = drv.vulnerability_id and drv.document_reference_id = dr.id
+    union
+    select 'document_reference' from_objt,dr.name from_name,'obstacle' to_objt, o.name to_name from document_reference_obstacle dro, document_reference dr, environment_obstacle eo, obstacle o where eo.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and eo.obstacle_id = o.id and eo.obstacle_id = dro.obstacle_id and dro.document_reference_id = dr.id;
   end if;
 end
 //
@@ -14553,7 +14559,10 @@ begin
     union
     select 'requirement', fr.name, 'requirement', tr.name, rr.label from requirement_requirement rr, requirement fr, requirement tr where rr.from_id = fr.id and rr.to_id = tr.id
     union
-    select 'document_reference', dr.name, 'vulnerability', v.name, '' from document_reference_vulnerability drv, document_reference dr, vulnerability v where drv.document_reference_id = dr.id and drv.vulnerability_id = v.id;
+    select 'document_reference', dr.name, 'vulnerability', v.name, '' from document_reference_vulnerability drv, document_reference dr, vulnerability v where drv.document_reference_id = dr.id and drv.vulnerability_id = v.id
+    union
+    select 'document_reference', dr.name, 'obstacle', o.name, '' from document_reference_obstacle dro, document_reference dr, obstacle o where dro.document_reference_id = dr.id and dro.obstacle_id = o.id;
+
 
   declare goalAssocCursor cursor for
     select e.name,hg.name,'goal',rt.name,tg.name,'goal',ga.alternative_id,ga.rationale from goalgoal_goalassociation ga, environment e, goal hg, reference_type rt, goal tg where ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and ga.environment_id = e.id
@@ -30064,7 +30073,9 @@ begin
     union
     select 'requirement', fr.name, 'requirement', tr.name, rr.label from requirement_requirement rr, requirement fr, requirement tr where rr.from_id = fr.id and rr.to_id = tr.id
     union
-    select 'document_reference', dr.name, 'vulnerability', v.name, '' from document_reference_vulnerability drv, document_reference dr, vulnerability v where drv.document_reference_id = dr.id and drv.vulnerability_id = v.id;
+    select 'document_reference', dr.name, 'vulnerability', v.name, '' from document_reference_vulnerability drv, document_reference dr, vulnerability v where drv.document_reference_id = dr.id and drv.vulnerability_id = v.id
+    union
+    select 'document_reference', dr.name, 'obstacle', o.name, '' from document_reference_obstacle dro, document_reference dr, obstacle o where dro.document_reference_id = dr.id and dro.obstacle_id = o.id;
 
   declare goalAssocCursor cursor for
     select e.name,hg.name,'goal',rt.name,tg.name,'goal',ga.alternative_id,ga.rationale from goalgoal_goalassociation ga, environment e, goal hg, reference_type rt, goal tg where ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and ga.environment_id = e.id
