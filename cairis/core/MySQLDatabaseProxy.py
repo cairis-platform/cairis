@@ -3537,6 +3537,7 @@ class MySQLDatabaseProxy:
   def environmentRequirements(self,envName): return self.responseList('call requirementNames(:env)',{'env':envName},'MySQL error getting requirements associated with environment ' + envName)
 
   def deleteTags(self,tagObjt,tagDim): self.updateDatabase('call deleteTags(:obj,:dim)',{'obj':tagObjt,'dim':tagDim},'MySQL error deleting tags')
+  def deleteDataFlowTags(self,dfName,fromType,fromName,toType,toName,envName): self.updateDatabase('call deleteDataFlowTags(:dfName,:fromType,:fromName,:toType,:toName,:envName)',{'dfName':dfName,'fromType':fromType,'fromName':fromName,'toType':toType,'toName':toName,'envName':envName},'MySQL error deleting tags')
 
   def addTags(self,dimObjt,dimName,tags):
     self.deleteTags(dimObjt,dimName)
@@ -3550,8 +3551,23 @@ class MySQLDatabaseProxy:
         raise DatabaseProxyException('MySQL error adding ' + dimName + ' ' + dimObjt + ' tag ' + tag + ': ' + format(e))
     curs.close()
 
+  def addDataFlowTags(self,dfName,fromType,fromName,toType,toName,envName,tags):
+    self.deleteDataFlowTags(dfName,fromType,fromName,toType,toName,envName)
+    curs = self.conn.connection().connection.cursor()
+    for tag in set(tags):
+      try:
+        curs.execute('call addDataFlowTag(%s,%s,%s,%s,%s,%s,%s)',[dfName,fromType,fromName,toType,toName,envName,tag])
+      except OperationalError as e:
+        raise DatabaseProxyException('MySQL error adding dataflow tag (message: ' + format(e))
+      except DatabaseError as e:
+        raise DatabaseProxyException('MySQL error adding dataflow tag ' + tag + ': ' + format(e))
+    curs.close()
+
   def getTags(self,dimObjt,dimName):
     return self.responseList('call getTags(:obj,:name)',{'obj':dimObjt,'name':dimName},'MySQL error getting tags')
+
+  def getDataFlowTags(self,dfName,fromType,fromName,toType,toName,envName):
+    return self.responseList('call getDataFlowTags(:dfName,:fromType,:fromName,:toType,:toName,:envName)',{'dfName':dfName,'fromType':fromType,'fromName':fromName,'toType':toType,'toName':toName,'envName':envName},'MySQL error getting data flow tags')
 
   def deleteTag(self,tagId): self.deleteObject(tagId,'tag')
     
@@ -4651,8 +4667,7 @@ class MySQLDatabaseProxy:
     dfRows = self.responseList('call getDataFlows(:df,:env)',{'df':dfName,'env':envName},'MySQL error getting data flows')
     dataFlows = []
     for dfName,dfType,envName,fromName,fromType,toName,toType in dfRows:
-#      tags = self.getTags(dfName,'dataflow')
-      tags = []
+      tags = self.getDataFlowTags(dfName,fromType,fromName,toType,toName,envName)
       dfAssets = self.getDataFlowAssets(dfName,envName)
       dfObs = self.getDataFlowObstacles(dfName,envName)
       parameters = DataFlowParameters(dfName,dfType,envName,fromName,fromType,toName,toType,dfAssets,dfObs,tags)
@@ -4679,7 +4694,7 @@ class MySQLDatabaseProxy:
     dfObs = parameters.obstacles()
     tags = parameters.tags()
     self.updateDatabase('call addDataFlow(:df,:dfType,:env,:fName,:fType,:tName,:tType)',{'df':dfName,'dfType':dfType,'env':envName,'fName':fromName,'fType':fromType,'tName':toName,'tType':toType},'MySQL error adding data flow')
-    self.addTags(dfName,'dataflow',tags)
+    self.addDataFlowTags(dfName,fromType,fromName,toType,toName,envName,tags)
     for dfAsset in dfAssets:
       self.addDataFlowAsset(dfName,envName,fromType,fromName,toType,toName,dfAsset)
     for dfOb in dfObs:
@@ -4705,7 +4720,7 @@ class MySQLDatabaseProxy:
     session = self.updateDatabase('call deleteDataFlowAssets(:df,:env)',{'df':oldDfName,'env':oldEnvName},'MySQL error deleting data flow assets',None,False)
     self.updateDatabase('call deleteDataFlowObstacles(:df,:env)',{'df':oldDfName,'env':oldEnvName},'MySQL error deleting data flow obstacles',session,False)
     self.updateDatabase('call updateDataFlow(:oDf,:nDf,:dfType,:oEnv,:nEnv,:fName,:fType,:tName,:tType)',{'oDf':oldDfName,'nDf':dfName,'dfType':dfType,'oEnv':oldEnvName,'nEnv':envName,'fName':fromName,'fType':fromType,'tName':toName,'tType':toType},'MySQL error updating data flow',session)
-    self.addTags(dfName,'dataflow',tags)
+    self.addDataFlowTags(dfName,fromType,fromName,toType,toName,envName,tags)
     for dfAsset in dfAssets:
       self.addDataFlowAsset(dfName,envName,fromType,fromName,toType,toName,dfAsset)
     for dfOb in dfObs:

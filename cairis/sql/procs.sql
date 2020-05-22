@@ -1030,6 +1030,9 @@ drop procedure if exists checkPostProcessTaint;
 drop procedure if exists analyseTaintFlows;
 drop procedure if exists controlStructure;
 drop procedure if exists controlNames;
+drop procedure if exists addDataFlowTag;
+drop procedure if exists getDataFlowTags;
+drop procedure if exists deleteDataFlowTags;
 
 
 delimiter //
@@ -31408,6 +31411,40 @@ begin
   select tb.name from dataflow d, dataflow_datastore_process ddp, trust_boundary tb, trust_boundary_asset tba where d.environment_id = envId and d.id = ddp.dataflow_id and ddp.from_id = tba.asset_id and tba.trust_boundary_id = tb.id
   union
   select tb.name from dataflow d, dataflow_datastore_process ddp, trust_boundary tb, trust_boundary_usecase tbu where d.environment_id = envId and d.id = ddp.dataflow_id and ddp.to_id = tbu.usecase_id and tbu.trust_boundary_id = tb.id order by 1;
+end
+//
+
+create procedure addDataFlowTag(in dfName text, in fromType text, in fromName text, in toType text, in toName text, in envName text, in tagName text)
+begin
+  declare dfId int;
+  declare tagId int;
+
+  select dataFlowId(dfName,fromType,fromName,toType,toName,envName) into dfId limit 1;
+
+  select id into tagId from tag where name = tagName limit 1;
+  if tagId is null
+  then
+    call newId2(tagId);
+    insert into tag (id,name) values (tagId,tagName);
+  end if;
+
+  insert into dataflow_tag(dataflow_id,tag_id) values (dfId,tagId);
+end
+//
+
+create procedure getDataFlowTags(in dfName text, in fromType text, in fromName text, in toType text, in toName text, in envName text)
+begin
+  declare dfId int;
+  select dataFlowId(dfName,fromType,fromName,toType,toName,envName) into dfId limit 1;
+  select t.name from dataflow_tag dt, tag t where dt.dataflow_id = dfId and dt.tag_id = t.id;
+end
+//
+
+create procedure deleteDataFlowTags(in dfName text, in fromType text, in fromName text, in toType text, in toName text, in envName text)
+begin
+  declare dfId int;
+  select dataFlowId(dfName,fromType,fromName,toType,toName,envName) into dfId limit 1;
+  delete from dataflow_tag where dataflow_id = dfId;
 end
 //
 
