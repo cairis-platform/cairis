@@ -31443,8 +31443,13 @@ end
 create procedure deleteDataFlowTags(in dfName text, in fromType text, in fromName text, in toType text, in toName text, in envName text)
 begin
   declare dfId int;
+
   select dataFlowId(dfName,fromType,fromName,toType,toName,envName) into dfId limit 1;
-  delete from dataflow_tag where dataflow_id = dfId;
+
+  if dfId is not null
+  then
+    delete from dataflow_tag where dataflow_id = dfId;
+  end if;
 end
 //
 

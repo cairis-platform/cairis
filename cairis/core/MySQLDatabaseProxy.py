@@ -3538,7 +3538,7 @@ class MySQLDatabaseProxy:
 
   def deleteTags(self,tagObjt,tagDim): self.updateDatabase('call deleteTags(:obj,:dim)',{'obj':tagObjt,'dim':tagDim},'MySQL error deleting tags')
 
-  def deleteDataFlowTags(self,dfName,fromType,fromName,toType,toName,envName): self.updateDatabase('call deleteDataFlowTags(:dfName,:fromType,:fromName,:toType,:toName,:envName)',{'dfName':dfName,'fromType':fromType,'fromName':fromName,'toType':toType,'toName':toName,'envName':envName},'MySQL error deleting tags')
+  def deleteDataFlowTags(self,dfName,fromType,fromName,toType,toName,envName): self.updateDatabase('call deleteDataFlowTags(:dfName, :fromType, :fromName, :toType, :toName, :envName)',{'dfName' : dfName, 'fromType' : fromType, 'fromName' : fromName, 'toType' : toType, 'toName' : toName, 'envName' : envName},'MySQL error deleting tags')
 
   def addTags(self,dimObjt,dimName,tags):
     self.deleteTags(dimObjt,dimName)
