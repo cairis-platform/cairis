@@ -4708,7 +4708,8 @@ class MySQLDatabaseProxy:
     self.updateDatabase('call addDataFlowAsset(:df,:env,:fromType,:fromName,:toType,:toName,:ass)',{'df':dfName,'env':envName,'fromType':fromType,'fromName':fromName,'toType':toType,'toName':toName,'ass':dfAsset},'MySQL error adding data flow asset')
 
   def addDataFlowObstacle(self,dfName,envName,fromType,fromName,toType,toName,dfOb):
-    self.updateDatabase('call addDataFlowObstacle(:df,:env,:fromType,:fromName,:toType,:toName,:ob)',{'df':dfName,'env':envName,'fromType':fromType,'fromName':fromName,'toType':toType,'toName':toName,'ob':dfOb},'MySQL error adding data flow obstacle')
+    obsName,kwd,dfoContext = dfOb
+    self.updateDatabase('call addDataFlowObstacle(:df,:env,:fromType,:fromName,:toType,:toName,:ob,:kwd,:dfoContext)',{'df':dfName,'env':envName,'fromType':fromType,'fromName':fromName,'toType':toType,'toName':toName,'ob':obsName,'kwd':kwd,'dfoContext':dfoContext},'MySQL error adding data flow obstacle')
 
   def updateDataFlow(self,oldDfName,oldEnvName,parameters):
     dfName = parameters.name()

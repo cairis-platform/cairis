@@ -24,7 +24,7 @@ from cairis.misc.DataFlowDiagram import DataFlowDiagram
 from cairis.misc.ControlStructure import ControlStructure
 from cairis.data.CairisDAO import CairisDAO
 from cairis.tools.JsonConverter import json_serialize, json_deserialize
-from cairis.tools.ModelDefinitions import DataFlowModel
+from cairis.tools.ModelDefinitions import DataFlowModel,DataFlowObstacle
 from cairis.tools.SessionValidator import check_required_keys, get_fonts
 
 
@@ -39,7 +39,10 @@ class DataFlowDAO(CairisDAO):
   def get_objects(self, dataflow_name = '', environment_name = ''):
     try:
       dfs = self.db_proxy.getDataFlows(dataflow_name,environment_name)
-      return dfs
+      dfsOut = []
+      for df in dfs:
+        dfsOut.append(self.realToFake(df))
+      return dfsOut
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)
@@ -55,6 +58,13 @@ class DataFlowDAO(CairisDAO):
       raise ObjectNotFoundHTTPError('The provided dataflow name')
     return dfs[0]
 
+  def realToFake(self,df):
+    fakeDfos = []
+    for dfo in df.obstacles():
+      fakeDfos.append({'theObstacleName':dfo[0],'theKeyword':dfo[1],'theContext':dfo[2]})
+    df.theObstacles = fakeDfos
+    return df
+ 
   def add_object(self, dataflow):
     df_params = DataFlowParameters(
       dfName=dataflow.name(),
@@ -142,8 +152,14 @@ class DataFlowDAO(CairisDAO):
     check_required_keys(json_dict, DataFlowModel.required)
     json_dict['__python_obj__'] = DataFlow.__module__ + '.' + DataFlow.__name__
 
+    realDfos = []
+    for dfo in json_dict['theObstacles']:
+      check_required_keys(dfo, DataFlowObstacle.required)
+      realDfos.append((dfo['theObstacleName'],dfo['theKeyword'],dfo['theContext']))
+
     dataflow = json_serialize(json_dict)
     dataflow = json_deserialize(dataflow)
+    dataflow.theObstacles = realDfos
     if not isinstance(dataflow, DataFlow):
       self.close()
       raise MalformedJSONHTTPError(data=request.get_data())

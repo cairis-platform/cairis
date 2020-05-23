@@ -199,6 +199,7 @@ class DataFlowAPITests(CairisDaemonTestCase):
       toName='Authorised Researcher',
       toType='entity',
       dfAssets=['Session'],
+      dfObs=[{'theObstacleName':'XSS Exploit','theKeyword':'not applicable','theContext':'Not applicable'}],
       dfTags=['tag1']
     )
     return new_dataflow

@@ -78,6 +78,7 @@ DROP TABLE IF EXISTS dataflow_process_datastore;
 DROP TABLE IF EXISTS dataflow_datastore_process;
 DROP TABLE IF EXISTS dataflow_asset;
 DROP TABLE IF EXISTS dataflow_obstacle;
+DROP TABLE IF EXISTS stpa_keyword;
 DROP TABLE IF EXISTS dataflow_tag;
 DROP TABLE IF EXISTS dataflow;
 DROP TABLE IF EXISTS dataflow_type;
@@ -3344,11 +3345,21 @@ CREATE TABLE dataflow_asset (
   FOREIGN KEY(asset_id) REFERENCES asset(id)
 ) ENGINE=INNODB;
 
+CREATE TABLE stpa_keyword (
+  id INT NOT NULL,
+  name VARCHAR(255),
+  description VARCHAR(4000),
+  PRIMARY KEY(id)
+) ENGINE=INNODB;
+
 CREATE TABLE dataflow_obstacle (
   dataflow_id INT NOT NULL,
   obstacle_id INT NOT NULL,
+  stpa_keyword_id INT NOT NULL,
+  context VARCHAR(4000),
   PRIMARY KEY(dataflow_id,obstacle_id),
-  FOREIGN KEY(obstacle_id) REFERENCES obstacle(id)
+  FOREIGN KEY(obstacle_id) REFERENCES obstacle(id),
+  FOREIGN KEY(stpa_keyword_id) REFERENCES stpa_keyword(id)
 ) ENGINE=INNODB;
 
 CREATE TABLE dataflow_tag (
@@ -4525,3 +4536,11 @@ INSERT INTO trust_boundary_type values(1,'Controlled Process','Controlled Proces
 INSERT INTO trust_boundary_type values(2,'Sensor','Sensor');
 INSERT INTO trust_boundary_type values(3,'Actuator','Actuator');
 INSERT INTO trust_boundary_type values(4,'General','General');
+INSERT INTO stpa_keyword values(0,'does not provide','Not providing causes hazards');
+INSERT INTO stpa_keyword values(1,'provides','Providing causes hazards');
+INSERT INTO stpa_keyword values(2,'provides too early','Incorrect timing / order');
+INSERT INTO stpa_keyword values(3,'provides too late','Incorrect timing / order');
+INSERT INTO stpa_keyword values(4,'provides out of order','Incorrect timing / order');
+INSERT INTO stpa_keyword values(5,'stopped too soon','Stopped too soon / applied to long');
+INSERT INTO stpa_keyword values(6,'applied too long','Stopped too soon / applied to long');
+INSERT INTO stpa_keyword values(7,'not applicable','Not applicable');

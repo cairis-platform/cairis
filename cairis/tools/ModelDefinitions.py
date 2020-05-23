@@ -1181,6 +1181,16 @@ class SecurityPatternModel(object):
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
 
+class DataFlowObstacle(object):
+  resource_fields = {
+    obj_id_field: fields.String,
+    "theObstacleName" : fields.String,
+    "theKeyword" : fields.String,
+    "theContext" : fields.String
+  }
+  required = list(resource_fields.keys())
+  required.remove(obj_id_field)
+
 class DataFlowModel(object):
   resource_fields = {
     obj_id_field: fields.String,
@@ -1192,7 +1202,7 @@ class DataFlowModel(object):
     "theToName": fields.String,
     "theToType": fields.String,
     "theAssets": fields.List(fields.String),
-    "theObstacles": fields.List(fields.String),
+    "theObstacles": fields.List(fields.Nested(DataFlowObstacle.resource_fields)),
     "theTags": fields.List(fields.String)
   }
   required = list(resource_fields.keys())

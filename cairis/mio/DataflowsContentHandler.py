@@ -26,6 +26,7 @@ class DataflowsContentHandler(ContentHandler,EntityResolver):
     self.theDataFlows = []
     self.theTrustBoundaries = []
     self.resetDataFlowAttributes()
+    self.resetDataFlowObstacleAttributes()
     self.resetTrustBoundaryAttributes()
 
   def resolveEntity(self,publicId,systemId):
@@ -48,6 +49,12 @@ class DataflowsContentHandler(ContentHandler,EntityResolver):
     self.theAssets = []
     self.theObstacles = []
     self.theTags = []
+
+  def resetDataFlowObstacleAttributes(self):
+    self.theObstacleName = ''
+    self.theKeyword = 'not applicable'
+    self.inContext = 0
+    self.theContext = ''
 
   def resetTrustBoundaryAttributes(self):
     self.inDescription = 0
@@ -75,8 +82,8 @@ class DataflowsContentHandler(ContentHandler,EntityResolver):
       dfAsset = attrs['name']
       self.theAssets.append(dfAsset)
     elif name == 'dataflow_obstacle':
-      dfObs = attrs['name']
-      self.theObstacles.append(dfObs)
+      self.theObstacleName = attrs['name']
+      self.theKeyword = attrs['keyword']
     elif name == 'trust_boundary':
       self.theName = attrs['name']
       if 'type' in attrs:
@@ -86,6 +93,9 @@ class DataflowsContentHandler(ContentHandler,EntityResolver):
     elif name == 'description':
       self.inDescription = 1
       self.theDescription = ''
+    elif name == 'context':
+      self.inContext = 1
+      self.theContext = ''
     elif name == 'trust_boundary_environment':
       self.theEnvironmentName = attrs['name']
       pLevel = 'None'
@@ -98,6 +108,8 @@ class DataflowsContentHandler(ContentHandler,EntityResolver):
   def characters(self,data):
     if self.inDescription:
       self.theDescription += data
+    elif self.inContext:
+      self.theContext += data
 
   def endElement(self,name):
     if name == 'dataflow':
@@ -112,3 +124,8 @@ class DataflowsContentHandler(ContentHandler,EntityResolver):
       self.resetTrustBoundaryAttributes()
     elif name == 'description':
       self.inDescription = 0
+    elif name == 'context':
+      self.inContext = 0
+    elif name == 'dataflow_obstacle':
+      self.theObstacles.append((self.theObstacleName,self.theKeyword,self.theContext))
+      self.resetDataFlowObstacleAttributes()

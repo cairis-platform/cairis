@@ -24383,19 +24383,21 @@ begin
 end
 //
 
-create procedure addDataFlowObstacle(in dfName text, in envName text, in fromType text, in fromName text, in toType text, in toName text, in obsName text)
+create procedure addDataFlowObstacle(in dfName text, in envName text, in fromType text, in fromName text, in toType text, in toName text, in obsName text, in kwd text, in dfoContext text)
 begin
   declare dfId int;
   declare obsId int;
   declare dfoCount int;
+  declare kwId int;
 
   select dataFlowId(dfName,fromType,fromName,toType,toName,envName) into dfId;
   select id into obsId from obstacle where name = obsName limit 1;
+  select id into kwId from stpa_keyword where name = kwd limit 1;
 
   select count(*) into dfoCount from dataflow_obstacle where dataflow_id = dfId and obstacle_id = obsId;
   if dfoCount = 0
   then
-    insert into dataflow_obstacle(dataflow_id,obstacle_id) values (dfId,obsId);
+    insert into dataflow_obstacle(dataflow_id,obstacle_id,stpa_keyword_id,context) values (dfId,obsId,kwId,dfoContext);
   end if;
 end
 //
@@ -24483,7 +24485,7 @@ begin
 
   select id into envId from environment where name = envName limit 1;
   select id into dfId from dataflow where name = dfName and environment_id = envId limit 1;
-  select o.name from dataflow_obstacle do, obstacle o where do.dataflow_id = dfId and do.obstacle_id = o.id order by 1;
+  select o.name,sk.name,do.context from dataflow_obstacle do, obstacle o,stpa_keyword sk where do.dataflow_id = dfId and do.obstacle_id = o.id and do.stpa_keyword_id = sk.id order by 1;
 end
 // 
 
@@ -24501,6 +24503,8 @@ begin
   declare toType varchar (9);
   declare assetName varchar (200);
   declare obsName varchar (200);
+  declare kwd varchar(255);
+  declare dfoContext varchar(4000);
   declare compName varchar (200);
   declare compType varchar (20);
   declare tbName varchar(50);
@@ -24521,7 +24525,7 @@ begin
     union
     select a.name,'datastore' from trust_boundary_asset tba, asset a where tba.asset_id = a.id and trust_boundary_id = tbId and environment_id = envId;
   declare dfAssetCursor cursor for select a.name from asset a, dataflow_asset da where da.dataflow_id = dfId and da.asset_id = a.id;
-  declare dfObsCursor cursor for select o.name from obstacle o, dataflow_obstacle do where do.dataflow_id = dfId and do.obstacle_id = o.id;
+  declare dfObsCursor cursor for select o.name,sk.name,do.context from obstacle o, dataflow_obstacle do,stpa_keyword sk where do.dataflow_id = dfId and do.obstacle_id = o.id and do.stpa_keyword_id = sk.id order by 1;
   declare continue handler for not found set done = 1;
 
   if includeHeader = 0
@@ -24568,12 +24572,12 @@ begin
 
     open dfObsCursor;
     dfObs_loop: loop
-      fetch dfObsCursor into obsName;
+      fetch dfObsCursor into obsName,kwd,dfoContext;
       if done = 1
       then 
         leave dfObs_loop;
       end if;
-      set buf = concat(buf,'    <dataflow_obstacle name=\"',obsName,'\" />\n');
+      set buf = concat(buf,'    <dataflow_obstacle name=\"',obsName,'\" keyword=\"',kwd,'" >\n      <context>',dfoContext,'</context>\n    </dataflow_obstacle>\n');
     end loop dfObs_loop;
     close dfObsCursor;
     set done = 0;
@@ -30416,6 +30420,8 @@ begin
   declare toType varchar (9);
   declare assetName varchar (200);
   declare obsName varchar(100);
+  declare kwd varchar(255);
+  declare dfoContext varchar(4000);
   declare compName varchar (200);
   declare compType varchar (20);
   declare tbName varchar(50);
@@ -30434,7 +30440,7 @@ begin
     union
     select a.name,'datastore' from trust_boundary_asset tba, asset a where tba.asset_id = a.id and trust_boundary_id = tbId and environment_id = envId;
   declare dfAssetCursor cursor for select a.name from asset a, dataflow_asset da where da.dataflow_id = dfId and da.asset_id = a.id;
-  declare dfObsCursor cursor for select o.name from obstacle o, dataflow_obstacle do where do.dataflow_id = dfId and do.obstacle_id = o.id;
+  declare dfObsCursor cursor for select o.name,sk.name,do.context from obstacle o, dataflow_obstacle do where do.dataflow_id = dfId and do.obstacle_id = o.id and do.stpa_keyword_id = sk.id;
   declare continue handler for not found set done = 1;
 
   set headElement = 1;
@@ -30482,7 +30488,7 @@ begin
 
     open dfObsCursor;
     dfObs_loop: loop
-      fetch dfObsCursor into obsName;
+      fetch dfObsCursor into obsName,kwd,dfoContext;
       if done = 1
       then 
         set buf = concat(buf,']}');
@@ -30495,7 +30501,7 @@ begin
           set buf = concat(buf,",");
         end if;
       end if;
-      set buf = concat(buf,'"',obsName,'"');
+      set buf = concat(buf,'("',obsName,'","',kwd,'","',dfoContext,'")');
     end loop dfObs_loop;
     close dfObsCursor;
     set done = 0;

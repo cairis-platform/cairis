@@ -2981,6 +2981,9 @@ Matt is also the designated NeuroGrid Certificate Authority and, as such, is oft
 <dataflows>
   <dataflow name="authenticate" environment="Psychosis" from_name="Authorised Researcher" from_type="entity" to_name="Authenticate Researcher" to_type="process">
     <dataflow_asset name="Credentials" />
+    <dataflow_obstacle name="XSS Exploit" keyword="not applicable">
+      <context>Not applicable</context>
+    </dataflow_obstacle>
   </dataflow>
   <dataflow name="verify" environment="Psychosis" from_name="Authenticate Researcher" from_type="process" to_name="Credentials Store" to_type="datastore">
     <dataflow_asset name="Credentials" />

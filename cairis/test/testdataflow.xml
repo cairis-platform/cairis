@@ -6,6 +6,8 @@
     <tag name="tag1" />
     <tag name="tag2" />
     <dataflow_asset name="Credentials" />
-    <dataflow_obstacle name="Desktop installation" />
+    <dataflow_obstacle name="Desktop installation" keyword="not applicable">
+      <context>Not applicable</context>
+    </dataflow_obstacle>
   </dataflow>
 </dataflows>

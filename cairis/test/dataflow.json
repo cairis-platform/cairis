@@ -100,7 +100,11 @@
      "theToName" : "Authenticate Researcher",
      "theToType" : "process",
      "theAssets" : ["Credentials"],
-     "theObstacles" : ["Desktop installation"],
+     "theObstacles" : [
+        {"theName" : "Desktop installation",
+         "theKeyword" : "not applicable",
+         "theContext" : "not applicable"}
+      ],
      "theTags" : ["tag1"]}
   ]
 }

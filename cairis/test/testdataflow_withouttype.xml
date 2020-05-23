@@ -4,6 +4,8 @@
 <dataflows>
   <dataflow name="authenticate" environment="Psychosis" from_name="Authorised Researcher" from_type="entity" to_name="Authenticate Researcher" to_type="process">
     <dataflow_asset name="Credentials" />
-    <dataflow_obstacle name="Desktop installation" />
+    <dataflow_obstacle name="Desktop installation" keyword="not applicable">
+      <context>Not applicable</context>
+    </dataflow_obstacle>
   </dataflow>
 </dataflows>

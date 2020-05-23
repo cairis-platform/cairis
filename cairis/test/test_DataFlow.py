@@ -93,7 +93,10 @@ class DataFlowTest(unittest.TestCase):
     self.dfJson = d['dataflows'][0]
 
   def testAddDataFlow(self):
-    idfp = DataFlowParameters(self.dfJson['theName'],self.dfJson['theType'],self.dfJson['theEnvironmentName'],self.dfJson['theFromName'],self.dfJson['theFromType'],self.dfJson['theToName'],self.dfJson['theToType'],self.dfJson['theAssets'],self.dfJson['theObstacles'],self.dfJson['theTags'])
+    dfObs = []
+    for dfo in self.dfJson['theObstacles']:
+      dfObs.append((dfo['theName'],dfo['theKeyword'],dfo['theContext']))
+    idfp = DataFlowParameters(self.dfJson['theName'],self.dfJson['theType'],self.dfJson['theEnvironmentName'],self.dfJson['theFromName'],self.dfJson['theFromType'],self.dfJson['theToName'],self.dfJson['theToType'],self.dfJson['theAssets'],dfObs,self.dfJson['theTags'])
     b = Borg()
     b.dbProxy.addDataFlow(idfp)
     odfs = b.dbProxy.getDataFlows()
@@ -110,7 +113,10 @@ class DataFlowTest(unittest.TestCase):
     self.assertEqual(idfp.tags(),odf.tags())
 
   def testUpdateDataFlow(self):
-    idfp = DataFlowParameters(self.dfJson['theName'],self.dfJson['theType'],self.dfJson['theEnvironmentName'],self.dfJson['theFromName'],self.dfJson['theFromType'],self.dfJson['theToName'],self.dfJson['theToType'],self.dfJson['theAssets'],self.dfJson['theObstacles'],self.dfJson['theTags'])
+    dfObs = []
+    for dfo in self.dfJson['theObstacles']:
+      dfObs.append((dfo['theName'],dfo['theKeyword'],dfo['theContext']))
+    idfp = DataFlowParameters(self.dfJson['theName'],self.dfJson['theType'],self.dfJson['theEnvironmentName'],self.dfJson['theFromName'],self.dfJson['theFromType'],self.dfJson['theToName'],self.dfJson['theToType'],self.dfJson['theAssets'],dfObs,self.dfJson['theTags'])
     b = Borg()
     b.dbProxy.addDataFlow(idfp)
     idfp.theName = 'Authenticate'
