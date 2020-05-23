@@ -449,11 +449,15 @@
 <!ELEMENT dataflow_asset EMPTY>
 <!ATTLIST dataflow_asset name CDATA #REQUIRED>
 
-<!ELEMENT dataflow_obstacle EMPTY>
+<!ELEMENT dataflow_obstacle (context)>
 <!ATTLIST dataflow_obstacle name CDATA #REQUIRED>
+<!ATTLIST dataflow_obstacle keyword (does not provide | provides | provides too early | provides too late | provides out of order | stopped too soon | applied too long | not applicable) #REQUIRED>
+<!ELEMENT context (#PCDATA)>
+
 
 <!ELEMENT trust_boundary (description,tag*,trust_boundary_environment+)>
 <!ATTLIST trust_boundary name CDATA #REQUIRED>
+<!ATTLIST trust_boundary type (Controller | Controlled Process | Sensor | Actuator | General) #IMPLIED>
 <!ATTLIST trust_boundary privilege CDATA #IMPLIED>
 <!ELEMENT trust_boundary_environment (trust_boundary_component+)>
 <!ATTLIST trust_boundary_environment name CDATA #REQUIRED>
