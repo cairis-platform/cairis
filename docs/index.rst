@@ -33,6 +33,7 @@ CAIRIS documentation
    vulnerabilities
    attackers
    threats_tm
+   stpa
    risks
    locations
    responses
