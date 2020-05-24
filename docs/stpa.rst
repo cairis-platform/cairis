@@ -43,7 +43,10 @@ This entails creating a data flow diagram (DFD), where processes and data stores
 
 DFD elements interact with each other via data flows.  When creating data flows, the type of these data flows can be set as Control, Feedback, of Information.  You also need to specify information asset/s carried by each control, feedback, or information flow.
 
-CAIRIS now supports a *control structure* model. This automatically visualises the relationship between trust boundaries - in their role of controllers, controlled processes, sensor or actuators - and entities.
+CAIRIS now supports a *control structure* model.  As shown in the figure below, which is based on ATC example in `this STPA tutorial <http://psas.scripts.mit.edu/home/wp-content/uploads/2013/04/Basic_STPA_Tutorial1.pdf>`_ . CAIRIS automatically visualises the relationship between trust boundaries - in their role of controllers, controlled processes, sensor or actuators - and entities, which could represent external systems.
+
+.. figure:: controlStructure.jpg
+   :alt: Control structure 
 
 Step 3: Identify unsafe control actions
 ---------------------------------------
