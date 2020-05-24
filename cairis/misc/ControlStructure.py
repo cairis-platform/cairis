@@ -21,6 +21,14 @@ import pydot
 from cairis.core.Borg import Borg
 from cairis.core.ARM import *
 
+def edgeColour(dfType):
+  if dfType == 'Control':
+    return 'green'
+  elif dfType == 'Feedback':
+    return 'brown'
+  else:
+    return 'black'
+
 class ControlStructure:
   def __init__(self,associations, envName,db_proxy=None,font_name=None, font_size=None):
     self.theAssociations = associations
@@ -36,7 +44,7 @@ class ControlStructure:
       self.fontSize = b.fontSize
 
     self.theGraph = pydot.Dot()
-    self.theGraph.set_graph_defaults(rankdir='LR')
+    self.theGraph.set_graph_defaults(rankdir='TB')
     self.theGraphName = b.tmpDir + '/' + 'cs.dot'
 
   def size(self):
@@ -49,7 +57,7 @@ class ControlStructure:
       self.theGraph.add_node(pydot.Node(objtName,shape='rectangle',margin=0,style='filled',fillcolor='white',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     elif (dimName == 'trust_boundary'):
       objtUrl = 'trust_boundary#' + objtName
-      self.theGraph.add_node(pydot.Node(objtName,shape='rectangle',margin=0,style="dashed",fillcolor='white',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
+      self.theGraph.add_node(pydot.Node(objtName,shape='rectangle',margin=0,fillcolor='white',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl))
     else:
       raise UnknownNodeType(dimName)
 
@@ -62,7 +70,7 @@ class ControlStructure:
       nodeNameSet = set([])
       edgeSet = set([])
 
-      for dfName,fromName,fromType,toName,toType in self.theAssociations:
+      for dfName,fromName,fromType,toName,toType,dfType in self.theAssociations:
 
         if (fromName not in nodeNameSet):
           self.buildNode(fromType,fromName)
@@ -74,7 +82,7 @@ class ControlStructure:
 
         if ((fromName,toName) not in edgeSet):
           objtUrl = 'dataflow#' + dfName + '#' + self.theEnvironmentName
-          df = pydot.Edge(fromName,toName,dir='forward',label=dfName,arrowhead='vee',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl)
+          df = pydot.Edge(fromName,toName,dir='forward',label=dfName,arrowhead='vee',color=edgeColour(dfType), fontname=self.fontName,fontsize=self.fontSize,fontcolor=edgeColour(dfType),URL=objtUrl)
           self.theGraph.add_edge(df)
       return self.layout()
     except DatabaseProxyException as errTxt:
