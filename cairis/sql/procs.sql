@@ -24926,7 +24926,6 @@ begin
   call deniedUserGoalDependencies(environmentId);
   call inheritanceInconsistency(environmentId);
   call userGoalLoopCheck();
-  call taintFlowAnalysis(environmentId);
 
   select distinct label,message from temp_vout;
 
@@ -31196,8 +31195,9 @@ begin
 end
 //
 
-create procedure taintFlowAnalysis(in envId int)
+create procedure taintFlowAnalysis(in envName text)
 begin
+  declare envId int;
   declare entId int;
   declare done int default 0;
   declare entityCursor cursor for select distinct dep.from_id from dataflow_entity_process dep, dataflow d where dep.dataflow_id = d.id and d.environment_id = envId; 
@@ -31206,6 +31206,7 @@ begin
   drop table if exists temp_taintflow;
   create temporary table temp_taintflow (dataflow_id int, environment_id int, entity longtext, df_sequence longtext);
 
+  select id into envId from environment where name = envName limit 1;
 /*
   SF: Useful when debugging
   drop table if exists temp_entitydataflow;

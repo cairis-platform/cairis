@@ -4822,6 +4822,7 @@ class MySQLDatabaseProxy:
 
   def modelValidation(self,envName):
     objtRows = self.responseList('call modelValidation(:envName)',{'envName':envName},'MySQL error validating model')
+    objtRows += self.responseList('call taintFlowAnalysis(:envName)',{'envName':envName},'MySQL error validating model')
     rows = []
     for lbl,msg in objtRows:
       rows.append(ValidationResult(lbl,msg))
