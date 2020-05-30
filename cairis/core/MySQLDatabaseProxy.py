@@ -4822,7 +4822,6 @@ class MySQLDatabaseProxy:
 
   def modelValidation(self,envName):
     objtRows = self.responseList('call modelValidation(:envName)',{'envName':envName},'MySQL error validating model')
-    objtRows += self.dataFlowTaint(envName)
     rows = []
     for lbl,msg in objtRows:
       rows.append(ValidationResult(lbl,msg))
@@ -5000,22 +4999,6 @@ class MySQLDatabaseProxy:
 
   def userGoalSystemGoals(self,ugId):
     return self.responseList('call userGoalSystemGoals(:ugId)',{'ugId':ugId},'MySQL error getting user goal system goals')
-
-  def dataFlowTaint(self,envName):
-    seqs = self.responseList('call entityDataFlows(:env)',{'env':envName},'MySQL error getting data flow taint') 
-    mvResults = []
-    if (len(seqs) > 0):
-      session = self.updateDatabase('call prepareTaintFlowTable()',{},'MySQL error setting up taint flow table',None,False)
-      envId = self.getDimensionId(envName,'environment')
-      for seq in seqs:
-        entityOrigin = seq[0]
-        seqTxt = seq[2]
-        dfs = seq[1].split(',') 
-        for dfId in dfs:
-          self.updateDatabase('call addTaintFlow(:dfId,:envId,:entity,:seq)',{'dfId':dfId,'envId':envId,'entity':entityOrigin,'seq':seqTxt},'MySQL error adding taint flow',session,False)
-      mvResults += self.responseList('call analyseTaintFlows()',{},'MySQL error analysing taint flows',session)
-      session.close()
-    return mvResults
 
   def controlStructure(self,envName,filterElement = ''):
     return self.responseList('call controlStructure(:env,:fe)',{'env':envName,'fe':filterElement},'MySQL error getting control structure')

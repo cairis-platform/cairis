@@ -1022,9 +1022,7 @@ drop procedure if exists userGoalSystemGoals;
 drop procedure if exists deniedUserGoalDependencies;
 drop procedure if exists isGoalDenied;
 drop procedure if exists flows;
-drop procedure if exists entityDataFlows;
-drop procedure if exists prepareTaintFlowTable;
-drop procedure if exists addTaintFlow;
+drop procedure if exists taintFlowAnalysis;
 drop procedure if exists checkPreProcessTaint;
 drop procedure if exists checkPostProcessTaint;
 drop procedure if exists analyseTaintFlows;
@@ -1033,6 +1031,8 @@ drop procedure if exists controlNames;
 drop procedure if exists addDataFlowTag;
 drop procedure if exists getDataFlowTags;
 drop procedure if exists deleteDataFlowTags;
+drop function if exists strSplit;
+drop procedure if exists addTaintFlows;
 
 
 delimiter //
@@ -24926,6 +24926,7 @@ begin
   call deniedUserGoalDependencies(environmentId);
   call inheritanceInconsistency(environmentId);
   call userGoalLoopCheck();
+  call taintFlowAnalysis(environmentId);
 
   select distinct label,message from temp_vout;
 
@@ -31138,6 +31139,7 @@ begin
   declare newPrefix_names longtext default '';
   declare noFlows int default 1;
   declare dfName varchar(255);
+  declare dfSql longtext;
   declare done int default 0;
   declare flowCursor cursor for 
     select dep.dataflow_id,dep.to_id,d.name from dataflow_entity_process dep, dataflow d where dep.from_id = nodeId and dep.dataflow_id = d.id and d.environment_id = environmentId
@@ -31175,7 +31177,8 @@ begin
 
     if (isVisited > 0 )
     then
-      insert into temp_entitydataflow(origin_id,ids,names) values(originId,newPrefix_ids,newPrefix_names);
+      call addTaintFlows(newPrefix_ids,originId,environmentId,newPrefix_names);
+/*      insert into temp_entitydataflow(origin_id,ids,names) values(originId,newPrefix_ids,newPrefix_names); SF: useful when debugging */
     else
       call flows(originId,toId,environmentId,newPrefix_ids,newPrefix_names);
     end if;
@@ -31186,27 +31189,30 @@ begin
   then
     if length(prefix_ids) > 0
     then
-      insert into temp_entitydataflow(origin_id,ids,names) values(originId,prefix_ids,prefix_names);
+      call addTaintFlows(prefix_ids,originId,environmentId,prefix_names);
+/*      insert into temp_entitydataflow(origin_id,ids,names) values(originId,prefix_ids,prefix_names); SF: useful when debugging */
     end if;
   end if;
 end
 //
 
-create procedure entityDataFlows(in envName text)
+create procedure taintFlowAnalysis(in envId int)
 begin
   declare entId int;
-  declare envId int;
   declare done int default 0;
   declare entityCursor cursor for select distinct dep.from_id from dataflow_entity_process dep, dataflow d where dep.dataflow_id = d.id and d.environment_id = envId; 
   declare continue handler for not found set done = 1;
 
+  drop table if exists temp_taintflow;
+  create temporary table temp_taintflow (dataflow_id int, environment_id int, entity longtext, df_sequence longtext);
+
+/*
+  SF: Useful when debugging
   drop table if exists temp_entitydataflow;
   create temporary table temp_entitydataflow (origin_id int, ids longtext, names longtext);
-
+*/
   drop table if exists temp_visited;
   create temporary table temp_visited (node_id int);
-
-  select id into envId from environment where name = envName limit 1;
 
   open entityCursor;
   entity_loop: loop
@@ -31219,22 +31225,10 @@ begin
   end loop entity_loop;
   close entityCursor;
 
-  select e.name,t.ids,t.names from temp_entitydataflow t, entity e where t.origin_id = e.id;
+/*  select e.name,t.ids,t.names from temp_entitydataflow t, entity e where t.origin_id = e.id; SF: useful when debugging */
 
-end
-//
+  call analyseTaintFlows();
 
-create procedure prepareTaintFlowTable()
-begin
-
-  drop table if exists temp_taintflow;
-  create temporary table temp_taintflow (dataflow_id int, environment_id int, entity longtext, df_sequence longtext);
-end
-//
-
-create procedure addTaintFlow(in dfId int, in envId int, in entName longtext, in dfSeq longtext)
-begin
-  insert into temp_taintflow(dataflow_id,environment_id,entity,df_sequence) values(dfId,envId,entName,dfSeq);
 end
 //
 
@@ -31462,6 +31456,41 @@ begin
   then
     delete from dataflow_tag where dataflow_id = dfId;
   end if;
+end
+//
+
+create function strSplit(x longtext, pos integer) 
+returns longtext
+begin
+  declare output longtext;
+  set output = replace(substring(substring_index(x, ',', pos)
+                 , length(substring_index(x, ',', pos - 1)) + 1)
+                 , ','
+                 , '');
+  if output = '' 
+  then 
+    set output = null; 
+  end if;
+  return output;
+end
+//
+
+create procedure addTaintFlows(in csvDfs longtext, in originId int, in environmentId int, in dfSeq longtext)
+begin
+  declare csvIdx int default 1;
+  declare dfId int default -1;
+  declare entityName varchar(100);
+
+  select name into entityName from entity where id = originId;
+
+  repeat
+    select strSplit(csvDfs,csvIdx) into dfId;
+    if dfId is not null
+    then
+      insert into temp_taintflow(dataflow_id,environment_id,entity,df_sequence) values(dfId,environmentId,entityName,dfSeq);
+      set csvIdx = csvIdx + 1;
+    end if;
+  until dfId is null end repeat;
 end
 //
 
