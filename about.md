@@ -11,7 +11,7 @@ CAIRIS stands for *Computer Aided Integration of Requirements and Information Se
 
 <h2>Why did you build CAIRIS?</h2>
 
-CAIRIS was developed as part of [Shamal Faily](http://shamalfaily.com)'s [doctoral research](http://ora.ox.ac.uk/objects/uuid:520b939f-b1d9-4a53-9a47-21f0ffcfd68d).  CAIRIS was designed and developed to better understand the form that software tools for secure and usable software design might take.
+CAIRIS initially developed over 10 years ago as part of [Shamal Faily](http://shamalfaily.com)'s [doctoral research](http://ora.ox.ac.uk/objects/uuid:520b939f-b1d9-4a53-9a47-21f0ffcfd68d) to better understand what software tool support for security and usability design might take.
 
 <h2>Why do I need CAIRIS?</h2>
 
@@ -29,15 +29,13 @@ Second, CAIRIS is, to the best of our knowledge, the only security design tool t
 
 Third, CAIRIS is scaleable.  In most other tools, analysts are required to build models by hand.  However, as models get bigger, this task gets increasingly harder.  CAIRIS addresses this by automatically generating models based on connections between concepts that analysts make.  CAIRIS deals with the messiness associated with visualising this data, so you don't have to.
 
-Fourth, CAIRIS doesn't attempt to be the 'one tool that rules them all'.  CAIRIS works best when used in combination with other 'best of breed' tools.  For example, CAIRIS has been used to import data from sources ranging from wiki pages and spreadsheets, to open source repositories about attack patterns.  Moreover, in addition to generating models and documentation, CAIRIS can generate goal models that can be imported into other tools like [jUCMNav](http://jucmnav.softwareengineering.ca/ucm/bin/view/ProjetSEG/WebHome).  CAIRIS also has an API, which makes it possible to build apps that can work with data from CAIRIS and other tools.  Because of how CAIRIS has been implemented, it's also fairly easy to develop extensions to CAIRIS based on new insights we might want to draw from analytics from CAIRIS, or even new APIs.
+Fourth, CAIRIS doesn't attempt to be the 'one tool that rules them all'.  CAIRIS works best when used in combination with other 'best of breed' tools.  For example, CAIRIS has been used to import data from sources ranging from wiki pages and spreadsheets, to open source repositories about attack patterns.  More recently, as illustrated [here](https://cairis.readthedocs.io/en/latest/usergoals.html#working-with-workbooks), we've been looking at how we can create partially populated Excel workbooks that users can complete and re-import back to CAIRIS.  CAIRIS also has an [API](https://app.swaggerhub.com/apis/failys/CAIRIS), which makes it possible to build apps that work with data from CAIRIS and other tools.  Because of how CAIRIS has been implemented, it's also fairly easy to [extend CAIRIS](https://cairis.readthedocs.io/en/latest/extending.html).
 
-Finally, although CAIRIS' origins are in specifying requirements, it has been recently extended to support the specification and analysis of software architectures as well.  To date, we believe CAIRIS to be the only tool that supports the specification and analysis of both security requirements and security architectures.
+Finally, although CAIRIS' origins are in specifying requirements, it can also support the specification and analysis of software architectures as well.  To date, we believe CAIRIS to be the only tool that supports the specification and analysis of both security requirements and security architectures.
 
 <h2>Is CAIRIS used in the real world?</h2>
 
-CAIRIS has been used in a number of real-world case studies.  We're currently working with a number of companies (both large and small) who are looking to adopt CAIRIS.  
-
-We're always interested in hearing from others interested in adopting the tool, so please [get in touch](mailto:sfaily@bournemouth.ac.uk) if you want to use CAIRIS and need help getting started.
+CAIRIS has been and is currently being used commercially, particularly in critical infrastructure domains such as Defence, Health, Transport, and Water Treatment.  We're always keen to hear from companies (both large and small) interested in using CAIRIS.  Please [get in touch](mailto:sfaily@bournemouth.ac.uk) if you want to use CAIRIS and need help gettting started.
 
 <h2>Are there any examples of CAIRIS in action?</h2>
 
@@ -53,7 +51,7 @@ Yes.  CAIRIS has been made freely available under an Apache Software License.  Y
 
 <h2>Does CAIRIS only work on Linux?</h2>
 
-No, CAIRIS will run on any platform that supports its open source dependencies.  Although it works best on Linux (particularly Debian based distributions), it has been known to run on Mac OS X and Windows as well.  Because of its architecture, there is no reason why the server side components can't run on one platform, and the client side components can't run on another. CAIRIS has also been distributed as a Docker container, which will run on any platform that supports Docker.
+No, CAIRIS will run on any platform that supports its open source dependencies.  Although it works best on Ubuntu, it has been known to run on Mac OS X and Windows as well.  Because of its architecture, there is no reason why the server side components can't run on one platform, and the client side components can't run on another. CAIRIS has also been distributed as a Docker container, which will run on any platform that supports Docker.
 
 <h2>Do you still do research around CAIRIS?</h2>
 
@@ -63,9 +61,10 @@ Very much so.  We have a number of undergraduate and postgraduate research assis
 
 You can contribute in several ways.
 
-* You can use CAIRIS in your own practice.  One of our aims in developing CAIRIS is to transfer knowledge about security design tool best practice, so by using CAIRIS, you will be helping us do this.  We welcome problem reports or feature requests; you can contribute these by doing little more than raising [an issue on github](https://github.com/failys/cairis/issues), or [getting in touch](mailto:sfaily@bournemouth.ac.uk) if your requirements are a little more elaborate.
+* You can use CAIRIS in your own practice.  One of our aims in developing CAIRIS is to transfer knowledge about security design tool best practice, so by using CAIRIS and sharing your experiencees with us, you will be helping us do this.  
+* Report problems or feature requests by raising [an issue on github](https://github.com/cairis-platform/cairis/issues), or [getting in touch](mailto:sfaily@bournemouth.ac.uk) if your requirements are a little more elaborate.
 * If you work in higher education, please consider using CAIRIS as a tool for teaching security design.  CAIRIS has already been used in [Oxford](http://www.cs.ox.ac.uk)'s postgraduate [Design of Security](http://www.cs.ox.ac.uk/softeng/subjects/DES.html) course.  At [BU](https://www1.bournemouth.ac.uk), we're also incorporating CAIRIS into our own cybersecurity teaching.  We're happy to share any teaching material we develop, so if you're interested in using CAIRIS as part of your teaching then please [get in touch](mailto:sfaily@bournemouth.ac.uk).
-* We're always looking for people to help with general maintenance activities.  
+* We're always looking for volunteers to help maintain and evolve CAIRIS - this includes not only the code, but other elements of CAIRIS such as documentation and even this website.
 
 <h2>How can I sponsor CAIRIS?</h2>
 
