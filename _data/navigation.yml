@@ -12,10 +12,6 @@
   url: /blog
   excerpt: "Posting about CAIRIS and related topics"
 
-- title: Media
-  url: /media
-  excerpt: "Videos about CAIRIS and Security-by-Design"
-
 - title: About
   url: /about
   excerpt: "About CAIRIS"

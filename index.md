@@ -10,7 +10,7 @@ description: Home Page of CAIRIS
     <h2>CAIRIS</h2>
     <p>An open source platform for building security and usability into your software</p>
     <ul class="actions">
-      <li><a href="http://cairis.readthedocs.io/en/latest/gettingstarted.html" class="button special">Quick start</a></li>
+      <li><a href="https://cairis.readthedocs.io/en/latest/gettingstarted.html" class="button special">Quick start</a></li>
       <li><a href="https://demo.cairis.org" class="button special">Live demo</a></li>
       <li><a href="https://github.com/failys/cairis" class="button special">GitHub</a></li>
     </ul>
@@ -90,7 +90,7 @@ description: Home Page of CAIRIS
   <div class="inner">
     <header class="major">
       <h2>What is CAIRIS?</h2>
-      <p>CAIRIS stands for Computer Aided Integration of Requirements and Information Security. It is a platform for eliciting, specifying, and validating secure and usable systems. It was built from the ground up to support all the elements necessary for usability, requirements, and risk analysis.</p>
+      <p>CAIRIS stands for Computer Aided Integration of Requirements and Information Security. It is an open source platform for eliciting, specifying, and validating secure and usable systems. It was built from the ground up to support all the elements necessary for usability, requirements, and risk analysis.</p>
     </header>
 
     <ul class="features">
@@ -107,7 +107,7 @@ CAIRIS is also the only security design tool that supports the notion of environ
 
       <li class="icon fa-laptop">
         <h3>Why do I need CAIRIS?</h3>
-        <p>We expect security to be 'built in' software, but software is useless if people can't or won't use it.  We built CAIRIS to support the activities need to build security AND usability into the earliest stages of software design.  Additionally, by using CAIRIS as the repository for data you collect, you benefit from CAIRIS' automatic analysis and visualisation capabilities.</p> 
+        <p>We expect security to be 'built in' software, but software is useless if people can't or won't use it.  We built CAIRIS to support the activities need to build security AND usability into the earliest stages of software design.  Additionally, by using CAIRIS as the repository for data you collect, you benefit from CAIRIS' automatic analysis, validation and visualisation capabilities.</p> 
       </li>	
 
       <li class="icon fa-flag-o">
