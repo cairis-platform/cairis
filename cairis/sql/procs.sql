@@ -13373,7 +13373,7 @@ begin
     then
       leave assoc_loop;
     end if;
-    set buf = concat(buf,'<asset_association environment=\"',envName,'\"  head_name=\"',headName,'\" head_nav=\"',headNav,'\" head_adornment=\"',headAdornment,'\" head_nry=\"',s2a(headNry),'\" head_role=\"',headRole,'\" tail_role=\"',tailRole,'\" tail_nry=\"',s2a(tailNry),'\" tail_adornment=\"',tailAdornment,'\" tail_nav=\"',tailNav,'\" tail_name=\"',tailName,'\" rationale=\"',assocRationale,'\" />\n');
+    set buf = concat(buf,'<asset_association environment=\"',envName,'\"  head_name=\"',headName,'\" head_nav=\"',headNav,'\" head_adornment=\"',headAdornment,'\" head_nry=\"',s2a(headNry),'\" head_role=\"',headRole,'\" tail_role=\"',tailRole,'\" tail_nry=\"',s2a(tailNry),'\" tail_adornment=\"',tailAdornment,'\" tail_nav=\"',tailNav,'\" tail_name=\"',tailName,'\">\n  <rationale>',assocRationale,'</rationale>\n</asset_association>\n');
     set rshipCount = rshipCount + 1;
   end loop assoc_loop;
   close assocCursor;
