@@ -187,7 +187,9 @@ class KaosModel:
           if (alternativeFlag == 1):
             refNodeName = goalName + '#' + subGoalName + '#' + associationType
           if (refNodeName not in refNodes):
-            if (associationType == 'and'):
+            if (subGoalDimName in ['task','usecase']):
+              self.theGraph.add_node(pydot.Node(refNodeName,shape='circle',style='filled',color='blue',label=' ',height='.2',width='.2'))
+            elif (associationType == 'and'):
               self.theGraph.add_node(pydot.Node(refNodeName,shape='circle',label=' ',height='.2',width='.2'))
             elif (associationType == 'or'):
               self.theGraph.add_node(pydot.Node(refNodeName,shape='circle',style='filled',color='black',label=' ',height='.2',width='.2'))
