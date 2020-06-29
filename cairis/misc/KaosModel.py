@@ -189,6 +189,8 @@ class KaosModel:
           if (refNodeName not in refNodes):
             if (subGoalDimName in ['task','usecase']):
               self.theGraph.add_node(pydot.Node(refNodeName,shape='circle',style='filled',color='blue',label=' ',height='.2',width='.2'))
+            elif ((subGoalDimName == 'countermeasure') and (associationType == 'and')):
+              self.theGraph.add_node(pydot.Node(refNodeName,shape='circle',style='filled',color='blue',label=' ',height='.2',width='.2'))
             elif (associationType == 'and'):
               self.theGraph.add_node(pydot.Node(refNodeName,shape='circle',label=' ',height='.2',width='.2'))
             elif (associationType == 'or'):
