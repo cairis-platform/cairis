@@ -19,6 +19,24 @@
 CAIRIS_ROOT=$HOME/cairis
 export CAIRIS_SRC=$CAIRIS_ROOT/cairis
 ROOTPW=$1
+DEF_USER=$2
+DEF_PASSWD=$3
+
+if [-z "$1"]
+then
+  ROOTPW=my-secret-pw
+fi
+
+if [-z "$2"]
+then
+  DEF_USER=test
+fi
+
+if [-z "$3"]
+then
+  DEF_PASSWD=test
+fi
+
 
 sudo systemctl stop cairis
 sudo systemctl disable cairis
@@ -49,7 +67,7 @@ sudo pkill mysqld
 sudo service mysql start
 
 export PYTHONPATH=$CAIRIS_ROOT
-$CAIRIS_ROOT/cairis/bin/quick_setup_headless.py --rootDir=$CAIRIS_ROOT/cairis --dbRootPassword=$ROOTPW --logLevel=debug 
+$CAIRIS_ROOT/cairis/bin/quick_setup_headless.py --rootDir=$CAIRIS_ROOT/cairis --dbRootPassword=$ROOTPW --logLevel=debug --user=$DEF_USER --password=$DEF_PASSWD
 
 SVCFILE="[Unit]\nDescription=cairisd\n\n[Service]\nUser=$USERNAME\nWorkingDirectory=$CAIRIS_ROOT\nEnvironment=\"CAIRIS_CFG=$HOME/cairis.cnf\"\nEnvironment=\"PYTHONPATH=\${PYTHONPATH}:$CAIRIS_ROOT\"\nExecStart=$CAIRIS_ROOT/cairis/bin/cairisd.py runserver\nRestart=on-failure\n\n[Install]\nWantedBy=multi-user.target"
 echo -e $SVCFILE | sudo tee /etc/systemd/system/cairis.service
