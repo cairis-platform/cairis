@@ -29,12 +29,12 @@ fi
 
 if [ -z "$2"]
 then
-  DEF_USER=test
+  DEFUSER=test
 fi
 
 if [ -z "$3"]
 then
-  DEF_PASSWD=test
+  DEFPASSWD=test
 fi
 
 
@@ -67,13 +67,13 @@ sudo pkill mysqld
 sudo service mysql start
 
 export PYTHONPATH=$CAIRIS_ROOT
-$CAIRIS_ROOT/cairis/bin/quick_setup_headless.py --rootDir=$CAIRIS_ROOT/cairis --dbRootPassword=$ROOTPW --logLevel=debug --user=$DEF_USER --password=$DEF_PASSWD
+$CAIRIS_ROOT/cairis/bin/quick_setup_headless.py --rootDir=$CAIRIS_ROOT/cairis --dbRootPassword=$ROOTPW --logLevel=debug --user=$DEFUSER --password=$DEFPASSWD
 
 SVCFILE="[Unit]\nDescription=cairisd\n\n[Service]\nUser=$USERNAME\nWorkingDirectory=$CAIRIS_ROOT\nEnvironment=\"CAIRIS_CFG=$HOME/cairis.cnf\"\nEnvironment=\"PYTHONPATH=\${PYTHONPATH}:$CAIRIS_ROOT\"\nExecStart=$CAIRIS_ROOT/cairis/bin/cairisd.py runserver\nRestart=on-failure\n\n[Install]\nWantedBy=multi-user.target"
 echo -e $SVCFILE | sudo tee /etc/systemd/system/cairis.service
 
 sudo systemctl enable /etc/systemd/system/cairis.service
 
-echo "alias update_cairis=\"sudo apt-get update && sudo apt-get upgrade -y && sudo apt-get dist-upgrade -y && curl -s https://cairis.org/quickInstall.sh | bash -s $ROOTPW $DEF_USER $DEF_PASSWD\"" >> $HOME/.bashrc
+echo "alias update_cairis=\"sudo apt-get update && sudo apt-get upgrade -y && sudo apt-get dist-upgrade -y && curl -s https://cairis.org/quickInstall.sh | bash -s $ROOTPW $DEFUSER $DEFPASSWD\"" >> $HOME/.bashrc
 
 sudo shutdown -Fr now
