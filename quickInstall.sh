@@ -37,6 +37,7 @@ then
   DEFPASSWD=test
 fi
 
+echo "ROOTPW: " $ROOTPW "DEFUSER: " $DEFUSER "DEFPASSWD: " $DEFPASSWD
 
 sudo systemctl stop cairis
 sudo systemctl disable cairis
