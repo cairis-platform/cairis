@@ -35,7 +35,7 @@ To restart the virtual machine:
 If you need to login to the virtual machine, i.e. to check the log files, use the *vagrant* account (password: *vagrant*).
 
 .. note:: 
-   The Vagrantfile is a simplified version of Ben Coleman's `Cairis_vagrant <https://github.com/nebloc/Cairis_vagrant>_` repository.
+   The Vagrantfile is a simplified version of Ben Coleman's `Cairis_vagrant <https://github.com/nebloc/Cairis_vagrant>`_ repository.
 
 
 Installation via Docker
