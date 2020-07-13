@@ -2,17 +2,19 @@ Installing CAIRIS
 =================
 
 Installation via Vagrant
-------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 If you have `Vagrant <https://www.vagrantup.com/downloads.html>`_ and `VirtualBox <https://virtualbox.org>`_ installed, you can build your CAIRIS VM in minutes.  To start, you need to cloning the cairis server repository:
 
 
 .. code-block:: bash
+
    git clone http://github.com/cairis-platform/cairis
 
 Once in the root directory of the repository type:
 
 .. code-block:: bash
+
    vagrant up
 
 This will create and start a CAIRIS virtual machine in VirtualBox and, once complete, this is accessbile via your web browser at http://localhost:7071. 
@@ -21,16 +23,19 @@ The default username and password is *test* and *test*, but you can change this 
 To shutdown the virtual machine:
 
 .. code-block:: bash
+
    vagrant halt
 
 To restart the virtual machine:
 
 .. code-block:: bash
+
    vagrant up
 
 If you need to login to the virtual machine, i.e. to check the log files, use the *vagrant* account (password: *vagrant*).
 
-.. note: The Vagrantfile is a simplified version of Ben Coleman's `Cairis_vagrant <https://github.com/nebloc/Cairis_vagrant>_` repository.
+.. note:: 
+   The Vagrantfile is a simplified version of Ben Coleman's `Cairis_vagrant <https://github.com/nebloc/Cairis_vagrant>_` repository.
 
 
 Installation via Docker
