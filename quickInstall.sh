@@ -22,17 +22,17 @@ ROOTPW=$1
 DEF_USER=$2
 DEF_PASSWD=$3
 
-if [ -z "$1"]
+if [ -z "$1" ]
 then
   ROOTPW=my-secret-pw
 fi
 
-if [ -z "$2"]
+if [ -z "$2" ]
 then
   DEFUSER=test
 fi
 
-if [ -z "$3"]
+if [ -z "$3" ]
 then
   DEFPASSWD=test
 fi
