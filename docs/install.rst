@@ -1,10 +1,42 @@
 Installing CAIRIS
 =================
 
+Installation via Vagrant
+------------------------
+
+If you have `Vagrant <https://www.vagrantup.com/downloads.html>`_ and `VirtualBox <https://virtualbox.org>`_ installed, you can build your CAIRIS VM in minutes.  To start, you need to cloning the cairis server repository:
+
+
+.. code-block:: bash
+   git clone http://github.com/cairis-platform/cairis
+
+Once in the root directory of the repository type:
+
+.. code-block:: bash
+   vagrant up
+
+This will create and start a CAIRIS virtual machine in VirtualBox and, once complete, this is accessbile via your web browser at http://localhost:7071. 
+The default username and password is *test* and *test*, but you can change this by editing *vagrant_conf.yaml*.  
+
+To shutdown the virtual machine:
+
+.. code-block:: bash
+   vagrant halt
+
+To restart the virtual machine:
+
+.. code-block:: bash
+   vagrant up
+
+If you need to login to the virtual machine, i.e. to check the log files, use the *vagrant* account (password: *vagrant*).
+
+.. note: The Vagrantfile is a simplified version of Ben Coleman's `Cairis_vagrant <https://github.com/nebloc/Cairis_vagrant>_` repository.
+
+
 Installation via Docker
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-If you have Docker installed on your laptop or an available machine, the easiest way of getting up and running with the web application is to download the CAIRIS container from `Docker hub <https://hub.docker.com/r/shamalfaily/cairis/>`_.  Like the live demo, this is built from the latest version of CAIRIS in GitHub, and uses `mod_wsgi-express <https://pypi.python.org/pypi/mod_wsgi>`_ to deliver the CAIRIS web services.
+If you have Docker installed on your laptop or an available machine, you can download the CAIRIS container from `Docker hub <https://hub.docker.com/r/shamalfaily/cairis/>`_.  Like the live demo, this is built from the latest version of CAIRIS in GitHub, and uses `mod_wsgi-express <https://pypi.python.org/pypi/mod_wsgi>`_ to deliver the CAIRIS web services.
 
 There are two options for running the container, a full install of everything or a smaller install which doesn't provide pdf export functionality:
 

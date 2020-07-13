@@ -1,0 +1,3 @@
+default_user: test
+default_passwd: test
+root_db_passwd: my-secret-pw
