@@ -22,6 +22,7 @@ from cairis.data.CairisDAO import CairisDAO
 from cairis.bin.cimport import file_import, package_import
 from cairis.bin.at2om import dotToObstacleModel
 from cairis.mio.ModelImport import importAttackTreeString
+from cairis.mio.ModelImport import importDiagramsNetDFD, importDiagramsNetAssetModel
 from cairis.core.Borg import Borg
 from zipfile import ZipFile
 import magic
@@ -49,6 +50,20 @@ class ImportDAO(CairisDAO):
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)
+
+  def diagramsnet_import(self,importFile,modelType,environment_name):
+    try:
+      if (modelType == 'diagrams.net (Data Flow Diagram)'):
+        return importDiagramsNetDFD(importFile,environment_name,self.session_id)
+      elif (modelType == 'diagrams.net (Asset Model)'):
+        return importDiagramsNetAssetModel(importFile,environment_name,self.session_id)
+      else:
+        raise ARMException(modelType + " is an invalid model type.")
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+  
+
 
   def import_attack_tree(self,dotBuf,environment_name,contributor_name):
     try:

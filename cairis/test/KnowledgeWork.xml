@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2020-07-23T09:07:40.017Z" agent="5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1.2 Safari/605.1.15" etag="BfjURwQUXDDztmsDh6jJ" version="13.5.0">
+  <diagram id="5RJK4qJPqnAzUUJRylxE" name="Page-1">
+    <mxGraphModel dx="813" dy="720" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <object label="" type="trust boundary" name="Head" id="sBYGf9e0H3ilfvhmzRd7-8">
+          <mxCell style="html=1;dashed=0;whitespace=wrap;" vertex="1" parent="1">
+            <mxGeometry x="230" y="160" width="480" height="170" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="" assets="Misc Knowledge" id="sBYGf9e0H3ilfvhmzRd7-4">
+          <mxCell style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="sBYGf9e0H3ilfvhmzRd7-1" target="sBYGf9e0H3ilfvhmzRd7-2">
+            <mxGeometry relative="1" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="sBYGf9e0H3ilfvhmzRd7-6" value="ideas" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="sBYGf9e0H3ilfvhmzRd7-4">
+          <mxGeometry x="-0.0333" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <object label="World" type="entity" id="sBYGf9e0H3ilfvhmzRd7-1">
+          <mxCell style="html=1;dashed=0;whitespace=wrap;" vertex="1" parent="1">
+            <mxGeometry x="60" y="220" width="100" height="50" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="" assets="Misc Knowledge, Processed Knowledge" id="sBYGf9e0H3ilfvhmzRd7-5">
+          <mxCell style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="sBYGf9e0H3ilfvhmzRd7-2" target="sBYGf9e0H3ilfvhmzRd7-3">
+            <mxGeometry relative="1" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="sBYGf9e0H3ilfvhmzRd7-7" value="ideas" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="sBYGf9e0H3ilfvhmzRd7-5">
+          <mxGeometry x="0.1294" y="-2" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <object label="Thought work" type="process" id="sBYGf9e0H3ilfvhmzRd7-2">
+          <mxCell style="html=1;dashed=0;whitespace=wrap;shape=mxgraph.dfd.start" vertex="1" parent="1">
+            <mxGeometry x="340" y="230" width="80" height="30" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="Mental model" type="datastore" id="sBYGf9e0H3ilfvhmzRd7-3">
+          <mxCell style="html=1;dashed=0;whitespace=wrap;shape=partialRectangle;right=0;left=0;" vertex="1" parent="1">
+            <mxGeometry x="590" y="230" width="100" height="30" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="sBYGf9e0H3ilfvhmzRd7-9" value="&lt;i&gt;Analyst&lt;/i&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;" vertex="1" parent="1">
+          <mxGeometry x="445" y="170" width="50" height="20" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

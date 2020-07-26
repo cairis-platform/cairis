@@ -33,7 +33,14 @@ from .TemplateAssetsContentHandler import TemplateAssetsContentHandler
 from .ProcessesContentHandler import ProcessesContentHandler
 from .LocationsContentHandler import LocationsContentHandler
 from .DataflowsContentHandler import DataflowsContentHandler
+from .DiagramsNetContentHandler import DiagramsNetContentHandler
+from cairis.core.DataFlowParameters import DataFlowParameters
+from cairis.core.AssetParameters import AssetParameters
+from cairis.core.AssetEnvironmentProperties import AssetEnvironmentProperties
+from cairis.core.ClassAssociationParameters import ClassAssociationParameters
+from cairis.core.TrustBoundary import TrustBoundary
 from cairis.core.Borg import Borg
+import cairis.core.DefaultParametersFactory
 import xml.sax
 from cairis.core.ARM import *
 
@@ -811,3 +818,122 @@ def importAttackTreeString(buf,session_id = None):
     return modelTxt
   except xml.sax.SAXException as e:
     raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
+
+def importDiagramsNetFile(importFile,modelType):
+  try:
+    parser = xml.sax.make_parser()
+    handler = DiagramsNetContentHandler(modelType)
+    parser.setContentHandler(handler)
+    parser.setEntityResolver(handler)
+    parser.parse(importFile)
+    if (modelType == 'dataflow'):
+      return (handler.objects(),handler.flows(), handler.trustBoundaries())
+    else:
+      return (handler.objects(),handler.associations())
+  except xml.sax.SAXException as e:
+    raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
+
+def importDiagramsNetDFD(importFile,envName,session_id):
+  objts, flows, tbs = importDiagramsNetFile(importFile,'dataflow')
+  b = Borg()
+  db_proxy = b.get_dbproxy(session_id)
+
+  newAssetCount = 0
+  newUCCount = 0
+  for objt in objts:
+    objtType = objt['type']
+    assetType = 'Information'
+    if (objtType == 'process'):
+      objtType = 'usecase'
+    elif (objtType == 'entity'):
+      objtType = 'asset'
+      assetType = 'Systems'
+    else:
+      objtType = 'asset'
+
+    if (db_proxy.existingObject(objt['name'],objtType) == -1):
+      cairis.core.DefaultParametersFactory.build(objt['name'],envName,objtType,session_id,assetType)
+      if (objtType == 'usecase'):
+        newUCCount += 1
+      else:
+        newAssetCount += 1
+
+  flowCount = 0
+  for f in flows:
+    dfName = f['name']
+    fromName = f['from_name']
+    fromType = f['from_type']
+    toName = f['to_name']
+    toType = f['to_type']
+    try:
+       db_proxy.checkDataFlowExists(dfName, fromType, fromName, toType, toName, envName)
+       dfAssets = f['assets']
+       for dfAsset in dfAssets:
+         if (db_proxy.existingObject(dfAsset,'asset') == -1):
+           cairis.core.DefaultParametersFactory.build(dfAsset,envName,'asset',session_id,'Information')
+           newAssetCount += 1
+       db_proxy.addDataFlow(DataFlowParameters(dfName,'Information',envName,fromName,fromType,toName,toType,dfAssets))
+       flowCount += 1
+    except DatabaseProxyException as ex:
+      if str(ex.value).find('already exists') == -1:
+        raise ARMException(str(ex.value))
+    except ARMException as ex:
+      if str(ex.value).find('already exists') == -1:
+        raise ARMException(str(ex.value))
+
+  tbCount = 0
+  for tb in tbs:
+    tbName = tb['name']
+    if (db_proxy.existingObject(tbName,'trust_boundary') == -1):
+      tbComps = []
+      for tbComp in tb['components']:
+        tbComps.append((tbComp['type'],tbComp['name']))
+      db_proxy.addTrustBoundary(TrustBoundary(-1,tbName,'General','To be defined',{envName : tbComps},{envName : 'None'},[])) 
+      tbCount += 1
+
+  msgStr = 'Imported ' + str(newAssetCount) + ' asset'
+  if (newAssetCount != 1): msgStr += 's'
+  msgStr += ', ' + str(newUCCount) + ' use case'
+  if (newUCCount != 1): msgStr += 's'
+  msgStr += ', ' + str(flowCount) + ' data flow'
+  if (flowCount != 1): msgStr += 's'
+  msgStr += ', and ' + str(tbCount) + ' trust boundar'
+  if (tbCount != 1): 
+    msgStr += 'ies'
+  else:
+    msgStr += 'y'
+  msgStr += '.'
+  return msgStr
+
+def importDiagramsNetAssetModel(importFile,envName,session_id):
+  objts, assocs = importDiagramsNetFile(importFile,'asset')
+  b = Borg()
+  db_proxy = b.get_dbproxy(session_id)
+
+  newAssetCount = 0
+  for asset in objts:
+    assetName = asset['name']
+    assetType = asset['type'].capitalize()
+
+    if (db_proxy.existingObject(assetName,'asset') == -1):
+      db_proxy.addAsset(AssetParameters(assetName,asset['short_code'],asset['description'],asset['significance'],assetType,0,'',[],[],[AssetEnvironmentProperties(envName,asset['properties'],asset['rationale'])]))
+      newAssetCount += 1
+
+  newAssocCount = 0
+  for assoc in assocs:
+    headAsset = assoc['head']
+    tailAsset = assoc['tail']
+    try:
+      db_proxy.checkAssetAssociation(envName,headAsset,tailAsset)
+      db_proxy.addClassAssociation(ClassAssociationParameters(envName,headAsset,'asset',assoc['headNav'],assoc['headType'],'*','','','*',assoc['tailType'],assoc['tailNav'],'asset',tailAsset,'To be defined'))
+      newAssocCount += 1
+    except DatabaseProxyException as ex:
+      if str(ex.value).find('already exists') == -1:
+        raise ARMException(str(ex.value))
+  
+  msgStr = 'Imported ' + str(newAssetCount) + ' asset'
+  if (newAssetCount != 1): msgStr += 's'
+  msgStr += ', and ' + str(newAssocCount) + ' asset association'
+  if (newAssocCount != 1): msgStr += 's'
+  msgStr += '.'
+  return msgStr

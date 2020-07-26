@@ -99,7 +99,11 @@ class CImportTextAPI(Resource):
 
       try:
         dao = ImportDAO(session_id)
-        result = dao.file_import(abs_path, type, overwrite)
+        if (type in ['diagrams.net (Data Flow Diagram)','diagrams.net (Asset Model)']):
+          environment_name = cimport_params['environment']
+          result = dao.diagramsnet_import(abs_path,type,environment_name)
+        else:
+          result = dao.file_import(abs_path, type, overwrite)
         dao.close()
       except DatabaseProxyException as ex:
         raise ARMHTTPError(ex)

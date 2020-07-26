@@ -25,6 +25,8 @@ else:
   from StringIO import StringIO
 import os
 import jsonpickle
+from cairis.core.Environment import Environment
+from cairis.tools.PseudoClasses import EnvironmentTensionModel
 from cairis.test.CairisDaemonTestCase import CairisDaemonTestCase
 
 __author__ = 'Robin Quetin, Shamal Faily'
@@ -33,6 +35,8 @@ __author__ = 'Robin Quetin, Shamal Faily'
 class CImportTests(CairisDaemonTestCase):
 
   xmlfile = os.environ['CAIRIS_SRC'] + '/../examples/exemplars/NeuroGrid/NeuroGrid.xml'
+  dnFile1 = os.environ['CAIRIS_SRC'] + '/test/KnowledgeWork.xml'
+  dnFile2 = os.environ['CAIRIS_SRC'] + '/test/classExample.xml'
   logger = logging.getLogger(__name__)
 
   def test_cimport_package_post(self):
@@ -51,8 +55,8 @@ class CImportTests(CairisDaemonTestCase):
     self.assertIsNotNone(message, 'Response does not contain a message')
     self.logger.info('[%s] Message: %s', method, message)
 
-  def test_cimport_data_post(self):
-    method = 'test_cimport_text_post'
+  def test_cimport_model_post(self):
+    method = 'test_cimport_model_post'
     url = '/api/import/text'
     fs_xmlfile = open(self.xmlfile, 'rb')
     file_contents = fs_xmlfile.read()
@@ -82,6 +86,69 @@ class CImportTests(CairisDaemonTestCase):
     self.assertIsNotNone(message, 'Response does not contain a message')
     self.logger.info('[%s] Message: %s', method, message)
 
+  def test_cimport_diagramsnet_dfd_post(self):
+    method = 'test_cimport_diagramsnet_dfd_post'
+    url = '/api/import/text'
+
+    rv = self.app.post('/api/environments', content_type='application/json', data=self.defaultEnvBody())
+    respBody = rv.data.decode('utf-8')
+    json_resp = jsonpickle.decode(respBody)
+    self.assertEqual(json_resp.get('message'),'Default created')
+
+    fs_xmlfile = open(self.dnFile1, 'rb')
+    file_contents = fs_xmlfile.read()
+
+    urlenc_file_contents = quote(file_contents)
+    json_dict = {
+      'session_id': 'test',
+      'object': {
+        'urlenc_file_contents': urlenc_file_contents,
+        'overwrite' : 1,
+        'environment' : 'Default',
+        'type': 'diagrams.net (Data Flow Diagram)'
+      }
+    }
+    json_body = jsonpickle.encode(json_dict)
+    rv = self.app.post(url, data=json_body, content_type='application/json')
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.assertIsNotNone(responseData, 'No response')
+    json_dict = jsonpickle.decode(responseData)
+    self.assertIsInstance(json_dict, dict, 'The response is not a valid JSON dictionary')
+    assert isinstance(json_dict, dict)
+    message = json_dict.get('message')
+    self.assertIsNotNone(message, 'Response does not contain a message')
+    self.assertEqual(message,'Imported 4 assets, 1 use case, 2 data flows, and 1 trust boundary.')
+
+    fs_xmlfile = open(self.dnFile2, 'rb')
+    file_contents = fs_xmlfile.read()
+
+    urlenc_file_contents = quote(file_contents)
+    json_dict = {
+      'session_id': 'test',
+      'object': {
+        'urlenc_file_contents': urlenc_file_contents,
+        'overwrite' : 1,
+        'environment' : 'Default',
+        'type': 'diagrams.net (Asset Model)'
+      }
+    }
+    json_body = jsonpickle.encode(json_dict)
+    rv = self.app.post(url, data=json_body, content_type='application/json')
+    if (sys.version_info > (3,)):
+      responseData = rv.data.decode('utf-8')
+    else:
+      responseData = rv.data
+    self.assertIsNotNone(responseData, 'No response')
+    json_dict = jsonpickle.decode(responseData)
+    self.assertIsInstance(json_dict, dict, 'The response is not a valid JSON dictionary')
+    assert isinstance(json_dict, dict)
+    message = json_dict.get('message')
+    self.assertIsNotNone(message, 'Response does not contain a message')
+    self.assertEqual(message,'Imported 4 assets, and 3 asset associations.')
+
   def test_cimport_file_post(self):
     method = 'test_cimport_file_post'
     url = '/api/import/file/type/all?session_id=test'
@@ -109,4 +176,14 @@ class CImportTests(CairisDaemonTestCase):
     message = json_dict.get('message')
     self.assertIsNotNone(message, 'Response does not contain a message')
     self.logger.info('[%s] Message: %s', method, message)
-    self.assertEquals(message,'import.xml imported')
+    self.assertEqual(message,'import.xml imported')
+  
+  def defaultEnvBody(self):
+    defaultEnv = Environment(-1,'Default','DEFAULT','Default environment',[],'','',[])
+
+    for idx1 in range(0, 4):
+      for idx2 in range(4, 8):
+        tension = EnvironmentTensionModel(idx1,idx2,0,'None')
+        defaultEnv.theTensions.append(tension)
+
+    return jsonpickle.encode({'session_id' : 'test', 'object' : defaultEnv})

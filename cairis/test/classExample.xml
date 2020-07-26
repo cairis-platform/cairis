@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2020-07-25T05:02:15.006Z" agent="5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1.2 Safari/605.1.15" etag="n7XCVPd4DtSkBXe3lP4B" version="13.5.3" type="device">
+  <diagram id="9MWyVGo9vrhhTfxINhHp" name="Page-1">
+    <mxGraphModel dx="813" dy="720" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="eM6zm3Esr2Ww5eosm15I-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;endArrow=none;endFill=0;startArrow=diamond;startFill=1;" parent="1" source="eM6zm3Esr2Ww5eosm15I-1" target="eM6zm3Esr2Ww5eosm15I-2" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <object label="Parent" type="People" Integrity="High" id="eM6zm3Esr2Ww5eosm15I-1">
+          <mxCell style="whiteSpace=wrap;html=1;aspect=fixed;" parent="1" vertex="1">
+            <mxGeometry x="120" y="230" width="80" height="80" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="eM6zm3Esr2Ww5eosm15I-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;startArrow=diamond;startFill=0;endArrow=none;endFill=0;" parent="1" source="eM6zm3Esr2Ww5eosm15I-2" target="eM6zm3Esr2Ww5eosm15I-8" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <object label="Home" type="Systems" availability="Medium" id="eM6zm3Esr2Ww5eosm15I-2">
+          <mxCell style="whiteSpace=wrap;html=1;aspect=fixed;" parent="1" vertex="1">
+            <mxGeometry x="440" y="230" width="80" height="80" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="eM6zm3Esr2Ww5eosm15I-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;startArrow=block;startFill=0;endArrow=none;endFill=0;" parent="1" source="eM6zm3Esr2Ww5eosm15I-6" target="eM6zm3Esr2Ww5eosm15I-1" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <object label="Human" type="People" id="eM6zm3Esr2Ww5eosm15I-6">
+          <mxCell style="whiteSpace=wrap;html=1;aspect=fixed;" parent="1" vertex="1">
+            <mxGeometry x="120" y="40" width="80" height="80" as="geometry" />
+          </mxCell>
+        </object>
+        <object label="Garden" type="Systems" id="eM6zm3Esr2Ww5eosm15I-8">
+          <mxCell style="whiteSpace=wrap;html=1;aspect=fixed;" parent="1" vertex="1">
+            <mxGeometry x="440" y="380" width="80" height="80" as="geometry" />
+          </mxCell>
+        </object>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
