@@ -14,19 +14,20 @@ Security design checks
 
 The security design checks currently supported are as follows: 
 
-================================= ==================================================================================================================================
-Check                             Description
-================================= ==================================================================================================================================
-Composition/Aggregation Integrity For Hardware/Software/Information assets, checks asset integrity for the head asset isn't lower than the tail asset.
-Implicit asset inclusion          Asset implicitly included in an environment because of an asset association but no security or privacy properties have been set.
-Implicit vulnerability            Checks whether a goal dependency is obstructed or a related user goal is denied, thereby introducing a vulnerability due to goal non-fulfilment.
-Inherited asset inconsistency     Checks an asset inheriting from another asset doesn't have weaker security or privacy properties.
-Inherited asset type              Checks an asset inheriting from another asset have the same asset type.
-New risk contexts                 Risks present in environments that haven't been accounted for.
-Obstructed tasks                  Where goals operationalise tasks, check root goals can be satisfied if any of its refined goals are obstructed.
-Uncovered exception               Exception present in use case without a related obstacle.
-Vulnerable non-valued asset       Asset is vulnerable but no security or privacy properties have been set for it.
-================================= ==================================================================================================================================
+=======================================  ==================================================================================================================================
+Check                                    Description
+=======================================  ==================================================================================================================================
+Composition/Aggregation Integrity        For Hardware/Software/Information assets, checks asset integrity for the head asset isn't lower than the tail asset.
+Implicit asset inclusion                 Asset implicitly included in an environment because of an asset association but no security or privacy properties have been set.
+Implicit vulnerability                   Checks whether a goal dependency is obstructed or a related user goal is denied, thereby introducing a vulnerability due to goal non-fulfilment.
+Inherited asset inconsistency            Checks an asset inheriting from another asset doesn't have weaker security or privacy properties.
+Inherited asset type                     Checks an asset inheriting from another asset have the same asset type.
+New risk contexts                        Risks present in environments that haven't been accounted for.
+Obstructed tasks                         Where goals operationalise tasks, check root goals can be satisfied if any of its refined goals are obstructed.
+STPA: potential control action conflict  Checks if multiple control flows feed into controlled processes.
+Uncovered exception                      Exception present in use case without a related obstacle.
+Vulnerable non-valued asset              Asset is vulnerable but no security or privacy properties have been set for it.
+=======================================  ==================================================================================================================================
 
 
 Privacy design checks

@@ -1033,6 +1033,7 @@ drop procedure if exists getDataFlowTags;
 drop procedure if exists deleteDataFlowTags;
 drop function if exists strSplit;
 drop procedure if exists addTaintFlows;
+drop procedure if exists conflictingControl;
 
 
 delimiter //
@@ -24942,6 +24943,7 @@ begin
   call deniedUserGoalDependencies(environmentId);
   call inheritanceInconsistency(environmentId);
   call userGoalLoopCheck();
+  call conflictingControl(environmentId);
 
   select distinct label,message from temp_vout;
 
@@ -31508,6 +31510,35 @@ begin
       set csvIdx = csvIdx + 1;
     end if;
   until dfId is null end repeat;
+end
+//
+
+create procedure conflictingControl(in environmentId int)
+begin
+  declare tbName varchar(255);
+  declare tbId int;
+  declare cfCount int;
+  declare done int default 0;
+  declare tbCursor cursor for 
+    select tb.id,tb.name from trust_boundary tb, trust_boundary_type tbt, trust_boundary_usecase tbu where tb.trust_boundary_type_id = tbt.id and tbt.name = 'Controlled Process' and tbu.trust_boundary_id = tb.id and tbu.environment_id = environmentId
+    union
+    select tb.id,tb.name from trust_boundary tb, trust_boundary_type tbt, trust_boundary_asset tba where tb.trust_boundary_type_id = tbt.id and tbt.name = 'Controlled Process' and tba.trust_boundary_id = tb.id and tba.environment_id = environmentId;
+  declare continue handler for not found set done = 1;
+
+  open tbCursor;
+  tb_loop: loop
+    fetch tbCursor into tbId,tbName;
+    if done = 1
+    then
+      leave tb_loop;
+    end if;
+    select count(*) into cfCount from dataflow d, dataflow_process_process dpp, trust_boundary tbf, trust_boundary_usecase tbfu, trust_boundary tbt, trust_boundary_usecase tbtu, dataflow_type dt where d.environment_id = environmentId and tbt.id = tbId and d.id = dpp.dataflow_id and dpp.from_id = tbfu.usecase_id and tbfu.trust_boundary_id = tbf.id and dpp.to_id = tbtu.usecase_id and tbtu.trust_boundary_id = tbt.id and tbf.id != tbt.id and d.dataflow_type_id = dt.id and dt.name = 'Control' and tbf.trust_boundary_type_id in (0,1,3);
+    if cfCount > 1
+    then
+      insert into temp_vout(label,message) values('STPA: potential control action conflict',concat('Multiple control actions feed into controlled process ',tbName,'.'));
+    end if;
+  end loop tb_loop;
+  close tbCursor;
 end
 //
 
