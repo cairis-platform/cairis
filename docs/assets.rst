@@ -153,3 +153,29 @@ These can be added, updated, and deleted in much the same way as standard assets
 1.  Template assets are not environment specific, so you need to specify the general security properties that need to be protected should this asset be included in a model.
 
 2.  You need to first define Access Rights, Surface Types, and Privileges.
+
+Asset modelling with diagrams.net
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+1. Create a new blank diagram in `diagrams.net <https://diagrams.net>`_ .
+
+2. Setup the CAIRIS asset modelling library by going to the File >> Open Library from >> URL menu, and entering the URL ``https://cairis.org/stencils/cairis_asset.xml``.
+
+3. Click on square (asset) in the cairis_assets.xml palette to place an asset on the canvas.  Hoovering the mouse over the asset will display the asset properties as a tool-tip
+
+.. figure:: dn_editData.jpg
+   :alt: dn_editData.jpg
+
+4. Right click on the asset and select *Edit Data* to change the asset properties.  When changing the asset, ensure you enter only a permissible value for the type (Hardware, Software, Information, Systems, or People) and the security property values (None, Low, Medium, or High).
+
+5. Click on the line (asset association) in the cairis_assets.xml palette to place an asset association on the canvas.  Change the start of end arrow accordingly based on the nature of the asset association. For example, setting an open arrow on the Telemetry Network asset end of the association indicates navigability from the Outstation to the Telemetry Network.  When adding associations between asset, ensure the association line is connected to both assets.
+
+.. figure:: dn_addAssociation.jpg
+   :alt: dn_addAssociation.jpg
+
+6. Once the diagram is ready, select the File >> Export as >> XML... menu option, unclick the Compressed tick box, click on the Export button, and enter the name of the diagram to be exported.
+
+7. In CAIRIS, select the System >> Import menu to open the Import form.  Select *diagrams.net (Asset Model)* from the Model combo box, click on the File button to choose the exported diagrams.net model to import, and select the environment to import the asset model into.
+
+Assets that don't already exist will be created in CAIRIS, with security properties set for the environment the model is imported into.  Assets and associations that already exist will not be overwritten.
+
