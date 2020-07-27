@@ -157,9 +157,11 @@ These can be added, updated, and deleted in much the same way as standard assets
 Asset modelling with diagrams.net
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+`diagrams.net <https://diagrams.net>`_ (previously known a draw.io) is an easy to use, open source diagramming tool; it can be run either from the browser or from the desktop.  diagrams.net has the ability to set shape properties and export to XML and, as a result, asset models created in this tool can, if defined properly, be imported into CAIRIS by following the steps below:
+
 1. Create a new blank diagram in `diagrams.net <https://diagrams.net>`_ .
 
-2. Setup the CAIRIS asset modelling library by going to the File >> Open Library from >> URL menu, and entering the URL ``https://cairis.org/stencils/cairis_asset.xml``.
+2. Setup the CAIRIS asset shape library by going to the File >> Open Library from >> URL menu, and entering the URL ``https://cairis.org/stencils/cairis_asset.xml``.
 
 3. Click on square (asset) in the cairis_assets.xml palette to place an asset on the canvas.  Hoovering the mouse over the asset will display the asset properties as a tool-tip
 
@@ -177,5 +179,10 @@ Asset modelling with diagrams.net
 
 7. In CAIRIS, select the System >> Import menu to open the Import form.  Select *diagrams.net (Asset Model)* from the Model combo box, click on the File button to choose the exported diagrams.net model to import, and select the environment to import the asset model into.
 
+.. figure:: dn_assetModel.jpg
+   :alt: dn_assetModel.jpg
+
 Assets that don't already exist will be created in CAIRIS, with security properties set for the environment the model is imported into.  Assets and associations that already exist will not be overwritten.
 
+.. note:: 
+   We recommend you use the *cairis_asset.xml* shape library when asset modelling, but you could - in theory - you any shape in diagrams.net to model assets.  However, you must ensure that you use the Edit Data option to add a ``type`` property, which should be set to a valid asset type.
