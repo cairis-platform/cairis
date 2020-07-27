@@ -163,7 +163,7 @@ Asset modelling with diagrams.net
 
 2. Setup the CAIRIS asset shape library by going to the File >> Open Library from >> URL menu, and entering the URL ``https://cairis.org/stencils/cairis_asset.xml``.
 
-3. Click on the square (asset) in the cairis_assets.xml palette to place an asset on the canvas.  Hoovering the mouse over the asset will display the asset properties as a tool-tip
+3. Click on the square (asset) in the cairis_assets.xml palette to place an asset on the canvas.  Double click on the shape to set its label, which represents the asset name.  Hoovering the mouse over the asset will display the asset properties as a tool-tip
 
 .. figure:: dn_editData.jpg
    :alt: dn_editData.jpg

@@ -124,6 +124,37 @@ By clicking on a model element, information about that artifact can be viewed.
 
 For details on how to print DFDs as SVG files, see :doc:`Generating Documentation </gendoc>`.
 
+Modelling DFDs with diagrams.net
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+You can use `diagrams.net <https://diagrams.net>`_ to import DFDs into CAIRIS by following the steps below:
+
+1. Create a new blank diagram in `diagrams.net <https://diagrams.net>`_ .
+
+2. Setup the CAIRIS DFD shape library by going to the File >> Open Library from >> URL menu, and entering the URL ``https://cairis.org/stencils/cairis_dfd.xml``.
+
+3. To add an entity, click on the square in the cairis_dfd.xml palette to place an entity on the canvas.  Double click on the shape to set its label, which represents the entity name.  When importing the model, if an asset corresponding with the entity does not exist, CAIRIS will create a corresponding asset with some default values.
+
+4. To add a process, click on the rounded box in the cairis_dfd.xml palette to place a process on the canvas.  Double click on the shape to set its label, which represents the process name.  When importing the model, if a use case corresponding with the process does not exist, CAIRIS will create a corresponding use case (and associated role) with some default values.
+
+5. To add a data store, click on the parallel lines in the cairis_dfd.xml palette to place a data store on the canvas.  Double click on the shape to set its label, which represents the data store name.  When importing the model, if an asset corresponding with the data store does not exist, CAIRIS will create a corresponding asset with some default values.
+
+6. To add a data flow between DFD elements, click on the arrow in the cairis_dfd.xml palette to place a data flow on the canvas.  Double click on the data flow to set its label, which represents the data flow name.  Right click on the data flow and select Edit Data to set the assets carried in the flow.  By default, this is set to *UndefinedInformation*.  This should be changed to represent the information assets carried by the data flow.  Multiple assets should be separated by a comma.  When importing the model, if assets corresponding with this comma separated list do not exist, CAIRIS will create them.
+
+7. To encompass processes and data stores in a trust boundary, click on the dashed square in the cairis_dfd.xml palete to place a trust boundary on the canvas.  Right click on the shape and select Edit Data to set the trust boundary name.  Once set, move the processes and data stores within the trust boundary.  Please note that, as external systems, entities should not be place within trust boundaries.
+
+.. figure:: dn_dfd.jpg
+   :alt: dn_dfd.jpg
+
+6. Once the diagram is ready, select the File >> Export as >> XML... menu option, unclick the Compressed tick box, click on the Export button, and enter the name of the diagram to be exported.
+
+7. In CAIRIS, select the System >> Import menu to open the Import form.  Select *diagrams.net (Data Flow Diagram)* from the Model combo box, click on the File button to choose the exported diagrams.net model to import, and select the environment to import the DFD into.
+
+.. figure:: dn_importedDfd.jpg
+   :alt: dn_importedDfd.jpg
+
+.. note:: 
+   We recommend you use the *cairis_dfd.xml* shape library when data flow diagramming, but you could - in theory - use any shape in diagrams.net to model DFD elements.  However, you must ensure that you use the Edit Data option to add a ``type`` property, which should be set to a valid DFD type (entity, process, datastore, or trustboundary).   You also need to set a name property for trust boundaries.  Similarly, you also use any line to link DFD elements, but you need to use the Edit Data option to add a ``assets`` property and define at least one asset as it value.
 
 
 Attack trees
