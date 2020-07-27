@@ -9,7 +9,7 @@ If you have `Vagrant <https://www.vagrantup.com/downloads.html>`_ and `VirtualBo
 
 .. code-block:: bash
 
-   git clone http://github.com/cairis-platform/cairis
+   git clone https://github.com/cairis-platform/cairis
 
 Once in the root directory of the repository type:
 
