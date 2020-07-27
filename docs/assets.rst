@@ -185,4 +185,4 @@ Asset modelling with diagrams.net
 Assets that don't already exist will be created in CAIRIS, with security properties set for the environment the model is imported into.  Assets and associations that already exist will not be overwritten.
 
 .. note:: 
-   We recommend you use the *cairis_asset.xml* shape library when asset modelling, but you could - in theory - you any shape in diagrams.net to model assets.  However, you must ensure that you use the Edit Data option to add a ``type`` property, which should be set to a valid asset type.
+   We recommend you use the *cairis_asset.xml* shape library when asset modelling, but you could - in theory - use any shape in diagrams.net to model assets.  However, you must ensure that you use the Edit Data option to add a ``type`` property, which should be set to a valid asset type.
