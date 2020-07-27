@@ -4,7 +4,7 @@ Installing CAIRIS
 Installation via Vagrant
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-If you have `Vagrant <https://www.vagrantup.com/downloads.html>`_ and `VirtualBox <https://virtualbox.org>`_ installed, you can build your CAIRIS VM in minutes.  To start, you need to cloning the cairis server repository:
+If you have `Vagrant <https://www.vagrantup.com/downloads.html>`_ and `VirtualBox <https://virtualbox.org>`_ installed, you can build your CAIRIS VM in minutes.  To start, you need to clone the cairis server repository:
 
 
 .. code-block:: bash
