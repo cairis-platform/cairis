@@ -28,6 +28,7 @@ drop procedure if exists updateAttacker;
 drop procedure if exists updateAsset;
 drop procedure if exists updateClassAssociation;
 drop procedure if exists updateGoalAssociation;
+drop procedure if exists updateUsecaseAssociation;
 drop procedure if exists addAttackerMotive;
 drop procedure if exists addAttackerCapability;
 drop procedure if exists add_attacker_role;
@@ -43,6 +44,7 @@ drop procedure if exists delete_vulnerability;
 drop procedure if exists addAsset;
 drop procedure if exists addClassAssociation;
 drop procedure if exists addGoalAssociation;
+drop procedure if exists addUsecaseAssociation;
 drop procedure if exists addThreat;
 drop procedure if exists updateThreat;
 drop procedure if exists addVulnerability;
@@ -54,9 +56,11 @@ drop procedure if exists addThreatLikelihood;
 drop procedure if exists addVulnerabilitySeverity;
 drop procedure if exists add_threat_properties;
 drop procedure if exists add_asset_properties;
+drop procedure if exists add_usecase_attributes;
 drop procedure if exists add_countermeasure_properties;
 drop procedure if exists delete_threat_properties;
 drop procedure if exists delete_asset_properties;
+drop procedure if exists delete_usecase_attributes;
 drop procedure if exists delete_countermeasure_properties;
 drop procedure if exists attacker_environments;
 drop procedure if exists risk_environments;
@@ -93,6 +97,7 @@ drop procedure if exists threat_attacker;
 drop procedure if exists delete_asset;
 drop procedure if exists delete_classassociation;
 drop procedure if exists delete_goalassociation;
+drop procedure if exists delete_usecaseassociation;
 drop procedure if exists vulnerability_asset;
 drop procedure if exists riskAnalysisModel;
 drop procedure if exists riskModel;
@@ -1022,7 +1027,9 @@ drop procedure if exists userGoalSystemGoals;
 drop procedure if exists deniedUserGoalDependencies;
 drop procedure if exists isGoalDenied;
 drop procedure if exists flows;
-drop procedure if exists taintFlowAnalysis;
+drop procedure if exists entityDataFlows;
+drop procedure if exists prepareTaintFlowTable;
+drop procedure if exists addTaintFlow;
 drop procedure if exists checkPreProcessTaint;
 drop procedure if exists checkPostProcessTaint;
 drop procedure if exists analyseTaintFlows;
@@ -1031,9 +1038,6 @@ drop procedure if exists controlNames;
 drop procedure if exists addDataFlowTag;
 drop procedure if exists getDataFlowTags;
 drop procedure if exists deleteDataFlowTags;
-drop function if exists strSplit;
-drop procedure if exists addTaintFlows;
-drop procedure if exists conflictingControl;
 
 
 delimiter //
@@ -2144,9 +2148,27 @@ begin
 end
 //
 
+create procedure add_usecase_attributes(in usecaseId int, in environmentName text, in vAttribute int, in saAttribute int, in wAttribute int, in sAttribute int, in raAttribute int, in vRationale text, in saRationale text, in wRationale text, in sRationale text, in raRationale text)
+begin
+  declare environmentId int;
+  select id into environmentId from environment where name = environmentName limit 1;
+  insert into usecase_property(environment_id,usecase_id,property_id,property_value_id,property_rationale) values(environmentId,usecaseId,0,vAttribute,vRationale);
+  insert into usecase_property(environment_id,usecase_id,property_id,property_value_id,property_rationale) values(environmentId,usecaseId,1,saAttribute,saRationale);
+  insert into usecase_property(environment_id,usecase_id,property_id,property_value_id,property_rationale) values(environmentId,usecaseId,2,wttribute,wRationale);
+  insert into usecase_property(environment_id,usecase_id,property_id,property_value_id,property_rationale) values(environmentId,usecaseId,3,sAttribute,sRationale);
+  insert into usecase_property(environment_id,usecase_id,property_id,property_value_id,property_rationale) values(environmentId,usecaseId,4,raAttribute,raRationale);
+  end
+//
+
 create procedure delete_asset_properties(in assetId int, in environmentId int)
 begin
   delete from asset_property where asset_id = assetId and environment_id = environmentId;
+end
+//
+
+create procedure delete_usecase_attributes(in usecaseId int, in environmentId int)
+begin
+  delete from usecase_property where usecase_id = usecaseId and environment_id = environmentId;
 end
 //
 
@@ -6043,9 +6065,7 @@ begin
     union
     select -1,e.name,concat('Concerns task ',t.name),'taskconcern',0,'Association','1','','','1','Association',0,'asset',a.name,concat('Concerns task ',t.name) from task_asset tc, task t, environment_asset ea, asset a, environment e where ea.environment_id = environmentId and ea.environment_id = tc.environment_id and ea.asset_id = tc.asset_id and tc.task_id = t.id and tc.asset_id = ea.asset_id and tc.asset_id = a.id and ea.environment_id = e.id
     union
-    select -1,e.name,concat('Concerns usecase ',t.name),'usecaseconcern',0,'Association','1','','','1','Association',0,'asset',a.name,concat('Concerns use case ',t.name) from usecase_asset tc, usecase t, environment_asset ea, asset a, environment e where ea.environment_id = environmentId and ea.environment_id = tc.environment_id and ea.asset_id = tc.asset_id and tc.usecase_id = t.id and tc.asset_id = ea.asset_id and tc.asset_id = a.id and ea.environment_id = e.id
-    union
-    select -1,e.name,p.name,'persona',0,'Association','1','','','1','Inheritance',0,'asset', a.name,concat('Is a ',r.name) rationale from persona p, asset a, environment e, role r, environment_asset ea, persona_role pr, asset_tag at, tag t where p.id = pr.persona_id and pr.environment_id = environmentId and pr.environment_id = ea.environment_id and pr.role_id = r.id and r.name = substr(t.name,6) and ea.asset_id = at.asset_id and at.tag_id = t.id and ea.asset_id = a.id;
+    select -1,e.name,concat('Concerns usecase ',t.name),'usecaseconcern',0,'Association','1','','','1','Association',0,'asset',a.name,concat('Concerns use case ',t.name) from usecase_asset tc, usecase t, environment_asset ea, asset a, environment e where ea.environment_id = environmentId and ea.environment_id = tc.environment_id and ea.asset_id = tc.asset_id and tc.usecase_id = t.id and tc.asset_id = ea.asset_id and tc.asset_id = a.id and ea.environment_id = e.id;
   else
     select a.id,e.name,ha.name,'asset',a.head_navigation,hat.name,hm.name,a.head_role_name,a.tail_role_name,tm.name,tat.name,a.tail_navigation,'asset',ta.name,a.rationale rationale from classassociation a, environment e, asset ha, multiplicity_type hm, association_type hat, association_type tat, multiplicity_type tm, asset ta where a.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and a.environment_id = e.id and a.head_id = ha.id and a.head_multiplicity_id = hm.id and a.head_association_type_id = hat.id and a.tail_association_type_id = tat.id and a.tail_multiplicity_id = tm.id and a.tail_id = ta.id
     union
@@ -6073,9 +6093,7 @@ begin
     union
     select -1,e.name,va.name,'asset',1,'Dependency','1','&lt;&lt;safeguards&gt;&gt;','','1','Association',0,'asset',ma.name,'' rationale from asset ma, asset va, environment e, component_vulnerability_target cvt, asset_vulnerability av where ma.id = cvt.asset_id and cvt.vulnerability_id = av.vulnerability_id and av.asset_id = va.id and cvt.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and av.environment_id = environmentId and av.environment_id = e.id
     union
-    select -1,e.name,va.name,'asset',1,'Dependency','1','&lt;&lt;safeguards&gt;&gt;','','1','Association',0,'asset',ma.name,'' rationale from asset ma, asset va, environment e, component_threat_target ctt, asset_threat at where ma.id = ctt.asset_id and ctt.threat_id = at.threat_id and at.asset_id = va.id and ctt.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and at.environment_id = environmentId and at.environment_id = e.id
-    union
-    select -1,e.name,p.name,'persona',0,'Association','1','','','1','Inheritance',0,'asset', a.name,concat('Is a ',r.name) rationale from persona p, asset a, environment e, role r, environment_asset ea, persona_role pr, asset_tag at, tag t where p.id = pr.persona_id and pr.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and pr.environment_id = ea.environment_id and pr.role_id = r.id and r.name = substr(t.name,6) and ea.asset_id = at.asset_id and at.tag_id = t.id and ea.asset_id = a.id;
+    select -1,e.name,va.name,'asset',1,'Dependency','1','&lt;&lt;safeguards&gt;&gt;','','1','Association',0,'asset',ma.name,'' rationale from asset ma, asset va, environment e, component_threat_target ctt, asset_threat at where ma.id = ctt.asset_id and ctt.threat_id = at.threat_id and at.asset_id = va.id and ctt.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and at.environment_id = environmentId and at.environment_id = e.id;
   end if;
 end
 //
@@ -6107,9 +6125,7 @@ begin
     union
     select -1,e.name,sa.name,'asset',0,'Association',tmt.name,ca.link,'',smt.name,'Association',0,'asset',ta.name,'' rationale from goal_concernassociation ca, asset sa, multiplicity_type smt, asset ta, multiplicity_type tmt, environment e where ca.environment_id = environmentId and ca.source_id = sa.id and ca.target_id = ta.id and ca.source_multiplicity_id = smt.id and ca.target_multiplicity_id = tmt.id and ca.environment_id = e.id
     union
-    select -1,e.name,sa.name,'asset',0,'Association',tmt.name,ca.link,'',smt.name,'Association',0,'asset',ta.name,'' rationale from task_concernassociation ca, asset sa, multiplicity_type smt, asset ta, multiplicity_type tmt, environment e where ca.environment_id = environmentId and ca.source_id = sa.id and ca.target_id = ta.id and ca.source_multiplicity_id = smt.id and ca.target_multiplicity_id = tmt.id and ca.environment_id = e.id
-    union
-    select -1,e.name,p.name,'persona',0,'Association','1','','','1','Inheritance',0,'asset', a.name,'' rationale from persona p, asset a, environment e, role r, environment_asset ea, persona_role pr, asset_tag at, tag t where p.id = pr.persona_id and pr.environment_id = environmentId and pr.environment_id = ea.environment_id and pr.role_id = r.id and r.name = substr(t.name,6) and ea.asset_id = at.asset_id and at.tag_id = t.id and ea.asset_id = a.id; 
+    select -1,e.name,sa.name,'asset',0,'Association',tmt.name,ca.link,'',smt.name,'Association',0,'asset',ta.name,'' rationale from task_concernassociation ca, asset sa, multiplicity_type smt, asset ta, multiplicity_type tmt, environment e where ca.environment_id = environmentId and ca.source_id = sa.id and ca.target_id = ta.id and ca.source_multiplicity_id = smt.id and ca.target_multiplicity_id = tmt.id and ca.environment_id = e.id;
   else
     select a.id,e.name,ha.name,'asset',a.head_navigation,hat.name,hm.name,a.head_role_name,a.tail_role_name,tm.name,tat.name,a.tail_navigation,'asset',ta.name,'' rationale from classassociation a, environment e, asset ha, multiplicity_type hm, association_type hat, association_type tat, multiplicity_type tm, asset ta where a.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and a.environment_id = e.id and a.head_id = ha.id and a.head_multiplicity_id = hm.id and a.head_association_type_id = hat.id and a.tail_association_type_id = tat.id and a.tail_multiplicity_id = tm.id and a.tail_id = ta.id
     union
@@ -6133,9 +6149,7 @@ begin
     union
     select -1,e.name,sa.name,'asset',0,'Association',tmt.name,ca.link,'',smt.name,'Association',0,'asset',ta.name,'' rationale from goal_concernassociation ca, asset sa, multiplicity_type smt, asset ta, multiplicity_type tmt, environment e where ca.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and ca.source_id = sa.id and ca.target_id = ta.id and ca.source_multiplicity_id = smt.id and ca.target_multiplicity_id = tmt.id and ca.environment_id = e.id
     union
-    select -1,e.name,sa.name,'asset',0,'Association',tmt.name,ca.link,'',smt.name,'Association',0,'asset',ta.name,'' rationale from task_concernassociation ca, asset sa, multiplicity_type smt, asset ta, multiplicity_type tmt, environment e where ca.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and ca.source_id = sa.id and ca.target_id = ta.id and ca.source_multiplicity_id = smt.id and ca.target_multiplicity_id = tmt.id and ca.environment_id = e.id
-    union
-    select -1,e.name,p.name,'persona',0,'Association','1','','','1','Inheritance',0,'asset', a.name,'' rationale from persona p, asset a, environment e, role r, environment_asset ea, persona_role pr, asset_tag at, tag t where p.id = pr.persona_id and pr.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and pr.environment_id = ea.environment_id and pr.role_id = r.id and r.name = substr(t.name,6) and ea.asset_id = at.asset_id and at.tag_id = t.id and ea.asset_id = a.id;
+    select -1,e.name,sa.name,'asset',0,'Association',tmt.name,ca.link,'',smt.name,'Association',0,'asset',ta.name,'' rationale from task_concernassociation ca, asset sa, multiplicity_type smt, asset ta, multiplicity_type tmt, environment e where ca.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and ca.source_id = sa.id and ca.target_id = ta.id and ca.source_multiplicity_id = smt.id and ca.target_multiplicity_id = tmt.id and ca.environment_id = e.id;
   end if;
 end
 //
@@ -6652,6 +6666,20 @@ begin
 end
 //
 
+create procedure addUsecaseAssociation(in associationId int, in envName text, in usecaseName text, in subUsecaseName text, rationaleName text)
+begin
+  declare environmentId int;
+  declare usecaseId int;
+  declare subUsecaseId int;
+  
+  select id into environmentId from environment where name = envName limit 1;
+  
+    select id into usecaseId from usecase where name = usecaseName;    
+    select id into subUsecaseId from usecase where name = subUsecaseName;    
+    insert into usecase_usecaseassociation(id,environment_id,usecase_id,subUsecase_id,rationale) values(associationId,environmentId,UsecaseId,subUsecaseId,rationaleName);
+end
+//
+
 create procedure addGoalAssociation(in associationId int,in envName text, in goalName text, in goalDimName text, in aType text, in subGoalName text, in subGoalDimName text,in alternativeId int,rationaleName text)
 begin
   declare environmentId int;
@@ -6785,6 +6813,20 @@ begin
 end
 //
 
+create procedure updateUsecaseAssociation(in associationId int, in envName text, in usecaseName text, in subUsecaseName text, rationaleName text)
+begin
+  declare environmentId int;
+  declare usecaseId int;
+  declare subUsecaseId int;
+  
+  select id into environmentId from environment where name = envName limit 1;
+  
+	select id into usecaseId from usecase where name = usecaseName;    
+	select id into subUsecaseId from usecase where name = subUsecaseName;    
+	update usecase_usecaseassociation set environment_id = environmentId, usecase_id = usecaseId, subUsecase_id = subUsecaseId,rationale = rationaleName where id = associationId;
+end
+//
+
 create procedure updateGoalAssociation(in associationId int,in envName text, in goalName text, in goalDimName text, in aType text, in subGoalName text,in subGoalDimName text,in alternativeId int,rationaleName text)
 begin
   declare environmentId int;
@@ -6905,6 +6947,12 @@ begin
     select id into subGoalId from role where name = subGoalName;    
     update requirementrole_goalassociation set environment_id = environmentId, goal_id = goalId, ref_type_id = aTypeId, subgoal_id = subGoalId,alternative_id = alternativeId, rationale = rationaleName where id = associationId;
   end if;
+end
+//
+
+create procedure delete_usecaseassociation(in associationId int, in usecaseName text, in subUsecaseName text)
+begin
+  delete from usecase_usecaseassociation where id = associationId;
 end
 //
 
@@ -12593,9 +12641,7 @@ begin
     union
     select a.id,e.name,ha.name,'asset',a.head_navigation,hat.name,hm.name,a.head_role_name,a.tail_role_name,tm.name,tat.name,a.tail_navigation,'asset',ta.name,'' rationale from classassociation a, environment e, asset ha, multiplicity_type hm, association_type hat, association_type tat, multiplicity_type tm, asset ta where a.tail_id = assetId and a.environment_id = environmentId and a.environment_id = e.id and a.head_id = ha.id and a.head_multiplicity_id = hm.id and a.head_association_type_id = hat.id and a.tail_association_type_id = tat.id and a.tail_multiplicity_id = tm.id and a.tail_id = ta.id
     union
-    select -1,he.name,ha.name,'asset',0,hat.name,hm.name,a.head_role_name,a.tail_role_name,tm.name,tat.name,0,'asset',ta.name,concat('Concerns Security Pattern ',sp.name) rationale from securitypattern_classassociation a, environment he, environment te, asset ha, template_asset hta, multiplicity_type hm, association_type hat, association_type tat, multiplicity_type tm, asset ta, template_asset tta, environment_asset hea, environment_asset tea, securitypattern_asset_template_asset hata, securitypattern_asset_template_asset tata,securitypattern sp where a.tail_id = assetId and hea.environment_id = environmentId and hea.environment_id = tea.environment_id and hea.environment_id = he.id and tea.environment_id = te.id and hea.asset_id = ha.id and tea.asset_id = ta.id and a.head_id = hta.id and a.head_multiplicity_id = hm.id and a.head_association_type_id = hat.id and a.tail_association_type_id = tat.id and a.tail_multiplicity_id = tm.id and a.tail_id = tta.id and ha.id = hata.asset_id and hata.template_asset_id = hta.id and hata.pattern_id = sp.id and ta.id = tata.asset_id and tata.template_asset_id = tta.id and tata.pattern_id = sp.id and a.pattern_id = sp.id
-    union
-    select -1,e.name,p.name,'persona',0,'Association','1','','','1','Inheritance',0,'asset', a.name,concat('Is a ',r.name) rationale from persona p, asset a, environment e, role r, environment_asset ea, persona_role pr, asset_tag at, tag t where a.id = assetId and p.id = pr.persona_id and pr.environment_id = environmentId and pr.environment_id = ea.environment_id and pr.role_id = r.id and r.name = substr(t.name,6) and ea.asset_id = at.asset_id and at.tag_id = t.id and ea.asset_id = a.id;
+    select -1,he.name,ha.name,'asset',0,hat.name,hm.name,a.head_role_name,a.tail_role_name,tm.name,tat.name,0,'asset',ta.name,concat('Concerns Security Pattern ',sp.name) rationale from securitypattern_classassociation a, environment he, environment te, asset ha, template_asset hta, multiplicity_type hm, association_type hat, association_type tat, multiplicity_type tm, asset ta, template_asset tta, environment_asset hea, environment_asset tea, securitypattern_asset_template_asset hata, securitypattern_asset_template_asset tata,securitypattern sp where a.tail_id = assetId and hea.environment_id = environmentId and hea.environment_id = tea.environment_id and hea.environment_id = he.id and tea.environment_id = te.id and hea.asset_id = ha.id and tea.asset_id = ta.id and a.head_id = hta.id and a.head_multiplicity_id = hm.id and a.head_association_type_id = hat.id and a.tail_association_type_id = tat.id and a.tail_multiplicity_id = tm.id and a.tail_id = tta.id and ha.id = hata.asset_id and hata.template_asset_id = hta.id and hata.pattern_id = sp.id and ta.id = tata.asset_id and tata.template_asset_id = tta.id and tata.pattern_id = sp.id and a.pattern_id = sp.id;
   else
     insert into temp_classtree(id,environment,head_name,head_dim,head_nav,head_assoc,head_mult,head_role,tail_role,tail_mult,tail_assoc,tail_nav,tail_dim,tail_name,rationale)
     select a.id,e.name,ha.name,'asset',a.head_navigation,hat.name,hm.name,a.head_role_name,a.tail_role_name,tm.name,tat.name,a.tail_navigation,'asset',ta.name,a.rationale rationale from classassociation a, environment e, asset ha, multiplicity_type hm, association_type hat, association_type tat, multiplicity_type tm, asset ta where a.head_id = assetId and a.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and a.environment_id = e.id and a.head_id = ha.id and a.head_multiplicity_id = hm.id and a.head_association_type_id = hat.id and a.tail_association_type_id = tat.id and a.tail_multiplicity_id = tm.id and a.tail_id = ta.id
@@ -12622,9 +12668,7 @@ begin
     union
     select a.id,e.name,ha.name,'asset',a.head_navigation,hat.name,hm.name,a.head_role_name,a.tail_role_name,tm.name,tat.name,a.tail_navigation,'asset',ta.name,'' rationale from classassociation a, environment e, asset ha, multiplicity_type hm, association_type hat, association_type tat, multiplicity_type tm, asset ta where a.tail_id = assetId and a.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and a.environment_id = e.id and a.head_id = ha.id and a.head_multiplicity_id = hm.id and a.head_association_type_id = hat.id and a.tail_association_type_id = tat.id and a.tail_multiplicity_id = tm.id and a.tail_id = ta.id
     union
-    select -1,he.name,ha.name,'asset',0,hat.name,hm.name,a.head_role_name,a.tail_role_name,tm.name,tat.name,0,'asset',ta.name,concat('Concerns Security Pattern ',sp.name) rationale from securitypattern_classassociation a, environment he, environment te, asset ha, template_asset hta, multiplicity_type hm, association_type hat, association_type tat, multiplicity_type tm, asset ta, template_asset tta, environment_asset hea, environment_asset tea, securitypattern_asset_template_asset hata, securitypattern_asset_template_asset tata,securitypattern sp where a.tail_id = assetId and hea.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and hea.environment_id = tea.environment_id and hea.environment_id = he.id and tea.environment_id = te.id and hea.asset_id = ha.id and tea.asset_id = ta.id and a.head_id = hta.id and a.head_multiplicity_id = hm.id and a.head_association_type_id = hat.id and a.tail_association_type_id = tat.id and a.tail_multiplicity_id = tm.id and a.tail_id = tta.id and ha.id = hata.asset_id and hata.template_asset_id = hta.id and hata.pattern_id = sp.id and ta.id = tata.asset_id and tata.template_asset_id = tta.id and tata.pattern_id = sp.id and a.pattern_id = sp.id
-    union
-    select -1,e.name,p.name,'persona',0,'Association','1','','','1','Inheritance',0,'asset', a.name,concat('Is a ',r.name) rationale from persona p, asset a, environment e, role r, environment_asset ea, persona_role pr, asset_tag at, tag t where a.id = assetId and p.id = pr.persona_id and pr.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and pr.environment_id = ea.environment_id and pr.role_id = r.id and r.name = substr(t.name,6) and ea.asset_id = at.asset_id and at.tag_id = t.id and ea.asset_id = a.id;
+    select -1,he.name,ha.name,'asset',0,hat.name,hm.name,a.head_role_name,a.tail_role_name,tm.name,tat.name,0,'asset',ta.name,concat('Concerns Security Pattern ',sp.name) rationale from securitypattern_classassociation a, environment he, environment te, asset ha, template_asset hta, multiplicity_type hm, association_type hat, association_type tat, multiplicity_type tm, asset ta, template_asset tta, environment_asset hea, environment_asset tea, securitypattern_asset_template_asset hata, securitypattern_asset_template_asset tata,securitypattern sp where a.tail_id = assetId and hea.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and hea.environment_id = tea.environment_id and hea.environment_id = he.id and tea.environment_id = te.id and hea.asset_id = ha.id and tea.asset_id = ta.id and a.head_id = hta.id and a.head_multiplicity_id = hm.id and a.head_association_type_id = hat.id and a.tail_association_type_id = tat.id and a.tail_multiplicity_id = tm.id and a.tail_id = tta.id and ha.id = hata.asset_id and hata.template_asset_id = hta.id and hata.pattern_id = sp.id and ta.id = tata.asset_id and tata.template_asset_id = tta.id and tata.pattern_id = sp.id and a.pattern_id = sp.id;
   end if;
 
   select id,environment,head_name,head_dim,head_nav,head_assoc,head_mult,head_role,tail_role,tail_mult,tail_assoc,tail_nav,tail_dim,tail_name,rationale from temp_classtree;
@@ -12668,9 +12712,7 @@ begin
     union
     select -1,e.name,sa.name,'asset',0,'Association',tmt.name,ca.link,'',smt.name,'Association',0,'asset',ta.name,'' rationale from task_concernassociation ca, asset sa, environment_asset sea, multiplicity_type smt, asset ta, environment_asset tea, multiplicity_type tmt, environment e where ca.environment_id = environmentId and ca.source_id = sa.id and ca.target_id = ta.id and ca.source_multiplicity_id = smt.id and ca.target_multiplicity_id = tmt.id and ca.environment_id = e.id and sa.id = assetId and sa.id = sea.asset_id and sea.environment_id = ca.environment_id and ta.id = tea.asset_id and tea.environment_id = ca.environment_id
     union
-    select -1,e.name,sa.name,'asset',0,'Association',tmt.name,ca.link,'',smt.name,'Association',0,'asset',ta.name,'' rationale from task_concernassociation ca, asset sa, environment_asset sea, multiplicity_type smt, asset ta, environment_asset tea, multiplicity_type tmt, environment e where ca.environment_id = environmentId and ca.source_id = sa.id and ca.target_id = ta.id and ca.source_multiplicity_id = smt.id and ca.target_multiplicity_id = tmt.id and ca.environment_id = e.id and sa.id = sea.asset_id and sea.environment_id = ca.environment_id and ta.id = assetId and ta.id = tea.asset_id and tea.environment_id = ca.environment_id
-    union
-    select -1,e.name,p.name,'persona',0,'Association','1','','','1','Inheritance',0,'asset', a.name,concat('Is a ',r.name) rationale from persona p, asset a, environment e, role r, environment_asset ea, persona_role pr, asset_tag at, tag t where a.id = assetId and p.id = pr.persona_id and pr.environment_id = environmentId and pr.environment_id = ea.environment_id and pr.role_id = r.id and r.name = substr(t.name,6) and ea.asset_id = at.asset_id and at.tag_id = t.id and ea.asset_id = a.id;
+    select -1,e.name,sa.name,'asset',0,'Association',tmt.name,ca.link,'',smt.name,'Association',0,'asset',ta.name,'' rationale from task_concernassociation ca, asset sa, environment_asset sea, multiplicity_type smt, asset ta, environment_asset tea, multiplicity_type tmt, environment e where ca.environment_id = environmentId and ca.source_id = sa.id and ca.target_id = ta.id and ca.source_multiplicity_id = smt.id and ca.target_multiplicity_id = tmt.id and ca.environment_id = e.id and sa.id = sea.asset_id and sea.environment_id = ca.environment_id and ta.id = assetId and ta.id = tea.asset_id and tea.environment_id = ca.environment_id;
   else
     insert into temp_classtree(id,environment,head_name,head_dim,head_nav,head_assoc,head_mult,head_role,tail_role,tail_mult,tail_assoc,tail_nav,tail_dim,tail_name,rationale)
     select a.id,e.name,ha.name,'asset',a.head_navigation,hat.name,hm.name,a.head_role_name,a.tail_role_name,tm.name,tat.name,a.tail_navigation,'asset',ta.name,'' rationale from classassociation a, environment e, asset ha, multiplicity_type hm, association_type hat, association_type tat, multiplicity_type tm, asset ta, environment_asset hea, environment_asset tea where a.head_id = assetId and a.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and a.environment_id = e.id and a.head_id = ha.id and a.head_multiplicity_id = hm.id and a.head_association_type_id = hat.id and a.tail_association_type_id = tat.id and a.tail_multiplicity_id = tm.id and a.tail_id = ta.id and ha.id = hea.asset_id and hea.environment_id = a.environment_id and ta.id = tea.asset_id and tea.environment_id = a.environment_id
@@ -12689,9 +12731,7 @@ begin
     union
     select -1,e.name,sa.name,'asset',0,'Association',tmt.name,ca.link,'',smt.name,'Association',0,'asset',ta.name,'' rationale from task_concernassociation ca, asset sa, environment_asset sea, multiplicity_type smt, asset ta, environment_asset tea, multiplicity_type tmt, environment e where ca.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and ca.source_id = sa.id and ca.target_id = ta.id and ca.source_multiplicity_id = smt.id and ca.target_multiplicity_id = tmt.id and ca.environment_id = e.id and sa.id = assetId and sa.id = sea.asset_id and sea.environment_id = ca.environment_id and ta.id = tea.asset_id and tea.environment_id = ca.environment_id
     union
-    select -1,e.name,sa.name,'asset',0,'Association',tmt.name,ca.link,'',smt.name,'Association',0,'asset',ta.name,'' rationale from task_concernassociation ca, asset sa, environment_asset sea, multiplicity_type smt, asset ta, environment_asset tea, multiplicity_type tmt, environment e where ca.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and ca.source_id = sa.id and ca.target_id = ta.id and ca.source_multiplicity_id = smt.id and ca.target_multiplicity_id = tmt.id and ca.environment_id = e.id and sa.id = sea.asset_id and sea.environment_id = ca.environment_id and ta.id = assetId and ta.id = tea.asset_id and tea.environment_id = ca.environment_id
-    union
-    select -1,e.name,p.name,'persona',0,'Association','1','','','1','Inheritance',0,'asset', a.name,concat('Is a ',r.name) rationale from persona p, asset a, environment e, role r, environment_asset ea, persona_role pr, asset_tag at, tag t where a.id = assetId and p.id = pr.persona_id and pr.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and pr.environment_id = ea.environment_id and pr.role_id = r.id and r.name = substr(t.name,6) and ea.asset_id = at.asset_id and at.tag_id = t.id and ea.asset_id = a.id;
+    select -1,e.name,sa.name,'asset',0,'Association',tmt.name,ca.link,'',smt.name,'Association',0,'asset',ta.name,'' rationale from task_concernassociation ca, asset sa, environment_asset sea, multiplicity_type smt, asset ta, environment_asset tea, multiplicity_type tmt, environment e where ca.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and ca.source_id = sa.id and ca.target_id = ta.id and ca.source_multiplicity_id = smt.id and ca.target_multiplicity_id = tmt.id and ca.environment_id = e.id and sa.id = sea.asset_id and sea.environment_id = ca.environment_id and ta.id = assetId and ta.id = tea.asset_id and tea.environment_id = ca.environment_id;
   end if;
   select id,environment,head_name,head_dim,head_nav,head_assoc,head_mult,head_role,tail_role,tail_mult,tail_assoc,tail_nav,tail_dim,tail_name,rationale from temp_classtree;
 end
@@ -13374,7 +13414,7 @@ begin
     then
       leave assoc_loop;
     end if;
-    set buf = concat(buf,'<asset_association environment=\"',envName,'\"  head_name=\"',headName,'\" head_nav=\"',headNav,'\" head_adornment=\"',headAdornment,'\" head_nry=\"',s2a(headNry),'\" head_role=\"',headRole,'\" tail_role=\"',tailRole,'\" tail_nry=\"',s2a(tailNry),'\" tail_adornment=\"',tailAdornment,'\" tail_nav=\"',tailNav,'\" tail_name=\"',tailName,'\">\n  <rationale>',assocRationale,'</rationale>\n</asset_association>\n');
+    set buf = concat(buf,'<asset_association environment=\"',envName,'\"  head_name=\"',headName,'\" head_nav=\"',headNav,'\" head_adornment=\"',headAdornment,'\" head_nry=\"',s2a(headNry),'\" head_role=\"',headRole,'\" tail_role=\"',tailRole,'\" tail_nry=\"',s2a(tailNry),'\" tail_adornment=\"',tailAdornment,'\" tail_nav=\"',tailNav,'\" tail_name=\"',tailName,'\" rationale=\"',assocRationale,'\" />\n');
     set rshipCount = rshipCount + 1;
   end loop assoc_loop;
   close assocCursor;
@@ -24943,7 +24983,6 @@ begin
   call deniedUserGoalDependencies(environmentId);
   call inheritanceInconsistency(environmentId);
   call userGoalLoopCheck();
-  call conflictingControl(environmentId);
 
   select distinct label,message from temp_vout;
 
@@ -31156,7 +31195,6 @@ begin
   declare newPrefix_names longtext default '';
   declare noFlows int default 1;
   declare dfName varchar(255);
-  declare dfSql longtext;
   declare done int default 0;
   declare flowCursor cursor for 
     select dep.dataflow_id,dep.to_id,d.name from dataflow_entity_process dep, dataflow d where dep.from_id = nodeId and dep.dataflow_id = d.id and d.environment_id = environmentId
@@ -31194,8 +31232,7 @@ begin
 
     if (isVisited > 0 )
     then
-      call addTaintFlows(newPrefix_ids,originId,environmentId,newPrefix_names);
-/*      insert into temp_entitydataflow(origin_id,ids,names) values(originId,newPrefix_ids,newPrefix_names); SF: useful when debugging */
+      insert into temp_entitydataflow(origin_id,ids,names) values(originId,newPrefix_ids,newPrefix_names);
     else
       call flows(originId,toId,environmentId,newPrefix_ids,newPrefix_names);
     end if;
@@ -31206,32 +31243,27 @@ begin
   then
     if length(prefix_ids) > 0
     then
-      call addTaintFlows(prefix_ids,originId,environmentId,prefix_names);
-/*      insert into temp_entitydataflow(origin_id,ids,names) values(originId,prefix_ids,prefix_names); SF: useful when debugging */
+      insert into temp_entitydataflow(origin_id,ids,names) values(originId,prefix_ids,prefix_names);
     end if;
   end if;
 end
 //
 
-create procedure taintFlowAnalysis(in envName text)
+create procedure entityDataFlows(in envName text)
 begin
-  declare envId int;
   declare entId int;
+  declare envId int;
   declare done int default 0;
   declare entityCursor cursor for select distinct dep.from_id from dataflow_entity_process dep, dataflow d where dep.dataflow_id = d.id and d.environment_id = envId; 
   declare continue handler for not found set done = 1;
 
-  drop table if exists temp_taintflow;
-  create temporary table temp_taintflow (dataflow_id int, environment_id int, entity longtext, df_sequence longtext);
-
-  select id into envId from environment where name = envName limit 1;
-/*
-  SF: Useful when debugging
   drop table if exists temp_entitydataflow;
   create temporary table temp_entitydataflow (origin_id int, ids longtext, names longtext);
-*/
+
   drop table if exists temp_visited;
   create temporary table temp_visited (node_id int);
+
+  select id into envId from environment where name = envName limit 1;
 
   open entityCursor;
   entity_loop: loop
@@ -31244,10 +31276,22 @@ begin
   end loop entity_loop;
   close entityCursor;
 
-/*  select e.name,t.ids,t.names from temp_entitydataflow t, entity e where t.origin_id = e.id; SF: useful when debugging */
+  select e.name,t.ids,t.names from temp_entitydataflow t, entity e where t.origin_id = e.id;
 
-  call analyseTaintFlows();
+end
+//
 
+create procedure prepareTaintFlowTable()
+begin
+
+  drop table if exists temp_taintflow;
+  create temporary table temp_taintflow (dataflow_id int, environment_id int, entity longtext, df_sequence longtext);
+end
+//
+
+create procedure addTaintFlow(in dfId int, in envId int, in entName longtext, in dfSeq longtext)
+begin
+  insert into temp_taintflow(dataflow_id,environment_id,entity,df_sequence) values(dfId,envId,entName,dfSeq);
 end
 //
 
@@ -31475,70 +31519,6 @@ begin
   then
     delete from dataflow_tag where dataflow_id = dfId;
   end if;
-end
-//
-
-create function strSplit(x longtext, pos integer) 
-returns longtext
-begin
-  declare output longtext;
-  set output = replace(substring(substring_index(x, ',', pos)
-                 , length(substring_index(x, ',', pos - 1)) + 1)
-                 , ','
-                 , '');
-  if output = '' 
-  then 
-    set output = null; 
-  end if;
-  return output;
-end
-//
-
-create procedure addTaintFlows(in csvDfs longtext, in originId int, in environmentId int, in dfSeq longtext)
-begin
-  declare csvIdx int default 1;
-  declare dfId int default -1;
-  declare entityName varchar(100);
-
-  select name into entityName from entity where id = originId;
-
-  repeat
-    select strSplit(csvDfs,csvIdx) into dfId;
-    if dfId is not null
-    then
-      insert into temp_taintflow(dataflow_id,environment_id,entity,df_sequence) values(dfId,environmentId,entityName,dfSeq);
-      set csvIdx = csvIdx + 1;
-    end if;
-  until dfId is null end repeat;
-end
-//
-
-create procedure conflictingControl(in environmentId int)
-begin
-  declare tbName varchar(255);
-  declare tbId int;
-  declare cfCount int;
-  declare done int default 0;
-  declare tbCursor cursor for 
-    select tb.id,tb.name from trust_boundary tb, trust_boundary_type tbt, trust_boundary_usecase tbu where tb.trust_boundary_type_id = tbt.id and tbt.name = 'Controlled Process' and tbu.trust_boundary_id = tb.id and tbu.environment_id = environmentId
-    union
-    select tb.id,tb.name from trust_boundary tb, trust_boundary_type tbt, trust_boundary_asset tba where tb.trust_boundary_type_id = tbt.id and tbt.name = 'Controlled Process' and tba.trust_boundary_id = tb.id and tba.environment_id = environmentId;
-  declare continue handler for not found set done = 1;
-
-  open tbCursor;
-  tb_loop: loop
-    fetch tbCursor into tbId,tbName;
-    if done = 1
-    then
-      leave tb_loop;
-    end if;
-    select count(*) into cfCount from dataflow d, dataflow_process_process dpp, trust_boundary tbf, trust_boundary_usecase tbfu, trust_boundary tbt, trust_boundary_usecase tbtu, dataflow_type dt where d.environment_id = environmentId and tbt.id = tbId and d.id = dpp.dataflow_id and dpp.from_id = tbfu.usecase_id and tbfu.trust_boundary_id = tbf.id and dpp.to_id = tbtu.usecase_id and tbtu.trust_boundary_id = tbt.id and tbf.id != tbt.id and d.dataflow_type_id = dt.id and dt.name = 'Control' and tbf.trust_boundary_type_id in (0,1,3);
-    if cfCount > 1
-    then
-      insert into temp_vout(label,message) values('STPA: potential control action conflict',concat('Multiple control actions feed into controlled process ',tbName,'.'));
-    end if;
-  end loop tb_loop;
-  close tbCursor;
 end
 //
 

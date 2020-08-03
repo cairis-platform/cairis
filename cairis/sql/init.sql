@@ -202,6 +202,7 @@ DROP TABLE IF EXISTS rolegoalrole_dependency;
 DROP TABLE IF EXISTS roletaskrole_dependency;
 DROP TABLE IF EXISTS roleassetrole_dependency;
 DROP TABLE IF EXISTS goalgoal_goalassociation;
+DROP TABLE IF EXISTS usecase_usecaseassociation;
 DROP TABLE IF EXISTS goalrequirement_goalassociation;
 DROP TABLE IF EXISTS goaltask_goalassociation;
 DROP TABLE IF EXISTS goalusecase_goalassociation;
@@ -383,6 +384,7 @@ DROP TABLE IF EXISTS vulnerability;
 DROP TABLE IF EXISTS vulnerability_type;
 DROP TABLE IF EXISTS severity;
 DROP TABLE IF EXISTS asset_property;
+DROP TABLE IF EXISTS usecase_property;
 DROP TABLE IF EXISTS environment_asset;
 DROP TABLE IF EXISTS composite_environment_override;
 DROP TABLE IF EXISTS composite_environment_property;
@@ -399,6 +401,8 @@ DROP TABLE IF EXISTS asset_value;
 DROP TABLE IF EXISTS environment;
 DROP TABLE IF EXISTS security_property;
 DROP TABLE IF EXISTS security_property_value;
+DROP TABLE IF EXISTS cognitive_attribute;
+DROP TABLE IF EXISTS cognitive_attribute_value;
 DROP TABLE IF EXISTS securityusability_property_value;
 DROP TABLE IF EXISTS countermeasure_value;
 DROP TABLE IF EXISTS threat_value;
@@ -605,6 +609,16 @@ CREATE TABLE security_property_value (
   name VARCHAR(50) NOT NULL,
   PRIMARY KEY(id)
 ) ENGINE=INNODB; 
+CREATE TABLE cognitive_attribute (
+  id INT NOT NULL,
+  name VARCHAR(50) NOT NULL,
+  PRIMARY KEY(id)
+) ENGINE=INNODB;
+CREATE TABLE cognitive_attribute_value (
+  id INT NOT NULL,
+  name VARCHAR(50) NOT NULL,
+  PRIMARY KEY(id)
+) ENGINE=INNODB;
 CREATE TABLE securityusability_property_value (
   id INT NOT NULL,
   name VARCHAR(50) NOT NULL,
@@ -962,6 +976,18 @@ CREATE TABLE usecase (
   author VARCHAR(255) NOT NULL,
   description VARCHAR(2000) NOT NULL,
   PRIMARY KEY(id)
+) ENGINE=INNODB;
+CREATE TABLE usecase_property(
+  usecase_id INT NOT NULL,
+  environment_id INT NOT NULL,
+  property_id INT NOT NULL,
+  property_value_id INT NOT NULL,
+  property_rationale varchar(4000),
+  PRIMARY KEY(usecase_id,environment_id,property_id),
+  FOREIGN KEY(usecase_id) REFERENCES usecase(id),
+  FOREIGN KEY(environment_id) REFERENCES environment(id),
+  FOREIGN KEY(property_id) REFERENCES cognitive_attribute(id),
+  FOREIGN KEY(property_value_id) REFERENCES cognitive_attribute_value(id)
 ) ENGINE=INNODB;
 CREATE TABLE requirement_requirement (
   from_id INT NOT NULL,
@@ -1555,6 +1581,17 @@ CREATE TABLE goalgoal_goalassociation (
   FOREIGN KEY(goal_id) REFERENCES goal(id),
   FOREIGN KEY(ref_type_id) REFERENCES reference_type(id),
   FOREIGN KEY(subgoal_id) REFERENCES goal(id)
+) ENGINE=INNODB;
+CREATE TABLE usecase_usecaseassociation (
+  id INT NOT NULL,
+  environment_id INT NOT NULL,
+  usecase_id INT NOT NULL,
+  subUsecase_id INT NOT NULL,
+  rationale VARCHAR(1000) NOT NULL,
+  PRIMARY KEY(id),
+  FOREIGN KEY(environment_id) REFERENCES environment(id),
+  FOREIGN KEY(usecase_id) REFERENCES usecase(id),
+  FOREIGN KEY(subUsecase_id) REFERENCES usecase(id)
 ) ENGINE=INNODB;
 CREATE TABLE goalrequirement_goalassociation (
   id INT NOT NULL,
@@ -4238,7 +4275,7 @@ CREATE VIEW conceptMapModel_all as
 
 
 
-INSERT INTO version (major,minor,patch) VALUES (2,3,5);
+INSERT INTO version (major,minor,patch) VALUES (2,3,3);
 INSERT INTO attributes (id,name) VALUES (103,'did');
 INSERT INTO trace_dimension values (0,'requirement');
 INSERT INTO trace_dimension values (1,'persona');
@@ -4330,6 +4367,10 @@ INSERT INTO security_property_value values (0,'None');
 INSERT INTO security_property_value values (1,'Low');
 INSERT INTO security_property_value values (2,'Medium');
 INSERT INTO security_property_value values (3,'High');
+INSERT INTO cognitive_attribute_value values (0,'None');
+INSERT INTO cognitive_attribute_value values (1,'Low');
+INSERT INTO cognitive_attribute_value values (2,'Medium');
+INSERT INTO cognitive_attribute_value values (3,'High');
 INSERT INTO securityusability_property_value values (-3,'High Help');
 INSERT INTO securityusability_property_value values (-2,'Medium Help');
 INSERT INTO securityusability_property_value values (-1,'Low Help');
@@ -4345,6 +4386,11 @@ INSERT INTO security_property values (4,'Anonymity');
 INSERT INTO security_property values (5,'Pseudonymity');
 INSERT INTO security_property values (6,'Unlinkability');
 INSERT INTO security_property values (7,'Unobservability');
+INSERT INTO cognitive_attribute values (0,'Vigilance');
+INSERT INTO cognitive_attribute values (1,'Situation Awareness');
+INSERT INTO cognitive_attribute values (2,'Workload');
+INSERT INTO cognitive_attribute values (3,'Stress');
+INSERT INTO cognitive_attribute values (4,'Risk Awareness');
 INSERT INTO allowable_trace values(0,2);
 INSERT INTO allowable_trace values(2,6);
 INSERT INTO allowable_trace values(0,6);
