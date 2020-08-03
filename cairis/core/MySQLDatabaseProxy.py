@@ -2023,7 +2023,8 @@ class MySQLDatabaseProxy:
       associations[asLabel] = association
     return associations
 
-def usecaseAssociations(self,procName,constraintId = ''):
+
+  def usecaseAssociations(self,procName,constraintId = ''):
     rows = self.responseList(procName,{'id':constraintId},'MySQL error getting usecase associations')
     associations = {}
     for associationId,envName,ucName,subUcName,rationale in rows:
@@ -2032,6 +2033,7 @@ def usecaseAssociations(self,procName,constraintId = ''):
       asLabel = envName + '/' + ucName + '/' + subUcName 
       associations[asLabel] = association
     return associations
+
 
   def riskObstacleModel(self,riskName,envName):
     rows = self.responseList('call riskObstacleTree(:risk,:env,0)',{'risk':riskName,'env':envName},'MySQL error getting risk obstacle model')
