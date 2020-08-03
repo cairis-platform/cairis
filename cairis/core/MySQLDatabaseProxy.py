@@ -72,6 +72,7 @@ from .MisuseCaseEnvironmentProperties import MisuseCaseEnvironmentProperties
 from .RoleEnvironmentProperties import RoleEnvironmentProperties
 from .ClassAssociationParameters import ClassAssociationParameters
 from .GoalAssociationParameters import GoalAssociationParameters
+from .UsecaseAssociationParameters import UsecaseAssociationParameters
 from .DependencyParameters import DependencyParameters
 from .GoalEnvironmentProperties import GoalEnvironmentProperties
 from .ObstacleEnvironmentProperties import ObstacleEnvironmentProperties
@@ -538,6 +539,10 @@ class MySQLDatabaseProxy:
   def addSecurityProperties(self,dimTable,objtId,environmentName,securityProperties,pRationale):
     sqlTxt = 'call add_' + dimTable + '_properties(:obj,:env,:cPr,:iPr,:avPr,:acPr,:anPr,:panPr,:unlPr,:unoPr,:cRa,:iRa,:avRa,:acRa,:anRa,:panRa,:unlRa,:unoRa)'
     self.updateDatabase(sqlTxt,{'obj':objtId,'env':environmentName,'cPr':securityProperties[C_PROPERTY],'iPr':securityProperties[I_PROPERTY],'avPr':securityProperties[AV_PROPERTY],'acPr':securityProperties[AC_PROPERTY],'anPr':securityProperties[AN_PROPERTY],'panPr':securityProperties[PAN_PROPERTY],'unlPr':securityProperties[UNL_PROPERTY],'unoPr':securityProperties[UNO_PROPERTY],'cRa':pRationale[C_PROPERTY],'iRa':pRationale[I_PROPERTY],'avRa':pRationale[AV_PROPERTY],'acRa':pRationale[AC_PROPERTY],'anRa':pRationale[AN_PROPERTY],'panRa':pRationale[PAN_PROPERTY],'unlRa':pRationale[UNL_PROPERTY],'unoRa':pRationale[UNO_PROPERTY]},'MySQL error adding security properties for ' + dimTable)
+
+  def addCognitiveAttributes(self,dimTable,objtId,environmentName,cognitiveAttributes,pRationale):
+    sqlTxt = 'call add_' + dimTable + '_attributes(:obj,:env,:vPr,:saPr,:wPr,:sPr,:raPr,:vRa,:saRa,:wRa,:sRa,:rsRa)'
+    self.updateDatabase(sqlTxt,{'obj':objtId,'env':environmentName,'vPr':cognitiveAttributes[V_ATTRIBUTE],'saPr':cognitiveAttributes[SA_ATTRIBUTE],'wPr':cognitiveAttributes[W_ATTRIBUTE],'sPr':cognitiveAttributes[S_ATTRIBUTE],'raPr':cognitiveAttributes[RA_ATTRIBUTE],'vRa':vRationale[V_ATTRIBUTE],'saRa':saRationale[SA_ATTRIBUTE],'wRa':wRationale[W_ATTRIBUTE],'sRa':sRationale[S_ATTRIBUTE],'raRa':raRationale[RA_ATTRIBUTE]},'MySQL error adding security properties for ' + dimTable)
 
   def deleteAsset(self,assetId):
     self.deleteObject(assetId,'asset')
@@ -2018,6 +2023,16 @@ class MySQLDatabaseProxy:
       associations[asLabel] = association
     return associations
 
+def usecaseAssociations(self,procName,constraintId = ''):
+    rows = self.responseList(procName,{'id':constraintId},'MySQL error getting usecase associations')
+    associations = {}
+    for associationId,envName,ucName,subUcName,rationale in rows:
+      parameters = UsecaseAssociationParameters(envName,ucName,subUcName,rationale)
+      association = ObjectFactory.build(associationId,parameters)
+      asLabel = envName + '/' + ucName + '/' + subUcName 
+      associations[asLabel] = association
+    return associations
+
   def riskObstacleModel(self,riskName,envName):
     rows = self.responseList('call riskObstacleTree(:risk,:env,0)',{'risk':riskName,'env':envName},'MySQL error getting risk obstacle model')
     associations = {}
@@ -2071,6 +2086,26 @@ class MySQLDatabaseProxy:
 
   def deleteGoalAssociation(self,associationId,goalDimName,subGoalDimName):
     self.updateDatabase('call delete_goalassociation(:ass,:gDName,:sGDName)',{'ass':associationId,'gDName':goalDimName,'sGDName':subGoalDimName},'MySQL error deleting goal association')
+
+  def addUsecaseAssociation(self,parameters):
+    associationId = self.newId()
+    envName = parameters.environment()
+    usecaseName = parameters.usecase()
+    subUsecaseName = parameters.subUsecase()
+    rationale = parameters.rationale()
+    self.updateDatabase('call addUsecaseAssociation(:assId,:env,:ucName,:sUcName,:rationale)',{'assId':associationId,'env':envName,'ucName':usecaseName,'sUcName':subUsecaseName,'rationale':rationale},'MySQL error adding usecase association')
+    return associationId
+
+  def updateUsecaseAssociation(self,parameters):
+    associationId = parameters.id()
+    envName = parameters.environment()
+    usecaseName = parameters.usecase()
+    subUsecaseName = parameters.subUsecase()
+    rationale = parameters.rationale()
+    self.updateDatabase('call addUsecaseAssociation(:assId,:env,:ucName,:sUcName,:rationale)',{'assId':associationId,'env':envName,'ucName':usecaseName,'sUcName':subUsecaseName,'rationale':rationale},'MySQL error adding usecase association')
+    
+  def deleteUsecaseAssociation(self,associationId,ucName,subUcName):
+    self.updateDatabase('call delete_usecaseassociation(:ass,:ucName,:sUcName)',{'ass':associationId,'ucName':ucName,'sUcName':subUcName},'MySQL error deleting usecase association')
 
   def addGoalDefinition(self,goalId,environmentName,goalDef):
     self.updateDatabase('call addGoalDefinition(:gId,:env,:gDef)',{'gId':goalId,'env':environmentName,'gDef':goalDef},'MySQL error adding goal definition')
@@ -3023,8 +3058,10 @@ class MySQLDatabaseProxy:
       self.addDimensionEnvironment(ucId,'usecase',environmentName)
       self.addUseCaseConditions(ucId,environmentName,cProperties.preconditions(),cProperties.postconditions())
       self.addUseCaseSteps(ucId,environmentName,cProperties.steps())
+      self.addCognitiveAttributes('usecase',ucId,environmentName,cProperties.attributes(),cProperties.rationale())
     return ucId
 
+    
   def addUseCaseRole(self,ucId,actor):
     self.updateDatabase('call addUseCaseRole(:id,:act)',{'id':ucId,'act':actor},'MySQL error adding use case role') 
 
@@ -3068,6 +3105,7 @@ class MySQLDatabaseProxy:
       self.addDimensionEnvironment(ucId,'usecase',environmentName)
       self.addUseCaseConditions(ucId,environmentName,cProperties.preconditions(),cProperties.postconditions())
       self.addUseCaseSteps(ucId,environmentName,cProperties.steps())
+      self.addCognitiveAttributes('usecase',ucId,environmentName,cProperties.attributes(),cProperties.rationale())
 
   def deleteUseCase(self,ucId):
     self.deleteObject(ucId,'usecase')
