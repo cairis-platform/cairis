@@ -312,7 +312,7 @@
 <!ATTLIST requirement priority (1 | 2 | 3) #REQUIRED>
 <!ELEMENT originator (#PCDATA)>
 
-<!ELEMENT usecase (tag*,description,actor+,usecase_environment+)>
+<!ELEMENT usecase (tag*,description,actor+,usecase_environment+,cognitive_attribute*)>
 <!ATTLIST usecase name CDATA #REQUIRED>
 <!ATTLIST usecase author CDATA #REQUIRED>
 <!ATTLIST usecase code CDATA #REQUIRED>
@@ -332,6 +332,16 @@
 <!ATTLIST exception category (Confidentiality_Threat | Integrity_Threat | Availability_Threat | Accountability_Threat | Vulnerability | Duration | Frequency | Demands | Goal_Support | Anonymity_Threat | Pseudonymity_Threat | Unlinkability_Threat | Unobservability_Threat | Threat ) #IMPLIED>
 <!ELEMENT postconditions (#PCDATA)>
 
+<!ELEMENT cognitive_attribute (rationale)>
+<!ATTLIST cognitive_attribute environment CDATA #REQUIRED>
+<!ATTLIST cognitive_attribute attribute (vigilance | situation awareness | workload | stress | risk awareness) #REQUIRED>
+<!ATTLIST cognitive_attribute value (None | Low | Medium | High) #REQUIRED>
+<!ELEMENT rationale (#PCDATA)>
+
+<!ELEMENT usecase_association (rationale)>
+<!ATTLIST usecase_association environment CDATA #REQUIRED>
+<!ATTLIST usecase_association usecase_name CDATA #REQUIRED>
+<!ATTLIST usecase_association subusecase_name CDATA #REQUIRED>
 
 <!ELEMENT countermeasure (tag*,description,countermeasure_environment+)>
 <!ATTLIST countermeasure name CDATA #REQUIRED>
@@ -377,6 +387,11 @@
 <!ATTLIST goal_association subgoal_name CDATA #REQUIRED>
 <!ATTLIST goal_association subgoal_dim (goal | task | usecase | requirement | obstacle | domainproperty | threat | vulnerability | role) #REQUIRED>
 <!ATTLIST goal_association alternative_id (0 | 1) #REQUIRED>
+
+<!ELEMENT usecase_association (rationale)>
+<!ATTLIST usecase_association environment CDATA #REQUIRED>
+<!ATTLIST usecase_association usecase_name CDATA #REQUIRED>
+<!ATTLIST usecase_association subusecase_name CDATA #REQUIRED>
 
 <!ELEMENT dependency (rationale)>
 <!ATTLIST dependency depender CDATA #REQUIRED>
