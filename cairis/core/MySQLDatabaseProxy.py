@@ -540,9 +540,9 @@ class MySQLDatabaseProxy:
     sqlTxt = 'call add_' + dimTable + '_properties(:obj,:env,:cPr,:iPr,:avPr,:acPr,:anPr,:panPr,:unlPr,:unoPr,:cRa,:iRa,:avRa,:acRa,:anRa,:panRa,:unlRa,:unoRa)'
     self.updateDatabase(sqlTxt,{'obj':objtId,'env':environmentName,'cPr':securityProperties[C_PROPERTY],'iPr':securityProperties[I_PROPERTY],'avPr':securityProperties[AV_PROPERTY],'acPr':securityProperties[AC_PROPERTY],'anPr':securityProperties[AN_PROPERTY],'panPr':securityProperties[PAN_PROPERTY],'unlPr':securityProperties[UNL_PROPERTY],'unoPr':securityProperties[UNO_PROPERTY],'cRa':pRationale[C_PROPERTY],'iRa':pRationale[I_PROPERTY],'avRa':pRationale[AV_PROPERTY],'acRa':pRationale[AC_PROPERTY],'anRa':pRationale[AN_PROPERTY],'panRa':pRationale[PAN_PROPERTY],'unlRa':pRationale[UNL_PROPERTY],'unoRa':pRationale[UNO_PROPERTY]},'MySQL error adding security properties for ' + dimTable)
 
-  def addCognitiveAttributes(self,dimTable,objtId,environmentName,cognitiveAttributes,pRationale):
-    sqlTxt = 'call add_' + dimTable + '_attributes(:obj,:env,:vPr,:saPr,:wPr,:sPr,:raPr,:vRa,:saRa,:wRa,:sRa,:rsRa)'
-    self.updateDatabase(sqlTxt,{'obj':objtId,'env':environmentName,'vPr':cognitiveAttributes[V_ATTRIBUTE],'saPr':cognitiveAttributes[SA_ATTRIBUTE],'wPr':cognitiveAttributes[W_ATTRIBUTE],'sPr':cognitiveAttributes[S_ATTRIBUTE],'raPr':cognitiveAttributes[RA_ATTRIBUTE],'vRa':vRationale[V_ATTRIBUTE],'saRa':saRationale[SA_ATTRIBUTE],'wRa':wRationale[W_ATTRIBUTE],'sRa':sRationale[S_ATTRIBUTE],'raRa':raRationale[RA_ATTRIBUTE]},'MySQL error adding security properties for ' + dimTable)
+  def addCognitiveAttributes(self,objtId,environmentName,cognitiveAttributes,aRationale):
+    sqlTxt = 'call add_usecase_attributes(:obj,:env,:vPr,:saPr,:wPr,:sPr,:raPr,:vRa,:saRa,:wRa,:sRa,:rsRa)'
+    self.updateDatabase(sqlTxt,{'obj':objtId,'env':environmentName,'vPr':cognitiveAttributes[V_ATTRIBUTE],'saPr':cognitiveAttributes[SA_ATTRIBUTE],'wPr':cognitiveAttributes[W_ATTRIBUTE],'sPr':cognitiveAttributes[S_ATTRIBUTE],'raPr':cognitiveAttributes[RA_ATTRIBUTE],'vRa':aRationale[V_ATTRIBUTE],'saRa':aRationale[SA_ATTRIBUTE],'wRa':aRationale[W_ATTRIBUTE],'sRa':aRationale[S_ATTRIBUTE],'raRa':aRationale[RA_ATTRIBUTE]},'MySQL error adding cognitive attributes for use case')
 
   def deleteAsset(self,assetId):
     self.deleteObject(assetId,'asset')
