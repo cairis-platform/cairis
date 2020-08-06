@@ -2154,7 +2154,7 @@ begin
   select id into environmentId from environment where name = environmentName limit 1;
   insert into usecase_property(environment_id,usecase_id,property_id,property_value_id,property_rationale) values(environmentId,usecaseId,0,vAttribute,vRationale);
   insert into usecase_property(environment_id,usecase_id,property_id,property_value_id,property_rationale) values(environmentId,usecaseId,1,saAttribute,saRationale);
-  insert into usecase_property(environment_id,usecase_id,property_id,property_value_id,property_rationale) values(environmentId,usecaseId,2,wttribute,wRationale);
+  insert into usecase_property(environment_id,usecase_id,property_id,property_value_id,property_rationale) values(environmentId,usecaseId,2,wAttribute,wRationale);
   insert into usecase_property(environment_id,usecase_id,property_id,property_value_id,property_rationale) values(environmentId,usecaseId,3,sAttribute,sRationale);
   insert into usecase_property(environment_id,usecase_id,property_id,property_value_id,property_rationale) values(environmentId,usecaseId,4,raAttribute,raRationale);
   end
