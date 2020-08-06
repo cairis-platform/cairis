@@ -23,12 +23,16 @@ from .EnvironmentProperties import EnvironmentProperties
 from .Steps import Steps
 
 class UseCaseEnvironmentProperties(EnvironmentProperties):
-  def __init__(self,environmentName,preCond='',steps = None,postCond=''):
+  def __init__(self,environmentName,preCond='',steps = None,postCond='',cAttributes='',caRationale=''):
     EnvironmentProperties.__init__(self,environmentName)
     self.thePreCond = preCond
     self.theSteps = steps
     self.thePostCond = postCond
+    self.theAttributes = cAttributes
+    self.theRationale = caRationale
 
   def preconditions(self): return self.thePreCond
   def steps(self): return self.theSteps
   def postconditions(self): return self.thePostCond
+  def attributes(self): return self.theAttributes
+  def rationale(self): return self.theRationale
