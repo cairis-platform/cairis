@@ -152,8 +152,6 @@ Working with workbooks
 
 CAIRIS can generate an Excel workbook for capturing user goals and contribution links from persona charactacteristics.  To create a workbook, select the System/Export menu, click on the *User goals (Workbook)* radio button, enter the spreadsheet file to be created, and click on the Export button.
 
-generating a CAIRIS model from the completed workbook (cairis/bin/wb2ug.py).
-
 .. note::
    If you have server access, you can also run the cairis/bin/ug2wb.py script, indicating the user account, database, and name of the XLSX file to be generated, i.e.  ``./ug2wb.py --user test --database default RickGoals.xlsx``.
 
