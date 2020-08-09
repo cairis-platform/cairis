@@ -39,9 +39,12 @@ from cairis.core.AssetParameters import AssetParameters
 from cairis.core.AssetEnvironmentProperties import AssetEnvironmentProperties
 from cairis.core.ClassAssociationParameters import ClassAssociationParameters
 from cairis.core.TrustBoundary import TrustBoundary
+from cairis.core.ReferenceSynopsis import ReferenceSynopsis
+from cairis.core.ReferenceContribution import ReferenceContribution
 from cairis.core.Borg import Borg
 import cairis.core.DefaultParametersFactory
 import xml.sax
+from openpyxl import load_workbook
 from cairis.core.ARM import *
 
 __author__ = 'Shamal Faily'
@@ -936,4 +939,47 @@ def importDiagramsNetAssetModel(importFile,envName,session_id):
   msgStr += ', and ' + str(newAssocCount) + ' asset association'
   if (newAssocCount != 1): msgStr += 's'
   msgStr += '.'
+  return msgStr
+
+def  importUserGoalWorkbook(wbFile,session_id):
+  charSyns = []
+  refSyns = []
+  refConts = []
+
+  wb = load_workbook(filename = wbFile,data_only=True)
+  ugSheet = wb.worksheets[0]
+  for row in ugSheet.iter_rows(min_row=2):
+    refName = row[0].value
+    refDesc = row[1].value
+    pName = row[2].value
+    pdRef = row[3].value
+    elType = row[4].value
+    ugName = row[5].value
+    if (ugName != '' and ugName != None and ugName != 0):
+      initSat = row[6].value
+      if (pdRef == 'persona'):
+        charSyns.append(ReferenceSynopsis(-1,refName,ugName,elType,'persona',pName,'persona_characteristic',initSat))
+      else:
+        refSyns.append(ReferenceSynopsis(-1,refName,ugName,elType,'persona',pName,'document_reference',initSat))
+
+  contSheet = wb.worksheets[1]
+  for row in contSheet.iter_rows(min_row=2):
+    srcName = row[0].value
+    destName = row[1].value
+    meName = row[2].value
+    contName = row[3].value
+    if (srcName != '' and srcName != None and srcName != 0 and destName != '' and destName != None and destName != 0):
+      refConts.append(ReferenceContribution(srcName,destName,meName,contName))
+
+  b = Borg()
+  db_proxy = b.get_dbproxy(session_id)
+  for cs in charSyns:
+    db_proxy.addCharacteristicSynopsis(cs)
+  for rs in refSyns:
+    db_proxy.addReferenceSynopsis(rs)
+  db_proxy.conn.commit()
+  for rc in refConts:
+    db_proxy.addReferenceContribution(rc)
+
+  msgStr = 'Imported ' + str(len(charSyns)) + ' characteristic synopses, ' + str(len(refSyns)) + ' reference synopses, and ' + str(len(refConts)) + ' reference contributions.'
   return msgStr

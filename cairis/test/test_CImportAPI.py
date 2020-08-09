@@ -55,6 +55,23 @@ class CImportTests(CairisDaemonTestCase):
     self.assertIsNotNone(message, 'Response does not contain a message')
     self.logger.info('[%s] Message: %s', method, message)
 
+  def test_cimport_ugwb_post(self):
+    method = 'test_cimport_ugwb_post'
+    url = '/api/import/file/user_goals'
+    wb = BytesIO(open(os.environ['CAIRIS_SRC'] + '/test/ngug.xlsx','rb').read())
+    rv = self.app.post('/api/import/file/user_goals?session_id=test', data={
+      'file': (wb, 'ngug.xlsx'),
+    })
+    responseData = rv.data.decode('utf-8')
+    self.assertIsNotNone(responseData, 'No response')
+    json_dict = jsonpickle.decode(responseData)
+    self.assertIsInstance(json_dict, dict, 'The response is not a valid JSON dictionary')
+    assert isinstance(json_dict, dict)
+    message = json_dict.get('message')
+    self.assertIsNotNone(message, 'Response does not contain a message')
+    self.assertEqual(message, 'Imported 5 characteristic synopses, 7 reference synopses, and 4 reference contributions.')
+
+
   def test_cimport_model_post(self):
     method = 'test_cimport_model_post'
     url = '/api/import/text'
@@ -177,6 +194,10 @@ class CImportTests(CairisDaemonTestCase):
     self.assertIsNotNone(message, 'Response does not contain a message')
     self.logger.info('[%s] Message: %s', method, message)
     self.assertEqual(message,'import.xml imported')
+
+  def test_cimport_ug_post(self):
+    pass
+
   
   def defaultEnvBody(self):
     defaultEnv = Environment(-1,'Default','DEFAULT','Default environment',[],'','',[])

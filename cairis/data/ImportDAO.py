@@ -22,7 +22,7 @@ from cairis.data.CairisDAO import CairisDAO
 from cairis.bin.cimport import file_import, package_import
 from cairis.bin.at2om import dotToObstacleModel
 from cairis.mio.ModelImport import importAttackTreeString
-from cairis.mio.ModelImport import importDiagramsNetDFD, importDiagramsNetAssetModel
+from cairis.mio.ModelImport import importDiagramsNetDFD, importDiagramsNetAssetModel, importUserGoalWorkbook
 from cairis.core.Borg import Borg
 from zipfile import ZipFile
 import magic
@@ -63,8 +63,6 @@ class ImportDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
   
-
-
   def import_attack_tree(self,dotBuf,environment_name,contributor_name):
     try:
       dotInstance = pydot.graph_from_dot_data(dotBuf)
@@ -73,3 +71,11 @@ class ImportDAO(CairisDAO):
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)
+
+  def import_user_goals(self,wbStr):
+    try:
+      return importUserGoalWorkbook(wbStr,self.session_id)
+    except ARMException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+

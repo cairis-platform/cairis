@@ -19,7 +19,8 @@ from cairis.core.ARM import *
 from cairis.daemon.CairisHTTPError import CairisHTTPError, ARMHTTPError
 from cairis.data.CairisDAO import CairisDAO
 from cairis.core.Borg import Borg
-from cairis.mio.ModelExport import extractModel,extractPackage
+from cairis.mio.ModelExport import extractModel,extractPackage,exportUserGoalWorkbook
+from os import read
 
 __author__ = 'Shamal Faily'
 
@@ -43,6 +44,19 @@ class ExportDAO(CairisDAO):
   def architectural_pattern_export(self,apName, pathValues = []):
     try:
       return self.db_proxy.architecturalPatternToXml(apName);
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+
+  def user_goals_export(self,pathValues):
+    wbName = pathValues[0]
+    try:
+      b = Borg()
+      wbName = b.tmpDir + '/' + wbName
+      exportUserGoalWorkbook(wbName,self.session_id)
+      with open(wbName,'r+b') as f:
+        buf = f.read()
+      return buf
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)
