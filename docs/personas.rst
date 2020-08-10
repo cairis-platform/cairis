@@ -138,7 +138,45 @@ Creating persona characteristics
 Automating persona characteristic creation
 ------------------------------------------
 
-In the ideal world, personas will be created by dedicated teams of research collecting empirical data, working collectively in one place to affinity diagram factoids, and persona characteristics that structure them.  In reality, team members might be working individually, remotely, and using open source intelligence or online sources of data.  To provide some automation for this activity, we have created some *helper* extensions and CAIRIS features.
+In the ideal world, personas will be created by dedicated teams of research collecting empirical data, working collectively in one place to affinity diagram factoids, and persona characteristics that structure them.  In reality, team members might be working individually, remotely, and using open source intelligence or online sources of data.  To provide some automation for this activity, we have created some features for offline and collaborative creation of persona characteristics.
+
+
+Working with persona characteristic workbooks
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+CAIRIS can generate an Excel workbook that makes it possible to add or update persona characteristic elements.  
+
+To export a workbook, select the System/Export menu, click on the *Persona characteristics (Workbook)* radio button, enter the name of the workbook to be created, and click on the Export button.  The workbook name should be postfixed with .xlsx.  
+
+
+.. figure:: exportPCWorkbook.jpg
+   :alt: Export persona characteristics workbook
+
+The generated spreadsheet contains three spreadsheets: External Documents, Document References, and Persona Characteristics.
+
+.. figure:: ExternalDocuments_sheet.jpg
+   :alt: External documents spreadsheet
+
+Pre-existing external documents will be added to the External Documents sheet.  Updating existing values will update the corresponding object when the spreadsheet is uploaded, but changing the name will create a new external document.  To add a new external document, add a row to the spreadsheet and complete the name, author, version, publication date, and description fields.  
+
+.. figure:: DocumentReferences_sheet.jpg
+   :alt: Document references spreadsheet
+
+Pre-existing document references will be added to the Document References sheet.  Updating existing values will update the corresponding object when the spreadsheet is uploaded, but changing the name will create a new document reference.  To add a new document reference, add a row to the spreadsheet and enter the name, select the document (external document), and enter the contributor and excerpt. If external documents are changed, ensure the document fields in the sheet correspond with an external document - either in the spreadsheet or in the upstream CAIRIS model.
+
+.. figure:: PersonaCharacteristics_sheet.jpg
+   :alt: Persona characteristics spreadsheet
+
+Pre-existing persona characteristics will be added to the Persona Characteristics sheet.  Updating existing values will update the corresponding object when the spreadsheet is uploaded, but changing the name will create a new persona characteristic.  To add a new persona characteristic, add a row to the spreadsheet and enter the characteristic name, corresponding persona name, select the behavioural variable, enter the modal qualifier, and grounds, warrant, and rebuttal.  The grounds, warrant, and rebuttal cells take a comma separated list of document reference names.  You should ensure the named persona exists in the upstream CAIRIS model, and the names of grounds, warrants, and rebuttals correspond with document reference values in the Document References spreadsheet or the upstream CAIRIS model.
+
+.. figure:: importPCWorkbook.jpg
+   :alt: Import persona characteristics workbook
+
+
+To import a workbook, select the System/Import menu, select the *Persona characteristics (Workbook)* radio button, choose the name of the workbook to be uploaded, and click on the Import button.
+
+Please note that removing rows from any of the spreadsheets does not remove the corresponding object in the CAIRIS model; these should be removed directly in CAIRIS.
+
 
 Persona Helper
 ~~~~~~~~~~~~~~

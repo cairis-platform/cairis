@@ -19,8 +19,9 @@ from cairis.core.ARM import *
 from cairis.daemon.CairisHTTPError import CairisHTTPError, ARMHTTPError
 from cairis.data.CairisDAO import CairisDAO
 from cairis.core.Borg import Borg
-from cairis.mio.ModelExport import extractModel,extractPackage,exportUserGoalWorkbook
+from cairis.mio.ModelExport import extractModel,extractPackage,exportUserGoalWorkbook,exportPersonaCharacteristicsWorkbook
 from os import read
+from tempfile import mkstemp
 
 __author__ = 'Shamal Faily'
 
@@ -55,6 +56,18 @@ class ExportDAO(CairisDAO):
       wbName = b.tmpDir + '/' + wbName
       exportUserGoalWorkbook(wbName,self.session_id)
       with open(wbName,'r+b') as f:
+        buf = f.read()
+      return buf
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+
+  def persona_characteristics_export(self,pathValues = []):
+    try:
+      b = Borg()
+      fd, abs_path = mkstemp(suffix='.xlsx')
+      exportPersonaCharacteristicsWorkbook(abs_path,self.session_id)
+      with open(abs_path,'r+b') as f:
         buf = f.read()
       return buf
     except DatabaseProxyException as ex:

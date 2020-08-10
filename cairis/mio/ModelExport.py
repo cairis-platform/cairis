@@ -450,3 +450,87 @@ def exportUserGoalWorkbook(outFile, session_id = None):
   contSheet.set_column('A:B',20)
   contSheet.set_column('C:D',15)
   wb.close()
+
+def exportPersonaCharacteristicsWorkbook(outFile, session_id = None):
+  b = Borg()
+  dbProxy = b.get_dbproxy(session_id)
+  roles = list(map(lambda x: x[1],list(dbProxy.getRoles().items())))
+  eds = list(map(lambda x: x[1],list(dbProxy.getExternalDocuments().items())))
+  drs = list(map(lambda x: x[1],list(dbProxy.getDocumentReferences().items())))
+  pcs = list(map(lambda x: x[1],list(dbProxy.getPersonaCharacteristics().items())))
+
+
+  wb = Workbook(outFile)
+  hFormat = wb.add_format({'border':1,'bg_color' : '#C6EFCE', 'bold' : True, 'text_wrap' : True})
+  wrapped = wb.add_format({'text_wrap' : True,})
+
+  edSheet = wb.add_worksheet('External Documents')
+  edSheet.write('A1','Name',hFormat)
+  edSheet.write('B1','Authors',hFormat)
+  edSheet.write('C1','Version',hFormat)
+  edSheet.write('D1','Publication Date',hFormat)
+  edSheet.write('E1','Description',hFormat)
+
+  edRow = 1
+  for edoc in eds:
+    edSheet.write('A' + str(edRow + 1),edoc.name(),wrapped)
+    edSheet.write('B' + str(edRow + 1),edoc.authors(),wrapped)
+    edSheet.write('C' + str(edRow + 1),edoc.version())
+    edSheet.write('D' + str(edRow + 1),edoc.date(),wrapped)
+    edSheet.write('E' + str(edRow + 1),edoc.description(),wrapped)
+    edRow += 1
+  edSheet.set_column('A:D',20)
+  edSheet.set_column('E:E',50)
+
+  drSheet = wb.add_worksheet('Document References')
+  drSheet.write('A1','Name',hFormat)
+  drSheet.write('B1','External Document',hFormat)
+  drSheet.write('C1','Contributor',hFormat)
+  drSheet.write('D1','Excerpt',hFormat)
+
+  drRow = 1
+  for dr in drs:
+    drSheet.write('A' + str(drRow + 1),dr.name(),wrapped)
+    drSheet.data_validation('B' + str(drRow + 1),{'validate':'list','source' : "='External Documents'!$A$2:$A$5000"})
+    drSheet.write('B' + str(drRow + 1),dr.document(),wrapped)
+    drSheet.write('C' + str(drRow + 1),dr.contributor(),wrapped)
+    drSheet.write('D' + str(drRow + 1),dr.excerpt(),wrapped)
+    drRow += 1
+
+  while drRow <= 5000:
+    drSheet.data_validation('B' + str(drRow + 1),{'validate':'list','source' : "='External Documents'!$A$2:$A$5000"})
+    drRow += 1
+
+  drSheet.set_column('A:C',50)
+  drSheet.set_column('D:D',75)
+
+
+  pcSheet = wb.add_worksheet('Persona Characteristics')
+  pcSheet.write('A1','Characteristic',hFormat)
+  pcSheet.write('B1','Persona',hFormat)
+  pcSheet.write('C1','Variable',hFormat)
+  pcSheet.write('D1','Modal Qualifier',hFormat)
+  pcSheet.write('E1','Grounds',hFormat)
+  pcSheet.write('F1','Warrant',hFormat)
+  pcSheet.write('G1','Rebuttal',hFormat)
+
+  pcRow = 1
+  for pc in pcs:
+    pcSheet.write('A' + str(pcRow + 1),pc.characteristic(),wrapped)
+    pcSheet.write('B' + str(pcRow + 1),pc.persona(),wrapped)
+    pcSheet.data_validation('C' + str(pcRow + 1),{'validate':'list','source' : ['Activities','Attitudes','Aptitudes','Motivations','Skills','Environment Narrative','Intrinsic','Contextual']})
+    pcSheet.write('C' + str(pcRow + 1),pc.behaviouralVariable(),wrapped)
+    pcSheet.write('D' + str(pcRow + 1),pc.qualifier(),wrapped)
+    pcSheet.write('E' + str(pcRow + 1),','.join(list(map(lambda x: x[0],pc.grounds()))),wrapped)
+    pcSheet.write('F' + str(pcRow + 1),','.join(list(map(lambda x: x[0],pc.warrant()))),wrapped)
+    pcSheet.write('G' + str(pcRow + 1),','.join(list(map(lambda x: x[0],pc.rebuttal()))),wrapped)
+    pcRow += 1
+
+  while pcRow <= 5000:
+    pcSheet.data_validation('C' + str(pcRow + 1),{'validate':'list','source' : ['Activities','Attitudes','Aptitudes','Motivations','Skills','Environment Narrative','Intrinsic','Contextual']})
+    pcRow += 1
+
+  pcSheet.set_column('A:A',50)
+  pcSheet.set_column('B:D',20)
+  pcSheet.set_column('E:G',75)
+  wb.close()

@@ -22,7 +22,7 @@ from cairis.data.CairisDAO import CairisDAO
 from cairis.bin.cimport import file_import, package_import
 from cairis.bin.at2om import dotToObstacleModel
 from cairis.mio.ModelImport import importAttackTreeString
-from cairis.mio.ModelImport import importDiagramsNetDFD, importDiagramsNetAssetModel, importUserGoalWorkbook
+from cairis.mio.ModelImport import importDiagramsNetDFD, importDiagramsNetAssetModel, importUserGoalWorkbook, importPersonaCharacteristicsWorkbook
 from cairis.core.Borg import Borg
 from zipfile import ZipFile
 import magic
@@ -73,9 +73,7 @@ class ImportDAO(CairisDAO):
       raise ARMHTTPError(ex)
 
   def import_user_goals(self,wbStr):
-    try:
-      return importUserGoalWorkbook(wbStr,self.session_id)
-    except ARMException as ex:
-      self.close()
-      raise ARMHTTPError(ex)
+    return importUserGoalWorkbook(wbStr,self.session_id)
 
+  def import_persona_characteristics(self,wbStr):
+    return importPersonaCharacteristicsWorkbook(wbStr,self.session_id)

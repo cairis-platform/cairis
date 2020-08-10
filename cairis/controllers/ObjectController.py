@@ -132,7 +132,7 @@ class ObjectsByMethodAPI(Resource):
 
       if (self.theGetMethod == 'file_export'): 
         resp.headers["Content-Disposition"] = 'Attachment; filename=' + pathValues[0] + '.'  + pathValues[1]
-      elif (self.theGetMethod == 'user_goals_export'): 
+      elif (self.theGetMethod == 'user_goals_export' or self.theGetMethod == 'persona_characteristics_export'):
         resp.headers["Content-Disposition"] = 'Attachment; filename=' + pathValues[0] + '.xlsx'
       else:
         resp.headers["Content-Disposition"] = 'Attachment; filename=' + pathValues[0]

@@ -41,6 +41,9 @@ from cairis.core.ClassAssociationParameters import ClassAssociationParameters
 from cairis.core.TrustBoundary import TrustBoundary
 from cairis.core.ReferenceSynopsis import ReferenceSynopsis
 from cairis.core.ReferenceContribution import ReferenceContribution
+from cairis.core.ExternalDocumentParameters import ExternalDocumentParameters
+from cairis.core.DocumentReferenceParameters import DocumentReferenceParameters
+from cairis.core.PersonaCharacteristicParameters import PersonaCharacteristicParameters
 from cairis.core.Borg import Borg
 import cairis.core.DefaultParametersFactory
 import xml.sax
@@ -941,7 +944,7 @@ def importDiagramsNetAssetModel(importFile,envName,session_id):
   msgStr += '.'
   return msgStr
 
-def  importUserGoalWorkbook(wbFile,session_id):
+def importUserGoalWorkbook(wbFile,session_id):
   charSyns = []
   refSyns = []
   refConts = []
@@ -982,4 +985,130 @@ def  importUserGoalWorkbook(wbFile,session_id):
     db_proxy.addReferenceContribution(rc)
 
   msgStr = 'Imported ' + str(len(charSyns)) + ' characteristic synopses, ' + str(len(refSyns)) + ' reference synopses, and ' + str(len(refConts)) + ' reference contributions.'
+  return msgStr
+
+def importPersonaCharacteristicsWorkbook(wbFile,session_id):
+  eds = []
+  drs = []
+  pcs = []
+
+  wb = load_workbook(filename = wbFile,data_only=True)
+  edSheet = wb.worksheets[0]
+  edNames = set([])
+  for row in edSheet.iter_rows(min_row=2):
+    edName = row[0].value
+    edAuth = row[1].value
+    edVer = row[2].value
+    edPD = str(row[3].value)
+    edDesc = row[4].value
+    if (edName != '' and edName != None):
+      edNames.add(edName)
+      if (edAuth == '' or edAuth == None):
+        edAuth = 'Unknown'
+      if (edVer == '' or edVer == None):
+        edVer = '1'
+      if (edPD == '' or edPD == None):
+        edPD = 'Unknown'
+      if (edDesc == '' or edDesc == None):
+        edDesc = 'Unknown'
+      eds.append(ExternalDocumentParameters(edName,edVer,edPD,edAuth,edDesc))
+
+  b = Borg()
+  db_proxy = b.get_dbproxy(session_id)
+
+  drNames = set([])
+  drSheet = wb.worksheets[1]
+  for row in drSheet.iter_rows(min_row=2):
+    drName = row[0].value
+    drDoc = row[1].value
+    drCont = row[2].value
+    drExc = row[3].value
+
+    if (drName != '' and drName != None):
+      drNames.add(drName)
+      if (drDoc not in edNames):
+        if (db_proxy.existingObject(drDoc,'external_document') == -1):
+          raise ARMException("Cannot import document reference " + drName + ". " + drDoc + " not an external document.")
+      if (drCont == '' or drCont == None):
+        drCont = 'Unknown'
+      if (drExc == '' or drExc == None):
+        drExc = 'Unknown'
+      drs.append(DocumentReferenceParameters(drName,drDoc,drCont,drExc))
+
+  pcSheet = wb.worksheets[2]
+  for row in pcSheet.iter_rows(min_row=2):
+    pcName = row[0].value
+    pName = row[1].value.strip()
+    bvName = row[2].value.strip()
+    modQual = row[3].value.strip()
+    grounds  = row[4].value
+    if (grounds == None):
+      grounds = []
+    else:
+      grounds = list(map(lambda x: (x.strip(),'','document'),grounds.strip().split(',')))
+      if (len(grounds) == 1 and grounds[0][0] == ''):
+        grounds = []
+
+    warrant  = row[5].value
+    if (warrant == None):
+      warrant = []
+    else:
+      warrant = list(map(lambda x: (x.strip(),'','document'),warrant.strip().split(',')))
+      if (len(warrant) == 1 and warrant[0][0] == ''):
+        warrant = []
+
+    rebuttal = row[6].value
+    if (rebuttal == None):
+      rebuttal = []
+    else:
+      rebuttal = list(map(lambda x: (x.strip(),'','document'),rebuttal.strip().split(',')))
+      if (len(rebuttal) == 1 and rebuttal[0][0] == ''):
+        rebuttal = []
+
+    if (pcName != ''):
+      if (db_proxy.existingObject(pName,'persona') == -1):
+        raise ARMException("Cannot import persona characteristic " + pcName + ". Persona " + pName + " does not exist.")
+      if bvName not in ['Activities','Attitudes','Aptitudes','Motivations','Skills','Environment Narrative','Intrinsic','Contextual']:
+        raise ARMException("Cannot import persona characteristic " + pcName + ". " + bvName + " is an invalid behavioural variable name.")
+
+      if (modQual == '' or modQual == None):
+        modQual = 'Possibly'
+
+      for g in grounds:
+        if ((g[0] not in drNames) and (db_proxy.existingObject(g[0],'document_reference') == -1)):
+          raise ARMException("Cannot import persona characteristic " + pcName + ". Document reference corresponding with grounds " + g[0] + " does not exist.")
+      for w in warrant:
+        if ((w[0] not in drNames) and (db_proxy.existingObject(w[0],'document_reference') == -1)):
+          raise ARMException("Cannot import persona characteristic " + pcName + ". Document reference corresponding with warrant " + w[0] + " does not exist.")
+      for r in rebuttal:
+        if ((r[0] not in drNames) and (db_proxy.existingObject(r[0],'document_reference') == -1)):
+          raise ARMException("Cannot import persona characteristic " + pcName + ". Document reference corresponding with rebuttal " + r[0] + " does not exist.")
+
+      pcs.append(PersonaCharacteristicParameters(pName,modQual,bvName,pcName,grounds,warrant,[],rebuttal))
+      
+  for edParameters in eds:
+    objtId = db_proxy.existingObject(edParameters.name(),'external_document')
+    if objtId == -1:
+      db_proxy.addExternalDocument(edParameters)
+    else:
+      edParameters.setId(objtId)
+      db_proxy.updateExternalDocument(edParameters)
+
+  for drParameters in drs:
+    objtId = db_proxy.existingObject(drParameters.name(),'document_reference')
+    if objtId == -1:
+      db_proxy.addDocumentReference(drParameters)
+    else:
+      drParameters.setId(objtId)
+      db_proxy.updateDocumentReference(drParameters)
+
+  for pcParameters in pcs:
+    objtId = db_proxy.existingObject(pcParameters.characteristic(),'persona_characteristic')
+    if objtId == -1:
+      db_proxy.addPersonaCharacteristic(pcParameters)
+    else:
+      pcParameters.setId(objtId)
+      db_proxy.updatePersonaCharacteristic(pcParameters)
+
+  msgStr = 'Imported ' + str(len(eds)) + ' external documents, ' + str(len(drs)) + ' document references, and ' + str(len(pcs)) + ' persona characteristics.'
   return msgStr
