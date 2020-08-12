@@ -2035,9 +2035,9 @@ def dataflows(p,docDir,fileSuffix = 'svg'):
   envDict = {}
   for d in dfs:
     if d.environment() not in envDict:
-      envDict[d.environment()] = [(d.name(),d.fromName(),d.fromType(),d.toName(),d.toType(),listToItems(d.assets()),listToItems(d.obstacles()))]
+      envDict[d.environment()] = [(d.name(),d.fromName(),d.fromType(),d.toName(),d.toType(),listToItems(d.assets()),listToItems(list(map(lambda x: x[0],d.obstacles()))))]
     else:
-      envDict[d.environment()].append((d.name(),d.fromName(),d.fromType(),d.toName(),d.toType(),listToItems(d.assets()),listToItems(d.obstacles())))
+      envDict[d.environment()].append((d.name(),d.fromName(),d.fromType(),d.toName(),d.toType(),listToItems(d.assets()),listToItems(list(map(lambda x: x[0],d.obstacles())))))
   envList = list(envDict.keys())
   envList.sort()
   for envName in envList:
