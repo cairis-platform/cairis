@@ -172,7 +172,7 @@ def buildImage(p,imageFile,caption,fileSuffix = 'svg',extract = True):
       <imageobject>
         <imagedata align=\"left\" fileref=\"""" + imageFile + "\" format=\"" + imageFormat + "\" />" + """
       </imageobject>
-      <caption><para>""" + caption + "</para></caption>" + """
+      <caption><para>""" + escapeText(caption) + "</para></caption>" + """
     </mediaobject>"""
   return txt
 
@@ -279,6 +279,8 @@ def buildAPModel(p,personaName,bvName,graphFile,fileSuffix = 'svg'):
   return True
 
 def buildTable(tableId, tableTitle, colNames,colData,linkInd = 1):
+  tableId = escapeText(tableId)
+  tableTitle = escapeText(tableTitle)
   noOfCols = len(colNames)
   tgroupTxt = """
     <tgroup cols=\"""" + str(noOfCols) + "\">"
@@ -343,7 +345,7 @@ def bookHeader(specName,contributors,revisions,logoFile = 'logo.jpg',logoFormat 
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook 4.1//EN" "'''+b.docBookDir+"""/docbookx.dtd" >
 <book>
   <bookinfo>
-    <title>""" + specName + "</title>"  + '''
+    <title>""" + escapeText(specName) + "</title>"  + '''
     <mediaobject>
       <imageobject>
         <imagedata align=\"center\" fileref=\"''' + logoFile + "\" format=\"" + logoFormat + "\" />" + """
@@ -504,8 +506,8 @@ def dpiaProcessing(p,docDir,fileSuffix = 'svg'):
     modelFile = docDir + '/' + environmentName + modelType + 'Model'
     if (buildModel(p,environmentName,modelType,modelFile,'',fileSuffix) == True):
       chapterTxt += """
-        <section><title>""" + environmentName + "</title>" 
-      chapterTxt += buildImage(p,modelFile,environmentName + ' ' + 'Data Flow Diagram',fileSuffix,False)
+        <section><title>""" + escapeText(environmentName) + "</title>" 
+      chapterTxt += buildImage(p,modelFile,escapeText(environmentName) + ' ' + 'Data Flow Diagram',fileSuffix,False)
       chapterTxt += """
         </section>"""
   chapterTxt += """
@@ -587,7 +589,7 @@ def dpiaNecessity(p,docDir):
       chapterTxt += """
     <section><title>""" + envName + "</title>" + """
       """
-      chapterTxt += buildTable( envName + "LPTable",envName + " Lawful Processing table",['Process','Personal Information','Goal','Definition','Fit Criterion','Issues'],lpTable,0) 
+      chapterTxt += buildTable( escapeText(envName) + "LPTable",escapeText(envName) + " Lawful Processing table",['Process','Personal Information','Goal','Definition','Fit Criterion','Issues'],lpTable,0) 
       chapterTxt += """
     </section>
       """
@@ -798,14 +800,15 @@ def buildUseCases(p,docDir,chapterTxt):
       <section><title>Environments</title>"""
     for eProps in uc.environmentProperties():
       environmentName = eProps.name()
+      envTitle = escapeText(environmentName)
       envSteps = eProps.steps()
       stepRows = []
       for idx,step in enumerate(envSteps):
         stepNo = idx + 1
         stepRows.append((stepNo,step.text(),listToItems(step.exceptions())))  
       chapterTxt += """
-        <section id=\"""" + (ucName + environmentName).replace(" ","_") + "UCEnv\"><title>" + environmentName + "</title>" + """
-          <section id=\"""" + (ucName + environmentName).replace(" ","_") + "UCEnvPreCond\"><title>Pre-conditions</title>" + """
+        <section id=\"""" + (ucName + envTitle).replace(" ","_") + "UCEnv\"><title>" + envTitle + "</title>" + """
+          <section id=\"""" + (ucName + envTitle).replace(" ","_") + "UCEnvPreCond\"><title>Pre-conditions</title>" + """
             <para>""" + eProps.preconditions() + "</para>" + """
           </section>
           <section id=\"""" + (ucName + environmentName).replace(" ","_") + "UCEnvSteps\"><title>Steps</title>" + """
@@ -857,25 +860,26 @@ def tasks(p,docDir,fileSuffix = 'svg'):
       <section id=\"""" + taskName.replace(" ","_") + "Environments\"><title>Environments</title>"
  
     for eProps in task.environmentProperties():
-      environmentName = eProps.name()
+      environmentName = escapeText(eProps.name())
+      envTitle = escapeText(environmentName)
       chapterTxt += """
-        <section id=\"""" + (taskName + environmentName).replace(" ","_") + "TaskProperties\"><title>" + environmentName + "</title>" + """
-          <section id=\"""" + (taskName + environmentName).replace(" ","_") + "TaskDependencies\"><title>Dependencies</title>" + """
+        <section id=\"""" + (taskName + envTitle).replace(" ","_") + "TaskProperties\"><title>" + envTitle + "</title>" + """
+          <section id=\"""" + (taskName + envTitle).replace(" ","_") + "TaskDependencies\"><title>Dependencies</title>" + """
             <para>""" + eProps.dependencies() + "</para>" + """
           </section>
-          <section id=\"""" + (taskName + environmentName).replace(" ","_") + "TaskPersonas\"><title>Personas</title>"
+          <section id=\"""" + (taskName + envTitle).replace(" ","_") + "TaskPersonas\"><title>Personas</title>"
       tpRows = []
       for persona,duration,frequency,demands,goals in eProps.personas():
         tpRows.append((persona,durationLookup[duration],frequencyLookup[frequency],demands,goals))
       chapterTxt += buildTable( (taskName + environmentName).replace(" ","_") + "TaskPersonaTable","Personas",['Persona','Duration','Frequency','Demands','Goals'],tpRows,0) + """
           </section>
-          <section id=\"""" + (taskName + environmentName).replace(" ","_") + "TaskAssets\"><title>Assets</title>"
+          <section id=\"""" + (taskName + envTitle).replace(" ","_") + "TaskAssets\"><title>Assets</title>"
       assetRows = []
       for asset in eProps.assets():
         assetRows.append( (asset))
       chapterTxt += buildTable( (taskName + environmentName).replace(" ","_") + "TaskAssetTable","Assets",['Asset'],assetRows,1) + """
           </section>
-          <section id=\"""" + (taskName + environmentName).replace(" ","_") + "TaskNarrative\"><title>Narrative</title>" + """
+          <section id=\"""" + (taskName + envTitle).replace(" ","_") + "TaskNarrative\"><title>Narrative</title>" + """
             <para>""" + paraText(eProps.narrative()) + "</para>" + """
           </section>
         </section>""" 
@@ -960,13 +964,14 @@ def buildPersonas(p,docDir,chapterTxt,isDpia = False,fileSuffix = 'svg'):
 
     for eProps in persona.environmentProperties():
       environmentName = eProps.name()
+      envTitle = escapeText(environmentName)
       chapterTxt += """
-        <section><title>""" + environmentName + " Roles</title>" + """
+        <section><title>""" + envTitle + " Roles</title>" + """
           """
       envRows = [(listToString(eProps.roles()),eProps.directFlag())]
       chapterTxt += buildTable( personaName.replace(" ","_") + environmentName.replace(" ","_") + "PropertiesTable",personaName + " role attributes",['Roles','Direct/Indirect'],envRows,0) + """
         </section>
-        <section><title>""" + environmentName + " Security Issues</title>" + """
+        <section><title>""" + envTitle + " Security Issues</title>" + """
           """ + "<para>" + paraText(eProps.narrative()) + "</para>" + """
         </section>
       """ 
@@ -1113,12 +1118,13 @@ def misuseCases(p):
       <section id=\"""" + mcName.replace(" ","_") + "Environments\"><title>Environments</title>"
     for eProps in mc.environmentProperties():
       environmentName = eProps.name()
+      envTitle = escapeText(environmentName)
       chapterTxt += """
-        <section id=\"""" + (mcName + environmentName).replace(" ","_") + "MisuseCaseProperties\"><title>" + environmentName + "</title>" + """
-          <section id=\"""" + (mcName + environmentName).replace(" ","_") + "MisuseCaseObjectives\"><title>Objective</title>" + """
+        <section id=\"""" + (mcName + envTitle).replace(" ","_") + "MisuseCaseProperties\"><title>" + envTitle + "</title>" + """
+          <section id=\"""" + (mcName + envTitle).replace(" ","_") + "MisuseCaseObjectives\"><title>Objective</title>" + """
             <para>""" + paraText(objectiveText(p,environmentName,threatName,vulName)) + "</para>" + """
           </section>
-          <section id=\"""" + (mcName + environmentName).replace(" ","_") + "MisuseCaseNarrative\"><title>Narrative</title>" + """
+          <section id=\"""" + (mcName + envTitle).replace(" ","_") + "MisuseCaseNarrative\"><title>Narrative</title>" + """
             <para>""" + paraText(eProps.narrative()) + "</para>" + """
           </section>
         </section>""" 
@@ -1309,12 +1315,13 @@ def buildVulnerabilities(p,chapterTxt,isPia = False):
       <section id=\"""" + objtName.replace(" ","_") + "Environments\"><title>Environments</title>"
     for eProps in objt.environmentProperties():
       environmentName = eProps.name()
+      envTitle = escapeText(environmentName)
       chapterTxt += """
-        <section id=\"""" + (objtName + environmentName).replace(" ","_") + "VulnerabilityProperties\"><title>" + environmentName + "</title>" + """
-          <section id=\"""" + (objtName + environmentName).replace(" ","_") + "VulnerabilityPropertiesSeverity\"><title>Severity</title>" + """
+        <section id=\"""" + (objtName + envTitle).replace(" ","_") + "VulnerabilityProperties\"><title>" + envTitle + "</title>" + """
+          <section id=\"""" + (objtName + envTitle).replace(" ","_") + "VulnerabilityPropertiesSeverity\"><title>Severity</title>" + """
             <para>""" + eProps.severity() + "</para>" + """
           </section>
-          <section id=\"""" + (objtName + environmentName).replace(" ","_") + "VulnerabilityPropertiesAssets\"><title>Assets</title>" 
+          <section id=\"""" + (objtName + envTitle).replace(" ","_") + "VulnerabilityPropertiesAssets\"><title>Assets</title>" 
       chapterTxt += buildTable( (objtName + environmentName).replace(" ","_") + "VulnerabilityAssetsTable","Assets",['Asset'],eProps.assets(),1) + """
           </section>
         </section>""" 
@@ -1330,11 +1337,12 @@ def modelSection(p,modelType,docDir,fileSuffix = 'svg'):
   envs = p.getEnvironments()
   for idx,env in envs.items():
     environmentName = env.name()
-    modelFile = docDir + '/' + environmentName + modelType + 'Model'
+    envTitle = escapeText(environmentName)
+    modelFile = docDir + '/' + escapeText(environmentName) + modelType + 'Model'
     if (buildModel(p,environmentName,modelType,modelFile,'',fileSuffix) == True):
       validModels = True
       txt += """
-        <section><title>""" + environmentName + "</title>" 
+        <section><title>""" + envTitle + "</title>" 
       txt += buildImage(p,modelFile,environmentName + ' ' + modelType + ' Model',fileSuffix,False)
       txt += """
         </section>"""
@@ -1352,11 +1360,12 @@ def locationModelSection(p,locsName,docDir,fileSuffix = 'svg'):
   envs = p.getEnvironments()
   for idx,env in envs.items():
     environmentName = env.name()
-    modelFile = docDir + '/' + locsName + environmentName + 'LocationsModel'
+    envTitle = escapeText(environmentName)
+    modelFile = docDir + '/' + locsName + envTitle + 'LocationsModel'
     if (buildModel(p,environmentName,'Locations',modelFile,locsName,fileSuffix) == True):
       validModels = True
       txt += """
-        <section><title>""" + environmentName + "</title>" 
+        <section><title>""" + envTitle + "</title>" 
       txt += buildImage(p,modelFile,environmentName + ' ' + 'Locations Model',fileSuffix,False)
       txt += """
         </section>"""
@@ -1532,12 +1541,13 @@ def buildRisks(p,docDir,chapterTxt,isPia = False):
       </section>
       <section id=\"""" + objtName.replace(" ","_") + "Environments\"><title>Environments</title>"
     for environmentName in p.riskEnvironments(threatName,vulName):
+      envTitle = escapeText(environmentName)
       chapterTxt += """
-        <section id=\"""" + (objtName + environmentName).replace(" ","_") + "RiskProperties\"><title>" + environmentName + "</title>" + """
-          <section id=\"""" + (objtName + environmentName).replace(" ","_") + "RiskPropertiesRating\"><title>Severity</title>" + """
+        <section id=\"""" + (objtName + envTitle).replace(" ","_") + "RiskProperties\"><title>" + envTitle + "</title>" + """
+          <section id=\"""" + (objtName + envTitle).replace(" ","_") + "RiskPropertiesRating\"><title>Severity</title>" + """
             <para>""" + p.riskRating(-1,threatName,vulName,environmentName) + "</para>" + """
           </section>
-          <section id=\"""" + (objtName + environmentName).replace(" ","_") + "RiskPropertiesResponses\"><title>Mitigation Scores</title>" 
+          <section id=\"""" + (objtName + envTitle).replace(" ","_") + "RiskPropertiesResponses\"><title>Mitigation Scores</title>" 
       riskScoreList = p.riskScore(threatName,vulName,environmentName,riskName)
       responseRows = []
       for idx,riskScore in enumerate(riskScoreList):
@@ -1584,9 +1594,10 @@ def acceptSection(response):
   """
   for cProps in response.environmentProperties():
     environmentName = cProps.name()
+    envTitle = escapeText(environmentName)
     acceptTxt += """
                  <row>
-                   <entry>""" + environmentName + """</entry> 
+                   <entry>""" + envTitle + """</entry> 
                    <entry>""" + cProps.cost() + """</entry>
                  </row>\n"""
   acceptTxt += """ 
@@ -1609,9 +1620,10 @@ def acceptSection(response):
   """
   for cProps in response.environmentProperties():
     environmentName = cProps.name()
+    envTitle = escapeText(environmentName)
     acceptTxt += """
                 <row>
-                  <entry>""" + environmentName + """</entry> 
+                  <entry>""" + envTitle + """</entry> 
                   <entry>""" + cProps.description() + """</entry>
                 </row>\n"""
   acceptTxt += """ 
@@ -1648,9 +1660,10 @@ def transferSection(response):
   """
   for cProps in response.environmentProperties():
     environmentName = cProps.name()
+    envTitle = escapeText(environmentName)
     transferTxt += """
                  <row>
-                   <entry>""" + environmentName + """</entry> 
+                   <entry>""" + envTitle + """</entry> 
                    <entry>""" 
     for role in cProps.roles():
       transferTxt += """
@@ -1677,9 +1690,10 @@ def transferSection(response):
   """
   for cProps in response.environmentProperties():
     environmentName = cProps.name()
+    envTitle = escapeText(environmentName)
     transferTxt += """
                 <row>
-                  <entry>""" + environmentName + """</entry> 
+                  <entry>""" + envTitle + """</entry> 
                   <entry>""" + cProps.description() + """</entry>
                 </row>\n"""
   transferTxt += """ 
@@ -1715,9 +1729,10 @@ def mitigateSection(response):
   """
   for cProps in response.environmentProperties():
     environmentName = cProps.name()
+    envTitle = escapeText(environmentName)
     mitTxt += """
                  <row>
-                   <entry>""" + environmentName + """</entry> 
+                   <entry>""" + envTitle + """</entry> 
                    <entry>"""
     mitType = cProps.type()
     mitTxt += """
@@ -1823,12 +1838,13 @@ def countermeasures(p):
       <section id=\"""" + objtName.replace(" ","_") + "Environments\"><title>Environments</title>"
     for eProps in objt.environmentProperties():
       environmentName = eProps.name()
+      envTitle = escapeText(environmentName)
       chapterTxt += """
-        <section id=\"""" + (objtName + environmentName).replace(" ","_") + "CountermeasureProperties\"><title>" + environmentName + "</title>" + """
-          <section id=\"""" + (objtName + environmentName).replace(" ","_") + "CountermeasurePropertiesCost\"><title>Cost</title>" + """
+        <section id=\"""" + (objtName + envTitle).replace(" ","_") + "CountermeasureProperties\"><title>" + envTitle + "</title>" + """
+          <section id=\"""" + (objtName + envTitle).replace(" ","_") + "CountermeasurePropertiesCost\"><title>Cost</title>" + """
             <para>""" + eProps.cost() + "</para>" + """
           </section>
-          <section id=\"""" + (objtName + environmentName).replace(" ","_") + "CountermeasureSecurityProperties\"><title>Security Properties</title>" 
+          <section id=\"""" + (objtName + envTitle).replace(" ","_") + "CountermeasureSecurityProperties\"><title>Security Properties</title>" 
       chapterTxt += buildTable( (objtName + environmentName).replace(" ","_") + "CountermeasureRequirementsTable","Requirements",['Requirement'],eProps.requirements(),0)
       chapterTxt += buildTable( (objtName + environmentName).replace(" ","_") + "CountermeasureTargetTable","Targets",['Target','Effectiveness'],eProps.targets(),0)
       cmRows = []
@@ -1861,8 +1877,9 @@ def environments(p,docDir):
 """
   for idx,environment in environments.items():
     environmentName = environment.name()
+    envTitle = escapeText(environmentName)
     chapterTxt +=  """
-      <section id=\'""" + environmentName.replace(" ","_") + "\' ><title>" + environmentName + "</title>"
+      <section id=\'""" + envTitle.replace(" ","_") + "\' ><title>" + envTitle + "</title>"
     chapterTxt += """
         <section><title>Description</title>
           <para>""" + paraText(environment.description()) + "</para>" + """
@@ -1880,7 +1897,7 @@ def environments(p,docDir):
     if (len(environment.environments()) > 0):
       chapterTxt += """
       <section><title>Properties</title> 
-        <table id=\"""" + environmentName.replace(" ","_") + "Properties\"" + """><title>""" + environmentName + """ Properties </title>
+        <table id=\"""" + envTitle.replace(" ","_") + "Properties\"" + """><title>""" + envTitle + """ Properties </title>
           <tgroup cols="2">
             <colspec align="left" />
             <colspec align="left" />
@@ -1903,8 +1920,9 @@ def environments(p,docDir):
               <entry>Environments</entry>
               <entry>"""
       for componentEnvironment in environment.environments():
+        ceTitle = escapeText(componentEnvironment)
         chapterTxt += """ 
-                <para><link linkend=\"""" + componentEnvironment.replace(" ","_") + "\">" + componentEnvironment + "</link></para>"
+                <para><link linkend=\"""" + ceTitle.replace(" ","_") + "\">" + ceTitle + "</link></para>"
       chapterTxt += """
               </entry>
             </row>
@@ -1936,8 +1954,9 @@ def dependencies(p):
   envList = list(envDict.keys())
   envList.sort()
   for envName in envList:
+    envTitle = escapeText(envName)
     chapterTxt +=  """
-      <section id=\'""" + envName.replace(" ","_") + "_Dependencies\' ><title>" + envName + "</title>" 
+      <section id=\'""" + envTitle.replace(" ","_") + "_Dependencies\' ><title>" + envTitle + "</title>" 
     chapterTxt += buildTable(envName + '_' + 'DepdendenciesTable'.replace(" ","_"),'Dependencies',['Depender','Dependee','Dependency','Type','Rationale'],envDict[envName],0)
     chapterTxt += """
       </section>""" 
@@ -2022,8 +2041,9 @@ def dataflows(p,docDir,fileSuffix = 'svg'):
   envList = list(envDict.keys())
   envList.sort()
   for envName in envList:
+    envTitle = escapeText(envName)
     chapterTxt +=  """
-      <section id=\'""" + envName.replace(" ","_") + "_Dataflows\' ><title>" + envName + "</title>"
+      <section id=\'""" + envTitle.replace(" ","_") + "_Dataflows\' ><title>" + envTitle + "</title>"
     chapterTxt += buildTable(envName + '_' + 'DataFlows'.replace(" ","_"),'Data Flows',['Name','From','Type','To','Type','Assets','Obstacles'],envDict[envName],0)
 
     chapterTxt += """
