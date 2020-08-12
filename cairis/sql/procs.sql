@@ -2297,7 +2297,7 @@ create procedure getAttackers(in constraintId int)
 begin
   if constraintId = -1
   then
-    select id,name,description,image from attacker;
+    select id,name,description,image from attacker order by 2;
   else
     select id,name,description,image from attacker where id = constraintId;
   end if;
@@ -2314,7 +2314,7 @@ create procedure getAssets(in constraintId int)
 begin
   if constraintId = -1
   then
-    select a.id,a.name,a.short_code,a.description,a.significance,at.name,a.is_critical,a.critical_rationale from asset a,asset_type at where a.asset_type_id = at.id;
+    select a.id,a.name,a.short_code,a.description,a.significance,at.name,a.is_critical,a.critical_rationale from asset a,asset_type at where a.asset_type_id = at.id order by 2;
   else
     select a.id,a.name,a.short_code,a.description,a.significance,at.name,a.is_critical,a.critical_rationale from asset a,asset_type at where a.id = constraintId and a.asset_type_id = at.id;
   end if;
@@ -2331,7 +2331,7 @@ create procedure getThreats(in constraintId int)
 begin
   if constraintId = -1
   then
-    select t.id, t.name, tt.name, t.method from threat t, threat_type tt where t.threat_type_id = tt.id;
+    select t.id, t.name, tt.name, t.method from threat t, threat_type tt where t.threat_type_id = tt.id order by 2;
   else
     select t.id, t.name, tt.name, t.method from threat t, threat_type tt where t.id = constraintId and t.threat_type_id = tt.id;
   end if;
@@ -2348,7 +2348,7 @@ create procedure getVulnerabilities(in constraintId int)
 begin
   if constraintId = -1
   then
-    select v.id, v.name,v.description,vt.name from vulnerability v,vulnerability_type vt where v.vulnerability_type_id = vt.id;
+    select v.id, v.name,v.description,vt.name from vulnerability v,vulnerability_type vt where v.vulnerability_type_id = vt.id order by 2;
   else
     select v.id, v.name,v.description,vt.name from vulnerability v,vulnerability_type vt where v.id = constraintId and v.vulnerability_type_id = vt.id;
   end if;
@@ -2359,7 +2359,7 @@ create procedure getRisks(in constraintId int)
 begin
   if constraintId = -1
   then
-    select r.id, r.name,t.name,v.name from risk r, threat t, vulnerability v where r.threat_id = t.id and r.vulnerability_id = v.id;
+    select r.id, r.name,t.name,v.name from risk r, threat t, vulnerability v where r.threat_id = t.id and r.vulnerability_id = v.id order by 2;
   else
     select r.id, r.name,t.name,v.name from risk r, threat t, vulnerability v where r.id = constraintId and r.threat_id = t.id and r.vulnerability_id = v.id;
   end if;
@@ -8310,7 +8310,7 @@ create procedure getEnvironments(in constraintId int)
 begin
   if constraintId = -1
   then
-    select id,name,short_code,description from environment;
+    select id,name,short_code,description from environment order by 2;
   else
     select id,name,short_code,description from environment where id = constraintId;
   end if;
@@ -8335,7 +8335,7 @@ create procedure getPersonas(in constraintId int)
 begin
   if constraintId = -1
   then
-    select p.id,p.name,p.activities,p.attitudes,p.aptitudes,p.motivations,p.skills,p.intrinsic,p.contextual,p.image,p.assumption_id,pt.name from persona p, persona_type pt where p.persona_type_id = pt.id;
+    select p.id,p.name,p.activities,p.attitudes,p.aptitudes,p.motivations,p.skills,p.intrinsic,p.contextual,p.image,p.assumption_id,pt.name from persona p, persona_type pt where p.persona_type_id = pt.id order by 2;
   else
     select p.id,p.name,p.activities,p.attitudes,p.aptitudes,p.motivations,p.skills,p.intrinsic,p.contextual,p.image,p.assumption_id,pt.name from persona p, persona_type pt where p.id = constraintId and p.persona_type_id = pt.id;
   end if;
@@ -8353,7 +8353,7 @@ create procedure getTasks(in constraintId int)
 begin
   if constraintId = -1
   then
-    select id,name,short_code,objective,assumption_id,author from task;
+    select id,name,short_code,objective,assumption_id,author from task order by 2;
   else
     select id,name,short_code,objective,assumption_id,author from task where id = constraintId;
   end if;
@@ -8364,7 +8364,7 @@ create procedure getUseCases(in constraintId int)
 begin
   if constraintId = -1
   then
-    select id,name,author,short_code,description from usecase;
+    select id,name,author,short_code,description from usecase order by 2;
   else
     select id,name,author,short_code,description from usecase where id = constraintId;
   end if;
@@ -8381,7 +8381,7 @@ create procedure getMisuseCases(in constraintId int)
 begin
   if constraintId = -1
   then
-    select id,name from misusecase;
+    select id,name from misusecase order by 2;
   else
     select id,name from misusecase where id = constraintId;
   end if;
@@ -8432,7 +8432,7 @@ create procedure getResponses(in constraintId int)
 begin
   if constraintId = -1
   then
-    select re.id,re.name,rt.name,r.name from response re,goal_category_type rt, risk r where re.goal_category_type_id = rt.id and re.risk_id = r.id;
+    select re.id,re.name,rt.name,r.name from response re,goal_category_type rt, risk r where re.goal_category_type_id = rt.id and re.risk_id = r.id order by 2;
   else
     select re.id,re.name,rt.name,r.name from response re,goal_category_type rt, risk r where re.id = constraintId and re.goal_category_type_id = rt.id and re.risk_id = r.id;
   end if;
@@ -8470,7 +8470,7 @@ create procedure getRoles(in constraintId int)
 begin
   if constraintId = -1
   then
-    select r.id,r.name,rt.name,r.short_code,r.description from role r, role_type rt where r.role_type_id = rt.id;
+    select r.id,r.name,rt.name,r.short_code,r.description from role r, role_type rt where r.role_type_id = rt.id order by 2;
   else
     select r.id,r.name,rt.name,r.short_code,r.description from role r, role_type rt where r.id = constraintId and r.role_type_id = rt.id;
   end if;
@@ -8497,7 +8497,7 @@ create procedure getCountermeasures(in constraintId int)
 begin
   if constraintId = -1
   then
-    select c.id,c.name,c.description,at.name from countermeasure c,asset_type at where c.countermeasure_type_id = at.id;
+    select c.id,c.name,c.description,at.name from countermeasure c,asset_type at where c.countermeasure_type_id = at.id order by 2;
   else
     select c.id,c.name,c.description,at.name from countermeasure c,asset_type at where c.id = constraintId and c.countermeasure_type_id = at.id;
   end if;
@@ -8508,7 +8508,7 @@ create procedure getGoals(in constraintId int)
 begin
   if constraintId = -1
   then
-    select id,name,originator from goal;
+    select id,name,originator from goal order by 2;
   else
     select id,name,originator from goal where id = constraintId;
   end if;
@@ -8723,7 +8723,7 @@ create procedure getObstacles(in constraintId int)
 begin
   if constraintId = -1
   then
-    select id,name,originator from obstacle;
+    select id,name,originator from obstacle order by 2;
   else
     select id,name,originator from obstacle where id = constraintId;
   end if;
@@ -23154,7 +23154,7 @@ create procedure getLocations(in constraintId int)
 begin
   if constraintId = -1
   then
-    select id,name,diagram from locations;
+    select id,name,diagram from locations order by 2;
   else
     select id,name,diagram from locations where id = constraintId;
   end if;
@@ -24479,7 +24479,7 @@ begin
     select id into dfId from dataflow where name = dfName and environment_id = envId limit 1;
     select dataflow, dataflow_type, environment, from_name, from_type, to_name, to_type from dataflows where dataflow=dfName and environment = envName;
   else
-    select dataflow, dataflow_type, environment, from_name, from_type, to_name, to_type from dataflows;
+    select dataflow, dataflow_type, environment, from_name, from_type, to_name, to_type from dataflows order by 1;
   end if;
 end
 //
