@@ -27,7 +27,9 @@
           {"theStepNo" : "4", "theDescription" : "The policy manager inside the PZP checks if the application has write access to the protected storage, and grant the access on the base of configured policies"},
           {"theStepNo" : "5", "theDescription" : "The application starts to write content to the protected storage space."}
         ],
-         "thePostconditions" : "All participants of the video conference receive a user experience that is most appropriate for their device and environment.* Users with large screen devices (such as TVs) will see the video streams of all participating users in equal size.* Users with medium size screens (desktop computers) will see the current speaker in a large window and the streams of all participants in smaller thumbnail windows.* Users with mobile phones will only see the stream of the current speaker.* Users that are driving cars will not see a video stream, to avoid distractions, but will only receive an audio stream with additional acoustic cues to identify the current speaker."}
+         "thePostconditions" : "Users that are driving cars will not see a video stream...",
+         "theAttributes" : [0,0,0,0,0],
+         "theRationale" : ["None","None","None","None","None"]}
       ]}
   ]
 }

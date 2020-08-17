@@ -59,10 +59,12 @@ class UseCaseTest(unittest.TestCase):
     ucEnvName = ucEnv["theName"]
     ucPre = ucEnv["thePreconditions"]
     ucPost = ucEnv["thePostconditions"]
+    ucAttribute = ucEnv["theAttributes"]
+    ucRationale = ucEnv["theRationale"]
     ss = Steps()
     for ucStep in ucEnv["theFlow"]:
       ss.append(Step(ucStep["theDescription"]))  
-    ucep = UseCaseEnvironmentProperties(ucEnvName,ucPre,ss,ucPost)
+    ucep = UseCaseEnvironmentProperties(ucEnvName,ucPre,ss,ucPost,ucAttribute,ucRationale)
     iuc = UseCaseParameters(ucName,ucAuthor,ucCode,[ucActor],ucDesc,[],[ucep])
     b = Borg()
     b.dbProxy.addUseCase(iuc) 
@@ -78,6 +80,8 @@ class UseCaseTest(unittest.TestCase):
     self.assertEqual(iuc.author(),ouc.author())
     self.assertEqual(iuc.environmentProperties()[0].preconditions(),ouc.environmentProperties()[0].preconditions())
     self.assertEqual(iuc.environmentProperties()[0].postconditions(),ouc.environmentProperties()[0].postconditions())
+    self.assertEqual(iuc.environmentProperties()[0].attributes(),ouc.environmentProperties()[0].attributes())
+    self.assertEqual(iuc.environmentProperties()[0].rationale(),ouc.environmentProperties()[0].rationale())
 
     iuc.theName = 'Updated name'
     iuc.setId(ouc.id())
@@ -93,6 +97,8 @@ class UseCaseTest(unittest.TestCase):
     self.assertEqual(iuc.author(),ouc.author())
     self.assertEqual(iuc.environmentProperties()[0].preconditions(),ouc.environmentProperties()[0].preconditions())
     self.assertEqual(iuc.environmentProperties()[0].postconditions(),ouc.environmentProperties()[0].postconditions())
+    self.assertEqual(iuc.environmentProperties()[0].attributes(),ouc.environmentProperties()[0].attributes())
+    self.assertEqual(iuc.environmentProperties()[0].rationale(),ouc.environmentProperties()[0].rationale())
 
     b.dbProxy.deleteUseCase(ouc.id())
 
