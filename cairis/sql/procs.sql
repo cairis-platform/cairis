@@ -30990,7 +30990,7 @@ begin
   declare refId int;
   declare isConflict int default 0;
   declare done int default 0;
-  declare pcCursor cursor for select pc.persona_id from persona_characteristic pc, persona_characteristic_document pcd where pc.id = pcd.characteristic_id and pcd.reference_id = refId;
+  declare pcCursor cursor for select pc.persona_id from persona_characteristic pc, persona_characteristic_document pcd, persona_characteristic_synopsis pcs where pc.id = pcd.characteristic_id and pcd.reference_id = refId and  pcs.characteristic_id = pc.id;
   declare continue handler for not found set done = 1;
 
   select id into pId from persona where name = pName limit 1;
