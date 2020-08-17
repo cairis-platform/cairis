@@ -77,8 +77,8 @@ class UserGoalDAO(CairisDAO):
         if (len(ugPCs) > 1): 
           excTxt += "s " + ', '.join(ugPCs)
         else:
-          excTxt += ugPCs[0]
-        raise CairisHTTPError(BAD_REQUEST,'Invalid update',excTxt)
+          excTxt += " " + ugPCs[0]
+        raise CairisHTTPError(BAD_REQUEST,excTxt)
     except ARMException as ex:
       self.close()
       raise ARMHTTPError(ex)
