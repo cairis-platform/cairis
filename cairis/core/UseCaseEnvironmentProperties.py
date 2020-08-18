@@ -23,7 +23,7 @@ from .EnvironmentProperties import EnvironmentProperties
 from .Steps import Steps
 
 class UseCaseEnvironmentProperties(EnvironmentProperties):
-  def __init__(self,environmentName,preCond='',steps = None,postCond='',cAttributes=[],caRationale=[]):
+  def __init__(self,environmentName,preCond='',steps = None,postCond='',cAttributes=[0,1,2,3,4],caRationale=[None,None,None,None,None]):
     EnvironmentProperties.__init__(self,environmentName)
     self.thePreCond = preCond
     self.theSteps = steps
