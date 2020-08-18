@@ -30726,7 +30726,6 @@ begin
           set score = score + contScore;
         end loop tc_loop;
         close taskContCursor;
-
         set done = 0;
         open goalLinksCursor;
         gl_loop: loop
@@ -30735,6 +30734,8 @@ begin
           then
             leave gl_loop;
           end if;
+
+          set ugScore = 0;  
           call userGoalContribution(cgId,envId,ugScore);
 
           select value into contScore from link_contribution where id = linkScore;
@@ -30742,7 +30743,6 @@ begin
           set score = score + ugScore;
         end loop gl_loop;
         close goalLinksCursor;
-
         if score > 100 or score < -100
         then
           set score = score / 100;
