@@ -30713,7 +30713,7 @@ begin
       select count(id) into idCount from temp_gid where id = ugId;
       if idCount = 0
       then
-        insert into temp_gid(id) values (ugId);
+        insert into temp_gid(id,gscore) values (ugId,0);
         set done = 0;
         open taskContCursor;
         tc_loop: loop
@@ -30754,6 +30754,9 @@ begin
             set score = 100;
           end if; 
         end if;
+        update temp_gid set gscore = score where id = ugId;
+      else
+        select gscore into score from  temp_gid where id = ugId;
       end if;
     end if;
   end if;
@@ -30768,7 +30771,7 @@ begin
   declare gsScoreId int;
 
   drop table if exists temp_gid;
-  create temporary table temp_gid (id int not null);
+  create temporary table temp_gid (id int not null, gscore int not null);
 
   select id into envId from environment where name = envName limit 1;
   
