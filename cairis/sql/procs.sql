@@ -18,6 +18,7 @@
 */
 
 drop procedure if exists assetProperties;
+drop procedure if exists usecaseAttributes;
 drop procedure if exists suppressedAssetProperties;
 drop procedure if exists threatProperties;
 drop procedure if exists suppressedThreatProperties;
@@ -1181,6 +1182,108 @@ begin
 end;
 //
 
+create procedure usecaseAttributes(in usecaseId int,in environmentId int)
+begin
+  declare compositeCount int;
+  declare duplicatePolicy varchar(200);
+  declare overridingEnvironmentId int;
+  declare vAttribute int;
+  declare saAttribute int;
+  declare wAttribute int;
+  declare sAttribute int;
+  declare raAttribute int;
+  declare workingVAttribute int default 0;
+  declare workingSAAttribute int default 0;
+  declare workingWAttribute int default 0;
+  declare workingSAttribute int default 0;
+  declare workingRAAttribute int default 0;
+  declare vRationale varchar(4000);
+  declare saRationale varchar(4000);
+  declare wRationale varchar(4000);
+  declare sRationale varchar(4000);
+  declare raRationale varchar(4000);
+  declare workingVRationale varchar(4000);
+  declare workingSARationale varchar(4000);
+  declare workingWRationale varchar(4000);
+  declare workingSRationale varchar(4000);
+  declare workingRARationale varchar(4000);
+  declare done int default 0;
+  declare currentEnvironmentId int;
+  declare attributesCursor cursor for select environment_id from composite_environment where composite_environment_id = environmentId;  
+  declare continue handler for not found set done = 1;
+
+  select count(environment_id) into compositeCount from composite_environment where composite_environment_id = environmentId limit 1;
+  if compositeCount > 0
+  then
+    select dp.name into duplicatePolicy from duplicate_property dp, composite_environment_property ccp where ccp.composite_environment_id = environmentId and ccp.duplicate_property_id = dp.id limit 1;
+    if duplicatePolicy = 'Override'
+    then
+      select overriding_environment_id into overridingEnvironmentId from composite_environment_override where composite_environment_id = environmentId limit 1;
+    end if;
+
+    open attributesCursor;
+    attributes_loop: loop
+      fetch attributesCursor into currentEnvironmentId;
+      if done = 1
+      then
+        leave attributes_loop;
+      end if;
+      select property_value_id,property_rationale into vAttribute,vRationale from usecase_property where usecase_id = usecaseId and property_id = 0 and environment_id = currentEnvironmentId;
+      select property_value_id,property_rationale into saAttribute,saRationale from usecase_property where usecase_id = usecaseId and property_id = 1 and environment_id = currentEnvironmentId;
+      select property_value_id,property_rationale into wAttribute,wRationale from usecase_property where usecase_id = usecaseId and property_id = 2 and environment_id = currentEnvironmentId;
+      select property_value_id,property_rationale into sAttribute,sRationale from usecase_property where usecase_id = usecaseId and property_id = 3 and environment_id = currentEnvironmentId;
+      select property_value_id,property_rationale into raAttribute,raRationale from usecase_property where usecase_id = usecaseId and property_id = 4 and environment_id = currentEnvironmentId;
+      
+      if duplicatePolicy = 'Maximise'
+      then
+        if vAttribute > workingVAttribute then 
+          set workingVAttribute = vAttribute; 
+          set workingVRationale = vRationale; 
+        end if;
+        if saAttribute > workingSAAttribute then 
+          set workingSAAttribute = saAttribute; 
+          set workingSARationale = saRationale; 
+        end if;
+        if wAttribute > workingWAttribute then 
+          set workingWAttribute = wAttribute; 
+          set workingWRationale = wRationale; 
+        end if;
+        if sAttribute > workingSAttribute then 
+          set workingSAttribute = sAttribute; 
+          set workingSRationale = sRationale; 
+        end if;
+        if raAttribute > workingRAAttribute then 
+          set workingRAAttribute = raAttribute; 
+          set workingRARationale = raRationale; 
+        end if;
+      else
+        if currentEnvironmentId = overridingEnvironmentId 
+        then
+          set workingVAttribute = vAttribute;
+          set workingSAAttribute = saAttribute;
+          set workingWAttribute = wAttribute;
+          set workingSAttribute = sAttribute;
+          set workingRAAttribute = raProperty;
+          set workingVRationale = vRationale; 
+          set workingSARationale = saRationale; 
+          set workingWRationale = wRationale; 
+          set workingSRationale = sRationale; 
+          set workingRARationale = raRationale; 
+        end if;
+      end if;
+    end loop attributes_loop;
+    close attributesCursor;
+    select workingVAttribute,workingSAAttribute,workingWAttribute,workingSAttribute,workingRAAttribute,workingVRationale,workingSARationale,workingWRationale,workingSRationale,workingRARationale;
+  else
+    select property_value_id,property_rationale into vAttribute,vRationale from usecase_property where usecase_id = usecaseId and property_id = 0 and environment_id = environmentId;
+    select property_value_id,property_rationale into saAttribute,saRationale from usecase_property where usecase_id = usecaseId and property_id = 1 and environment_id = environmentId;
+    select property_value_id,property_rationale into wAttribute,wRationale from usecase_property where usecase_id = usecaseId and property_id = 2 and environment_id = environmentId;
+    select property_value_id,property_rationale into sAttribute,sRationale from usecase_property where usecase_id = usecaseId and property_id = 3 and environment_id = environmentId;
+    select property_value_id,property_rationale into raAttribute,raRationale from usecase_property where usecase_id = usecaseId and property_id = 4 and environment_id = environmentId;
+    select ifnull(vAttribute,0),ifnull(saAttribute,0),ifnull(wAttribute,0),ifnull(sAttribute,0),ifnull(raAttribute,0),vRationale,saRationale,wRationale,sRationale,raRationale;
+  end if;
+end;
+//
 
 create procedure suppressedAssetProperties(in assetId int,in environmentId int)
 begin
