@@ -541,9 +541,18 @@ class MySQLDatabaseProxy:
     self.updateDatabase(sqlTxt,{'obj':objtId,'env':environmentName,'cPr':securityProperties[C_PROPERTY],'iPr':securityProperties[I_PROPERTY],'avPr':securityProperties[AV_PROPERTY],'acPr':securityProperties[AC_PROPERTY],'anPr':securityProperties[AN_PROPERTY],'panPr':securityProperties[PAN_PROPERTY],'unlPr':securityProperties[UNL_PROPERTY],'unoPr':securityProperties[UNO_PROPERTY],'cRa':pRationale[C_PROPERTY],'iRa':pRationale[I_PROPERTY],'avRa':pRationale[AV_PROPERTY],'acRa':pRationale[AC_PROPERTY],'anRa':pRationale[AN_PROPERTY],'panRa':pRationale[PAN_PROPERTY],'unlRa':pRationale[UNL_PROPERTY],'unoRa':pRationale[UNO_PROPERTY]},'MySQL error adding security properties for ' + dimTable)
 
   def addCognitiveAttributes(self,objtId,environmentName,cognitiveAttributes,aRationale):
-    sqlTxt = 'call add_usecase_attributes(:obj,:env,:vCA,:saCA,:wCA,:sCA,:raCA,:vRa,:saRa,:wRa,:sRa,:rsRa)'
+    sqlTxt = 'call add_usecase_attributes(:obj,:env,:vCA,:saCA,:wCA,:sCA,:raCA,:vRa,:saRa,:wRa,:sRa,:raRa)'
     self.updateDatabase(sqlTxt,{'obj':objtId,'env':environmentName,'vCA':cognitiveAttributes[V_ATTRIBUTE],'saCA':cognitiveAttributes[SA_ATTRIBUTE],'wCA':cognitiveAttributes[W_ATTRIBUTE],'sCA':cognitiveAttributes[S_ATTRIBUTE],'raCA':cognitiveAttributes[RA_ATTRIBUTE],'vRa':aRationale[V_ATTRIBUTE],'saRa':aRationale[SA_ATTRIBUTE],'wRa':aRationale[W_ATTRIBUTE],'sRa':aRationale[S_ATTRIBUTE],'raRa':aRationale[RA_ATTRIBUTE]},'MySQL error adding cognitive attributes for use case')
 
+  def relatedAttributes(self,objtId,environmentId):
+    callTxt = 'call usecaseAttributes (:objtId,:envId)'
+    argDict = {'objtId':objtId,'envId':environmentId}
+    row = self.responseList(callTxt,argDict,'MySQL error getting related properties')[0]
+    cognitiveAttributes = []
+    cognitiveAttributes =  array((row[0],row[1],row[2],row[3],row[4])).astype(int32) 
+    aRationale =  [row[5],row[6],row[7],row[8],row[9]]
+    return (cognitiveAttributes,aRationale)
+  
   def deleteAsset(self,assetId):
     self.deleteObject(assetId,'asset')
     
@@ -3003,7 +3012,8 @@ class MySQLDatabaseProxy:
       for environmentId,environmentName in self.dimensionEnvironments(ucId,'usecase'):
         preConds,postConds = self.useCaseConditions(ucId,environmentId)
         ucSteps = self.useCaseSteps(ucId,environmentId)
-        properties = UseCaseEnvironmentProperties(environmentName,preConds,ucSteps,postConds)
+        cognitiveAttributes,aRationale = self.relatedAttributes(ucId,environmentId)
+        properties = UseCaseEnvironmentProperties(environmentName,preConds,ucSteps,postConds,cognitiveAttributes,aRationale)
         environmentProperties.append(properties)
         parameters = UseCaseParameters(ucName,ucAuth,ucCode,ucRoles,ucDesc,tags,environmentProperties)
         uc = ObjectFactory.build(ucId,parameters)
