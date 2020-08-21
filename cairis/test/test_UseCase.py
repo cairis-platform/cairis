@@ -80,9 +80,17 @@ class UseCaseTest(unittest.TestCase):
     self.assertEqual(iuc.author(),ouc.author())
     self.assertEqual(iuc.environmentProperties()[0].preconditions(),ouc.environmentProperties()[0].preconditions())
     self.assertEqual(iuc.environmentProperties()[0].postconditions(),ouc.environmentProperties()[0].postconditions())
-    self.assertEqual(iuc.environmentProperties()[0].attributes(),ouc.environmentProperties()[0].attributes())
-    self.assertEqual(iuc.environmentProperties()[0].rationale(),ouc.environmentProperties()[0].rationale())
-
+    self.assertEqual(iuc.environmentProperties()[0].attributes()[0],ouc.environmentProperties()[0].attributes()[0])
+    self.assertEqual(iuc.environmentProperties()[0].attributes()[1],ouc.environmentProperties()[0].attributes()[1])
+    self.assertEqual(iuc.environmentProperties()[0].attributes()[2],ouc.environmentProperties()[0].attributes()[2])
+    self.assertEqual(iuc.environmentProperties()[0].attributes()[3],ouc.environmentProperties()[0].attributes()[3])
+    self.assertEqual(iuc.environmentProperties()[0].attributes()[4],ouc.environmentProperties()[0].attributes()[4])
+    self.assertEqual(iuc.environmentProperties()[0].rationale()[0],ouc.environmentProperties()[0].rationale()[0])
+    self.assertEqual(iuc.environmentProperties()[0].rationale()[1],ouc.environmentProperties()[0].rationale()[1])
+    self.assertEqual(iuc.environmentProperties()[0].rationale()[2],ouc.environmentProperties()[0].rationale()[2])
+    self.assertEqual(iuc.environmentProperties()[0].rationale()[3],ouc.environmentProperties()[0].rationale()[3])
+    self.assertEqual(iuc.environmentProperties()[0].rationale()[4],ouc.environmentProperties()[0].rationale()[4])
+    
     iuc.theName = 'Updated name'
     iuc.setId(ouc.id())
     b.dbProxy.updateUseCase(iuc) 
@@ -97,9 +105,17 @@ class UseCaseTest(unittest.TestCase):
     self.assertEqual(iuc.author(),ouc.author())
     self.assertEqual(iuc.environmentProperties()[0].preconditions(),ouc.environmentProperties()[0].preconditions())
     self.assertEqual(iuc.environmentProperties()[0].postconditions(),ouc.environmentProperties()[0].postconditions())
-    self.assertEqual(iuc.environmentProperties()[0].attributes(),ouc.environmentProperties()[0].attributes())
-    self.assertEqual(iuc.environmentProperties()[0].rationale(),ouc.environmentProperties()[0].rationale())
-
+    self.assertEqual(iuc.environmentProperties()[0].attributes()[0],ouc.environmentProperties()[0].attributes()[0])
+    self.assertEqual(iuc.environmentProperties()[0].attributes()[1],ouc.environmentProperties()[0].attributes()[1])
+    self.assertEqual(iuc.environmentProperties()[0].attributes()[2],ouc.environmentProperties()[0].attributes()[2])
+    self.assertEqual(iuc.environmentProperties()[0].attributes()[3],ouc.environmentProperties()[0].attributes()[3])
+    self.assertEqual(iuc.environmentProperties()[0].attributes()[4],ouc.environmentProperties()[0].attributes()[4])
+    self.assertEqual(iuc.environmentProperties()[0].rationale()[0],ouc.environmentProperties()[0].rationale()[0])
+    self.assertEqual(iuc.environmentProperties()[0].rationale()[1],ouc.environmentProperties()[0].rationale()[1])
+    self.assertEqual(iuc.environmentProperties()[0].rationale()[2],ouc.environmentProperties()[0].rationale()[2])
+    self.assertEqual(iuc.environmentProperties()[0].rationale()[3],ouc.environmentProperties()[0].rationale()[3])
+    self.assertEqual(iuc.environmentProperties()[0].rationale()[4],ouc.environmentProperties()[0].rationale()[4])
+    
     b.dbProxy.deleteUseCase(ouc.id())
 
   def tearDown(self):
