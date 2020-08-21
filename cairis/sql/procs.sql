@@ -31047,7 +31047,7 @@ begin
   declare continue handler for not found set done = 1;
 
   drop table if exists temp_gid;
-  create temporary table temp_gid (id int not null);
+  create temporary table temp_gid (id int not null, gscore int not null);
 
   open depCursor;
   dep_loop: loop
