@@ -68,11 +68,12 @@ sudo service mysql stop
 sudo mkdir -p /var/run/mysqld
 sudo chown mysql:mysql /var/run/mysqld
 sudo /usr/bin/mysqld_safe --skip-grant-tables &
-sleep 15
+sleep 10
 mysql -u root --execute="$CMD"
 sudo pkill mysqld_safe
 sudo pkill mysqld
 sudo service mysql start
+sleep 10
 
 export PYTHONPATH=$CAIRIS_ROOT
 $CAIRIS_ROOT/cairis/bin/quick_setup_headless.py --rootDir=$CAIRIS_ROOT/cairis --dbRootPassword=$ROOTPW --logLevel=debug --user=$DEFUSER --password=$DEFPASSWD
