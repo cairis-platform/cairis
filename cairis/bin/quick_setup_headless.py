@@ -49,4 +49,6 @@ if __name__ == '__main__':
   except ARMException as e:
     print('Fatal setup error: ' + str(e))
     sys.exit(-1)
-
+  except Exception as e:
+    print('Fatal setup error: ' + str(e))
+    sys.exit(-1)
