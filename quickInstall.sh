@@ -82,6 +82,6 @@ echo -e $SVCFILE | sudo tee /etc/systemd/system/cairis.service
 
 sudo systemctl enable /etc/systemd/system/cairis.service
 
-echo "alias update_cairis=\"sudo apt-get update && sudo apt-get upgrade -y && sudo apt-get dist-upgrade -y && curl -s https://cairis.org/quickInstall.sh | bash -s $ROOTPW $DEFUSER $DEFPASSWD\"" >> $HOMEDIR/.bashrc
+echo "alias update_cairis=\"sudo apt-get update && sudo apt-get upgrade -y && sudo apt-get dist-upgrade -y && curl -s https://cairis.org/quickInstall.sh | bash -s $ROOTPW $DEFUSER $DEFPASSWD $HOMEDIR\"" >> $HOMEDIR/.bashrc
 
 sudo shutdown -Fr now
