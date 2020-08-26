@@ -76,7 +76,7 @@ sudo service mysql start
 sleep 10
 
 export PYTHONPATH=$CAIRIS_ROOT
-$CAIRIS_ROOT/cairis/bin/quick_setup_headless.py --rootDir=$CAIRIS_ROOT/cairis --dbRootPassword=$ROOTPW --logLevel=debug --user=$DEFUSER --password=$DEFPASSWD
+$CAIRIS_ROOT/cairis/bin/quick_setup_headless.py --rootDir=$CAIRIS_ROOT/cairis --dbRootPassword=$ROOTPW --logLevel=debug --user=$DEFUSER --password=$DEFPASSWD --configFile=$HOMEDIR/cairis.cnf
 
 SVCFILE="[Unit]\nDescription=cairisd\n\n[Service]\nUser=$USERNAME\nWorkingDirectory=$CAIRIS_ROOT\nEnvironment=\"CAIRIS_CFG=$HOMEDIR/cairis.cnf\"\nEnvironment=\"PYTHONPATH=\${PYTHONPATH}:$CAIRIS_ROOT\"\nExecStart=$CAIRIS_ROOT/cairis/bin/cairisd.py runserver\nRestart=on-failure\n\n[Install]\nWantedBy=multi-user.target"
 echo -e $SVCFILE | sudo tee /etc/systemd/system/cairis.service
