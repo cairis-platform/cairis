@@ -16,11 +16,10 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
-CAIRIS_ROOT=$HOME/cairis
-export CAIRIS_SRC=$CAIRIS_ROOT/cairis
 ROOTPW=$1
 DEFUSER=$2
 DEFPASSWD=$3
+HOMEDIR=$4
 
 if [ -z $1 ]
 then
@@ -37,6 +36,14 @@ then
   DEFPASSWD=test
 fi
 
+if [ -z $3 ]
+then
+  HOMEDIR=$HOME
+fi
+
+CAIRIS_ROOT=$HOMEDIR/cairis
+export CAIRIS_SRC=$CAIRIS_ROOT/cairis
+
 echo "ROOTPW: " $ROOTPW "DEFUSER: " $DEFUSER "DEFPASSWD: " $DEFPASSWD
 
 sudo systemctl stop cairis
@@ -44,12 +51,12 @@ sudo systemctl disable cairis
 
 sudo apt-get -y install python3-dev build-essential mysql-server mysql-client graphviz docbook dblatex python3-pip python3-mysqldb python3-numpy git libmysqlclient-dev --no-install-recommends texlive-latex-extra docbook-utils inkscape libxml2-dev libxslt1-dev poppler-utils python3-setuptools pandoc
 
-sudo -s rm -rf $CAIRIS_ROOT
+sudo rm -rf $CAIRIS_ROOT
 git clone https://github.com/cairis-platform/cairis $CAIRIS_ROOT
-sudo -s -E $CAIRIS_ROOT/cairis/bin/installUI.sh
+sudo -E $CAIRIS_ROOT/cairis/bin/installUI.sh
 
 sudo pip3 install wheel
-sudo -s pip3 install -r $CAIRIS_ROOT/requirements.txt
+sudo pip3 install -r $CAIRIS_ROOT/requirements.txt
 
 echo -e "[mysqld]\nthread_stack = 256K\nmax_sp_recursion_depth = 255\nlog_bin_trust_function_creators = 1" | sudo tee /etc/mysql/conf.d/mysql.cnf
 
