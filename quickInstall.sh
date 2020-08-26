@@ -68,7 +68,7 @@ sudo service mysql stop
 sudo mkdir -p /var/run/mysqld
 sudo chown mysql:mysql /var/run/mysqld
 sudo /usr/bin/mysqld_safe --skip-grant-tables &
-sleep 5
+sleep 15
 mysql -u root --execute="$CMD"
 sudo pkill mysqld_safe
 sudo pkill mysqld
