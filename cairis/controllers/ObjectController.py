@@ -222,6 +222,7 @@ class ObjectsByMethodAndThreeParametersAPI(Resource):
   def __init__(self,**kwargs):
     self.DAOModule = getattr(import_module('cairis.data.' + kwargs['dao']),kwargs['dao'])
     self.thePathParameters = []
+    self.thePostMessage = ''
     if 'get_method' in kwargs:
       self.theGetMethod = kwargs['get_method']
     if 'post_method' in kwargs:

@@ -346,7 +346,7 @@ api.add_resource(ObjectController.ModelByTwoParametersAPI, '/api/obstacles/model
 
 # Permissions routes
 api.add_resource(ObjectController.ObjectsByMethodAndParameterAPI, '/api/permissions/database/<path:parameter_string>',endpoint='permissions', resource_class_kwargs={'dao' : 'PermissionsDAO', 'get_method' : 'get_permissions'})
-api.add_resource(ObjectController.ObjectsByMethodAndThreeParametersAPI, '/api/permissions/database/<path:p1>/user/<path:p2>/permission/<path:p3>',endpoint='changepermission', resource_class_kwargs={'dao' : 'PermissionsDAO', 'post_method' : 'set_permissions'})
+api.add_resource(ObjectController.ObjectsByMethodAndThreeParametersAPI, '/api/permissions/database/<path:p1>/user/<path:p2>/permission/<path:p3>',endpoint='changepermission', resource_class_kwargs={'dao' : 'PermissionsDAO', 'post_method' : 'set_permission'})
 
 # Persona routes
 api.add_resource(ObjectController.ObjectsAPI, '/api/personas',endpoint='personas',resource_class_kwargs={'dao': 'PersonaDAO'})
