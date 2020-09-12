@@ -199,7 +199,13 @@ class GoalsContentHandler(ContentHandler,EntityResolver):
     self.theExcCat = ''
     self.inDefinition = 0
     self.theDefinition = ''
-
+    self.theCognitiveAttribute = {}
+    self.theCognitiveAttribute['vigilance'] = (0,'None')
+    self.theCognitiveAttribute['situation awareness'] = (0,'None')
+    self.theCognitiveAttribute['stress'] = (0,'None')
+    self.theCognitiveAttribute['workload'] = (0,'None')
+    self.theCognitiveAttribute['risk awareness'] = (0,'None')
+    
   def resetCountermeasureAttributes(self):
     self.theName = ''
     self.theType = ''
@@ -407,7 +413,12 @@ class GoalsContentHandler(ContentHandler,EntityResolver):
       self.theSteps.append(self.theCurrentStep)
       self.theCurrentStep = None
     elif name == 'usecase_environment':
-      p = UseCaseEnvironmentProperties(self.theEnvironmentName,unescape(self.thePreconditions),self.theSteps,unescape(self.thePostconditions))
+      vProperty,vRationale = self.theCognitiveAttribute['vigilance']
+      saProperty,saRationale = self.theCognitiveAttribute['situation awareness']
+      sProperty,sRationale = self.theCognitiveAttribute['stress']
+      wProperty,wRationale = self.theCognitiveAttribute['workload']
+      raProperty,raRationale = self.theCognitiveAttribute['risk awareness']
+      p = UseCaseEnvironmentProperties(self.theEnvironmentName,unescape(self.thePreconditions),self.theSteps,unescape(self.thePostconditions),[vProperty,saProperty,sProperty,wProperty,raProperty],[vRationale,saRationale,sRationale,wRationale,raRationale])
       self.theEnvironmentProperties.append(p)
       self.resetUseCaseEnvironmentAttributes()
     elif name == 'usecase':
