@@ -13597,6 +13597,7 @@ begin
   declare ucDesc varchar(2000);
   declare ucPreCond varchar(2000);
   declare ucPostCond varchar(2000);
+  declare ucRationale varchar(4000);
   declare stepNo int;
   declare stepDesc varchar(2000);
   declare ucExcName varchar(200);
@@ -13634,6 +13635,16 @@ begin
   declare unlRationale varchar(4000);
   declare unoRationale varchar(4000);
   declare cmRationale varchar(4000);
+  declare vProperty varchar(50);
+  declare saProperty varchar(50);
+  declare sProperty varchar(50);
+  declare wProperty varchar(50);
+  declare raProperty varchar(50);
+  declare vRationale varchar(4000);
+  declare saRationale varchar(4000);
+  declare sRationale varchar(4000);
+  declare wRationale varchar(4000);
+  declare raRationale varchar(4000);
   declare probRationale varchar(4000);
   declare obsProb float;
   declare trName varchar(50);
@@ -13948,6 +13959,36 @@ begin
       set buf = concat(buf,'    </flow>\n');
       select postconditions into ucPostCond from usecase_conditions where usecase_id = ucId and environment_id = envId;
       set buf = concat(buf,'    <postconditions>',ucPostCond,'</postconditions>\n');
+      
+      set done = 0;
+
+      select cav.name,ucp.property_rationale into vProperty,vRationale from usecase_property ucp, cognitive_attribute_value cav where ucp.usecase_id = ucId and ucp.property_id = 0 and ucp.environment_id = envId and ucp.property_value_id = cav.id;
+      select cav.name,ucp.property_rationale into saProperty,saRationale from usecase_property ucp, cognitive_attribute_value cav where ucp.usecase_id = ucId and ucp.property_id = 1 and ucp.environment_id = envId and ucp.property_value_id = cav.id;
+      select cav.name,ucp.property_rationale into sProperty,sRationale from usecase_property ucp, cognitive_attribute_value cav where ucp.usecase_id = ucId and ucp.property_id = 2 and ucp.environment_id = envId and ucp.property_value_id = cav.id;
+      select cav.name,ucp.property_rationale into wProperty,wRationale from usecase_property ucp, cognitive_attribute_value cav where ucp.usecase_id = ucId and ucp.property_id = 3 and ucp.environment_id = envId and ucp.property_value_id = cav.id;
+      select cav.name,ucp.property_rationale into raProperty,raRationale from usecase_property ucp, cognitive_attribute_value cav where ucp.usecase_id = ucId and ucp.property_id = 4 and ucp.environment_id = envId and ucp.property_value_id = cav.id;
+      
+      if vProperty != 'None'
+      then
+        set buf = concat(buf,'    <cognitive_attribute attribute="vigilance" value=\"',vProperty,'\">\n      <rationale>',vRationale,'</rationale>\n    </cognitive_attribute>\n');
+      end if;
+      if saProperty != 'None'
+      then
+        set buf = concat(buf,'    <cognitive_attribute attribute="situation awareness" value=\"',saProperty,'\">\n      <rationale>',saRationale,'</rationale>\n    </cognitive_attribute>\n');
+      end if;
+      if sProperty != 'None'
+      then
+        set buf = concat(buf,'    <cognitive_attribute attribute="stress" value=\"',sProperty,'\">\n      <rationale>',sRationale,'</rationale>\n    </cognitive_attribute>\n');
+      end if;
+      if wProperty != 'None'
+      then
+        set buf = concat(buf,'    <cognitive_attribute attribute="workload" value=\"',wProperty,'\">\n      <rationale>',wRationale,'</rationale>\n    </cognitive_attribute>\n');
+      end if;
+      if raProperty != 'None'
+      then
+        set buf = concat(buf,'    <cognitive_attribute attribute="risk awareness" value=\"',raProperty,'\">\n      <rationale>',raRationale,'</rationale>\n    </cognitive_attribute>\n');
+      end if;
+      
       set buf = concat(buf,'  </usecase_environment>\n');
     end loop ucEnv_loop;
     close ucEnvCursor;
