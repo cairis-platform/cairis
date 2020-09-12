@@ -312,13 +312,13 @@
 <!ATTLIST requirement priority (1 | 2 | 3) #REQUIRED>
 <!ELEMENT originator (#PCDATA)>
 
-<!ELEMENT usecase (tag*,description,actor+,usecase_environment+,cognitive_attribute*)>
+<!ELEMENT usecase (tag*,description,actor+,usecase_environment+)>
 <!ATTLIST usecase name CDATA #REQUIRED>
 <!ATTLIST usecase author CDATA #REQUIRED>
 <!ATTLIST usecase code CDATA #REQUIRED>
 <!ELEMENT actor EMPTY>
 <!ATTLIST actor name CDATA #REQUIRED>
-<!ELEMENT usecase_environment (preconditions,flow,postconditions)>
+<!ELEMENT usecase_environment (preconditions,flow,postconditions,cognitive_attribute*)>
 <!ATTLIST usecase_environment name CDATA #REQUIRED>
 <!ELEMENT preconditions (#PCDATA)>
 <!ELEMENT flow (step+)>
@@ -331,12 +331,9 @@
 <!ATTLIST exception value CDATA #IMPLIED>
 <!ATTLIST exception category (Confidentiality_Threat | Integrity_Threat | Availability_Threat | Accountability_Threat | Vulnerability | Duration | Frequency | Demands | Goal_Support | Anonymity_Threat | Pseudonymity_Threat | Unlinkability_Threat | Unobservability_Threat | Threat ) #IMPLIED>
 <!ELEMENT postconditions (#PCDATA)>
-
 <!ELEMENT cognitive_attribute (rationale)>
-<!ATTLIST cognitive_attribute environment CDATA #REQUIRED>
 <!ATTLIST cognitive_attribute attribute (vigilance | situation awareness | workload | stress | risk awareness) #REQUIRED>
 <!ATTLIST cognitive_attribute value (None | Low | Medium | High) #REQUIRED>
-<!ELEMENT rationale (#PCDATA)>
 
 <!ELEMENT usecase_association (rationale)>
 <!ATTLIST usecase_association environment CDATA #REQUIRED>
