@@ -2422,7 +2422,7 @@ create procedure getAttackers(in constraintId int)
 begin
   if constraintId = -1
   then
-    select id,name,description,image from attacker order by 2;
+    select id,name,description,image from attacker;
   else
     select id,name,description,image from attacker where id = constraintId;
   end if;
@@ -2439,7 +2439,7 @@ create procedure getAssets(in constraintId int)
 begin
   if constraintId = -1
   then
-    select a.id,a.name,a.short_code,a.description,a.significance,at.name,a.is_critical,a.critical_rationale from asset a,asset_type at where a.asset_type_id = at.id order by 2;
+    select a.id,a.name,a.short_code,a.description,a.significance,at.name,a.is_critical,a.critical_rationale from asset a,asset_type at where a.asset_type_id = at.id;
   else
     select a.id,a.name,a.short_code,a.description,a.significance,at.name,a.is_critical,a.critical_rationale from asset a,asset_type at where a.id = constraintId and a.asset_type_id = at.id;
   end if;
@@ -2456,7 +2456,7 @@ create procedure getThreats(in constraintId int)
 begin
   if constraintId = -1
   then
-    select t.id, t.name, tt.name, t.method from threat t, threat_type tt where t.threat_type_id = tt.id order by 2;
+    select t.id, t.name, tt.name, t.method from threat t, threat_type tt where t.threat_type_id = tt.id;
   else
     select t.id, t.name, tt.name, t.method from threat t, threat_type tt where t.id = constraintId and t.threat_type_id = tt.id;
   end if;
@@ -2473,7 +2473,7 @@ create procedure getVulnerabilities(in constraintId int)
 begin
   if constraintId = -1
   then
-    select v.id, v.name,v.description,vt.name from vulnerability v,vulnerability_type vt where v.vulnerability_type_id = vt.id order by 2;
+    select v.id, v.name,v.description,vt.name from vulnerability v,vulnerability_type vt where v.vulnerability_type_id = vt.id;
   else
     select v.id, v.name,v.description,vt.name from vulnerability v,vulnerability_type vt where v.id = constraintId and v.vulnerability_type_id = vt.id;
   end if;
@@ -2484,7 +2484,7 @@ create procedure getRisks(in constraintId int)
 begin
   if constraintId = -1
   then
-    select r.id, r.name,t.name,v.name from risk r, threat t, vulnerability v where r.threat_id = t.id and r.vulnerability_id = v.id order by 2;
+    select r.id, r.name,t.name,v.name from risk r, threat t, vulnerability v where r.threat_id = t.id and r.vulnerability_id = v.id;
   else
     select r.id, r.name,t.name,v.name from risk r, threat t, vulnerability v where r.id = constraintId and r.threat_id = t.id and r.vulnerability_id = v.id;
   end if;
@@ -8462,7 +8462,7 @@ create procedure getEnvironments(in constraintId int)
 begin
   if constraintId = -1
   then
-    select id,name,short_code,description from environment order by 2;
+    select id,name,short_code,description from environment;
   else
     select id,name,short_code,description from environment where id = constraintId;
   end if;
@@ -8487,7 +8487,7 @@ create procedure getPersonas(in constraintId int)
 begin
   if constraintId = -1
   then
-    select p.id,p.name,p.activities,p.attitudes,p.aptitudes,p.motivations,p.skills,p.intrinsic,p.contextual,p.image,p.assumption_id,pt.name from persona p, persona_type pt where p.persona_type_id = pt.id order by 2;
+    select p.id,p.name,p.activities,p.attitudes,p.aptitudes,p.motivations,p.skills,p.intrinsic,p.contextual,p.image,p.assumption_id,pt.name from persona p, persona_type pt where p.persona_type_id = pt.id;
   else
     select p.id,p.name,p.activities,p.attitudes,p.aptitudes,p.motivations,p.skills,p.intrinsic,p.contextual,p.image,p.assumption_id,pt.name from persona p, persona_type pt where p.id = constraintId and p.persona_type_id = pt.id;
   end if;
@@ -8505,7 +8505,7 @@ create procedure getTasks(in constraintId int)
 begin
   if constraintId = -1
   then
-    select id,name,short_code,objective,assumption_id,author from task order by 2;
+    select id,name,short_code,objective,assumption_id,author from task;
   else
     select id,name,short_code,objective,assumption_id,author from task where id = constraintId;
   end if;
@@ -8516,7 +8516,7 @@ create procedure getUseCases(in constraintId int)
 begin
   if constraintId = -1
   then
-    select id,name,author,short_code,description from usecase order by 2;
+    select id,name,author,short_code,description from usecase;
   else
     select id,name,author,short_code,description from usecase where id = constraintId;
   end if;
@@ -8533,7 +8533,7 @@ create procedure getMisuseCases(in constraintId int)
 begin
   if constraintId = -1
   then
-    select id,name from misusecase order by 2;
+    select id,name from misusecase;
   else
     select id,name from misusecase where id = constraintId;
   end if;
@@ -8584,7 +8584,7 @@ create procedure getResponses(in constraintId int)
 begin
   if constraintId = -1
   then
-    select re.id,re.name,rt.name,r.name from response re,goal_category_type rt, risk r where re.goal_category_type_id = rt.id and re.risk_id = r.id order by 2;
+    select re.id,re.name,rt.name,r.name from response re,goal_category_type rt, risk r where re.goal_category_type_id = rt.id and re.risk_id = r.id;
   else
     select re.id,re.name,rt.name,r.name from response re,goal_category_type rt, risk r where re.id = constraintId and re.goal_category_type_id = rt.id and re.risk_id = r.id;
   end if;
@@ -8622,7 +8622,7 @@ create procedure getRoles(in constraintId int)
 begin
   if constraintId = -1
   then
-    select r.id,r.name,rt.name,r.short_code,r.description from role r, role_type rt where r.role_type_id = rt.id order by 2;
+    select r.id,r.name,rt.name,r.short_code,r.description from role r, role_type rt where r.role_type_id = rt.id;
   else
     select r.id,r.name,rt.name,r.short_code,r.description from role r, role_type rt where r.id = constraintId and r.role_type_id = rt.id;
   end if;
@@ -8649,7 +8649,7 @@ create procedure getCountermeasures(in constraintId int)
 begin
   if constraintId = -1
   then
-    select c.id,c.name,c.description,at.name from countermeasure c,asset_type at where c.countermeasure_type_id = at.id order by 2;
+    select c.id,c.name,c.description,at.name from countermeasure c,asset_type at where c.countermeasure_type_id = at.id;
   else
     select c.id,c.name,c.description,at.name from countermeasure c,asset_type at where c.id = constraintId and c.countermeasure_type_id = at.id;
   end if;
@@ -8660,7 +8660,7 @@ create procedure getGoals(in constraintId int)
 begin
   if constraintId = -1
   then
-    select id,name,originator from goal order by 2;
+    select id,name,originator from goal;
   else
     select id,name,originator from goal where id = constraintId;
   end if;
@@ -8875,7 +8875,7 @@ create procedure getObstacles(in constraintId int)
 begin
   if constraintId = -1
   then
-    select id,name,originator from obstacle order by 2;
+    select id,name,originator from obstacle;
   else
     select id,name,originator from obstacle where id = constraintId;
   end if;
@@ -23339,7 +23339,7 @@ create procedure getLocations(in constraintId int)
 begin
   if constraintId = -1
   then
-    select id,name,diagram from locations order by 2;
+    select id,name,diagram from locations;
   else
     select id,name,diagram from locations where id = constraintId;
   end if;
@@ -24664,7 +24664,7 @@ begin
     select id into dfId from dataflow where name = dfName and environment_id = envId limit 1;
     select dataflow, dataflow_type, environment, from_name, from_type, to_name, to_type from dataflows where dataflow=dfName and environment = envName;
   else
-    select dataflow, dataflow_type, environment, from_name, from_type, to_name, to_type from dataflows order by 1;
+    select dataflow, dataflow_type, environment, from_name, from_type, to_name, to_type from dataflows;
   end if;
 end
 //
@@ -30897,7 +30897,7 @@ begin
       select count(id) into idCount from temp_gid where id = ugId;
       if idCount = 0
       then
-        insert into temp_gid(id,gscore) values (ugId,0);
+        insert into temp_gid(id) values (ugId);
         set done = 0;
         open taskContCursor;
         tc_loop: loop
@@ -30910,6 +30910,7 @@ begin
           set score = score + contScore;
         end loop tc_loop;
         close taskContCursor;
+
         set done = 0;
         open goalLinksCursor;
         gl_loop: loop
@@ -30918,8 +30919,6 @@ begin
           then
             leave gl_loop;
           end if;
-
-          set ugScore = 0;  
           call userGoalContribution(cgId,envId,ugScore);
 
           select value into contScore from link_contribution where id = linkScore;
@@ -30927,6 +30926,7 @@ begin
           set score = score + ugScore;
         end loop gl_loop;
         close goalLinksCursor;
+
         if score > 100 or score < -100
         then
           set score = score / 100;
@@ -30938,9 +30938,6 @@ begin
             set score = 100;
           end if; 
         end if;
-        update temp_gid set gscore = score where id = ugId;
-      else
-        select gscore into score from  temp_gid where id = ugId;
       end if;
     end if;
   end if;
@@ -30955,7 +30952,7 @@ begin
   declare gsScoreId int;
 
   drop table if exists temp_gid;
-  create temporary table temp_gid (id int not null, gscore int not null);
+  create temporary table temp_gid (id int not null);
 
   select id into envId from environment where name = envName limit 1;
   
@@ -31177,7 +31174,7 @@ begin
   declare refId int;
   declare isConflict int default 0;
   declare done int default 0;
-  declare pcCursor cursor for select pc.persona_id from persona_characteristic pc, persona_characteristic_document pcd, persona_characteristic_synopsis pcs where pc.id = pcd.characteristic_id and pcd.reference_id = refId and  pcs.characteristic_id = pc.id;
+  declare pcCursor cursor for select pc.persona_id from persona_characteristic pc, persona_characteristic_document pcd where pc.id = pcd.characteristic_id and pcd.reference_id = refId;
   declare continue handler for not found set done = 1;
 
   select id into pId from persona where name = pName limit 1;
@@ -31231,7 +31228,7 @@ begin
   declare continue handler for not found set done = 1;
 
   drop table if exists temp_gid;
-  create temporary table temp_gid (id int not null, gscore int not null);
+  create temporary table temp_gid (id int not null);
 
   open depCursor;
   dep_loop: loop
