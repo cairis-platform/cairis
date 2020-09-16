@@ -27,7 +27,12 @@ from flask_restful import Resource
 from cairis.daemon.CairisHTTPError import ARMHTTPError
 from cairis.tools.JsonConverter import json_serialize
 from cairis.tools.SessionValidator import get_session_id, get_model_generator
+from cairis.core.ARM import ARMException, DatabaseProxyException
+from cairis.daemon.CairisHTTPError import CairisHTTPError, ARMHTTPError, MissingParameterHTTPError
 from importlib import import_module
+from tempfile import mkstemp
+import codecs
+import os
 
 __author__ = 'Robin Quetin, Shamal Faily'
 
@@ -120,11 +125,15 @@ class ObjectsByMethodAPI(Resource):
       resp = make_response(objts)
       if (self.theGetMethod == 'file_export' and pathValues[1] == 'cairis'):
         resp.headers["Content-Type"] = 'application/octet-stream' 
+      elif (self.theGetMethod == 'user_goals_export'):
+        resp.headers["Content-Type"] = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
       else:
         resp.headers["Content-Type"] = 'application/xml'
 
       if (self.theGetMethod == 'file_export'): 
         resp.headers["Content-Disposition"] = 'Attachment; filename=' + pathValues[0] + '.'  + pathValues[1]
+      elif (self.theGetMethod == 'user_goals_export' or self.theGetMethod == 'persona_characteristics_export'):
+        resp.headers["Content-Disposition"] = 'Attachment; filename=' + pathValues[0] + '.xlsx'
       else:
         resp.headers["Content-Disposition"] = 'Attachment; filename=' + pathValues[0]
     else:
@@ -213,6 +222,7 @@ class ObjectsByMethodAndThreeParametersAPI(Resource):
   def __init__(self,**kwargs):
     self.DAOModule = getattr(import_module('cairis.data.' + kwargs['dao']),kwargs['dao'])
     self.thePathParameters = []
+    self.thePostMessage = ''
     if 'get_method' in kwargs:
       self.theGetMethod = kwargs['get_method']
     if 'post_method' in kwargs:
@@ -411,6 +421,8 @@ class ObjectsByMethodAndParameterAPI(Resource):
         fileName = parameter_string
       resp.headers["Content-Type"] = 'application/xml'
       resp.headers["Content-Disposition"] = 'Attachment; filename=' + pathValues[0] + '.xml'
+
+
     else:
       resp = make_response(json_serialize(objts, session_id=session_id), OK)
       resp.contenttype = 'application/json'
@@ -836,3 +848,42 @@ class ModelByThreeParametersAPI(Resource):
     else:
       resp.headers['Content-type'] = 'image/svg+xml'
     return resp
+
+class WorkbookUploadAPI(Resource):
+  def __init__(self,**kwargs):
+    self.DAOModule = getattr(import_module('cairis.data.' + kwargs['dao']),kwargs['dao'])
+    self.thePathParameters = []
+    if 'post_method' in kwargs:
+      self.thePostMethod = kwargs['post_method']
+
+  def post(self):
+    session_id = get_session_id(session, request)
+
+    content_length = request.content_length
+    max_length = 30*1024*1024
+    if content_length > max_length:
+      raise MissingParameterHTTPError(exception=RuntimeError('File exceeded maximum size (30MB)'))
+
+    try:
+      wb = request.files['file']
+      fd, abs_path = mkstemp(suffix='.xlsx')
+      fs_temp = open(abs_path, 'wb')
+      fs_temp.write(wb.stream.read())
+      fs_temp.close()
+      os.close(fd)
+      dao = self.DAOModule(session_id)
+      postMsg = getattr(dao, self.thePostMethod)(abs_path)
+      dao.close()
+      os.remove(abs_path)
+      resp_dict = {'message': postMsg}
+      resp = make_response(json_serialize(resp_dict, session_id=session_id), OK)
+      resp.contenttype = 'application/json'
+      return resp
+    except DatabaseProxyException as ex:
+      raise ARMHTTPError(ex)
+    except ARMException as ex:
+      raise ARMHTTPError(ex)
+    except LookupError as ex:
+      raise MissingParameterHTTPError(param_names=['file'])
+    except Exception as ex:
+      raise CairisHTTPError(status_code=CONFLICT, message=str(ex), status='Unknown error')

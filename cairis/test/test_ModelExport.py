@@ -19,7 +19,7 @@ import unittest
 import os
 import logging
 from cairis.mio.ModelImport import importTVTypeFile,importModelFile,importAttackPattern,importComponentViewFile,importDirectoryFile
-from cairis.mio.ModelExport import exportModel,exportJSON,exportRedmineScenarios,exportRedmineUseCases,exportGRL
+from cairis.mio.ModelExport import exportModel,exportJSON,exportRedmineScenarios,exportRedmineUseCases,exportGRL,exportUserGoalWorkbook
 import cairis.core.BorgFactory
 from cairis.core.Borg import Borg
 
@@ -97,4 +97,9 @@ class ModelExportTests(unittest.TestCase):
   def testExportGRL(self):
     outFile = '/tmp/exportedGRL.grl'
     self.assertEqual(exportGRL(outFile,'all','Unsafe application install','Complete'),'Exported GRL for all in tasks Unsafe application install situated in environment Complete')
+    self.assertEqual(os.path.isfile(outFile),True)
+
+  def testExportUserGoalWorkbook(self):
+    outFile = '/tmp/ugwb.xlsx'
+    exportUserGoalWorkbook(outFile)
     self.assertEqual(os.path.isfile(outFile),True)

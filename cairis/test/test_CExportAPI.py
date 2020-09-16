@@ -74,3 +74,23 @@ class CExportTests(CairisDaemonTestCase):
     self.logger.info('[%s] URL: %s', method, url)
     rv = self.app.get(url)
     self.assertIsNotNone(rv.data, 'No response')
+
+  def test_user_goals_get(self):
+    method = 'test_cexport_user_goals_get?session_id=test'
+    url = '/api/export/file/user_goals?session_id=test&filename=apiwb&fileType=xlsx'
+    self.logger.info('[%s] URL: %s', method, url)
+    rv = self.app.get(url)
+    self.assertIsNotNone(rv.data, 'No response')
+    f = open('/tmp/newwb.xlsx','wb')
+    f.write(rv.data)
+    f.close()
+
+  def test_persona_characteristics_get(self):
+    method = 'test_cexport_persona_characteristics_get?session_id=test'
+    url = '/api/export/file/persona_characteristics?session_id=test&filename=pcwb&fileType=xlsx'
+    self.logger.info('[%s] URL: %s', method, url)
+    rv = self.app.get(url)
+    self.assertIsNotNone(rv.data, 'No response')
+    f = open('/tmp/newpcwb.xlsx','wb')
+    f.write(rv.data)
+    f.close()

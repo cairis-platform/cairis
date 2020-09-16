@@ -37,9 +37,10 @@ def quick_setup(dbHost,dbPort,dbRootPassword,tmpDir,rootDir,configFile,webPort,l
     raise ARMException("Username cannot be longer than 255 characters")
   if (userName == "root"):
     raise ARMException("Username cannot be root")
+  createCairisCnf(configFile,dbRootPassword,dbHost,dbPort,tmpDir,rootDir,webPort,logLevel,staticDir,assetDir,mailServer,mailPort,mailUser,mailPasswd)
+  os.environ["CAIRIS_CFG"] = configFile
   createDbOwnerDatabase(dbRootPassword,dbHost,dbPort)
   createUserDatabase(dbHost,dbPort,dbRootPassword,rootDir)
-  os.environ["CAIRIS_CFG"] = configFile
   pathName = os.path.split(os.path.split(os.path.realpath(os.path.dirname(__file__)))[0])[0]
   sys.path.insert(0, pathName)
   fileName = os.environ.get("HOME") + "/.bashrc"
@@ -49,7 +50,6 @@ def quick_setup(dbHost,dbPort,dbRootPassword,tmpDir,rootDir,configFile,webPort,l
   f.write("export CAIRIS_CFG="+ configFile +"\n")
   f.write("export PYTHONPATH=${PYTHONPATH}:" + pathName +"\n")
   f.close()
-  createCairisCnf(configFile,dbRootPassword,dbHost,dbPort,tmpDir,rootDir,webPort,logLevel,staticDir,assetDir,mailServer,mailPort,mailUser,mailPasswd)
 
   from cairis.bin.add_cairis_user import user_datastore,db
   db.create_all()

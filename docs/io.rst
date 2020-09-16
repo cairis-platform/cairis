@@ -36,6 +36,9 @@ Processes                                     processes.dtd                   CS
 Locations                                     locations.dtd                   locations
 Dataflows                                     dataflow.dtd                    dataflows and trust boundaries 
 Attack Tree (Dot)                             N/A                             Graphviz (Dot) representation of an attack tree
+diagrams.net (Data Flow Diagram)              N/A                             diagrams.net drawn DFD 
+diagrams.net (Asset Model)                    N/A                             diagrams.net drawn asset model
+User goals (Workbook)                         N/A                             CAIRIS generated Excel workbook with user goals and contributions
 ============================================= =============================== ============================================================================================================================
 
 If you have command line access to the server running the CAIRIS server then a quicker way of importing a model is to use the cimport.py script, which can be found in cairis/cairis/bin.  The below command, which is run from cairis/cairis/bin, imports the ACME Water sample model into the default database of the test user. 

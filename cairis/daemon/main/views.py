@@ -307,6 +307,8 @@ api.add_resource(ObjectController.ObjectsByMethodAndTwoParametersAPI, '/api/goal
 # Export routes
 api.add_resource(ObjectController.ObjectsByMethodAPI, '/api/export/file',endpoint='export',resource_class_kwargs={'dao' : 'ExportDAO', 'get_method' : 'file_export', 'path_parameters' : [('filename','model'),('fileType','xml')]})
 api.add_resource(ObjectController.ObjectsByMethodAndParameterAPI, '/api/export/file/architectural_pattern/<path:parameter_string>',endpoint='exportarchitecturalpattern', resource_class_kwargs={'dao' : 'ExportDAO', 'get_method' : 'architectural_pattern_export', 'path_parameters' : [('filename','')]})
+api.add_resource(ObjectController.ObjectsByMethodAPI, '/api/export/file/persona_characteristics',endpoint='exportpersonacharacteristics', resource_class_kwargs={'dao' : 'ExportDAO', 'get_method' : 'persona_characteristics_export', 'path_parameters' : [('filename','personaCharacteristics.xlsx')]})
+api.add_resource(ObjectController.ObjectsByMethodAPI, '/api/export/file/user_goals',endpoint='exportusergoals', resource_class_kwargs={'dao' : 'ExportDAO', 'get_method' : 'user_goals_export', 'path_parameters' : [('filename','userGoals.xlsx')]})
 api.add_resource(ObjectController.ObjectsByMethodAPI, '/api/export/file/security_patterns',endpoint='exportsecuritypatterns',resource_class_kwargs={'dao' : 'ExportDAO', 'get_method' : 'security_patterns_export', 'path_parameters' : [('filename','security_patterns.xml')]})
 api.add_resource(ObjectController.ObjectsByMethodAndThreeParametersAPI, '/api/export/file/grl/task/<path:p1>/persona/<path:p2>/environment/<path:p3>',endpoint='exportgrl', resource_class_kwargs={'dao' : 'ExportDAO', 'get_method' : 'grl_export', 'path_parameters' : [('filename','')]})
 
@@ -317,6 +319,8 @@ api.add_resource(ObjectController.ObjectsByNameAPI, '/api/find/<path:parameter_s
 api.add_resource(CImportController.CImportPackageAPI, '/api/import/package',endpoint='import_package')
 api.add_resource(CImportController.CImportTextAPI, '/api/import/text',endpoint='import_text')
 api.add_resource(CImportController.CImportFileAPI, '/api/import/file/type/<path:type>',endpoint='import_file')
+api.add_resource(ObjectController.WorkbookUploadAPI, '/api/import/file/persona_characteristics',endpoint='import_persona_characteristics',resource_class_kwargs={'dao': 'ImportDAO','post_method' : 'import_persona_characteristics'})
+api.add_resource(ObjectController.WorkbookUploadAPI, '/api/import/file/user_goals',endpoint='import_user_goals',resource_class_kwargs={'dao': 'ImportDAO','post_method' : 'import_user_goals'})
 
 # Locations routes
 api.add_resource(ObjectController.ObjectsAPI, '/api/locations',endpoint='locations',resource_class_kwargs={'dao': 'LocationsDAO'})
@@ -342,7 +346,7 @@ api.add_resource(ObjectController.ModelByTwoParametersAPI, '/api/obstacles/model
 
 # Permissions routes
 api.add_resource(ObjectController.ObjectsByMethodAndParameterAPI, '/api/permissions/database/<path:parameter_string>',endpoint='permissions', resource_class_kwargs={'dao' : 'PermissionsDAO', 'get_method' : 'get_permissions'})
-api.add_resource(ObjectController.ObjectsByMethodAndThreeParametersAPI, '/api/permissions/database/<path:p1>/user/<path:p2>/permission/<path:p3>',endpoint='changepermission', resource_class_kwargs={'dao' : 'PermissionsDAO', 'post_method' : 'set_permissions'})
+api.add_resource(ObjectController.ObjectsByMethodAndThreeParametersAPI, '/api/permissions/database/<path:p1>/user/<path:p2>/permission/<path:p3>',endpoint='changepermission', resource_class_kwargs={'dao' : 'PermissionsDAO', 'post_method' : 'set_permission'})
 
 # Persona routes
 api.add_resource(ObjectController.ObjectsAPI, '/api/personas',endpoint='personas',resource_class_kwargs={'dao': 'PersonaDAO'})
