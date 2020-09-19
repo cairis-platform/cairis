@@ -87,7 +87,7 @@
 <!ELEMENT riskanalysis (role*,asset*,vulnerability*,attacker*,threat*,risk*,response*,asset_association*)>
 <!ELEMENT role (description)>
 <!ATTLIST role name CDATA #REQUIRED>
-<!ATTLIST role type (Stakeholder | Attacker) #REQUIRED>
+<!ATTLIST role type (Stakeholder | Attacker | Data Controller | Data Processor | Data Subject | Machine) #REQUIRED>
 <!ATTLIST role short_code CDATA #REQUIRED>
 
 <!ELEMENT tag EMPTY>

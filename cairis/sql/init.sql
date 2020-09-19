@@ -4482,6 +4482,7 @@ INSERT INTO role_type(id,name) values(1,'Attacker');
 INSERT INTO role_type(id,name) values(2,'Data Controller');
 INSERT INTO role_type(id,name) values(3,'Data Processor');
 INSERT INTO role_type(id,name) values(4,'Data Subject');
+INSERT INTO role_type(id,name) values(5,'Machine');
 INSERT INTO behavioural_variable(id,name) values (0,'Activities');
 INSERT INTO behavioural_variable(id,name) values (1,'Attitudes');
 INSERT INTO behavioural_variable(id,name) values (2,'Aptitudes');

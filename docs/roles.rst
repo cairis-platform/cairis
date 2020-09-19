@@ -3,7 +3,7 @@ Roles
 
 Roles represent the abstract classes representing human agents; these also encapsulate behaviours and responsibilities.
 
-CAIRIS supports 5 types of role:
+CAIRIS supports 6 types of role:
 
 =============== ================================================================================================= ===============
 Role            Description
@@ -13,6 +13,7 @@ Attacker        Human agents behaving maliciously.                              
 Data Controller The entity that determines the purposes, conditions and means of the processing of personal data. GDPR
 Data Processor  The entity that processes data on behalf of the Data Controller.                                  GDPR
 Data Subject    A natural person whose personal data is processed by a controller or processor.                   GDPR
+Machine         Software agents that behave with some level of autonomy.
 =============== ================================================================================================= ===============
 
 Adding, updating, and deleting a role
