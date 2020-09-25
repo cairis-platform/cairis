@@ -3,7 +3,7 @@ Risks
 
 A risk is the detriment arising from an attacker launching an
 attack, in the form of a threat, exploiting a system weakness, in the
-form of a vulnerability. Associated with each risk is a Misuse Case.
+form of a vulnerability. Associated with each risk is a misuse case.
 This describes how the attacker (or attackers) behind the risk's
 threat exploits the risk's vulnerability to realise the risk.
 
