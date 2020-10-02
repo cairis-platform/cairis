@@ -147,7 +147,7 @@ def file_import(importFile,mFormat,overwriteFlag,session_id = None):
     msgStr += importLocationsFile(importFile,session_id)
   elif (mFormat == 'dataflows' or mFormat == 'Dataflows'):
     msgStr += importDataflowsFile(importFile,session_id)
-  elif (mFormat == 'all' or mFormat == 'Model'):
+  elif (mFormat == 'all' or mFormat == 'Model' or mFormat == 'Model file (.xml)'):
     msgStr += importModelFile(importFile,int(overwriteFlag),session_id)
   else:
     raise ARMException('Input model type ' + mFormat + ' not recognised')
