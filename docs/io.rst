@@ -9,9 +9,9 @@ You can import models by selecting the System / Import Model menu, selecting the
 .. figure:: ImportModel.jpg
    :alt: import model form
 
-You will usually want to stick with the Model Package option to import .cairis files.  .cairis files are zip archives with a model file, any supplemental locations and architectural pattern models, and all the image files associated with the model.  
+You will usually want to stick with the *Model package (.cairis)* option to import .cairis files.  .cairis files are zip archives with a model file, any supplemental locations and architectural pattern models, and all the image files associated with the model.  
 
-You can, alternatively, select the Model option, which imports a standard CAIRIS XML model file (as defined by the DTD in https://cairis.org/dtd/cairis_model.dtd).  If you select this option, you can choose to overwrite an existing model (the default option) or you can incrementally import the contents of a model file into a pre-existing model.  
+You can, alternatively, select the *Model file (.xml)* option, which imports a standard CAIRIS XML model file (as defined by the DTD in https://cairis.org/dtd/cairis_model.dtd).  If you select this option, you can choose to overwrite an existing model (the default option) or you can incrementally import the contents of a model file into a pre-existing model.  
 
 You can also import other types of model into your current working project.
 
