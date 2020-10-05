@@ -5456,7 +5456,7 @@ Pre-condition: ... the device has a wallpaper that is not suitable for displayin
   <grounds type="document" reference="Spends 50 percent time outside of office" />
 </persona_characteristic>
 <persona_characteristic persona="Richard" behavioural_variable="Activities" modal_qualifier="Probably" >
-  <definition>Prone to lose/break device</definition>
+  <definition>Prone to lose or break device</definition>
   <grounds type="document" reference="Police are active and in dangerous positions" />
   <grounds type="document" reference="Always on the move to new locations" />
   <rebuttal type="document" reference="Police equipment manufactures claim robustnesss" />
