@@ -7255,7 +7255,7 @@ Jimmy’s mistake was to assume that his ZenSearch client application cannot be 
   <fit_criterion>None</fit_criterion>
   <originator>Oxford</originator>
 </requirement>
-<requirement name="Policy view/edit level" reference="Policy and Security" reference_type="environment" label="39" type="Functional" priority="2" >
+<requirement name="Policy view and edit level" reference="Policy and Security" reference_type="environment" label="39" type="Functional" priority="2" >
   <description>Policies shall be viewable and editable by users at both a fine-grained and coarse-grained level.</description>
   <rationale>Based on PS-USR-Oxford-113</rationale>
   <fit_criterion>Users shall be provided with the ability to identify applications which have been granted particular privileges.</fit_criterion>

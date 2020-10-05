@@ -8045,7 +8045,7 @@ Jimmy’s mistake was to assume that his ZenSearch client application cannot be 
   <fit_criterion>None</fit_criterion>
   <originator>Oxford</originator>
 </requirement>
-<requirement name="Policy view/edit level" reference="Policy and Security" reference_type="environment" label="39" type="Functional" priority="2" >
+<requirement name="Policy view and edit level" reference="Policy and Security" reference_type="environment" label="39" type="Functional" priority="2" >
   <description>Policies shall be viewable and editable by users at both a fine-grained and coarse-grained level.</description>
   <rationale>Based on PS-USR-Oxford-113</rationale>
   <fit_criterion>Users shall be provided with the ability to identify applications which have been granted particular privileges.</fit_criterion>
@@ -9586,7 +9586,7 @@ Jimmy’s mistake was to assume that his ZenSearch client application cannot be 
 <manual_association from_name="Policy impact" from_dim="requirement" to_name="Designing Policy-aware webinos Applications" to_dim="task" ref_type="and" />
 <manual_association from_name="Policy management" from_dim="requirement" to_name="Smart Device Integration" to_dim="task" ref_type="and" />
 <manual_association from_name="Policy samples" from_dim="requirement" to_name="Designing Policy-aware webinos Applications" to_dim="task" ref_type="and" />
-<manual_association from_name="Policy view/edit level" from_dim="requirement" to_name="Usable Privacy Controls for webinos" to_dim="task" ref_type="and" />
+<manual_association from_name="Policy view and edit level" from_dim="requirement" to_name="Usable Privacy Controls for webinos" to_dim="task" ref_type="and" />
 <manual_association from_name="Privacy preferences" from_dim="requirement" to_name="Implementing Government-mandated Privacy Controls" to_dim="task" ref_type="and" />
 <manual_association from_name="Privacy preferences" from_dim="requirement" to_name="Privacy Controls and Analytics for Corporations an" to_dim="task" ref_type="and" />
 <manual_association from_name="User policy authoring" from_dim="requirement" to_name="Implementing Government-mandated Privacy Controls" to_dim="task" ref_type="and" />
@@ -10299,7 +10299,7 @@ Jimmy’s mistake was to assume that his ZenSearch client application cannot be 
 <concept_reference name="Autostart programmatically controlled" concept="requirement" object="Automatic background start-up" >
   <description></description>
 </concept_reference>
-<concept_reference name="Editors support fine and coarse grained policy editing" concept="requirement" object="Policy view/edit level" >
+<concept_reference name="Editors support fine and coarse grained policy editing" concept="requirement" object="Policy view and edit level" >
   <description></description>
 </concept_reference>
 <concept_reference name="Policies contain fine-grained rules" concept="requirement" object="Application identity" >
