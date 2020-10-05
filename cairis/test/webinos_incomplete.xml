@@ -1768,7 +1768,7 @@ Richard is a fast decision maker and can follow this through with the public and
 <external_document name="Social Policies forum post" version="1" date="March 2009" authors="Various" >
   <description>http://www.thestudentroom.co.uk/showthread.php?p=17667544</description>
 </external_document>
-<external_document name="Disabled Students Society - new icon? forum post" version="1" date="May 2007" authors="Various" >
+<external_document name="Disabled Students Society - new icon forum post" version="1" date="May 2007" authors="Various" >
   <description>  http://www.thestudentroom.co.uk/showthread.php?p=8763798</description>
 </external_document>
 <external_document name="Personal assistant forum post" version="1" date="October 2009" authors="Various" >
@@ -2444,7 +2444,7 @@ User: The user wants to direct streams (either from one of the user's devices or
 <document_reference name="wary of highlighting own disability" contributor="Shamal Faily" document="Social Policies forum post" >
   <excerpt>Haven't been employed for a long time but I'm very wary of actually applying for work (especially in the current economic climate) as a result of my disability.</excerpt>
 </document_reference>
-<document_reference name="dislikes wheelchair stereotypes" contributor="Shamal Faily" document="Disabled Students Society - new icon? forum post" >
+<document_reference name="dislikes wheelchair stereotypes" contributor="Shamal Faily" document="Disabled Students Society - new icon forum post" >
   <excerpt>A wheelchair isn't a disability, a disability is what puts you in the wheelchair.  The whole point of a wheelchair is to make your life easier.  Yes, in relation to 'normal' people it's difficult and awkward, but they give mobility to people who would be unable to move otherwise.  That's not really that hindering at all.</excerpt>
 </document_reference>
 <document_reference name="access to a personal assistant" contributor="Shamal Faily" document="Personal assistant forum post" >
@@ -3409,7 +3409,7 @@ Pre-condition: ... the device has a wallpaper that is not suitable for displayin
 <document_reference name="Creating new systems makes her work hard" contributor="Hans Myrhaug" document="US developer expectations" >
   <excerpt>None</excerpt>
 </document_reference>
-<document_reference name="If she likes the purpose of the work she will commit 100% to it" contributor="Hans Myrhaug" document="US developer expectations" >
+<document_reference name="If she likes the purpose of the work she will commit 100 percent to it" contributor="Hans Myrhaug" document="US developer expectations" >
   <excerpt>None</excerpt>
 </document_reference>
 <document_reference name="Helping others will make her forget her own needs" contributor="Hans Myrhaug" document="US developer expectations" >
@@ -3661,7 +3661,7 @@ Pre-condition: ... the device has a wallpaper that is not suitable for displayin
 <document_reference name="BMW 3 series costs at least 32000 euros" contributor="John Lyle" document="BMW Price list" >
   <excerpt>BMW 318i ES, price: EUR 32,520</excerpt>
 </document_reference>
-<document_reference name="Spends 50% time outside of office" contributor="Nick Allott" document="Day in the life PA report" >
+<document_reference name="Spends 50 percent time outside of office" contributor="Nick Allott" document="Day in the life PA report" >
   <excerpt>If you are out of the office, you are mobile.</excerpt>
 </document_reference>
 <document_reference name="Police work requires strict clocking in and out" contributor="Nick Allott" document="Day in the life PA report" >
@@ -3870,7 +3870,7 @@ Pre-condition: ... the device has a wallpaper that is not suitable for displayin
   <warrant type="document" reference="strives for independence" />
 </persona_characteristic>
 <persona_characteristic persona="Anna" behavioural_variable="Attitudes" modal_qualifier="probably" >
-  <definition>Doesn't want to be typecasted</definition>
+  <definition>Does not want to be typecasted</definition>
   <grounds type="document" reference="can walk short distances" />
   <grounds type="document" reference="wary of highlighting own disability" />
   <grounds type="document" reference="dislikes wheelchair stereotypes" />
@@ -3959,7 +3959,7 @@ Pre-condition: ... the device has a wallpaper that is not suitable for displayin
   <grounds type="document" reference="Description of  problem in simple terms" />
 </persona_characteristic>
 <persona_characteristic persona="David" behavioural_variable="Aptitudes" modal_qualifier="Likely" >
-  <definition>Comfortable with car's internals</definition>
+  <definition>Comfortable with car internals</definition>
   <grounds type="document" reference="He mixed with car experts from early age" />
   <grounds type="document" reference="Car maintenance deep knowledge" />
   <grounds type="document" reference="Successful car catalog writer" />
@@ -4011,7 +4011,7 @@ Pre-condition: ... the device has a wallpaper that is not suitable for displayin
   <grounds type="document" reference="Car tamperer" />
 </persona_characteristic>
 <persona_characteristic persona="David" behavioural_variable="Environment_Narrative" modal_qualifier="Likely" >
-  <definition>Careless of his own action's consequences</definition>
+  <definition>Careless of his own action consequences</definition>
   <grounds type="document" reference="Guilty of multiple, serious felonies" />
   <grounds type="document" reference="use fire weapons to break the law" />
 </persona_characteristic>
@@ -4485,7 +4485,7 @@ Pre-condition: ... the device has a wallpaper that is not suitable for displayin
   <grounds type="document" reference="He was a bright student,ambitious and driven" />
 </persona_characteristic>
 <persona_characteristic persona="Irwin" behavioural_variable="Aptitudes" modal_qualifier="Presumably" >
-  <definition>Knowledgeable of company's assets</definition>
+  <definition>Knowledgeable of company assets</definition>
   <grounds type="document" reference="He is involved in security policy generation" />
 </persona_characteristic>
 <persona_characteristic persona="Irwin" behavioural_variable="Attitudes" modal_qualifier="Always" >
@@ -4567,10 +4567,10 @@ Pre-condition: ... the device has a wallpaper that is not suitable for displayin
   <grounds type="document" reference="Is interested in developing an application that can run securely on any mobile phone" />
 </persona_characteristic>
 <persona_characteristic persona="Jessica" behavioural_variable="Motivations" modal_qualifier="Definitely" >
-  <definition>Stays away from anything associated with poor quality and/or risk</definition>
+  <definition>Stays away from anything associated with poor quality or risk</definition>
   <grounds type="document" reference="Helping and adding value to peoples lives is meaningful" />
   <grounds type="document" reference="Creating new systems makes her work hard" />
-  <grounds type="document" reference="If she likes the purpose of the work she will commit 100% to it" />
+  <grounds type="document" reference="If she likes the purpose of the work she will commit 100 percent to it" />
   <grounds type="document" reference="Helping others will make her forget her own needs" />
   <grounds type="document" reference="A trusted person that turns her down will make her depressed and lose motivation" />
   <grounds type="document" reference="Lack of inclusion and control makes her nervous" />
@@ -4805,14 +4805,14 @@ Pre-condition: ... the device has a wallpaper that is not suitable for displayin
   <grounds type="document" reference="Police work requires strict clocking in and out" />
 </persona_characteristic>
 <persona_characteristic persona="Richard" behavioural_variable="Activities" modal_qualifier="Probably" >
-  <definition>Prone to lose/break device</definition>
+  <definition>Prone to lose or break device</definition>
   <grounds type="document" reference="Police are active and in dangerous positions" />
   <grounds type="document" reference="Always on the move to new locations" />
   <rebuttal type="document" reference="Police equipment manufactures claim robustnesss" />
 </persona_characteristic>
 <persona_characteristic persona="Richard" behavioural_variable="Activities" modal_qualifier="Probably" >
   <definition>Highly mobile</definition>
-  <grounds type="document" reference="Spends 50% time outside of office" />
+  <grounds type="document" reference="Spends 50 percent time outside of office" />
 </persona_characteristic>
 <persona_characteristic persona="Richard" behavioural_variable="Aptitudes" modal_qualifier="Probably" >
   <definition>Emotionally calm</definition>
@@ -6788,7 +6788,7 @@ Jimmy’s mistake was to assume that his ZenSearch client application cannot be 
   <fit_criterion>None</fit_criterion>
   <originator>SEMC</originator>
 </requirement>
-<requirement name="Un-supported sensor/actuator discovery" reference="Discovery and Addressing" reference_type="environment" label="26" type="Functional" priority="1" >
+<requirement name="Un-supported sensor and actuator discovery" reference="Discovery and Addressing" reference_type="environment" label="26" type="Functional" priority="1" >
   <description>It shall be possible to address sensors and actuators that does not provide webinos support.</description>
   <rationale>Based on DA-DEV-ISMB-004</rationale>
   <fit_criterion>None</fit_criterion>
@@ -7562,7 +7562,7 @@ Jimmy’s mistake was to assume that his ZenSearch client application cannot be 
   <fit_criterion>None</fit_criterion>
   <originator>Oxford</originator>
 </requirement>
-<requirement name="Policy view/edit level" reference="Policy and Security" reference_type="environment" label="39" type="Functional" priority="2" >
+<requirement name="Policy view and edit level" reference="Policy and Security" reference_type="environment" label="39" type="Functional" priority="2" >
   <description>Policies shall be viewable and editable by users at both a fine-grained and coarse-grained level.</description>
   <rationale>Based on PS-USR-Oxford-113</rationale>
   <fit_criterion>Users shall be provided with the ability to identify applications which have been granted particular privileges.</fit_criterion>
@@ -7670,7 +7670,7 @@ Jimmy’s mistake was to assume that his ZenSearch client application cannot be 
   <fit_criterion>None</fit_criterion>
   <originator>POLITO</originator>
 </requirement>
-<requirement name="WAC/XACML policy" reference="Policy and Security" reference_type="environment" label="57" type="Functional" priority="1" >
+<requirement name="WAC and XACML policy" reference="Policy and Security" reference_type="environment" label="57" type="Functional" priority="1" >
   <description>The WAC XACML-based policy framework shall be adopted as the webinos policy framework.</description>
   <rationale>Agreed by webinos consortium</rationale>
   <fit_criterion>None</fit_criterion>
