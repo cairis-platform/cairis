@@ -2202,7 +2202,7 @@ Richard is a fast decision maker and can follow this through with the public and
 <external_document name="Personal assistant forum post" version="1" date="October 2009" authors="Various" >
   <description>http://www.thestudentroom.co.uk/showthread.php?p=21996601</description>
 </external_document>
-<external_document name="Hiring mobility equipment? forum post" version="1" date="April 2009" authors="Various" >
+<external_document name="Hiring mobility equipment forum post" version="1" date="April 2009" authors="Various" >
   <description>http://www.studentroom.co.uk/showthread.php?p=18324611</description>
 </external_document>
 <external_document name="Manageable privacy policies across the application lifecycle User Story" version="0.95" date="3 Dec 2010" authors="Ajit Jaokar, John Lyle, Shamal Faily, Ivan Flechais, Hans Myrhaug, Ayse Goker" >
@@ -2881,7 +2881,7 @@ User: The user wants to direct streams (either from one of the user's devices or
 <document_reference name="uses mobile to get assistance" contributor="Shamal Faily" document="Personal assistant forum post" >
   <excerpt>For me, as a wheelchair user, I had a personal assistant right through induction week (24/7) but them afterwards that I wanted by own space which they respected (so now I just text if I need anything)</excerpt>
 </document_reference>
-<document_reference name="pays for some of her own equipment" contributor="Shamal Faily" document="Hiring mobility equipment? forum post" >
+<document_reference name="pays for some of her own equipment" contributor="Shamal Faily" document="Hiring mobility equipment forum post" >
   <excerpt>at least in my disabled friend's case is that she pays things out of her own money...</excerpt>
 </document_reference>
 <document_reference name="Regulator who works at the European Commission" contributor="Sven Lachmund" document="Manageable privacy policies across the application lifecycle User Story" >
