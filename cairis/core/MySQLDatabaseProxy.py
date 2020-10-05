@@ -5003,3 +5003,6 @@ class MySQLDatabaseProxy:
 
   def controlStructure(self,envName,filterElement = ''):
     return self.responseList('call controlStructure(:env,:fe)',{'env':envName,'fe':filterElement},'MySQL error getting control structure')
+
+  def validateForExport(self):
+    return self.responseList('call invalidObjectNames()',{},'MySQL error getting invalid object names')[0]

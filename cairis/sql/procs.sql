@@ -1034,6 +1034,7 @@ drop procedure if exists deleteDataFlowTags;
 drop function if exists strSplit;
 drop procedure if exists addTaintFlows;
 drop procedure if exists conflictingControl;
+drop procedure if exists invalidObjectNames;
 
 
 delimiter //
@@ -31542,6 +31543,88 @@ begin
     end if;
   end loop tb_loop;
   close tbCursor;
+end
+//
+
+create procedure invalidObjectNames()
+begin
+  declare dimName varchar(100);
+  declare objtName varchar(2000);
+  declare buf longtext default '';
+  declare done int default 0;
+  declare nameCursor cursor for 
+    select 'Requirement',name from requirement where name regexp "[<>'`\:%_*/?#£&]"
+    union
+    select 'Domain property',name from domainproperty where name regexp "[<>'`\:%_*/?#£&]"
+    union
+    select 'Goal',name from goal where name regexp "[<>'`\:%_*/?#£&]"
+    union
+    select 'Obstacle',name from obstacle where name regexp "[<>'`\:%_*/?#£&]"
+    union
+    select 'Use case',name from usecase where name regexp "[<>'`\:%_*/?#£&]"
+    union
+    select 'Architectural pattern',name from component_view where name regexp "[<>'`\:%_*/?#£&]"
+    union
+    select 'Component',name from component where name regexp "[<>'`\:%_*/?#£&]"
+    union
+    select 'Connector',name from connector where name regexp "[<>'`\:%_*/?#£&]"
+    union
+    select 'Role',name from role where name regexp "[<>'`\:%_*/?#£&]"
+    union
+    select 'Asset',name from asset where name regexp "[<>'`\:%_*/?#£&]"
+    union
+    select 'Vulnerability',name from vulnerability where name regexp "[<>'`\:%_*/?#£&]"
+    union 
+    select 'Attacker',name from attacker where name regexp "[<>'`\:%_*/?#£&]"
+    union 
+    select 'Threat',name from threat where name regexp "[<>'`\:%_*/?#£&]"
+    union 
+    select 'Risk',name from risk where name regexp "[<>'`\:%_*/?#£&]"
+    union 
+    select 'Response',name from response where name regexp "<>'`\:%_*/?#£&"
+    union 
+    select 'Countermeasure',name from countermeasure where name regexp "[<>'`\:%_*/?#£&]"
+    union 
+    select 'Environment',name from environment where name regexp "[<>'`\:%_*/?#£&]"
+    union 
+    select 'Persona',name from persona where name regexp "[<>'`\:%_*/?#£&]"
+    union 
+    select 'Task',name from task where name regexp "[<>'`\:%_*/?#£&]"
+    union 
+    select 'User goal',synopsis from document_reference_synopsis where synopsis regexp "[<>'`\:%_*/?#£&]"
+    union 
+    select 'Data flow',name from dataflow where name regexp "[<>'`\:%_*/?#£&]"
+    union 
+    select 'Trust boundary',name from trust_boundary where name regexp "[<>'`\:%_*/?#£&]"
+    union 
+    select 'External document',name from external_document where name regexp "[<>'`\:%_*/?#£&]"
+    union 
+    select 'Document reference',name from document_reference where name regexp "[<>'`\:%_*/?#£&]"
+    union 
+    select 'Persona characteristic',description from persona_characteristic where description regexp "[<>'`\:%_*/?#£&]"
+    union 
+    select 'Task characteristic',description from task_characteristic where description regexp "[<>'`\:%_*/?#£&]"
+    union 
+    select 'Locations',name from locations where name regexp "[<>'`\:%_*/?#£&]"
+    union 
+    select 'Template asset',name from template_asset where name regexp "[<>'`\:%_*/?#£&]"
+    union 
+    select 'Template goal',name from template_goal where name regexp "[<>'`\:%_*/?#£&]"
+    union 
+    select 'Template requirement',name from template_requirement where name regexp "[<>'`\:%_*/?#£&]";
+  declare continue handler for not found set done = 1;
+   
+  open nameCursor;
+  name_loop: loop
+    fetch nameCursor into dimName,objtName;
+    if done = 1
+    then
+      leave name_loop;
+    end if;
+    set buf = concat(buf,dimName,' name "',objtName,'" contains a reserved character.  ');
+  end loop name_loop;
+  close nameCursor;
+  select buf;
 end
 //
 

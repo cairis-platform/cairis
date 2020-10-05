@@ -22,6 +22,7 @@ import re
 import codecs
 import io
 import zipfile
+from cairis.core.ARM import ARMException
 from base64 import b64decode
 from xlsxwriter import Workbook
 
@@ -295,6 +296,9 @@ def exportAttackPatterns(outFile,session_id = None):
 
 def extractModel(session_id = None):
   b = Borg()
+  valStr = b.get_dbproxy(session_id).validateForExport() 
+  if (len(valStr) > 0):
+    raise ARMException(valStr)
   xmlBuf = '<?xml version="1.0"?>\n<!DOCTYPE cairis_model PUBLIC "-//CAIRIS//DTD MODEL 1.0//EN" "http://cairis.org/dtd/cairis_model.dtd">\n<cairis_model>\n\n\n'
   xmlBuf+= b.get_dbproxy(session_id).tvTypesToXml(0)[0] + '\n\n'
   xmlBuf+= b.get_dbproxy(session_id).domainValuesToXml(0)[0] + '\n\n'

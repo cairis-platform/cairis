@@ -33,14 +33,10 @@ class ExportDAO(CairisDAO):
 
   def file_export(self,pathValues):
     fileType = pathValues[1]
-    try:
-      if (fileType == 'xml'):
-        return extractModel(self.session_id)
-      else:
-        return extractPackage(self.session_id)
-    except DatabaseProxyException as ex:
-      self.close()
-      raise ARMHTTPError(ex)
+    if (fileType == 'xml'):
+      return extractModel(self.session_id)
+    else:
+      return extractPackage(self.session_id)
 
   def architectural_pattern_export(self,apName, pathValues = []):
     try:
@@ -58,7 +54,7 @@ class ExportDAO(CairisDAO):
       with open(wbName,'r+b') as f:
         buf = f.read()
       return buf
-    except DatabaseProxyException as ex:
+    except ARMException as ex:
       self.close()
       raise ARMHTTPError(ex)
 
