@@ -16,6 +16,7 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
+
 ROOTPW=$1
 MAILSVR=$2
 MAILPORT=$3
@@ -26,6 +27,10 @@ CAIRIS_HOME=$7
 
 CAIRIS_ROOT=$CAIRIS_HOME/cairis
 export CAIRIS_SRC=$CAIRIS_ROOT/cairis
+
+export CAIRIS_CFG_DIR=${CAIRIS_SRC}/config
+export CAIRIS_CFG=/home/sfaily/cairis.cnf
+
 
 sudo systemctl stop cairis
 sudo systemctl disable cairis
@@ -42,7 +47,6 @@ sudo rm -rf $CAIRIS_ROOT
 git clone https://github.com/cairis-platform/cairis $CAIRIS_ROOT
 sudo -E $CAIRIS_ROOT/cairis/bin/installUI.sh
 
-sudo pip3 install wheel
 sudo pip3 install -r $CAIRIS_ROOT/requirements.txt
 sudo pip3 install -r $CAIRIS_ROOT/wsgi_requirements.txt
 
@@ -57,5 +61,7 @@ sudo systemctl enable /etc/systemd/system/cairis.service
 mysql -h localhost --user=root --password=$ROOTPW <<!
 load data infile '/var/lib/mysql-files/auth_user' into table cairis_user.auth_user;
 !
+
+$CAIRIS_ROOT/cairis/bin/reset_cairis_user.py --reload 1 all
 
 sudo shutdown -Fr now
