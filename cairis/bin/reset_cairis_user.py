@@ -53,7 +53,7 @@ def main():
   parser = argparse.ArgumentParser(description='Computer Aided Integration of Requirements and Information Security - Reset CAIRIS user')
   parser.add_argument('user',help='Email address or all for all users')
   parser.add_argument('--reload',dest='isReload',help='If 1 is set, reload the contents of the default database', default='0')
-  parser.add_argument('--ignore_validity',dest='ignoreValidityCheck',help='If 1 is set, databases will not be validity checked before export', default='0')
+  parser.add_argument('--ignore_validity',dest='ignoreValidityCheck',help='If 1 is set, databases will not be validity checked before export', default=0)
 
   args = parser.parse_args()
 
