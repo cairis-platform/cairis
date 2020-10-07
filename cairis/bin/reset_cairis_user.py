@@ -31,14 +31,14 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger('reset_user')
 
 
-def resetDatabase(cairisRoot,rPasswd,dbHost,dbPort,user,isReload):
+def resetDatabase(cairisRoot,rPasswd,dbHost,dbPort,user,isReload,ignoreValidityCheck):
   cairis.core.BorgFactory.initialise(user=user,db='default')
   b = Borg()
 
   packageFile = '/tmp/' + user + '.cairis'
   if (isReload == '1'):
     logger.info('Exporting ' + user + ' default database')
-    exportPackage(packageFile,b.dbProxy)
+    exportPackage(packageFile,b.dbProxy,ignoreValidityCheck)
 
   logger.info('Resetting ' + user)
   resetUser(cairisRoot,rPasswd, dbHost, dbPort, user)
@@ -53,6 +53,7 @@ def main():
   parser = argparse.ArgumentParser(description='Computer Aided Integration of Requirements and Information Security - Reset CAIRIS user')
   parser.add_argument('user',help='Email address or all for all users')
   parser.add_argument('--reload',dest='isReload',help='If 1 is set, reload the contents of the default database', default='0')
+  parser.add_argument('--ignore_validity',dest='ignoreValidityCheck',help='If 1 is set, databases will not be validity checked before export', default='0')
 
   args = parser.parse_args()
 
@@ -60,10 +61,10 @@ def main():
   b = Borg()
   
   if (args.user != 'all'):
-    resetDatabase(b.cairisRoot,b.rPasswd,b.dbHost,b.dbPort,args.user,args.isReload)
+    resetDatabase(b.cairisRoot,b.rPasswd,b.dbHost,b.dbPort,args.user,args.isReload,args.ignoreValidityCheck)
   else:
     for email in accounts(b.cairisRoot,b.dbHost,b.dbPort):
-      resetDatabase(b.cairisRoot,b.rPasswd,b.dbHost,b.dbPort,email,args.isReload)
+      resetDatabase(b.cairisRoot,b.rPasswd,b.dbHost,b.dbPort,email,args.isReload,args.ignoreValidityCheck)
 
 if __name__ == '__main__':
   try:

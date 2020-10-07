@@ -294,11 +294,12 @@ def exportAttackPatterns(outFile,session_id = None):
 
   return 'Exported ' + str(noAPs) + ' attack patterns.'
 
-def extractModel(session_id = None):
+def extractModel(session_id = None,ignoreValidityCheck = 0):
   b = Borg()
-  valStr = b.get_dbproxy(session_id).validateForExport() 
-  if (len(valStr) > 0):
-    raise ARMException(valStr)
+  if (ignoreValidityCheck == 0):
+    valStr = b.get_dbproxy(session_id).validateForExport() 
+    if (len(valStr) > 0):
+      raise ARMException(valStr)
   xmlBuf = '<?xml version="1.0"?>\n<!DOCTYPE cairis_model PUBLIC "-//CAIRIS//DTD MODEL 1.0//EN" "http://cairis.org/dtd/cairis_model.dtd">\n<cairis_model>\n\n\n'
   xmlBuf+= b.get_dbproxy(session_id).tvTypesToXml(0)[0] + '\n\n'
   xmlBuf+= b.get_dbproxy(session_id).domainValuesToXml(0)[0] + '\n\n'
@@ -313,8 +314,8 @@ def extractModel(session_id = None):
   xmlBuf+= b.get_dbproxy(session_id).locationsToXml()[0] + '\n\n</cairis_model>'
   return xmlBuf
 
-def exportModel(outFile = None,session_id = None):
-  xmlBuf = extractModel(session_id)
+def exportModel(outFile = None,session_id = None, ignoreValidityCheck = 0):
+  xmlBuf = extractModel(session_id,ignoreValidityCheck)
   if outFile == None:
     return xmlBuf
   else:
@@ -323,10 +324,10 @@ def exportModel(outFile = None,session_id = None):
     f.close()
     return 'Exported model'
 
-def extractPackage(session_id = None):
+def extractPackage(session_id = None, ignoreValidityCheck = 0):
   buf = io.BytesIO()
   zf = zipfile.ZipFile(buf,'w',zipfile.ZIP_DEFLATED)
-  zf.writestr('model.xml',extractModel(session_id))
+  zf.writestr('model.xml',extractModel(session_id,ignoreValidityCheck))
 
   b = Borg()
   apNames = b.get_dbproxy(session_id).getDimensionNames('component_view','')
@@ -344,8 +345,8 @@ def extractPackage(session_id = None):
   zf.close()
   return buf.getvalue()
 
-def exportPackage(outFile = None, session_id = None):
-  buf = extractPackage(session_id)
+def exportPackage(outFile = None, session_id = None, ignoreValidityCheck = 0):
+  buf = extractPackage(session_id,ignoreValidityCheck)
   if outFile == None:
     return buf
   else:
