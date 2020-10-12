@@ -34,3 +34,6 @@ Adding a new environment
    threat, or the highest security property values for an asset. If the
    override radio button is selected then CAIRIS will ensure that the
    artifact properties are used for the overriding environment.
+
+.. note::
+   Composite environments are an experimental feature and you may get errors when using them.
