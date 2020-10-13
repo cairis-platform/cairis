@@ -8,6 +8,17 @@ To validate a current CAIRIS model, click on the Models/Validate menu and select
 .. figure:: MVForm.jpg
    :alt: Model Validation results
 
+General validity checks
+-----------------------
+
+The general validity checks currently supported are as follows:
+
+=======================================  ==================================================================================================================================
+Check                                    Description
+=======================================  ==================================================================================================================================
+Reserved characters                      Check object names for the presence of reserved characters.
+=======================================  ==================================================================================================================================
+
 
 Security design checks
 ----------------------
