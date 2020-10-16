@@ -109,6 +109,8 @@ Adding an asset association
 -  Optional role names can also be set at the head or tail end of the
    association.
 
+-  Check the navigation setting for the head and tail ends of the association.  By default, this is 0.  Setting an end to 1 indicates that an asset at the opposite end of the association has visibility of assets on the end set.  This is consistent with navigability semantics in UML class diagrams.
+
 -  Select the Create (or Update if modifying an existing association) will
    add the association to the CAIRIS model.
 
