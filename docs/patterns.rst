@@ -76,9 +76,9 @@ Create a security pattern
 -  a problem description motivationg the security pattern, and the intrinsics of how the security pattern
    solves the pre-defined problem.
 
--  Click on the Structure page, and the Add button in the associations table to add associations between template assets; these associations form the collaborative structure for the pattern. The procedure for entering associations is based on that used for associating assets.
+-  Click on the Structure tab, and the Add button in the associations table to add associations between template assets; these associations form the collaborative structure for the pattern. The procedure for entering associations is based on that used for associating assets.
 
--  Click on the Requirements page, and the Add button in the requirements
+-  Click on the Requirements tab, and the Add button in the requirements
    table to add names of template requirements needing to be satisfied to realise
    the pattern.
    
