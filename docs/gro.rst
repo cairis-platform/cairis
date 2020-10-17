@@ -18,7 +18,7 @@ To satisfy a goal, one or more sub-goals may need to be satisfied;
 satisfaction may require satisfying a conjunction of sub-goals, i.e.
 several AND goals, or a disjunction of sub-goals, i.e. several OR goals.
 
-Goals or requirements may be obstructed by obstacles, which are
+Goals or requirements may be *obstructed* by obstacles, which are
 conditions representing undesired behaviour; these prevent an associated
 goal from being achieved. By progressively refining obstacles, we can
 obtain the origin of some undesired behaviour; this may be reflected as
