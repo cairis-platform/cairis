@@ -13,7 +13,7 @@ Tags can also be used to group objects in risk models.  The example below shows 
 .. figure:: DefaultRiskModel.jpg
    :alt: tags in risk models
 
-Some assets might represent entities in DFDs and, when it does and where appropriate, we can use asset tags to indicate roles that are synonymous with assets.  For example, with if the people asset of *Technician* is synonymous with the role *Instrument Technician*, you can indicate this by setting the asset tag as *role=Instrument Technician* .  
+Some assets might represent entities in DFDs and, when it does and where appropriate, we can use asset tags to indicate roles that are synonymous with assets.  For example, if the people asset of *Technician* is synonymous with the role *Instrument Technician*, you can indicate this by setting the asset tag as *role=Instrument Technician* .  
 
 .. figure:: TaggedAsset.jpg
    :alt: tag in asset model
