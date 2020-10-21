@@ -1,0 +1,13 @@
+argparse>=1.4.0
+pytest-cov>=2.7.1
+coveralls>=1.4.0
+coverage>=4.5.1
+jsonpickle>=0.9.3
+pyparsing>=2.1.10
+pytest>=3.3.0
+pytest-cache>=1.0
+pytest-pep8>=1.0.6
+mako>=1.0.4
+lxml>=3.6.4
+openpyxl>=2.4.0
+xlsxwriter>=1.2.7
