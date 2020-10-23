@@ -38,18 +38,10 @@ class ImportDAO(CairisDAO):
     CairisDAO.__init__(self, session_id)
 
   def package_import(self,pkgStr):
-    try:
-      return package_import(pkgStr,self.session_id)
-    except ARMException as ex:
-      self.close()
-      raise ARMHTTPError(ex)
+    return package_import(pkgStr,self.session_id)
 
   def file_import(self,importFile,mFormat,overwriteFlag):
-    try:
-      return file_import(importFile,mFormat,overwriteFlag,self.session_id)
-    except DatabaseProxyException as ex:
-      self.close()
-      raise ARMHTTPError(ex)
+    return file_import(importFile,mFormat,overwriteFlag,self.session_id)
 
   def diagramsnet_import(self,importFile,modelType,environment_name):
     try:
