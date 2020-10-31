@@ -235,8 +235,12 @@ To import the board, return to CAIRIS and select the System / Import from Trello
 .. figure:: GeneratedPC.jpg
    :alt: Generated persona characteristic
 
+
 The persona characteristic generated will, as shown above, have a modal qualifier set to *Perhaps*.  This should be updated based on your confidence in the characteristic.
 
 If you have exported your document references from CAIRIS then each ground/warrant/rebuttal document reference will be associated with its apopriate external document.  However, if you have created the cards manually in Trello then CAIRIS will create new document references for each card, and an *Unknown* external document to indicates that, at the time of import, the factoids were of uncertin origin. If you know the origin of the factoids, you can create external documents to represent these origins, and re-associate the document references accordingly.
 
 Armed with your persona characteristics, you can now write narrative text in your persona corresponding with these characteristics.  In doing so, you may surface possible assumptions or ambiguity.  For example, the above persona characteristic seems to suggest a non-traditional education is the basis for managing by cues but this assumption might not be warranted, particularly as all the factoids come from a single source.  As such, this could trigger a return to the affinity diagrams or the weakening of the modal qualifier to indicate reduced confidence.
+
+.. note::
+   Due to recent changes to how Trello's client.js file works, you may get errors connecting to Trello during Trello exports and imports.  You can, however, get around this by running the CAIRIS UI in debug mode.  You can do this by (i) cloning the `CAIRIS UI GitHub repository <https://github.com/cairis-platform/cairis-ui>`_, (ii) Following the instructions in the README to setup the CAIRIS UI project by running *yarn install* in the root directory, (ii) setting up the indicated .env.development file as indicated, (iii) running *yarn run serve* to locally run the CAIRIS UI.
