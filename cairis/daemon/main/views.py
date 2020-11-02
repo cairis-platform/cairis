@@ -249,7 +249,6 @@ api.add_resource(ObjectController.ObjectsByMethodAndParameterAPI, '/api/counterm
 
 # Dataflow routes
 api.add_resource(ObjectController.ObjectsAPI, '/api/dataflows',endpoint='dataflows',resource_class_kwargs={'dao': 'DataFlowDAO'})
-#api.add_resource(ObjectController.ObjectByTwoParametersAPI, '/api/dataflows/name/<path:p1>/environment/<path:p2>',endpoint='dataflow',resource_class_kwargs={'dao' : 'DataFlowDAO'})
 api.add_resource(ObjectController.ObjectsByMethodAndSixParametersAPI, '/api/dataflows/name/<path:p1>/from_name/<path:p2>/from_type/<path:p3>/to_name/<path:p4>/to_type/<path:p5>/environment/<path:p6>',endpoint='dataflow',resource_class_kwargs={'dao': 'DataFlowDAO','get_method' : 'get_object_by_name', 'put_method' : 'update_object', 'del_method' : 'delete_object'})
 api.add_resource(ObjectController.ModelByThreeParametersAPI, '/api/dataflows/diagram/environment/<path:p1>/filter_type/<path:p2>/filter_name/<path:p3>',endpoint='dataflowdiagram',resource_class_kwargs={'dao' : 'DataFlowDAO','get_method' : 'get_dataflow_diagram','renderer' : 'dot', 'model_type' : 'dataflow'})
 api.add_resource(ObjectController.ModelByTwoParametersAPI, '/api/dataflows/control_structure/environment/<path:p1>/filter_name/<path:p2>',endpoint='controlstructure',resource_class_kwargs={'dao' : 'DataFlowDAO','get_method' : 'get_control_structure','renderer' : 'dot', 'model_type' : 'control_structure'})
