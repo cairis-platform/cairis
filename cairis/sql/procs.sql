@@ -24486,13 +24486,11 @@ begin
 end
 //
 
-create procedure getDataFlowAssets(in dfName text, in envName text)
+create procedure getDataFlowAssets(in dfName text, in fromName text, in fromType text, in toName text, in toType text, in envName text)
 begin
   declare dfId int;
-  declare envId int;
 
-  select id into envId from environment where name = envName limit 1;
-  select id into dfId from dataflow where name = dfName and environment_id = envId limit 1;
+  select id into dfId from dataflows where dataflow = dfName and from_name = fromName and from_type = fromType and to_name = toName and to_type = toType and environment = envName limit 1;
   select a.name from dataflow_asset da, asset a where da.dataflow_id = dfId and da.asset_id = a.id order by 1;
 end
 //

@@ -4672,15 +4672,15 @@ class MySQLDatabaseProxy:
     dataFlows = []
     for dfName,dfType,envName,fromName,fromType,toName,toType in dfRows:
       tags = self.getDataFlowTags(dfName,fromType,fromName,toType,toName,envName)
-      dfAssets = self.getDataFlowAssets(dfName,envName)
+      dfAssets = self.getDataFlowAssets(dfName,fromName,fromType,toName,toType,envName)
       dfObs = self.getDataFlowObstacles(dfName,envName)
       parameters = DataFlowParameters(dfName,dfType,envName,fromName,fromType,toName,toType,dfAssets,dfObs,tags)
       df = ObjectFactory.build(-1,parameters)
       dataFlows.append(df)
     return dataFlows
 
-  def getDataFlowAssets(self,dfName,envName):
-    return self.responseList('call getDataFlowAssets(:df,:env)',{'df':dfName,'env':envName},'MySQL error getting assets for data flow ' + dfName)
+  def getDataFlowAssets(self,dfName,fromName,fromType,toName,toType,envName):
+    return self.responseList('call getDataFlowAssets(:df,:fromName,:fromType,:toName,:toType,:env)',{'df':dfName,'fromName':fromName,'fromType':fromType,'toName':toName,'toType':toType,'env':envName},'MySQL error getting assets for data flow ' + dfName)
 
   def getDataFlowObstacles(self,dfName,envName):
     return self.responseList('call getDataFlowObstacles(:df,:env)',{'df':dfName,'env':envName},'MySQL error getting obstacles for data flow ' + dfName)

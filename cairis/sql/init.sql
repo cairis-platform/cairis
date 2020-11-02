@@ -3646,15 +3646,15 @@ CREATE VIEW datastore as
   select id,name,short_code,description,significance,asset_type_id,is_critical,critical_rationale from asset where asset_type_id = 0;
 
 CREATE VIEW dataflows as
-  select d.name dataflow, dt.name dataflow_type, e.name environment,fp.name from_name,'process' from_type,tp.name to_name,'process' to_type from dataflow d, dataflow_process_process dpp, usecase fp, usecase tp, environment e, dataflow_type dt where d.id = dpp.dataflow_id and d.environment_id = e.id and dpp.from_id = fp.id and dpp.to_id = tp.id and d.dataflow_type_id = dt.id
+  select d.id id, d.name dataflow, dt.name dataflow_type, e.name environment,fp.name from_name,'process' from_type,tp.name to_name,'process' to_type from dataflow d, dataflow_process_process dpp, usecase fp, usecase tp, environment e, dataflow_type dt where d.id = dpp.dataflow_id and d.environment_id = e.id and dpp.from_id = fp.id and dpp.to_id = tp.id and d.dataflow_type_id = dt.id
   union
-  select d.name dataflow, dt.name dataflow_type, e.name environment, fe.name from_name, 'entity' from_type, tp.name to_name, 'process' to_type from dataflow d, dataflow_entity_process dep, asset fe, usecase tp, environment e, dataflow_type dt where d.id = dep.dataflow_id and d.environment_id = e.id and dep.from_id = fe.id and dep.to_id = tp.id and d.dataflow_type_id = dt.id
+  select d.id, d.name dataflow, dt.name dataflow_type, e.name environment, fe.name from_name, 'entity' from_type, tp.name to_name, 'process' to_type from dataflow d, dataflow_entity_process dep, asset fe, usecase tp, environment e, dataflow_type dt where d.id = dep.dataflow_id and d.environment_id = e.id and dep.from_id = fe.id and dep.to_id = tp.id and d.dataflow_type_id = dt.id
   union
-  select d.name dataflow, dt.name dataflow_type, e.name environment, fp.name from_name, 'process' from_type, te.name to_name, 'entity' to_type from dataflow d, dataflow_process_entity dpe, usecase fp, asset te, environment e, dataflow_type dt where d.id = dpe.dataflow_id and d.environment_id = e.id and dpe.from_id = fp.id and dpe.to_id = te.id and d.dataflow_type_id = dt.id
+  select d.id, d.name dataflow, dt.name dataflow_type, e.name environment, fp.name from_name, 'process' from_type, te.name to_name, 'entity' to_type from dataflow d, dataflow_process_entity dpe, usecase fp, asset te, environment e, dataflow_type dt where d.id = dpe.dataflow_id and d.environment_id = e.id and dpe.from_id = fp.id and dpe.to_id = te.id and d.dataflow_type_id = dt.id
   union
-  select d.name dataflow, dt.name dataflow_type, e.name environment, fd.name from_name, 'datastore' from_type, tp.name to_name, 'process' to_type from dataflow d, dataflow_datastore_process ddp, asset fd, usecase tp, environment e, dataflow_type dt where d.id = ddp.dataflow_id and d.environment_id = e.id and ddp.from_id = fd.id and ddp.to_id = tp.id and d.dataflow_type_id = dt.id
+  select d.id, d.name dataflow, dt.name dataflow_type, e.name environment, fd.name from_name, 'datastore' from_type, tp.name to_name, 'process' to_type from dataflow d, dataflow_datastore_process ddp, asset fd, usecase tp, environment e, dataflow_type dt where d.id = ddp.dataflow_id and d.environment_id = e.id and ddp.from_id = fd.id and ddp.to_id = tp.id and d.dataflow_type_id = dt.id
   union
-  select d.name dataflow, dt.name dataflow_type, e.name environment, fp.name from_name, 'process' from_type, td.name to_name, 'datastore' to_type from dataflow d, dataflow_process_datastore dpd, usecase fp, asset td, environment e, dataflow_type dt where d.id = dpd.dataflow_id and d.environment_id = e.id and dpd.from_id = fp.id and dpd.to_id = td.id and d.dataflow_type_id = dt.id;
+  select d.id, d.name dataflow, dt.name dataflow_type, e.name environment, fp.name from_name, 'process' from_type, td.name to_name, 'datastore' to_type from dataflow d, dataflow_process_datastore dpd, usecase fp, asset td, environment e, dataflow_type dt where d.id = dpd.dataflow_id and d.environment_id = e.id and dpd.from_id = fp.id and dpd.to_id = td.id and d.dataflow_type_id = dt.id;
 
 
 CREATE VIEW countermeasure_vulnerability_response_target as 
