@@ -60,7 +60,6 @@ These models also show the assets used in the tasks or threatened/exploited by m
 .. figure:: TaskModelKey.jpg
    :alt: Task Model key
 
-
 Task models can be viewed by selecting the Models/Task menu, and selecting the environment to view the model for.
 
 .. figure:: TaskModel.jpg
