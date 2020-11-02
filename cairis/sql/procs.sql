@@ -24292,7 +24292,7 @@ begin
 end
 //
 
-create procedure updateDataFlow(in oldDfName text, in newDfName text, in dfType text, in oldEnvName text, in newEnvName text, in fromName text, in fromType text, in toName text, in toType text)
+create procedure updateDataFlow(in oldDfName text, in oldFromName text, in oldFromType text, in oldToName text, in oldToType text, in oldEnvName text, in dfName text, in fromName text, in fromType text, in toName text, in toType text, in envName text, in dfType text)
 begin
   declare dfId int;
   declare oldEnvId int;
@@ -24301,13 +24301,12 @@ begin
   declare toId int;
   declare typeId int;
 
-  select id into oldEnvId from environment where name = oldEnvName limit 1;
-  select id into envId from environment where name = newEnvName limit 1;
+  select id into envId from environment where name = envName limit 1;
   select id into typeId from dataflow_type where name = dfType limit 1;
 
-  select id into dfId from dataflow where name = oldDfName and environment_id = oldEnvId limit 1;
+  select dataFlowId(oldDfName,oldFromType,oldFromName,oldToType,oldToName,oldEnvName) into dfId limit 1;
 
-  update dataflow set environment_id = envId, name = newDfName, dataflow_type_id = typeId where id = dfId;
+  update dataflow set environment_id = envId, name = dfName, dataflow_type_id = typeId where id = dfId;
   delete from dataflow_process_process where dataflow_id = dfId;
   delete from dataflow_entity_process where dataflow_id = dfId;
   delete from dataflow_process_entity where dataflow_id = dfId;
@@ -24423,24 +24422,24 @@ end
 
 
 
-create procedure deleteDataFlowAssets(in dfName text, in envName text)
+create procedure deleteDataFlowAssets(in dfName text, in fromName text, in fromType text, in toName text, in toType text, in envName text)
 begin
   declare dfId int;
   declare envId int;
 
   select id into envId from environment where name = envName limit 1;
-  select id into dfId from dataflow where name = dfName and environment_id = envId limit 1;
+  select dataFlowId(dfName,fromType,fromName,toType,toName,envName) into dfId limit 1;
   delete from dataflow_asset where dataflow_id = dfId;
 end
 //
 
-create procedure deleteDataFlowObstacles(in dfName text, in envName text)
+create procedure deleteDataFlowObstacles(in dfName text, in fromName text, in fromType text, in toName text, in toType text, in envName text)
 begin
   declare dfId int;
   declare envId int;
 
   select id into envId from environment where name = envName limit 1;
-  select id into dfId from dataflow where name = dfName and environment_id = envId limit 1;
+  select dataFlowId(dfName,fromType,fromName,toType,toName,envName) into dfId limit 1;
   delete from dataflow_obstacle where dataflow_id = dfId;
 end
 //
@@ -24459,18 +24458,18 @@ begin
 end
 //
 
-create procedure deleteDataFlow(in dfName text, in envName text)
+create procedure deleteDataFlow(in dfName text, in fromName text, in fromType text, in toName text, in toType text, in envName text)
 begin
   declare dfId int;
   declare envId int;
 
   select id into envId from environment where name = envName limit 1;
-  select id into dfId from dataflow where name = dfName and environment_id = envId limit 1;
+  select dataFlowId(dfName,fromType,fromName,toType,toName,envName) into dfId limit 1;
   call delete_dataflow(dfId);
 end
 //
 
-create procedure getDataFlows(in dfName text, in envName text)
+create procedure getDataFlows(in dfName text, in fromName text, in fromType text, in toName text, in toType text, in envName text)
 begin
   declare dfId int;
   declare envId int;
@@ -24479,7 +24478,7 @@ begin
   then
     select id into envId from environment where name = envName limit 1;
     select id into dfId from dataflow where name = dfName and environment_id = envId limit 1;
-    select dataflow, dataflow_type, environment, from_name, from_type, to_name, to_type from dataflows where dataflow=dfName and environment = envName;
+    select dataflow, dataflow_type, environment, from_name, from_type, to_name, to_type from dataflows where dataflow=dfName and from_name = fromName and from_type = fromType and to_name = toName and to_type = toType and environment = envName;
   else
     select dataflow, dataflow_type, environment, from_name, from_type, to_name, to_type from dataflows order by 1;
   end if;
@@ -24490,18 +24489,16 @@ create procedure getDataFlowAssets(in dfName text, in fromName text, in fromType
 begin
   declare dfId int;
 
-  select id into dfId from dataflows where dataflow = dfName and from_name = fromName and from_type = fromType and to_name = toName and to_type = toType and environment = envName limit 1;
+  select dataFlowId(dfName,fromType,fromName,toType,toName,envName) into dfId limit 1;
   select a.name from dataflow_asset da, asset a where da.dataflow_id = dfId and da.asset_id = a.id order by 1;
 end
 //
 
-create procedure getDataFlowObstacles(in dfName text, in envName text)
+create procedure getDataFlowObstacles(in dfName text, in fromName text, in fromType text, in toName text, in toType text, in envName text)
 begin
   declare dfId int;
-  declare envId int;
 
-  select id into envId from environment where name = envName limit 1;
-  select id into dfId from dataflow where name = dfName and environment_id = envId limit 1;
+  select dataFlowId(dfName,fromType,fromName,toType,toName,envName) into dfId limit 1;
   select o.name,sk.name,do.context from dataflow_obstacle do, obstacle o,stpa_keyword sk where do.dataflow_id = dfId and do.obstacle_id = o.id and do.stpa_keyword_id = sk.id order by 1;
 end
 // 
@@ -24560,7 +24557,7 @@ begin
 
     set buf = concat(buf,'  <dataflow name=\"',dfName,'\" type=\"',dfType,'\" environment=\"',envName,'\" from_name=\"',fromName,'\" from_type=\"',fromType,'\" to_name=\"',toName,'\" to_type=\"',toType,'\">\n');
     select id into envId from environment where name = envName;
-    select id into dfId from dataflow where name = dfName and environment_id = envId limit 1;
+    select dataFlowId(dfName,fromType,fromName,toType,toName,envName) into dfId limit 1;
 
     open dfTagCursor;
     dfTag_loop: loop
@@ -30483,7 +30480,7 @@ begin
 
     set buf = concat(buf,'  {"name" : "',dfName,'", type : "',dfType,'", "environment" : "',envName,'", "from_name" : "',fromName,'", "from_type" : "',fromType,'", "to_name" : "',toName,'", "to_type" : "',toType,'", "assets" : [');
     select id into envId from environment where name = envName;
-    select id into dfId from dataflow where name = dfName and environment_id = envId limit 1;
+    select dataFlowId(dfName,fromType,fromName,toType,toName,envName) into dfId;
 
     open dfAssetCursor;
     dfAsset_loop: loop

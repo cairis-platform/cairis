@@ -72,7 +72,7 @@ class DataFlowAPITests(CairisDaemonTestCase):
 
   def test_get_by_name(self):
     method = 'test_get_by_name'
-    url = '/api/dataflows/name/' + quote(self.existing_dataflow_name) + '/environment/' + quote(self.existing_environment_name) + '?session_id=test'
+    url = '/api/dataflows/name/' + quote(self.existing_dataflow_name) + '/from_name/' + self.existing_from_name + '/from_type/' + self.existing_from_type + '/to_name/' + self.existing_to_name + '/to_type/' + self.existing_to_type + '/environment/' + quote(self.existing_environment_name) + '?session_id=test'
     rv = self.app.get(url)
     self.assertIsNotNone(rv.data, 'No response')
     if (sys.version_info > (3,)):
@@ -106,7 +106,7 @@ class DataFlowAPITests(CairisDaemonTestCase):
     json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp, 'No results after deserialization')
     self.assertEqual(json_resp['message'],'acknowledge created')
-    rv = self.app.delete('/api/dataflows/name/acknowledge/environment/Psychosis?session_id=test')
+    rv = self.app.delete('/api/dataflows/name/acknowledge/from_name/Authenticate Researcher/from_type/process/to_name/Authorised Researcher/to_type/entity/environment/Psychosis?session_id=test')
 
   def test_put(self):
     method = 'test_put'
@@ -126,7 +126,7 @@ class DataFlowAPITests(CairisDaemonTestCase):
     dataflow_to_update = self.prepare_new_dataflow()
     dataflow_to_update.theName = 'Edited test dataflow'
     upd_env_body = self.prepare_json(dataflow=dataflow_to_update)
-    rv = self.app.put('/api/dataflows/name/acknowledge/environment/Psychosis?session_id=test', data=upd_env_body, content_type='application/json')
+    rv = self.app.put('/api/dataflows/name/acknowledge/from_name/Authenticate%20Researcher/from_type/process/to_name/Authorised%20Researcher/to_type/entity/environment/Psychosis?session_id=test', data=upd_env_body, content_type='application/json')
     self.assertIsNotNone(rv.data, 'No response')
     if (sys.version_info > (3,)):
       responseData = rv.data.decode('utf-8')
@@ -136,7 +136,7 @@ class DataFlowAPITests(CairisDaemonTestCase):
     self.assertIsNotNone(json_resp)
     self.assertEqual(json_resp['message'],'Edited test dataflow updated')
 
-    rv = self.app.get('/api/dataflows/name/Edited%20test%20dataflow/environment/Psychosis?session_id=test')
+    rv = self.app.get('/api/dataflows/name/Edited%20test%20dataflow/from_name/' + dataflow_to_update.fromName() + '/from_type/' + dataflow_to_update.fromType() + '/to_name/' + dataflow_to_update.toName() + '/to_type/' + dataflow_to_update.toType() + '/environment/Psychosis?session_id=test')
     if (sys.version_info > (3,)):
       responseData = rv.data.decode('utf-8')
     else:
@@ -153,7 +153,7 @@ class DataFlowAPITests(CairisDaemonTestCase):
     self.assertEqual(upd_dataflow['theToType'],dataflow_to_update.toType())
     self.assertEqual(upd_dataflow['theTags'],dataflow_to_update.tags())
 
-    rv = self.app.delete('/api/dataflows/name/Edited%20test%20dataflow/environment/Psychosis?session_id=test')
+    rv = self.app.delete('/api/dataflows/name/Edited%20test%20dataflow/from_name/' + dataflow_to_update.fromName() + '/from_type/' + dataflow_to_update.fromType() + '/to_name/' + dataflow_to_update.toName() + '/to_type/' + dataflow_to_update.toType() + '/environment/Psychosis?session_id=test')
     self.assertIsNotNone(rv.data, 'No response')
     if (sys.version_info > (3,)):
       responseData = rv.data.decode('utf-8')
@@ -161,7 +161,7 @@ class DataFlowAPITests(CairisDaemonTestCase):
       responseData = rv.data
     json_resp = jsonpickle.decode(responseData)
     self.assertIsNotNone(json_resp)
-    self.assertEqual(json_resp['message'],'Edited test dataflow / Psychosis deleted')
+    self.assertEqual(json_resp['message'],'Edited test dataflow / ' + dataflow_to_update.fromName() + ' / ' + dataflow_to_update.toName() + ' / Psychosis deleted')
 
   def test_dataflow_diagram(self):
     url = '/api/dataflows/diagram/environment/Psychosis/filter_type/None/filter_name/None?session_id=test'

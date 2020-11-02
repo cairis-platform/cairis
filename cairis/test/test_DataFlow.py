@@ -120,7 +120,7 @@ class DataFlowTest(unittest.TestCase):
     b = Borg()
     b.dbProxy.addDataFlow(idfp)
     idfp.theName = 'Authenticate'
-    b.dbProxy.updateDataFlow('authenticate','Psychosis',idfp)
+    b.dbProxy.updateDataFlow('authenticate','Authorised Researcher','entity','Authenticate Researcher','process','Psychosis',idfp)
     odfs = b.dbProxy.getDataFlows()
     odf = odfs[0]
     self.assertEqual(idfp.name(),odf.name())
@@ -157,7 +157,7 @@ class DataFlowTest(unittest.TestCase):
 
   def tearDown(self):
     b = Borg()
-    b.dbProxy.deleteDataFlow(self.dfJson['theName'],self.dfJson['theEnvironmentName'])
+    b.dbProxy.deleteDataFlow(self.dfJson['theName'],self.dfJson['theFromName'],self.dfJson['theFromType'],self.dfJson['theToName'],self.dfJson['theToType'],self.dfJson['theEnvironmentName'])
     odfs = b.dbProxy.getDataFlows()
     self.assertEqual(len(odfs),0)
 

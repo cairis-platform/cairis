@@ -36,9 +36,9 @@ class DataFlowDAO(CairisDAO):
   def __init__(self, session_id):
     CairisDAO.__init__(self, session_id)
 
-  def get_objects(self, dataflow_name = '', environment_name = ''):
+  def get_objects(self, dataflow_name = '', from_name='', from_type='', to_name='', to_type='',environment_name = ''):
     try:
-      dfs = self.db_proxy.getDataFlows(dataflow_name,environment_name)
+      dfs = self.db_proxy.getDataFlows(dataflow_name,from_name,from_type,to_name,to_type,environment_name)
       dfsOut = []
       for df in dfs:
         dfsOut.append(self.realToFake(df))
@@ -51,8 +51,8 @@ class DataFlowDAO(CairisDAO):
       raise ARMHTTPError(ex)
 
 
-  def get_object_by_name(self, dataflow_name, environment_name):
-    dfs = self.get_objects(dataflow_name,environment_name)
+  def get_object_by_name(self, dataflow_name, from_name,from_type,to_name,to_type,environment_name,pathValues = []):
+    dfs = self.get_objects(dataflow_name,from_name,from_type,to_name,to_type,environment_name)
     if len(dfs) == 0:
       self.close()
       raise ObjectNotFoundHTTPError('The provided dataflow name')
@@ -92,7 +92,7 @@ class DataFlowDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def update_object(self, dataflow, old_dataflow_name,old_environment_name):
+  def update_object(self, dataflow, old_dataflow_name,old_from_name,old_from_type,old_to_name,old_to_type,old_environment_name,pathValues = []):
 
     df_params = DataFlowParameters(
       dfName=dataflow.name(),
@@ -108,7 +108,7 @@ class DataFlowDAO(CairisDAO):
     )
 
     try:
-       self.db_proxy.updateDataFlow(old_dataflow_name,old_environment_name,df_params)
+      self.db_proxy.updateDataFlow(old_dataflow_name,old_from_name,old_from_type,old_to_name,old_to_type,old_environment_name,df_params)
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)
@@ -116,9 +116,9 @@ class DataFlowDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def delete_object(self, dataflow_name, environment_name):
+  def delete_object(self, dataflow_name, from_name, from_type, to_name, to_type, environment_name, pathValues = []):
     try:
-      self.db_proxy.deleteDataFlow(dataflow_name, environment_name)
+      self.db_proxy.deleteDataFlow(dataflow_name, from_name, from_type, to_name, to_type,environment_name)
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)

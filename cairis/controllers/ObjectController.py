@@ -887,3 +887,51 @@ class WorkbookUploadAPI(Resource):
       raise MissingParameterHTTPError(param_names=['file'])
     except Exception as ex:
       raise CairisHTTPError(status_code=CONFLICT, message=str(ex), status='Unknown error')
+
+class ObjectsByMethodAndSixParametersAPI(Resource):
+  def __init__(self,**kwargs):
+    self.DAOModule = getattr(import_module('cairis.data.' + kwargs['dao']),kwargs['dao'])
+    self.thePathParameters = []
+    if 'get_method' in kwargs:
+      self.theGetMethod = kwargs['get_method']
+    if 'put_method' in kwargs:
+      self.thePutMethod = kwargs['put_method']
+    if 'del_method' in kwargs:
+      self.theDelMethod = kwargs['del_method']
+
+  def get(self,p1,p2,p3,p4,p5,p6):
+    session_id = get_session_id(session, request)
+    dao = self.DAOModule(session_id)
+    pathValues = []
+    for parameterName,defaultValue in self.thePathParameters:
+      pathValues.append(request.args.get(parameterName,defaultValue))
+    objts = getattr(dao, self.theGetMethod)(p1,p2,p3,p4,p5,p6,pathValues)
+    dao.close()
+    resp = make_response(json_serialize(objts, session_id=session_id), OK)
+    resp.contenttype = 'application/json'
+    return resp
+
+  def put(self,p1,p2,p3,p4,p5,p6):
+    session_id = get_session_id(session, request)
+    dao = self.DAOModule(session_id)
+    pathValues = []
+    for parameterName,defaultValue in self.thePathParameters:
+      pathValues.append(request.args.get(parameterName,defaultValue))
+    objt = dao.from_json(request)
+    getattr(dao, self.thePutMethod)(objt,p1,p2,p3,p4,p5,p6,pathValues)
+    resp_dict = {'message': objt.name() + ' updated'}
+    resp = make_response(json_serialize(resp_dict, session_id=session_id), OK)
+    resp.contenttype = 'application/json'
+    return resp
+
+  def delete(self,p1,p2,p3,p4,p5,p6):
+    session_id = get_session_id(session, request)
+    dao = self.DAOModule(session_id)
+    pathValues = []
+    for parameterName,defaultValue in self.thePathParameters:
+      pathValues.append(request.args.get(parameterName,defaultValue))
+    getattr(dao, self.theDelMethod)(p1,p2,p3,p4,p5,p6,pathValues)
+    resp_dict = {'message': p1 + ' / ' + p2 + ' / ' + p4 + ' / ' +  p6 + ' deleted'}
+    resp = make_response(json_serialize(resp_dict, session_id=session_id), OK)
+    resp.contenttype = 'application/json'
+    return resp
