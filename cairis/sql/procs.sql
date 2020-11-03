@@ -24304,7 +24304,7 @@ begin
   select id into envId from environment where name = envName limit 1;
   select id into typeId from dataflow_type where name = dfType limit 1;
 
-  select dataFlowId(oldDfName,oldFromType,oldFromName,oldToType,oldToName,oldEnvName) into dfId limit 1;
+  select dataFlowId(oldDfName,oldFromType,oldFromName,oldToType,oldToName,oldEnvName) into dfId;
 
   update dataflow set environment_id = envId, name = dfName, dataflow_type_id = typeId where id = dfId;
   delete from dataflow_process_process where dataflow_id = dfId;
@@ -24428,7 +24428,7 @@ begin
   declare envId int;
 
   select id into envId from environment where name = envName limit 1;
-  select dataFlowId(dfName,fromType,fromName,toType,toName,envName) into dfId limit 1;
+  select dataFlowId(dfName,fromType,fromName,toType,toName,envName) into dfId;
   delete from dataflow_asset where dataflow_id = dfId;
 end
 //
@@ -24439,7 +24439,7 @@ begin
   declare envId int;
 
   select id into envId from environment where name = envName limit 1;
-  select dataFlowId(dfName,fromType,fromName,toType,toName,envName) into dfId limit 1;
+  select dataFlowId(dfName,fromType,fromName,toType,toName,envName) into dfId;
   delete from dataflow_obstacle where dataflow_id = dfId;
 end
 //
@@ -24464,7 +24464,7 @@ begin
   declare envId int;
 
   select id into envId from environment where name = envName limit 1;
-  select dataFlowId(dfName,fromType,fromName,toType,toName,envName) into dfId limit 1;
+  select dataFlowId(dfName,fromType,fromName,toType,toName,envName) into dfId;
   call delete_dataflow(dfId);
 end
 //
@@ -24489,7 +24489,7 @@ create procedure getDataFlowAssets(in dfName text, in fromName text, in fromType
 begin
   declare dfId int;
 
-  select dataFlowId(dfName,fromType,fromName,toType,toName,envName) into dfId limit 1;
+  select dataFlowId(dfName,fromType,fromName,toType,toName,envName) into dfId;
   select a.name from dataflow_asset da, asset a where da.dataflow_id = dfId and da.asset_id = a.id order by 1;
 end
 //
@@ -24498,7 +24498,7 @@ create procedure getDataFlowObstacles(in dfName text, in fromName text, in fromT
 begin
   declare dfId int;
 
-  select dataFlowId(dfName,fromType,fromName,toType,toName,envName) into dfId limit 1;
+  select dataFlowId(dfName,fromType,fromName,toType,toName,envName) into dfId;
   select o.name,sk.name,do.context from dataflow_obstacle do, obstacle o,stpa_keyword sk where do.dataflow_id = dfId and do.obstacle_id = o.id and do.stpa_keyword_id = sk.id order by 1;
 end
 // 
@@ -24557,7 +24557,7 @@ begin
 
     set buf = concat(buf,'  <dataflow name=\"',dfName,'\" type=\"',dfType,'\" environment=\"',envName,'\" from_name=\"',fromName,'\" from_type=\"',fromType,'\" to_name=\"',toName,'\" to_type=\"',toType,'\">\n');
     select id into envId from environment where name = envName;
-    select dataFlowId(dfName,fromType,fromName,toType,toName,envName) into dfId limit 1;
+    select dataFlowId(dfName,fromType,fromName,toType,toName,envName) into dfId;
 
     open dfTagCursor;
     dfTag_loop: loop
