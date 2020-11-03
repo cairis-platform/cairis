@@ -42,6 +42,8 @@ install:
 - pip install -r test_requirements.txt
 - pip install -r travis_requirements.txt
 
+before_script:
+- echo "use mysql;\nupdate user set password=password('cairis_test') where user='cairis_test';\nflush privileges;\n" | mysql -u root
 
 script:
 - python3 -mpytest cairis/test --doctest-modules -v --cov cairis/core cairis/daemon cairis/controllers
