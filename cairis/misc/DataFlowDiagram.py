@@ -98,7 +98,7 @@ class DataFlowDiagram:
           nodeNameSet.add(toName)
 
         if ((fromName,toName) not in edgeSet):
-          objtUrl = 'dataflow#' + dfName + '#' + self.theEnvironmentName
+          objtUrl = 'dataflow#' + dfName + '#' + fromName + '#' + fromType + '#' + toName + '#' + toType + '#' + self.theEnvironmentName
           df = pydot.Edge(fromName,toName,dir='forward',label=dfName,arrowhead='vee',fontname=self.fontName,fontsize=self.fontSize,URL=objtUrl)
           self.theGraph.add_edge(df)
       return self.layout()

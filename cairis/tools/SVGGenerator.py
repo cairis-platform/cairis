@@ -134,8 +134,16 @@ def correctHref(line, model_type):
       type = parts[0]
       if type[-1] == 'y':
         type = type[:-1]+'ie'
+      fromName = ''
+      fromType = ''
+      toName = ''
+      toType = ''
       if (model_type == 'dataflow' and type == 'dataflow'):
-        environment = ''.join(parts[2:])
+        fromName = parts[2]
+        fromType = parts[3]
+        toName = parts[4]
+        toType = parts[5]
+        environment = parts[6]
       elif (model_type == 'control_structure' and type == 'dataflow'):
         environment = ''.join(parts[2:])
       else:
@@ -149,7 +157,7 @@ def correctHref(line, model_type):
       if (model_type == 'goal' or model_type == 'risk') and type == 'requirement':
         new_link = '/api/{0}s/shortcode/{1}'.format(type, object)
       elif (model_type == 'dataflow' and type == 'dataflow'):
-        new_link = '/api/{0}s/name/{1}/environment/{2}'.format(type,object,quote(environment))
+        new_link = '/api/{0}s/name/{1}/from_name/{2}/from_type/{3}/to_name/{4}/to_type/{5}/environment/{6}'.format(type,object,quote(fromName),quote(fromType),quote(toName),quote(toType),quote(environment))
       elif (model_type == 'control_structure' and type == 'dataflow'):
         new_link = '/api/{0}s/name/{1}/environment/{2}'.format(type,object,quote(environment))
       elif (type == 'goalassociation'):
