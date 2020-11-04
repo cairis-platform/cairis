@@ -28,7 +28,7 @@ addons:
     - libxslt1-dev
     - python3-setuptools
     - pandoc
-
+ 
 env:
 - PYTHONPATH=. CAIRIS_SRC=$PYTHONPATH/cairis CAIRIS_CFG=cairis_travis.cnf XML_CATALOG_FILES=$CAIRIS_SRC/config/catalog
     $CAIRIS_CFG_DIR=./travisConfig
