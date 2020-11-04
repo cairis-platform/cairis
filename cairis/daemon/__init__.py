@@ -77,3 +77,32 @@ def create_app():
   with app.app_context():
     db.create_all()
   return app
+
+def create_test_app():
+  options = {
+    'port' : 0,
+    'unitTesting': True
+  }
+  WebConfig.config(options)
+
+  b = Borg()
+  app = Flask(__name__)
+  app.config['DEBUG'] = True
+  app.config['SECRET_KEY'] = b.secretKey
+  app.config['SECURITY_PASSWORD_SALT'] = 'None'
+  app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+  app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:' + b.rPasswd + '@' + b.dbHost + '/cairis_user'
+  b.logger.setLevel(b.logLevel)
+  b.logger.debug('Error handlers: {0}'.format(app.error_handler_spec))
+  app.secret_key = os.urandom(24)
+  logger = logging.getLogger('werkzeug')
+  logger.setLevel(b.logLevel)
+  enable_debug = b.logLevel = logging.DEBUG
+  db.init_app(app)
+  user_datastore = SQLAlchemyUserDatastore(db,User, Role)
+  security = Security(app, user_datastore)
+  from .main import main as main_blueprint 
+  app.register_blueprint(main_blueprint)
+  with app.app_context():
+    db.create_all()
+  return app

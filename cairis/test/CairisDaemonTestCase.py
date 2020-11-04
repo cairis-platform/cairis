@@ -19,11 +19,11 @@ from time import sleep
 import unittest
 import os
 from subprocess import call
-from cairis.daemon import create_app
+from cairis.daemon import create_test_app
 
 class CairisDaemonTestCase(unittest.TestCase):
   call([os.environ['CAIRIS_CFG_DIR'] + "/initdb.sh"])
-  app = create_app()
+  app = create_test_app()
   app.config['TESTING'] = True
   app = app.test_client()
   sleep(1)
