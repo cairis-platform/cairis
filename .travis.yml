@@ -2,7 +2,6 @@ language: python
 python:
 - '3.8'
 dist: focal
-sudo: required
 services:
 - mysql
 addons:
