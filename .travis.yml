@@ -1,7 +1,7 @@
 language: python
 python:
-- '3.8'
-dist: focal
+- '3.7'
+dist: bionic
 sudo: required
 services:
 - mysql
