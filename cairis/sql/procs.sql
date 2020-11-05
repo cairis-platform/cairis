@@ -12974,14 +12974,14 @@ begin
       then
         leave assetEnv_loop;
       end if;
-      select spv.name,ap.property_rationale into cProperty,cRationale from asset_property ap, security_property_value spv where ap.asset_id = assetId and ap.property_id = 0 and ap.environment_id = envId and ap.property_value_id = spv.id;
-      select spv.name,ap.property_rationale into iProperty,iRationale from asset_property ap, security_property_value spv where ap.asset_id = assetId and ap.property_id = 1 and ap.environment_id = envId and ap.property_value_id = spv.id;
-      select spv.name,ap.property_rationale into avProperty,avRationale from asset_property ap, security_property_value spv where ap.asset_id = assetId and ap.property_id = 2 and ap.environment_id = envId and ap.property_value_id = spv.id;
-      select spv.name,ap.property_rationale into acProperty,acRationale from asset_property ap, security_property_value spv where ap.asset_id = assetId and ap.property_id = 3 and ap.environment_id = envId and ap.property_value_id = spv.id;
-      select spv.name,ap.property_rationale into anProperty,anRationale from asset_property ap, security_property_value spv where ap.asset_id = assetId and ap.property_id = 4 and ap.environment_id = envId and ap.property_value_id = spv.id;
-      select spv.name,ap.property_rationale into panProperty,panRationale from asset_property ap, security_property_value spv where ap.asset_id = assetId and ap.property_id = 5 and ap.environment_id = envId and ap.property_value_id = spv.id;
-      select spv.name,ap.property_rationale into unlProperty,unlRationale from asset_property ap, security_property_value spv where ap.asset_id = assetId and ap.property_id = 6 and ap.environment_id = envId and ap.property_value_id = spv.id;
-      select spv.name,ap.property_rationale into unoProperty,unoRationale from asset_property ap, security_property_value spv where ap.asset_id = assetId and ap.property_id = 7 and ap.environment_id = envId and ap.property_value_id = spv.id;
+      select spv.name,xmlEscaped(ap.property_rationale) into cProperty,cRationale from asset_property ap, security_property_value spv where ap.asset_id = assetId and ap.property_id = 0 and ap.environment_id = envId and ap.property_value_id = spv.id;
+      select spv.name,xmlEscaped(ap.property_rationale) into iProperty,iRationale from asset_property ap, security_property_value spv where ap.asset_id = assetId and ap.property_id = 1 and ap.environment_id = envId and ap.property_value_id = spv.id;
+      select spv.name,xmlEscaped(ap.property_rationale) into avProperty,avRationale from asset_property ap, security_property_value spv where ap.asset_id = assetId and ap.property_id = 2 and ap.environment_id = envId and ap.property_value_id = spv.id;
+      select spv.name,xmlEscaped(ap.property_rationale) into acProperty,acRationale from asset_property ap, security_property_value spv where ap.asset_id = assetId and ap.property_id = 3 and ap.environment_id = envId and ap.property_value_id = spv.id;
+      select spv.name,xmlEscaped(ap.property_rationale) into anProperty,anRationale from asset_property ap, security_property_value spv where ap.asset_id = assetId and ap.property_id = 4 and ap.environment_id = envId and ap.property_value_id = spv.id;
+      select spv.name,xmlEscaped(ap.property_rationale) into panProperty,panRationale from asset_property ap, security_property_value spv where ap.asset_id = assetId and ap.property_id = 5 and ap.environment_id = envId and ap.property_value_id = spv.id;
+      select spv.name,xmlEscaped(ap.property_rationale) into unlProperty,unlRationale from asset_property ap, security_property_value spv where ap.asset_id = assetId and ap.property_id = 6 and ap.environment_id = envId and ap.property_value_id = spv.id;
+      select spv.name,xmlEscaped(ap.property_rationale) into unoProperty,unoRationale from asset_property ap, security_property_value spv where ap.asset_id = assetId and ap.property_id = 7 and ap.environment_id = envId and ap.property_value_id = spv.id;
       if cProperty != 'None'
       then
         set buf = concat(buf,'  <security_property environment=\"',envName,'\" property="confidentiality" value=\"',cProperty,'\">\n    <rationale>',cRationale,'</rationale>\n  </security_property>\n');
@@ -13209,14 +13209,14 @@ begin
       close threatAssetCursor;
       set done = 0;
 
-      select spv.name,tp.property_rationale into cProperty,cRationale from threat_property tp, security_property_value spv where tp.threat_id = threatId and tp.property_id = 0 and tp.environment_id = envId and tp.property_value_id = spv.id;
-      select spv.name,tp.property_rationale into iProperty,iRationale from threat_property tp, security_property_value spv where tp.threat_id = threatId and tp.property_id = 1 and tp.environment_id = envId and tp.property_value_id = spv.id;
-      select spv.name,tp.property_rationale into avProperty,avRationale from threat_property tp, security_property_value spv where tp.threat_id = threatId and tp.property_id = 2 and tp.environment_id = envId and tp.property_value_id = spv.id;
-      select spv.name,tp.property_rationale into acProperty,acRationale from threat_property tp, security_property_value spv where tp.threat_id = threatId and tp.property_id = 3 and tp.environment_id = envId and tp.property_value_id = spv.id;
-      select spv.name,tp.property_rationale into anProperty,anRationale from threat_property tp, security_property_value spv where tp.threat_id = threatId and tp.property_id = 4 and tp.environment_id = envId and tp.property_value_id = spv.id;
-      select spv.name,tp.property_rationale into panProperty,panRationale from threat_property tp, security_property_value spv where tp.threat_id = threatId and tp.property_id = 5 and tp.environment_id = envId and tp.property_value_id = spv.id;
-      select spv.name,tp.property_rationale into unlProperty,unlRationale from threat_property tp, security_property_value spv where tp.threat_id = threatId and tp.property_id = 6 and tp.environment_id = envId and tp.property_value_id = spv.id;
-      select spv.name,tp.property_rationale into unoProperty,unoRationale from threat_property tp, security_property_value spv where tp.threat_id = threatId and tp.property_id = 7 and tp.environment_id = envId and tp.property_value_id = spv.id;
+      select spv.name,xmlEscaped(tp.property_rationale) into cProperty,cRationale from threat_property tp, security_property_value spv where tp.threat_id = threatId and tp.property_id = 0 and tp.environment_id = envId and tp.property_value_id = spv.id;
+      select spv.name,xmlEscaped(tp.property_rationale) into iProperty,iRationale from threat_property tp, security_property_value spv where tp.threat_id = threatId and tp.property_id = 1 and tp.environment_id = envId and tp.property_value_id = spv.id;
+      select spv.name,xmlEscaped(tp.property_rationale) into avProperty,avRationale from threat_property tp, security_property_value spv where tp.threat_id = threatId and tp.property_id = 2 and tp.environment_id = envId and tp.property_value_id = spv.id;
+      select spv.name,xmlEscaped(tp.property_rationale) into acProperty,acRationale from threat_property tp, security_property_value spv where tp.threat_id = threatId and tp.property_id = 3 and tp.environment_id = envId and tp.property_value_id = spv.id;
+      select spv.name,xmlEscaped(tp.property_rationale) into anProperty,anRationale from threat_property tp, security_property_value spv where tp.threat_id = threatId and tp.property_id = 4 and tp.environment_id = envId and tp.property_value_id = spv.id;
+      select spv.name,xmlEscaped(tp.property_rationale) into panProperty,panRationale from threat_property tp, security_property_value spv where tp.threat_id = threatId and tp.property_id = 5 and tp.environment_id = envId and tp.property_value_id = spv.id;
+      select spv.name,xmlEscaped(tp.property_rationale) into unlProperty,unlRationale from threat_property tp, security_property_value spv where tp.threat_id = threatId and tp.property_id = 6 and tp.environment_id = envId and tp.property_value_id = spv.id;
+      select spv.name,xmlEscaped(tp.property_rationale) into unoProperty,unoRationale from threat_property tp, security_property_value spv where tp.threat_id = threatId and tp.property_id = 7 and tp.environment_id = envId and tp.property_value_id = spv.id;
       if cProperty != 'None'
       then
         set buf = concat(buf,'    <threatened_property name="confidentiality" value=\"',cProperty,'\">\n      <rationale>',cRationale,'</rationale>\n    </threatened_property>\n');
@@ -13874,14 +13874,14 @@ begin
       close cmTargetsCursor;
       set done = 0;
 
-      select spv.name,cp.property_rationale into cProperty,cRationale from countermeasure_property cp, security_property_value spv where cp.countermeasure_id = cmId and cp.property_id = 0 and cp.environment_id = envId and cp.property_value_id = spv.id;
-      select spv.name,cp.property_rationale into iProperty,iRationale from countermeasure_property cp, security_property_value spv where cp.countermeasure_id = cmId and cp.property_id = 1 and cp.environment_id = envId and cp.property_value_id = spv.id;
-      select spv.name,cp.property_rationale into avProperty,avRationale from countermeasure_property cp, security_property_value spv where cp.countermeasure_id = cmId and cp.property_id = 2 and cp.environment_id = envId and cp.property_value_id = spv.id;
-      select spv.name,cp.property_rationale into acProperty,acRationale from countermeasure_property cp, security_property_value spv where cp.countermeasure_id = cmId and cp.property_id = 3 and cp.environment_id = envId and cp.property_value_id = spv.id;
-      select spv.name,cp.property_rationale into anProperty,anRationale from countermeasure_property cp, security_property_value spv where cp.countermeasure_id = cmId and cp.property_id = 4 and cp.environment_id = envId and cp.property_value_id = spv.id;
-      select spv.name,cp.property_rationale into panProperty,panRationale from countermeasure_property cp, security_property_value spv where cp.countermeasure_id = cmId and cp.property_id = 5 and cp.environment_id = envId and cp.property_value_id = spv.id;
-      select spv.name,cp.property_rationale into unlProperty,unlRationale from countermeasure_property cp, security_property_value spv where cp.countermeasure_id = cmId and cp.property_id = 6 and cp.environment_id = envId and cp.property_value_id = spv.id;
-      select spv.name,cp.property_rationale into unoProperty,unoRationale from countermeasure_property cp, security_property_value spv where cp.countermeasure_id = cmId and cp.property_id = 7 and cp.environment_id = envId and cp.property_value_id = spv.id;
+      select spv.name,xmlEscaped(cp.property_rationale) into cProperty,cRationale from countermeasure_property cp, security_property_value spv where cp.countermeasure_id = cmId and cp.property_id = 0 and cp.environment_id = envId and cp.property_value_id = spv.id;
+      select spv.name,xmlEscaped(cp.property_rationale) into iProperty,iRationale from countermeasure_property cp, security_property_value spv where cp.countermeasure_id = cmId and cp.property_id = 1 and cp.environment_id = envId and cp.property_value_id = spv.id;
+      select spv.name,xmlEscaped(cp.property_rationale) into avProperty,avRationale from countermeasure_property cp, security_property_value spv where cp.countermeasure_id = cmId and cp.property_id = 2 and cp.environment_id = envId and cp.property_value_id = spv.id;
+      select spv.name,xmlEscaped(cp.property_rationale) into acProperty,acRationale from countermeasure_property cp, security_property_value spv where cp.countermeasure_id = cmId and cp.property_id = 3 and cp.environment_id = envId and cp.property_value_id = spv.id;
+      select spv.name,xmlEscaped(cp.property_rationale) into anProperty,anRationale from countermeasure_property cp, security_property_value spv where cp.countermeasure_id = cmId and cp.property_id = 4 and cp.environment_id = envId and cp.property_value_id = spv.id;
+      select spv.name,xmlEscaped(cp.property_rationale) into panProperty,panRationale from countermeasure_property cp, security_property_value spv where cp.countermeasure_id = cmId and cp.property_id = 5 and cp.environment_id = envId and cp.property_value_id = spv.id;
+      select spv.name,xmlEscaped(cp.property_rationale) into unlProperty,unlRationale from countermeasure_property cp, security_property_value spv where cp.countermeasure_id = cmId and cp.property_id = 6 and cp.environment_id = envId and cp.property_value_id = spv.id;
+      select spv.name,xmlEscaped(cp.property_rationale) into unoProperty,unoRationale from countermeasure_property cp, security_property_value spv where cp.countermeasure_id = cmId and cp.property_id = 7 and cp.environment_id = envId and cp.property_value_id = spv.id;
       if cProperty != 'None'
       then
         set buf = concat(buf,'    <mitigating_property name="confidentiality" value=\"',cProperty,'\">\n      <rationale>',cRationale,'</rationale>\n    </mitigating_property>\n');
