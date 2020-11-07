@@ -1,7 +1,7 @@
 Model Validation
 ================
 
-CAIRIS has the ability to validate models for a given environment based on potential security and privacy design problems.  
+CAIRIS can validate models for a given environment based on potential security and privacy design problems.  
 
 To validate a current CAIRIS model, click on the Models/Validate menu and select the environment to check the CAIRIS model for.
 
