@@ -18,7 +18,7 @@ Editing Architectural Patterns
 .. figure:: ArchitecturalPatternForm.jpg
    :alt: Architectural Pattern form
 
--  Enter the name for the architectural pattern and provided a synopsis for the pattern.
+-  Enter the name for the architectural pattern and provide a synopsis for the pattern.
 
 -  Select the Component tab, lick on the Add button to add a new Component folder for the component being created.
 
