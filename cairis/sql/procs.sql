@@ -1036,6 +1036,7 @@ drop procedure if exists addTaintFlows;
 drop procedure if exists conflictingControl;
 drop procedure if exists invalidObjectNames;
 drop procedure if exists reservedCharacterCheck;
+drop procedure if exists unconnected_vulnerabilityNames;
 
 
 delimiter //
@@ -1201,29 +1202,29 @@ begin
   declare workingPanProperty int default 0;
   declare workingUnlProperty int default 0;
   declare workingUnoProperty int default 0;
-  declare cRationale varchar(500) default '';
-  declare iRationale varchar(500) default '';
-  declare avRationale varchar(500) default '';
-  declare acRationale varchar(500) default '';
-  declare anRationale varchar(500) default '';
-  declare panRationale varchar(500) default '';
-  declare unlRationale varchar(500) default '';
-  declare unoRationale varchar(500) default '';
-  declare workingCRationale varchar(500) default '';
-  declare workingIRationale varchar(500) default '';
-  declare workingAvRationale varchar(500) default '';
-  declare workingAcRationale varchar(500) default '';
-  declare workingAnRationale varchar(500) default '';
-  declare workingPanRationale varchar(500) default '';
-  declare workingUnlRationale varchar(500) default '';
-  declare workingUnoRationale varchar(500) default '';
+  declare cRationale varchar(4000) default '';
+  declare iRationale varchar(4000) default '';
+  declare avRationale varchar(4000) default '';
+  declare acRationale varchar(4000) default '';
+  declare anRationale varchar(4000) default '';
+  declare panRationale varchar(4000) default '';
+  declare unlRationale varchar(4000) default '';
+  declare unoRationale varchar(4000) default '';
+  declare workingCRationale varchar(4000) default '';
+  declare workingIRationale varchar(4000) default '';
+  declare workingAvRationale varchar(4000) default '';
+  declare workingAcRationale varchar(4000) default '';
+  declare workingAnRationale varchar(4000) default '';
+  declare workingPanRationale varchar(4000) default '';
+  declare workingUnlRationale varchar(4000) default '';
+  declare workingUnoRationale varchar(4000) default '';
   declare done int default 0;
   declare currentEnvironmentId int;
   declare propertiesCursor cursor for select environment_id from composite_environment where composite_environment_id = environmentId;  
   declare continue handler for not found set done = 1;
 
   drop table if exists temp_assetproperties;
-  create temporary table temp_assetproperties (cProperty int,iProperty int,avProperty int, acProperty int, anProperty int, panProperty int, unlProperty int, unoProperty int, c_rat varchar(500), i_rat varchar(500), av_rat varchar(500), ac_rat varchar(500), an_rat varchar(500), pan_rat varchar(500), unl_rat varchar(500), uno_rat varchar(500));
+  create temporary table temp_assetproperties (cProperty int,iProperty int,avProperty int, acProperty int, anProperty int, panProperty int, unlProperty int, unoProperty int, c_rat text, i_rat text, av_rat text, ac_rat text, an_rat text, pan_rat text, unl_rat text, uno_rat text);
 
   select count(environment_id) into compositeCount from composite_environment where composite_environment_id = environmentId limit 1;
   if compositeCount > 0
@@ -1484,29 +1485,29 @@ begin
   declare workingPanProperty int default 0;
   declare workingUnlProperty int default 0;
   declare workingUnoProperty int default 0;
-  declare cRationale varchar(500);
-  declare iRationale varchar(500);
-  declare avRationale varchar(500);
-  declare acRationale varchar(500);
-  declare anRationale varchar(500);
-  declare panRationale varchar(500);
-  declare unlRationale varchar(500);
-  declare unoRationale varchar(500);
-  declare workingCRationale varchar(500);
-  declare workingIRationale varchar(500);
-  declare workingAvRationale varchar(500);
-  declare workingAcRationale varchar(500);
-  declare workingAnRationale varchar(500);
-  declare workingPanRationale varchar(500);
-  declare workingUnlRationale varchar(500);
-  declare workingUnoRationale varchar(500);
+  declare cRationale varchar(4000);
+  declare iRationale varchar(4000);
+  declare avRationale varchar(4000);
+  declare acRationale varchar(4000);
+  declare anRationale varchar(4000);
+  declare panRationale varchar(4000);
+  declare unlRationale varchar(4000);
+  declare unoRationale varchar(4000);
+  declare workingCRationale varchar(4000);
+  declare workingIRationale varchar(4000);
+  declare workingAvRationale varchar(4000);
+  declare workingAcRationale varchar(4000);
+  declare workingAnRationale varchar(4000);
+  declare workingPanRationale varchar(4000);
+  declare workingUnlRationale varchar(4000);
+  declare workingUnoRationale varchar(4000);
   declare done int default 0;
   declare currentEnvironmentId int;
   declare propertiesCursor cursor for select environment_id from composite_environment where composite_environment_id = environmentId;  
   declare continue handler for not found set done = 1;
 
   drop table if exists temp_threatproperties;
-  create temporary table temp_threatproperties (cProperty int,iProperty int,avProperty int, acProperty int, anProperty int, panProperty int, unlProperty int, unoProperty int, c_rat varchar(500), i_rat varchar(500), av_rat varchar(500), ac_rat varchar(500), an_rat varchar(500), pan_rat varchar(500), unl_rat varchar(500), uno_rat varchar(500));
+  create temporary table temp_threatproperties (cProperty int,iProperty int,avProperty int, acProperty int, anProperty int, panProperty int, unlProperty int, unoProperty int, c_rat text, i_rat text, av_rat text, ac_rat text, an_rat text, pan_rat text, unl_rat text, uno_rat text);
 
   select count(environment_id) into compositeCount from composite_environment where composite_environment_id = environmentId limit 1;
   if compositeCount > 0
@@ -1766,29 +1767,29 @@ begin
   declare workingPanProperty int default 0;
   declare workingUnlProperty int default 0;
   declare workingUnoProperty int default 0;
-  declare cRationale varchar(500);
-  declare iRationale varchar(500);
-  declare avRationale varchar(500);
-  declare acRationale varchar(500);
-  declare anRationale varchar(500);
-  declare panRationale varchar(500);
-  declare unlRationale varchar(500);
-  declare unoRationale varchar(500);
-  declare workingCRationale varchar(500);
-  declare workingIRationale varchar(500);
-  declare workingAvRationale varchar(500);
-  declare workingAcRationale varchar(500);
-  declare workingAnRationale varchar(500);
-  declare workingPanRationale varchar(500);
-  declare workingUnlRationale varchar(500);
-  declare workingUnoRationale varchar(500);
+  declare cRationale varchar(4000);
+  declare iRationale varchar(4000);
+  declare avRationale varchar(4000);
+  declare acRationale varchar(4000);
+  declare anRationale varchar(4000);
+  declare panRationale varchar(4000);
+  declare unlRationale varchar(4000);
+  declare unoRationale varchar(4000);
+  declare workingCRationale varchar(4000);
+  declare workingIRationale varchar(4000);
+  declare workingAvRationale varchar(4000);
+  declare workingAcRationale varchar(4000);
+  declare workingAnRationale varchar(4000);
+  declare workingPanRationale varchar(4000);
+  declare workingUnlRationale varchar(4000);
+  declare workingUnoRationale varchar(4000);
   declare done int default 0;
   declare currentEnvironmentId int;
   declare propertiesCursor cursor for select environment_id from composite_environment where composite_environment_id = environmentId;  
   declare continue handler for not found set done = 1;
 
   drop table if exists temp_countermeasureproperties;
-  create temporary table temp_countermeasureproperties (c_property int,i_property int,av_property int, ac_property int, an_property int, pan_property int, unl_property int, uno_property int, c_rat varchar(500), i_rat varchar(500), av_rat varchar(500), ac_rat varchar(500), an_rat varchar(500), pan_rat varchar(500), unl_rat varchar(500), uno_rat varchar(500));
+  create temporary table temp_countermeasureproperties (c_property int,i_property int,av_property int, ac_property int, an_property int, pan_property int, unl_property int, uno_property int, c_rat text, i_rat text, av_rat text, ac_rat text, an_rat text, pan_rat text, unl_rat text, uno_rat text);
 
   select count(environment_id) into compositeCount from composite_environment where composite_environment_id = environmentId limit 1;
   if compositeCount > 0
@@ -6614,7 +6615,9 @@ begin
     union
     select ga.id id,e.name environment,hg.name goal_name,'obstacle' goal_dim,rt.name ref_type,tg.name subgoal_name,'requirement' subgoal_dim,ga.alternative_id alternative_id,ga.rationale from obstaclerequirement_goalassociation ga, environment e, obstacle hg, reference_type rt, requirement tg where ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and tg.version = (select max(i.version) from requirement i where i.id = tg.id) and ga.environment_id = e.id
     union
-    select ga.id id,e.name environment,hg.name goal_name,'obstacle' goal_dim,rt.name ref_type,tg.name subgoal_name, 'domainproperty' subgoal_dim,ga.alternative_id alternative_id,ga.rationale from obstacledomainproperty_goalassociation ga, environment e, obstacle hg, reference_type rt, domainproperty tg where ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and ga.environment_id = e.id;
+    select ga.id id,e.name environment,hg.name goal_name,'obstacle' goal_dim,rt.name ref_type,tg.name subgoal_name, 'domainproperty' subgoal_dim,ga.alternative_id alternative_id,ga.rationale from obstacledomainproperty_goalassociation ga, environment e, obstacle hg, reference_type rt, domainproperty tg where ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and ga.environment_id = e.id
+    union
+    select ga.id id,e.name environment,hg.name goal_name,'obstacle' goal_dim,rt.name ref_type,tg.name subgoal_name, 'vulnerability' subgoal_dim,ga.alternative_id alternative_id,ga.rationale from obstaclevulnerability_goalassociation ga, environment e, obstacle hg, reference_type rt, vulnerability tg where ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and ga.environment_id = e.id;
   else
     select id into environmentId from environment where name = environmentName limit 1;
     select ga.id id,e.name environment,hg.name goal_name,'goal' goal_dim,rt.name ref_type,tg.name subgoal_name,'goal' subgoal_dim,ga.alternative_id alternative_id,ga.rationale from goalgoal_goalassociation ga, environment e, goal hg, reference_type rt, goal tg where ga.environment_id = environmentId and ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and ga.environment_id = e.id
@@ -6649,7 +6652,9 @@ begin
     union
     select ga.id id,e.name environment,hg.name goal_name,'obstacle' goal_dim,rt.name ref_type,tg.name subgoal_name,'requirement' subgoal_dim,ga.alternative_id alternative_id,ga.rationale from obstaclerequirement_goalassociation ga, environment e, obstacle hg, reference_type rt, requirement tg where ga.environment_id = environmentId and ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and tg.version = (select max(i.version) from requirement i where i.id = tg.id) and ga.environment_id = e.id
     union
-    select ga.id id,e.name environment,hg.name goal_name,'obstacle' goal_dim,rt.name ref_type,tg.name subgoal_name, 'domainproperty' subgoal_dim,ga.alternative_id alternative_id,ga.rationale from obstacledomainproperty_goalassociation ga, environment e, obstacle hg, reference_type rt, domainproperty tg where ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and ga.environment_id = e.id and ga.environment_id = environmentId;
+    select ga.id id,e.name environment,hg.name goal_name,'obstacle' goal_dim,rt.name ref_type,tg.name subgoal_name, 'domainproperty' subgoal_dim,ga.alternative_id alternative_id,ga.rationale from obstacledomainproperty_goalassociation ga, environment e, obstacle hg, reference_type rt, domainproperty tg where ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and ga.environment_id = e.id and ga.environment_id = environmentId
+    union
+    select ga.id id,e.name environment,hg.name goal_name,'obstacle' goal_dim,rt.name ref_type,tg.name subgoal_name, 'vulnerability' subgoal_dim,ga.alternative_id alternative_id,ga.rationale from obstaclevulnerability_goalassociation ga, environment e, obstacle hg, reference_type rt, vulnerability tg where ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and ga.environment_id = e.id and ga.environment_id = environmentId;
   end if;
 end
 //
@@ -31703,6 +31708,14 @@ begin
     insert into temp_vout(label,message) values('Reserved character check',concat(dimName,' name "',objtName,'" contains a reserved character.'));
   end loop rc_loop;
   close rcCursor;
+end
+//
+
+create procedure unconnected_vulnerabilityNames(in environmentName text)
+begin
+  declare environmentId int;
+  select id into environmentId from environment where name = environmentName limit 1;
+  select v.name from vulnerability v where v.id not in (select ga.subgoal_id from obstaclevulnerability_goalassociation ga where ga.environment_id = environmentId) order by 1;
 end
 //
 
