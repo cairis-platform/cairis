@@ -14346,7 +14346,7 @@ begin
       close personaRolesCursor;
       set done = 0;
 
-      set buf = concat(buf,'    <narrative>',personaNarrative(personaId,envId),'</narrative>\n');
+      set buf = concat(buf,'    <narrative>',xmlEscaped(personaNarrative(personaId,envId)),'</narrative>\n');
       set buf = concat(buf,'  </persona_environment>\n');
     end loop personaEnv_loop;
     close personaEnvCursor;
