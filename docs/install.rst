@@ -49,7 +49,7 @@ For the full install (with pdf export functionality) download and run the contai
 
 .. code-block:: bash
  
-   sudo docker run --name cairis-mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql:5.7 --thread_stack=256K
+   sudo docker run --name cairis-mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql:latest --thread_stack=256K --max_sp_recursion_depth=255 --log_bin_trust_function_creators=1
    sudo docker run --name cairis-docs -d -v cairisDocumentation:/tmpDocker -v cairisImage:/images -t shamalfaily/cairis-docs
    sudo docker run --name CAIRIS -d --link cairis-mysql:mysql --link cairis-docs:docs -P -p 80:8000 --net=bridge -v cairisDocumentation:/tmpDocker -v cairisImage:/images shamalfaily/cairis
 
@@ -57,7 +57,7 @@ For the smaller install (without pdf export functionality) download and run the 
 
 .. code-block:: bash
  
-   sudo docker run --name cairis-mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql:5.7 --thread_stack=256K
+   sudo docker run --name cairis-mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql:latest --thread_stack=256K --max_sp_recursion_depth=255 --log_bin_trust_function_creators=1
    sudo docker run --name CAIRIS --link cairis-mysql:mysql -d -P -p 80:8000 --net=bridge shamalfaily/cairis
 
 If you run the above commands on macOS (and possibly other non-Linux platformns), you might get the error *links are only supported for user-defined networks*.  If so, you should instead run the below commands to download and run your containers:
@@ -66,7 +66,7 @@ If you run the above commands on macOS (and possibly other non-Linux platformns)
    
    NET=cairisnet
    docker network create -d bridge $NET
-   docker run --name cairis-mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql:5.7 --thread_stack=256K
+   docker run --name cairis-mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql:latest --thread_stack=256K --max_sp_recursion_depth=255 --log_bin_trust_function_creators=1
    docker network connect $NET cairis-mysql
    docker run --name CAIRIS -d -P -p 80:8000 --net=$NET shamalfaily/cairis
 
