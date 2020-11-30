@@ -13784,7 +13784,7 @@ begin
         leave ucEnv_loop;
       end if;
       select preconditions into ucPreCond from usecase_conditions where usecase_id = ucId and environment_id = envId;
-      set buf = concat(buf,'  <usecase_environment name=\"',envName,'\" >\n    <preconditions>',ucPreCond,'</preconditions>\n    <flow>\n');
+      set buf = concat(buf,'  <usecase_environment name=\"',envName,'\" >\n    <preconditions>',xmlEscaped(ucPreCond),'</preconditions>\n    <flow>\n');
 
       open ucStepCursor;
       ucStep_loop: loop
@@ -13827,7 +13827,7 @@ begin
    
       set buf = concat(buf,'    </flow>\n');
       select postconditions into ucPostCond from usecase_conditions where usecase_id = ucId and environment_id = envId;
-      set buf = concat(buf,'    <postconditions>',ucPostCond,'</postconditions>\n');
+      set buf = concat(buf,'    <postconditions>',xmlEscaped(ucPostCond),'</postconditions>\n');
       set buf = concat(buf,'  </usecase_environment>\n');
     end loop ucEnv_loop;
     close ucEnvCursor;
