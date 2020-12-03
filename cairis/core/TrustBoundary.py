@@ -28,6 +28,7 @@ class TrustBoundary:
     self.theTags = tags
 
   def id(self): return self.theId
+  def setId(self,anId): self.theId = anId
   def name(self): return self.theName
   def type(self): return self.theType
   def description(self): return self.theDescription

@@ -779,7 +779,12 @@ def importTrustBoundaries(tbs,session_id):
   b = Borg()
   db_proxy = b.get_dbproxy(session_id)
   for tb in tbs:
-    db_proxy.addTrustBoundary(tb)
+    objtId = db_proxy.existingObject(tb.name(),'trust_boundary')
+    if objtId == -1:
+      db_proxy.addTrustBoundary(tb)
+    else:
+      tb.setId(objtId)
+      db_proxy.updateTrustBoundary(tb)
   noOfTrustBoundaries = len(tbs)
   msgStr = 'Imported ' +str( noOfTrustBoundaries) + ' trust boundar'
   if (noOfTrustBoundaries != 1):
