@@ -6428,7 +6428,7 @@ begin
   declare issueName varchar(1000);
   declare currentEnvName varchar(50);
   declare done int default 0;
-  declare issueCursor cursor for select environment_id,definition from goal_issue where goal_id = goalId and environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId);
+  declare issueCursor cursor for select environment_id,issue from goal_issue where goal_id = goalId and environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId);
   declare continue handler for not found set done = 1;
 
   select count(environment_id) into compositeCount from composite_environment where composite_environment_id = environmentId limit 1;
