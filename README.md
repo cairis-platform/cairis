@@ -12,7 +12,12 @@
 [![Documentation Status](https://readthedocs.org/projects/cairis/badge/?version=latest)](http://cairis.readthedocs.io/en/latest/?badge=latest)
 [![License](https://img.shields.io/github/license/cairis-platform/cairis.svg)](https://github.com/cairis-platform/cairis/blob/master/LICENSE)
 [![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/1411/badge)](https://bestpractices.coreinfrastructure.org/projects/1411)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fcairis-platform%2Fcairis.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fcairis-platform%2Fcairis?ref=badge_shield)
 
 CAIRIS (Computer Aided Integration of Requirements and Information Security) is a platform for specifying and modelling secure and usable systems. CAIRIS was built from the ground-up to support the elements necessary for usability, requirements, and risk analysis. 
 
 See [the CAIRIS website](https://cairis.org) for more information on the platform, and details on how to get started. 
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fcairis-platform%2Fcairis.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fcairis-platform%2Fcairis?ref=badge_large)
