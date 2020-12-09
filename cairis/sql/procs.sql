@@ -6628,9 +6628,9 @@ begin
     union
     select ga.id id,e.name environment,hg.name goal_name,'obstacle' goal_dim,rt.name ref_type,tg.name subgoal_name, 'domainproperty' subgoal_dim,ga.alternative_id alternative_id,ga.rationale from obstacledomainproperty_goalassociation ga, environment e, obstacle hg, reference_type rt, domainproperty tg where ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and ga.environment_id = e.id
     union
-    select ga.id id,e.name environment,hg.name goal_name,'obstacle' goal_dim,rt.name ref_type,tg.name subgoal_name, 'unconnected_vulnerability' subgoal_dim,ga.alternative_id alternative_id,ga.rationale from obstaclevulnerability_goalassociation ga, environment e, obstacle hg, reference_type rt, vulnerability tg where ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and ga.environment_id = e.id
+    select ga.id id,e.name environment,hg.name goal_name,'obstacle' goal_dim,rt.name ref_type,tg.name subgoal_name, 'vulnerability' subgoal_dim,ga.alternative_id alternative_id,ga.rationale from obstaclevulnerability_goalassociation ga, environment e, obstacle hg, reference_type rt, vulnerability tg where ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and ga.environment_id = e.id
     union
-    select ga.id id,e.name environment,hg.name goal_name,'obstacle' goal_dim,rt.name ref_type,tg.name subgoal_name, 'unconnected_threat' subgoal_dim,ga.alternative_id alternative_id,ga.rationale from obstaclethreat_goalassociation ga, environment e, obstacle hg, reference_type rt, threat tg where ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and ga.environment_id = e.id;
+    select ga.id id,e.name environment,hg.name goal_name,'obstacle' goal_dim,rt.name ref_type,tg.name subgoal_name, 'threat' subgoal_dim,ga.alternative_id alternative_id,ga.rationale from obstaclethreat_goalassociation ga, environment e, obstacle hg, reference_type rt, threat tg where ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and ga.environment_id = e.id;
   else
     select id into environmentId from environment where name = environmentName limit 1;
     select ga.id id,e.name environment,hg.name goal_name,'goal' goal_dim,rt.name ref_type,tg.name subgoal_name,'goal' subgoal_dim,ga.alternative_id alternative_id,ga.rationale from goalgoal_goalassociation ga, environment e, goal hg, reference_type rt, goal tg where ga.environment_id = environmentId and ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and ga.environment_id = e.id
@@ -6667,9 +6667,9 @@ begin
     union
     select ga.id id,e.name environment,hg.name goal_name,'obstacle' goal_dim,rt.name ref_type,tg.name subgoal_name, 'domainproperty' subgoal_dim,ga.alternative_id alternative_id,ga.rationale from obstacledomainproperty_goalassociation ga, environment e, obstacle hg, reference_type rt, domainproperty tg where ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and ga.environment_id = e.id and ga.environment_id = environmentId
     union
-    select ga.id id,e.name environment,hg.name goal_name,'obstacle' goal_dim,rt.name ref_type,tg.name subgoal_name, 'unconnected_vulnerability' subgoal_dim,ga.alternative_id alternative_id,ga.rationale from obstaclevulnerability_goalassociation ga, environment e, obstacle hg, reference_type rt, vulnerability tg where ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and ga.environment_id = e.id and ga.environment_id = environmentId
+    select ga.id id,e.name environment,hg.name goal_name,'obstacle' goal_dim,rt.name ref_type,tg.name subgoal_name, 'vulnerability' subgoal_dim,ga.alternative_id alternative_id,ga.rationale from obstaclevulnerability_goalassociation ga, environment e, obstacle hg, reference_type rt, vulnerability tg where ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and ga.environment_id = e.id and ga.environment_id = environmentId
     union
-    select ga.id id,e.name environment,hg.name goal_name,'obstacle' goal_dim,rt.name ref_type,tg.name subgoal_name, 'unconnected_threat' subgoal_dim,ga.alternative_id alternative_id,ga.rationale from obstaclethreat_goalassociation ga, environment e, obstacle hg, reference_type rt, threat tg where ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and ga.environment_id = e.id and ga.environment_id = environmentId;
+    select ga.id id,e.name environment,hg.name goal_name,'obstacle' goal_dim,rt.name ref_type,tg.name subgoal_name, 'threat' subgoal_dim,ga.alternative_id alternative_id,ga.rationale from obstaclethreat_goalassociation ga, environment e, obstacle hg, reference_type rt, threat tg where ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and ga.environment_id = e.id and ga.environment_id = environmentId;
   end if;
 end
 //
@@ -6910,7 +6910,7 @@ begin
   elseif goalDimName = 'obstacle' and subGoalDimName = 'vulnerability'
   then
     select id into goalId from obstacle where name = goalName;    
-    select id into subGoalId from threat where name = subGoalName;    
+    select id into subGoalId from vulnerability where name = subGoalName;    
     update obstaclevulnerability_goalassociation set environment_id = environmentId, goal_id = goalId, ref_type_id = aTypeId, subgoal_id = subGoalId,alternative_id = alternativeId, rationale = rationaleName where id = associationId;
   elseif goalDimName = 'obstacle' and subGoalDimName = 'role'
   then
