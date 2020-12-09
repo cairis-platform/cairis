@@ -44,7 +44,7 @@ class GoalAssociationDAO(CairisDAO):
       assocList.append(assoc)
     return assocList
 
-  def get_goal_association(self, environment_name, goal_name, subgoal_name, deleteId=True, pathValues = []):
+  def get_goal_association(self, environment_name, goal_name, subgoal_name, pathValues = [],deleteId=True):
     try:
       assoc = self.db_proxy.getGoalAssociation(environment_name,goal_name,subgoal_name)
       if (deleteId == True):
@@ -85,7 +85,7 @@ class GoalAssociationDAO(CairisDAO):
     if (assoc.theGoal == assoc.theSubGoal):
       raise CairisHTTPError(status_code=http.client.BAD_REQUEST,status="Self-refinement error",message='Cannot self-refine ' + assoc.theGoal)
 
-    old_assoc = self.get_goal_association(environment_name,goal_name,subgoal_name,False)
+    old_assoc = self.get_goal_association(environment_name,goal_name,subgoal_name,[],False)
     assocId = old_assoc.theId
 
     assocParams = GoalAssociationParameters(
@@ -105,7 +105,7 @@ class GoalAssociationDAO(CairisDAO):
       raise ARMHTTPError(ex)
 
   def delete_goal_association(self, environment_name, goal_name, subgoal_name, pathValues = []):
-    assoc = self.get_goal_association(environment_name,goal_name,subgoal_name,False)
+    assoc = self.get_goal_association(environment_name,goal_name,subgoal_name,[],False)
     try:
       self.db_proxy.deleteGoalAssociation(assoc.theId,assoc.theGoalDimension,assoc.theSubGoalDimension)
     except ARMException as ex:
