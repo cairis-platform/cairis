@@ -1038,6 +1038,7 @@ drop procedure if exists invalidObjectNames;
 drop procedure if exists reservedCharacterCheck;
 drop procedure if exists unconnected_vulnerabilityNames;
 drop procedure if exists unconnected_threatNames;
+drop procedure if exists information_assetNames;
 
 
 delimiter //
@@ -8608,6 +8609,9 @@ begin
   elseif dimensionTable = 'requirement' and constraintId = -1
   then
     set dimSql = 'select o.id,o.name from requirement o where o.version = (select max(i.version) from requirement i where i.id = o.id)';
+  elseif dimensionTable = 'noncomposite_environment'
+  then
+    set dimSql = 'select id, name from environment where id not in (select composite_environment_id from composite_environment) order by 1';
   else
     if dimensionTable = 'persona_characteristic'
     then
@@ -31741,6 +31745,14 @@ begin
   declare environmentId int;
   select id into environmentId from environment where name = environmentName limit 1;
   select t.name from threat t where t.id not in (select ga.subgoal_id from obstaclethreat_goalassociation ga where ga.environment_id = environmentId) order by 1;
+end
+//
+
+create procedure information_assetNames(in environmentName text)
+begin
+  declare environmentId int;
+  select id into environmentId from environment where name = environmentName limit 1;
+  select a.name from asset a, asset_type at, environment_asset ea where ea.environment_id = environmentId and ea.asset_id = a.id and a.asset_type_id = at.id and at.name = 'Information' order by 1;
 end
 //
 
