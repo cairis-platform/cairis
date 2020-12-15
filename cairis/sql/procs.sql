@@ -4142,7 +4142,7 @@ begin
     union
     select 'requirement',r.name from requirement_role rr, requirement r,environment_requirement er, environment e where rr.requirement_id = r.id and r.version = (select max(i.version) from requirement i where i.id = r.id) and r.id = er.requirement_id and er.environment_id = e.id
     union
-    select 'obstacle',o.name from obstacle o, obstacledomainproperty_goalassociation od where od.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and od.goal_id = g.id
+    select 'obstacle',o.name from obstacle o, obstacledomainproperty_goalassociation od where od.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and od.goal_id = o.id
     union
     select 'domainproperty',dp.name from domainproperty dp, obstacledomainproperty_goalassociation od where od.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and od.subgoal_id = dp.id;
   end if;
