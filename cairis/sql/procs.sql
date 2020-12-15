@@ -9147,7 +9147,7 @@ begin
     union
     select ga.id id,e.name environment,hg.name goal_name,'obstacle' goal_dim,rt.name ref_type,tg.name subgoal_name,'usecase' subgoal_dim,ga.alternative_id alternative_id,ga.rationale from obstacleusecase_goalassociation ga, environment e, obstacle hg, reference_type rt, usecase tg where ga.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and ga.environment_id = e.id
     union
-    select -1 id,e.name environment,hg.name goal_name,'obstacle' goal_dim,'resolve' ref_type,tg.name subgoal_name, 'goal' subgoal_dim,'0' alternative_id,concat('Mitigates ',ri.name) rationale from obstaclevulnerability_goalassociation ov,risk ri, response re, response_goal rg, environment_obstacle eo, environment_response er, environment_goal eg, environment e, obstacle hg, goal tg where ov.environment_id in (select id from composite_environment where composite_environment_id = environmentId) and ov.environment_id = e.id and ov.environment_id = eo.environment_id and er.environment_id = eg.environment_id and eg.goal_id = tg.id and er.response_id = re.id and ov.goal_id = hg.id and ov.subgoal_id = ri.vulnerability_id and ri.id = re.risk_id and re.id = rg.response_id and rg.goal_id = tg.id and eo.obstacle_id = hg.id
+    select -1 id,e.name environment,hg.name goal_name,'obstacle' goal_dim,'resolve' ref_type,tg.name subgoal_name, 'goal' subgoal_dim,'0' alternative_id,concat('Mitigates ',ri.name) rationale from obstaclevulnerability_goalassociation ov,risk ri, response re, response_goal rg, environment_obstacle eo, environment_response er, environment_goal eg, environment e, obstacle hg, goal tg where ov.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and ov.environment_id = e.id and ov.environment_id = eo.environment_id and er.environment_id = eg.environment_id and eg.goal_id = tg.id and er.response_id = re.id and ov.goal_id = hg.id and ov.subgoal_id = ri.vulnerability_id and ri.id = re.risk_id and re.id = rg.response_id and rg.goal_id = tg.id and eo.obstacle_id = hg.id
     union
     select -1 id,e.name environment,hg.name goal_name,'obstacle' goal_dim,'resolve' ref_type,tg.name subgoal_name, 'goal' subgoal_dim,'0' alternative_id,concat('Mitigates ',ri.name) rationale from obstaclevulnerability_goalassociation ov, risk ri, response re, response_goal rg, environment_obstacle eo, environment_vulnerability ev, environment_response er, environment_goal eg, environment e, obstacle hg, goal tg where ev.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and ev.environment_id = eo.environment_id and eo.environment_id = er.environment_id and er.environment_id = eg.environment_id and eg.goal_id = tg.id and er.response_id = re.id and ev.environment_id = e.id and ev.vulnerability_id = ov.subgoal_id and ev.environment_id = ov.environment_id and ov.goal_id = hg.id and ov.subgoal_id = ri.vulnerability_id and ri.id = re.risk_id and re.id = rg.response_id and rg.goal_id = tg.id and eo.obstacle_id = hg.id
     union
@@ -21248,10 +21248,36 @@ end
 
 create procedure obstacle_probability(in obsId int, in envId int)
 begin
-  declare obsProb float;
+  declare ceId int;
+  declare workingProb float default 0;
+  declare obsProb float default 0;
   declare obsRationale varchar(4000) default 'None';
+  declare done int default 0;
+  declare compositeCount int;
+  declare coCursor cursor for select ce.environment_id from composite_environment ce, environment_obstacle eo where ce.composite_environment_id = envId and ce.environment_id = eo.environment_id and eo.obstacle_id = obsId;
+  declare continue handler for not found set done = 1;
 
-  call obstacleProbability(obsId,envId,obsProb,obsRationale);
+  select count(*) into compositeCount from composite_environment ce, environment_obstacle eo where ce.composite_environment_id = envId and ce.environment_id = eo.environment_id and eo.obstacle_id = obsId;
+
+  if compositeCount <= 0
+  then
+    call obstacleProbability(obsId,envId,obsProb,obsRationale);
+  else
+    open coCursor;
+    co_loop: loop
+      fetch coCursor into ceId;
+      if done = 1
+      then
+        leave co_loop;
+      end if;
+      call obstacleProbability(obsId,ceId,workingProb,obsRationale);
+      if workingProb > obsProb
+      then
+        set obsProb = workingProb;
+      end if;
+    end loop co_loop; 
+    close coCursor;
+  end if;
   select obsProb,obsRationale;
 end
 //
@@ -24685,25 +24711,54 @@ end
 
 create procedure dataFlowDiagram(in envName text,in filterType text, in filterElement text)
 begin
-  if filterType = 'None' and filterElement != ''
+  declare environmentId int;
+  declare compositeCount int;
+  select id into environmentId from environment where name = envName limit 1;
+  select count(*) into compositeCount from composite_environment where composite_environment_id = environmentId;
+
+  if compositeCount <= 0
   then
-    select dataflow, from_name, from_type, to_name, to_type from dataflows where environment = envName and from_name = filterElement
-    union
-    select dataflow, from_name, from_type, to_name, to_type from dataflows where environment = envName and to_name = filterElement
-    union
-    select dataflow, from_name, from_type, to_name, to_type from dataflows where environment = envName and dataflow = filterElement;
-  elseif filterType = 'None' and filterElement = ''
-  then
-    select dataflow, from_name, from_type, to_name, to_type from dataflows where environment = envName;
-  elseif filterType != 'None' and filterElement = ''
-  then
-    select dataflow, from_name, from_type, to_name, to_type from dataflows where environment = envName and from_type = filterType
-    union
-    select dataflow, from_name, from_type, to_name, to_type from dataflows where environment = envName and to_type = filterType;
+    if filterType = 'None' and filterElement != ''
+    then
+      select dataflow, from_name, from_type, to_name, to_type from dataflows where environment = envName and from_name = filterElement
+      union
+      select dataflow, from_name, from_type, to_name, to_type from dataflows where environment = envName and to_name = filterElement
+      union
+      select dataflow, from_name, from_type, to_name, to_type from dataflows where environment = envName and dataflow = filterElement;
+    elseif filterType = 'None' and filterElement = ''
+    then
+      select dataflow, from_name, from_type, to_name, to_type from dataflows where environment = envName;
+    elseif filterType != 'None' and filterElement = ''
+    then
+      select dataflow, from_name, from_type, to_name, to_type from dataflows where environment = envName and from_type = filterType
+      union
+      select dataflow, from_name, from_type, to_name, to_type from dataflows where environment = envName and to_type = filterType;
+    else
+      select dataflow, from_name, from_type, to_name, to_type from dataflows where environment = envName and from_name = filterElement and from_type = filterType
+      union
+      select dataflow, from_name, from_type, to_name, to_type from dataflows where environment = envName and to_name = filterElement and to_type = filterType;
+    end if;
   else
-    select dataflow, from_name, from_type, to_name, to_type from dataflows where environment = envName and from_name = filterElement and from_type = filterType
-    union
-    select dataflow, from_name, from_type, to_name, to_type from dataflows where environment = envName and to_name = filterElement and to_type = filterType;
+    if filterType = 'None' and filterElement != ''
+    then
+      select dataflow, from_name, from_type, to_name, to_type from dataflows where environment in (select e.name from environment e, composite_environment ce, environment cen where cen.name = envName and cen.id = ce.composite_environment_id and ce.environment_id = e.id) and from_name = filterElement
+      union
+      select dataflow, from_name, from_type, to_name, to_type from dataflows where environment in (select e.name from environment e, composite_environment ce, environment cen where cen.name = envName and cen.id = ce.composite_environment_id and ce.environment_id = e.id) and to_name = filterElement
+      union
+      select dataflow, from_name, from_type, to_name, to_type from dataflows where environment in (select e.name from environment e, composite_environment ce, environment cen where cen.name = envName and cen.id = ce.composite_environment_id and ce.environment_id = e.id) and dataflow = filterElement;
+    elseif filterType = 'None' and filterElement = ''
+    then
+      select dataflow, from_name, from_type, to_name, to_type from dataflows where environment in (select e.name from environment e, composite_environment ce, environment cen where cen.name = envName and cen.id = ce.composite_environment_id and ce.environment_id = e.id);
+    elseif filterType != 'None' and filterElement = ''
+    then
+      select dataflow, from_name, from_type, to_name, to_type from dataflows where environment in (select e.name from environment e, composite_environment ce, environment cen where cen.name = envName and cen.id = ce.composite_environment_id and ce.environment_id = e.id) and from_type = filterType
+      union
+      select dataflow, from_name, from_type, to_name, to_type from dataflows where environment in (select e.name from environment e, composite_environment ce, environment cen where cen.name = envName and cen.id = ce.composite_environment_id and ce.environment_id = e.id) and to_type = filterType;
+    else
+      select dataflow, from_name, from_type, to_name, to_type from dataflows where environment in (select e.name from environment e, composite_environment ce, environment cen where cen.name = envName and cen.id = ce.composite_environment_id and ce.environment_id = e.id) and from_name = filterElement and from_type = filterType
+      union
+      select dataflow, from_name, from_type, to_name, to_type from dataflows where environment in (select e.name from environment e, composite_environment ce, environment cen where cen.name = envName and cen.id = ce.composite_environment_id and ce.environment_id = e.id) and to_name = filterElement and to_type = filterType;
+    end if;
   end if;
 end
 //
