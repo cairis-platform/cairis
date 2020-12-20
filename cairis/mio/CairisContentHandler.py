@@ -31,6 +31,7 @@ class CairisContentHandler(ContentHandler,EntityResolver):
     self.configDir = b.configDir
     self.theProjectSettings = None
     self.theEnvironments = []
+    self.theCEnvironments = []
 
     self.initialiseProjectSettingsAttributes()
     self.resetEnvironmentAttributes()
@@ -44,6 +45,9 @@ class CairisContentHandler(ContentHandler,EntityResolver):
 
   def environments(self):
     return self.theEnvironments
+
+  def compositeEnvironments(self):
+    return self.theCEnvironments
 
   def initialiseProjectSettingsAttributes(self):
     self.theName = ''
@@ -185,7 +189,10 @@ class CairisContentHandler(ContentHandler,EntityResolver):
     elif name == 'environment':
       p = EnvironmentParameters(unescape(self.theName),unescape(self.theShortCode),unescape(self.theDefinition),self.theCompositeEnvironments,self.theDuplicateProperty,unescape(self.theOverridingEnvironment))
       p.setAssetValues(self.theAssetValues)
-      self.theEnvironments.append(p)
+      if (len(p.environments()) > 0):
+        self.theCEnvironments.append(p)
+      else:
+        self.theEnvironments.append(p)
       self.resetEnvironmentAttributes()
     elif name == 'background':
       self.inBackground = 0

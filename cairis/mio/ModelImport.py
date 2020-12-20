@@ -479,17 +479,18 @@ def importProjectFile(importFile,session_id = None):
     parser.parse(importFile)
     pSettings = handler.settings()
     envParameterSet = handler.environments()
-    return importProjectData(pSettings,envParameterSet,session_id = session_id)
+    ceParameterSet = handler.compositeEnvironments()
+    return importProjectData(pSettings,envParameterSet,ceParameterSet,session_id = session_id)
   except xml.sax.SAXException as e:
     raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
 
-def importProjectData(pSettings,envParameterSet,session_id):
+def importProjectData(pSettings,envParameterSet,ceParameterSet,session_id):
   b = Borg()
   db_proxy = b.get_dbproxy(session_id)
   if (pSettings != None):
     db_proxy.updateSettings(pSettings[0],pSettings[1],pSettings[2],pSettings[3],pSettings[4],pSettings[5],pSettings[6],pSettings[7])
   envCount = 0
-  for envParameters in envParameterSet:
+  for envParameters in (envParameterSet + ceParameterSet):
     objtId = db_proxy.existingObject(envParameters.name(),'environment')
     if objtId == -1:
       db_proxy.addEnvironment(envParameters)
