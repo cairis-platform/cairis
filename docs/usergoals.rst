@@ -3,7 +3,7 @@ User goals and user goal models
 
 CAIRIS supports the specification, modelling, and validation of user goal models.  These models are based on a subset of the `Goal-oriented Requirements Language (GRL) <https://en.wikipedia.org/wiki/Goal-oriented_Requirements_Language>`_ : a language for modelling intentional relationships between goals.  
 
-There are several reasons why you might find working with user goals in CAIRIS useful.
+There are several reasons why you might find working with user goals useful.
 
 * Expressing persona data using user goals can help elicit intentional relationships that support or refute aspects of a persona’s behaviour.
 * Agent-oriented goal modelling language are popular in Requirements Engineering, making a user goal model a potential vehicle for interchange between RE methods, techniques, and tools.
