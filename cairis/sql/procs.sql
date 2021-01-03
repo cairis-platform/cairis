@@ -13485,7 +13485,7 @@ begin
   declare stepDesc varchar(2000);
   declare ucExcName varchar(200);
   declare excDim varchar(20);
-  declare ucExcRelValue varchar(50);
+  declare ucExcRelValue longtext;
   declare ucExcCategory varchar(50);
   declare ucExcDesc varchar(2000);
   declare ucCount int default 0;
@@ -28680,7 +28680,7 @@ begin
   declare stepDesc varchar(2000);
   declare ucExcName varchar(200);
   declare excDim varchar(20);
-  declare ucExcRelValue varchar(50);
+  declare ucExcRelValue longtext;
   declare ucExcCategory varchar(50);
   declare ucExcDesc varchar(2000);
   declare ucCount int default 0;
