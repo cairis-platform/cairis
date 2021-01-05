@@ -32,7 +32,7 @@ def main(args=None):
   parser.add_argument('modelFile',help='model file to import')
   parser.add_argument('--user',dest='userName',help='user name', default='cairis_test')
   parser.add_argument('--database',dest='dbName',help='database name',default='cairis_test')
-  parser.add_argument('--type',dest='modelFormat',help='model type to import.  One of securitypattern, attackpattern, tvtypes, directory, requirements, riskanalysis, usability, misusability, project, domainvalues, architecturalpattern, associations, synopses, processes, assets, locations, dataflows, package, or all',default='all')
+  parser.add_argument('--type',dest='modelFormat',help='model type to import.  One of securitypattern, attackpattern, tvtypes, directory, requirements, riskanalysis, usability, misusability, project, domainvalues, architecturalpattern, associations, synopses, processes, assets, locations, dataflows, stories, package, or all',default='all')
   parser.add_argument('--overwrite',dest='isOverwrite',help='Where appropriate, overwrite an existing CAIRIS model with this model',default=1)
   parser.add_argument('--image_dir',dest='imageDir',help='Where appropriate, directory for model images (overwrites default_image_dir value in cairis.cnf)')
   args = parser.parse_args() 
@@ -114,7 +114,7 @@ def file_import(importFile,mFormat,overwriteFlag,session_id = None):
   if overwriteFlag == None:
     overwriteFlag = 1
 
-  from cairis.mio.ModelImport import importSecurityPatternsFile, importAttackPattern,importTVTypeFile,importDirectoryFile,importRequirementsFile, importRiskAnalysisFile, importUsabilityFile, importAssociationsFile, importProjectFile, importDomainValuesFile, importComponentViewFile, importSynopsesFile,importProcessesFile,importAssetsFile,importLocationsFile,importModelFile,importMisusabilityFile,importDataflowsFile
+  from cairis.mio.ModelImport import importSecurityPatternsFile, importAttackPattern,importTVTypeFile,importDirectoryFile,importRequirementsFile, importRiskAnalysisFile, importUsabilityFile, importAssociationsFile, importProjectFile, importDomainValuesFile, importComponentViewFile, importSynopsesFile,importProcessesFile,importAssetsFile,importLocationsFile,importModelFile,importMisusabilityFile,importDataflowsFile,importStoriesFile
 
   try:
     ET.fromstring(open(importFile).read())
@@ -156,6 +156,8 @@ def file_import(importFile,mFormat,overwriteFlag,session_id = None):
     msgStr += importLocationsFile(importFile,session_id)
   elif (mFormat == 'dataflows' or mFormat == 'Dataflows'):
     msgStr += importDataflowsFile(importFile,session_id)
+  elif (mFormat == 'stories' or mFormat == 'Stories'):
+    msgStr += importStoriesFile(importFile,session_id)
   elif (mFormat == 'all' or mFormat == 'Model' or mFormat == 'Model file (.xml)'):
     msgStr += importModelFile(importFile,int(overwriteFlag),session_id)
   else:

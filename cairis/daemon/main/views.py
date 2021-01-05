@@ -474,6 +474,10 @@ api.add_resource(ObjectController.ObjectsAPI, '/api/user_goals',endpoint='user_g
 api.add_resource(ObjectController.ObjectByNameAPI, '/api/user_goals/name/<path:name>',endpoint='usergoal',resource_class_kwargs={'dao' : 'UserGoalDAO'})
 api.add_resource(ObjectController.ModelByTwoParametersAPI, '/api/user_goals/model/environment/<path:p1>/filter_name/<path:p2>',endpoint='usergoalmodel',resource_class_kwargs={'dao' : 'UserGoalDAO','get_method' : 'get_user_goal_model','renderer' : 'dot'})
 
+# User story routes
+api.add_resource(ObjectController.ObjectsAPI, '/api/userstories',endpoint='userstories',resource_class_kwargs={'dao': 'UserStoryDAO'})
+api.add_resource(ObjectController.ObjectByNameAPI, '/api/userstories/name/<path:name>',endpoint='userstory',resource_class_kwargs={'dao' : 'UserStoryDAO'})
+
 # Validation route
 api.add_resource(ObjectController.ObjectsByMethodAndParameterAPI, '/api/validation/environment/<path:parameter_string>',endpoint='environmentvalidation',resource_class_kwargs={'dao' : 'ValidationDAO','get_method' : 'model_validation'})
 

@@ -167,5 +167,12 @@
     "theOriginator" : 4000,
     "theFitCriterion" : 4000,
     "theSupportingMaterial" : 4000
+  },
+  "UserStory" : {
+    "theName" : 200,
+    "theAuthor" : 200,
+    "theRole" : 255,
+    "theDescription" : 2000,
+    "theUserGoal" : 1000 
   }
 }

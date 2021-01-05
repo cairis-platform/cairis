@@ -75,6 +75,7 @@ from cairis.core.Location import Location
 from cairis.core.Locations import Locations
 from cairis.core.WeaknessTarget import WeaknessTarget
 from cairis.core.DataFlow import DataFlow
+from cairis.core.UserStory import UserStory
 from cairis.tools.PseudoClasses import EnvironmentTensionModel, SecurityAttribute, ValuedRole, RiskRating, CountermeasureTarget,PersonaTaskCharacteristics, StepAttributes, CharacteristicReference,ObjectDependency,CharacteristicReferenceSynopsis,CharacteristicReferenceContribution
 
 __author__ = 'Robin Quetin, Shamal Faily'
@@ -1288,6 +1289,20 @@ class ThreatModelModel(object):
     'theProcesses': fields.List(fields.Nested(ThreatModelElementModel.resource_fields)),
     'theDatastores': fields.List(fields.Nested(ThreatModelElementModel.resource_fields)),
     'theDataflows': fields.List(fields.Nested(ThreatModelElementModel.resource_fields))
+  }
+  required = list(resource_fields.keys())
+  required.remove(obj_id_field)
+
+class UserStoryModel(object):
+  resource_fields = {
+    obj_id_field: fields.String,
+    "theName": fields.String,
+    "theAuthor": fields.String,
+    "theRole": fields.String,
+    "theDescription": fields.String,
+    "theUserGoal": fields.String,
+    "theAcceptanceCriteria": fields.List(fields.String),
+    "theTags": fields.List(fields.String)
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)

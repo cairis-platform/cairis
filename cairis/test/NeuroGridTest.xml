@@ -2879,4 +2879,21 @@ Matt is also the designated NeuroGrid Certificate Authority and, as such, is oft
 </dependency>
 </associations>
 
+<synopses>
+  <characteristic_synopsis characteristic="Managers delegate security decisions" synopsis="Security delegated" dimension="softgoal" actor_type="persona" actor="Claire" satisfaction="None" />
+  <reference_synopsis reference="Principles and ethics committee responsible for approval." synopsis="Committee approved" dimension="softgoal" actor_type="persona" actor="Claire" satisfaction="None" />
+  <reference_contribution source="Security delegated" destination="Committee approved" means_end="means" contribution="SomePositive" />
+</synopses>
+
+<stories>
+  <userstory name="Paperwork" author="SF" role="Researcher">
+    <description>Submit ethics approval</description>
+    <user_goal>Committee approved</user_goal>
+    <acceptance_criteria>Paper uploaded</acceptance_criteria>
+    <acceptance_criteria>Paperwork uploaded</acceptance_criteria>
+    <acceptance_criteria>Approval received</acceptance_criteria>
+    <tag name="ethics" />
+  </userstory>
+</stories>
+
 </cairis_model>

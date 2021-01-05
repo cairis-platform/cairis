@@ -311,7 +311,8 @@ def extractModel(session_id = None,ignoreValidityCheck = 0):
   xmlBuf+= b.get_dbproxy(session_id).synopsesToXml(0)[0] + '\n\n'
   xmlBuf+= b.get_dbproxy(session_id).misusabilityToXml(0)[0] + '\n\n'
   xmlBuf+= b.get_dbproxy(session_id).dataflowsToXml(0)[0] + '\n\n'
-  xmlBuf+= b.get_dbproxy(session_id).locationsToXml()[0] + '\n\n</cairis_model>'
+  xmlBuf+= b.get_dbproxy(session_id).locationsToXml()[0] + '\n\n'
+  xmlBuf+= b.get_dbproxy(session_id).storiesToXml(0)[0] + '\n\n</cairis_model>'
   return xmlBuf
 
 def exportModel(outFile = None,session_id = None, ignoreValidityCheck = 0):

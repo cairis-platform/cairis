@@ -64,6 +64,9 @@ DROP VIEW IF EXISTS goal_associations;
 DROP VIEW IF EXISTS riskModel_tagged;
 DROP VIEW IF EXISTS conceptMapModel_all;
 
+DROP TABLE IF EXISTS userstory_tag;
+DROP TABLE IF EXISTS userstory_acceptance_criteria;
+DROP TABLE IF EXISTS userstory;
 DROP TABLE IF EXISTS task_goal_contribution;
 DROP TABLE IF EXISTS trust_boundary_usecase;
 DROP TABLE IF EXISTS trust_boundary_asset;
@@ -3521,6 +3524,33 @@ CREATE TABLE document_reference_obstacle (
   FOREIGN KEY(document_reference_id) REFERENCES document_reference(id),
   FOREIGN KEY(obstacle_id) REFERENCES obstacle(id)
 ) ENGINE=INNODB; 
+
+CREATE TABLE userstory (
+  id INT NOT NULL,
+  name VARCHAR(200) NOT NULL,
+  author VARCHAR(200) NOT NULL,
+  role_id INT NOT NULL,
+  description VARCHAR(2000) NOT NULL,
+  usergoal_id INT NOT NULL,
+  PRIMARY KEY(id),
+  FOREIGN KEY(role_id) REFERENCES role(id)
+) ENGINE=INNODB;
+
+CREATE TABLE userstory_acceptance_criteria (
+  id INT NOT NULL,
+  userstory_id INT NOT NULL,
+  criteria VARCHAR(2000) NOT NULL,
+  PRIMARY KEY(id),
+  FOREIGN KEY(userstory_id) REFERENCES userstory(id)
+) ENGINE=INNODB;
+
+CREATE TABLE userstory_tag (
+  userstory_id INT NOT NULL,
+  tag_id INT NOT NULL,
+  PRIMARY KEY(userstory_id,tag_id),
+  FOREIGN KEY(userstory_id) REFERENCES userstory(id), 
+  FOREIGN KEY(tag_id) REFERENCES tag(id)
+) ENGINE=INNODB;
 
 delimiter //
 

@@ -29,6 +29,7 @@ from .AssociationsContentHandler import AssociationsContentHandler
 from .CairisContentHandler import CairisContentHandler
 from .ArchitecturalPatternContentHandler import ArchitecturalPatternContentHandler
 from .SynopsesContentHandler import SynopsesContentHandler
+from .StoriesContentHandler import StoriesContentHandler
 from .TemplateAssetsContentHandler import TemplateAssetsContentHandler
 from .ProcessesContentHandler import ProcessesContentHandler
 from .LocationsContentHandler import LocationsContentHandler
@@ -589,6 +590,36 @@ def importSynopses(charSyns,refSyns,stepSyns,refConts,ucConts,taskConts,session_
   msgStr = 'Imported ' + str(len(charSyns)) + ' characteristic synopses, ' + str(len(refSyns)) + ' reference synopses, ' + str(len(stepSyns)) + ' step synopses, ' + str(len(refConts)) + ' reference contributions, ' + str(len(ucConts)) + ' use case contributions, and ' + str(len(taskConts)) + ' task contrbutions.'
   return msgStr
 
+def importStoriesFile(importFile,session_id = None):
+  try:
+    parser = xml.sax.make_parser()
+    handler = StoriesContentHandler(session_id = session_id)
+    parser.setContentHandler(handler)
+    parser.setEntityResolver(handler)
+    parser.parse(importFile)
+    uss = handler.userStories()
+    return importStories(uss,session_id = session_id)
+  except xml.sax.SAXException as e:
+    raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
+
+def importStories(userStories,session_id):
+  b = Borg()
+  db_proxy = b.get_dbproxy(session_id)
+
+  usCount = 0
+  for userStory in userStories:
+    objtId = db_proxy.existingObject(userStory.name(),'userstory')
+    if objtId == -1:
+      db_proxy.addUserStory(userStory)
+    else:
+      userStory.theId = objtId
+      db_proxy.updateUserStory(userStory)
+    usCount += 1
+
+  msgStr = 'Imported ' + str(usCount) + ' user stories.'
+  return msgStr
+
+
 def importDomainValuesFile(importFile,session_id = None):
   try:
     parser = xml.sax.make_parser()
@@ -815,7 +846,8 @@ def importModelFile(importFile,isOverwrite = 1,session_id = None):
     modelTxt += importSynopsesFile(importFile,session_id) + ' '
     modelTxt += importMisusabilityFile(importFile,session_id) + ' '
     modelTxt += importDataflowsFile(importFile,session_id) + ' '
-    modelTxt += importLocationsFile(importFile,session_id)
+    modelTxt += importLocationsFile(importFile,session_id) + ' '
+    modelTxt += importStoriesFile(importFile,session_id)
     return modelTxt
   except xml.sax.SAXException as e:
     raise ARMException("Error parsing" + importFile + ": " + e.getMessage())

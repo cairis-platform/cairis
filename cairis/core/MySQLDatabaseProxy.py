@@ -108,6 +108,7 @@ from .TrustBoundary import TrustBoundary
 from .ValidationResult import ValidationResult
 from .GoalContribution import GoalContribution
 from .TaskContribution import TaskContribution
+from .UserStory import UserStory
 from cairis.tools.PseudoClasses import RiskRating
 import string
 import os
@@ -567,6 +568,7 @@ class MySQLDatabaseProxy:
     elif (dimensionTable == 'persona'): objts = self.getPersonas(constraintId)
     elif (dimensionTable == 'task'): objts = self.getTasks(constraintId)
     elif (dimensionTable == 'usecase'): objts = self.getUseCases(constraintId)
+    elif (dimensionTable == 'userstory'): objts = self.getUserStories(constraintId)
     elif (dimensionTable == 'misusecase'): objts = self.getMisuseCases(constraintId)
     elif (dimensionTable == 'requirement'): return self.getRequirement(constraintName)
     elif (dimensionTable == 'environment'): objts = self.getEnvironments(constraintId)
@@ -5006,3 +5008,57 @@ class MySQLDatabaseProxy:
 
   def validateForExport(self):
     return self.responseList('call invalidObjectNames()',{},'MySQL error getting invalid object names')[0]
+
+  def addUserStory(self,parameters):
+    parameters.validate()
+    usName = parameters.name()
+    usAuth = parameters.author()
+    roleName = parameters.role()
+    usDesc = parameters.description()
+    ugName = parameters.userGoal()
+    tags = parameters.tags()
+    usId = self.newId()
+    self.updateDatabase('call addUserStory(:id,:name,:auth,:role,:desc,:ug)',{'id':usId,'name':usName,'auth':usAuth,'role':roleName,'desc':usDesc,'ug':ugName},'MySQL error adding user story')
+    self.addTags(usName,'userstory',tags)
+
+    for ac in parameters.acceptanceCriteria():
+      self.addUserStoryAcceptanceCriteria(usId,ac)
+    return usId
+
+  def addUserStoryAcceptanceCriteria(self,usId,usAc):
+    self.updateDatabase('call addUserStoryAcceptanceCriteria(:usId,:usAc)',{'usId':usId,'usAc':usAc,},'MySQL error adding acceptance criteria to user story')
+
+  
+  def updateUserStory(self,parameters):
+    parameters.validate()
+    usId = parameters.id()
+    usName = parameters.name()
+    usAuth = parameters.author()
+    roleName = parameters.role()
+    usDesc = parameters.description()
+    ugName = parameters.userGoal()
+    tags = parameters.tags()
+    session = self.updateDatabase('call deleteUserStoryComponents(:us)',{'us':usId},'MySQL error deleting user story components',None,False)
+    self.updateDatabase('call updateUserStory(:id,:name,:auth,:role,:desc,:ug)',{'id':usId,'name':usName,'auth':usAuth,'role':roleName,'desc':usDesc,'ug':ugName},'MySQL error adding user story',session)
+    self.addTags(usName,'userstory',tags)
+
+    for ac in parameters.acceptanceCriteria():
+      self.addUserStoryAcceptanceCriteria(usId,ac)
+
+  def deleteUserStory(self,usId):
+    self.deleteObject(usId,'userstory')
+  
+  def getUserStories(self,constraintId = -1):
+    usRows = self.responseList('call getUserStories(:id)',{'id':constraintId},'MySQL error getting user stories')
+    uss = []
+    for usId,usName,usAuth,roleName,usDesc,ugName in usRows:
+      tags = self.getTags(usName,'userstory')
+      ac = self.userStoryAcceptanceCriteria(usName)
+      uss.append(UserStory(usId,usName,usAuth,roleName,usDesc,ugName,ac,tags))
+    return uss
+
+  def userStoryAcceptanceCriteria(self,usName):
+    return self.responseList('call userStoryAcceptanceCriteria(:usName)',{'usName':usName},'MySQL error getting user story acceptance criteria')
+
+  def storiesToXml(self,includeHeader=True):
+    return self.responseList('call storiesToXml(:head)',{'head' : includeHeader},'MySQL error exporting stories to XML')[0]

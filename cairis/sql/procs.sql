@@ -1039,6 +1039,14 @@ drop procedure if exists reservedCharacterCheck;
 drop procedure if exists unconnected_vulnerabilityNames;
 drop procedure if exists unconnected_threatNames;
 drop procedure if exists information_assetNames;
+drop procedure if exists addUserStory;
+drop procedure if exists updateUserStory;
+drop procedure if exists delete_userstory;
+drop procedure if exists deleteUserStoryComponents;
+drop procedure if exists getUserStories;
+drop procedure if exists userStoryAcceptanceCriteria;
+drop procedure if exists addUserStoryAcceptanceCriteria;
+drop procedure if exists storiesToXml;
 
 
 delimiter //
@@ -30933,6 +30941,8 @@ begin
 
   call deleteUserGoalComponents(ugId);
 
+  delete from userstory where usergoal_id = ugId;
+
   select count(characteristic_id) into pcsCount from persona_characteristic_synopsis where characteristic_id = ugId;
 
   if pcsCount > 0
@@ -31808,6 +31818,158 @@ begin
   declare environmentId int;
   select id into environmentId from environment where name = environmentName limit 1;
   select a.name from asset a, asset_type at, environment_asset ea where ea.environment_id = environmentId and ea.asset_id = a.id and a.asset_type_id = at.id and at.name = 'Information' order by 1;
+end
+//
+
+create procedure addUserStory(in usId int, in usName text, in usAuthor text, in roleName text, in usDesc text, in ugName text)
+begin
+  declare roleId int;
+  declare ugId int;
+
+  select id into roleId from role where name = roleName limit 1;
+
+  select characteristic_id into ugId from persona_characteristic_synopsis where synopsis = ugName;
+  if ugId is null
+  then
+    select id into ugId from document_reference_synopsis where synopsis = ugName;
+  end if; 
+
+  insert into userstory(id,name,author,role_id,description,usergoal_id) values (usId,usName,usAuthor,roleId,usDesc,ugId);
+end
+//
+
+
+create procedure updateUserStory(in usId int, in usName text, in usAuthor text, in roleName text, in usDesc text, in ugName text)
+begin
+  declare roleId int;
+  declare ugId int;
+
+  select id into roleId from role where name = roleName limit 1;
+
+  select characteristic_id into ugId from persona_characteristic_synopsis where synopsis = ugName;
+  if ugId is null
+  then
+    select id into ugId from document_reference_synopsis where synopsis = ugName;
+  end if; 
+
+  update userstory set name = usName, author = usAuthor, role_id = roleId, description = usDesc, usergoal_id = ugId where id = usId;
+end
+//
+
+create procedure delete_userstory(in usId int)
+begin
+  call deleteUserStoryComponents(usId);
+  delete from userstory_tag where userstory_id = usId;
+  delete from userstory where id = usId;
+end
+//
+
+create procedure deleteUserStoryComponents(in usId int)
+begin
+  delete from userstory_acceptance_criteria where userstory_id = usId;
+end
+//
+
+create procedure getUserStories(in constraintId int)
+begin
+  if constraintId = -1
+  then
+    select us.id, us.name, us.author, r.name, us.description, pcs.synopsis from userstory us, role r, persona_characteristic_synopsis pcs where us.role_id = r.id and us.usergoal_id = pcs.characteristic_id
+    union
+    select us.id, us.name, us.author, r.name, us.description, drs.synopsis from userstory us, role r, document_reference_synopsis drs where us.role_id = r.id and us.usergoal_id = drs.id order by 2;
+  else
+    select us.id, us.name, us.author, r.name, us.description, pcs.synopsis from userstory us, role r, persona_characteristic_synopsis pcs where us.id = constraintId and us.role_id = r.id and us.usergoal_id = pcs.characteristic_id
+    union
+    select us.id, us.name, us.author, r.name, us.description, drs.synopsis from userstory us, role r, document_reference_synopsis drs where us.id = constraintId and us.role_id = r.id and us.usergoal_id = drs.id order by 2;
+  end if;
+
+end
+//
+
+create procedure userStoryAcceptanceCriteria(in usName text)
+begin
+  declare usId int;
+  select id into usId from userstory where name = usName limit 1;
+  select criteria from userstory_acceptance_criteria where userstory_id = usId order by id;
+end
+//
+
+create procedure addUserStoryAcceptanceCriteria(in usId int, in usAc text)
+begin
+  declare usacId int;
+  call newId2(usacId);
+  insert into userstory_acceptance_criteria(id,userstory_id,criteria) values (usacId,usId,usAc);
+end
+//
+
+create procedure storiesToXml(in includeHeader int)
+begin
+  declare usCount int default 0;
+  declare usId int;
+  declare usName varchar(200);
+  declare usAuth varchar(200);
+  declare roleName varchar(255);
+  declare usDesc varchar(2000);
+  declare ugName varchar(1000);
+  declare ugAc varchar(2000);
+  declare tagName varchar(255);
+  declare done int default 0;
+  declare buf LONGTEXT default '<?xml version="1.0"?>\n<!DOCTYPE stories PUBLIC "-//CAIRIS//DTD STORIES 1.0//EN" "http://cairis.org/dtd/stories.dtd">\n\n<stories>\n';
+
+  declare storiesCursor cursor for 
+    select us.id, us.name, us.author, r.name, us.description, pcs.synopsis from userstory us, role r, persona_characteristic_synopsis pcs where us.role_id = r.id and us.usergoal_id = pcs.characteristic_id
+    union
+    select us.id, us.name, us.author, r.name, us.description, drs.synopsis from userstory us, role r, document_reference_synopsis drs where us.role_id = r.id and us.usergoal_id = drs.id order by 2;
+
+  declare acCursor cursor for select uac.criteria from userstory_acceptance_criteria uac where uac.userstory_id = usId order by 1;
+  declare tagCursor cursor for select t.name from userstory_tag ut, tag t where ut.userstory_id = usId and ut.tag_id = t.id order by 1;
+
+  declare continue handler for not found set done = 1;
+
+  if includeHeader = 0
+  then
+    set buf = '<stories>\n';
+  end if;
+
+  open storiesCursor;
+  stories_loop: loop
+    fetch storiesCursor into usId,usName,usAuth,roleName,usDesc,ugName;
+    if done = 1
+    then
+      leave stories_loop;
+    end if;
+    set buf = concat(buf,'  <userstory name=\"',usName,'\"  author=\"',usAuth,'\" role=\"',roleName,'\">\n    <description>',usDesc,'</description>\n    <user_goal>',ugName,'</user_goal>\n');
+    set usCount = usCount + 1;
+
+    open acCursor;
+    ac_loop: loop
+      fetch acCursor into ugAc;
+      if done = 1
+      then
+        leave ac_loop;
+      end if;
+      set buf = concat(buf,'    <acceptance_criteria>',ugAc,'</acceptance_criteria>\n');
+    end loop ac_loop;
+    close acCursor;
+   
+    set done = 0; 
+
+    open tagCursor;
+    tag_loop: loop
+      fetch tagCursor into tagName;
+      if done = 1
+      then
+        leave tag_loop;
+      end if;
+      set buf = concat(buf,'    <tag name=\"',tagName,'\" />\n');
+    end loop tag_loop;
+    close tagCursor;
+    
+    set buf = concat(buf,'  </userstory>\n');
+  end loop stories_loop;
+  close storiesCursor;
+  set buf = concat(buf,'</stories>');
+  select buf,usCount;
 end
 //
 

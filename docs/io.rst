@@ -35,6 +35,7 @@ Assets                                        template_assets.dtd             te
 Processes                                     processes.dtd                   CSP process elements (used by desktop application only)
 Locations                                     locations.dtd                   locations
 Dataflows                                     dataflow.dtd                    dataflows and trust boundaries 
+Stories                                       stories.dtd                     User stories
 Attack Tree (Dot)                             N/A                             Graphviz (Dot) representation of an attack tree
 diagrams.net (Data Flow Diagram)              N/A                             diagrams.net drawn DFD 
 diagrams.net (Asset Model)                    N/A                             diagrams.net drawn asset model

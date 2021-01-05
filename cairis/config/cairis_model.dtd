@@ -19,7 +19,7 @@
 
 <!-- DTD for CAIRIS XML model file -->
 
-<!ELEMENT cairis_model (tvtypes?,domainvalues?,cairis?,riskanalysis?,usability?,goals?,associations?,synopses?,misusability?,dataflows?,locations?)>
+<!ELEMENT cairis_model (tvtypes?,domainvalues?,cairis?,riskanalysis?,usability?,goals?,associations?,synopses?,misusability?,dataflows?,locations?,stories?)>
 
 <!ELEMENT tvtypes (vulnerability_type+,threat_type+)>
 <!ELEMENT vulnerability_type (description)>
@@ -482,3 +482,11 @@
 
 <!ELEMENT link EMPTY>
 <!ATTLIST link name CDATA #REQUIRED>
+
+<!ELEMENT stories (userstory*)>
+<!ELEMENT userstory (description,user_goal,acceptance_criteria+)>
+<!ELEMENT userstory name CDATA #REQUIRED)
+<!ELEMENT userstory author CDATA #REQUIRED)
+<!ELEMENT userstory role CDATA #REQUIRED)
+<!ELEMENT user_goal (#PCDATA)>
+<!ELEMENT acceptance_criteria (#PCDATA)>
