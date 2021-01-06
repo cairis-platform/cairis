@@ -71,6 +71,18 @@ class UserGoalAPITests(CairisDaemonTestCase):
     ug = ugs[0]
     self.logger.info('[%s] First user goal: %s\n', method, ug['theSynopsis'])
 
+  def test_get_role_usergoals(self):
+    method = 'test_get_role_usergoals'
+    url = '/api/user_goals/role/User?session_id=test'
+    self.logger.info('[%s] URL: %s', method, url)
+    rv = self.app.get(url)
+    responseData = rv.data.decode('utf-8')
+    ugs = jsonpickle.decode(responseData)
+    self.assertIsNotNone(ugs, 'No results after deserialization')
+    self.assertIsInstance(ugs, list, 'The result is not a list as expected')
+    self.assertGreater(len(ugs), 0, 'No user goals in the list')
+    self.logger.info('[%s] User goals found: %d', method, len(ugs))
+
   def test_get_by_name(self):
     method = 'test_get_by_name'
     url = '/api/user_goals/name/%s?session_id=test' % quote(self.existing_ug_name)

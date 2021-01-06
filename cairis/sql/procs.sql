@@ -1047,6 +1047,8 @@ drop procedure if exists getUserStories;
 drop procedure if exists userStoryAcceptanceCriteria;
 drop procedure if exists addUserStoryAcceptanceCriteria;
 drop procedure if exists storiesToXml;
+drop procedure if exists roleUserGoals;
+drop procedure if exists synopsisDependents;
 
 
 delimiter //
@@ -5180,6 +5182,7 @@ begin
   drop table if exists temp_misusecase;
   drop table if exists temp_persona;
   drop table if exists temp_component_view;
+  drop table if exists temp_userstory;
   create temporary table temp_asset (id INT NOT NULL,name VARCHAR(200) NOT NULL);
   create temporary table temp_attacker (id INT NOT NULL,name VARCHAR(200) NOT NULL);
   create temporary table temp_domainproperty (id INT NOT NULL,name VARCHAR(200) NOT NULL);
@@ -5197,6 +5200,7 @@ begin
   create temporary table temp_misusecase (id INT NOT NULL,name VARCHAR(200) NOT NULL);
   create temporary table temp_persona (id INT NOT NULL,name VARCHAR(200) NOT NULL);
   create temporary table temp_component_view (id INT NOT NULL,name VARCHAR(255) NOT NULL);
+  create temporary table temp_userstory (id INT NOT NULL,name VARCHAR(255) NOT NULL);
 
   if (dimName = 'attacker')
   then
@@ -5293,6 +5297,11 @@ begin
     call componentViewDependents(dimId);
   end if;
 
+  if (dimName = 'synopsis')
+  then
+    call synopsisDependents(dimId);
+  end if;
+
   select distinct 'countermeasure',id,name from temp_countermeasure
   union
   select distinct 'goal',id,name from temp_goal
@@ -5325,7 +5334,9 @@ begin
   union
   select distinct 'role',id,name from temp_role
   union
-  select distinct 'architectural_pattern',id,name from temp_component_view;
+  select distinct 'architectural_pattern',id,name from temp_component_view
+  union
+  select distinct 'userstory',id,name from temp_userstory;
 end
 //
 
@@ -8553,7 +8564,7 @@ begin
   declare objtId int;
   declare dimSql varchar(4000);
 
-  if dimTable != 'requirement' and dimTable != 'usecase' and dimTable != 'task'
+  if dimTable != 'requirement' and dimTable != 'usecase' and dimTable != 'task' and dimTable != 'user_goal'
   then
     set dimSql = concat('select id from ',dimTable,' where ');
 
@@ -8587,6 +8598,14 @@ begin
     then
       select id into objtId from task where short_code = dimText;
     end if;  
+    select objtId;
+  elseif dimTable = 'user_goal'
+  then
+    select id into objtId from document_reference_synopsis where synopsis = dimText;
+    if objtId is null
+    then
+      select characteristic_id into objtId from persona_characteristic_synopsis where synopsis = dimText;
+    end if;
     select objtId;
   else
     select o.id into objtId from requirement o where o.name = dimText and o.version = (select max(i.version) from requirement i where i.id = o.id);
@@ -31970,6 +31989,42 @@ begin
   close storiesCursor;
   set buf = concat(buf,'</stories>');
   select buf,usCount;
+end
+//
+
+create procedure roleUserGoals(in roleName text)
+begin
+
+  declare roleId int default -1;
+
+  select id into roleId from role where name = roleName limit 1;
+
+  select distinct drs.synopsis from document_reference_synopsis drs, persona_role pr where drs.actor_id = pr.persona_id and pr.role_id = roleId
+  union
+  select distinct pcs.synopsis from persona_characteristic_synopsis pcs, persona_characteristic pc, persona_role pr where pcs.characteristic_id = pc.id and pc.persona_id = pr.persona_id and pr.role_id = roleId order by 1;
+
+end
+//
+
+create procedure synopsisDependents(in ugId int)
+begin
+  declare usId int;
+  declare usName varchar(200);
+  declare done int default 0;
+
+  declare usCursor cursor for select id,name from userstory where usergoal_id = ugId order by 2;
+  declare continue handler for not found set done = 1;
+
+  open usCursor;
+  us_loop: loop
+    fetch usCursor into usId, usName;
+    if done = 1
+    then
+      leave us_loop;
+    end if;
+    insert into temp_userstory values(usId,usName);
+  end loop us_loop;
+  close usCursor;
 end
 //
 

@@ -5062,3 +5062,7 @@ class MySQLDatabaseProxy:
 
   def storiesToXml(self,includeHeader=True):
     return self.responseList('call storiesToXml(:head)',{'head' : includeHeader},'MySQL error exporting stories to XML')[0]
+
+  def roleUserGoals(self,roleName):
+    return self.responseList('call roleUserGoals(:name)',{'name':roleName},'MySQL error getting user goals for role ' + roleName)
+

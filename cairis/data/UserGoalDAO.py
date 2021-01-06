@@ -126,3 +126,13 @@ class UserGoalDAO(CairisDAO):
     except ARMException as ex:
       self.close()
       raise ARMHTTPError(ex)
+
+  def role_user_goals(self,role_name, pathValues = []):
+    try:
+      return self.db_proxy.roleUserGoals(role_name)
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+    except ARMException as ex:
+      self.close()
+      raise ARMHTTPError(ex)

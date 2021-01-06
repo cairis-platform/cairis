@@ -53,6 +53,8 @@ class ObjectDependencyDAO(CairisDAO):
     try:
       if (dimension_name == 'architectural_pattern'):
         dimension_name = 'component_view'
+      elif (dimension_name == 'user_goal'):
+        dimension_name = 'synopsis'
       objtId = self.db_proxy.getDimensionId(object_name,dimension_name)
       realDeps = self.db_proxy.reportDependencies(dimension_name,objtId)
       self.db_proxy.deleteDependencies(realDeps)
