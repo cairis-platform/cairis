@@ -14198,7 +14198,7 @@ begin
   declare edName varchar(2000);
   declare edVersion varchar(20);
   declare edDate varchar(100);
-  declare edAuthors varchar(200);
+  declare edAuthors varchar(2000);
   declare edDesc varchar(2000);
   declare edCount int default 0;
   declare drName varchar(200);
