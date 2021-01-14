@@ -831,6 +831,8 @@ drop procedure if exists importTemplateAssetIntoEnvironment;
 drop procedure if exists importTemplateAssetIntoComponent;
 drop procedure if exists obstacleProbability;
 drop procedure if exists obstacle_probability;
+drop procedure if exists usecaseLevelofHF;
+drop procedure if exists usecase_LevelofHF;
 drop procedure if exists candidateGoalObstacles;
 drop procedure if exists addPersonaMotive;
 drop procedure if exists addPersonaCapability;
@@ -21403,6 +21405,35 @@ begin
 end
 //
 
+create procedure usecaseLevelofHF(in UsecaseId int,in envId int, out UsecaseAvg float, out workingRationale text)
+begin
+  declare done int default 0;
+  declare leafUsecaseId int;
+  declare leafUsecaseAvg float;
+  declare calcUsecaseAvg float;
+  declare Avg int;
+  declare andAvg float default 0;
+  declare avgCursor cursor for select uc.subUsecase_id from usecase_usecaseassociation uc where uc.usecase_id = UsecaseId and uc.environment_id = envId;
+  declare continue handler for not found set done = 1;
+
+  select count(subUsecase_id) into Avg from usecase_usecaseassociation where usecase_id = UsecaseId and environment_id = envId;
+  if (andAvg > 0)
+  then
+    set done = 0;
+    open avgCursor;
+    avg_loop: loop
+      fetch avgCursor into leafUsecaseId;
+      if done = 1
+      then
+        leave avg_loop;
+      end if;
+      call usecaseLevelofHF(leafUsecaseId,envId,calcUsecaseAvg,workingRationale);
+      set andAvg = andAvg * calcUsecaseAvg;
+    end loop avg_loop;
+    close avgCursor;
+  end if;
+//
+
 create procedure obstacle_probability(in obsId int, in envId int)
 begin
   declare obsProb float;
@@ -21410,6 +21441,16 @@ begin
 
   call obstacleProbability(obsId,envId,obsProb,obsRationale);
   select obsProb,obsRationale;
+end
+//
+
+create procedure usecase_LevelofHF(in UsecaseId int, in envId int)
+begin
+  declare usecaseAvg float;
+  declare usecaseRationale varchar(4000) default 'None';
+
+  call usecaseLevelofHF(UsecaseId,envId,usecaseAvg,usecaseRationale);
+  select usecaseAvg,usecaseRationale;
 end
 //
 
