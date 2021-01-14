@@ -85,6 +85,12 @@ def obstacleColourCode(valueId):
   elif (valueId <= 0.9): return '8'
   else: return '9'
 
+def usecaseColourCode(valueId):
+  if (valueId == 0 or valueId == 1): return 'aliceblue'
+  elif (valueId == 2): return 'lightblue'
+  elif (valueId == 3): return 'royalblue'
+  else: return 'red'
+
 def riskTextColourCode(valueId):
   if (valueId >= 7): return 'white'
   else: return 'black'
