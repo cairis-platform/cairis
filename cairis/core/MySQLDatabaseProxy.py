@@ -1893,6 +1893,10 @@ class MySQLDatabaseProxy:
   def taskModelElements(self,envName):
     return self.responseList('call taskModelElements(:env)',{'env':envName},'MySQL error getting task model elements')
 
+  def UsecaseModelElements(self,envName):
+    return self.responseList('call UsecaseModelElements(:env)',{'env':envName},'MySQL error getting usecase model elements')
+
+
   def classModelElements(self,envName,hideConcerns = False):
     callTxt = ''
     argDict = {'env':envName}
@@ -2326,6 +2330,12 @@ class MySQLDatabaseProxy:
     obsAttr = row[0]
     obsRationale = row[1]
     return obsAttr,obsRationale
+
+  def usecaseLevelofHF(self,UsecaseId,environmentId):
+    row = self.responseList('call usecase_LevelofHF(:uId,:eId)',{'uId':UsecaseId,'eId':environmentId},'MySQL error getting usecase Level of HF')[0]
+    usecaseAttr = row[0]
+    usecaseRationale = row[1]
+    return usecaseAttr,usecaseRationale
 
   def obstacleCategory(self,obsId,environmentId):
     return self.responseList('select obstacle_category(:oId,:eId)',{'oId':obsId,'eId':environmentId},'MySQL error getting obstacle category')[0]
