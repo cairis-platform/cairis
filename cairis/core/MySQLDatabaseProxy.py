@@ -2331,11 +2331,15 @@ class MySQLDatabaseProxy:
     obsRationale = row[1]
     return obsAttr,obsRationale
 
-  def usecaseLevelofHF(self,UsecaseId,environmentId):
-    row = self.responseList('call usecase_LevelofHF(:uId,:eId)',{'uId':UsecaseId,'eId':environmentId},'MySQL error getting usecase Level of HF')[0]
+  def usecaseDefinition(self,UsecaseId,environmentId):
+    UsecaseDef = self.responseList('select usecase_definition(:uId,:eId)',{'uId':UsecaseId,'eId':environmentId},'MySQL error getting usecase definition')[0]
+    UsecaseAvg = self.usecaseAverage(UsecaseId,environmentId)
+    return (UsecaseDef,UsecaseAvg)
+
+  def usecaseAverage(self,UsecaseId,environmentId):
+    row = self.responseList('call usecase_average(:uId,:eId)',{'uId':UsecaseId,'eId':environmentId},'MySQL error getting usecase average')[0]
     usecaseAttr = row[0]
-    usecaseRationale = row[1]
-    return usecaseAttr,usecaseRationale
+    return usecaseAttr
 
   def obstacleCategory(self,obsId,environmentId):
     return self.responseList('select obstacle_category(:oId,:eId)',{'oId':obsId,'eId':environmentId},'MySQL error getting obstacle category')[0]
@@ -2378,6 +2382,9 @@ class MySQLDatabaseProxy:
 
   def addObstacleDefinition(self,obsId,environmentName,obsDef,obsProb,obsProbRat):
     self.updateDatabase('call addObstacleDefinition(:id,:env,:def,:prob,:probRat)',{'id':obsId,'env':environmentName,'def':obsDef,'prob':obsProb,'probRat':obsProbRat},'MySQL error adding obstacle definition')
+
+  def addUsecaseDefinition(self,UsecaseId,environmentName,UsecaseDef,UsecaseAvg):
+    self.updateDatabase('call addUsecaseDefinition(:id,:env,:def,:average)',{'id':UsecaseId,'env':environmentName,'def':UsecaseDef,'average':UsecaseAvg},'MySQL error adding usecase definition')
 
   def addObstacleCategory(self,obsId,environmentName,obsCat):
     self.updateDatabase('call addObstacleCategory(:obs,:env,:cat)',{'obs':obsId,'env':environmentName,'cat':obsCat},'MySQL error adding obstacle category')
@@ -3081,6 +3088,7 @@ class MySQLDatabaseProxy:
       self.addUseCaseConditions(ucId,environmentName,cProperties.preconditions(),cProperties.postconditions())
       self.addUseCaseSteps(ucId,environmentName,cProperties.steps())
       self.addCognitiveAttributes(ucId,environmentName,cProperties.attributes(),cProperties.rationale())
+      self.addUsecaseDefinition(ucId,environmentName,cProperties.definition(),cProperties.average())
     return ucId
 
     
@@ -3128,6 +3136,7 @@ class MySQLDatabaseProxy:
       self.addUseCaseConditions(ucId,environmentName,cProperties.preconditions(),cProperties.postconditions())
       self.addUseCaseSteps(ucId,environmentName,cProperties.steps())
       self.addCognitiveAttributes(ucId,environmentName,cProperties.attributes(),cProperties.rationale())
+      self.addUsecaseDefinition(ucId,environmentName,cProperties.definition(),cProperties.average())
 
   def deleteUseCase(self,ucId):
     self.deleteObject(ucId,'usecase')
