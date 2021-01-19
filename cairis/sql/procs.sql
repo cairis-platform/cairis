@@ -21411,13 +21411,13 @@ begin
   declare leafUsecaseId int;
   declare leafUsecaseAvg float;
   declare calcUsecaseAvg float;
-  declare Avg int;
-  declare andAvg float default 0;
+  declare countAvg int;
+  declare attrAvg float default 0;
   declare avgCursor cursor for select uc.subUsecase_id from usecase_usecaseassociation uc where uc.usecase_id = UsecaseId and uc.environment_id = envId;
   declare continue handler for not found set done = 1;
 
-  select count(subUsecase_id) into Avg from usecase_usecaseassociation where usecase_id = UsecaseId and environment_id = envId;
-  if (andAvg > 0)
+  select count(subUsecase_id) into countAvg from usecase_usecaseassociation where usecase_id = UsecaseId and environment_id = envId;
+  if (attrAvg > 0)
   then
     set done = 0;
     open avgCursor;
@@ -21428,7 +21428,7 @@ begin
         leave avg_loop;
       end if;
       call usecaseLevelofHF(leafUsecaseId,envId,calcUsecaseAvg,workingRationale);
-      set andAvg = andAvg * calcUsecaseAvg;
+      set attrAvg = attrAvg * calcUsecaseAvg;
     end loop avg_loop;
     close avgCursor;
   end if;
