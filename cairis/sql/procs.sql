@@ -366,10 +366,12 @@ drop procedure if exists updateObstacle;
 drop procedure if exists deleteObstacleComponents;
 drop procedure if exists delete_obstacle;
 drop procedure if exists addObstacleDefinition;
+drop procedure if exists addUsecaseDefinition;
 drop procedure if exists addObstacleCategory;
 drop procedure if exists getObstacles;
 drop procedure if exists getObstaclesSummary;
 drop function if exists obstacle_definition;
+drop function if exists usecase_definition;
 drop function if exists obstacle_category;
 drop procedure if exists add_obstacle_environment;
 drop procedure if exists obstacle_environments;
@@ -831,8 +833,8 @@ drop procedure if exists importTemplateAssetIntoEnvironment;
 drop procedure if exists importTemplateAssetIntoComponent;
 drop procedure if exists obstacleProbability;
 drop procedure if exists obstacle_probability;
-drop procedure if exists usecaseLevelofHF;
-drop procedure if exists usecase_LevelofHF;
+drop procedure if exists usecaseaverage;
+drop procedure if exists usecase_average;
 drop procedure if exists candidateGoalObstacles;
 drop procedure if exists addPersonaMotive;
 drop procedure if exists addPersonaCapability;
@@ -8863,6 +8865,14 @@ begin
 end
 //
 
+create procedure addUsecaseDefinition(in UsecaseId int,in environmentName text, in defName text, in UsecaseAvg float)
+begin
+  declare environmentId int;
+  select id into environmentId from environment where name = environmentName limit 1;
+  insert into usecase_definition(usecase_id,environment_id,definition,average) values (UsecaseId,environmentId,defName,UsecaseAvg);
+end
+//
+
 create procedure addObstacleCategory(in obsId int,in environmentName text, in catName text)
 begin
   declare environmentId int;
@@ -8936,6 +8946,59 @@ begin
     set definitionName = workingDefinition; 
   else
     select definition into definitionName from obstacle_definition where obstacle_id = obsId and environment_id = environmentId;
+  end if;
+  return definitionName;
+end
+//
+
+create function usecase_definition(UsecaseId int,environmentId int) 
+returns varchar(1000)
+deterministic 
+begin
+  declare compositeCount int;
+  declare duplicatePolicy varchar(50);
+  declare overridingEnvironmentId int;
+  declare workingDefinition varchar(1000);
+  declare currentEnvironmentId int;
+  declare currentDefinition varchar(1000);
+  declare definitionName varchar(1000);
+  declare currentEnvName varchar(50);
+  declare done int default 0;
+  declare defCursor cursor for select environment_id,definition from usecase_definition where usecase_id = UsecaseId and environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId);
+  declare continue handler for not found set done = 1;
+
+  select count(environment_id) into compositeCount from composite_environment where composite_environment_id = environmentId limit 1;
+  if compositeCount > 0
+  then
+    select dp.name into duplicatePolicy from duplicate_property dp, composite_environment_property ccp where ccp.composite_environment_id = environmentId and ccp.duplicate_property_id = dp.id limit 1;
+    if duplicatePolicy = 'Override'
+    then
+      select overriding_environment_id into overridingEnvironmentId from composite_environment_override where composite_environment_id = environmentId limit 1;
+    end if;
+    set workingDefinition = '';
+
+    open defCursor;
+    def_loop: loop
+      fetch defCursor into currentEnvironmentId, currentDefinition;
+      if done = 1
+      then
+        leave def_loop;
+      end if;
+      if duplicatePolicy = 'Override'
+      then
+        if currentEnvironmentId = overridingEnvironmentId
+        then
+          set workingDefinition = currentDefinition;
+        end if;
+      else
+        select name into currentEnvName from environment where id = currentEnvironmentId;
+        set workingDefinition = concat(workingDefinition,' [' ,currentEnvName,'] ',currentDefinition);
+      end if;
+    end loop def_loop;
+    close defCursor;
+    set definitionName = workingDefinition; 
+  else
+    select definition into definitionName from usecase_definition where usecase_id = UsecaseId and environment_id = environmentId;
   end if;
   return definitionName;
 end
@@ -21405,33 +21468,46 @@ begin
 end
 //
 
-create procedure usecaseLevelofHF(in UsecaseId int,in envId int, out UsecaseAvg float, out workingRationale text)
+create procedure usecaseaverage(in UsecaseId int,in envId int, out workingAverage float)
 begin
   declare done int default 0;
   declare leafUsecaseId int;
   declare leafUsecaseAvg float;
   declare calcUsecaseAvg float;
-  declare countAvg int;
-  declare attrAvg float default 0;
-  declare avgCursor cursor for select uc.subUsecase_id from usecase_usecaseassociation uc where uc.usecase_id = UsecaseId and uc.environment_id = envId;
+  declare andCount int;
+  declare andProb float default 0;
+  declare andCursor cursor for select uc.subUsecase_id from usecase_usecaseassociation uc where uc.usecase_id = UsecaseId and uc.environment_id = envId;
   declare continue handler for not found set done = 1;
 
-  select count(subUsecase_id) into countAvg from usecase_usecaseassociation where usecase_id = UsecaseId and environment_id = envId;
-  if (attrAvg > 0)
+  select count(subUsecase_id) into andCount from usecase_usecaseassociation where usecase_id = UsecaseId and environment_id = envId;
+  if (andCount > 0)
   then
     set done = 0;
-    open avgCursor;
-    avg_loop: loop
-      fetch avgCursor into leafUsecaseId;
+    open andCursor;
+    and_loop: loop
+      fetch andCursor into leafUsecaseId;
       if done = 1
       then
-        leave avg_loop;
+        leave and_loop;
       end if;
-      call usecaseLevelofHF(leafUsecaseId,envId,calcUsecaseAvg,workingRationale);
-      set attrAvg = attrAvg * calcUsecaseAvg;
-    end loop avg_loop;
-    close avgCursor;
+      call usecaseaverage(leafUsecaseId,envId,calcUsecaseAvg);
+      set andProb = andProb * calcUsecaseAvg;
+    end loop and_loop;
+    close andCursor;
   end if;
+  
+  if (andCount = 0)
+  then
+    select average into workingAverage from usecase_definition where usecase_id = UsecaseId and environment_id = envId;
+  else
+    select average into leafUsecaseAvg from usecase_definition where usecase_id = UsecaseId and environment_id = envId;
+    set workingAverage = andProb;
+    if leafUsecaseAvg > workingAverage
+    then
+      set workingAverage = leafUsecaseAvg;
+    end if;
+  end if;
+end
 //
 
 create procedure obstacle_probability(in obsId int, in envId int)
@@ -21444,13 +21520,12 @@ begin
 end
 //
 
-create procedure usecase_LevelofHF(in UsecaseId int, in envId int)
+create procedure usecase_average(in UsecaseId int, in envId int)
 begin
   declare usecaseAvg float;
-  declare usecaseRationale varchar(4000) default 'None';
 
-  call usecaseLevelofHF(UsecaseId,envId,usecaseAvg,usecaseRationale);
-  select usecaseAvg,usecaseRationale;
+  call usecaseaverage(UsecaseId,envId,usecaseAvg);
+  select usecaseAvg;
 end
 //
 

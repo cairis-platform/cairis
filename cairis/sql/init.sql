@@ -230,6 +230,7 @@ DROP TABLE IF EXISTS domainproperty_asset;
 DROP TABLE IF EXISTS environment_obstacle;
 DROP TABLE IF EXISTS obstacle_label;
 DROP TABLE IF EXISTS obstacle_definition;
+DROP TABLE IF EXISTS usecase_definition;
 DROP TABLE IF EXISTS obstacle_category;
 DROP TABLE IF EXISTS obstacle_concern;
 DROP TABLE IF EXISTS requirement_task;
@@ -1436,6 +1437,15 @@ CREATE TABLE obstacle_definition (
   rationale VARCHAR (4000) DEFAULT 'None',
   PRIMARY KEY(obstacle_id,environment_id),
   FOREIGN KEY(obstacle_id) REFERENCES obstacle(id),
+  FOREIGN KEY(environment_id) REFERENCES environment(id)
+) ENGINE=INNODB;
+CREATE TABLE usecase_definition (
+  usecase_id INT NOT NULL,
+  environment_id INT NOT NULL,
+  definition VARCHAR(1000) NOT NULL,
+  average FLOAT DEFAULT 0.0,
+  PRIMARY KEY(usecase_id,environment_id),
+  FOREIGN KEY(usecase_id) REFERENCES usecase(id),
   FOREIGN KEY(environment_id) REFERENCES environment(id)
 ) ENGINE=INNODB;
 CREATE TABLE obstacle_category (
