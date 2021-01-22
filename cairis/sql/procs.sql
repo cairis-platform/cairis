@@ -104,6 +104,7 @@ drop procedure if exists riskAnalysisModel;
 drop procedure if exists riskModel;
 drop procedure if exists goalModel;
 drop procedure if exists obstacleModel;
+drop procedure if exists usecaseModel;
 drop procedure if exists responsibilityModel;
 drop procedure if exists taskModel;
 drop procedure if exists classModel;
@@ -306,6 +307,7 @@ drop procedure if exists concernlessClassModelElements;
 drop procedure if exists classModelElements;
 drop procedure if exists goalModelElements;
 drop procedure if exists obstacleModelElements;
+drop procedure if exists usecaseModelElements;
 drop procedure if exists responsibilityModelElements;
 drop procedure if exists taskModelElements;
 drop function if exists requirementLabel;
@@ -9283,6 +9285,22 @@ begin
 end
 //
 
+create procedure usecaseModelElements(in environmentName text)
+begin
+  declare environmentId int;
+  declare compositeCount int;
+  select id into environmentId from environment where name = environmentName limit 1;
+  select count(*) into compositeCount from composite_environment where composite_environment_id = environmentId;
+
+  if compositeCount <= 0
+  then
+    select 'usecase',u.name from usecase_usecaseassociation uc, usecase u where uc.environment_id = environmentId and uc.usecase_id = u.id
+  else
+    select 'usecase',u.name from usecase_usecaseassociation uc, usecase u where uc.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and uc.usecase_id = u.id
+  end if;
+end
+//
+
 create procedure obstacleModel(in environmentName text)
 begin
   declare environmentId int;
@@ -9351,6 +9369,22 @@ begin
     select -1 id,e.name environment,hg.name goal_name,'requirement' goal_dim,'responsible' ref_type,tg.name subgoal_name,'role' subgoal_dim,'0' alternative_id,'' rationale from requirement_role ga, requirement hg, role tg,environment_requirement er, environment e, obstaclerequirement_goalassociation grga where ga.requirement_id = hg.id and ga.role_id = tg.id and hg.version = (select max(i.version) from requirement i where i.id = hg.id) and hg.id = er.requirement_id and er.environment_id = e.id and grga.subgoal_id = ga.requirement_id and grga.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId)
     union
     select ga.id id,e.name environment,hg.name goal_name,'obstacle' goal_dim,rt.name ref_type,tg.name subgoal_name,'misusecase' subgoal_dim,ga.alternative_id alternative_id,ga.rationale from obstaclemisusecase_goalassociation ga, environment e, obstacle hg, reference_type rt, misusecase tg where ga.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and ga.goal_id = hg.id and ga.ref_type_id = rt.id and ga.subgoal_id = tg.id and ga.environment_id = e.id;
+  end if;
+end
+//
+
+create procedure usecaseModel(in environmentName text)
+begin
+  declare environmentId int;
+  declare compositeCount int;
+  select id into environmentId from environment where name = environmentName limit 1;
+  select count(*) into compositeCount from composite_environment where composite_environment_id = environmentId;
+
+  if compositeCount <= 0
+  then
+    select uc.id id,e.name environment,hc.name usecase_name,'usecase' usecase_dim,rt.name ref_type,tc.name subusecase_name,'usecase' subusecase_dim,uc.alternative_id alternative_id,uc.rationale from usecase_usecaseassociation uc, environment e, usecase hc, reference_type rt, usecase tc where uc.usecase_id = hc.id and uc.ref_type_id = rt.id and uc.subusecase_id = tc.id and uc.environment_id = e.id and uc.environment_id = environmentId
+  else
+    uc.id id,e.name environment,hc.name usecase_name,'usecase' usecase_dim,rt.name ref_type,tc.name subusecase_name,'usecase' subusecase_dim,uc.alternative_id alternative_id,uc.rationale from usecase_usecaseassociation uc, environment e, usecase hc, reference_type rt, usecase tc where uc.usecase_id = hc.id and uc.ref_type_id = rt.id and uc.subusecase_id = tc.id and uc.environment_id = e.id and uc.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId)
   end if;
 end
 //
