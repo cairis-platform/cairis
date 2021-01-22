@@ -48,7 +48,7 @@ class ModelTests(unittest.TestCase):
     b.get_dbproxy().riskObstacleModel('Unauthorised Certificate Access','Psychosis')
     b.get_dbproxy().assumptionPersonaModel('Claire')
     b.get_dbproxy().textualArgumentationModel('Claire','Activities')
-    b.get_dbproxy().UsecaseModel('Psychosis')
+    b.get_dbproxy().usecaseModel('Psychosis')
     
     
     importModelFile(os.environ['CAIRIS_SRC'] + '/../examples/exemplars/ACME_Water/ACME_Water.xml',1,'test')
