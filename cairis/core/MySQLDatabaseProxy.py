@@ -1893,8 +1893,8 @@ class MySQLDatabaseProxy:
   def taskModelElements(self,envName):
     return self.responseList('call taskModelElements(:env)',{'env':envName},'MySQL error getting task model elements')
 
-  def UsecaseModelElements(self,envName):
-    return self.responseList('call UsecaseModelElements(:env)',{'env':envName},'MySQL error getting usecase model elements')
+  def usecaseModelElements(self,envName):
+    return self.responseList('call usecaseModelElements(:env)',{'env':envName},'MySQL error getting usecase model elements')
 
 
   def classModelElements(self,envName,hideConcerns = False):
@@ -2002,8 +2002,9 @@ class MySQLDatabaseProxy:
     else:
       return self.goalTreeAssociations('call obstacleTree(:id1,:id2,:id3,:id4)',goalName,envName,topLevelGoals)
  
-
-
+  def usecaseModel(self,envName,usecaseName = ''):
+      return self.usecaseAssociations('call usecaseModel(:id)',envName)
+    
   def taskModel(self,envName,taskName = '',mcFilter=False):
     if (taskName == ''):
       return self.goalAssociations('call taskModel(:id)',envName)
