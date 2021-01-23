@@ -120,10 +120,10 @@ def dInitialise(withTest = True):
   b.logger = logging.getLogger('cairisd')
   b.configDir = os.path.join(b.cairisRoot,'config')
   b.secretKey = cfgDict['secret_key']
-  b.mailServer = cfgDict['mail_server']
-  b.mailPort = cfgDict['mail_port']
-  b.mailUser = cfgDict['mail_user']
-  b.mailPasswd = cfgDict['mail_passwd']
+  b.mailServer = os.environ.get('MAIL_SERVER', cfgDict['mail_server'])
+  b.mailPort = os.environ.get('MAIL_PORT', cfgDict['mail_port'])
+  b.mailUser = os.environ.get('MAIL_USER', cfgDict['mail_user'])
+  b.mailPasswd = os.environ.get('MAIL_PASSWD', cfgDict['mail_passwd'])
 
   try:
     b.webPort = int(cfgDict['web_port'])
