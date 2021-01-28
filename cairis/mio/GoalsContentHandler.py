@@ -205,6 +205,8 @@ class GoalsContentHandler(ContentHandler,EntityResolver):
     self.theCognitiveAttribute['stress'] = (0,'None')
     self.theCognitiveAttribute['workload'] = (0,'None')
     self.theCognitiveAttribute['risk awareness'] = (0,'None')
+    self.inAverage = 0
+    self.theAverage = ''
     
   def resetCountermeasureAttributes(self):
     self.theName = ''
