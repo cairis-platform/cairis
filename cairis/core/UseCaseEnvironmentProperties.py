@@ -30,9 +30,11 @@ class UseCaseEnvironmentProperties(EnvironmentProperties):
     self.thePostCond = postCond
     self.theAttributes = cAttributes
     self.theRationale = caRationale
+    self.theAverage = 0
 
   def preconditions(self): return self.thePreCond
   def steps(self): return self.theSteps
   def postconditions(self): return self.thePostCond
   def attributes(self): return self.theAttributes
   def rationale(self): return self.theRationale
+  def average(self): return self.theAverage
