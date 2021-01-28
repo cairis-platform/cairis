@@ -90,7 +90,7 @@ class UsecaseModel:
   def graph(self):
     try:
       elements = []
-      elements = self.dbProxy.UsecaseModelElements(self.theEnvironmentName)
+      elements = self.dbProxy.usecaseModelElements(self.theEnvironmentName)
 
       for element in elements:
         self.buildNode(element[0],element[1])
