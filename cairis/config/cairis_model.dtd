@@ -334,11 +334,8 @@
 <!ELEMENT cognitive_attribute (rationale)>
 <!ATTLIST cognitive_attribute attribute (vigilance | situation awareness | workload | stress | risk awareness) #REQUIRED>
 <!ATTLIST cognitive_attribute value (None | Low | Medium | High) #REQUIRED>
-
-<!ELEMENT usecase_association (rationale)>
-<!ATTLIST usecase_association environment CDATA #REQUIRED>
-<!ATTLIST usecase_association usecase_name CDATA #REQUIRED>
-<!ATTLIST usecase_association subusecase_name CDATA #REQUIRED>
+<!ELEMENT average (rationale)>
+<!ATTLIST average value CDATA #REQUIRED>
 
 <!ELEMENT countermeasure (tag*,description,countermeasure_environment+)>
 <!ATTLIST countermeasure name CDATA #REQUIRED>
