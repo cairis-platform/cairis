@@ -19,7 +19,6 @@ Flask-Security-Too>=3.3.2
 Flask-Script>=2.0.5
 Flask-OAuthlib>=0.9.3
 Flask-Mail>=0.9.1
-Flask-Babel>=2.0
 mako>=1.0.4
 lxml>=3.6.4
 openpyxl>=2.4.0
