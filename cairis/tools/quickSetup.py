@@ -22,6 +22,7 @@ from sqlalchemy.exc import SQLAlchemyError
 import os
 import sys
 from cairis.core.dba import createDatabaseAccount, createDbOwnerDatabase, createDatabaseAndPrivileges, createDatabaseSchema, createDefaults, canonicalDbUser, dropCairisUserDatabase, createCairisUserDatabase
+from flask_security import hash_password
 import binascii
 from random import choice
 from string import ascii_letters, digits
@@ -57,7 +58,7 @@ def quick_setup(dbHost,dbPort,dbRootPassword,tmpDir,rootDir,configFile,webPort,l
   if (userName != ''):
     rp = ''.join(choice(ascii_letters + digits) for i in range(255))
     dbAccount = canonicalDbUser(userName)
-    user_datastore.create_user(email=userName, account=dbAccount, password=passWd,dbtoken=rp,name = 'Default user')
+    user_datastore.create_user(email=userName, account=dbAccount, password=hash_password(passWd),dbtoken=rp,name = 'Default user')
     db.session.commit()
     createDatabaseAccount(dbRootPassword,dbHost,dbPort,userName,rp)
     createDatabaseAndPrivileges(dbRootPassword,dbHost,dbPort,userName,rp,dbAccount + '_default')
