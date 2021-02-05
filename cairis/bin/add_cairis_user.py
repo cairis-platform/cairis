@@ -19,7 +19,7 @@
 import argparse
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from flask_security import Security, SQLAlchemyUserDatastore, UserMixin, RoleMixin, login_required
+from flask_security import Security, SQLAlchemyUserDatastore, UserMixin, RoleMixin, login_required, hash_password
 from flask_cors import CORS
 from cairis.core.Borg import Borg
 from cairis.core.dba import createDatabaseAccount,createDatabaseAndPrivileges,createDatabaseSchema, createDefaults, canonicalDbUser, existingAccount
@@ -96,7 +96,7 @@ def main():
   createDatabaseSchema(b.cairisRoot,b.dbHost,b.dbPort,args.user,rp,dbAccount + '_default')
 
   db.create_all()
-  user_datastore.create_user(email=args.user, account=dbAccount, password=args.password,dbtoken=rp,name = 'Default user')
+  user_datastore.create_user(email=args.user, account=dbAccount, password=hash_password(args.password),dbtoken=rp,name = 'Default user')
   db.session.commit()
 
   createDefaults(b.cairisRoot,b.dbHost,b.dbPort,args.user,rp,dbAccount + '_default')
