@@ -50,7 +50,7 @@ class CAIRISDatabaseConfigurationForm(np.ActionForm):
     self.theStaticDir = self.add(np.TitleText,name = "Static directory:", value = pathName + "cairis/dist")
     self.theAssetDir = self.add(np.TitleText,name = "Asset directory:", value = pathName + "cairis/dist")
 
-    self.theUsername = self.add(np.TitleText, name = "Initial Username:", value = "")
+    self.theUsername = self.add(np.TitleText, name = "Initial Email:", value = "")
     self.thePassword = self.add(np.TitlePassword, name = "Initial Password:", value = "")
 
   def findRootDir(self):

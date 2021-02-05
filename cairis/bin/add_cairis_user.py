@@ -100,7 +100,6 @@ def main():
   db.create_all()
   user_datastore.create_user(email=args.user, account=dbAccount, password=hash_password(args.password),dbtoken=rp,name = 'Default user')
   db.session.commit()
-
   createDefaults(b.cairisRoot,b.dbHost,b.dbPort,args.user,rp,dbAccount + '_default')
 
 

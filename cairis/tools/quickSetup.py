@@ -60,7 +60,7 @@ def quick_setup(dbHost,dbPort,dbRootPassword,tmpDir,rootDir,configFile,webPort,l
     dbAccount = canonicalDbUser(userName)
     user_datastore.create_user(email=userName, account=dbAccount, password=hash_password(passWd),dbtoken=rp,name = 'Default user')
     db.session.commit()
-    createDatabaseAccount(dbRootPassword,dbHost,dbPort,userName,rp)
+    createDatabaseAccount(dbRootPassword,dbHost,dbPort,dbAccount,rp)
     createDatabaseAndPrivileges(dbRootPassword,dbHost,dbPort,userName,rp,dbAccount + '_default')
     createDatabaseSchema(rootDir,dbHost,dbPort,userName,rp,dbAccount + '_default')
     createDefaults(rootDir,dbHost,dbPort,userName,rp,dbAccount + '_default')
