@@ -70,11 +70,11 @@ If you run the above commands on macOS (and possibly other non-Linux platformns)
    docker network connect $NET cairis-mysql
    docker run --name CAIRIS -d -P -p 80:8000 --net=$NET shamalfaily/cairis
 
-The *docker run* commands will create and start-up CAIRIS, but you will need to create an account before you can use it.  To do this, run the below command - replacing test and test with your desired username and password. 
+The *docker run* commands will create and start-up CAIRIS, but you will need to create an account before you can use it.  To do this, run the below command - replacing test@test.com and test with your desired username and password. 
 
 .. code-block:: bash
 
-   docker exec -t `docker ps | grep shamalfaily/cairis | head -1 | cut -d ' ' -f 1` /addAccount.sh test test TestUser
+   docker exec -t `docker ps | grep shamalfaily/cairis | head -1 | cut -d ' ' -f 1` /addAccount.sh test@test.com test TestUser
 
 Once the containers have been installed then, in the future, you should use *docker start* rather than *docker run* to start up the already downloaded containers.
 
@@ -118,7 +118,7 @@ If you have a clean Ubuntu VM, you can quickly install and configure CAIRIS and 
 
    sudo apt-get update && sudo apt-get upgrade -y && sudo apt-get dist-upgrade -y && sudo apt install curl -y && sudo apt install net-tools -y && curl -s https://cairis.org/quickInstall.sh | bash -s my-secret-pw
 
-In addition to configuring and installing CAIRIS, the script creates an initial user account (username: test, password: test), starts cairisd.py as a service, and restarts the VM.  You can use *journalctl* to check the CAIRIS log file.
+In addition to configuring and installing CAIRIS, the script creates an initial user account (username: test@test.com, password: test), starts cairisd.py as a service, and restarts the VM.  You can use *journalctl* to check the CAIRIS log file.
 
 .. code-block:: bash
 
