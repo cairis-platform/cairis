@@ -18,7 +18,7 @@ Once in the root directory of the repository type:
    vagrant up
 
 This will create and start a CAIRIS virtual machine in VirtualBox and, once complete, this is accessbile via your web browser at http://localhost:7071. 
-The default username and password is *test* and *test*, but you can change this by editing *vagrant_conf.yaml*.  
+The default username and password is *test@test.com* and *test*, but you can change this by editing *vagrant_conf.yaml*.  
 
 To shutdown the virtual machine:
 
