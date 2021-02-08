@@ -1,4 +1,4 @@
 provider: virtualbox
-default_user: test
+default_user: test@test.com
 default_passwd: test
 root_db_passwd: my-secret-pw
