@@ -28,7 +28,7 @@ fi
 
 if [ -z $2 ]
 then
-  DEFUSER=test
+  DEFUSER=test@test.com
 fi
 
 if [ -z $3 ]
