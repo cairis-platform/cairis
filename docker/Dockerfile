@@ -45,8 +45,6 @@ COPY cairis.cnf /
 COPY setupDb.sh /
 COPY createdb.sql /
 COPY addAccount.sh /
-COPY backupAccounts.sh /
-COPY restoreAccounts.sh /
 COPY register_user.html /cairis/cairis/daemon/templates/security
 
 RUN /cairis/cairis/bin/installUI.sh
