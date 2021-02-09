@@ -68,7 +68,7 @@ user_datastore = SQLAlchemyUserDatastore(db,User, Role)
 security = Security(app, user_datastore)
 
 def addAdditionalUserData(userName,passWd):
-  fUser = user_datastore.get_user(userName)
+  fUser = user_datastore.find_user(email=userName)
   rp = ''.join(choice(string.ascii_letters + string.digits) for i in range(255))
   fUser.dbtoken = rp
   db.session.commit()
