@@ -70,7 +70,13 @@ If you run the above commands on macOS (and possibly other non-Linux platformns)
    docker network connect $NET cairis-mysql
    docker run --name CAIRIS -d -P -p 80:8000 --net=$NET shamalfaily/cairis
 
-The *docker run* commands will create and start-up CAIRIS, but you will need to create an account before you can use it.  To do this, run the below command - replacing test@test.com and test with your desired username and password. 
+If you want to use the containers to support account self-registration and revocation then you can set MAIL_SERVER, MAIL_PORT, MAIL_USER, and MAIL_PASSWD environment variables to correspond with the SSL outgiong mail server, mail server poort, mail account username, and password for the mail account, i.e.
+
+.. code-block:: bash
+
+   docker run --name CAIRIS --env MAIL_SERVER=mymailserver.com --env MAIL_PORT=465 --env MAIL_USER=admin@mymailserver.com --env MAIL_PASSWD=mypassword -d -P -p 80:8000 --net=$NET shamalfaily/cairis
+
+The *docker run* commands will create and start-up CAIRIS.  If you haven't setup account self-registration then you will need to create an account before you can use it.  To do this, run the below command - replacing test@test.com and test with your desired username and password. 
 
 .. code-block:: bash
 
