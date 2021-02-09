@@ -1,0 +1,25 @@
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<link href="login.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+
+{% extends "security/base.html" %}
+{% from "security/_macros.html" import render_field_with_errors, render_field %}
+
+{% block content %}
+{% include "security/_messages.html" %}
+<form action="{{ url_for_security('register') }}" method="POST" name="register_user_form">
+  <div class="container-fluid">
+  <h1>{{ _('Register CAIRIS user') }}</h1>
+  {{ register_user_form.hidden_tag() }}
+  {{ render_field_with_errors(register_user_form.email) }}
+  {{ render_field_with_errors(register_user_form.password) }}
+  {% if register_user_form.password_confirm %}
+    {{ render_field_with_errors(register_user_form.password_confirm) }}
+  {% endif %}
+  {{ render_field(register_user_form.submit) }}
+  <h2>{{ _('Live demo accounts are dropped each night') }}</h2>
+  <h3>{{ _('Contact admin@cairis.org if you need a longer lived account') }}</h3>
+  </div>
+</form>
+{% endblock %}
