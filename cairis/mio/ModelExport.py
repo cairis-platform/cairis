@@ -294,29 +294,32 @@ def exportAttackPatterns(outFile,session_id = None):
 
   return 'Exported ' + str(noAPs) + ' attack patterns.'
 
-def extractModel(session_id = None,ignoreValidityCheck = 0):
-  b = Borg()
+def extractModel(session_id = None,ignoreValidityCheck = 0,dbProxy = None):
+  proxy = dbProxy
+  if (session_id != None):
+    b = Borg()
+    proxy = b.get_dbproxy(session_id)
   if (ignoreValidityCheck == 0):
-    valStr = b.get_dbproxy(session_id).validateForExport() 
+    valStr = proxy.validateForExport() 
     if (len(valStr) > 0):
       raise ARMException(valStr)
   xmlBuf = '<?xml version="1.0"?>\n<!DOCTYPE cairis_model PUBLIC "-//CAIRIS//DTD MODEL 1.0//EN" "http://cairis.org/dtd/cairis_model.dtd">\n<cairis_model>\n\n\n'
-  xmlBuf+= b.get_dbproxy(session_id).tvTypesToXml(0)[0] + '\n\n'
-  xmlBuf+= b.get_dbproxy(session_id).domainValuesToXml(0)[0] + '\n\n'
-  xmlBuf+= b.get_dbproxy(session_id).projectToXml(0) + '\n\n'
-  xmlBuf+= b.get_dbproxy(session_id).riskAnalysisToXml(0)[0] + '\n\n'
-  xmlBuf+= b.get_dbproxy(session_id).usabilityToXml(0)[0] + '\n\n'
-  xmlBuf+= b.get_dbproxy(session_id).goalsToXml(0)[0] + '\n\n'
-  xmlBuf+= b.get_dbproxy(session_id).associationsToXml(0)[0] + '\n\n'
-  xmlBuf+= b.get_dbproxy(session_id).synopsesToXml(0)[0] + '\n\n'
-  xmlBuf+= b.get_dbproxy(session_id).misusabilityToXml(0)[0] + '\n\n'
-  xmlBuf+= b.get_dbproxy(session_id).dataflowsToXml(0)[0] + '\n\n'
-  xmlBuf+= b.get_dbproxy(session_id).locationsToXml()[0] + '\n\n'
-  xmlBuf+= b.get_dbproxy(session_id).storiesToXml(0)[0] + '\n\n</cairis_model>'
+  xmlBuf+= proxy.tvTypesToXml(0)[0] + '\n\n'
+  xmlBuf+= proxy.domainValuesToXml(0)[0] + '\n\n'
+  xmlBuf+= proxy.projectToXml(0) + '\n\n'
+  xmlBuf+= proxy.riskAnalysisToXml(0)[0] + '\n\n'
+  xmlBuf+= proxy.usabilityToXml(0)[0] + '\n\n'
+  xmlBuf+= proxy.goalsToXml(0)[0] + '\n\n'
+  xmlBuf+= proxy.associationsToXml(0)[0] + '\n\n'
+  xmlBuf+= proxy.synopsesToXml(0)[0] + '\n\n'
+  xmlBuf+= proxy.misusabilityToXml(0)[0] + '\n\n'
+  xmlBuf+= proxy.dataflowsToXml(0)[0] + '\n\n'
+  xmlBuf+= proxy.locationsToXml()[0] + '\n\n'
+  xmlBuf+= proxy.storiesToXml(0)[0] + '\n\n</cairis_model>'
   return xmlBuf
 
-def exportModel(outFile = None,session_id = None, ignoreValidityCheck = 0):
-  xmlBuf = extractModel(session_id,ignoreValidityCheck)
+def exportModel(outFile = None,session_id = None, ignoreValidityCheck = 0,dbProxy = None):
+  xmlBuf = extractModel(session_id,ignoreValidityCheck,dbProxy)
   if outFile == None:
     return xmlBuf
   else:
@@ -325,29 +328,32 @@ def exportModel(outFile = None,session_id = None, ignoreValidityCheck = 0):
     f.close()
     return 'Exported model'
 
-def extractPackage(session_id = None, ignoreValidityCheck = 0):
+def extractPackage(session_id = None, ignoreValidityCheck = 0, dbProxy = None):
   buf = io.BytesIO()
   zf = zipfile.ZipFile(buf,'w',zipfile.ZIP_DEFLATED)
-  zf.writestr('model.xml',extractModel(session_id,ignoreValidityCheck))
+  zf.writestr('model.xml',extractModel(session_id,ignoreValidityCheck,dbProxy))
 
-  b = Borg()
-  apNames = b.get_dbproxy(session_id).getDimensionNames('component_view','')
+  proxy = dbProxy
+  if (session_id != None):
+    b = Borg()
+    proxy = b.get_dbproxy(session_id)
+  apNames = proxy.getDimensionNames('component_view','')
   for apName in apNames:
-    apBuf = b.get_dbproxy(session_id).architecturalPatternToXml(apName)
+    apBuf = proxy.architecturalPatternToXml(apName)
     zf.writestr(apName + '.xml',apBuf)
 
-  spNames = b.get_dbproxy(session_id).getDimensionNames('securitypattern','')
+  spNames = proxy.getDimensionNames('securitypattern','')
   if (len(spNames) > 0):
-    spBuf = b.get_dbproxy(session_id).securityPatternsToXml()
+    spBuf = proxy.securityPatternsToXml()
     zf.writestr('security_patterns.xml',spBuf)
 
-  for imgName,imgContent in b.get_dbproxy(session_id).getImages():
+  for imgName,imgContent in proxy.getImages():
     zf.writestr(imgName,b64decode(imgContent))
   zf.close()
   return buf.getvalue()
 
-def exportPackage(outFile = None, session_id = None, ignoreValidityCheck = 0):
-  buf = extractPackage(session_id,ignoreValidityCheck)
+def exportPackage(outFile = None, session_id = None, ignoreValidityCheck = 0, dbProxy = None):
+  buf = extractPackage(session_id,ignoreValidityCheck,dbProxy)
   if outFile == None:
     return buf
   else:
