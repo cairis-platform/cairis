@@ -37,9 +37,7 @@ def apply_caching(response):
   return response
 
 @user_registered.connect_via(app)
-def enroll(sender, user, confirm_token):
-  import pytest
-  pytest.set_trace()
+def enroll(sender, user, confirm_token,form_data):
   addAdditionalUserData(user.email,user.password)
 
 class TestClient(Command):
