@@ -296,7 +296,7 @@ def exportAttackPatterns(outFile,session_id = None):
 
 def extractModel(session_id = None,ignoreValidityCheck = 0,dbProxy = None):
   proxy = dbProxy
-  if (session_id != None):
+  if (proxy == None):
     b = Borg()
     proxy = b.get_dbproxy(session_id)
   if (ignoreValidityCheck == 0):
@@ -334,7 +334,7 @@ def extractPackage(session_id = None, ignoreValidityCheck = 0, dbProxy = None):
   zf.writestr('model.xml',extractModel(session_id,ignoreValidityCheck,dbProxy))
 
   proxy = dbProxy
-  if (session_id != None):
+  if (proxy == None):
     b = Borg()
     proxy = b.get_dbproxy(session_id)
   apNames = proxy.getDimensionNames('component_view','')
