@@ -19,11 +19,12 @@
 import argparse
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from flask_security import Security, SQLAlchemyUserDatastore, UserMixin, RoleMixin, login_required, hash_password
-from flask_cors import CORS
 from cairis.core.Borg import Borg
 from cairis.core.dba import createDatabaseAccount,createDatabaseAndPrivileges,createDatabaseSchema, createDefaults, canonicalDbUser, existingAccount
+from flask_security import Security, SQLAlchemyUserDatastore, UserMixin, RoleMixin, hash_password
+from flask_cors import CORS
 import cairis.core.BorgFactory
+from cairis.core.Borg import Borg
 from random import choice
 import string
 import sys
@@ -79,6 +80,23 @@ def addAdditionalUserData(userName,passWd):
   createDatabaseSchema(b.cairisRoot,b.dbHost,b.dbPort,userName,rp,dbAccount + '_default')
   createDefaults(b.cairisRoot,b.dbHost,b.dbPort,userName,rp,dbAccount + '_default')
   
+def addCairisUser(userName,passWd,fullName):
+  rp = ''.join(choice(string.ascii_letters + string.digits) for i in range(255))
+
+  if (existingAccount(userName)):
+    raise Exception(userName + ' already exists')
+
+  dbAccount = canonicalDbUser(userName)
+
+  b = Borg()
+  createDatabaseAccount(b.rPasswd,b.dbHost,b.dbPort,dbAccount,rp)
+  createDatabaseAndPrivileges(b.rPasswd,b.dbHost,b.dbPort,dbAccount,rp,canonicalDbUser(userName) + '_default')
+  createDatabaseSchema(b.cairisRoot,b.dbHost,b.dbPort,userName,rp,dbAccount + '_default')
+
+  db.create_all()
+  user_datastore.create_user(email=userName, account=dbAccount, password=hash_password(passWd),dbtoken=rp,name = fullName)
+  db.session.commit()
+  createDefaults(b.cairisRoot,b.dbHost,b.dbPort,userName,rp,dbAccount + '_default')
 
 def main():
   parser = argparse.ArgumentParser(description='Computer Aided Integration of Requirements and Information Security - Add CAIRIS user')
@@ -86,21 +104,7 @@ def main():
   parser.add_argument('password',help='password')
   parser.add_argument('name',help='Full name')
   args = parser.parse_args()
-
-  rp = ''.join(choice(string.ascii_letters + string.digits) for i in range(255))
-
-  if (existingAccount(args.user)):
-    raise Exception(args.user + ' already exists')
-
-  dbAccount = canonicalDbUser(args.user)
-  createDatabaseAccount(b.rPasswd,b.dbHost,b.dbPort,dbAccount,rp)
-  createDatabaseAndPrivileges(b.rPasswd,b.dbHost,b.dbPort,dbAccount,rp,canonicalDbUser(args.user) + '_default')
-  createDatabaseSchema(b.cairisRoot,b.dbHost,b.dbPort,args.user,rp,dbAccount + '_default')
-
-  db.create_all()
-  user_datastore.create_user(email=args.user, account=dbAccount, password=hash_password(args.password),dbtoken=rp,name = 'Default user')
-  db.session.commit()
-  createDefaults(b.cairisRoot,b.dbHost,b.dbPort,args.user,rp,dbAccount + '_default')
+  addCairisUser(args.user,args.password,args.name)
 
 
 if __name__ == '__main__':
