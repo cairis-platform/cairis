@@ -29,7 +29,7 @@ RUN pip3 install -r requirements.txt
 RUN pip3 install -r wsgi_requirements.txt
 ENV CAIRIS_SRC=/cairis/cairis
 ENV CAIRIS_CFG_DIR=/cairis/docker
-ENV CAIRIS_CFG=cairis.cnf
+ENV CAIRIS_CFG=/cairis.cnf
 ENV PYTHONPATH=/cairis
 
 RUN mkdir /tmpDocker
