@@ -67,8 +67,6 @@ def main():
         logger.info('Re-imported default model for account ' + accountName)
       except ARMException as ex:
         logger.info('Error re-importing default model for account ' + accountName + ' : ' + str(ex))
-    import pytest
-    pytest.set_trace()
     updateEmailHashes(b.rPasswd,b.dbHost,b.dbPort,hashes)
 if __name__ == '__main__':
   try:
