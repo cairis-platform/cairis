@@ -20,7 +20,7 @@ import argparse
 import sys
 from cairis.core.Borg import Borg
 import cairis.core.BorgFactory
-from cairis.core.dba import dropUser
+from cairis.core.dba import dropUser,accounts
 
 __author__ = 'Shamal Faily'
 
@@ -32,7 +32,12 @@ def main():
 
   cairis.core.BorgFactory.dInitialise()
   b = Borg()
-  dropUser(b.rPasswd, b.dbHost, b.dbPort, args.user)
+  if (args.user.upper() == 'ALL'):
+    for user in accounts(b.rPasswd, b.dbHost, b.dbPort):
+      dropUser(b.rPasswd, b.dbHost, b.dbPort, user)
+
+  else:
+    dropUser(b.rPasswd, b.dbHost, b.dbPort, args.user)
 
 if __name__ == '__main__':
   try:

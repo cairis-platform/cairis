@@ -226,4 +226,5 @@ def emailHashes(rPasswd,dbHost,dbPort):
 
 def updateEmailHashes(rPasswd,dbHost,dbPort,ehs):
   stmts = list(map(lambda x: 'update cairis_user.auth_user set password = "' + x[1] + '" where email = "' + x[0] + '"',ehs))
+  stmts.append('commit')
   runAdminCommands(rPasswd,dbHost,dbPort,stmts)
