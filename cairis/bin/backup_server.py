@@ -24,7 +24,7 @@ import os
 from cairis.core.ARM import ARMException
 from cairis.core.Borg import Borg
 import cairis.core.BorgFactory
-from cairis.core.dba import accounts,canonicalDbUser,dbtoken
+from cairis.core.dba import accounts,canonicalDbUser,dbtoken,emailHashes
 from cairis.core.MySQLDatabaseProxy import MySQLDatabaseProxy
 from cairis.mio.ModelExport import exportPackage
 
@@ -62,6 +62,10 @@ def main():
     for p in os.listdir(b.tmpDir):
       modelName = b.tmpDir + '/' + p
       archive.add(modelName, arcname=p, filter=lambda x: x if x.name.endswith('.cairis') else None)
+    hashFile = b.tmpDir + '/hashes.txt'
+    with open(hashFile,'w') as f:
+      f.write('\n'.join(list(map(lambda x : ','.join(x),emailHashes(b.rPasswd,b.dbHost,b.dbPort)))))
+    archive.add(hashFile, arcname='hashes.txt')
 if __name__ == '__main__':
   try:
     main()

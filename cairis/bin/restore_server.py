@@ -24,7 +24,7 @@ import os
 from cairis.core.ARM import ARMException
 from cairis.core.Borg import Borg
 import cairis.core.BorgFactory
-from cairis.core.dba import accounts,canonicalDbUser,dbtoken
+from cairis.core.dba import accounts,canonicalDbUser,dbtoken,updateEmailHashes
 from cairis.core.MySQLDatabaseProxy import MySQLDatabaseProxy
 from cairis.mio.ModelExport import exportPackage
 from cairis.bin.add_cairis_user import addCairisUser
@@ -46,17 +46,20 @@ def main():
 
   modelFiles = []
   models = []
+  hashes = []
   with tarfile.open(args.archiveFile,'r') as archive:
     modelFiles = archive.getmembers()
     for modelFile in modelFiles:
-      accountName = modelFile.name.split('.cairis')[0]
-      try:
-        addCairisUser(accountName,accountName,accountName)
-        models.append((accountName,archive.extractfile(modelFile).read()))
-        logger.info('Re-created account ' + accountName)
-      except ARMException as ex:
-        logger.info('Error re-creating account ' + accountName + ' : ' + str(ex))
-  
+      if (modelFile.name != 'hashes.txt'):
+        accountName = modelFile.name.split('.cairis')[0]
+        try:
+          addCairisUser(accountName,accountName,accountName)
+          models.append((accountName,archive.extractfile(modelFile).read()))
+          logger.info('Re-created account ' + accountName)
+        except ARMException as ex:
+          logger.info('Error re-creating account ' + accountName + ' : ' + str(ex))
+      else:
+        hashes = list(map(lambda x: x.decode().rstrip().split(','),archive.extractfile(modelFile).readlines()))
     for accountName,model in models:
       try:
         cairis.core.BorgFactory.initialise(user=accountName,db='default')
@@ -64,7 +67,9 @@ def main():
         logger.info('Re-imported default model for account ' + accountName)
       except ARMException as ex:
         logger.info('Error re-importing default model for account ' + accountName + ' : ' + str(ex))
-
+    import pytest
+    pytest.set_trace()
+    updateEmailHashes(b.rPasswd,b.dbHost,b.dbPort,hashes)
 if __name__ == '__main__':
   try:
     main()

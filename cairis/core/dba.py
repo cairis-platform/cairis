@@ -220,3 +220,10 @@ def resetUsers(cairisRoot,rPasswd,dbHost,dbPort):
   for email in accounts(rPasswd,dbHost,dbPort):
     resetUser(cairisRoot,rPasswd,dbHost,dbPort,email)
 
+def emailHashes(rPasswd,dbHost,dbPort):
+  sqlTxt = 'select email,password from cairis_user.auth_user'
+  return rootResponseList(sqlTxt)
+
+def updateEmailHashes(rPasswd,dbHost,dbPort,ehs):
+  stmts = list(map(lambda x: 'update cairis_user.auth_user set password = "' + x[1] + '" where email = "' + x[0] + '"',ehs))
+  runAdminCommands(rPasswd,dbHost,dbPort,stmts)
