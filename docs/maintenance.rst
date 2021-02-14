@@ -33,7 +33,7 @@ The default database associated with CAIRIS accounts can sometimes get corrupted
 
    ./reset_cairis_user.py --reload 1 test@test.com
 
-If you set the *reload* parameter 1 then CAIRIS will attempt to export the contents of the default database, and -- once the default database has been re-created -- attempt to re-import it.  This can sometimes fail if the model contains reserved characters, but this can be overridden by setting the **ignore_validity* parameter to 1.
+If you set the *reload* parameter 1 then CAIRIS will attempt to export the contents of the default database, and -- once the default database has been re-created -- attempt to re-import it.  This can sometimes fail if the model contains reserved characters, but this can be overridden by setting the *ignore_validity* parameter to 1.
 
 
 
