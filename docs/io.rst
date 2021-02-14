@@ -42,13 +42,6 @@ diagrams.net (Asset Model)                    N/A                             di
 User goals (Workbook)                         N/A                             CAIRIS generated Excel workbook with user goals and contributions
 ============================================= =============================== ============================================================================================================================
 
-If you have command line access to the server running the CAIRIS server then a quicker way of importing a model is to use the cimport.py script, which can be found in cairis/cairis/bin.  The below command, which is run from cairis/cairis/bin, imports the ACME Water sample model into the default database of the test user. 
-
-.. code-block:: bash
-
-   ./cimport.py --user=test --database=test_default --type all --overwrite 1 ../../examples/exemplars/ACME_Water/ACME_Water.xml
-
-Running cimport.py with the --help argument provides more detailed import options.
 
 Exporting models
 ----------------
@@ -58,10 +51,3 @@ Exporting models
 
 To export a model, select the System / Export Model option.  Exporting the current model renders the current CAIRIS database you are working with as a CAIRIS XML model (conforming to cairis_model.dtd).
 You can also export a selected architectural pattern, the security patterns currently loaded into CAIRIS, or a GRL model for a selected environment and task; this GRL can be imported into jUCMNav.
-
-Like cimport.py, there is also a command line export script - cexport.py
- 
-.. code-block:: bash
-
-   ./cexport.py --user=test --database=test_default --type all /tmp/model.xml
-   
