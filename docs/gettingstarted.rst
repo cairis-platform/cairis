@@ -4,8 +4,13 @@ Quick Start
 Live Demo
 ---------
 
-A live demo of CAIRIS is available to use on https://demo.cairis.org.  The username and password you need are *test@test.com* and *test*. Internet Explorer isn't supported by CAIRIS, but it does work well with Edge, Safari, Chrome, Firefox, and Opera.
-The live demo is rebuilt every night based on the latest updates to CAIRIS, so please feel free to add, update, or remove elements in the example models, or even create new accounts and explore CAIRIS on your own.
+A live demo of CAIRIS is available to use on https://demo.cairis.org.  
+
+The demo has a test account (user: *test@test.com*, password: test) with two example databases you can explore: `NeuroGrid <https://cairis.readthedocs.io/en/latest/examples.html#neurogrid>`_ , `ACME Water <https://cairis.readthedocs.io/en/latest/examples.html#acme-water>`.
+You are also free to create your account to explore CAIRIS' capabilities on your own.
+
+The live demo is rebuilt every night based on the latest updates to CAIRIS, so please feel free to add, update, or remove elements in the example models.
+The test account is dropped and re-created each night with the sample models.  Other accounts created on the server are dropped on Sunday morning each week.
 
 Video tutorials
 ---------------
@@ -16,7 +21,6 @@ The `CAIRIS YouTube channel <https://m.youtube.com/channel/UC21MvLyGwF9S0f9XlMLB
 Example models
 --------------
 
-The live demo comes with three example models: `NeuroGrid <https://cairis.readthedocs.io/en/latest/examples.html#neurogrid>`_ , `ACME Water <https://cairis.readthedocs.io/en/latest/examples.html#acme-water>`_, and `webinos <https://cairis.readthedocs.io/en/latest/examples.html#webinos>`_.  To open these, select the System / Open Database menu, and choose the model to open. We would strongly suggest taking a look at these to quickly see how security, usability, and requirements concepts in CAIRIS fit together.
 
 Define your contexts of use
 ---------------------------
