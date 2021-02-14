@@ -6,7 +6,7 @@ Live Demo
 
 A live demo of CAIRIS is available to use on https://demo.cairis.org.  
 
-The demo has a test account (user: *test@test.com*, password: test) with two example databases you can explore: `NeuroGrid <https://cairis.readthedocs.io/en/latest/examples.html#neurogrid>`_ , `ACME Water <https://cairis.readthedocs.io/en/latest/examples.html#acme-water>`.
+The demo has a test account (user: *test@test.com*, password: test) with two example databases you can explore: `NeuroGrid <https://cairis.readthedocs.io/en/latest/examples.html#neurogrid>`_ , `ACME Water <https://cairis.readthedocs.io/en/latest/examples.html#acme-water>`_.
 You are also free to create your account to explore CAIRIS' capabilities on your own.
 
 The live demo is rebuilt every night based on the latest updates to CAIRIS, so please feel free to add, update, or remove elements in the example models.
@@ -45,7 +45,7 @@ Once you've specified at least one environments, you can start modelling :doc:`a
 Threat-driven security design
 -----------------------------
 
-You don't have to start your design by thinking about assets.  CAIRIS encourages the early creation of `threat models </https://cairis.readthedocs.io/en/latest/threats_tm.html#threat-modelling>`_, which can be useful if you're still trying to make sense of what the system is and how attackers might exploit it.  This can help you better understand what your assets are, and even help you understand what the usability implications of certain threats might be.
+You don't have to start your design by thinking about assets.  CAIRIS encourages the early creation of `threat models </https://cairis.readthedocs.io/en/latest/threats_tm.html>`_, which can be useful if you're still trying to make sense of what the system is and how attackers might exploit it.  This can help you better understand what your assets are, and even help you understand what the usability implications of certain threats might be.
 
 Working with requirements
 -------------------------
