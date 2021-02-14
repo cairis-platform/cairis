@@ -37,8 +37,8 @@ If you set the *reload* parameter 1 then CAIRIS will attempt to export the conte
 
 
 
-Importing an exporting models
------------------------------
+Importing and exporting models
+------------------------------
 
 Models can be imported using the *cimport.py* script. The below command, which is run from cairis/cairis/bin, imports the ACME Water sample model into the default database of the test@test.com user. 
 
