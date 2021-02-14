@@ -45,7 +45,7 @@ Once you've specified at least one environments, you can start modelling :doc:`a
 Threat-driven security design
 -----------------------------
 
-You don't have to start your design by thinking about assets.  CAIRIS encourages the early creation of `threat models </http://cairis.readthedocs.io/en/latest/threats_tm.html#threat-modelling>`_, which can be useful if you're still trying to make sense of what the system is and how attackers might exploit it.  This can help you better understand what your assets are, and even help you understand what the usability implications of certain threats might be.
+You don't have to start your design by thinking about assets.  CAIRIS encourages the early creation of `threat models </https://cairis.readthedocs.io/en/latest/threats_tm.html#threat-modelling>`_, which can be useful if you're still trying to make sense of what the system is and how attackers might exploit it.  This can help you better understand what your assets are, and even help you understand what the usability implications of certain threats might be.
 
 Working with requirements
 -------------------------
