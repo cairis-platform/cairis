@@ -105,8 +105,6 @@ To update your docker containers, stop the docker containers and run the below c
    sudo docker volume rm $(docker volume ls)
 
 
-Please feel free to use this container to evaluate CAIRIS, but do not use it for operational use without configuring the default credentials first.  The scripts used to build the container can be found on `GitHub <https://github.com/cairis-platform/cairis/tree/master/docker>`_, and provides a useful template for getting started.
-
 Ubuntu CAIRIS Virtual Machine
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
