@@ -2384,6 +2384,9 @@ class MySQLDatabaseProxy:
   def addObstacleDefinition(self,obsId,environmentName,obsDef,obsProb,obsProbRat):
     self.updateDatabase('call addObstacleDefinition(:id,:env,:def,:prob,:probRat)',{'id':obsId,'env':environmentName,'def':obsDef,'prob':obsProb,'probRat':obsProbRat},'MySQL error adding obstacle definition')
 
+  def addUsecaseDefinition(self,ucId,environmentName,ucDef,ucAvg):
+    self.updateDatabase('call addUsecaseDefinition(:id,:env,:def,:avg)',{'id':ucId,'env':environmentName,'def':ucDef,'avg':ucAvg},'MySQL error adding usecase definition')
+
   def addObstacleCategory(self,obsId,environmentName,obsCat):
     self.updateDatabase('call addObstacleCategory(:obs,:env,:cat)',{'obs':obsId,'env':environmentName,'cat':obsCat},'MySQL error adding obstacle category')
 
@@ -3028,7 +3031,8 @@ class MySQLDatabaseProxy:
         preConds,postConds = self.useCaseConditions(ucId,environmentId)
         ucSteps = self.useCaseSteps(ucId,environmentId)
         cognitiveAttributes,aRationale = self.relatedAttributes(ucId,environmentId)
-        properties = UseCaseEnvironmentProperties(environmentName,preConds,ucSteps,postConds,cognitiveAttributes,aRationale)
+        ucDef,ucAvg = self.usecaseDefinition(ucId,environmentId)
+        properties = UseCaseEnvironmentProperties(environmentName,preConds,ucSteps,postConds,cognitiveAttributes,aRationale,ucDef,ucAvg)
         environmentProperties.append(properties)
         parameters = UseCaseParameters(ucName,ucAuth,ucCode,ucRoles,ucDesc,tags,environmentProperties)
         uc = ObjectFactory.build(ucId,parameters)
@@ -3086,6 +3090,8 @@ class MySQLDatabaseProxy:
       self.addUseCaseConditions(ucId,environmentName,cProperties.preconditions(),cProperties.postconditions())
       self.addUseCaseSteps(ucId,environmentName,cProperties.steps())
       self.addCognitiveAttributes(ucId,environmentName,cProperties.attributes(),cProperties.rationale())
+      self.addUsecaseDefinition(ucId,environmentName,cProperties.definition(),cProperties.average())
+      
     return ucId
 
     
@@ -3133,6 +3139,7 @@ class MySQLDatabaseProxy:
       self.addUseCaseConditions(ucId,environmentName,cProperties.preconditions(),cProperties.postconditions())
       self.addUseCaseSteps(ucId,environmentName,cProperties.steps())
       self.addCognitiveAttributes(ucId,environmentName,cProperties.attributes(),cProperties.rationale())
+      self.addUsecaseDefinition(ucId,environmentName,cProperties.definition(),cProperties.average())
       
   def deleteUseCase(self,ucId):
     self.deleteObject(ucId,'usecase')
