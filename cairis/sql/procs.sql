@@ -1043,6 +1043,8 @@ drop procedure if exists controlNames;
 drop procedure if exists addDataFlowTag;
 drop procedure if exists getDataFlowTags;
 drop procedure if exists deleteDataFlowTags;
+drop function if exists usecase_definition;
+drop procedure if exists addUsecaseDefinition;
 
 
 delimiter //
@@ -21478,6 +21480,67 @@ begin
       set workingAverage = leafUsecaseAvg;
     end if;
   end if;
+end
+//
+
+create function usecase_definition(UsecaseId int,environmentId int) 
+returns varchar(1000)
+deterministic 
+begin
+  declare compositeCount int;
+  declare duplicatePolicy varchar(50);
+  declare overridingEnvironmentId int;
+  declare workingDefinition varchar(1000);
+  declare currentEnvironmentId int;
+  declare currentDefinition varchar(1000);
+  declare definitionName varchar(1000);
+  declare currentEnvName varchar(50);
+  declare done int default 0;
+  declare defCursor cursor for select environment_id,definition from usecase_definition where usecase_id = UsecaseId and environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId);
+  declare continue handler for not found set done = 1;
+
+  select count(environment_id) into compositeCount from composite_environment where composite_environment_id = environmentId limit 1;
+  if compositeCount > 0
+  then
+    select dp.name into duplicatePolicy from duplicate_property dp, composite_environment_property ccp where ccp.composite_environment_id = environmentId and ccp.duplicate_property_id = dp.id limit 1;
+    if duplicatePolicy = 'Override'
+    then
+      select overriding_environment_id into overridingEnvironmentId from composite_environment_override where composite_environment_id = environmentId limit 1;
+    end if;
+    set workingDefinition = '';
+
+    open defCursor;
+    def_loop: loop
+      fetch defCursor into currentEnvironmentId, currentDefinition;
+      if done = 1
+      then
+        leave def_loop;
+      end if;
+      if duplicatePolicy = 'Override'
+      then
+        if currentEnvironmentId = overridingEnvironmentId
+        then
+          set workingDefinition = currentDefinition;
+        end if;
+      else
+        select name into currentEnvName from environment where id = currentEnvironmentId;
+        set workingDefinition = concat(workingDefinition,' [' ,currentEnvName,'] ',currentDefinition);
+      end if;
+    end loop def_loop;
+    close defCursor;
+    set definitionName = workingDefinition; 
+  else
+    select definition into definitionName from usecase_definition where usecase_id = UsecaseId and environment_id = environmentId;
+  end if;
+  return definitionName;
+end
+//
+
+create procedure addUsecaseDefinition(in UsecaseId int,in environmentName text, in defName text, in UsecaseAvg float)
+begin
+  declare environmentId int;
+  select id into environmentId from environment where name = environmentName limit 1;
+  insert into usecase_definition(usecase_id,environment_id,definition,average) values (UsecaseId,environmentId,defName,UsecaseAvg);
 end
 //
 
