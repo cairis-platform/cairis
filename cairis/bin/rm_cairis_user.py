@@ -27,7 +27,7 @@ __author__ = 'Shamal Faily'
 
 def main():
   parser = argparse.ArgumentParser(description='Computer Aided Integration of Requirements and Information Security - Remove CAIRIS user')
-  parser.add_argument('user',help='Email address')
+  parser.add_argument('user',help='Account (email) name.  "all" removes all accounts')
   args = parser.parse_args()
 
   cairis.core.BorgFactory.dInitialise()

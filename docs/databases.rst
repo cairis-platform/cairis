@@ -12,7 +12,7 @@ Using other databases
 
 There might be times when it might be helpful to setup multiple databases.  For example, the live demo on https//demo.cairis.org has two exemplar databases that people can interact with to see different examples of CAIRIS projects.
 
-To create a new database, select the System/Databases menu, click on the Add button in the databases table, and enter the name for a new database.  The name should not contain any spaces or reserved characters.  After a few moments, a new database will be created and your CAIRIS application will point to this database.  Any databases you create will be visible only to your account.
+To create a new database, select the System/Databases menu, click on the Add button in the databases table, and enter the name for a new database.  The name must not contain any spaces or reserved characters.  After a few moments, a new database will be created and your CAIRIS application will point to this database.  Any databases you create will be visible only to your account.
 
 .. note::
    Based on the configuration of MySQL, you may find that - on creating a new database - you no longer see the default database in your database list.  If this is the case, you should logout of CAIRIS and log back in to return to the default database.
