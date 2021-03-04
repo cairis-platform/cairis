@@ -13491,7 +13491,7 @@ begin
   declare concernLink varchar(50);
   declare targetNry varchar(10);
   declare targetName varchar(50);
-  declare refName varchar(50);
+  declare refName varchar(100);
   declare refType varchar(50);
   declare reqLabel int;
   declare reqType varchar(255);
