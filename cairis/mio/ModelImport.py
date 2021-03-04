@@ -586,7 +586,6 @@ def importSynopses(charSyns,refSyns,stepSyns,refConts,ucConts,taskConts,session_
     db_proxy.addUseCaseContribution(uc)
   for tc in taskConts:
     db_proxy.addTaskContribution(tc)
-
   msgStr = 'Imported ' + str(len(charSyns)) + ' characteristic synopses, ' + str(len(refSyns)) + ' reference synopses, ' + str(len(stepSyns)) + ' step synopses, ' + str(len(refConts)) + ' reference contributions, ' + str(len(ucConts)) + ' use case contributions, and ' + str(len(taskConts)) + ' task contrbutions.'
   return msgStr
 
@@ -851,6 +850,8 @@ def importModelFile(importFile,isOverwrite = 1,session_id = None):
     return modelTxt
   except xml.sax.SAXException as e:
     raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
+  except Exception as e:
+    raise ARMException("Error importing " + importFile + ": " + format(e))
 
 def importAttackTreeString(buf,session_id = None):
   try:
