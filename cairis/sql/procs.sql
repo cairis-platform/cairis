@@ -30709,11 +30709,11 @@ begin
   then
     select drs.id, dr.name, drs.synopsis, td.name, p.name,'document_reference',gs.name from document_reference_synopsis drs, document_reference dr, persona p, trace_dimension td, goal_satisfaction gs where drs.reference_id = dr.id and drs.dimension_id = td.id and drs.actor_id = p.id and drs.satisfaction = gs.id
     union
-    select pcs.characteristic_id,pc.description,pcs.synopsis, td.name, p.name,'persona_characteristic', gs.name from persona_characteristic_synopsis pcs, persona_characteristic pc, persona p, trace_dimension td, goal_satisfaction gs where pcs.characteristic_id = pc.id and pcs.dimension_id = td.id and pc.persona_id = p.id and pcs.satisfaction = gs.id order by 2;
+    select pcs.characteristic_id,pc.description,pcs.synopsis, td.name, p.name,'persona_characteristic', gs.name from persona_characteristic_synopsis pcs, persona_characteristic pc, persona p, trace_dimension td, goal_satisfaction gs where pcs.characteristic_id = pc.id and pcs.dimension_id = td.id and pc.persona_id = p.id and pcs.satisfaction = gs.id order by 3;
   else
     select drs.id, dr.name, drs.synopsis, td.name, p.name, 'document_reference',gs.name from document_reference_synopsis drs, document_reference dr, persona p, trace_dimension td, goal_satisfaction gs where drs.id = constraintId and drs.reference_id = dr.id and drs.dimension_id = td.id and drs.actor_id = p.id and drs.satisfaction = gs.id
     union
-    select pcs.characteristic_id,pc.description,pcs.synopsis, td.name, p.name, 'persona_characteristic',gs.name from persona_characteristic_synopsis pcs, persona_characteristic pc, persona p, trace_dimension td, goal_satisfaction gs where pcs.characteristic_id = constraintId and pcs.characteristic_id = pc.id and pcs.dimension_id = td.id and pc.persona_id = p.id and pcs.satisfaction = gs.id order by 2;
+    select pcs.characteristic_id,pc.description,pcs.synopsis, td.name, p.name, 'persona_characteristic',gs.name from persona_characteristic_synopsis pcs, persona_characteristic pc, persona p, trace_dimension td, goal_satisfaction gs where pcs.characteristic_id = constraintId and pcs.characteristic_id = pc.id and pcs.dimension_id = td.id and pc.persona_id = p.id and pcs.satisfaction = gs.id order by 3;
   end if;
 end
 //
