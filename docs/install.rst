@@ -82,6 +82,13 @@ The *docker run* commands will create and start-up CAIRIS.  If you haven't setup
 
    docker exec -t `docker ps | grep shamalfaily/cairis | head -1 | cut -d ' ' -f 1` /addAccount.sh test@test.com test TestUser
 
+If you are using PowerSheell on Windows to run the above command then this might fail because *grep* is not installed.  To work around this, you need to use *docker ps* to get the Container ID and run the below modified command:
+
+
+.. code-block:: bash
+
+   docker exec -t CONTAINER_ID /addAccount.sh test@test.com test TestUser
+
 Once the containers have been installed then, in the future, you should use *docker start* rather than *docker run* to start up the already downloaded containers.
 
 .. code-block:: bash
