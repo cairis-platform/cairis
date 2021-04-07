@@ -27,10 +27,10 @@ import string
 __author__ = 'Shamal Faily'
 
 def canonicalDbUser(dbUser):
-  return dbUser.replace('@','_at_').replace('.','_dot_')[:32]
+  return dbUser.replace('@','_at_').replace('.','_dot_').replace('-','_dash_')[:32]
 
 def canonicalDbName(dbUser):
-  return dbUser.replace('@','_at_').replace('.','_dot_')[:64]
+  return dbUser.replace('@','_at_').replace('.','_dot_').replace('-','_dash_')[:64]
 
 def dbtoken(rPasswd,dbHost,dbPort,dbUser):
   try:
