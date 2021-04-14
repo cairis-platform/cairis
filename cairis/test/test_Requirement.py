@@ -61,7 +61,7 @@ class RequirementTest(unittest.TestCase):
 
 
     oreqs = b.dbProxy.getRequirements()
-    oreq = oreqs[ireq.description()]
+    oreq = oreqs[ireq.name()]
 
     self.assertEqual(str(ireq.id()),str(oreq.id()))
     self.assertEqual(self.iassets[0]["theShortCode"] + "-" + str(ireq.label()),str(oreq.label()))
@@ -103,7 +103,7 @@ class RequirementTest(unittest.TestCase):
     uireq.theLabel = int(uireq.theLabel.split('-')[1])
     b.dbProxy.updateRequirement(uireq)
     uoreqs = b.dbProxy.getRequirements()
-    uoreq = uoreqs['revised description']
+    uoreq = uoreqs['revised name']
 
     self.assertEqual(str(uireq.name()),str(uoreq.name()))
     self.assertEqual(str(uireq.description()),str(uoreq.description()))
