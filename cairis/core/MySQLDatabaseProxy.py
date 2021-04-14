@@ -198,7 +198,7 @@ class MySQLDatabaseProxy:
     reqDict = {}
     for reqLabel, reqId, reqName, reqDesc, priority, rationale, fitCriterion, originator, reqVersion, reqType, reqDomain in reqRows:
       r = RequirementFactory.build(reqId,reqLabel,reqName,reqDesc,priority,rationale,fitCriterion,originator,reqType,reqDomain,reqVersion)
-      reqDict[reqDesc] = r
+      reqDict[reqName] = r
     return reqDict
 
   def getRequirement(self,reqId):
