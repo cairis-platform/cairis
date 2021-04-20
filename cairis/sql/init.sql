@@ -4138,19 +4138,19 @@ CREATE VIEW misusability_case as
 CREATE VIEW quotation as
    select c.name code,'internal_document' artifact_type,ind.name artifact_name,'None' section,idc.start_index,idc.end_index,internalDocumentQuotationString(ind.name,idc.start_index,idc.end_index) quote,idc.synopsis,idc.label from code c, internal_document ind, internal_document_code idc where c.id = idc.code_id and ind.id = idc.internal_document_id
    union
-   select c.name code,'persona' artifact_type,p.name artifact_name,'Activities' section,pc.start_index,pc.end_index,personaQuotationString(p.name,'activities',pc.start_index,pc.end_index) quote,pc.synopsis,pc.label from code c, persona p, persona_code pc where c.id = pc.code_id and p.id = pc.persona_id
+   select c.name code,'persona' artifact_type,p.name artifact_name,'Activities' section,pc.start_index,pc.end_index,personaQuotationString(p.name,'activities','',pc.start_index,pc.end_index) quote,pc.synopsis,pc.label from code c, persona p, persona_code pc where c.id = pc.code_id and p.id = pc.persona_id
    union
-   select c.name code,'persona' artifact_type,p.name artifact_name,'Attitudes' section,pc.start_index,pc.end_index,personaQuotationString(p.name,'attitudes',pc.start_index,pc.end_index) quote,pc.synopsis,pc.label from code c, persona p, persona_code pc where c.id = pc.code_id and p.id = pc.persona_id
+   select c.name code,'persona' artifact_type,p.name artifact_name,'Attitudes' section,pc.start_index,pc.end_index,personaQuotationString(p.name,'attitudes','',pc.start_index,pc.end_index) quote,pc.synopsis,pc.label from code c, persona p, persona_code pc where c.id = pc.code_id and p.id = pc.persona_id
    union
-   select c.name code,'persona' artifact_type,p.name artifact_name,'Aptitudes' section,pc.start_index,pc.end_index,personaQuotationString(p.name,'attitudes',pc.start_index,pc.end_index) quote,pc.synopsis,pc.label from code c, persona p, persona_code pc where c.id = pc.code_id and p.id = pc.persona_id
+   select c.name code,'persona' artifact_type,p.name artifact_name,'Aptitudes' section,pc.start_index,pc.end_index,personaQuotationString(p.name,'attitudes','',pc.start_index,pc.end_index) quote,pc.synopsis,pc.label from code c, persona p, persona_code pc where c.id = pc.code_id and p.id = pc.persona_id
    union
-   select c.name code,'persona' artifact_type,p.name artifact_name,'Motivations' section,pc.start_index,pc.end_index,personaQuotationString(p.name,'motivations',pc.start_index,pc.end_index) quote,pc.synopsis,pc.label from code c, persona p, persona_code pc where c.id = pc.code_id and p.id = pc.persona_id
+   select c.name code,'persona' artifact_type,p.name artifact_name,'Motivations' section,pc.start_index,pc.end_index,personaQuotationString(p.name,'motivations','',pc.start_index,pc.end_index) quote,pc.synopsis,pc.label from code c, persona p, persona_code pc where c.id = pc.code_id and p.id = pc.persona_id
    union
-   select c.name code,'persona' artifact_type,p.name artifact_name,'Skills' section,pc.start_index,pc.end_index,personaQuotationString(p.name,'skills',pc.start_index,pc.end_index) quote,pc.synopsis,pc.label from code c, persona p, persona_code pc where c.id = pc.code_id and p.id = pc.persona_id
+   select c.name code,'persona' artifact_type,p.name artifact_name,'Skills' section,pc.start_index,pc.end_index,personaQuotationString(p.name,'skills','',pc.start_index,pc.end_index) quote,pc.synopsis,pc.label from code c, persona p, persona_code pc where c.id = pc.code_id and p.id = pc.persona_id
    union
-   select c.name code,'persona' artifact_type,p.name artifact_name,'Intrinsic' section,pc.start_index,pc.end_index,personaQuotationString(p.name,'intrinsic',pc.start_index,pc.end_index) quote,pc.synopsis,pc.label from code c, persona p, persona_code pc where c.id = pc.code_id and p.id = pc.persona_id
+   select c.name code,'persona' artifact_type,p.name artifact_name,'Intrinsic' section,pc.start_index,pc.end_index,personaQuotationString(p.name,'intrinsic','',pc.start_index,pc.end_index) quote,pc.synopsis,pc.label from code c, persona p, persona_code pc where c.id = pc.code_id and p.id = pc.persona_id
    union
-   select c.name code,'persona' artifact_type,p.name artifact_name,'Contextual' section,pc.start_index,pc.end_index,personaQuotationString(p.name,'contextual',pc.start_index,pc.end_index) quote,pc.synopsis,pc.label from code c, persona p, persona_code pc where c.id = pc.code_id and p.id = pc.persona_id order by 1;
+   select c.name code,'persona' artifact_type,p.name artifact_name,'Contextual' section,pc.start_index,pc.end_index,personaQuotationString(p.name,'contextual','',pc.start_index,pc.end_index) quote,pc.synopsis,pc.label from code c, persona p, persona_code pc where c.id = pc.code_id and p.id = pc.persona_id order by 1;
 
 CREATE VIEW personal_information as
   select a.id asset_id, rar.environment_id environment_id from asset a, asset_type at, roleassetrole_dependency rar,role dr, role_type drt, role de, role_type det where rar.dependency_id = a.id and rar.depender_id = dr.id and dr.role_type_id = drt.id and drt.name = 'Data Controller' and rar.dependee_id = de.id and de.role_type_id = det.id and det.name = 'Data Subject' and a.asset_type_id = at.id and at.name = 'Information';
