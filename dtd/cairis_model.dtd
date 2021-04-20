@@ -19,7 +19,7 @@
 
 <!-- DTD for CAIRIS XML model file -->
 
-<!ELEMENT cairis_model (tvtypes?,domainvalues?,cairis?,riskanalysis?,usability?,goals?,associations?,synopses?,misusability?,dataflows?,locations?)>
+<!ELEMENT cairis_model (tvtypes?,domainvalues?,cairis?,riskanalysis?,usability?,goals?,associations?,synopses?,misusability?,dataflows?,locations?,stories?)>
 
 <!ELEMENT tvtypes (vulnerability_type+,threat_type+)>
 <!ELEMENT vulnerability_type (description)>
@@ -87,7 +87,7 @@
 <!ELEMENT riskanalysis (role*,asset*,vulnerability*,attacker*,threat*,risk*,response*,asset_association*)>
 <!ELEMENT role (description)>
 <!ATTLIST role name CDATA #REQUIRED>
-<!ATTLIST role type (Stakeholder | Attacker) #REQUIRED>
+<!ATTLIST role type (Stakeholder | Attacker | Data Controller | Data Processor | Data Subject | Machine) #REQUIRED>
 <!ATTLIST role short_code CDATA #REQUIRED>
 
 <!ELEMENT tag EMPTY>
@@ -279,7 +279,7 @@
 <!ELEMENT goal (tag*,goal_environment+)>
 <!ATTLIST goal name CDATA #REQUIRED>
 <!ATTLIST goal originator CDATA #REQUIRED>
-<!ELEMENT goal_environment (definition,fit_criterion,issue,concern*,concern_association*)>
+<!ELEMENT goal_environment (definition,fit_criterion,issue,concern*,concern_association*,policy?)>
 <!ATTLIST goal_environment name CDATA #REQUIRED>
 <!ATTLIST goal_environment category (Achieve | Maintain | Avoid | Improve | Increase | Maximise | Minimise | Accept | Transfer | Mitigate | Deter | Prevent | Detect | React) #REQUIRED>
 <!ATTLIST goal_environment priority (Low | Medium | High) #REQUIRED>
@@ -293,6 +293,12 @@
 <!ATTLIST concern_association link_name CDATA #REQUIRED>
 <!ATTLIST concern_association target_nry (1 | a | 1..a) #REQUIRED>
 <!ATTLIST concern_association target_name CDATA #REQUIRED>
+
+<!ELEMENT policy EMPTY>
+<!ELEMENT policy subject CDATA #REQUIRED>
+<!ELEMENT policy access (read | write | interact) #REQUIRED>
+<!ELEMENT policy resource CDATA #REQUIRED>
+<!ELEMENT policy permission (allow | deny) #REQUIRED>
 
 <!ELEMENT obstacle (tag*,obstacle_environment+)>
 <!ATTLIST obstacle name CDATA #REQUIRED>
@@ -482,3 +488,11 @@
 
 <!ELEMENT link EMPTY>
 <!ATTLIST link name CDATA #REQUIRED>
+
+<!ELEMENT stories (userstory*)>
+<!ELEMENT userstory (description,user_goal,acceptance_criteria+)>
+<!ELEMENT userstory name CDATA #REQUIRED)
+<!ELEMENT userstory author CDATA #REQUIRED)
+<!ELEMENT userstory role CDATA #REQUIRED)
+<!ELEMENT user_goal (#PCDATA)>
+<!ELEMENT acceptance_criteria (#PCDATA)>
