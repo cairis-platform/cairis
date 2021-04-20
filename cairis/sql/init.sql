@@ -64,6 +64,9 @@ DROP VIEW IF EXISTS goal_associations;
 DROP VIEW IF EXISTS riskModel_tagged;
 DROP VIEW IF EXISTS conceptMapModel_all;
 
+DROP TABLE IF EXISTS policy_statement;
+DROP TABLE IF EXISTS access_type;
+DROP TABLE IF EXISTS access_permission;
 DROP TABLE IF EXISTS userstory_tag;
 DROP TABLE IF EXISTS userstory_acceptance_criteria;
 DROP TABLE IF EXISTS userstory;
@@ -666,8 +669,8 @@ CREATE TABLE multiplicity_type (
   head_id INT NOT NULL,
   head_association_type_id INT NOT NULL,
   head_multiplicity_id INT NOT NULL,
-  head_role_name VARCHAR(50) NOT NULL,
-  tail_role_name VARCHAR(50) NOT NULL,
+  head_role_name VARCHAR(200) NOT NULL,
+  tail_role_name VARCHAR(200) NOT NULL,
   tail_multiplicity_id INT NOT NULL,
   tail_association_type_id INT NOT NULL,
   tail_id INT NOT NULL,
@@ -2075,8 +2078,8 @@ CREATE TABLE securitypattern_classassociation (
   head_id INT NOT NULL,
   head_association_type_id INT NOT NULL,
   head_multiplicity_id INT NOT NULL,
-  head_role_name VARCHAR(50) NOT NULL,
-  tail_role_name VARCHAR(50) NOT NULL,
+  head_role_name VARCHAR(200) NOT NULL,
+  tail_role_name VARCHAR(200) NOT NULL,
   tail_multiplicity_id INT NOT NULL,
   tail_association_type_id INT NOT NULL,
   tail_id INT NOT NULL,
@@ -2906,8 +2909,8 @@ CREATE TABLE component_classassociation (
   head_association_type_id INT NOT NULL,
   head_navigation INT NOT NULL default 0,
   head_multiplicity_id INT NOT NULL,
-  head_role_name VARCHAR(50) NOT NULL,
-  tail_role_name VARCHAR(50) NOT NULL,
+  head_role_name VARCHAR(200) NOT NULL,
+  tail_role_name VARCHAR(200) NOT NULL,
   tail_multiplicity_id INT NOT NULL,
   tail_navigation INT NOT NULL default 0,
   tail_association_type_id INT NOT NULL,
@@ -3550,6 +3553,36 @@ CREATE TABLE userstory_tag (
   PRIMARY KEY(userstory_id,tag_id),
   FOREIGN KEY(userstory_id) REFERENCES userstory(id), 
   FOREIGN KEY(tag_id) REFERENCES tag(id)
+) ENGINE=INNODB;
+
+CREATE TABLE access_permission (
+  id INT NOT NULL,
+  name varchar(200) NOT NULL,
+  PRIMARY KEY(id)
+) ENGINE=INNODB;
+
+CREATE TABLE access_type (
+  id INT NOT NULL,
+  name varchar(200) NOT NULL,
+  short_code varchar(1) NOT NULL,
+  PRIMARY KEY(id)
+) ENGINE=INNODB;
+
+CREATE TABLE policy_statement (
+  id INT NOT NULL,
+  goal_id INT NOT NULL,
+  environment_id INT NOT NULL,
+  subject_id INT NOT NULL,
+  access_id INT NOT NULL,
+  resource_id INT NOT NULL,
+  permission_id INT NOT NULL,
+  PRIMARY KEY(id),
+  FOREIGN KEY(goal_id) REFERENCES goal(id), 
+  FOREIGN KEY(environment_id) REFERENCES environment(id), 
+  FOREIGN KEY(subject_id) REFERENCES asset(id), 
+  FOREIGN KEY(resource_id) REFERENCES asset(id), 
+  FOREIGN KEY(access_id) REFERENCES access_type(id), 
+  FOREIGN KEY(permission_id) REFERENCES access_permission(id)
 ) ENGINE=INNODB;
 
 delimiter //
@@ -4265,9 +4298,6 @@ CREATE VIEW conceptMapModel_all as
   select fr.name from_name, tr.name to_name, rr.label,fa.name from_objt,te.name to_objt from requirement fr, requirement tr, requirement_requirement rr, asset_requirement far, asset fa, environment_asset fea, environment_requirement ter, environment te where rr.from_id = fr.id and fr.version = (select max(i.version) from requirement i where i.id = fr.id) and fr.id = far.requirement_id and far.asset_id = fa.id and fa.id = fea.asset_id and rr.to_id = tr.id and tr.version = (select max(i.version) from requirement i where i.id = tr.id) and tr.id = ter.requirement_id and ter.environment_id = te.id order by 1,2;
 
 
-
-
-
 INSERT INTO version (major,minor,patch) VALUES (2,3,8);
 INSERT INTO attributes (id,name) VALUES (103,'did');
 INSERT INTO trace_dimension values (0,'requirement');
@@ -4575,3 +4605,8 @@ INSERT INTO stpa_keyword values(4,'provides out of order','Incorrect timing / or
 INSERT INTO stpa_keyword values(5,'stopped too soon','Stopped too soon / applied to long');
 INSERT INTO stpa_keyword values(6,'applied too long','Stopped too soon / applied to long');
 INSERT INTO stpa_keyword values(7,'not applicable','Not applicable');
+INSERT INTO access_type values(0,"read","r");
+INSERT INTO access_type values(1,"write","w");
+INSERT INTO access_type values(2,"interact","x");
+INSERT INTO access_permission values(0,"allow");
+INSERT INTO access_permission values(1,"deny");

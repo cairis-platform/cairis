@@ -363,6 +363,10 @@ api.add_resource(ObjectController.ObjectsAPI, '/api/persona_characteristics',end
 api.add_resource(ObjectController.ObjectByNameAPI, '/api/persona_characteristics/name/<path:name>',endpoint='persona_characteristic',resource_class_kwargs={'dao' : 'PersonaCharacteristicDAO'})
 api.add_resource(ObjectController.ObjectsSummaryAPI, '/api/persona_characteristics/summary',endpoint='personacharacteristicssummary',resource_class_kwargs={'dao' : 'PersonaCharacteristicDAO'})
 
+# Policy Statement routes
+api.add_resource(ObjectController.ObjectsAPI, '/api/policy_statements',endpoint='policy_statements',resource_class_kwargs={'dao': 'PolicyStatementDAO'})
+api.add_resource(ObjectController.ObjectsByMethodAndFiveParametersAPI,'/api/policy_statements/goal/<path:p1>/environment/<path:p2>/subject/<path:p3>/access_type/<path:p4>/resource/<path:p5>',endpoint='policy_statement',resource_class_kwargs={'dao' : 'PolicyStatementDAO', 'get_method' : 'get_object_by_name', 'put_method' : 'update_object', 'del_method' : 'delete_object'})
+
 # Project routes
 api.add_resource(ObjectController.ObjectsByMethodAPI, '/api/settings',endpoint='project_settings',resource_class_kwargs={'dao' : 'ProjectDAO','get_method' : 'get_settings','put_method' : 'apply_settings'})
 api.add_resource(ObjectController.ObjectsByMethodAPI, '/api/settings/clear',endpoint='project_clear', resource_class_kwargs={'dao' : 'ProjectDAO', 'post_method' : 'clear_project'})

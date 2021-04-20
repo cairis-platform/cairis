@@ -109,6 +109,7 @@ from .ValidationResult import ValidationResult
 from .GoalContribution import GoalContribution
 from .TaskContribution import TaskContribution
 from .UserStory import UserStory
+from .PolicyStatement import PolicyStatement
 from cairis.tools.PseudoClasses import RiskRating
 import string
 import os
@@ -586,6 +587,7 @@ class MySQLDatabaseProxy:
     elif (dimensionTable == 'reference_contribution'): objts = self.getReferenceContributions(constraintId)
     elif (dimensionTable == 'persona_implied_process'): objts = self.getImpliedProcesses(constraintId)
     elif (dimensionTable == 'trust_boundary'): objts = self.getTrustBoundaries(constraintId)
+    elif (dimensionTable == 'policy_statement'): objts = self.getPolicyStatements(constraintId)
     return (list(objts.values()))[0]
 
 
@@ -710,6 +712,9 @@ class MySQLDatabaseProxy:
       elif ((dimensionTable == 'provided_interface') or (dimensionTable == 'required_interface')):
         cName,ifName = dimensionName.split('_')
         rs = session.execute('select interfaceId(:name)',{'name':ifName})
+      elif (dimensionTable == 'policy_statement'):
+        psComponents = dimensionName.split('/')
+        rs = session.execute('select policyStatementId(:goal,:env,:subj,:at,:res)',{'goal':psComponents[0],'env':psComponents[1],'subj':psComponents[2],'at':psComponents[3],'res':psComponents[4]})
       else:
         rs = session.execute('call dimensionId(:name,:table)',{'name':dimensionName,'table':dimensionTable})
 
@@ -1759,6 +1764,9 @@ class MySQLDatabaseProxy:
       self.addGoalRefinements(goalId,goalName,environmentName,environmentProperties.goalRefinements(),environmentProperties.subGoalRefinements())
       self.addGoalConcerns(goalId,environmentName,environmentProperties.concerns())
       self.addGoalConcernAssociations(goalId,environmentName,environmentProperties.concernAssociations())
+      gp = environmentProperties.policy()
+      if (gp != None):
+        self.addGoalPolicy(goalId,environmentName,gp['subject'],gp['access'],gp['resource'],gp['permission'])
     return goalId
 
   def updateGoal(self,parameters):
@@ -1782,6 +1790,9 @@ class MySQLDatabaseProxy:
       self.addGoalRefinements(goalId,goalName,environmentName,environmentProperties.goalRefinements(),environmentProperties.subGoalRefinements())
       self.addGoalConcerns(goalId,environmentName,environmentProperties.concerns())
       self.addGoalConcernAssociations(goalId,environmentName,environmentProperties.concernAssociations())
+      gp = environmentProperties.policy()
+      if (gp != None):
+        self.addGoalPolicy(goalId,environmentName,gp['subject'],gp['access'],gp['resource'],gp['permission'])
 
   def getGoals(self,constraintId = -1):
     goalRows = self.responseList('call getGoals(:id)',{'id':constraintId},'MySQL error getting goals')
@@ -1819,7 +1830,8 @@ class MySQLDatabaseProxy:
       goalRefinements,subGoalRefinements = self.goalRefinements(goalId,environmentId)
       concerns = self.goalConcerns(goalId,environmentId)
       concernAssociations = self.goalConcernAssociations(goalId,environmentId)
-      properties = GoalEnvironmentProperties(environmentName,goalLabel,goalDef,goalType,goalPriority,goalFitCriterion,goalIssue,goalRefinements,subGoalRefinements,concerns,concernAssociations)
+      gp = self.goalPolicy(goalId,environmentId)
+      properties = GoalEnvironmentProperties(environmentName,goalLabel,goalDef,goalType,goalPriority,goalFitCriterion,goalIssue,goalRefinements,subGoalRefinements,concerns,concernAssociations,gp)
       environmentProperties.append(properties) 
     return environmentProperties
 
@@ -2406,9 +2418,14 @@ class MySQLDatabaseProxy:
     vtDesc = parameters.description()
     vtType = parameters.type()
     vtScore = parameters.score()
-    if vtScore == '': vtScore = 0
+    if vtType == 'access_right' and vtScore == '':
+      vtScore = 1
+    elif vtScore == '': 
+      vtScore = 0
     else:
       vtScore = int(vtScore)
+      if (vtType == 'access_right' and vtScore == 0):
+        raise DatabaseProxyException('Access right value cannot be set to 0')
     vtRat = parameters.rationale()
     if ((vtType == 'asset_value') or (vtType == 'threat_value') or (vtType == 'risk_class') or (vtType == 'countermeasure_value')):
       exceptionText = 'Cannot add ' + vtType + 's'
@@ -2423,6 +2440,8 @@ class MySQLDatabaseProxy:
     envName = parameters.environment()
     vtScore = parameters.score()
     vtRat = parameters.rationale()
+    if (vtType == 'access_right' and vtScore == 0):
+      raise DatabaseProxyException('Access right value cannot be set to 0')
     self.updateDatabase('call updateValueType(:id,:name,:desc,:type,:env,:score,:rat)',{'id':valueTypeId,'name':vtName,'desc':vtDesc,'type':vtType,'env':envName,'score':vtScore,'rat':vtRat},'MySQL error updating value type')
 
   def getVulnerabilityDirectory(self,vulName = ''):
@@ -2681,7 +2700,12 @@ class MySQLDatabaseProxy:
   def associateCountermeasureToPattern(self,cmId,patternName): self.updateDatabase('call associateCountermeasureToPattern(:cm,:pat)',{'cm':cmId,'pat':patternName},'MySQL error associating countermeasure to pattern')
 
   def nameCheck(self,objtName,dimName):
-    objtCount = self.responseList('call nameExists(:obj,:dim)',{'obj':objtName,'dim':dimName},'MySQL error checking existence of ' + dimName + ' ' + objtName)[0]
+    objtCount = 0
+    if (dimName == 'policy_statement'):
+      goalName,envName,subjName,atName,resName = objtName.split('/')
+      objtCount = self.responseList('call policyStatementExists(:goal,:env,:subj,:at,:res)',{'goal':goalName,'env':envName,'subj':subjName,'at':atName,'res':resName},'MySQL error checking existence of ' + dimName + ' ' + objtName)[0]
+    else:
+      objtCount = self.responseList('call nameExists(:obj,:dim)',{'obj':objtName,'dim':dimName},'MySQL error checking existence of ' + dimName + ' ' + objtName)[0]
     if (objtCount > 0): raise ARMException('Object with name ' + objtName + ' already exists.')
   
 
@@ -5066,3 +5090,44 @@ class MySQLDatabaseProxy:
   def roleUserGoals(self,roleName):
     return self.responseList('call roleUserGoals(:name)',{'name':roleName},'MySQL error getting user goals for role ' + roleName)
 
+  def goalPolicy(self,goalId,environmentId):
+    pData = self.responseList('call goalPolicy(:gId,:eId)',{'gId':goalId, 'eId':environmentId},'MySQL error getting goal policy')
+    if (len(pData) == 1):
+      return {'subject':pData[0][0],'access':pData[0][1],'resource':pData[0][2],'permission':pData[0][3]}
+    else:
+      return None
+
+  def addGoalPolicy(self,goalId,environmentName,subjName,acName,resName,pName):
+    self.updateDatabase('call addGoalPolicy(:gId,:eName,:subj,:acc,:res,:perm)',{'gId':goalId,'eName':environmentName,'subj':subjName,'acc':acName,'res':resName,'perm':pName},'MySQL error adding goal policy')
+
+  def addPolicyStatement(self,parameters):
+    psId = self.newId()
+    goalName = parameters.goal()
+    envName = parameters.environment()
+    subjName = parameters.subject() 
+    atName = parameters.accessType() 
+    resName = parameters.resource() 
+    pName = parameters.permission() 
+    self.updateDatabase('call addPolicyStatement(:id,:goal,:env,:subj,:at,:res,:perm)',{'id':psId,'goal':goalName,'env':envName,'subj':subjName,'at':atName,'res':resName,'perm':pName},'MySQL error adding policy statement')
+    return psId
+
+  def updatePolicyStatement(self,parameters):
+    psId = parameters.id()
+    goalName = parameters.goal()
+    envName = parameters.environment()
+    subjName = parameters.subject() 
+    atName = parameters.accessType() 
+    resName = parameters.resource() 
+    pName = parameters.permission() 
+    self.updateDatabase('call updatePolicyStatement(:id,:goal,:env,:subj,:at,:res,:perm)',{'id':psId,'goal':goalName,'env':envName,'subj':subjName,'at':atName,'res':resName,'perm':pName},'MySQL error updating policy statement')
+    
+
+  def deletePolicyStatement(self,psId = -1):
+    self.deleteObject(psId,'policy_statement')
+
+  def getPolicyStatements(self,constraintId = -1):
+    psRows = self.responseList('call getPolicyStatements(:id)',{'id':constraintId},'MySQL error getting policy statements')
+    objts = []
+    for psId,goalName,envName,subjName,atName,resName,pName in psRows:
+      objts.append(PolicyStatement(psId,goalName,envName,subjName,atName,resName,pName))
+    return objts

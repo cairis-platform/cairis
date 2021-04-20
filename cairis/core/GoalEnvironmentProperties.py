@@ -21,7 +21,7 @@ from .EnvironmentProperties import EnvironmentProperties
 __author__ = 'Shamal Faily'
 
 class GoalEnvironmentProperties(EnvironmentProperties):
-  def __init__(self,environmentName,lbl='',definition='',category='',priority='',fitCriterion='',issue='',goalRefinements=[],subGoalRefinements=[],concs=[],cas=[]):
+  def __init__(self,environmentName,lbl='',definition='',category='',priority='',fitCriterion='',issue='',goalRefinements=[],subGoalRefinements=[],concs=[],cas=[], gp = None):
     EnvironmentProperties.__init__(self,environmentName)
     self.theLabel = lbl
     self.theDefinition = definition
@@ -33,6 +33,7 @@ class GoalEnvironmentProperties(EnvironmentProperties):
     self.theSubGoalRefinements = subGoalRefinements
     self.theConcerns = concs
     self.theConcernAssociations = cas
+    self.thePolicy = gp
 
   def label(self): return self.theLabel
   def definition(self): return self.theDefinition
@@ -44,6 +45,7 @@ class GoalEnvironmentProperties(EnvironmentProperties):
   def subGoalRefinements(self): return self.theSubGoalRefinements
   def concerns(self): return self.theConcerns
   def concernAssociations(self): return self.theConcernAssociations
+  def policy(self): return self.thePolicy
 
   def setDefinition(self,v): self.theDefinition = v
   def setCategory(self,v): self.theCategory = v

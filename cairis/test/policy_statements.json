@@ -1,0 +1,62 @@
+{
+  "environments" : [
+      {"theName" : "Day",
+       "theShortCode" : "DAY",
+       "theDescription" : "Day-time plant operations"}
+  ],
+  "assets" : [
+   {
+     "theName" : "Corporate Network",
+     "theShortCode" : "CN",
+     "theDescription" : "ACME Corporate network.",
+     "theSignificance" : "Compromising the network may compromise the data passing through it.",
+     "theType" : "Systems",
+     "theEnvironmentProperties" :
+      [
+        ["Day",
+         [2,0,0,0,0,0,0,0],
+         ["","None","None","None","None","None","None","None"]
+        ]
+      ]
+    },
+    {
+     "theName" : "Message",
+     "theShortCode" : "MES",
+     "theDescription" : "ACME message",
+     "theSignificance" : "Disclosure or alteration of the message could be harmful.",
+     "theType" : "Information",
+     "theEnvironmentProperties" :
+      [
+        ["Day",
+         [2,2,0,0,0,0,0,0],
+         ["","","None","None","None","None","None","None"]
+        ]
+      ]
+    }
+  ],
+  "goals" : [
+     {
+       "theName" : "Active Directory Network Services",
+       "theOriginator" : "Anon",
+       "theEnvironmentProperties" : [
+	 {"theName": "Day",
+         "theLabel": "DAY-1",
+         "theDefinition" : "Network services shall be controlled using Active Directory",
+         "theCategory": "Maintain",
+         "thePriority": "High",
+         "theFitCriterion" : "Network connectivity to any SCADA, Telemetry, and Control System application workstation can be cut using Active Directory.",
+         "theIssue" : "Standard 7.2(q)",
+         "theConcerns" : ["Corporate Network","Message"]}
+       ]
+     }
+  ],
+  "policy_statements" : [
+    {"theEnvironmentName" : "Day",
+     "theGoalName" : "Active Directory Network Services",
+     "theSubject" : "Corporate Network",
+     "theAccessType" : "write",
+     "theResource" : "Message",
+     "thePermission" : "allow"
+    }
+  ]
+}

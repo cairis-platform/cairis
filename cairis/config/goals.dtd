@@ -34,7 +34,7 @@
 <!ELEMENT goal (tag*,goal_environment+)>
 <!ATTLIST goal name CDATA #REQUIRED>
 <!ATTLIST goal originator CDATA #REQUIRED>
-<!ELEMENT goal_environment (definition,fit_criterion,issue,concern*,concern_association*)>
+<!ELEMENT goal_environment (definition,fit_criterion,issue,concern*,concern_association*,policy?)>
 <!ATTLIST goal_environment name CDATA #REQUIRED>
 <!ATTLIST goal_environment category (Achieve | Maintain | Avoid | Improve | Increase | Maximise | Minimise | Accept | Transfer | Mitigate | Deter | Prevent | Detect | React) #REQUIRED>
 <!ATTLIST goal_environment priority (Low | Medium | High) #REQUIRED>
@@ -48,6 +48,12 @@
 <!ATTLIST concern_association link_name CDATA #REQUIRED>
 <!ATTLIST concern_association target_nry (1 | a | 1..a) #REQUIRED>
 <!ATTLIST concern_association target_name CDATA #REQUIRED>
+
+<!ELEMENT policy EMPTY>
+<!ELEMENT policy subject CDATA #REQUIRED>
+<!ELEMENT policy access (read | write | interact) #REQUIRED>
+<!ELEMENT policy resource CDATA #REQUIRED>
+<!ELEMENT policy permission (allow | deny) #REQUIRED>
 
 <!ELEMENT obstacle (tag*,obstacle_environment+)>
 <!ATTLIST obstacle name CDATA #REQUIRED>

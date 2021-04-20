@@ -97,12 +97,12 @@
     "theDescription" : 1000 
   },
   "ClassAssociation" : {
-    "theHeadRole" : 50,
-    "theTailRole" : 50
+    "theHeadRole" : 200,
+    "theTailRole" : 200
   },
   "ClassAssociationParameters" : {
-    "theHeadRole" : 50,
-    "theTailRole" : 50
+    "theHeadRole" : 200,
+    "theTailRole" : 200
   },
   "Attacker" : {
     "theName" : 50,

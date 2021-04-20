@@ -1049,7 +1049,17 @@ drop procedure if exists addUserStoryAcceptanceCriteria;
 drop procedure if exists storiesToXml;
 drop procedure if exists roleUserGoals;
 drop procedure if exists synopsisDependents;
-
+drop procedure if exists addAdornmentPermissions;
+drop procedure if exists goalPolicy;
+drop procedure if exists addGoalPolicy;
+drop procedure if exists accessControlCheck;
+drop procedure if exists addPolicyStatement;
+drop procedure if exists updatePolicyStatement;
+drop procedure if exists policyStatements;
+drop procedure if exists delete_policy_statement;
+drop procedure if exists getPolicyStatements;
+drop function if exists policyStatementId;
+drop procedure if exists checkPolicyStatementExists;
 
 delimiter //
 
@@ -2631,6 +2641,8 @@ begin
   delete from asset_tag where asset_id = assetId;
   delete from asset_reference where asset_id = assetId;
   delete from trust_boundary_asset where asset_id = assetId;
+  delete from policy_statement where subject_id = assetId;
+  delete from policy_statement where resource_id = assetId;
   delete from asset where id = assetId;
 end
 //
@@ -6281,6 +6293,7 @@ begin
   delete from goalrole_goalassociation where goal_id = goalId;
   delete from goal_concern where goal_id = goalId;
   delete from goal_concernassociation where goal_id = goalId;
+  delete from policy_statement where goal_id = goalId;
 end
 //
 
@@ -12921,8 +12934,8 @@ begin
   declare headName varchar(100);
   declare headAdornment varchar(50);
   declare headNry varchar(10);
-  declare headRole varchar(50);
-  declare tailRole varchar(50);
+  declare headRole varchar(200);
+  declare tailRole varchar(200);
   declare tailNry varchar(10);
   declare tailAdornment varchar(50);
   declare tailName varchar(100);
@@ -13485,12 +13498,17 @@ begin
   declare obsOrig varchar(100);
   declare envId int;
   declare envName varchar(50);
-  declare concernName varchar(50);
-  declare sourceName varchar(50);
+  declare concernName varchar(200);
+  declare sourceName varchar(200);
   declare sourceNry varchar(10);
   declare concernLink varchar(50);
   declare targetNry varchar(10);
-  declare targetName varchar(50);
+  declare targetName varchar(200);
+  declare gpCount int default 0;
+  declare subjName varchar(200);
+  declare atName varchar(200);
+  declare resName varchar(200);
+  declare permName varchar(200);
   declare refName varchar(100);
   declare refType varchar(50);
   declare reqLabel int;
@@ -13692,6 +13710,15 @@ begin
       close goalConcernAssocCursor;
       set done = 0;
 
+      select count(id) into gpCount from policy_statement where goal_id = goalId and environment_id = envId limit 1;
+      if (gpCount = 1)
+      then
+        select s.name into subjName from asset s, policy_statement ps where ps.goal_id = goalId and ps.environment_id = envId and ps.subject_id = s.id limit 1;
+        select at.name into atName from access_type at, policy_statement ps where ps.goal_id = goalId and ps.environment_id = envId and ps.access_id = at.id limit 1;
+        select r.name into resName from asset r, policy_statement ps where ps.goal_id = goalId and ps.environment_id = envId and ps.resource_id = r.id limit 1;
+        select ap.name into permName from access_permission ap, policy_statement ps where ps.goal_id = goalId and ps.environment_id = envId and ps.permission_id = ap.id limit 1;
+        set buf = concat(buf,'    <policy subject=\"',subjName,'\" access=\"',atName,'\" resource=\"',resName,'\" permission=\"',permName,'\" />\n');
+      end if;
       set buf = concat(buf,'  </goal_environment>\n');
     end loop goalEnv_loop;
     close goalEnvCursor;
@@ -23350,8 +23377,8 @@ begin
   declare hAdorn varchar(50);
   declare hNav int;
   declare hNry varchar(50);
-  declare hRole varchar(50);
-  declare tRole varchar(50);
+  declare hRole varchar(200);
+  declare tRole varchar(200);
   declare tNry varchar(50);
   declare tNav int;
   declare tAdorn varchar(50);
@@ -25050,6 +25077,7 @@ begin
   call userGoalLoopCheck();
   call conflictingControl(environmentId);
   call reservedCharacterCheck();
+  call accessControlCheck(environmentId);
 
   select distinct label,message from temp_vout;
 
@@ -27270,8 +27298,8 @@ begin
   declare headName varchar(100);
   declare headAdornment varchar(50);
   declare headNry varchar(10);
-  declare headRole varchar(50);
-  declare tailRole varchar(50);
+  declare headRole varchar(200);
+  declare tailRole varchar(200);
   declare tailNry varchar(10);
   declare tailAdornment varchar(50);
   declare tailName varchar(100);
@@ -29737,8 +29765,8 @@ begin
   declare hAsset varchar(50);
   declare hAdorn varchar(50);
   declare hNry varchar(50);
-  declare hRole varchar(50);
-  declare tRole varchar(50);
+  declare hRole varchar(200);
+  declare tRole varchar(200);
   declare tNry varchar(50);
   declare tAdorn varchar(50);
   declare tAsset varchar(50);
@@ -32025,6 +32053,269 @@ begin
     insert into temp_userstory values(usId,usName);
   end loop us_loop;
   close usCursor;
+end
+//
+
+create procedure addAdornmentPermissions(in caId int, in envId int, in headId int, in pStr longtext, in tailId int)
+begin
+  declare inStr longtext default '-1';
+  declare permissionPresent int default 0;
+
+
+  select ifnull( strSplit(pStr,1),'-1') into inStr;
+  select count(*) into permissionPresent from temp_access_need where id = caId and environment_id = envId and head_id = headId and tail_id = tailId and permission = inStr and permission in ('r','w','x');
+
+  if ((inStr = 'r') and (permissionPresent = 0)) or ((inStr = 'w') and (permissionPresent = 0)) or ((inStr = 'x') and (permissionPresent = 0))
+  then
+    insert into temp_access_need(id,environment_id,head_id,permission,tail_id) values (caId,envId,headId,inStr,tailId);
+  end if; 
+
+  select ifnull( strSplit(pStr,2),'-1') into inStr;
+  select count(*) into permissionPresent from temp_access_need where id = caId and environment_id = envId and head_id = headId and tail_id = tailId and permission = inStr and permission in ('r','w','x');
+  if ((inStr = 'r') and (permissionPresent = 0)) or ((inStr = 'w') and (permissionPresent = 0)) or ((inStr = 'x') and (permissionPresent = 0))
+  then
+    insert into temp_access_need(id,environment_id,head_id,permission,tail_id) values (caId,envId,headId,inStr,tailId);
+  end if; 
+
+  select ifnull( strSplit(pStr,3),'-1') into inStr;
+  select count(*) into permissionPresent from temp_access_need where id = caId and environment_id = envId and head_id = headId and tail_id = tailId and permission = inStr and permission in ('r','w','x');
+  if ((inStr = 'r') and (permissionPresent = 0)) or ((inStr = 'w') and (permissionPresent = 0)) or ((inStr = 'x') and (permissionPresent = 0))
+  then
+    insert into temp_access_need(id,environment_id,head_id,permission,tail_id) values (caId,envId,headId,inStr,tailId);
+  end if; 
+end
+//
+
+create procedure goalPolicy(in goalId int, in environmentId int)
+begin
+  select s.name, at.name, r.name, ap.name from asset s, asset r, access_type at, access_permission ap, policy_statement ps where ps.goal_id = goalId and ps.environment_id = environmentId and ps.subject_id = s.id and ps.resource_id = r.id and ps.access_id = at.id and ps.permission_id = ap.id limit 1;
+end
+//
+
+
+create procedure addGoalPolicy(in goalId int, in envName text, in subjName text, in atName text, in resName text, in pName text)
+begin
+  declare envId int;
+  declare sId int;
+  declare rId int;
+  declare atId int;
+  declare pId int;
+  declare polId int;
+
+  select id into envId from environment where name = envName limit 1;
+  select id into sId from asset where name = subjName limit 1;
+  select id into atId from access_type where name = atName limit 1;
+  select id into rId from asset where name = resName limit 1;
+  select id into pId from access_permission where name = pName limit 1;
+  
+  call newId2(polId);
+
+  insert into policy_statement(id,goal_id,environment_id,subject_id,access_id,resource_id,permission_id) values (polId,goalId,envId,sId,atId,rId,pId);
+end
+//
+
+create procedure accessControlCheck(in environmentId int)
+begin
+  declare caId int;
+  declare envId int;
+  declare headId int;
+  declare roleName varchar(200);
+  declare tailId int;
+  declare done int default 0;
+  declare currentEnvironmentId int;
+  declare policyCount int;
+  declare subjName varchar(200);
+  declare resName varchar(200);
+  declare accessName varchar(200);
+  declare subjValue int;
+  declare resValue int;
+  declare accessNeedCursor cursor for 
+    select ca.id,ca.environment_id,ca.head_id,ca.tail_role_name,ca.tail_id from classassociation ca, asset h, asset t where ca.head_association_type_id in (0,1,2) and ca.tail_association_type_id in (0,1,2) and ca.head_id = h.id and h.asset_type_id in (0,1) and ca.tail_id = t.id and t.asset_type_id in (0,1) and ca.tail_role_name != ''
+    union
+    select ca.id,ca.environment_id,ca.head_id,ca.tail_role_name,ca.tail_id from classassociation ca, asset h, asset t where ca.head_association_type_id in (0,1,2) and ca.tail_association_type_id in (0,1,2) and ca.head_id = h.id and h.asset_type_id in (0,1) and ca.tail_id = t.id and t.asset_type_id in (0,1) and ca.tail_role_name != ''
+    union
+    select ca.id,ca.environment_id,ca.head_id,ca.tail_role_name,ca.tail_id from classassociation ca, asset h, asset t where ca.head_association_type_id in (0,1,2) and ca.tail_association_type_id in (0,1,2) and ca.head_id = h.id and h.asset_type_id = 4 and ca.tail_id = t.id and t.asset_type_id in (0,1,4) and ca.tail_role_name != ''
+    union
+    select ca.id,ca.environment_id,ca.tail_id,ca.head_role_name,ca.head_id from classassociation ca, asset h, asset t where ca.tail_association_type_id in (0,1,2) and ca.head_association_type_id in (0,1,2) and ca.tail_id = t.id and t.asset_type_id in (0,1) and ca.head_id = h.id and h.asset_type_id in (0,1) and ca.head_role_name != ''
+    union
+    select ca.id,ca.environment_id,ca.tail_id,ca.head_role_name,ca.head_id from classassociation ca, asset h, asset t where ca.tail_association_type_id in (0,1,2) and ca.head_association_type_id in (0,1,2) and ca.tail_id = t.id and t.asset_type_id in (0,1) and ca.head_id = h.id and h.asset_type_id in (0,1) and ca.head_role_name != ''
+    union
+    select ca.id,ca.environment_id,ca.tail_id,ca.head_role_name,ca.head_id from classassociation ca, asset h, asset t where ca.tail_association_type_id in (0,1,2) and ca.head_association_type_id in (0,1,2) and ca.tail_id = t.id and t.asset_type_id = 4 and ca.head_id = h.id and h.asset_type_id in (0,1,4) and ca.head_role_name != '';
+  declare accessNeedCursor2 cursor for 
+    select id,environment_id,head_id,permission,tail_id from temp_access_need;
+
+  declare continue handler for not found set done = 1;
+
+  drop table if exists temp_access_need;
+  create temporary table temp_access_need (id int, environment_id int, head_id int, permission varchar(10), tail_id int);
+
+  open accessNeedCursor;
+  accessNeed_loop: loop
+    fetch accessNeedCursor into caId,envId,headId,roleName,tailId;
+    if done = 1
+    then
+      leave accessNeed_loop;
+    end if;
+    call addAdornmentPermissions(caId,envId,headId,roleName,tailId);
+  end loop accessNeed_loop;
+  close accessNeedCursor;
+
+  set done = 0;
+
+  open accessNeedCursor2;
+  accessNeed2_loop: loop
+    fetch accessNeedCursor2 into caId,envId,headId,roleName,tailId;
+    if done = 1
+    then
+      leave accessNeed2_loop;
+    end if;
+    select name into subjName from asset where id = headId limit 1;
+    select name into resName from asset where id = tailId limit 1;
+    select name into accessName from access_type where short_code = roleName limit 1;
+    select count(ps.id) into policyCount from policy_statement ps, access_type at where ps.environment_id = envId and ps.subject_id = headId and ps.resource_id = tailId and ps.access_id = at.id and at.short_code = roleName;
+
+    if policyCount = 0
+    then
+      insert into temp_vout(label,message) values('Absent policy statement',concat(subjName,' needs ',accessName,' access to ',resName,' but no policy statement specifies this access.'));
+    elseif policyCount > 1
+    then
+      insert into temp_vout(label,message) values('Ambiguous policy statements',concat(subjName,' needs ',accessName,' access to ',resName,' but multiple policy statements specify this access.'));
+    else
+      /* If resource C is higher than subject C then check for no read up */
+      select property_value_id into subjValue from asset_property where asset_id = headId and environment_id = envId and property_id = 0 limit 1;
+      select property_value_id into resValue from asset_property where asset_id = tailId and environment_id = envId and property_id = 0 limit 1;
+      if ((resValue > subjValue) and (accessName = 'read'))
+      then
+        insert into temp_vout(label,message) values('No read-up violation',concat(subjName,' needs ',accessName,' access to ',resName,' but reading up when the Confidentiality value of the resource is higher than the subject is undesirable'));
+      end if;
+
+      /* If subject C is higher than resource C then check for no write down */
+      if ((subjValue > resValue) and (accessName = 'write'))
+      then
+        insert into temp_vout(label,message) values('No write-down violation',concat(subjName,' needs ',accessName,' access to ',resName,' but writing down when the Confidentiality value of the subject is higher than the resource is undesirable'));
+      end if;
+
+      /* If subject I is higher than resource I then check for no read down */
+      select property_value_id into subjValue from asset_property where asset_id = headId and environment_id = envId and property_id = 1 limit 1;
+      select property_value_id into resValue from asset_property where asset_id = tailId and environment_id = envId and property_id = 1 limit 1;
+      if ((subjValue > resValue) and (accessName = 'read'))
+      then
+        insert into temp_vout(label,message) values('No read-down violation',concat(subjName,' needs ',accessName,' access to ',resName,' but reading down when the Integrity value of the subject is higher than the resource is undesirable'));
+      end if;
+
+      /* If resource I is higher than subject I then check for no write up */
+      if ((resValue > subjValue) and (accessName = 'write'))
+      then
+        insert into temp_vout(label,message) values('No write-up violation',concat(subjName,' needs ',accessName,' access to ',resName,' but writing up when the Integrity value of the resource is higher than the subject is undesirable'));
+      end if;
+
+      /* If subject I is lower than resource I then check for no interaction up */
+      if ((subjValue < resValue) and (accessName = 'interact'))
+      then
+        insert into temp_vout(label,message) values('No interaction up',concat(subjName,' needs ',accessName,' access to ',resName,' but interacting up when the Integrity value of the subject is lower than the resource is undesirable'));
+      end if;
+    end if;
+  end loop accessNeed2_loop;
+  close accessNeedCursor2;
+
+end
+//
+
+create procedure addPolicyStatement(in psId int, in goalName text, in envName text, in subjName text, in atName text, in resName text, in pName text)
+begin
+  declare goalId int;
+  declare envId int;
+  declare sId int;
+  declare rId int;
+  declare atId int;
+  declare pId int;
+
+  select id into goalId from goal where name = goalName limit 1;
+  select id into envId from environment where name = envName limit 1;
+  select id into sId from asset where name = subjName limit 1;
+  select id into atId from access_type where name = atName limit 1;
+  select id into rId from asset where name = resName limit 1;
+  select id into pId from access_permission where name = pName limit 1;
+  
+  insert into policy_statement(id,goal_id,environment_id,subject_id,access_id,resource_id,permission_id) values (psId,goalId,envId,sId,atId,rId,pId);
+end
+//
+
+create procedure updatePolicyStatement(in psId int, in goalName text, in envName text, in subjName text, in atName text, in resName text, in pName text)
+begin
+  declare goalId int;
+  declare envId int;
+  declare sId int;
+  declare rId int;
+  declare atId int;
+  declare pId int;
+
+  select id into goalId from goal where name = goalName limit 1;
+  select id into envId from environment where name = envName limit 1;
+  select id into sId from asset where name = subjName limit 1;
+  select id into atId from access_type where name = atName limit 1;
+  select id into rId from asset where name = resName limit 1;
+  select id into pId from access_permission where name = pName limit 1;
+  
+  update policy_statement set goal_id = goalId, environment_id = envId, subject_id = sId, access_id = atId, resource_id = rId, permission_id = pId where id = psId;
+end
+//
+
+create procedure getPolicyStatements(in constraintId int)
+begin
+  if constraintId = -1
+  then
+    select ps.id,g.name,e.name,s.name,at.name,r.name,ap.name from policy_statement ps, asset s, asset r, access_type at, access_permission ap, goal g, environment e where ps.subject_id = s.id and ps.access_id = at.id and ps.resource_id = r.id and ps.permission_id = ap.id and ps.goal_id = g.id and ps.environment_id = e.id order by 1;
+  else
+    select ps.id,g.name,e.name,s.name,at.name,r.name,ap.name from policy_statement ps, asset s, asset r, access_type at, access_permission ap, goal g, environment e where ps.id = constraintId and ps.subject_id = s.id and ps.access_id = at.id and ps.resource_id = r.id and ps.permission_id = ap.id and ps.goal_id = g.id and ps.environment_id = e.id order by 1;
+  end if;
+end
+//
+
+create procedure delete_policy_statement(in psId int)
+begin
+  delete from policy_statement where id = psId;
+end
+//
+
+create function policyStatementId(goalName text, envName text, subjName text, atName text, resName text) 
+returns int
+deterministic 
+begin
+  declare goalId int;
+  declare envId int;
+  declare sId int;
+  declare rId int;
+  declare atId int;
+  declare dimId int;
+
+  select id into goalId from goal where name = goalName limit 1;
+  select id into envId from environment where name = envName limit 1;
+  select id into sId from asset where name = subjName limit 1;
+  select id into atId from access_type where name = atName limit 1;
+  select id into rId from asset where name = resName limit 1;
+  
+  select id into dimId from policy_statement where goal_id = goalId and environment_id = envId and subject_id = sId and access_id = atId and resource_id = rId limit 1;
+  return dimId;
+end
+//
+
+
+create procedure checkPolicyStatementExists(in goalName text, in envName text, in subjName text, in atName text, in resName text) 
+begin
+  declare goalId int;
+  declare envId int;
+  declare sId int;
+  declare rId int;
+  declare atId int;
+
+  select id into goalId from goal where name = goalName limit 1;
+  select id into envId from environment where name = envName limit 1;
+  select id into sId from asset where name = subjName limit 1;
+  select id into atId from access_type where name = atName limit 1;
+  select id into rId from asset where name = resName limit 1;
+  
+  select count(id) from policy_statement where goal_id = goalId and environment_id = envId and subject_id = sId and access_id = atId and resource_id = rId limit 1;
 end
 //
 

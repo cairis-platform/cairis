@@ -307,6 +307,25 @@ class RefinementModel(object):
     self.isAlternate = isAlt
     self.theRationale = refRat
 
+class PolicyStatementModel(object):
+  resource_fields = {
+    obj_id_field: fields.String,
+    'theGoalName': fields.String,
+    'theEnvironmentName': fields.String,
+    'theSubject': fields.String,
+    'theAccessType': fields.String,
+    'theResource': fields.String,
+    'thePermission': fields.String
+  }
+  required = list(resource_fields.keys())
+  required.remove(obj_id_field)
+
+  def __init__(self,s,a,r,p):
+    self.subject = s
+    self.access = a
+    self.resource = r
+    self.permission = p
+
 
 class GoalEnvironmentPropertiesModel(object):
   resource_fields = {
@@ -320,7 +339,8 @@ class GoalEnvironmentPropertiesModel(object):
     "theGoalRefinements": fields.List(fields.Nested(RefinementModel.resource_fields)),
     "theIssue": fields.String,
     "thePriority": fields.String,
-    "theSubGoalRefinements": fields.List(fields.Nested(RefinementModel.resource_fields))
+    "theSubGoalRefinements": fields.List(fields.Nested(RefinementModel.resource_fields)),
+    "thePolicy" : fields.Nested(PolicyStatementModel.resource_fields)
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)

@@ -51,12 +51,16 @@ class GoalTest(unittest.TestCase):
     iaeps2 = AssetEnvironmentProperties(iassets[0]["theEnvironmentProperties"][1][0],iassets[0]["theEnvironmentProperties"][1][1],iassets[0]["theEnvironmentProperties"][1][2])
     iap1 = AssetParameters(iassets[0]["theName"],iassets[0]["theShortCode"],iassets[0]["theDescription"],iassets[0]["theSignificance"],iassets[0]["theType"],"0","N/A",[],[],[iaeps1,iaeps2])
     b.dbProxy.addAsset(iap1)
+    iaeps1 = AssetEnvironmentProperties(iassets[1]["theEnvironmentProperties"][0][0],iassets[1]["theEnvironmentProperties"][0][1],iassets[1]["theEnvironmentProperties"][0][2])
+    iaeps2 = AssetEnvironmentProperties(iassets[1]["theEnvironmentProperties"][1][0],iassets[1]["theEnvironmentProperties"][1][1],iassets[1]["theEnvironmentProperties"][1][2])
+    iap2 = AssetParameters(iassets[1]["theName"],iassets[1]["theShortCode"],iassets[1]["theDescription"],iassets[1]["theSignificance"],iassets[1]["theType"],"0","N/A",[],[],[iaeps1,iaeps2])
+    b.dbProxy.addAsset(iap2)
     self.iGoals = d['goals']
 
   def testGoal(self):
     b = Borg()
-    igep1d = GoalEnvironmentProperties(self.iGoals[0]["theEnvironmentProperties"][0]["theName"],self.iGoals[0]["theEnvironmentProperties"][0]["theLabel"],self.iGoals[0]["theEnvironmentProperties"][0]["theDefinition"],self.iGoals[0]["theEnvironmentProperties"][0]["theCategory"],self.iGoals[0]["theEnvironmentProperties"][0]["thePriority"],self.iGoals[0]["theEnvironmentProperties"][0]["theFitCriterion"],self.iGoals[0]["theEnvironmentProperties"][0]["theIssue"],[],[],self.iGoals[0]["theEnvironmentProperties"][0]["theConcerns"],[])
-    igep1n = GoalEnvironmentProperties(self.iGoals[0]["theEnvironmentProperties"][1]["theName"],self.iGoals[0]["theEnvironmentProperties"][1]["theLabel"],self.iGoals[0]["theEnvironmentProperties"][1]["theDefinition"],self.iGoals[0]["theEnvironmentProperties"][1]["theCategory"],self.iGoals[0]["theEnvironmentProperties"][1]["thePriority"],self.iGoals[0]["theEnvironmentProperties"][1]["theFitCriterion"],self.iGoals[0]["theEnvironmentProperties"][1]["theIssue"],[],[],self.iGoals[0]["theEnvironmentProperties"][1]["theConcerns"],[])
+    igep1d = GoalEnvironmentProperties(self.iGoals[0]["theEnvironmentProperties"][0]["theName"],self.iGoals[0]["theEnvironmentProperties"][0]["theLabel"],self.iGoals[0]["theEnvironmentProperties"][0]["theDefinition"],self.iGoals[0]["theEnvironmentProperties"][0]["theCategory"],self.iGoals[0]["theEnvironmentProperties"][0]["thePriority"],self.iGoals[0]["theEnvironmentProperties"][0]["theFitCriterion"],self.iGoals[0]["theEnvironmentProperties"][0]["theIssue"],[],[],self.iGoals[0]["theEnvironmentProperties"][0]["theConcerns"],[],self.iGoals[0]["theEnvironmentProperties"][0]["thePolicy"])
+    igep1n = GoalEnvironmentProperties(self.iGoals[0]["theEnvironmentProperties"][1]["theName"],self.iGoals[0]["theEnvironmentProperties"][1]["theLabel"],self.iGoals[0]["theEnvironmentProperties"][1]["theDefinition"],self.iGoals[0]["theEnvironmentProperties"][1]["theCategory"],self.iGoals[0]["theEnvironmentProperties"][1]["thePriority"],self.iGoals[0]["theEnvironmentProperties"][1]["theFitCriterion"],self.iGoals[0]["theEnvironmentProperties"][1]["theIssue"],[],[],self.iGoals[0]["theEnvironmentProperties"][1]["theConcerns"],[],self.iGoals[0]["theEnvironmentProperties"][0]["thePolicy"])
 
     igep2d = GoalEnvironmentProperties(self.iGoals[1]["theEnvironmentProperties"][0]["theName"],self.iGoals[1]["theEnvironmentProperties"][0]["theLabel"],self.iGoals[1]["theEnvironmentProperties"][0]["theDefinition"],self.iGoals[1]["theEnvironmentProperties"][0]["theCategory"],self.iGoals[1]["theEnvironmentProperties"][0]["thePriority"],self.iGoals[1]["theEnvironmentProperties"][0]["theFitCriterion"],self.iGoals[1]["theEnvironmentProperties"][0]["theIssue"],[],[],self.iGoals[1]["theEnvironmentProperties"][0]["theConcerns"],[])
     igep2n = GoalEnvironmentProperties(self.iGoals[1]["theEnvironmentProperties"][1]["theName"],self.iGoals[1]["theEnvironmentProperties"][1]["theLabel"],self.iGoals[1]["theEnvironmentProperties"][1]["theDefinition"],self.iGoals[1]["theEnvironmentProperties"][1]["theCategory"],self.iGoals[1]["theEnvironmentProperties"][1]["thePriority"],self.iGoals[1]["theEnvironmentProperties"][1]["theFitCriterion"],self.iGoals[1]["theEnvironmentProperties"][1]["theIssue"],[],[],self.iGoals[1]["theEnvironmentProperties"][1]["theConcerns"],[])
@@ -95,6 +99,7 @@ class GoalTest(unittest.TestCase):
     self.assertEqual(igep1d.subGoalRefinements(), ogep1.subGoalRefinements())
     self.assertEqual(igep1d.concerns(), ogep1.concerns())
     self.assertEqual(igep1d.concernAssociations(), ogep1.concernAssociations())
+    self.assertEqual(igep1d.policy(), ogep1.policy())
 
     envName = self.iGoals[0]["theEnvironmentProperties"][0]['theName']
     self.assertEqual(igep1d.label(), og1.label(envName))

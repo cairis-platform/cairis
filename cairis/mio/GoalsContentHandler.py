@@ -142,6 +142,7 @@ class GoalsContentHandler(ContentHandler,EntityResolver):
     self.theDefinition = ''
     self.theConcerns = []
     self.theConcernAssociations = []
+    self.thePolicy = None
 
   def resetObstacleEnvironmentAttributes(self):
     self.inDefinition = 0
@@ -266,6 +267,8 @@ class GoalsContentHandler(ContentHandler,EntityResolver):
       self.theConcerns.append(attrs['name'])
     elif name == 'concern_association':
       self.theConcernAssociations.append((attrs['source_name'],a2s(attrs['source_nry']),attrs['link_name'],attrs['target_name'],a2s(attrs['target_nry'])))
+    elif name == 'policy':
+      self.thePolicy = {'subject' : attrs['subject'], 'access' : attrs['access'], 'resource' : attrs['resource'], 'permission' : attrs['permission']}
     elif name == 'requirement':
       self.theReference = attrs['reference']
       if (self.theReference in self.theReferenceLabelDictionary):
@@ -378,7 +381,7 @@ class GoalsContentHandler(ContentHandler,EntityResolver):
       self.theDomainProperties.append(p)
       self.resetDomainPropertyAttributes()
     elif name == 'goal_environment':
-      p = GoalEnvironmentProperties(self.theEnvironmentName,'',unescape(self.theDefinition),self.theCategory,self.thePriority,unescape(self.theFitCriterion),unescape(self.theIssue),[],[],self.theConcerns,self.theConcernAssociations)
+      p = GoalEnvironmentProperties(self.theEnvironmentName,'',unescape(self.theDefinition),self.theCategory,self.thePriority,unescape(self.theFitCriterion),unescape(self.theIssue),[],[],self.theConcerns,self.theConcernAssociations,self.thePolicy)
       self.theEnvironmentProperties.append(p)
       self.resetGoalEnvironmentAttributes()
     elif name == 'obstacle_environment':

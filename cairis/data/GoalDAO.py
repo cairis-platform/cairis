@@ -25,7 +25,7 @@ from cairis.core.ValueType import ValueType
 from cairis.core.ValueTypeParameters import ValueTypeParameters
 from cairis.data.CairisDAO import CairisDAO
 from cairis.tools.JsonConverter import json_serialize, json_deserialize
-from cairis.tools.ModelDefinitions import GoalEnvironmentPropertiesModel, GoalModel, ConcernAssociationModel, RefinementModel
+from cairis.tools.ModelDefinitions import GoalEnvironmentPropertiesModel, GoalModel, ConcernAssociationModel, RefinementModel,PolicyStatementModel
 from cairis.tools.SessionValidator import check_required_keys, get_fonts
 import http
 
@@ -319,7 +319,7 @@ class GoalDAO(CairisDAO):
       return False
   # endregion
 
-  def convert_properties(self, real_props=None, fake_props=None):
+  def convert_properties(self, goalName, real_props=None, fake_props=None):
     new_props = []
     if real_props is not None:
       for real_prop in real_props:
@@ -340,6 +340,9 @@ class GoalDAO(CairisDAO):
         real_prop.theConcernAssociations = new_concern_assocs
         real_prop.theGoalRefinements = new_goal_refinements
         real_prop.theSubGoalRefinements = new_subgoal_refinements
+        gp = real_prop.thePolicy
+        if (gp != None):
+          real_prop.thePolicy = PolicyStatementModel(goalName,gp['theEnvironmentName'],gp['theSubject'],gp['theAccessType'],gp['theResource'],gp['thePermission'])
         new_props.append(real_prop)
     elif fake_props is not None:
       for fake_prop in fake_props:
@@ -357,6 +360,12 @@ class GoalDAO(CairisDAO):
         for sgr in fake_prop['theSubGoalRefinements']:
           new_subgoal_refinements.append((sgr['theEndName'],sgr['theEndType'],sgr['theRefType'],sgr['isAlternate'],sgr['theRationale']))
 
+        fgp = fake_prop['thePolicy']
+        if (fgp != None): 
+          gp = {'theGoalName': goalName,'theEnvironmentName':fake_prop['theEnvironmentName'],'theSubject':fgp['theSubject'],'theAccessType':fgp['theAccessType'],'theResource':fgp['theResource'],'thePermission':fgp['thePermission']}
+        else:
+          gp = None
+
         new_prop = GoalEnvironmentProperties(
           environmentName=fake_prop['theEnvironmentName'],
           lbl='',
@@ -368,7 +377,8 @@ class GoalDAO(CairisDAO):
           goalRefinements=new_goal_refinements,
           subGoalRefinements=new_subgoal_refinements,
           concs=fake_prop['theConcerns'],
-          cas=new_concern_assocs)
+          cas=new_concern_assocs,
+          gp = gp)
         new_props.append(new_prop)
     else:
       self.close()
@@ -387,7 +397,7 @@ class GoalDAO(CairisDAO):
     json_dict['__python_obj__'] = Goal.__module__+'.'+Goal.__name__
     props_list = json_dict.pop('theEnvironmentProperties', [])
     json_dict.pop('theEnvironmentDictionary', None)
-    real_props = self.convert_properties(fake_props=props_list)
+    real_props = self.convert_properties(json_dict['theName'],fake_props=props_list)
 
     new_json_goal = json_serialize(json_dict)
     new_json_goal = json_deserialize(new_json_goal)
@@ -400,7 +410,7 @@ class GoalDAO(CairisDAO):
       return new_json_goal
 
   def simplify(self, goal):
-    goal.theEnvironmentProperties = self.convert_properties(real_props=goal.theEnvironmentProperties)
+    goal.theEnvironmentProperties = self.convert_properties(goal.theName,real_props=goal.theEnvironmentProperties)
     assert isinstance(goal, Goal)
     del goal.theId
     del goal.theEnvironmentDictionary
