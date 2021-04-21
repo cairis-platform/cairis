@@ -195,6 +195,14 @@ class GoalAPITests(CairisDaemonTestCase):
   
     rv = self.app.delete('/api/goals/name/%s?session_id=test' % quote(goal_to_update.theName))
 
+  def test_get_goal_concerns(self):
+    method = 'test_get_goal_concerns'
+    rv = self.app.get('/api/goals/name/Active%20Directory%20Network%20Services/environment/Day/concerns?session_id=test')
+    concerns = json_deserialize(rv.data.decode('utf-8'))
+    self.assertIsNotNone(concerns, 'No results after deserialization')
+    self.assertGreater(len(concerns), 0, 'No concerns')
+    self.assertEqual(len(concerns),3)
+
   def prepare_new_goal(self):
     new_goal_refinements = [
       RefinementModel("PreventUnauthorised Certificate Access",

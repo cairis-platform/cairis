@@ -298,6 +298,7 @@ api.add_resource(ObjectController.ModelByThreeParametersAPI, '/api/goals/model/e
 api.add_resource(ObjectController.ModelByTwoParametersAPI, '/api/responsibility/model/environment/<path:p1>/role/<path:p2>',endpoint='responsibilitymodel',resource_class_kwargs={'dao' : 'GoalDAO','get_method' : 'get_responsibility_model','renderer' : 'dot', 'model_type' : 'responsibility'})
 api.add_resource(ObjectController.ObjectsByMethodAPI, '/api/goals/association',endpoint='goal_associations',resource_class_kwargs={'dao': 'GoalAssociationDAO', 'get_method' : 'get_goal_associations', 'post_method' : 'add_goal_association', 'path_parameters' : [('environment_name','')]})
 api.add_resource(ObjectController.ObjectsByMethodAndThreeParametersAPI,'/api/goals/association/environment/<path:p1>/goal/<path:p2>/subgoal/<path:p3>',endpoint='goal_association',resource_class_kwargs={'dao' : 'GoalAssociationDAO', 'get_method' : 'get_goal_association', 'put_method' : 'update_goal_association', 'del_method' : 'delete_goal_association'})
+api.add_resource(ObjectController.ObjectsByMethodAndTwoParametersAPI,'/api/goals/name/<path:p1>/environment/<path:p2>/concerns',endpoint='goal_concerns',resource_class_kwargs={'dao' : 'GoalDAO', 'get_method' : 'get_goal_concerns'})
 
 
 # Goal contribution routes

@@ -1059,7 +1059,7 @@ drop procedure if exists policyStatements;
 drop procedure if exists delete_policy_statement;
 drop procedure if exists getPolicyStatements;
 drop function if exists policyStatementId;
-drop procedure if exists checkPolicyStatementExists;
+drop procedure if exists policyStatementExists;
 
 delimiter //
 
@@ -32172,7 +32172,7 @@ begin
     select name into subjName from asset where id = headId limit 1;
     select name into resName from asset where id = tailId limit 1;
     select name into accessName from access_type where short_code = roleName limit 1;
-    select count(ps.id) into policyCount from policy_statement ps, access_type at where ps.environment_id = envId and ps.subject_id = headId and ps.resource_id = tailId and ps.access_id = at.id and at.short_code = roleName;
+    select count(ps.id) into policyCount from policy_statement ps, access_type at where ps.environment_id = envId and ps.subject_id = headId and ps.resource_id = tailId and ps.access_id = at.id and at.short_code = roleName and ps.permission_id = 0;
 
     if policyCount = 0
     then
@@ -32301,21 +32301,19 @@ end
 //
 
 
-create procedure checkPolicyStatementExists(in goalName text, in envName text, in subjName text, in atName text, in resName text) 
+create procedure policyStatementExists(in envName text, in subjName text, in atName text, in resName text) 
 begin
-  declare goalId int;
   declare envId int;
   declare sId int;
   declare rId int;
   declare atId int;
 
-  select id into goalId from goal where name = goalName limit 1;
   select id into envId from environment where name = envName limit 1;
   select id into sId from asset where name = subjName limit 1;
   select id into atId from access_type where name = atName limit 1;
   select id into rId from asset where name = resName limit 1;
   
-  select count(id) from policy_statement where goal_id = goalId and environment_id = envId and subject_id = sId and access_id = atId and resource_id = rId limit 1;
+  select count(id) from policy_statement where environment_id = envId and subject_id = sId and access_id = atId and resource_id = rId limit 1;
 end
 //
 

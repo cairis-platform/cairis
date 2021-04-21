@@ -428,3 +428,14 @@ class GoalDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
+  def get_goal_concerns(self,goal,environment,pathValues = []):
+    try:
+      goalId = self.db_proxy.getDimensionId(goal,'goal')
+      envId = self.db_proxy.getDimensionId(environment,'environment')
+      return self.db_proxy.goalConcerns(goalId,envId)
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+    except ARMException as ex:
+      self.close()
+      raise ARMHTTPError(ex)

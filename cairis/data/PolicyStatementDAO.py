@@ -29,7 +29,7 @@ __author__ = 'Shamal Faily'
 
 class PolicyStatementDAO(CairisDAO):
   def __init__(self, session_id):
-    CairisDAO.__init__(self, session_id, 'external_document')
+    CairisDAO.__init__(self, session_id, 'policy_statement')
 
   def get_objects(self,constraint_id = -1):
     try:
@@ -75,6 +75,9 @@ class PolicyStatementDAO(CairisDAO):
 
   def update_object(self, ps, goal_name, env_name,subject,access_type,resource, pathValues=[]):
     psParams = PolicyStatement(-1,ps.theGoalName,ps.theEnvironmentName,ps.theSubject,ps.theAccessType,ps.theResource,ps.thePermission)
+    if (env_name == ps.theEnvironmentName) and (ps.theSubject != subject or ps.theAccessType != access_type or ps.theResource != resource):
+      if(self.db_proxy.nameExists(ps.name(),'policy_statement')):
+        raise ARMException('Policy statement for ' + ps.name() + ' already exists.')
     try:
       psId = self.db_proxy.getDimensionId(goal_name + '/' + env_name + '/' + subject + '/' + access_type + '/' + resource,'policy_statement')
       psParams.theId = psId

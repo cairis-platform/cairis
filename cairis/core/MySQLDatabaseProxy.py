@@ -2703,7 +2703,7 @@ class MySQLDatabaseProxy:
     objtCount = 0
     if (dimName == 'policy_statement'):
       goalName,envName,subjName,atName,resName = objtName.split('/')
-      objtCount = self.responseList('call policyStatementExists(:goal,:env,:subj,:at,:res)',{'goal':goalName,'env':envName,'subj':subjName,'at':atName,'res':resName},'MySQL error checking existence of ' + dimName + ' ' + objtName)[0]
+      objtCount = self.responseList('call policyStatementExists(:env,:subj,:at,:res)',{'env':envName,'subj':subjName,'at':atName,'res':resName},'MySQL error checking existence of ' + dimName + ' ' + objtName)[0]
     else:
       objtCount = self.responseList('call nameExists(:obj,:dim)',{'obj':objtName,'dim':dimName},'MySQL error checking existence of ' + dimName + ' ' + objtName)[0]
     if (objtCount > 0): raise ARMException('Object with name ' + objtName + ' already exists.')
@@ -2714,7 +2714,12 @@ class MySQLDatabaseProxy:
     if (objtCount > 0): raise ARMException(dimName + ' ' + objtName + ' in environment ' + envName + ' already exists.')
 
   def nameExists(self,objtName,dimName):
-    objtCount = self.responseList('call nameExists(:obj,:dim)',{'obj':objtName,'dim':dimName},'MySQL error checking name exists')[0]
+    objtCount = 0
+    if (dimName == 'policy_statement'):
+      goalName,envName,subjName,atName,resName = objtName.split('/')
+      objtCount = self.responseList('call policyStatementExists(:env,:subj,:at,:res)',{'env':envName,'subj':subjName,'at':atName,'res':resName},'MySQL error checking existence of ' + dimName + ' ' + objtName)[0]
+    else:
+      objtCount = self.responseList('call nameExists(:obj,:dim)',{'obj':objtName,'dim':dimName},'MySQL error checking name exists')[0]
     if (objtCount > 0):
       return True
     else:
