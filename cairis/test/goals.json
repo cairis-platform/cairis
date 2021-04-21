@@ -59,7 +59,7 @@
          "theFitCriterion" : "Network connectivity to any SCADA, Telemetry, and Control System application workstation can be cut using Active Directory.",
          "theIssue" : "Standard 7.2(q)",
          "theConcerns" : ["Corporate Network","Message"],
-         "thePolicy": {"subject" : "Corporate Network", "access" : "write", "resource" : "Message", "permission" : "allow"}},
+         "thePolicy": {"theGoalName" : "Active Directory Network Services", "theEnvironmentName" : "Day", "theSubject" : "Corporate Network", "theAccessType" : "write", "theResource" : "Message", "thePermission" : "allow"}},
 	 {"theName": "Night",
          "theLabel": "NIGHT-1",
          "theDefinition" : "Network services shall be controlled using Active Directory",
@@ -68,7 +68,7 @@
          "theFitCriterion" : "Network connectivity to any SCADA, Telemetry, and Control System application workstation can be cut using Active Directory.",
          "theIssue" : "Standard 7.2(q)",
          "theConcerns" : ["Corporate Network","Message"],
-         "thePolicy": {"subject" : "Corporate Network", "access" : "write", "resource" : "Message", "permission" : "allow"}}
+         "thePolicy": {"theGoalName" : "Active Directory Network Services", "theEnvironmentName" : "Night", "theSubject" : "Corporate Network", "theAccessType" : "write", "theResource" : "Message", "thePermission" : "allow"}}
        ]
      },
      {
