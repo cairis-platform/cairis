@@ -1766,7 +1766,7 @@ class MySQLDatabaseProxy:
       self.addGoalConcernAssociations(goalId,environmentName,environmentProperties.concernAssociations())
       gp = environmentProperties.policy()
       if (gp != None):
-        self.addGoalPolicy(goalId,environmentName,gp['subject'],gp['access'],gp['resource'],gp['permission'])
+        self.addGoalPolicy(goalId,environmentName,gp['theSubject'],gp['theAccessType'],gp['theResource'],gp['thePermission'])
     return goalId
 
   def updateGoal(self,parameters):
@@ -1792,7 +1792,7 @@ class MySQLDatabaseProxy:
       self.addGoalConcernAssociations(goalId,environmentName,environmentProperties.concernAssociations())
       gp = environmentProperties.policy()
       if (gp != None):
-        self.addGoalPolicy(goalId,environmentName,gp['subject'],gp['access'],gp['resource'],gp['permission'])
+        self.addGoalPolicy(goalId,environmentName,gp['theSubject'],gp['theAccessType'],gp['theResource'],gp['thePermission'])
 
   def getGoals(self,constraintId = -1):
     goalRows = self.responseList('call getGoals(:id)',{'id':constraintId},'MySQL error getting goals')
@@ -5098,7 +5098,8 @@ class MySQLDatabaseProxy:
   def goalPolicy(self,goalId,environmentId):
     pData = self.responseList('call goalPolicy(:gId,:eId)',{'gId':goalId, 'eId':environmentId},'MySQL error getting goal policy')
     if (len(pData) == 1):
-      return {'subject':pData[0][0],'access':pData[0][1],'resource':pData[0][2],'permission':pData[0][3]}
+      ps = pData[0]
+      return {'theGoalName':ps[0],'theEnvironmentName':ps[1],'theSubject':ps[2],'theAccessType':ps[3],'theResource':ps[4],'thePermission':ps[5]}
     else:
       return None
 

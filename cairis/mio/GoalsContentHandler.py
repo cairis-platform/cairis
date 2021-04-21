@@ -268,7 +268,7 @@ class GoalsContentHandler(ContentHandler,EntityResolver):
     elif name == 'concern_association':
       self.theConcernAssociations.append((attrs['source_name'],a2s(attrs['source_nry']),attrs['link_name'],attrs['target_name'],a2s(attrs['target_nry'])))
     elif name == 'policy':
-      self.thePolicy = {'subject' : attrs['subject'], 'access' : attrs['access'], 'resource' : attrs['resource'], 'permission' : attrs['permission']}
+      self.thePolicy = {'theGoalName' : self.theName, 'theEnvironmentName' : self.theEnvironmentName, 'theSubject' : attrs['subject'], 'theAccessType' : attrs['access'], 'theResource' : attrs['resource'], 'thePermission' : attrs['permission']}
     elif name == 'requirement':
       self.theReference = attrs['reference']
       if (self.theReference in self.theReferenceLabelDictionary):

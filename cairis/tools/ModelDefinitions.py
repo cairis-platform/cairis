@@ -320,12 +320,13 @@ class PolicyStatementModel(object):
   required = list(resource_fields.keys())
   required.remove(obj_id_field)
 
-  def __init__(self,s,a,r,p):
-    self.subject = s
-    self.access = a
-    self.resource = r
-    self.permission = p
-
+  def __init__(self,g,e,s,a,r,p):
+    self.theGoalName = g
+    self.theEnvironmentName = e
+    self.theSubject = s
+    self.theAccessType = a
+    self.theResource = r
+    self.thePermission = p
 
 class GoalEnvironmentPropertiesModel(object):
   resource_fields = {

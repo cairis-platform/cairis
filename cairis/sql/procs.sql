@@ -32088,7 +32088,7 @@ end
 
 create procedure goalPolicy(in goalId int, in environmentId int)
 begin
-  select s.name, at.name, r.name, ap.name from asset s, asset r, access_type at, access_permission ap, policy_statement ps where ps.goal_id = goalId and ps.environment_id = environmentId and ps.subject_id = s.id and ps.resource_id = r.id and ps.access_id = at.id and ps.permission_id = ap.id limit 1;
+  select g.name,e.name,s.name, at.name, r.name, ap.name from asset s, asset r, access_type at, access_permission ap, policy_statement ps, goal g, environment e where ps.goal_id = goalId and ps.environment_id = environmentId and ps.subject_id = s.id and ps.resource_id = r.id and ps.access_id = at.id and ps.permission_id = ap.id and ps.goal_id = g.id and ps.environment_id = e.id limit 1;
 end
 //
 
