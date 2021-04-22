@@ -1060,6 +1060,7 @@ drop procedure if exists delete_policy_statement;
 drop procedure if exists getPolicyStatements;
 drop function if exists policyStatementId;
 drop procedure if exists policyStatementExists;
+drop procedure if exists nonpolicy_goalNames;
 
 delimiter //
 
@@ -32314,6 +32315,27 @@ begin
   select id into rId from asset where name = resName limit 1;
   
   select count(id) from policy_statement where environment_id = envId and subject_id = sId and access_id = atId and resource_id = rId limit 1;
+end
+//
+
+create procedure nonpolicy_goalNames(in environmentName text)
+begin
+  declare environmentId int;
+  declare idCount int;
+
+  if environmentName = ''
+  then
+    select name from goal;
+  else
+    select id into environmentId from environment where name = environmentName limit 1;
+    select count(id) into idCount from goal g, environment_goal eg where eg.environment_id = environmentId and eg.goal_id = g.id;
+    if idCount > 0
+    then 
+      select g.name from goal g, environment_goal eg where eg.environment_id = environmentId and eg.goal_id = g.id and g.id not in (select goal_id from policy_statement where environment_id = environmentId) order by 1;
+    else
+      select distinct g.name from goal g, environment_goal eg where eg.environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId) and eg.goal_id = g.id and g.id not in (select goal_id from policy_statement where environment_id in (select environment_id from composite_environment where composite_environment_id = environmentId)) order by 1;
+    end if;
+  end if;
 end
 //
 
