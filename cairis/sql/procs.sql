@@ -32125,6 +32125,7 @@ begin
   declare done int default 0;
   declare currentEnvironmentId int;
   declare policyCount int;
+  declare denyCount int;
   declare subjName varchar(200);
   declare resName varchar(200);
   declare accessName varchar(200);
@@ -32177,7 +32178,13 @@ begin
 
     if policyCount = 0
     then
-      insert into temp_vout(label,message) values('Absent policy statement',concat(subjName,' needs ',accessName,' access to ',resName,' but no policy statement specifies this access.'));
+      select count(ps.id) into denyCount from policy_statement ps, access_type at where ps.environment_id = envId and ps.subject_id = headId and ps.resource_id = tailId and ps.access_id = at.id and at.short_code = roleName and ps.permission_id = 1;
+      if denyCount = 1
+      then
+        insert into temp_vout(label,message) values('Unauthorised access',concat(subjName,' needs ',accessName,' access to ',resName,' but this access is denied.'));
+      else
+        insert into temp_vout(label,message) values('Absent policy statement',concat(subjName,' needs ',accessName,' access to ',resName,' but no policy statement specifies this access.'));
+      end if;
     elseif policyCount > 1
     then
       insert into temp_vout(label,message) values('Ambiguous policy statements',concat(subjName,' needs ',accessName,' access to ',resName,' but multiple policy statements specify this access.'));
