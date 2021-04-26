@@ -54,7 +54,8 @@ class RequirementAPITests(CairisDaemonTestCase):
       'theFitCriterion' : 'None',
       'theOriginator' : 'Student',
       'theType' : 'Functional',
-      'theAsset' : 'Analysis data'
+      'theDomain' : 'Analysis data',
+      'theDomainType' : 'asset'
     }
     self.new_requirement_dict = {
       'session_id': 'test',
@@ -163,7 +164,7 @@ class RequirementAPITests(CairisDaemonTestCase):
     upd_requirement_body = json.dumps(upd_requirement_dict)
     self.logger.info('[%s] JSON data: %s', method, upd_requirement_body)
 
-    rv = self.app.put(url, content_type='application/json', data=upd_requirement_body)
+    rv = self.app.put('/api/requirements/name/Analysis%20data', content_type='application/json', data=upd_requirement_body)
     if (sys.version_info > (3,)):
       responseData = rv.data.decode('utf-8')
     else:

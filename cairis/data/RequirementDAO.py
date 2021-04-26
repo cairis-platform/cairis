@@ -105,9 +105,7 @@ class RequirementDAO(CairisDAO):
       self.close()
       raise ARMHTTPError(ex)
 
-  def add_requirement(self, requirement, pathValues):
-    asset_name = pathValues[2]
-    environment_name = pathValues[3]
+  def add_requirement(self, requirement, pathValues = []):
 
     try:
       self.db_proxy.nameCheck(requirement.theName, 'requirement')
@@ -119,28 +117,21 @@ class RequirementDAO(CairisDAO):
     requirement.theId = new_id
     requirement.theVersion = 1
 
-    if asset_name is not None:
-      try:
-        self.db_proxy.addRequirement(requirement, assetName=asset_name, isAsset=True)
-      except ARMException as ex:
-        self.close()
-        handle_exception(ex)
-    elif environment_name is not None:
-      try:
-        self.db_proxy.addRequirement(requirement, assetName=environment_name, isAsset=False)
-      except ARMException as ex:
-        self.close()
-        handle_exception(ex)
-    else:
-      self.close()
-      raise MissingParameterHTTPError(param_names=['asset or environment'])
+    isAsset = False
+    if requirement.domainType() == 'asset':
+      isAsset = True 
 
-    return new_id
+    try:
+      self.db_proxy.addRequirement(requirement, assetName=requirement.domain(), isAsset=isAsset)
+    except ARMException as ex:
+      self.close()
+      handle_exception(ex)
+
 
   def delete_object(self, name=None):
     if name is not None:
       req = self.db_proxy.getRequirement(name)
-      reqReference = req.asset()
+      reqReference = req.domain()
       self.db_proxy.deleteRequirement(req.id())
       self.db_proxy.relabelRequirements(reqReference)
     else:
@@ -152,7 +143,7 @@ class RequirementDAO(CairisDAO):
     old_reference = None
     if name is not None:
       old_requirement = self.db_proxy.getRequirement(name)
-      old_reference = old_requirement.asset()
+      old_reference = old_requirement.domain()
     else:
       self.close()
       raise MissingParameterHTTPError(param_names=['theId'])
@@ -163,7 +154,7 @@ class RequirementDAO(CairisDAO):
         requirement.theId = old_requirement.theId
         requirement.incrementVersion()
         self.db_proxy.updateRequirement(requirement)
-        reqReference = requirement.asset()
+        reqReference = requirement.domain()
         if (reqReference != old_reference):
           self.db_proxy.reassociateRequirement(requirement.name(),reqReference)
           self.db_proxy.relabelRequirements(reqReference)
@@ -203,7 +194,6 @@ class RequirementDAO(CairisDAO):
       self.close()
       raise MalformedJSONHTTPError(data=request.get_data())
     else:
-      requirement.theAsset = json_dict['attrs']['asset']
       return requirement
 
   def simplify(self, obj):
@@ -212,7 +202,6 @@ class RequirementDAO(CairisDAO):
     del obj.attrs
     del obj.dirtyAttrs
     del obj.theVersion
-    del obj.theAsset
     return obj
 
   def get_concept_map_model(self, environment_name, requirement_name, pathValues):

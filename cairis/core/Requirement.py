@@ -20,7 +20,7 @@ __author__ = 'Shamal Faily'
 from . import ObjectValidator
 
 class Requirement(ObjectValidator.ObjectValidator):
-  def __init__(self, id, label, name='', description='', priority='1', rationale='', fitCriterion='', originator='', type='Functional', asset='', version=-1):
+  def __init__(self, id, label, name='', description='', priority='1', rationale='', fitCriterion='', originator='', type='Functional', asset='', dType='asset', version=-1):
     ObjectValidator.ObjectValidator.__init__(self)
     self.theId = id
     if (version == -1):
@@ -37,7 +37,8 @@ class Requirement(ObjectValidator.ObjectValidator):
     self.theFitCriterion = fitCriterion
     self.theSupportingMaterial = ''
     self.theType = type
-    self.theAsset = asset
+    self.theDomain = asset
+    self.theDomainType = dType
     self.dirtyAttrs = set([])
 
   def label(self):
@@ -67,8 +68,11 @@ class Requirement(ObjectValidator.ObjectValidator):
   def type(self):
     return self.theType
 
-  def asset(self):
-    return self.theAsset
+  def domain(self):
+    return self.theDomain
+
+  def domainType(self):
+    return self.theDomainType
 
   def dirty(self): return len(self.dirtyAttrs)
 
@@ -82,7 +86,7 @@ class Requirement(ObjectValidator.ObjectValidator):
     elif (attr == 'fitCriterion'): self.theFitCriterion = val
     elif (attr == 'supportingMaterial'): self.theSupportingMaterial = val
     elif (attr == 'type'): self.theType = val
-    elif (attr == 'asset'): self.theAsset = val
+    elif (attr == 'domain'): self.theDomain = val
     self.dirtyAttrs.add(attr)
 
   def incrementVersion(self):

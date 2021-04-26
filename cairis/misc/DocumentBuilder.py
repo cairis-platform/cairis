@@ -2292,12 +2292,12 @@ def buildReqSpecBody(p,sectionFlags,docDir,fileSuffix = 'svg'):
       reqType = val.type()
       reqDict[reqType].append(colData)
       if (reqType == 'Functional'):
-        reqDomain = val.asset()
+        reqDomain = val.domain()
         if (reqDomain not in frDomDict):
           frDomDict[reqDomain] = []
         frDomDict[reqDomain].append(colData)
       if (reqType == 'Data'):
-        reqDomain = val.asset()
+        reqDomain = val.domain()
         if (reqDomain not in ddDomDict):
           ddDomDict[reqDomain] = []
         ddDomDict[reqDomain].append(colData)

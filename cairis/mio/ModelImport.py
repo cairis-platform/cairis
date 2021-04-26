@@ -205,13 +205,13 @@ def importRequirements(dpParameterSet,goalParameterSet,obsParameterSet,reqParame
     obsCount += 1
 
   reqCount = 0
-  for req,refName,refType in reqParameterSet:
+  for req in reqParameterSet:
     objtId = db_proxy.existingObject(req.name(),'requirement')
     if objtId == -1:
       isAsset = True
-      if (refType == 'environment'):
+      if (req.domainType() == 'environment'):
         isAsset = False
-      db_proxy.addRequirement(req,refName,isAsset)
+      db_proxy.addRequirement(req,req.domain(),isAsset)
     else:
       db_proxy.updateRequirement(req)
     reqCount += 1

@@ -430,7 +430,9 @@ class RequirementModel(object):
     "theOriginator": fields.String,
     "theFitCriterion": fields.String,
     "theRationale": fields.String,
-    "theType": fields.String
+    "theType": fields.String,
+    "theDomain" : fields.String,
+    "theDomainType" : fields.String
   }
   required = list(resource_fields.keys())
   required.remove(obj_id_field)

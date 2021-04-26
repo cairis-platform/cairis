@@ -56,7 +56,7 @@ class RequirementTest(unittest.TestCase):
     b = Borg()
     reqId = b.dbProxy.newId()
     
-    ireq = cairis.core.RequirementFactory.build(reqId,self.irequirements[0]["theLabel"],self.irequirements[0]["theName"],self.irequirements[0]["theDescription"],self.irequirements[0]["thePriority"],self.irequirements[0]["theRationale"],self.irequirements[0]["theFitCriterion"],self.irequirements[0]["theOriginator"],self.irequirements[0]["theType"],self.irequirements[0]["theReference"],1)
+    ireq = cairis.core.RequirementFactory.build(reqId,self.irequirements[0]["theLabel"],self.irequirements[0]["theName"],self.irequirements[0]["theDescription"],self.irequirements[0]["thePriority"],self.irequirements[0]["theRationale"],self.irequirements[0]["theFitCriterion"],self.irequirements[0]["theOriginator"],self.irequirements[0]["theType"],self.irequirements[0]["theReference"],self.irequirements[0]["theReferenceType"],1)
     b.dbProxy.addRequirement(ireq,self.irequirements[0]["theReference"],True)
 
 
@@ -72,7 +72,8 @@ class RequirementTest(unittest.TestCase):
     self.assertEqual(str(ireq.version()),str(oreq.version()))
     self.assertEqual(str(ireq.originator()),str(oreq.originator()))
     self.assertEqual(str(ireq.type()),str(oreq.type()))
-    self.assertEqual(str(ireq.asset()),str(oreq.asset()))
+    self.assertEqual(str(ireq.domain()),str(oreq.domain()))
+    self.assertEqual(str(ireq.domainType()),str(oreq.domainType()))
 
     self.assertEqual(len(b.dbProxy.getRequirementVersions(ireq.id())),1)
 
@@ -84,7 +85,8 @@ class RequirementTest(unittest.TestCase):
     self.assertEqual(str(oreq.version()),str(soreq.version()))
     self.assertEqual(str(oreq.originator()),str(soreq.originator()))
     self.assertEqual(str(oreq.type()),str(soreq.type()))
-    self.assertEqual(str(oreq.asset()),str(soreq.asset()))
+    self.assertEqual(str(oreq.domain()),str(soreq.domain()))
+    self.assertEqual(str(oreq.domainType()),str(soreq.domainType()))
 
 
     uireq = oreq
@@ -96,7 +98,7 @@ class RequirementTest(unittest.TestCase):
     uireq.update('fitCriterion',oreq.fitCriterion())
     uireq.update('supportingMaterial','None')
     uireq.update('type',oreq.type())
-    uireq.update('asset',oreq.asset())
+    uireq.update('asset',oreq.domain())
     self.assertEqual(uireq.dirty(),9)
     uireq.incrementVersion()
 
@@ -112,7 +114,8 @@ class RequirementTest(unittest.TestCase):
     self.assertEqual(str(oreq.version()),'2')
     self.assertEqual(str(uireq.originator()),str(uoreq.originator()))
     self.assertEqual(str(uireq.type()),str(uoreq.type()))
-    self.assertEqual(str(uireq.asset()),str(uoreq.asset()))
+    self.assertEqual(str(uireq.domain()),str(uoreq.domain()))
+    self.assertEqual(str(uireq.domainType()),str(uoreq.domainType()))
 
     b.dbProxy.deleteRequirement(ireq.id())
 

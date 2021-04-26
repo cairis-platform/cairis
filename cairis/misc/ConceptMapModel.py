@@ -59,7 +59,7 @@ class ConceptMapModel:
   def buildNode(self,objtName):
     objtUrl = 'requirement#' + objtName
     reqObjt = self.dbProxy.dimensionObject(objtName,'requirement')
-    refName = reqObjt.asset()
+    refName = reqObjt.domain()
     refLabel = refName.replace(' ','_')
     if refName not in self.theClusters:
       self.theClusters[refName] = pydot.Cluster(refLabel,label=str(refName))

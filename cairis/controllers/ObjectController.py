@@ -28,7 +28,7 @@ from cairis.daemon.CairisHTTPError import ARMHTTPError
 from cairis.tools.JsonConverter import json_serialize
 from cairis.tools.SessionValidator import get_session_id, get_model_generator
 from cairis.core.ARM import ARMException, DatabaseProxyException
-from cairis.daemon.CairisHTTPError import CairisHTTPError, ARMHTTPError, MissingParameterHTTPError
+from cairis.daemon.CairisHTTPError import CairisHTTPError, ARMHTTPError, MissingParameterHTTPError,ObjectNotFoundHTTPError
 from importlib import import_module
 from tempfile import mkstemp
 import codecs

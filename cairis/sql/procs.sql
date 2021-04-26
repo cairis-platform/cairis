@@ -8266,18 +8266,18 @@ begin
   declare envId int;
   if assetName = ''
   then
-    select concat(rm.short_code,'-',o.label),o.id,o.name,o.description,o.priority,o.rationale,o.fit_criterion,o.originator,o.version,rt.name,rm.name from requirement o, asset_requirement rmr, asset rm, requirement_type rt where o.version = (select max(i.version) from requirement i where i.id = o.id) and o.type = rt.id and o.id = rmr.requirement_id and rmr.asset_id = rm.id 
+    select concat(rm.short_code,'-',o.label),o.id,o.name,o.description,o.priority,o.rationale,o.fit_criterion,o.originator,o.version,rt.name,rm.name,'asset' from requirement o, asset_requirement rmr, asset rm, requirement_type rt where o.version = (select max(i.version) from requirement i where i.id = o.id) and o.type = rt.id and o.id = rmr.requirement_id and rmr.asset_id = rm.id 
     union
-    select concat(rm.short_code,'-',o.label),o.id,o.name,o.description,o.priority,o.rationale,o.fit_criterion,o.originator,o.version,rt.name,rm.name from requirement o, environment_requirement rmr, environment rm, requirement_type rt where o.version = (select max(i.version) from requirement i where i.id = o.id) and o.type = rt.id and o.id = rmr.requirement_id and rmr.environment_id = rm.id 
+    select concat(rm.short_code,'-',o.label),o.id,o.name,o.description,o.priority,o.rationale,o.fit_criterion,o.originator,o.version,rt.name,rm.name,'environment' from requirement o, environment_requirement rmr, environment rm, requirement_type rt where o.version = (select max(i.version) from requirement i where i.id = o.id) and o.type = rt.id and o.id = rmr.requirement_id and rmr.environment_id = rm.id 
     order by 1;
   else
     if isAsset is True
     then
       select id into assetId from asset where name = assetName;
-      select o.label,o.id,o.name,o.description,o.priority,o.rationale,o.fit_criterion,o.originator,o.version,rt.name,rm.name from requirement o, asset_requirement rmr, asset rm, requirement_type rt where o.version = (select max(i.version) from requirement i where i.id = o.id) and o.type = rt.id and o.id = rmr.requirement_id and rmr.asset_id = assetId and rmr.asset_id = rm.id order by o.label;
+      select o.label,o.id,o.name,o.description,o.priority,o.rationale,o.fit_criterion,o.originator,o.version,rt.name,rm.name,'asset' from requirement o, asset_requirement rmr, asset rm, requirement_type rt where o.version = (select max(i.version) from requirement i where i.id = o.id) and o.type = rt.id and o.id = rmr.requirement_id and rmr.asset_id = assetId and rmr.asset_id = rm.id order by o.label;
     else
       select id into envId from environment where name = assetName;
-      select o.label,o.id,o.name,o.description,o.priority,o.rationale,o.fit_criterion,o.originator,o.version,rt.name,rm.name from requirement o, environment_requirement rmr, environment rm, requirement_type rt where o.version = (select max(i.version) from requirement i where i.id = o.id) and o.type = rt.id and o.id = rmr.requirement_id and rmr.environment_id = envId and rmr.environment_id = rm.id order by o.label;
+      select o.label,o.id,o.name,o.description,o.priority,o.rationale,o.fit_criterion,o.originator,o.version,rt.name,rm.name,'environment' from requirement o, environment_requirement rmr, environment rm, requirement_type rt where o.version = (select max(i.version) from requirement i where i.id = o.id) and o.type = rt.id and o.id = rmr.requirement_id and rmr.environment_id = envId and rmr.environment_id = rm.id order by o.label;
     end if;
   end if;
 end
@@ -8328,7 +8328,6 @@ begin
   declare reqTypeId int;
   declare modId int;
   select id into reqTypeId from requirement_type where name = reqTypeName;
-
 
   if isAsset = 1
   then
@@ -11187,7 +11186,12 @@ begin
     set nameVar = 'description';
   end if;
 
-  set ncSql = concat('select count(id) into @objtCount from ',dimName,' where ',nameVar,' = "',objtName,'" limit 1');
+  if dimName = 'requirement'
+  then
+    set ncSql = concat('select count(o.id) from requirement o where o.name = "',objtName,'" and o.version = (select max(i.version) from requirement i where i.id = o.id) limit 1');
+  else
+    set ncSql = concat('select count(id) into @objtCount from ',dimName,' where ',nameVar,' = "',objtName,'" limit 1');
+  end if;
   set @sql = ncSql;
   prepare stmt from @sql;
   execute stmt;
@@ -23665,18 +23669,18 @@ begin
     if dimId is null
     then
       select id into dimId from environment where short_code = shortCode;
-      select o.label,o.id,o.name,o.description,o.priority,o.rationale,o.fit_criterion,o.originator,o.version,rt.name,rm.name from requirement o, requirement_type rt, environment_requirement rmr, environment rm where o.version = (select max(i.version) from requirement i where i.id = o.id) and o.type = rt.id and o.id = reqId and o.id = rmr.requirement_id and rmr.environment_id = rm.id order by o.label; 
+      select o.label,o.id,o.name,o.description,o.priority,o.rationale,o.fit_criterion,o.originator,o.version,rt.name,rm.name,'environment' from requirement o, requirement_type rt, environment_requirement rmr, environment rm where o.version = (select max(i.version) from requirement i where i.id = o.id) and o.type = rt.id and o.id = reqId and o.id = rmr.requirement_id and rmr.environment_id = rm.id order by o.label; 
     else
-      select o.label,o.id,o.name,o.description,o.priority,o.rationale,o.fit_criterion,o.originator,o.version,rt.name,rm.name from requirement o, requirement_type rt, asset_requirement rmr, asset rm where o.version = (select max(i.version) from requirement i where i.id = o.id) and o.type = rt.id and o.id = reqId and o.id = rmr.requirement_id and rmr.asset_id = rm.id order by o.label; 
+      select o.label,o.id,o.name,o.description,o.priority,o.rationale,o.fit_criterion,o.originator,o.version,rt.name,rm.name,'asset' from requirement o, requirement_type rt, asset_requirement rmr, asset rm where o.version = (select max(i.version) from requirement i where i.id = o.id) and o.type = rt.id and o.id = reqId and o.id = rmr.requirement_id and rmr.asset_id = rm.id order by o.label; 
     end if; 
   else
     select asset_id into dimId from asset_requirement where requirement_id = reqId;
     if dimId is null
     then
       select environment_id into dimId from environment_requirement where requirement_id = reqId;
-      select o.label,o.id,o.name,o.description,o.priority,o.rationale,o.fit_criterion,o.originator,o.version,rt.name,rm.name from requirement o, requirement_type rt, environment_requirement rmr, environment rm where o.version = (select max(i.version) from requirement i where i.id = o.id) and o.type = rt.id and o.id = reqId and o.id = rmr.requirement_id and rmr.environment_id = rm.id order by o.label;
+      select o.label,o.id,o.name,o.description,o.priority,o.rationale,o.fit_criterion,o.originator,o.version,rt.name,rm.name,'environment' from requirement o, requirement_type rt, environment_requirement rmr, environment rm where o.version = (select max(i.version) from requirement i where i.id = o.id) and o.type = rt.id and o.id = reqId and o.id = rmr.requirement_id and rmr.environment_id = rm.id order by o.label;
     else
-      select o.label,o.id,o.name,o.description,o.priority,o.rationale,o.fit_criterion,o.originator,o.version,rt.name,rm.name from requirement o, requirement_type rt, asset_requirement rmr, asset rm where o.version = (select max(i.version) from requirement i where i.id = o.id) and o.type = rt.id and o.id = reqId and o.id = rmr.requirement_id and rmr.asset_id = rm.id order by o.label;
+      select o.label,o.id,o.name,o.description,o.priority,o.rationale,o.fit_criterion,o.originator,o.version,rt.name,rm.name,'asset' from requirement o, requirement_type rt, asset_requirement rmr, asset rm where o.version = (select max(i.version) from requirement i where i.id = o.id) and o.type = rt.id and o.id = reqId and o.id = rmr.requirement_id and rmr.asset_id = rm.id order by o.label;
     end if; 
   end if; 
 end

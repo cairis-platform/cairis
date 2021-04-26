@@ -400,8 +400,8 @@ class GoalsContentHandler(ContentHandler,EntityResolver):
       self.resetObstacleAttributes()
     elif name == 'requirement':
       reqId = self.dbProxy.newId()
-      r = cairis.core.RequirementFactory.build(reqId,self.theLabel,unescape(self.theName),unescape(self.theDescription),self.thePriority,unescape(self.theRationale),unescape(self.theFitCriterion),unescape(self.theOriginator),self.theType,self.theReference)
-      self.theRequirements.append((r,self.theReference,self.theReferenceType))
+      r = cairis.core.RequirementFactory.build(reqId,self.theLabel,unescape(self.theName),unescape(self.theDescription),self.thePriority,unescape(self.theRationale),unescape(self.theFitCriterion),unescape(self.theOriginator),self.theType,self.theReference,self.theReferenceType)
+      self.theRequirements.append(r)
       self.resetRequirementAttributes()
     elif name == 'exception':
       self.theCurrentStep.addException((self.theExcName,self.theExcType.lower(),self.theExcValue,self.theExcCat,unescape(self.theDefinition)))
