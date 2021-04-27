@@ -58,3 +58,21 @@ Accuracy                                Personal data integrity    Personal data
 Storage Limitation                      Unprocessed personal data  Personal data in data stores is processed.
 Integrity & Confidentiality             Unmitigated privacy risks  Personal information has confidentiality, integrity, and privacy properties that threats target are not exposed to unmitigated risks.
 ======================================  =========================  =================================================================================================================================================
+
+Access control checks
+---------------------
+
+These checks occur only if access needs and policy statements have been defined.
+
+=======================================  ===============================================================================================================================================
+Check                                    Description
+=======================================  ===============================================================================================================================================
+Unauthorised access                      Subject needs access to a resource, but this access is denied in a policy statement.
+Absent policy statement                  Subject needs access to a resource, but no policy statement specifies this access. 
+Ambiguous policy statement               Subject needs access to a resource, but multiple policy statements specify this access.
+No read-up violation                     Subject needs access to a resource, but reading up when the Confidentiality value of the resource is higher than the subject is undesirable.
+No write-down violation                  Subject needs access to a resource, but writing down when the Confidentiality value of the subject is higher than the resource is undesirable.
+No read-down violation                   Subject needs access to a resource, but reading down when the Integrity value of the subject is higher than the resource is undesirable.
+No write-up violation                    Subject needs access to a resource, but writing up when the Integrity value of the resource is higher than the subject is undesirable.
+No interaction up violation              Subject needs access to a resource, but interacting up when the Integrity value of the subject is lower than the resource is undesirable.
+=======================================  ===============================================================================================================================================

@@ -34,6 +34,7 @@ CAIRIS documentation
    attackers
    threats_tm
    stpa
+   actrl
    risks
    locations
    responses
