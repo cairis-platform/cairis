@@ -66,7 +66,7 @@ If there is a goal and policy statement for interaction between a subject and re
 Access control model validation checks
 --------------------------------------
 
-A number of access control specific model validation checks are supported, e.g. No-read down violation checks for conflicting Integrity values.  See the Model Validation section for a full list of supported checks.
+A number of access control specific model validation checks are supported, e.g. No-read down violation checks for conflicting Integrity values.  See :ref:`ac_checks` for a full list of supported checks.
 
 .. figure:: acValidation.jpg
    :alt: Access control model validation checking
