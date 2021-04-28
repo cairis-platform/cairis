@@ -13,26 +13,17 @@ Modelling access needs
 
 Indicating the need *subjects* have for accessing *resources* can be captured by in asset associations, where subjects and resources are system, information, or people assets.  The table below indicates permitted access needs for the different asset types.  For example, a person might read some information, but not vice-versa.  It may seem odd that information should be permitted to access resources but, during early stages of design, stakeholders might model some system that stores information as an information asset, or an information asset needs to access some resource because some out-of-scope system or person is handling that information, but the information-information access has some value.
 
-.. list-table:: Permitted access needs between subjects (rows) and resources (columns)
-   :widths: 25 25 50
-   :header-rows: 1
+.. table:: Permitted access needs between subjects (rows) and resources (columns)
 
-   * - 
-     - System
-     - Information
-     - People
-   * - **System**
-     - Y
-     - Y
-     - N
-   * - **Information**
-     - Y
-     - Y
-     - N
-   * - **People**
-     - Y
-     - Y
-     - Y
+   +-------------+--------+-------------+--------+
+   |             | System | Information | People |
+   +=============+========+=============+========+
+   | System      |   Y    |      Y      |   N    |
+   +-------------+--------+-------------+--------+
+   | Information |   Y    |      Y      |   N    |
+   +-------------+--------+-------------+--------+
+   | People      |   Y    |      Y      |   Y    |
+   +-------------+--------+-------------+--------+
 
 We use asset models to visually model desired access between subjects and resources.  
 
