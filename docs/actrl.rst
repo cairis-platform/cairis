@@ -25,16 +25,16 @@ Indicating the need *subjects* have for accessing *resources* is captured in ass
    | **People**      |   Y    |      Y      |   Y    |
    +-----------------+--------+-------------+--------+
 
-We use asset models to visually model desired access between subjects and resources.  
+Asset models visually model desired access between subjects and resources, and the ends of asset associations can capture access control information.
 
-We propose exploiting this feature by adorning these ends with access control information.  
-
-Possible adornments for access needs are one or more of read (r), write (w), and interact (x).  The choice of *x* is inspired by the execute permission used in unix, but the use of the term *interact* allows for a wider range of interaction affordances than execution.  Where r, w, or x adornment are not shown on the end of an association, it is assumed no access needs to take place.
+Possible adornments for access needs are one or more of read (r), write (w), and interact (x).  The choice of *x* is inspired by the execute permission used in unix, but the use of the term *interact* allows for a wider range of interaction affordances than execution.  Where r, w, or x adornment are not shown on the end of an association, it is assumed no access needs to take place.  
 
 .. figure:: adornEg.jpg
    :alt: Access control adornment example
 
 For example, the figure above shows the relationship between a Works Diary and Diary Event.  Both are information assets and the former contains one or more of the latter.  The adornment on the tail end of the Works Diary-Diary Event association should be read as *a works diary needs to read a diary event*.  The figure also indicates that diary events do not need to read, write, or interact with work diaries.
+
+Multiple access needs can be captured in a comma-separated need list.  For example, replacing *r* with *r,w* in the above example indicates that *a works diary needs to read and write a diary event*.
 
 Modelling access control policies with policy statements
 --------------------------------------------------------
