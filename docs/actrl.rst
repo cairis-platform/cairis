@@ -15,15 +15,15 @@ Indicating the need *subjects* have for accessing *resources* can be captured by
 
 .. table:: Permitted access needs between subjects (rows) and resources (columns)
 
-   +-------------+--------+-------------+--------+
-   |             | System | Information | People |
-   +=============+========+=============+========+
-   | System      |   Y    |      Y      |   N    |
-   +-------------+--------+-------------+--------+
-   | Information |   Y    |      Y      |   N    |
-   +-------------+--------+-------------+--------+
-   | People      |   Y    |      Y      |   Y    |
-   +-------------+--------+-------------+--------+
+   +-----------------+--------+-------------+--------+
+   |                 | System | Information | People |
+   +=================+========+=============+========+
+   | **System**      |   Y    |      Y      |   N    |
+   +-----------------+--------+-------------+--------+
+   | **Information** |   Y    |      Y      |   N    |
+   +-----------------+--------+-------------+--------+
+   | **People**      |   Y    |      Y      |   Y    |
+   +-----------------+--------+-------------+--------+
 
 We use asset models to visually model desired access between subjects and resources.  
 
