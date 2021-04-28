@@ -41,9 +41,9 @@ Modelling access control policies with policy statements
 
 An access control policy captures the set of authorised and unauthorised interactions between assets.  These interactions are captured using *policy statements*, where  statement is defined as *Subject* X *Access* X *Resource* X *Permission*, where *Access* = {*read, write, interact*} and *Permission* = {*allow,deny*}.
 	
-A single KAOS goal is associated with a single policy statement with concern links to both the subject and resource assets.  The goal should be precise enough to specify the conditions or capabilities the system needs to satisfy for the policy statement to hold.  Where this is not possible, the goal would need to be subject to refinement.  Consequently, a complete access control policy should correspond with a complete specification describing the intent the system needs to satisfy for compliance with the policy.  
+A single KAOS goal is associated with a single policy statement.  The goal needs to specify concern links to both the subject and resource assets.  The goal should be precise enough to specify the conditions or capabilities the system needs to satisfy for the policy statement to hold.  Where this is not possible, the goal needs to be refined.  Consequently, a complete access control policy should correspond with a complete specification describing the intent the system needs to satisfy for compliance with the policy.  
 
-Access needs should correspond with goals and policy statements, but the absence of needs do not, i.e. adding deny policy statements.  There are other means for capturing the rationale for non-inclusion, and requirements may not be within the scope of analysis.  This approach does not preclude the addition of requirements and policy statements if they are.
+Access needs should correspond with goals and policy statements, but the absence of needs do not, i.e. adding deny policy statements.  There are other means for capturing the rationale for non-inclusion, and goals may not be within the scope of analysis.  This approach does not preclude the addition of goals and policy statements if they are.
 
 If there is a goal and policy statement for interaction between a subject and resource, we would expect this to be refined to read and/or write interactions between the two.
 
