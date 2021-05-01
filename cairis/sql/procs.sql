@@ -15916,7 +15916,7 @@ begin
     call grepTags(inTxt);
   end if;
 
-  select environment_name, dimension_name,object_name from temp_searchresults;
+  select distinct environment_name, dimension_name,object_name from temp_searchresults;
 end
 //
 
