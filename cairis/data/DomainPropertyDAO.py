@@ -82,8 +82,7 @@ class DomainPropertyDAO(CairisDAO):
 
     try:
       if not self.check_existing_domain_property(domain_property.name()):
-        new_id = self.db_proxy.addDomainProperty(domain_property_params)
-        return new_id
+        self.db_proxy.addDomainProperty(domain_property_params)
       else:
         self.close()
         raise OverwriteNotAllowedHTTPError(obj_name=domain_property.name())
