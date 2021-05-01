@@ -80,7 +80,7 @@ class ObstacleDAO(CairisDAO):
     obsParams = ObstacleParameters(obsName=obstacle.theName,obsOrig=obstacle.theOriginator,tags=obstacle.theTags,properties=obstacle.theEnvironmentProperties)
 
     if not self.check_existing_obstacle(obstacle.theName):
-      obstacle_id = self.db_proxy.addObstacle(obsParams)
+      self.db_proxy.addObstacle(obsParams)
     else:
       self.close()
       raise OverwriteNotAllowedHTTPError('The provided obstacle name')
