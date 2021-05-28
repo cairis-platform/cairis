@@ -4276,15 +4276,15 @@ CREATE VIEW goal_associations as
   select ga.id, e.name environment, hg.name goal, 'obstacle' goal_dim, rt.name ref_type, tg.name subgoal, 'role' subgoal_dim, ga.alternative_id, ga.rationale from obstaclerole_goalassociation ga, environment e, obstacle hg, role tg, reference_type rt where ga.environment_id = e.id and ga.goal_id = hg.id and ga.subgoal_id = tg.id and ga.ref_type_id = rt.id;
 
 CREATE VIEW riskModel_tagged as
-  select t.name tag, a.name object, e.name environment from attacker_tag at, attacker a, tag t, environment_attacker ea, environment e where t.id = at.tag_id and a.id = at.attacker_id and at.attacker_id = ea.attacker_id and ea.environment_id = e.id
+  select t.name tag, a.name object, 'attacker' dimension, e.name environment from attacker_tag at, attacker a, tag t, environment_attacker ea, environment e where t.id = at.tag_id and a.id = at.attacker_id and at.attacker_id = ea.attacker_id and ea.environment_id = e.id
   union
-  select t.name tag, a.name object, e.name environment from asset_tag at, asset a, tag t, environment_asset ea, environment e where t.id = at.tag_id and a.id = at.asset_id and at.asset_id = ea.asset_id and ea.environment_id = e.id
+  select t.name tag, a.name object, 'asset' dimension, e.name environment from asset_tag at, asset a, tag t, environment_asset ea, environment e where t.id = at.tag_id and a.id = at.asset_id and at.asset_id = ea.asset_id and ea.environment_id = e.id
   union
-  select t.name tag, v.name object, e.name environment from vulnerability_tag vt, vulnerability v, tag t, environment_vulnerability  ev, environment e where t.id = vt.tag_id and v.id = vt.vulnerability_id and vt.vulnerability_id = ev.vulnerability_id and ev.environment_id = e.id
+  select t.name tag, v.name object, 'vulnerability' dimension, e.name environment from vulnerability_tag vt, vulnerability v, tag t, environment_vulnerability  ev, environment e where t.id = vt.tag_id and v.id = vt.vulnerability_id and vt.vulnerability_id = ev.vulnerability_id and ev.environment_id = e.id
   union
-  select t.name tag, th.name object, e.name environment from threat_tag tt, threat th, tag t, environment_threat et, environment e where t.id = tt.tag_id and th.id = tt.threat_id and tt.threat_id = et.threat_id and et.environment_id = e.id
+  select t.name tag, th.name object, 'threat' dimension, e.name environment from threat_tag tt, threat th, tag t, environment_threat et, environment e where t.id = tt.tag_id and th.id = tt.threat_id and tt.threat_id = et.threat_id and et.environment_id = e.id
   union
-  select t.name tag, r.name object, e.name environment from risk_tag rt, risk r, tag t, environment_risk er, environment e where t.id = rt.tag_id and r.id = rt.risk_id and rt.risk_id = er.id and er.environment_id = e.id;
+  select t.name tag, r.name object, 'risk' dimension, e.name environment from risk_tag rt, risk r, tag t, environment_risk er, environment e where t.id = rt.tag_id and r.id = rt.risk_id and rt.risk_id = er.id and er.environment_id = e.id;
 
 CREATE VIEW conceptMapModel_all as
   select fr.name from_name, tr.name to_name, rr.label,e.name from_objt,te.name to_objt from requirement fr, requirement tr, requirement_requirement rr,environment_requirement er, environment_requirement fer, environment e, environment te where rr.from_id = fr.id and fr.version = (select max(i.version) from requirement i where i.id = fr.id) and tr.version = (select max(i.version) from requirement i where i.id = tr.id) and rr.to_id = tr.id and tr.version = (select max(i.version) from requirement i where i.id = tr.id) and tr.id = er.requirement_id and rr.from_id = fer.requirement_id and fer.environment_id = e.id and rr.to_id = er.requirement_id and er.environment_id = te.id

@@ -4904,10 +4904,11 @@ class MySQLDatabaseProxy:
     for row in rows:
       tag = row[0]
       objt = row[1]
+      dimName = row[2]
       if (tag not in tagDict):
-        tagDict[tag] = [objt]
+        tagDict[tag] = [(objt,dimName)]
       else:
-        tagDict[tag].append(objt)
+        tagDict[tag].append((objt,dimName))
     return tagDict
 
   def securityPatternAssetModel(self,spName):

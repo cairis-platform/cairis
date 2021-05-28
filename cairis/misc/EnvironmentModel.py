@@ -181,14 +181,17 @@ class EnvironmentModel:
       edge = pydot.Edge(str(fromName),str(toName),dir=dirType)
       self.theGraph.add_edge(edge)
 
-      if (self.isTagged == True):
-        tags = self.dbProxy.riskModelTags(self.theEnvironmentName)
-        if (len(tags) > 0):
-          for tag in tags:
-            cluster = pydot.Cluster(tag,label=tag)
-            for objt in tags[tag]:
-              cluster.add_node(pydot.Node(objt))
-            self.theGraph.add_subgraph(cluster)
+    if (self.isTagged == True):
+      tags = self.dbProxy.riskModelTags(self.theEnvironmentName)
+      if (len(tags) > 0):
+        for tag in tags:
+          cluster = pydot.Cluster(tag,label=tag)
+          for objt,dimName in tags[tag]:
+            if (objt not in self.nodeNameSet):
+              self.buildNode(dimName,objt)
+              self.nodeNameSet.add(objt) 
+            cluster.add_node(pydot.Node(objt))
+          self.theGraph.add_subgraph(cluster)
     return self.layout()
 
   def layout(self):
