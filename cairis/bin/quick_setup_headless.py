@@ -37,7 +37,7 @@ def main(args=None):
   parser.add_argument('--logLevel',dest='logLevel',help='Log level',default='warning')
   parser.add_argument('--staticDir',dest='staticDir',help='Static directory',default=defaultRootDir + '/cairis/dist')
   parser.add_argument('--assetDir',dest='assetDir',help='Asset directory',default=defaultRootDir + '/cairis/dist')
-  parser.add_argument('--user',dest='userName',help='Initial username',default='test')
+  parser.add_argument('--user',dest='userName',help='Initial username',default='test@test.com')
   parser.add_argument('--password',dest='passWd',help='Initial password',default='test')
   args = parser.parse_args() 
   quick_setup(args.dbHost,int(args.dbPort),args.dbRootPassword,args.tmpDir,args.rootDir,args.configFile,int(args.webPort),args.logLevel,args.staticDir,args.assetDir,args.userName,args.passWd)
