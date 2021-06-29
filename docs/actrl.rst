@@ -5,7 +5,7 @@ Modelling access control needs and policies
 Overview
 --------
 
-Access control needs can be modelled in CAIRIS, together with access control policy statements.  If both needs and policies are captured then model validation checks can identify potentially undesirable / insecure access possibilities.
+Access control needs can be modelled in CAIRIS, together with access control policy statements.  If both needs and policies are captured then model validation checks can identify potentially undesirable or insecure access possibilities.
 
 
 Modelling access needs

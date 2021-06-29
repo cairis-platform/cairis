@@ -29556,7 +29556,7 @@ end
 
 create procedure riskModelTags(in envName text)
 begin
-  select tag, object from riskModel_tagged where environment = envName order by 1;
+  select tag, object,dimension from riskModel_tagged where environment = envName order by 1;
 
 end
 //
