@@ -27,7 +27,7 @@ def main(args=None):
   parser = argparse.ArgumentParser(description='CAIRIS quick setup script - headless')
   parser.add_argument('--dbHost',dest='dbHost',help='Database host name', default='localhost')
   parser.add_argument('--dbPort',dest='dbPort',help='Database port number',default='3306')
-  parser.add_argument('--dbRootPassword',dest='dbRootPassword',help='Database root password',default='')
+  parser.add_argument('--dbRootPassword',dest='dbRootPassword',help='Database root password',default='my-secret-pw')
   parser.add_argument('--tmpDir',dest='tmpDir',help='Temp directory',default='/tmp')
   defaultRootDir = os.path.split(os.path.split(os.path.realpath(os.path.dirname(__file__)))[0])[0]
   parser.add_argument('--rootDir',dest='rootDir',help='Root directory',default=defaultRootDir + '/cairis')
