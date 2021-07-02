@@ -478,7 +478,8 @@ api.add_resource(ObjectController.ObjectsByMethodAndTwoParametersAPI, '/api/usec
 api.add_resource(ObjectController.ObjectsAPI, '/api/user_goals',endpoint='user_goals',resource_class_kwargs={'dao': 'UserGoalDAO'})
 api.add_resource(ObjectController.ObjectByNameAPI, '/api/user_goals/name/<path:name>',endpoint='usergoal',resource_class_kwargs={'dao' : 'UserGoalDAO'})
 api.add_resource(ObjectController.ObjectsByMethodAndParameterAPI, '/api/user_goals/role/<path:parameter_string>',endpoint='roleusergoals',resource_class_kwargs={'dao' : 'UserGoalDAO','get_method' : 'role_user_goals'})
-api.add_resource(ObjectController.ModelByTwoParametersAPI, '/api/user_goals/model/environment/<path:p1>/filter_name/<path:p2>',endpoint='usergoalmodel',resource_class_kwargs={'dao' : 'UserGoalDAO','get_method' : 'get_user_goal_model','renderer' : 'dot'})
+api.add_resource(ObjectController.ObjectsByMethodAndTwoParametersAPI, '/api/user_goals/model/environment/<path:p1>/persona/<path:p2>/filters',endpoint='usergoalfilters',resource_class_kwargs={'dao' : 'UserGoalDAO','get_method' : 'user_goal_filters'})
+api.add_resource(ObjectController.ModelByThreeParametersAPI, '/api/user_goals/model/environment/<path:p1>/persona/<path:p2>/filter_name/<path:p3>',endpoint='usergoalmodel',resource_class_kwargs={'dao' : 'UserGoalDAO','get_method' : 'get_user_goal_model','renderer' : 'dot'})
 
 # User story routes
 api.add_resource(ObjectController.ObjectsAPI, '/api/userstories',endpoint='userstories',resource_class_kwargs={'dao': 'UserStoryDAO'})

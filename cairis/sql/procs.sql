@@ -30795,15 +30795,26 @@ begin
 end
 //
 
-create procedure getGoalContributions(in envName text, in filterElement text)
+create procedure getGoalContributions(in envName text, in personaName text, in filterElement text)
 begin
-  if filterElement != ''
+
+  if personaName = '' and filterElement = ''
+  then
+    select source, source_type, source_dimension, source_persona, target, target_type, target_dimension, target_persona, means_end, contribution from goal_contribution where environment in (envName,'');
+  elseif personaName != '' and filterElement = ''
+  then
+    select source, source_type, source_dimension, source_persona,  target, target_type, target_dimension, target_persona, means_end, contribution from goal_contribution where source_persona = personaName and environment in (envName,'')
+    union
+    select source, source_type, source_dimension, source_persona, target, target_type, target_dimension, target_persona, means_end, contribution from goal_contribution where target_persona = personaName and environment in (envName,'');
+  elseif personaName = '' and filterElement != ''
   then
     select source, source_type, source_dimension, source_persona,  target, target_type, target_dimension, target_persona, means_end, contribution from goal_contribution where source = filterElement and environment in (envName,'')
     union
     select source, source_type, source_dimension, source_persona, target, target_type, target_dimension, target_persona, means_end, contribution from goal_contribution where target = filterElement and environment in (envName,'');
   else
-    select source, source_type, source_dimension, source_persona, target, target_type, target_dimension, target_persona, means_end, contribution from goal_contribution where environment in (envName,'');
+    select source, source_type, source_dimension, source_persona,  target, target_type, target_dimension, target_persona, means_end, contribution from goal_contribution where source = filterElement and source_persona = personaName and environment in (envName,'')
+    union
+    select source, source_type, source_dimension, source_persona,  target, target_type, target_dimension, target_persona, means_end, contribution from goal_contribution where target = filterElement and target_persona = personaName and environment in (envName,'');
   end if;
 end
 //
@@ -30972,17 +30983,22 @@ begin
 end
 //
 
-create procedure ugm_filterNames(in envName text)
+create procedure ugm_filterNames(in envName text,in personaName text)
 begin
-  if envName != ''
+  if personaName = '' and envName = ''
+  then
+    select source from goal_contribution
+    union
+    select target from goal_contribution order by 1;
+  elseif personaName = '' and envName != ''
   then
     select source from goal_contribution where environment = envName
     union
     select target from goal_contribution where environment = envName order by 1;
   else
-    select source from goal_contribution
+    select source from goal_contribution where environment = envName and source_persona = personaName
     union
-    select target from goal_contribution order by 1;
+    select target from goal_contribution where environment = envName and target_persona = personaName order by 1;
   end if;
 end
 //

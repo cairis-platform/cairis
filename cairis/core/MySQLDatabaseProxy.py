@@ -4997,8 +4997,8 @@ class MySQLDatabaseProxy:
   def deleteUserGoal(self,ugId = -1):
     self.deleteObject(ugId,'user_goal')
 
-  def getGoalContributions(self,envName,filterElement = ''):
-    rows = self.responseList('call getGoalContributions(:envName,:filter)',{'envName':envName,'filter':filterElement},'MySQL error getting goal contributions')
+  def getGoalContributions(self,envName,personaName = '',filterElement = ''):
+    rows = self.responseList('call getGoalContributions(:envName,:persona,:filter)',{'envName':envName,'persona':personaName,'filter':filterElement},'MySQL error getting goal contributions')
     return rows
 
   def goalSatisfactionScore(self,goalName,envName):
@@ -5138,3 +5138,6 @@ class MySQLDatabaseProxy:
     for psId,goalName,envName,subjName,atName,resName,pName in psRows:
       objts.append(PolicyStatement(psId,goalName,envName,subjName,atName,resName,pName))
     return objts
+
+  def userGoalFilters(self,envName,personaName):
+    return self.responseList('call ugm_filterNames(:environment,:persona)',{'environment':envName,'persona':personaName},'MySQL error getting user goal filters for persona ' + personaName + ' in environment ' + envName)

@@ -83,6 +83,18 @@ class UserGoalAPITests(CairisDaemonTestCase):
     self.assertGreater(len(ugs), 0, 'No user goals in the list')
     self.logger.info('[%s] User goals found: %d', method, len(ugs))
 
+  def test_get_user_goal_filters(self):
+    method = 'test_user_goal_filters'
+    url = '/api/user_goals/model/environment/Complete/persona/Justin/filters?session_id=test'
+    self.logger.info('[%s] URL: %s', method, url)
+    rv = self.app.get(url)
+    responseData = rv.data.decode('utf-8')
+    filters = jsonpickle.decode(responseData)
+    self.assertIsNotNone(filters, 'No results after deserialization')
+    self.assertIsInstance(filters, list, 'The result is not a list as expected')
+    self.assertGreater(len(filters), 0, 'No filters in the list')
+    self.logger.info('[%s] Filters found: %d', method, len(filters))
+
   def test_get_by_name(self):
     method = 'test_get_by_name'
     url = '/api/user_goals/name/%s?session_id=test' % quote(self.existing_ug_name)

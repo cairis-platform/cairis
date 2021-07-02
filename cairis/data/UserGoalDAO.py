@@ -109,12 +109,14 @@ class UserGoalDAO(CairisDAO):
       self.close()
       raise MalformedJSONHTTPError()
 
-  def get_user_goal_model(self, environment_name, filter_element, pathValues = []):
+  def get_user_goal_model(self, environment_name, persona_name,filter_element, pathValues = []):
     fontName, fontSize, apFontName = get_fonts(session_id=self.session_id)
+    if persona_name == 'all':
+      persona_name = ''
     if filter_element == 'all':
       filter_element = ''
     try:
-      gcs = self.db_proxy.getGoalContributions(environment_name,filter_element)
+      gcs = self.db_proxy.getGoalContributions(environment_name,persona_name,filter_element)
       ugm = UserGoalModel(gcs,environment_name,self.db_proxy,font_name=fontName, font_size=fontSize)
       dot_code = ugm.graph()
       if not dot_code:
@@ -130,6 +132,18 @@ class UserGoalDAO(CairisDAO):
   def role_user_goals(self,role_name, pathValues = []):
     try:
       return self.db_proxy.roleUserGoals(role_name)
+    except DatabaseProxyException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+    except ARMException as ex:
+      self.close()
+      raise ARMHTTPError(ex)
+
+  def user_goal_filters(self,environment_name,persona_name, pathValues = []):
+    try:
+      if persona_name == 'all':
+        persona_name = '' 
+      return self.db_proxy.userGoalFilters(environment_name,persona_name)
     except DatabaseProxyException as ex:
       self.close()
       raise ARMHTTPError(ex)
