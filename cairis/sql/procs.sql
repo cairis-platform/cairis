@@ -12955,7 +12955,7 @@ begin
   declare vulTagCursor cursor for select t.name from vulnerability_tag vt, tag t where vt.vulnerability_id = vulId and vt.tag_id = t.id;
   declare threatTagCursor cursor for select t.name from threat_tag tt, tag t where tt.threat_id = threatId and tt.tag_id = t.id;
   declare riskTagCursor cursor for select t.name from risk_tag rt, tag t where rt.risk_id = riskId and rt.tag_id = t.id;
-  declare roleCursor cursor for  select r.name,rt.name,r.short_code,r.description from role r, role_type rt where r.role_type_id = rt.id;
+  declare roleCursor cursor for  select r.name,rt.name,r.short_code,xmlEscaped(r.description) from role r, role_type rt where r.role_type_id = rt.id;
   declare assetEnvCursor cursor for select ea.environment_id,e.name from environment_asset ea, environment e where ea.asset_id = assetId and ea.environment_id = e.id;
   declare vulEnvCursor cursor for select ev.environment_id,e.name from environment_vulnerability ev, environment e where ev.vulnerability_id = vulId and ev.environment_id = e.id;
   declare attackerEnvCursor cursor for select ea.environment_id,e.name from environment_attacker ea, environment e where ea.attacker_id = attackerId and ea.environment_id = e.id;
