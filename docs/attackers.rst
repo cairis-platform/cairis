@@ -39,4 +39,4 @@ Adding, updating, and deleting an attacker
    in the Attackers table, making the necessary changes, and
    clicking on the Update button.
 
--  To delete an attacker, click on the Delete button next to the attacker to be removed in the Attackers table. attacker to delete in the Attackers.  If any artifacts are dependent on this attacker then a dialog box stating these dependencies are displayed. The user has the option of selecting Yes to remove the attacker dependencies and the attacker itself, or No to cancel the deletion.
+-  To delete an attacker, click on the Delete button next to the attacker to be removed in the Attackers table. If any artifacts are dependent on this attacker then a dialog box stating these dependencies are displayed. The user has the option of selecting Yes to remove the attacker dependencies and the attacker itself, or No to cancel the deletion.
