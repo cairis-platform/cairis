@@ -1,7 +1,7 @@
 Roles
 =====
 
-Roles represent the abstract classes representing human agents; these also encapsulate behaviours and responsibilities.
+Roles are abstract classes representing human agents; these also encapsulate behaviours and responsibilities.
 
 CAIRIS supports 6 types of role:
 
