@@ -6,11 +6,11 @@ Starting the CAIRIS server
 
 If you are using Docker then the command used to install the container also starts the CAIRIS server on port 80.
 
-If you are the only person that plans to use CAIRIS, using the Flask development server to run cairisd should be sufficient.  You can find cairisd in the cairis/cairis/bin directory.
+If you are the only person that plans to use CAIRIS, using the Flask development server should be sufficient.  Once the FLASK_APP and FLASK_ENV environment variables have been set, you can run:
 
 .. code-block:: bash
 
-   ./cairisd.py runserver
+   flask run --port 7071
 
 If you plan to use mod_wsgi-express then you need to use cairis.wsgi (also in cairis/cairis/bin):
 

@@ -129,7 +129,7 @@ If you have a clean Ubuntu VM, you can quickly install and configure CAIRIS and 
 
    sudo apt-get update && sudo apt-get upgrade -y && sudo apt-get dist-upgrade -y && sudo apt install curl -y && sudo apt install net-tools -y && curl -s https://cairis.org/quickInstall.sh | bash -s my-secret-pw
 
-In addition to configuring and installing CAIRIS, the script creates an initial user account (username: test@test.com, password: test), starts cairisd.py as a service, and restarts the VM.  You can use *journalctl* to check the CAIRIS log file.
+In addition to configuring and installing CAIRIS, the script creates an initial user account (username: test@test.com, password: test), starts the Flask development server as a service, and restarts the VM.  You can use *journalctl* to check the CAIRIS log file.
 
 .. code-block:: bash
 
@@ -227,7 +227,7 @@ The final step entails installing the UI code by running the below script in cai
 The CAIRIS UI code is managed in the `cairis-ui github repository <https://github.com/cairis-platform/cairis-ui>`_.  Running this script will setup `node <https://nodejs.org>`_ and `yarn <https://yarnpkg>`_, download the github repo, create a production version of the latest UI code and deploy to cairis/cairis/dist.
 The -E flag is required, as the CAIRIS_SRC environment variable needs to be visible to root.
 
-You should now start up your CAIRIS server.  If you plan to develop with CAIRIS, you should skip this step as you'll find it more useful to manually start the development cairisd server.  For everyone else, create the following *cairis.service* file, substituting *cairisuser* for the name of your account.  Using sudo or root, copy this file to /etc/systemd/system.
+You should now start up your CAIRIS server.  If you plan to develop with CAIRIS, you should skip this step as you'll find it more useful to manually start the Flask development server.  For everyone else, create the following *cairis.service* file, substituting *cairisuser* for the name of your account.  Using sudo or root, copy this file to /etc/systemd/system.
 
 .. code-block:: bash
 
@@ -237,9 +237,11 @@ You should now start up your CAIRIS server.  If you plan to develop with CAIRIS,
    [Service]
    User=cairisuser
    WorkingDirectory=/home/cairisuser/cairis
+   Environment="FLASK_APP=/home/cairisuser/cairis/cairis/daemon:create_app"
+   Environment="FLASK_ENV=development"
    Environment="CAIRIS_CFG=/home/cairisuser/cairis.cnf"
    Environment="PYTHONPATH=${PYTHONPATH}:/home/cairisuser/cairis"
-   ExecStart=/home/cairisuser/cairis/cairis/bin/cairisd.py runserver
+   ExecStart=flask run --port 7071
    Restart=on-failure
 
    [Install]
@@ -282,10 +284,10 @@ If you plan to customise CAIRIS, development extensions or fixes, you should ins
 
    sudo pip3 install -r test_requirements.txt
 
-To start the CAIRIS development server, run the cairisd.py script, i.e. from the cairis/cairis/bin directory
+To start the CAIRIS development server, set the FLASK_APP environment variable to cairis/cairis/daemon:create_app, the FLASK_ENV environment variable to development, then run:
 
 .. code-block:: bash
 
-   ./cairisd.py runserver
+   flask run --port 7071
 
-All logged output is sent to the console where you started cairisd.py, which is useful when it come to diagnosing any problems.  Also, if you plan to use pytest to debug any CAIRIS server code (i.e. by adding import pytest and pytest.set_trace() before any code you want to debug), the debug prompt will appear in the console.
+All logged output is sent to the console where you started the development server, which is useful when it come to diagnosing any problems.  Also, if you plan to use pytest to debug any CAIRIS server code (i.e. by adding import pytest and pytest.set_trace() before any code you want to debug), the debug prompt will appear in the console.

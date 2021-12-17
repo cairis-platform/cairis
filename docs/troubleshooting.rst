@@ -6,7 +6,7 @@ Log files
 
 The CAIRIS log files are a good place to look for signs of errors in the event of any problems.
 
-If you are using the CAIRIS development server, i.e. running cairisd.py then the daemon will log directly to the console.
+If you are using the CAIRIS development server then the daemon will log directly to the console.
 
 If you are using mod_wsgi-express then the log file will be saved to /tmp/mod_wsgi-localhost:8000:0 (or similar depending on the port you've used).
 
