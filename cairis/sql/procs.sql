@@ -31287,6 +31287,10 @@ begin
   declare ugCursor cursor for select user_goal_id from user_system_goal_link where system_goal_id = goalId;
   declare continue handler for not found set done = 1;
 
+  drop table if exists temp_gid;
+  create temporary table temp_gid (id int not null, gscore int not null);
+
+
   open ugCursor;
   ug_loop: loop
     fetch ugCursor into ugId;
