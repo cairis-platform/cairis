@@ -11,7 +11,7 @@ CAIRIS stands for *Computer Aided Integration of Requirements and Information Se
 
 <h2>Why did you build CAIRIS?</h2>
 
-CAIRIS initially developed over 10 years ago as part of [Shamal Faily](http://shamalfaily.com)'s [doctoral research](http://ora.ox.ac.uk/objects/uuid:520b939f-b1d9-4a53-9a47-21f0ffcfd68d) to better understand what software tool support for security and usability design might take.
+CAIRIS initially developed over 10 years ago as part of [Shamal Faily](https://rgu-repository.worktribe.com/person/1335432/shamal-faily)'s [doctoral research](http://ora.ox.ac.uk/objects/uuid:520b939f-b1d9-4a53-9a47-21f0ffcfd68d) to better understand what software tool support for security and usability design might take.
 
 <h2>Why do I need CAIRIS?</h2>
 
@@ -35,7 +35,7 @@ Finally, although CAIRIS' origins are in specifying requirements, it can also su
 
 <h2>Is CAIRIS used in the real world?</h2>
 
-CAIRIS has been and is currently being used commercially, particularly in critical infrastructure domains such as Defence, Health, Transport, and Water Treatment.  We're always keen to hear from companies (both large and small) interested in using CAIRIS.  Please [get in touch](mailto:sfaily@bournemouth.ac.uk) if you want to use CAIRIS and need help gettting started.
+CAIRIS has been and is currently being used commercially, particularly in critical infrastructure domains such as Defence, Health, Transport, and Water Treatment.  We're always keen to hear from companies (both large and small) interested in using CAIRIS.  Please [get in touch](mailto:s.faily@rgu.ac.uk) if you want to use CAIRIS and need help gettting started.
 
 <h2>Are there any examples of CAIRIS in action?</h2>
 
@@ -55,15 +55,15 @@ No, CAIRIS will run on any platform that supports its open source dependencies. 
 
 <h2>Do you still do research around CAIRIS?</h2>
 
-Very much so.  We have a number of undergraduate and postgraduate research assistants that are currently extending CAIRIS, and exploring some of the ideas that originally motivated its development.  We love to hear from prospective collaborators, so if working with us to improve the state of the art in security design tools is of interest then please [get in touch](mailto:sfaily@bournemouth.ac.uk).
+Very much so.  We have a number of undergraduate and postgraduate research assistants that are currently extending CAIRIS, and exploring some of the ideas that originally motivated its development.  We love to hear from prospective collaborators, so if working with us to improve the state of the art in security design tools is of interest then please [get in touch](mailto:s.faily@rgu.ac.uk).
 
 <h2>How can I contribute to CAIRIS?</h2>
 
 You can contribute in several ways.
 
 * You can use CAIRIS in your own practice.  One of our aims in developing CAIRIS is to transfer knowledge about security design tool best practice, so by using CAIRIS and sharing your experiencees with us, you will be helping us do this.  
-* Report problems or feature requests by raising [an issue on github](https://github.com/cairis-platform/cairis/issues), or [getting in touch](mailto:sfaily@bournemouth.ac.uk) if your requirements are a little more elaborate.
-* If you work in higher education, please consider using CAIRIS as a tool for teaching security design.  CAIRIS has already been used in [Oxford](http://www.cs.ox.ac.uk)'s postgraduate [Design of Security](http://www.cs.ox.ac.uk/softeng/subjects/DES.html) course.  At [BU](https://www1.bournemouth.ac.uk), we're also incorporating CAIRIS into our own cybersecurity teaching.  We're happy to share any teaching material we develop, so if you're interested in using CAIRIS as part of your teaching then please [get in touch](mailto:sfaily@bournemouth.ac.uk).
+* Report problems or feature requests by raising [an issue on github](https://github.com/cairis-platform/cairis/issues), or [getting in touch](mailto:s.faily@rgu.ac.uk) if your requirements are a little more elaborate.
+* If you work in higher education, please consider using CAIRIS as a tool for teaching security design.  CAIRIS has already been used in [Oxford](http://www.cs.ox.ac.uk)'s postgraduate [Design of Security](http://www.cs.ox.ac.uk/softeng/subjects/DES.html) course.  [Bouremouth University](https://www1.bournemouth.ac.uk) and [Robert Gordon University](https://rgu.ac.uk) has also incorporated CAIRIS into its cybersecurity teaching.  We're happy to share any teaching material we develop, so if you're interested in using CAIRIS as part of your teaching then please [get in touch](mailto:s.faily@rgu.ac.uk).
 * We're always looking for volunteers to help maintain and evolve CAIRIS - this includes not only the code, but other elements of CAIRIS such as documentation and even this website.
 
 <h2>How can I sponsor CAIRIS?</h2>
@@ -75,4 +75,4 @@ We'd love to hear from companies interested in sponsoring the on-going design an
 * Buying consultancy to help you adopt CAIRIS.  Any income from CAIRIS consultancy, will go back into the development of CAIRIS.  
 * [Knowledge Transfer Partnerships (KTPs)](https://connect.innovateuk.org/web/ktp).  If you're a UK SME and see CAIRIS as an important tool in growing your business, then a KTP is a great way of getting government funding to support us and your project.
 
-Please [get in touch](mailto:sfaily@bournemouth.ac.uk) if any (or all!) of the above is of interest to you.
+Please [get in touch](mailto:s.faily@rgu.ac.uk) if any (or all!) of the above is of interest to you.
