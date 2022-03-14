@@ -34,7 +34,7 @@ def apply_caching(response):
   return response
 
 @user_registered.connect_via(application)
-def enroll(sender, user, confirm_token,form_data = {}):
+def enroll(sender, user, confirm_token,confirmation_token=None,form_data = {}):
   addAdditionalUserData(user.email, user.password)
 
 if __name__ == '__main__':
