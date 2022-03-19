@@ -1,32 +1,35 @@
 FROM ubuntu:latest
 MAINTAINER Shamal Faily <admin@cairis.org>
 ARG DEBIAN_FRONTEND=noninteractive
-RUN apt-get update 
-RUN apt-get install -y build-essential
-RUN apt-get install -y python3-dev
-RUN apt-get install -y mysql-client
-RUN apt-get install -y graphviz
-RUN apt-get install -y python3-pip
-RUN apt-get install -y python3-numpy
-RUN apt-get install -y python3-mysqldb
-RUN apt-get install -y git
-RUN apt-get install -y default-libmysqlclient-dev
-RUN apt-get install -y python-apt
-RUN apt-get install -y libxml2-dev
-RUN apt-get install -y libxslt1-dev 
-RUN apt-get install -y libssl-dev 
-RUN apt-get install -y apache2
-RUN apt-get install -y apache2-dev
-RUN apt-get install -y poppler-utils
-RUN apt-get install -y python3-setuptools
-RUN apt-get install -y apt-transport-https 
-RUN apt-get install -y ca-certificates
+RUN apt-get update
+RUN apt-get install -y build-essential \
+    python3-dev \
+    mysql-client \ 
+    graphviz \
+    python3-pip \
+    python3-numpy \
+    python3-mysqldb \
+    git \
+    default-libmysqlclient-dev \
+    python-apt \
+    libxml2-dev \
+    libxslt1-dev \
+    libssl-dev \
+    apache2 \
+    apache2-dev \
+    poppler-utils \
+    python3-setuptools \
+    apt-transport-https \
+    ca-certificates
 
 RUN pip3 install wheel
+#Installing Python modules
 COPY requirements.txt /
-COPY wsgi_requirements.txt /
 RUN pip3 install -r requirements.txt
+COPY wsgi_requirements.txt /
 RUN pip3 install -r wsgi_requirements.txt
+
+#Environment Variable starts from here
 ENV CAIRIS_SRC=/cairis/cairis
 ENV CAIRIS_CFG_DIR=/cairis/docker
 ENV CAIRIS_CFG=/cairis.cnf
@@ -35,11 +38,14 @@ ENV PYTHONPATH=/cairis
 RUN mkdir /tmpDocker
 RUN mkdir /images
 
+#Clonning the repo
 RUN git clone --depth 1 -b master https://github.com/cairis-platform/cairis /cairis
-RUN mkdir /cairisTmp
-RUN mv /cairis/cairis /cairisTmp/cairis
-RUN rm -rf /cairis/
-RUN mv /cairisTmp/ /cairis/
+#creating folder here and moving the files and folder
+
+RUN mkdir /cairisTmp &&\
+    mv /cairis/cairis /cairisTmp/cairis &&\
+    rm -rf /cairis/ &&\
+    mv /cairisTmp/ /cairis/
 
 COPY cairis.cnf /
 COPY setupDb.sh /
