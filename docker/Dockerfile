@@ -11,7 +11,7 @@ RUN apt-get install -y build-essential \
     python3-mysqldb \
     git \
     default-libmysqlclient-dev \
-    python-apt \
+    python3-apt \
     libxml2-dev \
     libxslt1-dev \
     libssl-dev \
