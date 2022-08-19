@@ -34,12 +34,13 @@ SwaggerHub provides a virtual server at https://virtserver.swaggerhub.com/failys
 Authenticating with the CAIRIS server
 -------------------------------------
 
-For a more representative test, you'll want to run up cairisd and import a model. If you do this, the first thing you need to do is authentication to get a session. You can get this by posting to /api/session with your credentials. Let's assume our username and password is test and test:
+For a more representative test, you'll want to run up cairisd and import a model. If you do this, the first thing you need to do is authentication to get a session. You can get this by posting to /api/session with your credentials. Let's assume our username and password is test@test.com and test:
 
 .. code-block:: bash
 
-   curl -u test:test -X POST http://localhost:7071/api/session
-   {"message": "Session created", "session_id": "S9A3U7XkKEzqPwjwzKqR8jPGPVK0dvtf", "user": "test"}
+   curl -u test@test.com -X POST http://localhost:7071/api/session
+   Enter host password for user 'test@test.com':
+   {"message": "Session created", "session_id": "S9A3U7XkKEzqPwjwzKqR8jPGPVK0dvtf", "user": "test@test.com"}
 
 By default, the session will point to the user's default database, but posting to api/settings/database/{name}/open can change the database the session points to, where name is the name of the database you want to point to.
 
