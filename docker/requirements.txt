@@ -16,7 +16,7 @@ Flask-RESTful>= 0.3.5
 flask-restful-swagger>= 0.19
 Flask-Cors>= 3.0.2
 Flask-SQLAlchemy>=2.1
-Flask-Security-Too>=3.3.2
+Flask-Security-Too==4.1.5
 Flask-Script>=2.0.5
 Flask-OAuthlib>=0.9.3
 Flask-Mail>=0.9.1
