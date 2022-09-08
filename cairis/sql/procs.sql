@@ -13570,7 +13570,7 @@ begin
   declare cmRationale varchar(4000);
   declare probRationale varchar(4000);
   declare obsProb float;
-  declare trName varchar(50);
+  declare trName varchar(500);
   declare goalCount int default 0;
   declare obsCount int default 0;
   declare reqCount int default 0;
@@ -28775,7 +28775,7 @@ begin
   declare cmRationale varchar(4000);
   declare probRationale varchar(4000);
   declare obsProb float;
-  declare trName varchar(50);
+  declare trName varchar(500);
   declare goalCount int default 0;
   declare obsCount int default 0;
   declare reqCount int default 0;
