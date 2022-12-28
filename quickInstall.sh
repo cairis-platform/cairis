@@ -78,7 +78,7 @@ sleep 10
 export PYTHONPATH=$CAIRIS_ROOT
 $CAIRIS_ROOT/cairis/bin/quick_setup_headless.py --rootDir=$CAIRIS_ROOT/cairis --dbRootPassword=$ROOTPW --logLevel=debug --user=$DEFUSER --password=$DEFPASSWD --configFile=$HOMEDIR/cairis.cnf
 
-SVCFILE="[Unit]\nDescription=cairisd\n\n[Service]\nEnvironment=\"FLASK_APP=$CAIRIS_ROOT/cairis/daemon:create_app\"\nEnvironment=\"FLASK_ENV=development\"\nUser=$USERNAME\nWorkingDirectory=$CAIRIS_ROOT\nEnvironment=\"CAIRIS_CFG=$HOMEDIR/cairis.cnf\"\nEnvironment=\"PYTHONPATH=\${PYTHONPATH}:$CAIRIS_ROOT\"\nExecStart=flask run --host 0.0.0.0 --port 7071\nRestart=on-failure\n\n[Install]\nWantedBy=multi-user.target"
+SVCFILE="[Unit]\nDescription=cairisd\n\n[Service]\nEnvironment=\"FLASK_APP=$CAIRIS_ROOT/cairis/daemon:create_app\"\nEnvironment=\"FLASK_ENV=development\"\nUser=$USERNAME\nWorkingDirectory=$CAIRIS_ROOT\nEnvironment=\"CAIRIS_CFG=$HOMEDIR/cairis.cnf\"\nEnvironment=\"PYTHONPATH=\${PYTHONPATH}:$CAIRIS_ROOT\"\nExecStart=flask run --port 7071\nRestart=on-failure\n\n[Install]\nWantedBy=multi-user.target"
 
 echo -e $SVCFILE | sudo tee /etc/systemd/system/cairis.service
 
