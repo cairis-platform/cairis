@@ -233,7 +233,7 @@ You should now start up your CAIRIS server.  If you plan to develop with CAIRIS,
    Environment="FLASK_ENV=development"
    Environment="CAIRIS_CFG=/home/cairisuser/cairis.cnf"
    Environment="PYTHONPATH=${PYTHONPATH}:/home/cairisuser/cairis"
-   ExecStart=flask run --port 7071
+   ExecStart=flask run --host 0.0.0.0 --port 7071
    Restart=on-failure
 
    [Install]
