@@ -58,7 +58,6 @@ class User(db.Model, UserMixin):
   email = db.Column(db.String(255), unique=True)
   account = db.Column(db.String(32), unique=True)
   password = db.Column(db.String(255))
-  dbtoken = db.Column(db.String(255))
   name = db.Column(db.String(255))
   active = db.Column(db.Boolean())
   fs_uniquifier = db.Column(db.String(255), unique=True, nullable=False)
