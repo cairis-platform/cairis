@@ -26,20 +26,20 @@ else:
   import httplib
 from flask import Flask
 from flask_mail import Mail
-#from flask_security import Security, SQLAlchemyUserDatastore, user_registered
+from flask_security import Security, SQLAlchemyUserDatastore, user_registered
 from flask_security import Security, SQLAlchemyUserDatastore
-#from cairis.bin.add_cairis_user import addAdditionalUserData
+from cairis.bin.add_cairis_user import addAdditionalUserData
 from flask_cors import CORS
 from cairis.core.Borg import Borg
 from cairis.daemon.WebConfig import *
 from .cdb import db
 from .models import User, Role
 
-#app = Flask(__name__)
+app = Flask(__name__)
 
-#@user_registered.connect_via(app)
-#def enroll(sender, user, confirm_token,confirmation_token=None,form_data = {}):
-#  addAdditionalUserData(user.email, user.password)
+@user_registered.connect_via(app)
+def enroll(sender, user, confirm_token,confirmation_token=None,form_data = {}):
+  addAdditionalUserData(user.email, user.password)
 
 
 def create_app():
@@ -50,7 +50,6 @@ def create_app():
   WebConfig.config(options)
 
   b = Borg()
-  app = Flask(__name__)
   app.config['DEBUG'] = True
   app.config['SECRET_KEY'] = b.secretKey
   app.config['SECURITY_PASSWORD_SALT'] = 'None'
