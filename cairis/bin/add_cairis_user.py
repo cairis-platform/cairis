@@ -71,7 +71,7 @@ def addAdditionalUserData(userName,passWd):
   rp = ''.join(choice(string.ascii_letters + string.digits) for i in range(255))
   b = Borg()
   dbAccount = canonicalDbUser(userName)
-  createDatabaseAccount(b.rPasswd,b.dbHost,b.dbPort,dbAccount,rp)
+  createDatabaseAccount(b.rPasswd,b.dbHost,b.dbPort,userName,dbAccount,rp)
   createDatabaseAndPrivileges(b.rPasswd,b.dbHost,b.dbPort,userName,rp,dbAccount + '_default')
   createDatabaseSchema(b.cairisRoot,b.dbHost,b.dbPort,userName,rp,dbAccount + '_default')
   createDefaults(b.cairisRoot,b.dbHost,b.dbPort,userName,rp,dbAccount + '_default')
@@ -86,7 +86,7 @@ def addCairisUser(userName,passWd,fullName):
   dbAccount = canonicalDbUser(userName)
 
   b = Borg()
-  createDatabaseAccount(b.rPasswd,b.dbHost,b.dbPort,dbAccount,rp)
+  createDatabaseAccount(b.rPasswd,b.dbHost,b.dbPort,userName,dbAccount,rp)
   createDatabaseAndPrivileges(b.rPasswd,b.dbHost,b.dbPort,userName,rp,canonicalDbUser(userName) + '_default')
   createDatabaseSchema(b.cairisRoot,b.dbHost,b.dbPort,userName,rp,dbAccount + '_default')
 

@@ -4607,9 +4607,10 @@ class MySQLDatabaseProxy:
     dbPort = ses_settings['dbPort']
     rPasswd = ses_settings['rPasswd']
     dbUser = ses_settings['dbUser']
+    userName = ses_settings['userName']
     dbPasswd = ses_settings['dbPasswd']
     dbName = dbUser + '_' + dbName
-    createDatabaseAndPrivileges(rPasswd,dbHost,dbPort,dbUser,dbPasswd,dbName)
+    createDatabaseAndPrivileges(rPasswd,dbHost,dbPort,userName,dbPasswd,dbName)
     b.settings[session_id]['dbName'] = dbName
     self.clearDatabase(session_id)
     self.reconnect(True,session_id)

@@ -39,7 +39,6 @@ db = SQLAlchemy(app)
 cors = CORS(app)
 
 roles_users = db.Table('roles_users', db.Column('user_id', db.Integer(), db.ForeignKey('auth_user.id')), db.Column('role_id', db.Integer(), db.ForeignKey('auth_role.id')))
-#db_token = db.Table('db_token', db.Column('email', db.String(255), unique=True), db.column('token',db.String(255)))
 
 class Role(db.Model, RoleMixin):
   __tablename__ = 'auth_role'
@@ -82,7 +81,7 @@ class DBATest(unittest.TestCase):
     self.assertEqual(testAccount not in accountList,True)
     rp = ''.join(choice(string.ascii_letters + string.digits) for i in range(255))
     dbAccount = canonicalDbUser(testAccount)
-    createDatabaseAccount(b.rPasswd,b.dbHost,b.dbPort,dbAccount,rp)
+    createDatabaseAccount(b.rPasswd,b.dbHost,b.dbPort,testAccount,dbAccount,rp)
     createDatabaseAndPrivileges(b.rPasswd,b.dbHost,b.dbPort,testAccount,rp,canonicalDbUser(testAccount) + '_default')
     createDatabaseSchema(b.cairisRoot,b.dbHost,b.dbPort,testAccount,rp,dbAccount + '_default')
 
@@ -109,7 +108,7 @@ class DBATest(unittest.TestCase):
     testAccount2 = 'dbatest2@cairis.org'
     rp2 = ''.join(choice(string.ascii_letters + string.digits) for i in range(255))
     dbAccount2 = canonicalDbUser(testAccount2)
-    createDatabaseAccount(b.rPasswd,b.dbHost,b.dbPort,dbAccount2,rp2)
+    createDatabaseAccount(b.rPasswd,b.dbHost,b.dbPort,testAccount2,dbAccount2,rp2)
     createDatabaseAndPrivileges(b.rPasswd,b.dbHost,b.dbPort,dbAccount2,rp2,canonicalDbUser(testAccount2) + '_default')
     createDatabaseSchema(b.cairisRoot,b.dbHost,b.dbPort,testAccount,rp2,dbAccount2 + '_default')
 

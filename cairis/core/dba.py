@@ -82,10 +82,12 @@ def runAdminCommands(adminPasswd,dbHost,dbPort,stmts,adminUser='root'):
     exceptionText = 'MySQL error running "' + ', '.join(stmts) + '": message:' + format(e) 
     raise DatabaseProxyException(exceptionText) 
 
-def createDatabaseAccount(rPasswd,dbHost,dbPort,dbUser,dbPasswd):
+def createDatabaseAccount(rPasswd,dbHost,dbPort,email,dbUser,dbPasswd):
   stmts = ['drop user if exists ' + dbUser,
            "create user if not exists '" + dbUser + "'@'" + "%' identified by '" + dbPasswd + "'",
-           'flush privileges']
+           'flush privileges',
+           'insert into cairis_user.db_token(email,token) values("' + email + '","' + dbPasswd + '")',
+           "commit"]
   runAdminCommands(rPasswd,dbHost,dbPort,stmts)
 
 def createDbOwnerDatabase(rPasswd,dbHost,dbPort):
@@ -106,7 +108,6 @@ def createDatabaseAndPrivileges(rPasswd,dbHost,dbPort,email,dbPasswd,dbName):
            'alter database ' + dbName + ' default collate utf8mb4_' + collationString + '_ci',
            'flush privileges',
            'insert into cairis_owner.db_owner(db,owner) values("' + dbName + '","' + dbUser + '")',
-           'insert into cairis_user.db_token(email,token) values("' + email + '","' + dbPasswd + '")',
            'commit']
   runAdminCommands(rPasswd,dbHost,dbPort,stmts)
 
