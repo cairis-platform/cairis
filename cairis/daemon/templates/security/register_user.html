@@ -4,14 +4,15 @@
 <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
 
 {% extends "security/base.html" %}
-{% from "security/_macros.html" import render_field_with_errors, render_field %}
+{% from "security/_macros.html" import render_field_with_errors, render_field, render_form_errors %}
 
 {% block content %}
 {% include "security/_messages.html" %}
 <form action="{{ url_for_security('register') }}" method="POST" name="register_user_form">
   <div class="container-fluid">
-  <h1>{{ _('Register CAIRIS user') }}</h1>
+  <h1>{{ _fsdomain('Register CAIRIS user') }}</h1>
   {{ register_user_form.hidden_tag() }}
+  {{ render_form_errors(register_user_form) }}
   {{ render_field_with_errors(register_user_form.email) }}
   {{ render_field_with_errors(register_user_form.password) }}
   {% if register_user_form.password_confirm %}

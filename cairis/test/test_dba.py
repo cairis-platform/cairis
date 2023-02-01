@@ -39,6 +39,7 @@ db = SQLAlchemy(app)
 cors = CORS(app)
 
 roles_users = db.Table('roles_users', db.Column('user_id', db.Integer(), db.ForeignKey('auth_user.id')), db.Column('role_id', db.Integer(), db.ForeignKey('auth_role.id')))
+#db_token = db.Table('db_token', db.Column('email', db.String(255), unique=True), db.column('token',db.String(255)))
 
 class Role(db.Model, RoleMixin):
   __tablename__ = 'auth_role'
@@ -52,7 +53,6 @@ class User(db.Model, UserMixin):
   email = db.Column(db.String(255), unique=True)
   account = db.Column(db.String(32), unique=True)
   password = db.Column(db.String(255))
-  dbtoken = db.Column(db.String(255))
   name = db.Column(db.String(255))
   active = db.Column(db.Boolean())
   fs_uniquifier = db.Column(db.String(255), unique=True, nullable=False)
@@ -74,7 +74,8 @@ class DBATest(unittest.TestCase):
 
     createDbOwnerDatabase(b.rPasswd,b.dbHost,b.dbPort)
     createCairisUserDatabase(b.rPasswd,b.dbHost,b.dbPort)
-    db.create_all()
+    with app.app_context():
+      db.create_all()
     dropUser(b.rPasswd,b.dbHost,b.dbPort,testAccount)
 
     accountList = accounts(b.rPasswd,b.dbHost,b.dbPort)
@@ -82,10 +83,12 @@ class DBATest(unittest.TestCase):
     rp = ''.join(choice(string.ascii_letters + string.digits) for i in range(255))
     dbAccount = canonicalDbUser(testAccount)
     createDatabaseAccount(b.rPasswd,b.dbHost,b.dbPort,dbAccount,rp)
-    createDatabaseAndPrivileges(b.rPasswd,b.dbHost,b.dbPort,dbAccount,rp,canonicalDbUser(testAccount) + '_default')
+    createDatabaseAndPrivileges(b.rPasswd,b.dbHost,b.dbPort,testAccount,rp,canonicalDbUser(testAccount) + '_default')
     createDatabaseSchema(b.cairisRoot,b.dbHost,b.dbPort,testAccount,rp,dbAccount + '_default')
-    user_datastore.create_user(email=testAccount, account=dbAccount, password='test',dbtoken=rp,name = 'Test user')
-    db.session.commit()
+
+    with app.app_context():
+      user_datastore.create_user(email=testAccount, account=dbAccount, password='test',name = 'Test user')
+      db.session.commit()
 
     self.assertEqual(rp, dbtoken(b.rPasswd,b.dbHost,b.dbPort,testAccount))
 
@@ -109,8 +112,11 @@ class DBATest(unittest.TestCase):
     createDatabaseAccount(b.rPasswd,b.dbHost,b.dbPort,dbAccount2,rp2)
     createDatabaseAndPrivileges(b.rPasswd,b.dbHost,b.dbPort,dbAccount2,rp2,canonicalDbUser(testAccount2) + '_default')
     createDatabaseSchema(b.cairisRoot,b.dbHost,b.dbPort,testAccount,rp2,dbAccount2 + '_default')
-    user_datastore.create_user(email=testAccount2, account=dbAccount2, password='test',dbtoken=rp2,name = 'Test user 2')
-    db.session.commit()
+
+    with app.app_context():
+      user_datastore.create_user(email=testAccount2, account=dbAccount2, password='test',name = 'Test user 2')
+      db.session.commit()
+
     accountList = accounts(b.rPasswd,b.dbHost,b.dbPort)
     self.assertEqual(testAccount2 in accountList,True)
     self.assertEqual(len(databases(dbAccount2)),1)

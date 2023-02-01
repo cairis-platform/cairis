@@ -36,6 +36,7 @@ from cairis.controllers import CImportController
 from cairis.controllers import DocumentationController
 from cairis.controllers import ObjectController
 from cairis.controllers import UploadController
+from cairis.core.dba import dbtoken
 
 from cairis.daemon.main import main, api
 from cairis.tools.SessionValidator import get_session_id
@@ -47,7 +48,8 @@ __author__ = 'Robin Quetin, Shamal Faily'
 
 def set_dbproxy(dbUser,userName):
   b = Borg()
-  dbPasswd = current_user.dbtoken
+  print('dbUser:' + dbUser)
+  dbPasswd = dbtoken(b.rPasswd,b.dbHost,b.dbPort,dbUser)
 
   dbUser = canonicalDbUser(dbUser)
   dbName = dbUser + '_default'

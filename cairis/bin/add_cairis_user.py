@@ -69,16 +69,14 @@ user_datastore = SQLAlchemyUserDatastore(db,User, Role)
 security = Security(app, user_datastore)
 
 def addAdditionalUserData(userName,passWd):
-  fUser = user_datastore.find_user(email=userName)
   rp = ''.join(choice(string.ascii_letters + string.digits) for i in range(255))
-  fUser.dbtoken = rp
-  db.session.commit()
   b = Borg()
   dbAccount = canonicalDbUser(userName)
   createDatabaseAccount(b.rPasswd,b.dbHost,b.dbPort,dbAccount,rp)
   createDatabaseAndPrivileges(b.rPasswd,b.dbHost,b.dbPort,userName,rp,dbAccount + '_default')
   createDatabaseSchema(b.cairisRoot,b.dbHost,b.dbPort,userName,rp,dbAccount + '_default')
   createDefaults(b.cairisRoot,b.dbHost,b.dbPort,userName,rp,dbAccount + '_default')
+
   
 def addCairisUser(userName,passWd,fullName):
   rp = ''.join(choice(string.ascii_letters + string.digits) for i in range(255))
@@ -90,13 +88,14 @@ def addCairisUser(userName,passWd,fullName):
 
   b = Borg()
   createDatabaseAccount(b.rPasswd,b.dbHost,b.dbPort,dbAccount,rp)
-  createDatabaseAndPrivileges(b.rPasswd,b.dbHost,b.dbPort,dbAccount,rp,canonicalDbUser(userName) + '_default')
+  createDatabaseAndPrivileges(b.rPasswd,b.dbHost,b.dbPort,userName,rp,canonicalDbUser(userName) + '_default')
   createDatabaseSchema(b.cairisRoot,b.dbHost,b.dbPort,userName,rp,dbAccount + '_default')
 
-  db.create_all()
-  user_datastore.create_user(email=userName, account=dbAccount, password=hash_password(passWd),dbtoken=rp,name = fullName)
-  db.session.commit()
-  createDefaults(b.cairisRoot,b.dbHost,b.dbPort,userName,rp,dbAccount + '_default')
+  with app.app_context():
+    db.create_all()
+    user_datastore.create_user(email=userName, account=dbAccount, password=hash_password(passWd),name = fullName)
+    db.session.commit()
+    createDefaults(b.cairisRoot,b.dbHost,b.dbPort,userName,rp,dbAccount + '_default')
 
 def main():
   parser = argparse.ArgumentParser(description='Computer Aided Integration of Requirements and Information Security - Add CAIRIS user')

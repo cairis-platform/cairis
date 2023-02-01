@@ -107,6 +107,7 @@ class AttackerAPITests(CairisDaemonTestCase):
     new_attacker_body = self.prepare_json()
 
     self.app.delete(url)
+
     self.logger.info('[%s] Object to delete: %s', method, new_attacker_body)
     self.app.post('/api/attackers', content_type='application/json', data=new_attacker_body)
     self.logger.info('[%s] URL: %s', method, url)

@@ -114,7 +114,7 @@ from cairis.tools.PseudoClasses import RiskRating
 import string
 import os
 from numpy import *
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 from sqlalchemy.orm import scoped_session, sessionmaker
 import sys
 from base64 import b64encode
@@ -133,9 +133,9 @@ class MySQLDatabaseProxy:
     port = b.dbPort
 
     try:
-      dbEngine = create_engine('mysql+mysqldb://'+user+':'+passwd+'@'+host+':'+str(port)+'/'+db+'?charset=utf8mb4')
+      dbEngine = create_engine('mysql+mysqldb://' + user + ':' + passwd + '@' + host + ':' + str(port) + '/' + db + '?charset=utf8mb4')
       self.conn = scoped_session(sessionmaker(bind=dbEngine))
-      self.conn.execute("set session max_sp_recursion_depth = 255")
+      self.conn.execute(text("set session max_sp_recursion_depth = 255"))
     except OperationalError as e:
       exceptionText = 'MySQL error connecting to the CAIRIS database ' + db + ' on host ' + host + ' at port ' + str(port) + ' with user ' + user + ' (message:' + format(e) + ')'
       raise DatabaseProxyException(exceptionText) 
@@ -165,7 +165,7 @@ class MySQLDatabaseProxy:
         self.conn = scoped_session(sessionmaker(bind=dbEngine))
       else:
         raise RuntimeError('Run mode not recognized')
-      self.conn.execute("set session max_sp_recursion_depth = 255")
+      self.conn.execute(text("set session max_sp_recursion_depth = 255"))
 
     except OperationalError as e:
       exceptionText = 'MySQL error re-connecting to the CAIRIS database: ' + format(e)
@@ -192,7 +192,10 @@ class MySQLDatabaseProxy:
     return (idLookup, nameLookup)
     
   def close(self):
-    self.conn.remove()
+    try:
+      self.conn.remove()
+    except ProgrammingError:
+      pass
 
   def getRequirements(self,constraintId = '',isAsset = 1):
     reqRows = self.responseList('call getRequirements(:id,:isAs)',{'id':constraintId,'isAs':isAsset},'MySQL error getting requirements')
@@ -236,7 +239,7 @@ class MySQLDatabaseProxy:
     try:
       if (session == None):
         session = self.conn()
-      session.execute(callTxt,argDict)
+      session.execute(text(callTxt),argDict)
       if (doCommit):
         session.commit()
         session.close()
@@ -327,7 +330,7 @@ class MySQLDatabaseProxy:
       if (session == None):
         session = self.conn()
         persistSession = False
-      rs = session.execute(callTxt,argDict)
+      rs = session.execute(text(callTxt),argDict)
       responseList = []
       if (rs.rowcount > 0):
         for row in rs.fetchall():
@@ -706,17 +709,19 @@ class MySQLDatabaseProxy:
       if ((dimensionTable == 'classassociation') or (dimensionTable == 'goalassociation')):
         associationComponents = dimensionName.split('/')
         if (dimensionTable == 'goalassociation'):
-          rs = session.execute('select goalAssociationId(:ac0,:ac1,:ac2,:ac3,ac:4)',{'ac0':associationComponents[0],'ac1':associationComponents[1],'ac2':associationComponents[2],'ac3':associationComponents[3],'ac4':associationComponents[4]})
+          rs = session.execute(text('select goalAssociationId(:ac0,:ac1,:ac2,:ac3,ac:4)'),{'ac0':associationComponents[0],'ac1':associationComponents[1],'ac2':associationComponents[2],'ac3':associationComponents[3],'ac4':associationComponents[4]})
         elif (dimensionTable == 'classassociation'):
-          rs = session.execute('select classAssociationId(:ac0,:ac1,:ac2)',{'ac0':associationComponents[0],'ac1':associationComponents[1],'ac2':associationComponents[2]})
+          rs = session.execute(text('select classAssociationId(:ac0,:ac1,:ac2)'),{'ac0':associationComponents[0],'ac1':associationComponents[1],'ac2':associationComponents[2]})
       elif ((dimensionTable == 'provided_interface') or (dimensionTable == 'required_interface')):
         cName,ifName = dimensionName.split('_')
-        rs = session.execute('select interfaceId(:name)',{'name':ifName})
+        rs = session.execute(text('select interfaceId(:name)'),{'name':ifName})
       elif (dimensionTable == 'policy_statement'):
         psComponents = dimensionName.split('/')
-        rs = session.execute('select policyStatementId(:goal,:env,:subj,:at,:res)',{'goal':psComponents[0],'env':psComponents[1],'subj':psComponents[2],'at':psComponents[3],'res':psComponents[4]})
+        rs = session.execute(text('select policyStatementId(:goal,:env,:subj,:at,:res)'),{'goal':psComponents[0],'env':psComponents[1],'subj':psComponents[2],'at':psComponents[3],'res':psComponents[4]})
       else:
-        rs = session.execute('call dimensionId(:name,:table)',{'name':dimensionName,'table':dimensionTable})
+        callTxt = text('call dimensionId(:name,:table)')
+        argDict = {'name':dimensionName,'table':dimensionTable}
+        rs = session.execute(callTxt,argDict)
 
       if (rs.rowcount == 0):
         exceptionText = 'No identifier associated with '
@@ -4667,7 +4672,7 @@ class MySQLDatabaseProxy:
               'delete from mysql.db where Db = "' + dbName + '"']
       session = tmpConn()
       for stmt in stmts:
-        session.execute(stmt)
+        session.execute(text(stmt))
       session.close()
       tmpConn.remove()
     except OperationalError as e:

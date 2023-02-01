@@ -19,6 +19,7 @@
 
 drop database if exists `cairis_user`;
 create database if not exists `cairis_user`;
+create table cairis_user.db_token(email varchar(255), token varchar(255), primary key(email)) engine=innodb;
 
 drop database if exists `cairis_owner`;
 create database if not exists `cairis_owner`;

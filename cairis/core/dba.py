@@ -36,7 +36,7 @@ def dbtoken(rPasswd,dbHost,dbPort,dbUser):
   try:
     rootConn = MySQLdb.connect(host=dbHost,port=int(dbPort),user='root',passwd=rPasswd)
     rootCursor = rootConn.cursor()
-    sqlTxt = 'select dbtoken from cairis_user.auth_user where email="' + dbUser + '"'
+    sqlTxt = 'select token from cairis_user.db_token where email="' + dbUser + '"'
     rs = rootCursor.execute(sqlTxt)
     if (rs != 1):
       exceptionText = 'MySQL error getting token for ' + dbUser 
@@ -94,9 +94,9 @@ def createDbOwnerDatabase(rPasswd,dbHost,dbPort):
            'create table cairis_owner.db_owner(db varchar(64), owner varchar(32), primary key(db,owner)) engine=innodb']
   runAdminCommands(rPasswd,dbHost,dbPort,stmts)
 
-def createDatabaseAndPrivileges(rPasswd,dbHost,dbPort,dbUser,dbPasswd,dbName):
+def createDatabaseAndPrivileges(rPasswd,dbHost,dbPort,email,dbPasswd,dbName):
   collationString = 'general'
-  dbUser = canonicalDbUser(dbUser)
+  dbUser = canonicalDbUser(email)
   dbName = canonicalDbName(dbName)
   stmts = ['drop database if exists `' + dbName + '`',
            'delete from cairis_owner.db_owner where db = "' + dbName + '"',
@@ -104,9 +104,9 @@ def createDatabaseAndPrivileges(rPasswd,dbHost,dbPort,dbUser,dbPasswd,dbName):
            "grant all privileges on `" + dbName + "`.* TO '" + dbUser + "'@'%'",
            'alter database ' + dbName + ' default character set utf8mb4',
            'alter database ' + dbName + ' default collate utf8mb4_' + collationString + '_ci',
-           'flush tables',
            'flush privileges',
            'insert into cairis_owner.db_owner(db,owner) values("' + dbName + '","' + dbUser + '")',
+           'insert into cairis_user.db_token(email,token) values("' + email + '","' + dbPasswd + '")',
            'commit']
   runAdminCommands(rPasswd,dbHost,dbPort,stmts)
 
@@ -117,7 +117,8 @@ def dropCairisUserDatabase(rPasswd,dbHost,dbPort):
 def createCairisUserDatabase(rPasswd,dbHost,dbPort):
   stmts = ['create database if not exists cairis_user',
            'set global max_sp_recursion_depth = 255',
-           'flush privileges']
+           'flush privileges',
+           'create table cairis_user.db_token(email varchar(255), token varchar(255), primary key(email)) engine=innodb']
   runAdminCommands(rPasswd,dbHost,dbPort,stmts)
 
 def grantDatabaseAccess(rPasswd,dbHost,dbPort,dbName,dbUser):
@@ -199,6 +200,7 @@ def dropUser(rPasswd,dbHost,dbPort,email):
   stmts.append('drop user if exists ' + dbUser)
   stmts.append('flush privileges')
   stmts.append('delete from cairis_user.auth_user where email = "' + email + '"')
+  stmts.append('delete from cairis_user.db_token where email = "' + email + '"')
   stmts.append('commit')
   runAdminCommands(rPasswd,dbHost,dbPort,stmts)
 
@@ -209,10 +211,11 @@ def resetUser(cairisRoot,rPasswd,dbHost,dbPort,email):
     stmts.append('drop database if exists ' + dbName)
     stmts.append('flush privileges')
     stmts.append('delete from cairis_owner.db_owner where db = "' + dbName + '"')
+    stmts.append('delete from cairis_user.db_token where email = "' + email + '"')
     stmts.append('commit')
   runAdminCommands(rPasswd,dbHost,dbPort,stmts)
-  rp = dbtoken(rPasswd,dbHost,dbPort,email)
-  createDatabaseAndPrivileges(rPasswd,dbHost,dbPort,dbUser,rp,dbUser + '_default')
+  rp = ''.join(choice(string.ascii_letters + string.digits) for i in range(255))
+  createDatabaseAndPrivileges(rPasswd,dbHost,dbPort,email,rp,dbUser + '_default')
   createDatabaseSchema(cairisRoot,dbHost,dbPort,email,rp,dbUser + '_default')
   createDefaults(cairisRoot,dbHost,dbPort,email,rp,dbUser + '_default')
 
