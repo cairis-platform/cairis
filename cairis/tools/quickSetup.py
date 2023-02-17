@@ -58,7 +58,7 @@ def quick_setup(dbHost,dbPort,dbRootPassword,tmpDir,rootDir,configFile,webPort,l
   if (userName != ''):
     rp = ''.join(choice(ascii_letters + digits) for i in range(255))
     dbAccount = canonicalDbUser(userName)
-    user_datastore.create_user(email=userName, account=dbAccount, password=hash_password(passWd),dbtoken=rp,name = 'Default user')
+    user_datastore.create_user(email=userName, account=dbAccount, password=hash_password(passWd),name = 'Default user')
     db.session.commit()
     createDatabaseAccount(dbRootPassword,dbHost,dbPort,userName,dbAccount,rp)
     createDatabaseAndPrivileges(dbRootPassword,dbHost,dbPort,userName,rp,dbAccount + '_default')
@@ -68,10 +68,10 @@ def quick_setup(dbHost,dbPort,dbRootPassword,tmpDir,rootDir,configFile,webPort,l
 
 def createUserDatabase(dbHost,dbPort,dbRootPassword,rootDir):
   dropCairisUserDatabase(dbRootPassword,dbHost,dbPort)
+  createCairisUserDatabase(dbRootPassword,dbHost,dbPort)
   createDatabaseAccount(dbRootPassword,dbHost,dbPort,'cairis_test','cairis_test','cairis_test')
   createDatabaseAndPrivileges(dbRootPassword,dbHost,dbPort,'cairis_test','cairis_test','cairis_test_default')
   createDatabaseSchema(rootDir,dbHost,dbPort,'cairis_test','cairis_test','cairis_test_default')
-  createCairisUserDatabase(dbRootPassword,dbHost,dbPort)
 
 
 def createCairisCnf(configFile,dbRootPassword,dbHost,dbPort,tmpDir,rootDir,webPort,logLevel,staticDir,assetDir,mailServer,mailPort,mailUser,mailPasswd):
