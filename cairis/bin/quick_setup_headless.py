@@ -45,8 +45,6 @@ def main(args=None):
 if __name__ == '__main__':
   try:
     from cairis.core.ARM import ARMException
-    import pytest
-    pytest.set_trace()
     main()
   except ARMException as e:
     print('Fatal setup error: ' + str(e))
