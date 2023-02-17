@@ -2,7 +2,7 @@ require 'yaml'
 conf = YAML.load_file("vagrant_conf.yaml")
 
 Vagrant.configure("2") do |config|
-  config.vm.box = "bento/ubuntu-20.04"
+  config.vm.box = "bento/ubuntu-22.04"
   config.vm.network "forwarded_port", guest: 7071, host: 7071
   config.vm.provider conf['provider'] do |vb|
     vb.memory = "2048"
