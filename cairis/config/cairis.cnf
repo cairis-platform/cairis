@@ -9,4 +9,3 @@ default_image_dir = .
 web_port = 7071
 log_level = warning
 web_static_dir = /home/cairisuser/cairis/cairis/web
-upload_dir = /tmp
