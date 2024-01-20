@@ -1,0 +1,46 @@
+networks:
+  cairis:
+    internal: true
+  portsHatch: # only needed for ports
+
+services:
+  cairis-db:
+    image: 'mysql:latest'
+    environment:
+      - MYSQL_ROOT_PASSWORD=changeme1 # changeme
+    command: >
+      --thread_stack=256K
+      --max_sp_recursion_depth=255
+      --log_bin_trust_function_creators=1
+    volumes: [cairis-db:/var/lib/mysql]
+    networks: [cairis]
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping"]
+  cairis:
+    image: shamalfaily/cairis
+    build: . # comment this to pull image
+    volumes:
+      - cairis-img:/cairis/images:rw
+    environment:
+      - MYSQL_HOST=cairis-db
+      - MYSQL_ROOT_PASSWORD=changeme1 # changeme
+      # - CAIRIS_LOGLEVEL=DEBUG
+      # - CAIRIS_SMTP_SERVER=
+      # - CAIRIS_SMTP_PORT=465
+      # - CAIRIS_SMTP_USER=
+      # - CAIRIS_SMTP_PASS=
+      # only applied on first run (database generation):
+      - CAIRIS_USER=example@example.tld
+      - CAIRIS_PASS=changeme2
+    networks:
+     - cairis
+     - portsHatch
+    ports:
+      - 8000:8000
+    depends_on:
+      cairis-db:
+        condition: service_healthy
+
+volumes:
+  cairis-db:
+  cairis-img:
