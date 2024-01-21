@@ -1,16 +1,14 @@
-argparse>=1.4.0
 bcrypt>=3.1.6,!=4.1.* # https://github.com/pyca/bcrypt/issues/684
 coverage>=4.5.1
 coveralls>=1.4.0
-email_validator>=1.0.5
-Flask-Cors>= 3.0.10
+Flask>=2.2.2
+Flask-Cors>=3.0.10
 Flask-Mail>=0.9.1
 Flask-OAuthlib>=0.9.6
 Flask-RESTful>= 0.3.9
 Flask-Script>=2.0.6
 Flask-Security-Too>=5.1.0
 Flask-SQLAlchemy>=2.5.1
-Flask>=2.2.2
 jsonpickle>=0.9.3
 lxml>=3.6.4
 mako>=1.0.4
@@ -25,5 +23,9 @@ pytest-cov>=2.7.1
 pytest-pep8>=1.0.6
 pytest>=3.3.0
 python-magic>=0.4.15
+Requests>=2.31.0 # added by pipreqs 2024-01-21
+# setuptools # suggestion by pipreqs 2024-01-21
+six>=1.16.0 # added by pipreqs 2024-01-21
 SQLAlchemy>=2.0.0
+Werkzeug>=3.0.1 # added by pipreqs 2024-01-21
 xlsxwriter>=1.2.7
