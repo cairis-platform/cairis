@@ -19,8 +19,6 @@ services:
   cairis:
     image: shamalfaily/cairis
     build: . # comment this to pull image
-    volumes:
-      - cairis-img:/cairis/images:rw
     environment:
       - MYSQL_HOST=cairis-db
       - MYSQL_ROOT_PASSWORD=changeme1 # changeme
@@ -43,4 +41,3 @@ services:
 
 volumes:
   cairis-db:
-  cairis-img:

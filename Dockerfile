@@ -53,7 +53,6 @@ ENV PYTHONPATH=/cairis
 COPY ./cairis /cairis
 RUN ln -s . /cairis/cairis
 
-VOLUME [ "/cairis/images" ]
 EXPOSE 8000
 USER www-data:www-data
 CMD ["python3", "/entrypoint.py"]
