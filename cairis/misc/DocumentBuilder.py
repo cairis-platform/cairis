@@ -2396,10 +2396,4 @@ def build(dbProxy,docType,sectionFlags,typeFlags,fileName,docDir):
   f.write(specDoc)
   f.close()
   
-
-  b = Borg()
-  if(b.docker == True):
-    requestString = "http://cairis-docs:5000/latexApi"
-    requests.post(requestString, data={'docBookCmd': docBookCmd})
-  else:
-    os.system(docBookCmd)
+  os.system(docBookCmd)

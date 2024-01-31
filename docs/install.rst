@@ -43,73 +43,39 @@ Installation via Docker
 
 If you have Docker installed on your laptop or an available machine, you can download the CAIRIS container from `Docker hub <https://hub.docker.com/r/shamalfaily/cairis/>`_.  Like the live demo, this is built from the latest version of CAIRIS in GitHub, and uses `mod_wsgi-express <https://pypi.python.org/pypi/mod_wsgi>`_ to deliver the CAIRIS web services.
 
-There are two options for running the container, a full install of everything or a smaller install which doesn't provide pdf export functionality:
-
-For the full install (with pdf export functionality) download and run the container, the documentation container, and its linked mysql container:
-
-.. code-block:: bash
- 
-   sudo docker run --name cairis-mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql:latest --thread_stack=256K --max_sp_recursion_depth=255 --log_bin_trust_function_creators=1
-   sudo docker run --name cairis-docs -d -v cairisDocumentation:/tmpDocker -v cairisImage:/images -t shamalfaily/cairis-docs
-   sudo docker run --name CAIRIS -d --link cairis-mysql:mysql --link cairis-docs:docs -P -p 80:8000 --net=bridge -v cairisDocumentation:/tmpDocker -v cairisImage:/images shamalfaily/cairis
-
-For the smaller install (without pdf export functionality) download and run the container, and its linked mysql container:
-
-.. code-block:: bash
- 
-   sudo docker run --name cairis-mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql:latest --thread_stack=256K --max_sp_recursion_depth=255 --log_bin_trust_function_creators=1
-   sudo docker run --name CAIRIS --link cairis-mysql:mysql -d -P -p 80:8000 --net=bridge shamalfaily/cairis
-
-If you run the above commands on macOS (and possibly other non-Linux platformns), you might get the error *links are only supported for user-defined networks*.  If so, you should instead run the below commands to download and run your containers:
-
-.. code-block:: bash
-   
-   NET=cairisnet
-   docker network create -d bridge $NET
-   docker run --name cairis-mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql:latest --thread_stack=256K --max_sp_recursion_depth=255 --log_bin_trust_function_creators=1
-   docker network connect $NET cairis-mysql
-   docker run --name CAIRIS -d -P -p 80:8000 --net=$NET shamalfaily/cairis
-
-If you want to use the containers to support account self-registration and revocation then you can set MAIL_SERVER, MAIL_PORT, MAIL_USER, and MAIL_PASSWD environment variables to correspond with the SSL outgiong mail server, mail server port, mail account username, and password for the mail account, i.e.
+Download and run the container, and its linked mysql container:
 
 .. code-block:: bash
 
-   docker run --name CAIRIS --env MAIL_SERVER=mymailserver.com --env MAIL_PORT=465 --env MAIL_USER=admin@mymailserver.com --env MAIL_PASSWD=mypassword -d -P -p 80:8000 --net=$NET shamalfaily/cairis
+   docker compose up -d
 
-The *docker run* commands will create and start-up CAIRIS.  If you haven't setup account self-registration then you will need to create an account before you can use it.  To do this, run the below command - replacing test@test.com and test with your desired username and password. 
+If you want to use the containers to support account self-registration and revocation then you can set *MAIL_\** environment variables in *compose.yml* to correspond with the SSL outgiong mail server, mail server port, mail account username, and password for the mail account, i.e.
 
-.. code-block:: bash
-
-   docker exec -t `docker ps | grep shamalfaily/cairis | head -1 | cut -d ' ' -f 1` /addAccount.sh test@test.com test TestUser
-
-If you are using PowerSheell on Windows to run the above command then this might fail because *grep* is not installed.  To work around this, you need to use *docker ps* to get the Container ID and run the below modified command:
-
+Populate the instance with examples:
 
 .. code-block:: bash
 
-   docker exec -t CONTAINER_ID /addAccount.sh test@test.com test TestUser
+   docker compose exec cairis python3 /cairis/bin/model_import_web.py --url http://localhost --database NeuroGrid /examples/exemplars/NeuroGrid.cairis
+   docker compose exec cairis python3 /cairis/bin/model_import_web.py --url http://localhost --database ACME_Water /examples/exemplars/ACME_Water.cairis
+   docker compose exec cairis python3 /cairis/bin/model_import_web.py --url http://localhost --database webinos /examples/exemplars/webinos.cairis
 
-Once the containers have been installed then, in the future, you should use *docker start* rather than *docker run* to start up the already downloaded containers.
+If you haven't setup account self-registration, you will need to create an account before you can use it:
 
 .. code-block:: bash
- 
-   sudo docker start cairis-mysql 
-   sudo docker start CAIRIS
+
+   docker compose exec cairis python3 /cairis/bin/add_cairis_user.py test@test.com test TestUser
 
 The containers can be stopped using *docker stop*, i.e.
 
 .. code-block:: bash
 
-   sudo docker stop CAIRIS
-   sudo docker stop cairis-mysql
+   docker compose down
 
-To update your docker containers, stop the docker containers and run the below commands to remove any old containers and volume files. Following that, you can re-run the above *docker run* commands to install and run the container.  Don't forget to re-add your user account!
+To update your docker containers, build or pull them:
 
 .. code-block:: bash
 
-   sudo docker rm $(sudo docker ps -aq)
-   sudo docker rmi --force $(sudo docker images -q)
-   sudo docker volume rm $(docker volume ls)
+   docker compose up -d --build --pull=always
 
 
 Installation and configuration via GitHub (automated)
