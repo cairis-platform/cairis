@@ -5,7 +5,7 @@ networks:
 
 services:
   cairis-db:
-    image: 'mysql:latest'
+    image: 'mariadb:latest'
     environment:
       - MYSQL_ROOT_PASSWORD=changeme1 # changeme
     command: >
@@ -15,7 +15,7 @@ services:
     volumes: [cairis-db:/var/lib/mysql]
     networks: [cairis]
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping"]
+      test: ["CMD", "healthcheck.sh", "--su=mysql", "--connect", "--innodb_initialized"]
   cairis:
     image: shamalfaily/cairis
     build: . # comment this to pull image
