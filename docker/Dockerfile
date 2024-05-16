@@ -1,4 +1,4 @@
-FROM ubuntu:latest
+FROM ubuntu:22.04
 MAINTAINER Shamal Faily <admin@cairis.org>
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update
