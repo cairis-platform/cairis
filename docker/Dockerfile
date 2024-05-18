@@ -25,9 +25,9 @@ RUN apt-get install -y build-essential \
 RUN pip3 install wheel
 #Installing Python modules
 COPY requirements.txt /
-RUN pip3 install -r requirements.txt
+RUN pip3 install -r requirements.txt --break-system-packages
 COPY wsgi_requirements.txt /
-RUN pip3 install -r wsgi_requirements.txt
+RUN pip3 install -r wsgi_requirements.txt --break-system-packages
 
 #Environment Variable starts from here
 ENV CAIRIS_SRC=/cairis/cairis

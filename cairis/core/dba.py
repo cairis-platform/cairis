@@ -103,6 +103,7 @@ def createDatabaseAndPrivileges(rPasswd,dbHost,dbPort,email,dbPasswd,dbName):
   stmts = ['drop database if exists `' + dbName + '`',
            'delete from cairis_owner.db_owner where db = "' + dbName + '"',
            'create database ' + dbName,
+           "create user if not exists '" + dbUser + "'@'" + "%' identified by '" + dbPasswd + "'",
            "grant all privileges on `" + dbName + "`.* TO '" + dbUser + "'@'%'",
            'alter database ' + dbName + ' default character set utf8mb4',
            'alter database ' + dbName + ' default collate utf8mb4_' + collationString + '_ci',

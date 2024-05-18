@@ -43,7 +43,7 @@ class ProjectAPITests(CairisDaemonTestCase):
   def setUpClass(cls):
     b = Borg()
     createDbOwnerDatabase(b.rPasswd,b.dbHost,b.dbPort)
-    createDatabaseAccount(b.rPasswd,b.dbHost,b.dbPort,'cairis_test','cairis_test')
+    createDatabaseAccount(b.rPasswd,b.dbHost,b.dbPort,'cairis_test','cairis_test','cairis_test')
     createDatabaseAndPrivileges(b.rPasswd,b.dbHost,b.dbPort,'cairis_test','cairis_test','cairis_test_default')
     createDatabaseSchema(b.cairisRoot,b.dbHost,b.dbPort,'cairis_test','cairis_test','cairis_test_default')
     importModelFile(os.environ['CAIRIS_SRC'] + '/../examples/exemplars/NeuroGrid/NeuroGrid.xml',1,'test')

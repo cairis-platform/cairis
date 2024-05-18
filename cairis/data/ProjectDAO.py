@@ -61,7 +61,6 @@ class ProjectDAO(CairisDAO):
       dbName = dbUser + '_' + canonicalDbName(db_name)
       if (dbExists(dbName)):
         raise ARMException(db_name + " already exists")
- 
       self.db_proxy.createDatabase(db_name,self.session_id)
       return 'New database successfully created'
     except DatabaseProxyException as ex:
