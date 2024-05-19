@@ -1,4 +1,4 @@
-FROM ubuntu:22.04
+FROM ubuntu:latest
 MAINTAINER Shamal Faily <admin@cairis.org>
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update
@@ -53,6 +53,7 @@ COPY createdb.sql /
 COPY addAccount.sh /
 COPY register_user.html /cairis/cairis/daemon/templates/security
 
+ENV NODE_OPTIONS=--openssl-legacy-provider
 RUN /cairis/cairis/bin/installUI.sh
 
 EXPOSE 8000
