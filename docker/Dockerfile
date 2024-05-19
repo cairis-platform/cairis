@@ -22,7 +22,7 @@ RUN apt-get install -y build-essential \
     apt-transport-https \
     ca-certificates
 
-RUN pip3 install wheel
+RUN pip3 install wheel --break-system-packages
 #Installing Python modules
 COPY requirements.txt /
 RUN pip3 install -r requirements.txt --break-system-packages
@@ -53,7 +53,6 @@ COPY createdb.sql /
 COPY addAccount.sh /
 COPY register_user.html /cairis/cairis/daemon/templates/security
 
-ENV NODE_OPTIONS=--openssl-legacy-provider
 RUN /cairis/cairis/bin/installUI.sh
 
 EXPOSE 8000
