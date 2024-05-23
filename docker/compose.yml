@@ -1,0 +1,50 @@
+name: cairis
+services:
+  cairis-mysql:
+    image: mysql:5.7
+    environment:
+      - MYSQL_ROOT_PASSWORD=my-secret-pw
+    command: --thread_stack=256K --max_sp_recursion_depth=255 --log_bin_trust_function_creators=1 --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - cairisMysqlData:/var/lib/mysql
+    networks:
+      - cairisnet
+    healthcheck:
+      test: ["CMD-SHELL", "mysql -h localhost -P 3306 -uroot -pmy-secret-pw -e \"SELECT 1\" && exit 0 || exit 1"]
+      interval: 1m
+      timeout: 10s
+      retries: 3
+      start_period: 45s
+      start_interval: 15s
+
+  cairis-docs:
+    image: shamalfaily/cairis-docs
+    depends_on:
+      - cairis-mysql
+    volumes:
+      - cairisDocumentation:/tmpDocker
+      - cairisImage:/images
+    networks:
+      - cairisnet
+
+  CAIRIS:
+    image: shamalfaily/cairis:latest
+    depends_on:
+      cairis-mysql:
+        condition: service_healthy
+        restart: true
+    ports:
+      - 80:8000
+    volumes:
+      - cairisDocumentation:/tmpDocker
+      - cairisImage:/images
+    networks:
+      - cairisnet
+
+volumes:
+  cairisMysqlData:
+  cairisDocumentation:
+  cairisImage:
+
+networks:
+  cairisnet:
