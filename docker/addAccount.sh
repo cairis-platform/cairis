@@ -8,4 +8,4 @@ USERNAME=$1
 PASSWD=$2
 FULLNAME=$3
 
-$CAIRIS_SRC/bin/add_cairis_user.py $USERNAME $PASSWD $FULLNAME
+python3 $CAIRIS_SRC/bin/add_cairis_user.py $USERNAME $PASSWD $FULLNAME

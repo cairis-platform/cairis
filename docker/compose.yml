@@ -7,15 +7,19 @@ services:
     command: --thread_stack=256K --max_sp_recursion_depth=255 --log_bin_trust_function_creators=1 --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     volumes:
       - cairisMysqlData:/var/lib/mysql
+      - ./createdb.sql:/docker-entrypoint-initdb.d/00-createdb.sql:ro
+      - ./init-test-data.sh:/docker-entrypoint-initdb.d/01-init-test-data.sh:ro
+      - ../cairis/sql/init.sql:/sql/init.sql
+      - ../cairis/sql/procs.sql:/sql/procs.sql
     networks:
       - cairisnet
     healthcheck:
-      test: ["CMD-SHELL", "mysql -h localhost -P 3306 -uroot -pmy-secret-pw -e \"SELECT 1\" && exit 0 || exit 1"]
+      test: ["CMD-SHELL", "[ -f /var/lib/mysql/db_init_done ] && mysql -h localhost -P 3306 -uroot -pmy-secret-pw -e \"SELECT 1\" && exit 0 || exit 1"]
       interval: 1m
       timeout: 10s
       retries: 3
-      start_period: 45s
-      start_interval: 15s
+      start_period: 2m30s
+      start_interval: 10s
 
   cairis-docs:
     image: shamalfaily/cairis-docs

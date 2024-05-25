@@ -9,24 +9,42 @@ You can specify the image version. By default, it is "latest".
 ./buildLocalImage.sh
 ```
 
-## 2. Startup servers
+## 2. Server startup and shutdown
 
-Foreground mode (to exit, press CTRL + C):
-
-```sh
-docker compose up
-```
-
-Background mode:
+To create and start containers in backgroud mode:
 
 ```sh
 docker compose up -d
 ```
 
-To stop the servers:
+To view container logs:
+
+```sh
+docker compose logs -f
+```
+
+To stop:
+
+```sh
+docker compose stop
+```
+
+To start:
+
+```sh
+docker compose start
+```
+
+To stop and remove the containers:
 
 ```sh
 docker compose down
+```
+
+Your data is persistent even you remove the containers. To completely delete all data:
+
+```sh
+$ docker volume rm cairis_cairisDocumentation cairis_cairisImage cairis_cairisMysqlData
 ```
 
 ## 3. Create a user

@@ -1,42 +1,35 @@
-FROM ubuntu:latest
+# syntax=docker/dockerfile:1
+# Build UI
+FROM node:16 as build_ui
+
+ADD --keep-git-dir=false https://github.com/cairis-platform/cairis-ui.git#master /cairis-ui
+RUN cd /cairis-ui && \
+    yarn install --ignore-engines && \
+    yarn run build
+
+# Build CAIRIS backend
+FROM python:3.12
 LABEL "org.opencontainers.image.authors"="Shamal Faily <admin@cairis.org>"
 ARG DEBIAN_FRONTEND=noninteractive
-RUN apt-get update && \
-    apt-get install -y build-essential \
-    python3-dev \
-    mysql-client \ 
-    graphviz \
-    python3-pip \
-    python3-numpy \
-    python3-mysqldb \
-    git \
-    default-libmysqlclient-dev \
-    python3-apt \
-    libxml2-dev \
-    libxslt1-dev \
-    libssl-dev \
+RUN apt-get update && apt-get install -y \
     apache2 \
     apache2-dev \
+    mariadb-client \
     poppler-utils \
-    python3-setuptools \
-    apt-transport-https \
-    ca-certificates
+    netpbm \
+    graphviz
 
-RUN pip3 install wheel --break-system-packages
 #Installing Python modules
 COPY requirements.txt /
-RUN pip3 install -r requirements.txt --break-system-packages
 COPY wsgi_requirements.txt /
-RUN pip3 install -r wsgi_requirements.txt --break-system-packages
+RUN pip install wheel --break-system-packages && \
+    pip install -r requirements.txt -r wsgi_requirements.txt --break-system-packages
 
 #Environment Variable starts from here
 ENV CAIRIS_SRC=/cairis/cairis
 ENV CAIRIS_CFG_DIR=/cairis/docker
 ENV CAIRIS_CFG=/cairis.cnf
 ENV PYTHONPATH=/cairis
-
-RUN mkdir /tmpDocker && \
-    mkdir /images
 
 # Copy from local repo
 COPY cairis /cairis/cairis
@@ -46,16 +39,18 @@ RUN chmod +x /cairis/cairis/bin/*.* && \
     chmod +x /cairis/cairis/config/*.sh
 
 COPY cairis.cnf /
-COPY setupDb.sh /
-COPY createdb.sql /
 COPY addAccount.sh /
 COPY register_user.html /cairis/cairis/daemon/templates/security
 
-RUN /cairis/cairis/bin/installUI.sh
+# Copy UI build
+COPY --from=build_ui /cairis-ui/dist /cairis/cairis/dist
 
 EXPOSE 8000
 
-RUN apt-get remove --purge -y git && \
-    apt-get autoremove -y
+RUN mkdir /tmpDocker && \
+    mkdir /images && \
+    chown www-data /images && \
+    chgrp www-data /images && \
+    chmod 1777 /tmpDocker
 
-CMD ["./setupDb.sh"]
+CMD ["mod_wsgi-express", "start-server", "/cairis/cairis/bin/cairis.wsgi", "--user", "www-data", "--group", "www-data"]
