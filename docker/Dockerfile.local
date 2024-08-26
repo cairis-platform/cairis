@@ -1,0 +1,56 @@
+# syntax=docker/dockerfile:1
+# Build UI
+FROM node:16 as build_ui
+
+ADD --keep-git-dir=false https://github.com/cairis-platform/cairis-ui.git#master /cairis-ui
+RUN cd /cairis-ui && \
+    yarn install --ignore-engines && \
+    yarn run build
+
+# Build CAIRIS backend
+FROM python:3.12
+LABEL "org.opencontainers.image.authors"="Shamal Faily <admin@cairis.org>"
+ARG DEBIAN_FRONTEND=noninteractive
+RUN apt-get update && apt-get install -y \
+    apache2 \
+    apache2-dev \
+    mariadb-client \
+    poppler-utils \
+    netpbm \
+    graphviz
+
+#Installing Python modules
+COPY requirements.txt /
+COPY wsgi_requirements.txt /
+RUN pip install wheel --break-system-packages && \
+    pip install -r requirements.txt -r wsgi_requirements.txt --break-system-packages
+
+#Environment Variable starts from here
+ENV CAIRIS_SRC=/cairis/cairis
+ENV CAIRIS_CFG_DIR=/cairis/docker
+ENV CAIRIS_CFG=/cairis.cnf
+ENV PYTHONPATH=/cairis
+
+# Copy from local repo
+COPY cairis /cairis/cairis
+
+# Grant permission to executable files
+RUN chmod +x /cairis/cairis/bin/*.* && \
+    chmod +x /cairis/cairis/config/*.sh
+
+COPY cairis.cnf /
+COPY addAccount.sh /
+COPY register_user.html /cairis/cairis/daemon/templates/security
+
+# Copy UI build
+COPY --from=build_ui /cairis-ui/dist /cairis/cairis/dist
+
+EXPOSE 8000
+
+RUN mkdir /tmpDocker && \
+    mkdir /images && \
+    chown www-data /images && \
+    chgrp www-data /images && \
+    chmod 1777 /tmpDocker
+
+CMD ["mod_wsgi-express", "start-server", "/cairis/cairis/bin/cairis.wsgi", "--user", "www-data", "--group", "www-data"]
