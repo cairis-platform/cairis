@@ -27,7 +27,7 @@ RUN pip3 install wheel --break-system-packages
 COPY docker/requirements.txt /
 RUN pip3 install -r requirements.txt --break-system-packages
 COPY docker/wsgi_requirements.txt /
-RUN pip3 install -r docker/wsgi_requirements.txt --break-system-packages
+RUN pip3 install -r wsgi_requirements.txt --break-system-packages
 
 #Environment Variable starts from here
 ENV CAIRIS_SRC=/cairis/cairis
