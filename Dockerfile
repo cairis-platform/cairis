@@ -24,9 +24,9 @@ RUN apt-get install -y build-essential \
 
 RUN pip3 install wheel --break-system-packages
 #Installing Python modules
-COPY requirements.txt /
-RUN pip3 install -r docker/requirements.txt --break-system-packages
-COPY wsgi_requirements.txt /
+COPY docker/requirements.txt /
+RUN pip3 install -r requirements.txt --break-system-packages
+COPY docker/wsgi_requirements.txt /
 RUN pip3 install -r docker/wsgi_requirements.txt --break-system-packages
 
 #Environment Variable starts from here
