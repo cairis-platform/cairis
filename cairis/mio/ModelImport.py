@@ -48,6 +48,7 @@ from cairis.core.PersonaCharacteristicParameters import PersonaCharacteristicPar
 from cairis.core.Borg import Borg
 import cairis.core.DefaultParametersFactory
 import xml.sax
+import defusedxml.sax
 from openpyxl import load_workbook
 from cairis.core.ARM import *
 
@@ -757,7 +758,7 @@ def importProcesses(docs,codes,memos,quotations,codeNetworks,processes,ics,inten
 
 def importLocationsFile(importFile,session_id = None):
   try: 
-    parser = xml.sax.make_parser()
+    parser = defusedxml.sax.make_parser()
     handler = LocationsContentHandler()
     parser.setContentHandler(handler)
     parser.setEntityResolver(handler)
@@ -781,7 +782,7 @@ def importLocations(locations,session_id):
 
 def importDataflowsFile(importFile,session_id = None):
   try: 
-    parser = xml.sax.make_parser()
+    parser = defusedxml.sax.make_parser()
     handler = DataflowsContentHandler()
     parser.setContentHandler(handler)
     parser.setEntityResolver(handler)
