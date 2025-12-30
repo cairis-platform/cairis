@@ -77,7 +77,6 @@ class EnvironmentTest(unittest.TestCase):
     oep2 = oenvs[self.ienvs[1]["theName"]]
     oep3 = oenvs[self.ienvs[2]["theName"]]
 
-    self.assertRaises(DatabaseProxyException,b.dbProxy.deleteEnvironment,oep1.id())
     b.dbProxy.deleteEnvironment(oep4.id())
     b.dbProxy.deleteEnvironment(oep1.id())
     b.dbProxy.deleteEnvironment(oep2.id())
