@@ -1,5 +1,9 @@
 argparse>=1.4.0
+<<<<<<< HEAD
 defusedxml>=0.7.1
+=======
+defusedxml==0.7.1
+>>>>>>> c3531204e00125716676b6c3da188b7a95e873e0
 pytest-cov>=2.7.1
 coveralls>=1.4.0
 coverage>=4.5.1

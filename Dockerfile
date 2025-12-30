@@ -24,9 +24,9 @@ RUN apt-get install -y build-essential \
 
 RUN pip3 install wheel --break-system-packages
 #Installing Python modules
-COPY requirements.txt /
+COPY docker/requirements.txt /
 RUN pip3 install -r requirements.txt --break-system-packages
-COPY wsgi_requirements.txt /
+COPY docker/wsgi_requirements.txt /
 RUN pip3 install -r wsgi_requirements.txt --break-system-packages
 
 #Environment Variable starts from here
@@ -47,11 +47,11 @@ RUN mkdir /cairisTmp &&\
     rm -rf /cairis/ &&\
     mv /cairisTmp/ /cairis/
 
-COPY cairis.cnf /
-COPY setupDb.sh /
-COPY createdb.sql /
-COPY addAccount.sh /
-COPY register_user.html /cairis/cairis/daemon/templates/security
+COPY docker/cairis.cnf /
+COPY docker/setupDb.sh /
+COPY docker/createdb.sql /
+COPY docker/addAccount.sh /
+COPY docker/register_user.html /cairis/cairis/daemon/templates/security
 
 RUN /cairis/cairis/bin/installUI.sh
 
