@@ -25,6 +25,7 @@ else:
 import os.path
 from flask import make_response, request, session, send_file
 from flask_restful import Resource
+from werkzeug.utils import secure_filename
 from cairis.core.ARM import DatabaseProxyException, ARMException
 from cairis.core.Borg import Borg
 from cairis.daemon.CairisHTTPError import MalformedJSONHTTPError, CairisHTTPError, ARMHTTPError, MissingParameterHTTPError
@@ -42,7 +43,8 @@ class DocumentationAPI(Resource):
 
   def get(self,doc_type,doc_format):
     session_id = get_session_id(session, request)
-    fileName = request.args.get('filename', 'report')
+    rawFileName = request.args.get('filename', 'report')
+    fileName = secure_filename(rawFileName) or 'report'
     dao = DocumentationDAO(session_id)
     sectionFlags = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
     if (doc_format == 'PDF'):
@@ -59,8 +61,10 @@ class DocumentationAPI(Resource):
       doc_format = [0,0,0,0,1]
 
     b = Borg()
-    reportName = b.tmpDir + '/' + fileName + '.' + filePostfix
-
+    tmp_dir = os.path.realpath(b.tmpDir)
+    reportName = os.path.realpath(os.path.join(tmp_dir, fileName + '.' + filePostfix))
+    if not reportName.startswith(tmp_dir + os.path.sep):
+      raise CairisHTTPError(status_code=BAD_REQUEST, message='Invalid report file name', status='Invalid parameter')
     dao.generate_documentation(fileName,doc_type,sectionFlags,doc_format)
     dao.close()
 

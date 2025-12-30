@@ -48,6 +48,7 @@ from cairis.core.PersonaCharacteristicParameters import PersonaCharacteristicPar
 from cairis.core.Borg import Borg
 import cairis.core.DefaultParametersFactory
 import xml.sax
+import defusedxml.sax
 from openpyxl import load_workbook
 from cairis.core.ARM import *
 
@@ -55,7 +56,8 @@ __author__ = 'Shamal Faily'
 
 def importSecurityPatternsFile(importFile,session_id = None):
   try:
-    parser = xml.sax.make_parser()
+    parser = defusedxml.sax.make_parser()
+    parser.forbid_external = False
     handler = SecurityPatternContentHandler()
     parser.setContentHandler(handler)
     parser.setEntityResolver(handler)
@@ -83,7 +85,8 @@ def importSecurityPatterns(taps,spps,vts,session_id=None):
 
 def importAttackPattern(importFile,session_id = None):
   try:
-    parser = xml.sax.make_parser()
+    parser = defusedxml.sax.make_parser()
+    parser.forbid_external = False
     handler = AttackPatternContentHandler(session_id = session_id)
     parser.setContentHandler(handler)
     parser.setEntityResolver(handler)
@@ -102,7 +105,8 @@ def importAttackPattern(importFile,session_id = None):
 
 def importTVTypeFile(importFile,isOverwrite=1,session_id = None):
   try:
-    parser = xml.sax.make_parser()
+    parser = defusedxml.sax.make_parser()
+    parser.forbid_external = False
     handler = TVTypeContentHandler()
     parser.setContentHandler(handler)
     parser.setEntityResolver(handler)
@@ -132,7 +136,8 @@ def importTVTypes(vulTypes,threatTypes,isOverwrite,session_id):
 
 def importDirectoryFile(importFile,isOverwrite=1,session_id = None):
   try:
-    parser = xml.sax.make_parser()
+    parser = defusedxml.sax.make_parser()
+    parser.forbid_external = False
     handler = DirectoryContentHandler()
     parser.setContentHandler(handler)
     parser.setEntityResolver(handler)
@@ -154,7 +159,8 @@ def importDirectoryFile(importFile,isOverwrite=1,session_id = None):
 
 def importRequirementsFile(importFile,session_id = None):
   try:
-    parser = xml.sax.make_parser()
+    parser = defusedxml.sax.make_parser()
+    parser.forbid_external = False
     handler = GoalsContentHandler(session_id = session_id)
     parser.setContentHandler(handler)
     parser.setEntityResolver(handler)
@@ -240,7 +246,8 @@ def importRequirements(dpParameterSet,goalParameterSet,obsParameterSet,reqParame
 
 def importRiskAnalysisFile(importFile,session_id = None):
   try:
-    parser = xml.sax.make_parser()
+    parser = defusedxml.sax.make_parser()
+    parser.forbid_external = False
     handler = RiskAnalysisContentHandler()
     parser.setContentHandler(handler)
     parser.setEntityResolver(handler)
@@ -333,7 +340,8 @@ def importRiskAnalysis(roleParameterSet,assetParameterSet,vulParameterSet,attack
 
 def importUsabilityFile(importFile,session_id = None):
   try:
-    parser = xml.sax.make_parser()
+    parser = defusedxml.sax.make_parser()
+    parser.forbid_external = False
     handler = UsabilityContentHandler()
     parser.setContentHandler(handler)
     parser.setEntityResolver(handler)
@@ -398,7 +406,8 @@ def importUsability(personaParameterSet,edParameterSet,drParameterSet,pcParamete
 
 def importMisusabilityFile(importFile,session_id = None):
   try:
-    parser = xml.sax.make_parser()
+    parser = defusedxml.sax.make_parser()
+    parser.forbid_external = False
     handler = MisusabilityContentHandler()
     parser.setContentHandler(handler)
     parser.setEntityResolver(handler)
@@ -435,7 +444,8 @@ def importMisusability(crParameterSet,tcParameterSet,session_id):
 
 def importAssociationsFile(importFile,session_id = None):
   try:
-    parser = xml.sax.make_parser()
+    parser = defusedxml.sax.make_parser()
+    parser.forbid_external = False
     handler = AssociationsContentHandler(session_id = session_id)
     parser.setContentHandler(handler)
     parser.setEntityResolver(handler)
@@ -473,7 +483,8 @@ def importAssociations(maParameterSet,gaParameterSet,depParameterSet,session_id)
 
 def importProjectFile(importFile,session_id = None):
   try:
-    parser = xml.sax.make_parser()
+    parser = defusedxml.sax.make_parser()
+    parser.forbid_external = False
     handler = CairisContentHandler()
     parser.setContentHandler(handler)
     parser.setEntityResolver(handler)
@@ -507,7 +518,8 @@ def importProjectData(pSettings,envParameterSet,ceParameterSet,session_id):
 
 def importComponentViewFile(importFile,session_id = None):
   try:
-    parser = xml.sax.make_parser()
+    parser = defusedxml.sax.make_parser()
+    parser.forbid_external = False
     handler = ArchitecturalPatternContentHandler()
     parser.setContentHandler(handler)
     parser.setEntityResolver(handler)
@@ -519,7 +531,8 @@ def importComponentViewFile(importFile,session_id = None):
 
 def importAssetsFile(importFile,session_id = None):
   try:
-    parser = xml.sax.make_parser()
+    parser = defusedxml.sax.make_parser()
+    parser.forbid_external = False
     handler = TemplateAssetsContentHandler()
     parser.setContentHandler(handler)
     parser.setEntityResolver(handler)
@@ -555,7 +568,8 @@ def importComponentViewData(view,session_id = None):
 
 def importSynopsesFile(importFile,session_id = None):
   try:
-    parser = xml.sax.make_parser()
+    parser = defusedxml.sax.make_parser()
+    parser.forbid_external = False
     handler = SynopsesContentHandler(session_id = session_id)
     parser.setContentHandler(handler)
     parser.setEntityResolver(handler)
@@ -591,7 +605,8 @@ def importSynopses(charSyns,refSyns,stepSyns,refConts,ucConts,taskConts,session_
 
 def importStoriesFile(importFile,session_id = None):
   try:
-    parser = xml.sax.make_parser()
+    parser = defusedxml.sax.make_parser()
+    parser.forbid_external = False
     handler = StoriesContentHandler(session_id = session_id)
     parser.setContentHandler(handler)
     parser.setEntityResolver(handler)
@@ -621,7 +636,8 @@ def importStories(userStories,session_id):
 
 def importDomainValuesFile(importFile,session_id = None):
   try:
-    parser = xml.sax.make_parser()
+    parser = defusedxml.sax.make_parser()
+    parser.forbid_external = False
     handler = DomainValueContentHandler()
     parser.setContentHandler(handler)
     parser.setEntityResolver(handler)
@@ -685,7 +701,8 @@ def importDomainValues(tvValues,rvValues,cvValues,svValues,lvValues,capValues,mo
 
 def importProcessesFile(importFile,session_id = None):
   try:
-    parser = xml.sax.make_parser()
+    parser = defusedxml.sax.make_parser()
+    parser.forbid_external = False
     handler = ProcessesContentHandler()
     parser.setContentHandler(handler)
     parser.setEntityResolver(handler)
@@ -757,7 +774,8 @@ def importProcesses(docs,codes,memos,quotations,codeNetworks,processes,ics,inten
 
 def importLocationsFile(importFile,session_id = None):
   try: 
-    parser = xml.sax.make_parser()
+    parser = defusedxml.sax.make_parser()
+    parser.forbid_external = False
     handler = LocationsContentHandler()
     parser.setContentHandler(handler)
     parser.setEntityResolver(handler)
@@ -781,7 +799,8 @@ def importLocations(locations,session_id):
 
 def importDataflowsFile(importFile,session_id = None):
   try: 
-    parser = xml.sax.make_parser()
+    parser = defusedxml.sax.make_parser()
+    parser.forbid_external = False
     handler = DataflowsContentHandler()
     parser.setContentHandler(handler)
     parser.setEntityResolver(handler)

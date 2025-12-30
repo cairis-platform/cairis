@@ -777,7 +777,7 @@ def useCases(p,docDir):
 def buildUseCases(p,docDir,chapterTxt):
   ucs = p.getUseCases()
   if (len(ucs) == 0):
-    return ""
+    return chapterTxt
 
   for idx,uc in ucs.items():
     ucName = uc.name()
