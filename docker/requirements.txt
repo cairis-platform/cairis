@@ -28,3 +28,4 @@ bcrypt>=3.1.6
 python-magic>=0.4.15
 email_validator>=1.0.5
 xlsxwriter>=1.2.7
+argon2-cffi>=25.1.0
