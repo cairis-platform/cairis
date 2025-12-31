@@ -4,15 +4,18 @@ import os
 
 app = Flask(__name__)
 
-allowedCommands = set(['docbook2html','docbook2rtf','dblatex','pandoc'])
 
 @app.route('/latexApi', methods=['POST'])
 def index():
+  allowedCommands = set(['docbook2html','docbook2rtf','dblatex','pandoc'])
   try:
     dockBookCmd = request.values.get('docBookCmd')
     if not docBookCmd:
+      print("No DocBook command")
       abort(400)
+    cmd = docBookCmd.split(' ')[0]
     if (docBookCmd.split(' ')[0] not in allowedCommands):
+      print(cmd + " is not allowed.")
       abort(400)
     os.system(dockBookCmd)
     return "Success"
