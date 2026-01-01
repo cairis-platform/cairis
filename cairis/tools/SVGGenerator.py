@@ -72,7 +72,6 @@ class SVGGenerator(object):
         is_node = True
 
       line = substitute(b.staticDir,"",line)
-      line = substitute("<!--.*?-->", "", line)
       if line.find('fill="none"') > -1 and is_node:
         is_node = False
 
@@ -86,6 +85,7 @@ class SVGGenerator(object):
       lines = lines[svg_start:]
 
     svg_text = '\n'.join(lines)
+    svg_text = substitute(r'<!--[\s\S]*?-->', '', svg_text)
     svg_output = prettifySVG(svg_text)
 
     return svg_output
