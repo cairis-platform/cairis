@@ -173,7 +173,11 @@ def importRequirementsFile(importFile,session_id = None):
 def importRequirementsString(buf,session_id = None):
   try:
     handler = GoalsContentHandler(session_id = session_id)
-    xml.sax.parseString(buf,handler)
+    parser = defusedxml.sax.make_parser()
+    parser.forbid_external = False
+    parser.setContentHandler(handler)
+    parser.setEntityResolver(handler)
+    parser.parse(io.StringIO(buf))
     return importRequirements(handler.domainProperties(),handler.goals(),handler.obstacles(),handler.requirements(),handler.usecases(),handler.countermeasures(),session_id = session_id)
   except xml.sax.SAXException as e:
     raise ARMException("Error parsing imported file: " + e.getMessage())
