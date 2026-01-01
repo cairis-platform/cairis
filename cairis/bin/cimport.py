@@ -59,6 +59,10 @@ def safe_extract(zf, member, target_dir):
   if (os.path.isabs(member)):
     raise ARMException('Invalid path in package: ' + member)
   normalised_member = os.path.normpath(member)
+
+  if (not normalised_member or normalised_member.split(os.sep)[0] == os.pardir):
+    raise ARMException('Invalid path in package: ' + member)
+
   target_path = os.path.abspath(os.path.join(target_dir, normalised_member))
   target_dir_abs = os.path.abspath(target_dir)
 
