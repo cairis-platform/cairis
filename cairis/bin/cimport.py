@@ -123,9 +123,14 @@ def file_import(importFile,mFormat,overwriteFlag,session_id = None):
   if overwriteFlag == None:
     overwriteFlag = 1
 
+  from cairis.core.Borg import Borg
   from cairis.mio.ModelImport import importSecurityPatternsFile, importAttackPattern,importTVTypeFile,importDirectoryFile,importRequirementsFile, importRiskAnalysisFile, importUsabilityFile, importAssociationsFile, importProjectFile, importDomainValuesFile, importComponentViewFile, importSynopsesFile,importProcessesFile,importAssetsFile,importLocationsFile,importModelFile,importMisusabilityFile,importDataflowsFile,importStoriesFile
 
   normalised_import_file = os.path.abspath(importFile)
+  b = Borg()
+  tmp_dir_abs = os.path.abspath(b.tmpDir)
+  if (os.path.commonpath([tmp_dir_abs, normalised_import_file]) != tmp_dir_abs):
+    raise ARMException('Invalid import file path: ' + importFile)
 
   try:
     ET.fromstring(open(normalised_import_file).read())
@@ -134,43 +139,43 @@ def file_import(importFile,mFormat,overwriteFlag,session_id = None):
 
   msgStr = ''
   if (mFormat == 'securitypattern' or mFormat == 'Security Pattern'):
-    msgStr += importSecurityPatternsFile(importFile,session_id)
+    msgStr += importSecurityPatternsFile(normalised_import_file,session_id)
   elif (mFormat == 'attackpattern' or mFormat == 'Attack Pattern'):
-    msgStr += importAttackPattern(importFile,session_id)
+    msgStr += importAttackPattern(normalised_import_file,session_id)
   elif (mFormat == 'tvtypes' or mFormat == 'Threat and Vulnerability Types'):
-    msgStr += importTVTypeFile(importFile,int(overwriteFlag),session_id)
+    msgStr += importTVTypeFile(normalised_import_file,int(overwriteFlag),session_id)
   elif (mFormat == 'directory' or mFormat == 'Threat and Vulnerability Directory'):
-    msgStr += importDirectoryFile(importFile,int(overwriteFlag),session_id)
+    msgStr += importDirectoryFile(normalised_import_file,int(overwriteFlag),session_id)
   elif (mFormat == 'requirements' or mFormat == 'Requirements'):
-    msgStr += importRequirementsFile(importFile,session_id)
+    msgStr += importRequirementsFile(normalised_import_file,session_id)
   elif (mFormat == 'riskanalysis' or mFormat == 'Risk Analysis'):
-    msgStr += importRiskAnalysisFile(importFile,session_id)
+    msgStr += importRiskAnalysisFile(normalised_import_file,session_id)
   elif (mFormat == 'usability' or mFormat == 'Usability'):
-    msgStr += importUsabilityFile(importFile,session_id)
+    msgStr += importUsabilityFile(normalised_import_file,session_id)
   elif (mFormat == 'misusability' or mFormat == 'Misusability'):
-    msgStr += importMisusabilityFile(importFile,session_id)
+    msgStr += importMisusabilityFile(normalised_import_file,session_id)
   elif (mFormat == 'associations' or mFormat == 'Associations'):
-    msgStr += importAssociationsFile(importFile,session_id)
+    msgStr += importAssociationsFile(normalised_import_file,session_id)
   elif (mFormat == 'project' or mFormat == 'Project data'):
-    msgStr += importProjectFile(importFile,session_id)
+    msgStr += importProjectFile(normalised_import_file,session_id)
   elif (mFormat == 'domainvalues' or mFormat == 'Domain Values'):
-    msgStr += importDomainValuesFile(importFile,session_id)
+    msgStr += importDomainValuesFile(normalised_import_file,session_id)
   elif (mFormat == 'architecturalpattern' or mFormat == 'Architectural Pattern'):
-    msgStr += importComponentViewFile(importFile,session_id)
+    msgStr += importComponentViewFile(normalised_import_file,session_id)
   elif (mFormat == 'synopses' or mFormat == 'Synopses'):
-    msgStr += importSynopsesFile(importFile,session_id)
+    msgStr += importSynopsesFile(normalised_import_file,session_id)
   elif (mFormat == 'processes' or mFormat == 'Processes'):
-    msgStr += importProcessesFile(importFile,session_id)
+    msgStr += importProcessesFile(normalised_import_file,session_id)
   elif (mFormat == 'assets' or mFormat == 'Assets'):
-    msgStr += importAssetsFile(importFile,session_id)
+    msgStr += importAssetsFile(normalised_import_file,session_id)
   elif (mFormat == 'locations' or mFormat == 'Locations'):
-    msgStr += importLocationsFile(importFile,session_id)
+    msgStr += importLocationsFile(normalised_import_file,session_id)
   elif (mFormat == 'dataflows' or mFormat == 'Dataflows'):
-    msgStr += importDataflowsFile(importFile,session_id)
+    msgStr += importDataflowsFile(normalised_import_file,session_id)
   elif (mFormat == 'stories' or mFormat == 'Stories'):
-    msgStr += importStoriesFile(importFile,session_id)
+    msgStr += importStoriesFile(normalised_import_file,session_id)
   elif (mFormat == 'all' or mFormat == 'Model' or mFormat == 'Model file (.xml)'):
-    msgStr += importModelFile(importFile,int(overwriteFlag),session_id)
+    msgStr += importModelFile(normalised_import_file,int(overwriteFlag),session_id)
   else:
     raise ARMException('Input model type ' + mFormat + ' not recognised')
   return 0
