@@ -55,6 +55,15 @@ def main(args=None):
       b.imageDir = os.path.abspath(args.imageDir)
     file_import(importFile,mFormat,overwriteFlag)
 
+def safe_extract(zf, member, target_dir):
+  normalised_member = os.path.normpath(member)
+  target_path = os.path.abspath(os.path.join(target_dir, normalised_member))
+  target_dir_abs = os.path.abspath(target_dir)
+  if (os.path.commonpath([target_dir_abs, target_path]) != target_dir_abs):
+    raise ARMException('Invalid path in package: ' + member)
+  zf.extract(member, target_dir_abs)
+  return target_path
+
 def package_import(pkgStr,session_id = None):
   from cairis.core.Borg import Borg
   b = Borg()
@@ -68,13 +77,13 @@ def package_import(pkgStr,session_id = None):
   for fileName in fileList:
     fName,fType = fileName.split('.')
     if (fType == 'xml'):
-      zf.extract(fileName,b.tmpDir)
+      extracted_path = safe_extract(zf, fileName, b.tmpDir)
       modelType = ''
       try:
-        modelType = ET.fromstring(open(b.tmpDir + '/' + fileName).read()).tag
+        modelType = ET.fromstring(open(extracted_path).read()).tag
       except ET.ParseError as e:
         raise ARMException('Error parsing ' + fileName + ': ' + str(e))
-      os.remove(b.tmpDir + '/' + fileName)
+      os.remove(extracted_path)
       if (modelType == 'cairis_model'):
         if (models[modelType] != ''):
           raise ARMException('Cannot have more than one CAIRIS model file in the package file')
@@ -88,19 +97,19 @@ def package_import(pkgStr,session_id = None):
   if (cairisModel == ''):
     raise ARMException('No CAIRIS model file in the package file')
   else:
-    zf.extract(cairisModel,b.tmpDir)
-    file_import(b.tmpDir + '/' + cairisModel,'all',1,session_id) 
-    os.remove(b.tmpDir + '/' + cairisModel)
+    cairis_model_path = safe_extract(zf, cairisModel, b.tmpDir)
+    file_import(cairis_model_path,'all',1,session_id) 
+    os.remove(cairis_model_path)
 
   for typeKey in ['locations','architectural_pattern','security_patterns']:
     for modelFile in models[typeKey]:
-      zf.extract(modelFile,b.tmpDir)
+      model_path = safe_extract(zf, modelFile,b.tmpDir)
       if (typeKey == 'architectural_pattern'):
         typeKey = 'architecturalpattern'
       elif (typeKey == 'security_patterns'):
         typeKey = 'securitypattern'
-      file_import(b.tmpDir + '/' + modelFile,typeKey,0,session_id) 
-      os.remove(b.tmpDir + '/' + modelFile)
+      file_import(model_path,typeKey,0,session_id) 
+      os.remove(model_path)
   for imageFile in modelImages:
     buf = zf.read(imageFile)
     mimeType = magic.from_buffer(buf,mime=True)
@@ -116,8 +125,10 @@ def file_import(importFile,mFormat,overwriteFlag,session_id = None):
 
   from cairis.mio.ModelImport import importSecurityPatternsFile, importAttackPattern,importTVTypeFile,importDirectoryFile,importRequirementsFile, importRiskAnalysisFile, importUsabilityFile, importAssociationsFile, importProjectFile, importDomainValuesFile, importComponentViewFile, importSynopsesFile,importProcessesFile,importAssetsFile,importLocationsFile,importModelFile,importMisusabilityFile,importDataflowsFile,importStoriesFile
 
+  normalised_import_file = os.path.abspath(importFile)
+
   try:
-    ET.fromstring(open(importFile).read())
+    ET.fromstring(open(normalised_import_file).read())
   except ET.ParseError as e:
     raise ARMException('Error parsing ' + importFile + ': ' + str(e))
 
