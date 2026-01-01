@@ -56,10 +56,18 @@ def main(args=None):
     file_import(importFile,mFormat,overwriteFlag)
 
 def safe_extract(zf, member, target_dir):
+  if (os.path.isabs(member)):
+    raise ARMException('Invalid path in package: ' + member)
   normalised_member = os.path.normpath(member)
   target_path = os.path.abspath(os.path.join(target_dir, normalised_member))
   target_dir_abs = os.path.abspath(target_dir)
-  if (os.path.commonpath([target_dir_abs, target_path]) != target_dir_abs):
+
+  try:
+    common = os.path.commonpath([target_dir_abs, target_path])
+  except ValueError:
+    raise ARMException('Invalid path in package: ' + member)
+
+  if common != target_dir_abs:
     raise ARMException('Invalid path in package: ' + member)
  
   with open(target_path, 'wb') as out_f:
