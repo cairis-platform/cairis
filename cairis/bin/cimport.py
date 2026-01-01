@@ -61,7 +61,9 @@ def safe_extract(zf, member, target_dir):
   target_dir_abs = os.path.abspath(target_dir)
   if (os.path.commonpath([target_dir_abs, target_path]) != target_dir_abs):
     raise ARMException('Invalid path in package: ' + member)
-  zf.extract(member, target_dir_abs)
+ 
+  with open(target_path, 'wb') as out_f:
+    out_f.write(zf.read(member))
   return target_path
 
 def package_import(pkgStr,session_id = None):
@@ -80,7 +82,8 @@ def package_import(pkgStr,session_id = None):
       extracted_path = safe_extract(zf, fileName, b.tmpDir)
       modelType = ''
       try:
-        modelType = ET.fromstring(open(extracted_path).read()).tag
+        xml_bytes = zf.read(fileName)
+        modelType = ET.fromstring(xml_bytes).tag
       except ET.ParseError as e:
         raise ARMException('Error parsing ' + fileName + ': ' + str(e))
       os.remove(extracted_path)
