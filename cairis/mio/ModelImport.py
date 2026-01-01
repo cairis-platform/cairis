@@ -49,6 +49,7 @@ from cairis.core.Borg import Borg
 import cairis.core.DefaultParametersFactory
 import xml.sax
 import defusedxml.sax
+import io
 from openpyxl import load_workbook
 from cairis.core.ARM import *
 
@@ -457,7 +458,11 @@ def importAssociationsFile(importFile,session_id = None):
 def importAssociationsString(buf,session_id = None):
   try:
     handler = AssociationsContentHandler(session_id = session_id)
-    xml.sax.parseString(buf,handler)
+    parser = defusedxml.sax.make_parser()
+    parser.forbid_external = False
+    parser.setContentHandler(handler)
+    parser.setEntityResolver(handler)
+    parser.parse(io.StringIO(buf))
     return importAssociations(handler.manualAssociations(),handler.goalAssociations(),handler.dependencyAssociations(),session_id = session_id)
   except xml.sax.SAXException as e:
     raise ARMException("Error parsing" + importFile + ": " + e.getMessage())
