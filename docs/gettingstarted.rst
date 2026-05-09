@@ -1,17 +1,6 @@
 Quick Start
 ===========
 
-Live Demo
----------
-
-A live demo of CAIRIS is available to use on https://demo.cairis.org.  
-
-The demo has a test account (user: *test@test.com*, password: test) with two example databases you can explore: `NeuroGrid <https://cairis.readthedocs.io/en/latest/examples.html#neurogrid>`_ , `ACME Water <https://cairis.readthedocs.io/en/latest/examples.html#acme-water>`_.
-You are also free to create your account to explore CAIRIS' capabilities on your own.
-
-The live demo is rebuilt every night based on the latest updates to CAIRIS, so please feel free to add, update, or remove elements in the example models.
-The test account is dropped and re-created each night with the sample models.  Other accounts created on the server are dropped on Sunday morning each week.
-
 Video tutorials
 ---------------
 
