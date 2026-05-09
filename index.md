@@ -11,7 +11,6 @@ description: Home Page of CAIRIS
     <p>An open source platform for building security and usability into your software</p>
     <ul class="actions">
       <li><a href="https://cairis.readthedocs.io/en/latest/gettingstarted.html" class="button special">Quick start</a></li>
-      <li><a href="https://demo.cairis.org" class="button special">Live demo</a></li>
       <li><a href="https://github.com/cairis-platform/cairis" class="button special">GitHub</a></li>
     </ul>
   </div>
