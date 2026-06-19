@@ -48,10 +48,13 @@ COPY \
     docker/createdb.sql \
     docker/addAccount.sh \
     /
+COPY cairis/bin/installUI.sh /cairis/cairis/bin/installUI.sh
 COPY docker/register_user.html /cairis/cairis/daemon/templates/security
 
-RUN /cairis/cairis/bin/installUI.sh \
-    && apt-get remove --purge -y git \
+RUN chmod +x /cairis/cairis/bin/installUI.sh \
+    && /cairis/cairis/bin/installUI.sh
+
+RUN apt-get remove --purge -y git \
     && apt-get autoremove -y \
     && rm -rf /var/lib/apt/lists/*
 
