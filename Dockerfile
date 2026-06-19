@@ -1,8 +1,7 @@
 FROM ubuntu:latest
 LABEL maintainer="Shamal Faily <admin@cairis.org>"
 ARG DEBIAN_FRONTEND=noninteractive
-RUN apt-get update
-RUN apt-get install -y build-essential \
+RUN apt-get update && apt-get install -y build-essential \
     python3-dev \
     mysql-client \ 
     graphviz \
@@ -22,21 +21,17 @@ RUN apt-get install -y build-essential \
     apt-transport-https \
     ca-certificates
 
-RUN pip3 install wheel --break-system-packages
-#Installing Python modules
-COPY docker/requirements.txt /
-RUN pip3 install -r requirements.txt --break-system-packages
-COPY docker/wsgi_requirements.txt /
+COPY docker/requirements.txt docker/wsgi_requirements.txt /
+RUN pip3 install wheel --break-system-packages \
+    && pip3 install -r requirements.txt --break-system-packages
 RUN pip3 install -r wsgi_requirements.txt --break-system-packages
 
-#Environment Variable starts from here
-ENV CAIRIS_SRC=/cairis/cairis
-ENV CAIRIS_CFG_DIR=/cairis/docker
-ENV CAIRIS_CFG=/cairis.cnf
-ENV PYTHONPATH=/cairis
+ENV CAIRIS_SRC=/cairis/cairis \
+    CAIRIS_CFG_DIR=/cairis/docker \
+    CAIRIS_CFG=/cairis.cnf \
+    PYTHONPATH=/cairis
 
-RUN mkdir /tmpDocker
-RUN mkdir /images
+RUN mkdir /tmpDocker /images
 
 #Clonning the repo
 RUN git clone --depth 1 -b master https://github.com/cairis-platform/cairis /cairis
@@ -47,17 +42,19 @@ RUN mkdir /cairisTmp &&\
     rm -rf /cairis/ &&\
     mv /cairisTmp/ /cairis/
 
-COPY docker/cairis.cnf /
-COPY docker/setupDb.sh /
-COPY docker/createdb.sql /
-COPY docker/addAccount.sh /
+COPY \
+    docker/cairis.cnf \
+    docker/setupDb.sh \
+    docker/createdb.sql \
+    docker/addAccount.sh \
+    /
 COPY docker/register_user.html /cairis/cairis/daemon/templates/security
 
-RUN /cairis/cairis/bin/installUI.sh
+RUN /cairis/cairis/bin/installUI.sh \
+    && apt-get remove --purge -y git \
+    && apt-get autoremove -y \
+    && rm -rf /var/lib/apt/lists/*
 
 EXPOSE 8000
-
-RUN apt-get remove --purge -y git
-RUN apt-get autoremove -y
 
 CMD ["./setupDb.sh"]
