@@ -1,4 +1,5 @@
-#!/bin/bash -x
+#!/bin/bash
+set -euo pipefail
 #  Licensed to the Apache Software Foundation (ASF) under one
 #  or more contributor license agreements.  See the NOTICE file
 #  distributed with this work for additional information
@@ -13,20 +14,21 @@
 #  software distributed under the License is distributed on an
 #  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
 #  KIND, either express or implied.  See the License for the
-#  specific language go
-#
+#  specific language governing permissions and limitations
+#  under the License.
+
 # Author: Shamal Faily
 
-
 export UI_REPO=/tmp/cairis-ui
-rm -rf $UI_REPO
-apt-get install curl
-curl -sL https://deb.nodesource.com/setup_16.x | bash - && apt-get install -y nodejs
-curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
-echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
-apt-get update && apt-get install -y yarn
-apt-get install -y yarn
-git clone https://github.com/cairis-platform/cairis-ui $UI_REPO
-yarn --cwd $UI_REPO install --ignore-engines
-yarn --cwd $UI_REPO run build
-cp -r $UI_REPO/dist $CAIRIS_SRC
+rm -rf "$UI_REPO"
+
+apt-get update
+apt-get install -y curl ca-certificates gnupg
+curl -fsSL https://deb.nodesource.com/setup_16.x | bash -
+apt-get install -y nodejs
+npm install -g yarn
+
+git clone https://github.com/cairis-platform/cairis-ui "$UI_REPO"
+yarn --cwd "$UI_REPO" install --ignore-engines
+yarn --cwd "$UI_REPO" run build
+cp -r "$UI_REPO/dist" "$CAIRIS_SRC"

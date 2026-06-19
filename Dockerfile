@@ -1,42 +1,39 @@
-FROM ubuntu:latest
-MAINTAINER Shamal Faily <admin@cairis.org>
+FROM debian:bookworm-slim
+# Pin to Bookworm (Python 3.11). CAIRIS uses imghdr, which was removed in Python 3.13+.
+LABEL maintainer="Shamal Faily <admin@cairis.org>"
 ARG DEBIAN_FRONTEND=noninteractive
-RUN apt-get update
-RUN apt-get install -y build-essential \
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
     python3-dev \
-    mysql-client \ 
+    default-mysql-client \
     graphviz \
     python3-pip \
     python3-numpy \
     python3-mysqldb \
     git \
     default-libmysqlclient-dev \
-    python3-apt \
     libxml2-dev \
     libxslt1-dev \
     libssl-dev \
+    libmagic1 \
     apache2 \
     apache2-dev \
     poppler-utils \
     python3-setuptools \
-    apt-transport-https \
-    ca-certificates
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
 
-RUN pip3 install wheel --break-system-packages
-#Installing Python modules
-COPY docker/requirements.txt /
-RUN pip3 install -r requirements.txt --break-system-packages
-COPY docker/wsgi_requirements.txt /
+COPY docker/requirements.txt docker/wsgi_requirements.txt /
+RUN pip3 install wheel --break-system-packages \
+    && pip3 install -r requirements.txt --break-system-packages
 RUN pip3 install -r wsgi_requirements.txt --break-system-packages
 
-#Environment Variable starts from here
-ENV CAIRIS_SRC=/cairis/cairis
-ENV CAIRIS_CFG_DIR=/cairis/docker
-ENV CAIRIS_CFG=/cairis.cnf
-ENV PYTHONPATH=/cairis
+ENV CAIRIS_SRC=/cairis/cairis \
+    CAIRIS_CFG_DIR=/cairis/docker \
+    CAIRIS_CFG=/cairis.cnf \
+    PYTHONPATH=/cairis
 
-RUN mkdir /tmpDocker
-RUN mkdir /images
+RUN mkdir /tmpDocker /images
 
 #Clonning the repo
 RUN git clone --depth 1 -b master https://github.com/cairis-platform/cairis /cairis
@@ -47,17 +44,22 @@ RUN mkdir /cairisTmp &&\
     rm -rf /cairis/ &&\
     mv /cairisTmp/ /cairis/
 
-COPY docker/cairis.cnf /
-COPY docker/setupDb.sh /
-COPY docker/createdb.sql /
-COPY docker/addAccount.sh /
+COPY \
+    docker/cairis.cnf \
+    docker/setupDb.sh \
+    docker/createdb.sql \
+    docker/addAccount.sh \
+    /
+COPY cairis/bin/installUI.sh /cairis/cairis/bin/installUI.sh
 COPY docker/register_user.html /cairis/cairis/daemon/templates/security
 
-RUN /cairis/cairis/bin/installUI.sh
+RUN chmod +x /cairis/cairis/bin/installUI.sh \
+    && /cairis/cairis/bin/installUI.sh
+
+RUN apt-get remove --purge -y git \
+    && apt-get autoremove -y \
+    && rm -rf /var/lib/apt/lists/*
 
 EXPOSE 8000
-
-RUN apt-get remove --purge -y git
-RUN apt-get autoremove -y
 
 CMD ["./setupDb.sh"]
